@@ -1,0 +1,33 @@
+.search-container {
+    display: flex;
+    justify-content: space-between; /* Mantiene el espacio entre el filtro y la lista */
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.food-list {
+    width: 70%;
+    min-height: 500px;
+    background-color: rgb(206, 217, 225);
+}
+
+.filter-section {
+    width: 30%;
+    min-width: 250px; /* Un ancho mínimo para evitar que el filtro sea demasiado pequeño */
+    margin-bottom: 20px; /* Para separarlo un poco del contenido */
+}
+
+@media (max-width: 768px) {
+    .search-container {
+        flex-direction: column; /* Colocar los divs en columna en pantallas pequeñas */
+        align-items: center;
+    }
+
+    .food-list {
+        width: 100%; /* Que la lista ocupe el 100% en pantallas pequeñas */
+    }
+
+    .filter-section {
+        width: 100%; /* Que el filtro ocupe el 100% en pantallas pequeñas */
+    }
+}

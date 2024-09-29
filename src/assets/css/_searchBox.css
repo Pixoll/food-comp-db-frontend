@@ -1,0 +1,60 @@
+.search-box, .checkbox-filter {
+  position: relative;
+  width: 100%; /* Para asegurar que sean responsivos */
+}
+
+.selected-options-display, .filter-tag {
+  background-color: rgb(135, 160, 194); 
+  color: white;
+  padding: 10px;
+  border: 1px solid white;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 4px; 
+}
+.dropdown-options {
+  display: none;
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  width: 100%;
+  z-index: 10;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.checkbox-filter.show .dropdown-options {
+  display: block;
+}
+
+.select-all-label, .dropdown-options label {
+  background-color: #f0f0f0;
+  padding: 10px;
+  display: block;
+  cursor: pointer;
+}
+
+.select-all-label:hover, .dropdown-options label:hover {
+  background-color: #e0e0e0;
+}
+
+.dropdown-options > label > input[type=checkbox] {
+  display: none;
+}
+
+.checked {
+  float: right;
+  color: green;
+}
+
+.selected-options {
+  margin-top: 10px;
+}
+
+.filter-tag {
+  margin-right: 5px;
+  display: inline-block;
+}

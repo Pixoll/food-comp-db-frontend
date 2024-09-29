@@ -1,0 +1,60 @@
+.food-filter {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  background-color: #ffffff;
+  padding: 70px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.filter-group {
+  margin-bottom: 15px;
+  width: 100%; 
+}
+
+.filter-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.filter-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.reset-button {
+  background-color: rgb(25, 103, 175);
+  color: white;
+  padding: 10px;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+}
+
+.reset-button:hover {
+  background-color: #0056b3;
+}
+
+.search-box {
+  margin-top: 20px;
+  width: 100%; 
+}
+
+@media (max-width: 768px) {
+  .food-filter {
+      padding: 15px;
+  }
+
+  .filter-group {
+      margin-bottom: 10px;
+  }
+
+  .reset-button {
+      padding: 8px;
+  }
+}
