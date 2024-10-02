@@ -1,6 +1,6 @@
 import AppNavbar from '../../core/components/Navbar'
 
-const HomeContainer = () => {
+const HomePage = () => {
     return (
         <div>
             <AppNavbar/>
@@ -9,4 +9,4 @@ const HomeContainer = () => {
     );
 };
 
-export default HomeContainer;
+export default HomePage;
