@@ -4,7 +4,7 @@
 }
 
 .selected-options-display, .filter-tag {
-  background-color: rgb(135, 160, 194); 
+  background-color: #009879; 
   color: white;
   padding: 10px;
   border: 1px solid white;
@@ -18,7 +18,7 @@
   display: none;
   position: absolute;
   background-color: white;
-  border: 1px solid #ccc;
+  border: 1px solid #c1f3c6;
   width: 100%;
   z-index: 10;
   max-height: 200px;

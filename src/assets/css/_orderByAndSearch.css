@@ -1,0 +1,26 @@
+.search-and-orderBy {
+    position: relative; 
+    padding: 20px;
+    background-image: url('../images/GreenFoods.jpg');
+    background-size: cover; 
+    background-position: center; 
+    border-radius: 10px; 
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); 
+    overflow: hidden; /* Asegúrate de que el pseudo-elemento no sobresalga */
+}
+
+.search-and-orderBy::before {
+    content: ""; /* Necesario para el pseudo-elemento */
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0; 
+    background-color: rgba(0, 0, 0, 0.5); /* Cambia el color y la opacidad aquí */
+    z-index: 1; /* Asegúrate de que esté encima de la imagen de fondo */
+}
+
+.search-and-orderBy > * {
+    position: relative; /* Para que los hijos estén por encima de la capa de fondo */
+    z-index: 2; /* Asegúrate de que el contenido esté por encima de la capa de fondo */
+}

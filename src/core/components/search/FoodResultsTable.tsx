@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import "../../../assets/css/_foodResultsTable.css"
 interface FoodResultsListProps {
   url: string;
 }
@@ -20,7 +20,7 @@ const FoodResultsTable: React.FC<FoodResultsListProps> = ({ url }) => {
   };
 
   return (
-    <table>
+    <table className="content-table-foods">
       <thead>
         <tr>
           <th>ID</th>
@@ -30,8 +30,8 @@ const FoodResultsTable: React.FC<FoodResultsListProps> = ({ url }) => {
       <tbody>
         {data.map((item) => (
           <tr key={item.id} onClick={() => handleRowClick(item.id)}>
-            <td>{item.id}</td>
-            <td>{item.name}</td>
+            <td data-label="ID">{item.id}</td>
+            <td data-label="Nombre">{item.name}</td>
           </tr>
         ))}
       </tbody>

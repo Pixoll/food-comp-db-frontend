@@ -1,37 +1,38 @@
+
 .button-for-search {
     background-color: #1a73e8;
     padding: 10px;
     border: 0;
     border-radius: 0 5px 5px 0;
-    cursor: pointer; /* Mostrar el cursor de mano */
-    transition: background-color 0.3s ease; /* Añadir una transición */
+    cursor: pointer; 
+    transition: background-color 0.3s ease; 
 }
 
 .button-for-search:hover {
-    background-color: #1565c0; /* Cambiar el color al pasar el ratón */
+    background-color: #1565c0; 
 }
 
 .input-for-name {
-    width: 250px; /* Aumentar el ancho para darle más espacio */
+    width: 250px; 
     padding: 10px;
     padding-right: 35px;
     border-radius: 5px 0 0 5px;
     border: 1px solid #ccc;
     outline: none;
-    transition: box-shadow 0.3s ease; /* Añadir una transición para la sombra */
+    transition: box-shadow 0.3s ease;
 }
 
 .input-for-name:focus {
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Sombra azul clara al enfocar */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); 
 }
 
 .search-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 20px 0; /* Agregar un margen para separarlo de otros elementos */
-    background-color: #f8f9fa; /* Color de fondo suave */
+    margin: 20px 0; 
+    background-color: #f8f9fa; 
     padding: 10px;
     border-radius: 5px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Añadir sombra al contenedor */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
 }
