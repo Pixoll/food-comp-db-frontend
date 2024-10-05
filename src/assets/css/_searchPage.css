@@ -9,7 +9,7 @@
 }
 
 .food-list {
-    width: 70%;
+    width: 62%;
     background-color: rgb(214, 226, 218);
     min-height: 500px;
     padding: 20px; 
@@ -19,7 +19,7 @@
 }
 
 .filter-section {
-    width: 28%;
+    width: 38%;
     min-width: 320px; 
     margin-right: 20px; 
     margin-bottom: 20px;
