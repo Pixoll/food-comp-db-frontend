@@ -2,8 +2,7 @@ import { useState } from "react";
 import AppNavbar from "../../core/components/Navbar";
 import FoodFilter from "../../core/components/search/FoodFilter";
 import FoodResultsTable from "../../core/components/search/FoodResultsTable";
-import OrderByAndSearch
- from "../../core/components/search/OrderByAndSearch";
+import OrderByAndSearch from "../../core/components/search/OrderByAndSearch";
 import "../../assets/css/_searchPage.css"
 
   const SearchPage = () => {
@@ -17,7 +16,7 @@ import "../../assets/css/_searchPage.css"
             <FoodFilter />
           </div>
             <FoodResultsTable url={url} />
-        </div>
+          </div>
       </div>
     );
   };

@@ -1,13 +1,12 @@
 const OrderBy = () => {
-    const handleSortChage = () => {
+    const handleSortChange = () => { }
 
-    }
     return(
-        <select onChange={handleSortChage}>
+        <select className="select-order" onChange={handleSortChange}>
             <option value="asc">A - Z</option>
             <option value="desc">Z - A</option>
         </select>
     );
 }
 
-export default OrderBy
+export default OrderBy;

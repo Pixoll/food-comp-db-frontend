@@ -1,6 +1,6 @@
 .search-box, .checkbox-filter {
   position: relative;
-  width: 100%; /* Para asegurar que sean responsivos */
+  width: 100%; 
 }
 
 .selected-options-display, .filter-tag {

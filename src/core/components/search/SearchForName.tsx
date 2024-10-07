@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import "../../../assets/css/_search.css"
 
 const SearchForName = () => {
     const [searchTerm, setSearchTerm] = useState<string>('');
-    
-    return(
+
+    return (
         <div className="search-for-name">
             <input 
                 className="input-for-name"
@@ -13,6 +12,7 @@ const SearchForName = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
             />
         </div>
-    )
+    );
 };
+
 export default SearchForName;
