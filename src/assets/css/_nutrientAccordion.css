@@ -1,0 +1,26 @@
+.accordion-header {
+  border-radius: 5px;
+  background-color: rgb(183, 224, 183);
+  color: white;
+  font-size: 1.1rem;
+}
+
+.accordion-body {
+  background-color: #f8f9fa;
+  border-radius: 5px;
+}
+
+.accordion-button:focus {
+  box-shadow: none;
+  background-color: rgb(183, 224, 183);
+  color: white;
+  border-radius: 5px;
+
+}
+
+.mi-accordion .accordion-button:focus,
+.mi-accordion .accordion-button:active,
+.mi-accordion .accordion-button:hover {
+  outline: none; 
+  box-shadow: none; 
+}

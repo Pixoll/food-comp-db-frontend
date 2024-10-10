@@ -1,12 +1,15 @@
 import AppNavbar from '../../core/components/Navbar'
+import MainSectionHome from '../../core/components/MainSectionHome'
+import Footer from '../../core/components/Footer';
 
 const HomePage = () => {
     return (
         <div>
-            <AppNavbar/>
-            <h1>Aqui estará el home </h1>
+            <MainSectionHome/>
+            <Footer/>           
         </div>
     );
 };
 
 export default HomePage;
+

@@ -40,7 +40,7 @@ const CheckboxFilter: React.FC<CheckboxFilterProps> = ({
 
   const getSelectedLabel = () => {
     if (selectedOptions.size === 0) {
-      return "Nothing selected";
+      return "Nada seleccionado";
     } else if (selectedOptions.size > 0 && selectedOptions.size < 3) {
       return [...selectedOptions
         .values()]

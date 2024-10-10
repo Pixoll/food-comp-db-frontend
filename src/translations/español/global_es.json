@@ -1,0 +1,104 @@
+{
+    "navbar": {
+      "home": "Página Principal",
+      "search": "Buscar",
+      "languages": "Idiomas",
+      "spanish": "ESPAÑOL",
+      "english": "INGLES"
+    },
+    "homepage": {
+      "title": "Base de Datos de Composición de Alimentos",
+      "subtitle": "Una colección de datos de composición de alimentos y más............."
+    },
+    "search": {
+      "placeholder": "Buscar...",
+      "button": "Buscar",
+      "advancedSearch": "Búsqueda avanzada"
+    },
+    "footer": {
+        "contact": {
+            "title": "Contacto",
+            "email": "Email: contacto@ejemplo.com",
+            "phone": "Teléfono: +123 456 7890"
+        },
+        "address": {
+            "title": "Dirección",
+            "details": "123 Calle Falsa, Ciudad, País"
+        },
+        "policies": {
+            "title": "Políticas",
+            "privacy": "Política de Privacidad",
+            "terms": "Términos y Condiciones",
+            "cookies": "Política de Cookies"
+        },
+        "copyright": "© 2024 Mi Empresa. Todos los derechos reservados."
+    },
+    "Table":{
+      "title": "Lista de resultados",
+      "search":"Buscar por nombre...",
+      "attributes":{
+        "Id":"ID",
+        "name":"Nombre",
+        "nutrient":"Nutriente",
+        "action":"Accion"
+      },  
+      "details":"Detalles",
+      "modify":"Modificar"
+    },
+    "Filter":{
+      "title": "Filtros",
+      "type":"Tipo de alimento",
+      "nutrient":"Nutriente",
+      "other":"Otro...",
+      "reset":"Restablecer filtros"
+    },
+    "DetailPage":{
+      "title":"Datos generales de la comida",
+      "code":"Codigo:",
+      "name":{
+        "Spanish":"Nombre Español:",
+        "Portuguese":"Nombre Portugues:",
+        "English":"Nombre Ingles:",
+        "scientific":"Nombre Cientifico:" 
+      },
+      "origin":"Origen:",
+      "type":"Tipo de alimento:",
+      "group":"Grupo de comida:",
+      "labels":{
+        "Nutritional":"Etiquetado Nutricional",
+        "plus":"Etiquetado Nutricional ++",
+        "data":"Todos los datos"
+      }
+    },
+    "loginPage":{
+      "title":"Iniciar Sesion",
+      "username":"Nombre de usuario",
+      "password":"Contraseña",
+      "button": "Iniciar"
+
+    },
+    
+    "nutrientAccordion":{
+      "attributes":{
+          "type":"Tipo",
+          "amount":"Cantidad",
+          "unit":"Unidad",
+          "action":"Acción",
+          "nutrient":"Nutriente"
+        },
+      "Energy":"Valor energético",
+      "Main":{
+        "title":"Nutrientes principales",
+        "components":"Componentes de "
+      },
+      "Micronutrients":"Micronutrientes",
+      "buttons":{
+        "remove":"Eliminar",
+        "edit":"Editar",
+        "save":"Guardar"
+      }
+      
+    }
+
+}
+  

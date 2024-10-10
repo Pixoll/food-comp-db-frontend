@@ -1,0 +1,103 @@
+{
+    "navbar": {
+      "home": "Main Page",
+      "search": "Search",
+      "languages": "Languages",
+      "spanish": "Spanish",
+      "english": "English"
+    },
+    "homepage": {
+      "title": "Food Composition Database",
+      "subtitle": "A data collection of food composition and more... something like that must be here hehe"
+    },
+    "search": {
+      "placeholder": "Search...",
+      "button": "Search",
+      "advancedSearch": "Search advanced"
+    },
+    "footer": {
+        "contact": {
+            "title": "Contact",
+            "email": "Email: contacto@ejemplo.com",
+            "phone": "Phone: +123 456 7890"
+        },
+        "address": {
+            "title": "Address",
+            "details": "123 Calle Falsa, Ciudad, País"
+        },
+        "policies": {
+            "title": "Policies",
+            "privacy": "Privacy Policies",
+            "terms": "Terms and Conditions",
+            "cookies": "Cookies Policy"
+        },
+        "copyright": "© 2024 Mi Empresa. All rights reserved."
+    },
+    "Table":{
+      "title": "Results list",
+      "search":"Search by name...",
+      "attributes":{
+        "Id":"ID",
+        "name":"Name",
+        "nutrient":"Nutrient",
+        "action":"Action"
+      },  
+      "details":"Details",
+      "modify":"Modify"
+    },
+    "Filter":{
+      "title": "Filters",
+      "type":"Type of food",
+      "nutrient":"Nutrient",
+      "other":"Other...",
+      "reset":"Reset filters"
+    },
+    "DetailPage":{
+      "title":"General food information",
+      "code":"Code:",
+      "name":{
+        "Spanish":"Spanish Name:",
+        "Portuguese":"Portuguese Name:",
+        "English":"English Name:",
+        "scientific":"Scientific Name:" 
+      },
+      "origin":"Origin:",
+      "type":"Type of food:",
+      "group":"Food group:",
+      "labels":{
+        "Nutritional":"Nutritional Labeling",
+        "plus":"Nutritional Labeling ++",
+        "data":"All data"
+      }
+    },
+    "loginPage":{
+      "title":"Login",
+      "username":"Username",
+      "password":"Password",
+      "button": "Start"
+    },
+   "nutrientAccordion":{
+    "attributes":{
+          "type":"Type",
+          "amount":"Amount",
+          "unit":"Unit",
+          "action":"Action",
+          "nutrient":"Nutrient"
+        },
+      "Energy":"Energy value",
+      "Main":{
+        "title":"Main nutrients",
+        "components":"Components of "
+      },
+      "Micronutrients":"Micronutrients",
+
+      "buttons":{
+        "remove":"Remove",
+        "edit":"Edit",
+        "save":"Save"
+      }
+    
+
+    }
+}
+  
