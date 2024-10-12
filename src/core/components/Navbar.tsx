@@ -6,17 +6,27 @@ const AppNavbar = () => {
     return (
         <Navbar className='custom-navbar' expand="lg">
             <Container>
-                <Navbar.Brand as={Link} to="/">Home</Navbar.Brand>
+                <Navbar.Brand as={Link} to="/">Página Principal</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
-                        <Nav.Link as = {Link} to = "/search"> Search</Nav.Link>
+                        <Nav.Link as = {Link} to = "/search">Buscar</Nav.Link>
                     </Nav>
-                    <NavDropdown title="Information" id="nav-dropdown">
+
+                    <NavDropdown title="Idiomas" id="nav-dropdown"> 
                         <NavDropdown.Item as={Link} to="/nutrients">Nutrients</NavDropdown.Item>
                     </NavDropdown>
+
+                    <NavDropdown title="Información" id="nav-dropdown">
+                        <NavDropdown.Item as={Link} to="/nutrients">Nutrients</NavDropdown.Item>
+                    </NavDropdown>
+
+
+
+
+                    
                 </Navbar.Collapse>
-            </Container>
+            </Container>    
         </Navbar>
     );
 };
