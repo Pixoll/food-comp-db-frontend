@@ -14,17 +14,9 @@ const AppNavbar = () => {
                     </Nav>
 
                     <NavDropdown title="Idiomas" id="nav-dropdown"> 
-                        <NavDropdown.Item></NavDropdown.Item>
+                        <NavDropdown.Item>ESPAÑOL</NavDropdown.Item>
+                        <NavDropdown.Item>INGLES</NavDropdown.Item>
                     </NavDropdown>
-
-                    <NavDropdown title="Información" id="nav-dropdown">
-                        <NavDropdown.Item as={Link} to="/nutrients">Nutrients</NavDropdown.Item>
-                    </NavDropdown>
-
-
-
-
-                    
                 </Navbar.Collapse>
             </Container>    
         </Navbar>
