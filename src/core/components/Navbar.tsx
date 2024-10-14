@@ -14,7 +14,7 @@ const AppNavbar = () => {
                     </Nav>
 
                     <NavDropdown title="Idiomas" id="nav-dropdown"> 
-                        <NavDropdown.Item as={Link} to="/nutrients">Nutrients</NavDropdown.Item>
+                        <NavDropdown.Item></NavDropdown.Item>
                     </NavDropdown>
 
                     <NavDropdown title="Información" id="nav-dropdown">
