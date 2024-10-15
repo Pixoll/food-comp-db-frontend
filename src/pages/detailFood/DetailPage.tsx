@@ -1,6 +1,7 @@
 import AppNavbar from "../../core/components/Navbar";
+import Footer from "../../core/components/Footer";
 import { useParams } from "react-router-dom";
-import { Container, Row, Col, Tab,Nav} from "react-bootstrap";
+import { Container, Row, Col, Tab, Nav } from "react-bootstrap";
 import { PieChart, Pie, Tooltip, Legend, Cell } from "recharts";
 
 const DetailPage = () => {
@@ -28,14 +29,13 @@ const DetailPage = () => {
     { name: 'Colesterol [mg]', quantity: '0.83', source: 222, method: 2 },
     { name: 'Azúcares totales [g]', quantity: '0.0325', source: 155, method: 4 },
   ];
-  
+
 
   return (
-    
-    <div>
-        <AppNavbar />
 
-      <h1>Detalle del alimento con ID: {id}</h1>
+    <div>
+      <AppNavbar />
+
 
 
       <Container>
@@ -54,7 +54,7 @@ const DetailPage = () => {
           <Col md={6}>
             <div style={{ backgroundColor: '#e9ecef', padding: '20px', borderRadius: '5px' }}>
               <h2>Contenedor 2</h2>
-              
+
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
                 {/*<h1>Composición de Nutrientes</h1>*/}
                 <PieChart width={400} height={400}>
@@ -84,15 +84,35 @@ const DetailPage = () => {
             <div style={{ backgroundColor: '#d1e7dd', padding: '20px', borderRadius: '5px' }}>
 
               <Tab.Container defaultActiveKey="first">
-                <Nav variant="tabs" className="mb-3">
+                <Nav variant="tabs" className="mb-3" style={{ borderBottom: '2px solid #d1e7dd' }}>
                   <Nav.Item>
-                    <Nav.Link eventKey="first">Etiquetado Nutricional</Nav.Link>
+                    <Nav.Link eventKey="first" style={{
+                      backgroundColor: '#f8f9fa',
+                      borderRadius: '5px 5px 0 0',
+                      border: '1px solid #d1e7dd',
+                      marginRight: '5px',
+                      color: '#0d6efd',
+                      transition: 'background-color 0.3s ease',
+                    }}>Etiquetado Nutricional</Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="second">Etiquetado Nutricional ++</Nav.Link>
+                    <Nav.Link eventKey="second" style={{
+                      backgroundColor: '#f8f9fa',
+                      borderRadius: '5px 5px 0 0',
+                      border: '1px solid #d1e7dd',
+                      marginRight: '5px',
+                      color: '#0d6efd',
+                      transition: 'background-color 0.3s ease',
+                    }}>Etiquetado Nutricional ++</Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="third">Todos los datos</Nav.Link>
+                    <Nav.Link eventKey="third" style={{
+                      backgroundColor: '#f8f9fa',
+                      borderRadius: '5px 5px 0 0',
+                      border: '1px solid #d1e7dd',
+                      color: '#0d6efd',
+                      transition: 'background-color 0.3s ease',
+                    }}>Todos los datos</Nav.Link>
                   </Nav.Item>
                 </Nav>
 
@@ -102,30 +122,47 @@ const DetailPage = () => {
                     <p>Aquí va el contenido específico para la opción 1.</p>
 
                     <div style={{ textAlign: 'center' }}>
-                    <h2>Nutrient Data Table</h2>
-                    <table style={{ margin: 'auto', borderCollapse: 'collapse', width: '80%' }}>
-                      <thead>
-                        <tr>
-                          <th style={{ border: '1px solid #ccc', padding: '8px' }}>Nutrient name</th>
-                          <th style={{ border: '1px solid #ccc', padding: '8px' }}>Quantity / 100 g</th>
-                          <th style={{ border: '1px solid #ccc', padding: '8px' }}>Source</th>
-                          <th style={{ border: '1px solid #ccc', padding: '8px' }}>Method</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {nutrients.map((nutrient, index) => (
-                          <tr key={index}>
-                            <td style={{ border: '1px solid #ccc', padding: '8px', color: nutrient.name === 'Energy' ? 'red' : 'black' }}>
-                              {nutrient.name}
-                            </td>
-                            <td style={{ border: '1px solid #ccc', padding: '8px' }}>{nutrient.quantity}</td>
-                            <td style={{ border: '1px solid #ccc', padding: '8px' }}>{nutrient.source}</td>
-                            <td style={{ border: '1px solid #ccc', padding: '8px' }}>{nutrient.method}</td>
+                      <h2>Nutrient Data Table</h2>
+                      <table style={{
+                        margin: 'auto',
+                        borderCollapse: 'collapse',
+                        width: '80%',
+                        boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+                        borderRadius: '8px',
+                        overflow: 'hidden',
+                      }}>
+                        <thead>
+                          <tr style={{ backgroundColor: '#00796b', color: '#ffffff', fontWeight: 'bold' }}>
+                            <th style={{ padding: '12px', borderBottom: '2px solid #004d40' }}>Nutrient name</th>
+                            <th style={{ padding: '12px', borderBottom: '2px solid #004d40' }}>Quantity / 100 g</th>
+                            <th style={{ padding: '12px', borderBottom: '2px solid #004d40' }}>Source</th>
+                            <th style={{ padding: '12px', borderBottom: '2px solid #004d40' }}>Method</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                        </thead>
+                        <tbody>
+                          {nutrients.map((nutrient, index) => (
+                            <tr
+                              key={index}
+                              style={{
+                                backgroundColor: index % 2 === 0 ? '#e0f2f1' : '#b2dfdb',
+                                transition: 'background-color 0.3s ease',
+                              }}
+                              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#80cbc4'}
+                              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = index % 2 === 0 ? '#e0f2f1' : '#b2dfdb'}
+                            >
+                              <td style={{ padding: '12px', borderBottom: '1px solid #004d40', color: nutrient.name === 'Energy' ? 'red' : '#333' }}>
+                                {nutrient.name}
+                              </td>
+                              <td style={{ padding: '12px', borderBottom: '1px solid #004d40' }}>{nutrient.quantity}</td>
+                              <td style={{ padding: '12px', borderBottom: '1px solid #004d40' }}>{nutrient.source}</td>
+                              <td style={{ padding: '12px', borderBottom: '1px solid #004d40' }}>{nutrient.method}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+
+
 
 
 
@@ -145,6 +182,10 @@ const DetailPage = () => {
           </Col>
         </Row>
       </Container>
+
+
+      <Footer/>
+
 
     </div>
   );
