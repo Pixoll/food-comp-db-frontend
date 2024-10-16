@@ -8,7 +8,8 @@ import "../../assets/css/_searchPage.css"
   const SearchPage = () => {
     const [url, setUrl] = useState<string>("/api/foods"); 
     return (
-      <div className="search-page">
+      <div className="search-background">
+        
         <AppNavbar />
         <div className="search-container">
           <div className="filter-section">

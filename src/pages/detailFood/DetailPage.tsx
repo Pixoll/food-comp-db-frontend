@@ -3,6 +3,7 @@ import Footer from "../../core/components/Footer";
 import { useParams } from "react-router-dom";
 import { Container, Row, Col, Tab, Nav } from "react-bootstrap";
 import { PieChart, Pie, Tooltip, Legend, Cell } from "recharts";
+import "../../assets/css/_DetailPage.css"
 
 const DetailPage = () => {
   const { id } = useParams();
@@ -20,28 +21,24 @@ const DetailPage = () => {
 
   //PARA PROBAR LA TABLA
   const nutrients = [
-    { name: 'Energía [kJ]', quantity: '262', source: 155, method: 4 },
-    { name: 'Energía [kcal]', quantity: '62 kcal', source: 155, method: 4 },
-    { name: 'Proteína [g]', quantity: '0.83', source: 222, method: 2 },
-    { name: 'Grasa total [g]', quantity: '0', source: 222, method: 2 },
-    { name: 'Carboidratos disponibles [g]', quantity: '12.8', source: 222, method: 5 },
-    { name: 'Sodio [mg]', quantity: '11.1', source: 155, method: 4 },
-    { name: 'Colesterol [mg]', quantity: '0.83', source: 222, method: 2 },
-    { name: 'Azúcares totales [g]', quantity: '0.0325', source: 155, method: 4 },
+    { name: 'Energía [kJ]', quantity: '262' },
+    { name: 'Energía [kcal]', quantity: '62' },
+    { name: 'Proteína [g]', quantity: '0.83' },
+    { name: 'Grasa total [g]', quantity: '0' },
+    { name: 'Carbohidratos disponibles [g]', quantity: '12.8' },
+    { name: 'Sodio [mg]', quantity: '11.1' },
+    { name: 'Colesterol [mg]', quantity: '0.83' },
+    { name: 'Azúcares totales [g]', quantity: '0.0325' },
   ];
 
-
   return (
-
-    <div>
+    <div className="detail-background">
       <AppNavbar />
-
-
 
       <Container>
         <Row>
           <Col md={6}>
-            <div style={{ backgroundColor: '#f8f9fa', padding: '20px', borderRadius: '5px' }}>
+            <div className="transparent-container">
               <h2>Datos generales de la comida:</h2>
               <p><strong>Código:</strong></p>
               <p><strong>Nombre comida:</strong></p>
@@ -52,11 +49,10 @@ const DetailPage = () => {
             </div>
           </Col>
           <Col md={6}>
-            <div style={{ backgroundColor: '#e9ecef', padding: '20px', borderRadius: '5px' }}>
+            <div className="transparent-container">
               <h2>Contenedor 2</h2>
 
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                {/*<h1>Composición de Nutrientes</h1>*/}
                 <PieChart width={400} height={400}>
                   <Pie
                     data={data}
@@ -75,7 +71,6 @@ const DetailPage = () => {
                   <Legend />
                 </PieChart>
               </div>
-
             </div>
           </Col>
         </Row>
@@ -115,14 +110,11 @@ const DetailPage = () => {
                     }}>Todos los datos</Nav.Link>
                   </Nav.Item>
                 </Nav>
-
+                
                 <Tab.Content>
                   <Tab.Pane eventKey="first">
-                    <h4>Contenido para Opción 1</h4>
-                    <p>Aquí va el contenido específico para la opción 1.</p>
-
-                    <div style={{ textAlign: 'center' }}>
-                      <h2>Nutrient Data Table</h2>
+                    <div style={{ textAlign: 'center' }}> 
+                      {/*TABLA NUTRICIONAL*/}
                       <table style={{
                         margin: 'auto',
                         borderCollapse: 'collapse',
@@ -133,10 +125,8 @@ const DetailPage = () => {
                       }}>
                         <thead>
                           <tr style={{ backgroundColor: '#00796b', color: '#ffffff', fontWeight: 'bold' }}>
-                            <th style={{ padding: '12px', borderBottom: '2px solid #004d40' }}>Nutrient name</th>
-                            <th style={{ padding: '12px', borderBottom: '2px solid #004d40' }}>Quantity / 100 g</th>
-                            <th style={{ padding: '12px', borderBottom: '2px solid #004d40' }}>Source</th>
-                            <th style={{ padding: '12px', borderBottom: '2px solid #004d40' }}>Method</th>
+                            <th style={{ padding: '12px', borderBottom: '2px solid #004d40' }}>Nutrientes</th>
+                            <th style={{ padding: '12px', borderBottom: '2px solid #004d40' }}>Cantidad / 100 g</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -154,19 +144,11 @@ const DetailPage = () => {
                                 {nutrient.name}
                               </td>
                               <td style={{ padding: '12px', borderBottom: '1px solid #004d40' }}>{nutrient.quantity}</td>
-                              <td style={{ padding: '12px', borderBottom: '1px solid #004d40' }}>{nutrient.source}</td>
-                              <td style={{ padding: '12px', borderBottom: '1px solid #004d40' }}>{nutrient.method}</td>
                             </tr>
                           ))}
                         </tbody>
                       </table>
                     </div>
-
-
-
-
-
-
                   </Tab.Pane>
                   <Tab.Pane eventKey="second">
                     <h4>Contenido para Opción 2</h4>
@@ -183,10 +165,7 @@ const DetailPage = () => {
         </Row>
       </Container>
 
-
-      <Footer/>
-
-
+      <Footer />
     </div>
   );
 };

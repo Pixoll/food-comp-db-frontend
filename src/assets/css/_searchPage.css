@@ -31,6 +31,15 @@
     flex-direction: column;
 }
 
+.search-background {
+    background-color: #ffffff;
+    opacity: 1;
+    background-image: radial-gradient(#009d0b 0.9px, #ffffff 0.9px);
+    background-size: 18px 18px;
+  }
+  
+  
+
 @media (max-width: 768px) {
     .search-container {
         flex-direction: column; 
