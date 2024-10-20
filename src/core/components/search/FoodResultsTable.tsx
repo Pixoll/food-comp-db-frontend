@@ -7,12 +7,14 @@ interface FoodResultsListProps {
   url: string;
   sortOrder: "asc" | "desc";
   handleSort: () => void;
+  searchForName: string;
+  setSearchForName: (value: string) => void;
 }
 
-const FoodResultsTable: React.FC<FoodResultsListProps> = ({ url, sortOrder, handleSort}) => {
+const FoodResultsTable: React.FC<FoodResultsListProps> = ({ url, sortOrder, handleSort,searchForName, setSearchForName}) => {
   const data = [];
 
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 1000; i++) {
     data.push({ id: i, name: "Item" + i, nutrient: "nutrient" + i });
 
   }
@@ -20,7 +22,6 @@ const FoodResultsTable: React.FC<FoodResultsListProps> = ({ url, sortOrder, hand
     sortOrder === "asc" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)
   );
   
-
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 10;
   const lastIndex = currentPage * recordsPerPage;
@@ -42,6 +43,15 @@ const FoodResultsTable: React.FC<FoodResultsListProps> = ({ url, sortOrder, hand
 
   return (
     <div className="food-list">
+      <div className="search-for-name-and-tittle">
+        <h2>Lista de resultados</h2>
+        <input
+          type="text"
+          placeholder="Buscar por nombre..."
+          value = {searchForName}
+          onChange={(e)=>setSearchForName(e.target.value)}
+        />
+      </div>
       <table className="content-table-foods">
         <thead>
           <tr>

@@ -1,3 +1,4 @@
+import "../../../assets/css/_pagination.css"
 interface PaginationProps {
     currentPage: number;
     npage: number;

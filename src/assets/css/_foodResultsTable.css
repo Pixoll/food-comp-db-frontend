@@ -1,3 +1,36 @@
+/* Estilo del título */
+.search-for-name-and-tittle h2 {
+    font-size: 24px;
+    color: #007f67; 
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: 'Arial', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: bold;
+  }
+  
+  /* Estilo del input de búsqueda */
+  .search-for-name-and-tittle input {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: 2px solid #82c4b7; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    font-size: 16px;
+  }
+  
+  .search-for-name-and-tittle input::placeholder {
+    color: #a9a9a9;
+  }
+  
+  .search-for-name-and-tittle input:focus {
+    border-color: #007f67; 
+    box-shadow: 0 4px 10px rgba(0, 127, 103, 0.2); 
+  }
 /* Tabla */
 .content-table-foods {
     border-collapse: collapse;
@@ -33,11 +66,25 @@
 .content-table-foods tbody tr:last-of-type {
     border-bottom: 2px solid #009879;
 }
-
-.content-table-foods tbody tr:hover {
-    background-color: #92e4b8;
+/* Botón Detalles */
+.content-table-foods tbody tr button {
+    background-color: #82c4b7;
+    border-radius: 25px;
+    color: white;
     cursor: pointer;
-}
+    font-family: 'Arial', sans-serif;
+    padding: 8px 16px;
+    text-align: center;
+    transition: all 0.3s;
+    border: none;
+    font-size: 14px;
+  }
+  
+  .content-table-foods tbody tr button:hover {
+    background-color: #007f67; 
+    transform: translateY(-2px); 
+  }
+  
 
 /* Tabla en pantallas pequeñas */
 @media screen and (max-width: 768px) {
@@ -74,58 +121,5 @@
 
     .content-table-foods tr {
         margin-bottom: 10px; 
-    }
-}
-
-.pagination-table {
-    display: flex;
-    justify-content: center;
-    padding: 10px 0;
-    margin: 20px 0;
-    list-style: none;
-    background-color: #ffffff;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    white-space: nowrap; 
-}
-
-.page-item-table {
-    margin: 0 5px;
-}
-
-.page-link {
-    padding: 8px 12px;
-    text-decoration: none;
-    background-color: #82c4b7;
-    color: white;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-    display: inline-block;
-}
-
-.page-link:hover {
-    background-color: #007f67;
-}
-
-.page-item-table.active .page-link {
-    background-color: #007f67;
-    font-weight: bold;
-    pointer-events: none;
-}
-
-@media (max-width: 768px) {
-    .pagination-table {
-        justify-content: space-around; 
-        overflow-x: auto; 
-        white-space: nowrap; 
-    }
-
-    .page-item-table {
-        margin: 0 2px; 
-    }
-
-    .page-link {
-        padding: 10px 8px;
-        font-size: 14px;
     }
 }

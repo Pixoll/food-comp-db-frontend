@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import SearchBox from "./SearchBox";
 import "../../../assets/css/_foodFilter.css";
 import { Collection } from "../../utils/collection";
@@ -11,12 +11,15 @@ const filterOptions = new Collection<string, string>([
 ]);
 
 const FoodFilter = () => {
+
   const [foodType, setFoodType] = useState<string>("");
   const [nutrients, setNutrients] = useState<string>("");
   const [other, setOther] = useState<string>("");
 
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [searchForName, setSearchForName] = useState<string>("");
 
+  
   const handleSort = () => {
     setSortOrder((prevSortOrder) => (prevSortOrder === "asc" ? "desc" : "asc"));
   };
@@ -25,10 +28,12 @@ const FoodFilter = () => {
     setFoodType("");
     setNutrients("");
     setOther("");
+    setSearchForName("");
+    setSortOrder("asc")
   };
 
   return (
-    <div>
+    <div className="search-container">
       <div className="food-filter">
         <h2>Filtros</h2>
 
@@ -51,7 +56,13 @@ const FoodFilter = () => {
           Reestablecer filtro
         </button>
       </div>
-      <FoodResultsTable url={"xd"} sortOrder={sortOrder} handleSort={handleSort} />
+      <FoodResultsTable 
+        url={"xd"} 
+        sortOrder={sortOrder} 
+        handleSort={handleSort} 
+        searchForName={searchForName}
+        setSearchForName={setSearchForName}
+      />
   </div>
   );
 };
