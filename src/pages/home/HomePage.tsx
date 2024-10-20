@@ -1,8 +1,5 @@
 import AppNavbar from '../../core/components/Navbar'
 import MainSectionHome from '../../core/components/MainSectionHome'
-
-
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import Footer from '../../core/components/Footer';
 
 const HomePage = () => {
@@ -10,13 +7,7 @@ const HomePage = () => {
         <div>
             <AppNavbar/>
             <MainSectionHome/>
-
-            <Footer/>
-            
-
-
-
-
+            <Footer/>           
         </div>
     );
 };

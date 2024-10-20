@@ -115,13 +115,13 @@
 
 @media (max-width: 768px) {
     .pagination-table {
-        justify-content: space-around; /* Ajusta la separación en pantallas pequeñas */
-        overflow-x: auto; /* Agrega desplazamiento horizontal si es necesario */
-        white-space: nowrap; /* Mantiene todo en una sola línea */
+        justify-content: space-around; 
+        overflow-x: auto; 
+        white-space: nowrap; 
     }
 
     .page-item-table {
-        margin: 0 2px; /* Reduce el margen para pantallas pequeñas */
+        margin: 0 2px; 
     }
 
     .page-link {

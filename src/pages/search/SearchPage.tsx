@@ -16,7 +16,6 @@ import "../../assets/css/_searchPage.css"
             <OrderByAndSearch />
             <FoodFilter />
           </div>
-            <FoodResultsTable url={url} />
           </div>
       </div>
     );
