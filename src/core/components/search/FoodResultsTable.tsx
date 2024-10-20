@@ -55,11 +55,11 @@ const FoodResultsTable: React.FC<FoodResultsListProps> = ({ url, sortOrder, hand
       <table className="content-table-foods">
         <thead>
           <tr>
-            <th>ID</th>
-            <th onClick={handleSort} style={{ cursor: "pointer" }}>Nombre {sortOrder === "asc" ? "↑" : "↓"}
+            <th style={{fontSize:22 }}>ID</th>
+            <th onClick={handleSort} style={{ cursor: "pointer", fontSize: 22 }}>Nombre {sortOrder === "asc" ? "↑" : "↓"}
             </th>
-            <th>Nutriente</th>
-            <th>Acción</th>
+            <th style={{fontSize:22 }}>Nutriente</th>
+            <th style={{fontSize:22 }}>Acción</th>
           </tr>
         </thead>
         <tbody>

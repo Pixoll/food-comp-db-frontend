@@ -11,3 +11,9 @@
     background-color: rgb(214, 226, 218);
     border-radius: 10px;
   }
+  .search-background {
+    background-color: #ffffff;
+    opacity: 1;
+    background-image: radial-gradient(#009d0b 0.9px, #ffffff 0.9px);
+    background-size: 18px 18px;
+  }
