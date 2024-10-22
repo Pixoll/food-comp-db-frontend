@@ -7,9 +7,8 @@
 }
 
 .food-filter {
-  width: 35%; 
-  height: 100%;
-  flex-shrink: 0;
+  width: 39%;
+  min-height: 300px; 
   display: flex;
   flex-direction: column;
   padding: 20px;
@@ -17,8 +16,13 @@
   border: 2px solid #ddd;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  gap: 20px;
+  gap: 50px;
 }
+.filter-group label{
+  font-size: 22px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
 
 @media (max-width: 768px) {
   .search-container {

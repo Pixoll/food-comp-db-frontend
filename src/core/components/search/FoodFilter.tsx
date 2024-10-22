@@ -4,12 +4,10 @@ import "../../../assets/css/_foodFilter.css";
 import { Collection } from "../../utils/collection";
 import FoodResultsTable from "./FoodResultsTable";
 
-const filterOptions = new Collection<string, string>([
-  ["bear", "Bear"],
-  ["ant", "Ant"],
-  ["salamander", "Salamander"],
-]);
-
+const filterOptions = new Collection<string, string>([]);
+for (let i = 0; i < 100; i++) {
+  filterOptions.set(`animal${i}`, `Animal ${i}`);
+}
 const FoodFilter = () => {
 
   const [foodType, setFoodType] = useState<string>("");
