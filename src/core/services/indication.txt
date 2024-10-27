@@ -1,5 +1,0 @@
-The services folder handles interactions with external resources like APIs. It manages tasks such as:
-
-Fetching and sending data to APIs.
-Handling API responses and errors.
-Managing authentication (e.g., tokens).

@@ -5,7 +5,7 @@ const HomeContainer = lazy(() => import("../../pages/home/HomePage"));
 const Nutrients = lazy(() => import("../components/information/Nutrients"));
 const SearchPage = lazy(() => import("../../pages/search/SearchPage"));
 const DetailPage = lazy(() => import("../../pages/detailFood/DetailPage"));
-
+const LoginPage = lazy(()=> import("../../pages/loginPage"))
 export const router = createBrowserRouter([
     {
       path: "/",
@@ -30,6 +30,10 @@ export const router = createBrowserRouter([
         {
           path: "search/details/:id",
           element: <DetailPage />,
+        },
+        {
+          path: "login",
+          element: <LoginPage />,
         },
       ],
     },
