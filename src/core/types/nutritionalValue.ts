@@ -22,7 +22,7 @@ interface Energy {
     type: string;
 }
 
-interface Vitamin {
+export interface Vitamin {
     vitamin: string;
     unit: string;
     amount: number;
@@ -32,7 +32,7 @@ interface Vitamin {
     type: string;
 }
 
-interface Mineral {
+export interface Mineral {
     mineral: string;
     unit: string;
     amount: number;

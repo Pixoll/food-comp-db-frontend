@@ -6,6 +6,7 @@ const Nutrients = lazy(() => import("../components/information/Nutrients"));
 const SearchPage = lazy(() => import("../../pages/search/SearchPage"));
 const DetailPage = lazy(() => import("../../pages/detailFood/DetailPage"));
 const LoginPage = lazy(()=> import("../../pages/loginPage"))
+const ModifyFoodDetail = lazy(()=> import("../../pages/detailFood/ModifyFoodDetail"))
 export const router = createBrowserRouter([
     {
       path: "/",
@@ -34,6 +35,10 @@ export const router = createBrowserRouter([
         {
           path: "login",
           element: <LoginPage />,
+        },
+        {
+          path: "search/Modifydetails/:id",
+          element: <ModifyFoodDetail />,
         },
       ],
     },

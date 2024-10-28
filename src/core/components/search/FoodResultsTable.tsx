@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../../../assets/css/_foodResultsTable.css";
 import Pagination from "./Pagination";
+import "../../../assets/css/_foodResultsTable.css";
+
 
 interface FoodResultsListProps {
   url: string;
@@ -31,8 +32,12 @@ const FoodResultsTable: React.FC<FoodResultsListProps> = ({ url, sortOrder, hand
 
   const navigate = useNavigate();
 
-  const handleRowClick = (id: number) => {
+  const toFoodDetail = (id: number) => {
     navigate(`/search/details/${id}`);
+  };
+
+  const toModfyFoodDetail = (id: number) => {
+    navigate(`/search/Modifydetails/${id}`);
   };
 
   const changePage = (page: number) => {
@@ -69,8 +74,11 @@ const FoodResultsTable: React.FC<FoodResultsListProps> = ({ url, sortOrder, hand
               <td data-label="Nombre">{item.name}</td>
               <td data-label="Nutriente">{item.nutrient}</td>
               <td>
-                <button onClick={() => handleRowClick(item.id)}>
+                <button onClick={() => toFoodDetail(item.id)}>
                   Detalles
+                </button>
+                <button onClick={() => toModfyFoodDetail(item.id)}>
+                  Modificar
                 </button>
               </td>
             </tr>

@@ -1,11 +1,51 @@
-import { Accordion, Table } from "react-bootstrap";
-import nutritionalValue from "../../types/nutritionalValue";
+import { Accordion, Table, Button } from "react-bootstrap";
+import nutritionalValue, {
+  Vitamin,
+  Mineral,
+} from "../../types/nutritionalValue";
+import { useState } from "react";
 
 interface NutrientAccordionProps {
   data: nutritionalValue;
 }
 
 const NutrientAccordion: React.FC<NutrientAccordionProps> = ({ data }) => {
+  const [editableRow, setEditableRow] = useState<{
+    [key: string]: number | null;
+  }>({
+    energy: null,
+    main_nutrients: null,
+    micronutrients: null,
+  });
+  const [tableData, setTableData] = useState(data);
+  console.log(tableData);
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    section: string,
+    index: number,
+    field: string
+  ) => {
+    const newData = { ...tableData };
+    (newData as any)[section][index][field] = e.target.value;
+    setTableData(newData);
+  };
+
+  const handleEditClick = (section: string, index: number) => {
+    setEditableRow({ ...editableRow, [section]: index });
+  };
+
+  const handleSaveClick = (section: string) => {
+    setEditableRow({ ...editableRow, [section]: null });
+  };
+
+  const handleDeleteClick = (section: string, index: number) => {
+    const newData = { ...tableData };
+    (newData as any)[section] = (newData as any)[section].filter(
+      (_: any, i: number) => i !== index
+    );
+    setTableData(newData);
+  };
+
   return (
     <Accordion defaultActiveKey="0">
       <Accordion.Item eventKey="0">
@@ -17,25 +57,85 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({ data }) => {
                 <th>Type</th>
                 <th>Amount</th>
                 <th>Unit</th>
+                <th>Acción</th>
               </tr>
             </thead>
             <tbody>
-              {data.energy.map((energy, index) => (
+              {tableData.energy.map((energy, index) => (
                 <tr key={index}>
-                  <td>{energy.type}</td>
-                  <td>{energy.amount}</td>
-                  <td>{energy.unit}</td>
+                  {editableRow.energy === index ? (
+                    <>
+                      <td>
+                        <input
+                          type="text"
+                          value={energy.type}
+                          onChange={(e) =>
+                            handleInputChange(e, "energy", index, "type")
+                          }
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          value={energy.amount}
+                          onChange={(e) =>
+                            handleInputChange(e, "energy", index, "amount")
+                          }
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          value={energy.unit}
+                          onChange={(e) =>
+                            handleInputChange(e, "energy", index, "unit")
+                          }
+                        />
+                      </td>
+                      <td>
+                        <Button
+                          size="sm"
+                          variant="success"
+                          onClick={() => handleSaveClick("energy")}
+                        >
+                          Guardar
+                        </Button>
+                      </td>
+                    </>
+                  ) : (
+                    <>
+                      <td>{energy.type}</td>
+                      <td>{energy.amount}</td>
+                      <td>{energy.unit}</td>
+                      <td>
+                        <Button
+                          size="sm"
+                          variant="warning"
+                          onClick={() => handleEditClick("energy", index)}
+                        >
+                          Editar
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="danger"
+                          onClick={() => handleDeleteClick("energy", index)}
+                          style={{ marginLeft: "5px" }}
+                        >
+                          Eliminar
+                        </Button>
+                      </td>
+                    </>
+                  )}
                 </tr>
               ))}
             </tbody>
           </Table>
         </Accordion.Body>
       </Accordion.Item>
-
       <Accordion.Item eventKey="1">
         <Accordion.Header>Main nutrients</Accordion.Header>
         <Accordion.Body>
-          {data.main_nutrients.map((nutrient, index) => (
+          {tableData.main_nutrients.map((nutrient, index) => (
             <div key={index}>
               {!nutrient.components || nutrient.components.length === 0 ? (
                 <Table striped bordered hover size="sm">
@@ -44,13 +144,35 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({ data }) => {
                       <th>Nutrient</th>
                       <th>Amount</th>
                       <th>Unit</th>
+                      <th>Acción</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
                       <td>{nutrient.nutrient}</td>
                       <td>{nutrient.amount}</td>
-                      <td>{"N/A"}</td>
+                      <td>N/A</td>
+                      <td>
+                        <Button
+                          size="sm"
+                          variant="warning"
+                          onClick={() =>
+                            handleEditClick("main_nutrients", index)
+                          }
+                        >
+                          Editar
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="danger"
+                          onClick={() =>
+                            handleDeleteClick("main_nutrients", index)
+                          }
+                          style={{ marginLeft: "5px" }}
+                        >
+                          Eliminar
+                        </Button>
+                      </td>
                     </tr>
                   </tbody>
                 </Table>
@@ -67,6 +189,7 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({ data }) => {
                             <th>Type</th>
                             <th>Amount</th>
                             <th>Unit</th>
+                            <th>Acción</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -74,7 +197,31 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({ data }) => {
                             <tr key={`comp-${index}-${compIndex}`}>
                               <td>{component.type}</td>
                               <td>{component.amount ?? "N/A"}</td>
-                              <td>{"N/A"}</td>
+                              <td>N/A</td>
+                              <td>
+                                <Button
+                                  size="sm"
+                                  variant="warning"
+                                  onClick={() =>
+                                    handleEditClick("main_nutrients", compIndex)
+                                  }
+                                >
+                                  Editar
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="danger"
+                                  onClick={() =>
+                                    handleDeleteClick(
+                                      "main_nutrients",
+                                      compIndex
+                                    )
+                                  }
+                                  style={{ marginLeft: "5px" }}
+                                >
+                                  Eliminar
+                                </Button>
+                              </td>
                             </tr>
                           ))}
                         </tbody>
@@ -87,49 +234,65 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({ data }) => {
           ))}
         </Accordion.Body>
       </Accordion.Item>
-
       <Accordion.Item eventKey="2">
         <Accordion.Header>Micronutrients</Accordion.Header>
         <Accordion.Body>
-          <h6>Vitamins</h6>
-          <Table striped bordered hover size="sm">
-            <thead>
-              <tr>
-                <th>Vitamin</th>
-                <th>Amount</th>
-                <th>Unit</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.micronutrients.vitamins.map((vitamin, index) => (
-                <tr key={index}>
-                  <td>{vitamin.vitamin}</td>
-                  <td>{vitamin.amount}</td>
-                  <td>{vitamin.unit}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-
-          <h6>Minerals</h6>
-          <Table striped bordered hover size="sm">
-            <thead>
-              <tr>
-                <th>Mineral</th>
-                <th>Amount</th>
-                <th>Unit</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.micronutrients.minerals.map((mineral, index) => (
-                <tr key={index}>
-                  <td>{mineral.mineral}</td>
-                  <td>{mineral.amount}</td>
-                  <td>{mineral.unit}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
+          {Object.entries(tableData.micronutrients).map(
+            ([micronutrientType, micronutrientList]) => (
+              <div key={micronutrientType}>
+                <h6>
+                  {micronutrientType.charAt(0).toUpperCase() +
+                    micronutrientType.slice(1)}
+                </h6>
+                <Table striped bordered hover size="sm">
+                  <thead>
+                    <tr>
+                      <th>Nutrient</th>
+                      <th>Amount</th>
+                      <th>Unit</th>
+                      <th>Acción</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(micronutrientList as (Vitamin | Mineral)[]).map(
+                      (micronutrient, index) => (
+                        <tr key={index}>
+                          <td>
+                            {"vitamin" in micronutrient
+                              ? micronutrient.vitamin
+                              : micronutrient.mineral}
+                          </td>
+                          <td>{micronutrient.amount}</td>
+                          <td>{micronutrient.unit}</td>
+                          <td>
+                            <Button
+                              size="sm"
+                              variant="warning"
+                              onClick={() =>
+                                handleEditClick(micronutrientType, index)
+                              }
+                            >
+                              Editar
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="danger"
+                              onClick={() =>
+                                handleDeleteClick(micronutrientType, index)
+                              }
+                              style={{ marginLeft: "5px" }}
+                            >
+                              Eliminar
+                            </Button>
+                          </td>
+                        </tr>
+                      )
+                    )}
+                  </tbody>
+                </Table>
+              </div>
+            )
+          )}
         </Accordion.Body>
       </Accordion.Item>
     </Accordion>

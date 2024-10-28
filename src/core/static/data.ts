@@ -173,7 +173,8 @@
             max: null,
             type: "Analítico"
           }
-        ]
+        ],
+        
       }
     },
     referencia: {

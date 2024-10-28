@@ -1,4 +1,3 @@
-import React from 'react';
 import "../assets/css/_login.css"
 const loginPage = () =>{
     return (
