@@ -2,34 +2,17 @@ import AppNavbar from "../../core/components/Navbar";
 import Footer from "../../core/components/Footer";
 import { useParams } from "react-router-dom";
 import { Container, Row, Col, Tab, Nav } from "react-bootstrap";
-import { PieChart, Pie, Tooltip, Legend, Cell } from "recharts";
+import { data, nutrients, data2, data3 } from "../../core/static/data"
+import Graphic from "../../core/components/detailFood/Graphic";
 import "../../assets/css/_DetailPage.css"
+import NutrientAccordion from "../../core/components/detailFood/NutrientAccordion";
+import nutritionalValue from "../../core/types/nutritionalValue";
+
 
 const DetailPage = () => {
   const { id } = useParams();
 
-  //ESTO ES PARA PROBAR LOS GRAFICOS
-  const data = [
-    { name: "Grasa", value: 5.34, fill: "#4B9CD3" }, // Azul claro
-    { name: "Carbohidratos", value: 25.31, fill: "#F5B041" }, // Amarillo
-    { name: "Fibra alimentaria", value: 9.43, fill: "#E67E22" }, // Naranja
-    { name: "Alcohol", value: 31.05, fill: "#E74C3C" }, // Rojo
-    { name: "Proteina", value: 22.56, fill: "#9B59B6" }, // Morado
-    { name: "Agua", value: 1.39, fill: "#3498DB" }, // Azul medio
-    { name: "Otros", value: 4.91, fill: "#2ECC71" }, // Verde
-  ];
-
-  //PARA PROBAR LA TABLA
-  const nutrients = [
-    { name: 'Energía [kJ]', quantity: '262' },
-    { name: 'Energía [kcal]', quantity: '62' },
-    { name: 'Proteína [g]', quantity: '0.83' },
-    { name: 'Grasa total [g]', quantity: '0' },
-    { name: 'Carbohidratos disponibles [g]', quantity: '12.8' },
-    { name: 'Sodio [mg]', quantity: '11.1' },
-    { name: 'Colesterol [mg]', quantity: '0.83' },
-    { name: 'Azúcares totales [g]', quantity: '0.0325' },
-  ];
+  const valores_nutricionales: nutritionalValue = data2[0].valores_nutricionales;
 
   return (
     <div className="detail-background">
@@ -40,12 +23,16 @@ const DetailPage = () => {
           <Col md={6}>
             <div className="transparent-container">
               <h2>Datos generales de la comida:</h2>
-              <p><strong>Código:</strong></p>
-              <p><strong>Nombre comida:</strong></p>
-              <p><strong>Nombre Cientifico:</strong></p>
-              <p><strong>Origen:</strong></p>
-              <p><strong>Tipo de alimento:</strong></p>
-              <p><strong>Grupo de comida:</strong></p>
+              <p><strong>Código: {data2[0].codigo}</strong></p>
+              <p><strong>Nombre español: {data2[0].nombre_espanol}</strong></p>
+              <p><strong>Nombre Portugues: {data2[0].nombre_portugues}</strong></p>
+              <p><strong>Nombre ingles: {data2[0].nombre_ingles}</strong></p>
+
+              <p><strong>Nombre Cientifico: {data2[0].nombre_cientifico}</strong></p>
+
+              <p><strong>Origen: {data2[0].region_origen}</strong></p>
+              <p><strong>Tipo de alimento: {data2[0].tipo_alimento}</strong></p>
+              <p><strong>Grupo de comida: {data2[0].grupo}</strong></p>
             </div>
           </Col>
           <Col md={6}>
@@ -53,23 +40,7 @@ const DetailPage = () => {
               <h2>Contenedor 2</h2>
 
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                <PieChart width={400} height={400}>
-                  <Pie
-                    data={data}
-                    dataKey="value"
-                    nameKey="name"
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={80}
-                    label
-                  >
-                    {data.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.fill} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                </PieChart>
+                <Graphic data = {data} />
               </div>
             </div>
           </Col>
@@ -114,7 +85,7 @@ const DetailPage = () => {
                 <Tab.Content>
                   <Tab.Pane eventKey="first">
                     <div style={{ textAlign: 'center' }}> 
-                      {/*TABLA NUTRICIONAL*/}
+                      {/*TABLA NUTRICIONAL
                       <table style={{
                         margin: 'auto',
                         borderCollapse: 'collapse',
@@ -147,7 +118,8 @@ const DetailPage = () => {
                             </tr>
                           ))}
                         </tbody>
-                      </table>
+                      </table>*/}
+                      <NutrientAccordion data={valores_nutricionales}/>
                     </div>
                   </Tab.Pane>
                   <Tab.Pane eventKey="second">

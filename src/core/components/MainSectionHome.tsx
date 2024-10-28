@@ -1,4 +1,3 @@
-import React from 'react';
 import { Container, Row, Col, Form, Button} from 'react-bootstrap';
 
 const HeroSection = () => {
@@ -69,9 +68,6 @@ const HeroSection = () => {
                 Búsqueda avanzada
               </Button>
             </div>
-
-
-
           </Col>
         </Row>
       </Container>
