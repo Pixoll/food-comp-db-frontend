@@ -3,7 +3,7 @@ interface NutrientComponent {
     amount: number | null;
 }
 
-interface MainNutrient {
+export interface MainNutrient {
     nutrient: string;
     amount: number;
     deviation: null | number;
@@ -13,7 +13,7 @@ interface MainNutrient {
     components?: NutrientComponent[];
 }
 
-interface Energy {
+export interface Energy {
     unit: string;
     amount: number;
     deviation: null | number;
@@ -42,7 +42,7 @@ export interface Mineral {
     type: string;
 }
 
-interface Micronutrients {
+export interface Micronutrients {
     vitamins: Vitamin[];
     minerals: Mineral[];
 }

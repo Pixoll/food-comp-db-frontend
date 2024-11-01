@@ -18,7 +18,7 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({ data }) => {
     micronutrients: null,
   });
   const [tableData, setTableData] = useState(data);
-  console.log(tableData);
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     section: string,
@@ -27,6 +27,8 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({ data }) => {
   ) => {
     const newData = { ...tableData };
     (newData as any)[section][index][field] = e.target.value;
+    console.log((newData as any)[section][index][field]);
+    console.log(newData)
     setTableData(newData);
   };
 
@@ -45,7 +47,6 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({ data }) => {
     );
     setTableData(newData);
   };
-
   return (
     <Accordion defaultActiveKey="0">
       <Accordion.Item eventKey="0">
@@ -54,9 +55,12 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({ data }) => {
           <Table striped bordered hover size="sm">
             <thead>
               <tr>
-                <th>Type</th>
-                <th>Amount</th>
-                <th>Unit</th>
+                <th>Tipo</th>
+                <th>Cantidad</th>
+                <th>Unidad</th>
+                <th>Desviación</th>
+                <th>Min</th>
+                <th>Max</th>
                 <th>Acción</th>
               </tr>
             </thead>
@@ -93,6 +97,33 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({ data }) => {
                         />
                       </td>
                       <td>
+                        <input
+                          type="text"
+                          value={energy.deviation ?? ""}
+                          onChange={(e) =>
+                            handleInputChange(e, "energy", index, "deviation")
+                          }
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          value={energy.min ?? ""}
+                          onChange={(e) =>
+                            handleInputChange(e, "energy", index, "min")
+                          }
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          value={energy.max ?? ""}
+                          onChange={(e) =>
+                            handleInputChange(e, "energy", index, "max")
+                          }
+                        />
+                      </td>
+                      <td>
                         <Button
                           size="sm"
                           variant="success"
@@ -107,6 +138,9 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({ data }) => {
                       <td>{energy.type}</td>
                       <td>{energy.amount}</td>
                       <td>{energy.unit}</td>
+                      <td>{energy.deviation}</td>
+                      <td>{energy.min}</td>
+                      <td>{energy.max}</td>
                       <td>
                         <Button
                           size="sm"
@@ -141,38 +175,144 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({ data }) => {
                 <Table striped bordered hover size="sm">
                   <thead>
                     <tr>
-                      <th>Nutrient</th>
-                      <th>Amount</th>
-                      <th>Unit</th>
+                      <th>Nutriente</th>
+                      <th>Cantidad</th>
+                      <th>Desviación</th>
+                      <th>Min</th>
+                      <th>Max</th>
+                      <th>Tipo</th>
                       <th>Acción</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>{nutrient.nutrient}</td>
-                      <td>{nutrient.amount}</td>
-                      <td>N/A</td>
-                      <td>
-                        <Button
-                          size="sm"
-                          variant="warning"
-                          onClick={() =>
-                            handleEditClick("main_nutrients", index)
-                          }
-                        >
-                          Editar
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="danger"
-                          onClick={() =>
-                            handleDeleteClick("main_nutrients", index)
-                          }
-                          style={{ marginLeft: "5px" }}
-                        >
-                          Eliminar
-                        </Button>
-                      </td>
+                    <tr key={index}>
+                      {editableRow.main_nutrients === index ? (
+                        <>
+                          <td>
+                            <input
+                              type="text"
+                              value={nutrient.nutrient}
+                              onChange={(e) =>
+                                handleInputChange(
+                                  e,
+                                  "main_nutrients",
+                                  index,
+                                  "nutrient"
+                                )
+                              }
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              value={nutrient.amount}
+                              onChange={(e) =>
+                                handleInputChange(
+                                  e,
+                                  "main_nutrients",
+                                  index,
+                                  "amount"
+                                )
+                              }
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              value={nutrient.deviation ?? ""}
+                              onChange={(e) =>
+                                handleInputChange(
+                                  e,
+                                  "main_nutrients",
+                                  index,
+                                  "deviation"
+                                )
+                              }
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              value={nutrient.min ?? ""}
+                              onChange={(e) =>
+                                handleInputChange(
+                                  e,
+                                  "main_nutrients",
+                                  index,
+                                  "min"
+                                )
+                              }
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              value={nutrient.max ?? ""}
+                              onChange={(e) =>
+                                handleInputChange(
+                                  e,
+                                  "main_nutrients",
+                                  index,
+                                  "max"
+                                )
+                              }
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              value={nutrient.type}
+                              onChange={(e) =>
+                                handleInputChange(
+                                  e,
+                                  "main_nutrients",
+                                  index,
+                                  "type"
+                                )
+                              }
+                            />
+                          </td>
+                          <td>
+                            <Button
+                              size="sm"
+                              variant="success"
+                              onClick={() => handleSaveClick("main_nutrients")}
+                            >
+                              Guardar
+                            </Button>
+                          </td>
+                        </>
+                      ) : (
+                        <>
+                          <td>{nutrient.nutrient}</td>
+                          <td>{nutrient.amount}</td>
+                          <td>{nutrient.deviation}</td>
+                          <td>{nutrient.min}</td>
+                          <td>{nutrient.max}</td>
+                          <td>{nutrient.type}</td>
+                          <td>
+                            <Button
+                              size="sm"
+                              variant="warning"
+                              onClick={() =>
+                                handleEditClick("main_nutrients", index)
+                              }
+                            >
+                              Editar
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="danger"
+                              onClick={() =>
+                                handleDeleteClick("main_nutrients", index)
+                              }
+                              style={{ marginLeft: "5px" }}
+                            >
+                              Eliminar
+                            </Button>
+                          </td>
+                        </>
+                      )}
                     </tr>
                   </tbody>
                 </Table>
@@ -247,9 +387,12 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({ data }) => {
                 <Table striped bordered hover size="sm">
                   <thead>
                     <tr>
-                      <th>Nutrient</th>
-                      <th>Amount</th>
-                      <th>Unit</th>
+                      <th>Micronutriente</th>
+                      <th>Cantidad</th>
+                      <th>Unidad</th>
+                      <th>Desviación</th>
+                      <th>Min</th>
+                      <th>Max</th>
                       <th>Acción</th>
                     </tr>
                   </thead>
@@ -257,34 +400,145 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({ data }) => {
                     {(micronutrientList as (Vitamin | Mineral)[]).map(
                       (micronutrient, index) => (
                         <tr key={index}>
-                          <td>
-                            {"vitamin" in micronutrient
-                              ? micronutrient.vitamin
-                              : micronutrient.mineral}
-                          </td>
-                          <td>{micronutrient.amount}</td>
-                          <td>{micronutrient.unit}</td>
-                          <td>
-                            <Button
-                              size="sm"
-                              variant="warning"
-                              onClick={() =>
-                                handleEditClick(micronutrientType, index)
-                              }
-                            >
-                              Editar
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="danger"
-                              onClick={() =>
-                                handleDeleteClick(micronutrientType, index)
-                              }
-                              style={{ marginLeft: "5px" }}
-                            >
-                              Eliminar
-                            </Button>
-                          </td>
+                          {editableRow[micronutrientType] === index ? (
+                            <>
+                              <td>
+                                <input
+                                  type="text"
+                                  value={
+                                    "vitamin" in micronutrient
+                                      ? micronutrient.vitamin
+                                      : micronutrient.mineral
+                                  }
+                                  onChange={(e) =>
+                                    handleInputChange(
+                                      e,
+                                      micronutrientType,
+                                      index,
+                                      "vitamin" in micronutrient
+                                        ? "vitamin"
+                                        : "mineral"
+                                    )
+                                  }
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  type="text"
+                                  value={micronutrient.amount}
+                                  onChange={(e) =>
+                                    handleInputChange(
+                                      e,
+                                      micronutrientType,
+                                      index,
+                                      "amount"
+                                    )
+                                  }
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  type="text"
+                                  value={micronutrient.unit}
+                                  onChange={(e) =>
+                                    handleInputChange(
+                                      e,
+                                      micronutrientType,
+                                      index,
+                                      "unit"
+                                    )
+                                  }
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  type="text"
+                                  value={micronutrient.deviation ?? ""}
+                                  onChange={(e) =>
+                                    handleInputChange(
+                                      e,
+                                      micronutrientType,
+                                      index,
+                                      "deviation"
+                                    )
+                                  }
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  type="text"
+                                  value={micronutrient.min ?? ""}
+                                  onChange={(e) =>
+                                    handleInputChange(
+                                      e,
+                                      micronutrientType,
+                                      index,
+                                      "min"
+                                    )
+                                  }
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  type="text"
+                                  value={micronutrient.max ?? ""}
+                                  onChange={(e) =>
+                                    handleInputChange(
+                                      e,
+                                      micronutrientType,
+                                      index,
+                                      "max"
+                                    )
+                                  }
+                                />
+                              </td>
+                              <td>
+                                <Button
+                                  size="sm"
+                                  variant="success"
+                                  onClick={() =>
+                                    handleSaveClick(micronutrientType)
+                                  }
+                                >
+                                  Guardar
+                                </Button>
+                              </td>
+                            </>
+                          ) : (
+                            <>
+                              <td>
+                                {"vitamin" in micronutrient
+                                  ? micronutrient.vitamin
+                                  : micronutrient.mineral}
+                              </td>
+                              <td>{micronutrient.amount}</td>
+                              <td>{micronutrient.unit}</td>
+                              <td>{micronutrient.deviation}</td>
+                              <td>{micronutrient.min}</td>
+                              <td>{micronutrient.max}</td>
+                              <td>
+                                <Button
+                                  size="sm"
+                                  variant="warning"
+                                  onClick={() =>
+                                    handleEditClick(micronutrientType, index)
+                                  }
+                                >
+                                  Editar
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="danger"
+                                  onClick={() =>
+                                    handleDeleteClick(micronutrientType, index)
+                                  }
+                                  style={{ marginLeft: "5px" }}
+                                >
+                                  Eliminar
+                                </Button>
+                              </td>
+                            </>
+                          )}
                         </tr>
                       )
                     )}
