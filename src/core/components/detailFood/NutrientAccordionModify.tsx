@@ -320,7 +320,7 @@ const NutrientAccordionModify: React.FC<NutrientAccordionProps> = ({ data }) => 
                 <Accordion>
                   <Accordion.Item eventKey={`comp-${index}`}>
                     <Accordion.Header>
-                      Components of {nutrient.nutrient}
+                      {nutrient.nutrient}
                     </Accordion.Header>
                     <Accordion.Body>
                       <Table striped bordered hover size="sm">
