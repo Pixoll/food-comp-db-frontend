@@ -9,7 +9,6 @@ const Footer = () => {
           <Col md={4}>
             <h5>Contacto</h5>
             <p>Email: contacto@ejemplo.com</p>
-            <p>Teléfono: +123 456 7890</p>
           </Col>
           <Col md={4}>
             <h5>Dirección</h5>
@@ -19,8 +18,6 @@ const Footer = () => {
             <h5>Políticas</h5>
             <ul style={{ listStyleType: 'none', padding: 0 }}>
               <li><a href="/politica-privacidad" style={{ color: 'white', textDecoration: 'none' }}>Política de Privacidad</a></li>
-              <li><a href="/terminos-condiciones" style={{ color: 'white', textDecoration: 'none' }}>Términos y Condiciones</a></li>
-              <li><a href="/cookies" style={{ color: 'white', textDecoration: 'none' }}>Política de Cookies</a></li>
             </ul>
           </Col>
         </Row>

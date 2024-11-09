@@ -19,7 +19,7 @@ const HeroSection = () => {
         <Row className="h-100 d-flex justify-content-center align-items-center">
           <Col md={8}>
             <h1 style={{ fontWeight: 'bold', fontSize: '3rem', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.7)', fontFamily: 'Montserrat, sans-serif' }}>
-              Food Composition Database 
+              Food Composition Database
             </h1>
             <p style={{ fontSize: '1.5rem', marginBottom: '30px', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.7)', fontFamily: 'Montserrat, sans-serif' }}>
               A data collection of food composition and more... something like that must be here hehe 

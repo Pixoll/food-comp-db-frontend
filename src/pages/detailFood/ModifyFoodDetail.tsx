@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { Container, Row, Col, Tab, Nav } from "react-bootstrap";
 import { data, data2 } from "../../core/static/data";
 import Graphic from "../../core/components/detailFood/Graphic";
-import NutrientAccordion from "../../core/components/detailFood/NutrientAccordionModify";
+import NutrientAccordion from "../../core/components/detailFood/NutrientAccordion";
 import nutritionalValue from "../../core/types/nutritionalValue";
 import writeIcon from "../../assets/images/write.png";
 import { useState } from "react";
