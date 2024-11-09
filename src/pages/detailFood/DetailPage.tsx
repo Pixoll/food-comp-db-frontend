@@ -2,7 +2,7 @@ import AppNavbar from "../../core/components/Navbar";
 import Footer from "../../core/components/Footer";
 import { useParams } from "react-router-dom";
 import { Container, Row, Col, Tab, Nav } from "react-bootstrap";
-import { data, nutrients, data2, data3 } from "../../core/static/data"
+import { data, data2 } from "../../core/static/data"
 import Graphic from "../../core/components/detailFood/Graphic";
 import "../../assets/css/_DetailPage.css"
 import NutrientAccordion from "../../core/components/detailFood/NutrientAccordion";
@@ -85,40 +85,6 @@ const DetailPage = () => {
                 <Tab.Content>
                   <Tab.Pane eventKey="first">
                     <div style={{ textAlign: 'center' }}> 
-                      {/*TABLA NUTRICIONAL
-                      <table style={{
-                        margin: 'auto',
-                        borderCollapse: 'collapse',
-                        width: '80%',
-                        boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-                        borderRadius: '8px',
-                        overflow: 'hidden',
-                      }}>
-                        <thead>
-                          <tr style={{ backgroundColor: '#00796b', color: '#ffffff', fontWeight: 'bold' }}>
-                            <th style={{ padding: '12px', borderBottom: '2px solid #004d40' }}>Nutrientes</th>
-                            <th style={{ padding: '12px', borderBottom: '2px solid #004d40' }}>Cantidad / 100 g</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {nutrients.map((nutrient, index) => (
-                            <tr
-                              key={index}
-                              style={{
-                                backgroundColor: index % 2 === 0 ? '#e0f2f1' : '#b2dfdb',
-                                transition: 'background-color 0.3s ease',
-                              }}
-                              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#80cbc4'}
-                              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = index % 2 === 0 ? '#e0f2f1' : '#b2dfdb'}
-                            >
-                              <td style={{ padding: '12px', borderBottom: '1px solid #004d40', color: nutrient.name === 'Energy' ? 'red' : '#333' }}>
-                                {nutrient.name}
-                              </td>
-                              <td style={{ padding: '12px', borderBottom: '1px solid #004d40' }}>{nutrient.quantity}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>*/}
                       <NutrientAccordion data={valores_nutricionales}/>
                     </div>
                   </Tab.Pane>
