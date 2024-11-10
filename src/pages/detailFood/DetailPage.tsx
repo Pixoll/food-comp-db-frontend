@@ -1,8 +1,8 @@
-import AppNavbar from "../../core/components/Navbar";
+
 import Footer from "../../core/components/Footer";
 import { useParams } from "react-router-dom";
 import { Container, Row, Col, Tab, Nav } from "react-bootstrap";
-import { data, nutrients, data2, data3 } from "../../core/static/data"
+import { data, data2 } from "../../core/static/data"
 import Graphic from "../../core/components/detailFood/Graphic";
 import "../../assets/css/_DetailPage.css"
 import NutrientAccordion from "../../core/components/detailFood/NutrientAccordion";
@@ -16,7 +16,6 @@ const DetailPage = () => {
 
   return (
     <div className="detail-background">
-      <AppNavbar />
 
       <Container>
         <Row>

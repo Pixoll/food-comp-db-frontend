@@ -1,9 +1,18 @@
 import { Navbar, Nav, Container } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link ,useNavigate } from 'react-router-dom';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import loginIcon from '../../assets/images/enter.png';
+import { useAuth } from '../context/AuthContext';
 
 const AppNavbar = () => {
+
+    const { state, logout} = useAuth();
+    const navigate = useNavigate();
+  
+    const handleLogout = () => {
+      logout();
+      navigate('/login');
+    };
     return (
         <Navbar className='custom-navbar' expand="lg">
             <Container>
@@ -18,13 +27,20 @@ const AppNavbar = () => {
                             <NavDropdown.Item>ESPAÑOL</NavDropdown.Item>
                             <NavDropdown.Item>INGLES</NavDropdown.Item>
                         </NavDropdown>
-                        <Nav.Link as={Link} to="/login" >
-                            <img
-                                src={loginIcon}
-                                alt="User Icon"
-                                style={{ width: '28px', marginRight: '5px', fill: '#ffffff'}}
-                            />
-                        </Nav.Link>
+                        {state.isAuthenticated ? (
+                            <Nav.Link onClick={handleLogout}>
+                                Cerrar Sesión
+                            </Nav.Link>
+                        ) : (
+                            <Nav.Link as={Link} to="/login">
+                                <img
+                                    src={loginIcon}
+                                    alt="User Icon"
+                                    style={{ width: '28px', marginRight: '5px', fill: '#ffffff' }}
+                                />
+                                Iniciar sesión
+                            </Nav.Link>
+                        )}
                     </Nav>
                 </Navbar.Collapse>
             </Container>

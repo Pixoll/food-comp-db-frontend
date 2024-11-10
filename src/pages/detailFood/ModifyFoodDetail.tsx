@@ -55,7 +55,6 @@ const ModifyFoodDetail = () => {
 
   return (
     <div className="detail-background">
-      <AppNavbar />
       <Container>
         <Row>
           <Col md={6}>

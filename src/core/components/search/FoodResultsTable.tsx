@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Pagination from "./Pagination";
 import "../../../assets/css/_foodResultsTable.css";
-
+import { useAuth } from "../../context/AuthContext";
 
 interface FoodResultsListProps {
   url: string;
@@ -31,15 +31,18 @@ const FoodResultsTable: React.FC<FoodResultsListProps> = ({ url, sortOrder, hand
   const npage = Math.ceil(sortedData.length / recordsPerPage);
 
   const navigate = useNavigate();
-
+  const { state } = useAuth();
   const toFoodDetail = (id: number) => {
     navigate(`/search/details/${id}`);
   };
 
   const toModfyFoodDetail = (id: number) => {
-    navigate(`/search/Modifydetails/${id}`);
+    if (state.isAuthenticated) {
+      navigate(`/search/Modifydetails/${id}`);
+    } else {
+      navigate("/login"); 
+    }
   };
-
   const changePage = (page: number) => {
     if (page >= 1 && page <= npage) {
       setCurrentPage(page);
@@ -77,9 +80,11 @@ const FoodResultsTable: React.FC<FoodResultsListProps> = ({ url, sortOrder, hand
                 <button onClick={() => toFoodDetail(item.id)}>
                   Detalles
                 </button>
-                <button onClick={() => toModfyFoodDetail(item.id)}>
-                  Modificar
-                </button>
+                {state.isAuthenticated && (
+                  <button onClick={() => toModfyFoodDetail(item.id)}>
+                    Modificar
+                  </button>
+                )}
               </td>
             </tr>
           ))}

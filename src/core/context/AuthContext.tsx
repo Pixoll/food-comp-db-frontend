@@ -5,91 +5,94 @@ import React, {
     useCallback,
     ReactNode,
     Dispatch,
-} from 'react';
-
-interface AuthState {
+    useContext,
+  } from 'react';
+  
+  interface AuthState {
     isAuthenticated: boolean;
-    userType: string | null;
     token: string | null;
-}
-
-type AuthAction =
-    | { type: 'LOGIN'; payload: { userType: string; token: string } }
-    | { type: 'LOGOUT' };
-
-interface AuthContextType {
+  }
+  
+  type AuthAction = { type: 'LOGIN'; payload: { token: string } } | { type: 'LOGOUT' };
+  
+  interface AuthContextType {
     state: AuthState;
     dispatch: Dispatch<AuthAction>;
     logout: () => void;
-}
-
-const initialState: AuthState = {
+  }
+  
+  const initialState: AuthState = {
     isAuthenticated: false,
-    userType: null,
     token: null,
-};
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-const authReducer = (state: AuthState, action: AuthAction): AuthState => {
+  };
+  
+  // Create context with default undefined value
+  const AuthContext = createContext<AuthContextType | undefined>(undefined);
+  
+  const authReducer = (state: AuthState, action: AuthAction): AuthState => {
     switch (action.type) {
-        case 'LOGIN':
-            return {
-                ...state,
-                isAuthenticated: true,
-                userType: action.payload.userType,
-                token: action.payload.token,
-            };
-        case 'LOGOUT':
-            return {
-                ...state,
-                isAuthenticated: false,
-                userType: null,
-                token: null,
-            };
-        default:
-            return state;
+      case 'LOGIN':
+        return {
+          ...state,
+          isAuthenticated: true,
+          token: action.payload.token,
+        };
+      case 'LOGOUT':
+        return {
+          ...state,
+          isAuthenticated: false,
+          token: null,
+        };
+      default:
+        return state;
     }
-};
-
-interface AuthProviderProps {
+  };
+  
+  interface AuthProviderProps {
     children: ReactNode;
-}
-
-const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  }
+  
+  const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [state, dispatch] = useReducer(authReducer, initialState);
-
+  
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        const userType = localStorage.getItem('userType');
-        if (token && userType) {
-            dispatch({
-                type: 'LOGIN',
-                payload: { token, userType },
-            });
-        }
+      const token = localStorage.getItem('token');
+      if (token) {
+        dispatch({
+          type: 'LOGIN',
+          payload: { token },
+        });
+      }
     }, []);
-    
+  
     useEffect(() => {
-        if (state.isAuthenticated) {
-            localStorage.setItem('token', state.token!);
-            localStorage.setItem('userType', state.userType!);
-        } else {
-            localStorage.removeItem('token');
-            localStorage.removeItem('userType');
-        }
-    }, [state.isAuthenticated]);
-
-    const logout = useCallback(() => {
+      if (state.isAuthenticated) {
+        localStorage.setItem('token', state.token!);
+      } else {
         localStorage.removeItem('token');
-        localStorage.removeItem('userType');
-        dispatch({ type: 'LOGOUT' });
+      }
+    }, [state.isAuthenticated, state.token]);
+  
+    const logout = useCallback(() => {
+      localStorage.removeItem('token');
+      dispatch({ type: 'LOGOUT' });
     }, []);
-
+  
     return (
-        <AuthContext.Provider value={{ state, dispatch, logout }}>
-            {children}
-        </AuthContext.Provider>
+      <AuthContext.Provider value={{ state, dispatch, logout }}>
+        {children}
+      </AuthContext.Provider>
     );
-};
-
-export { AuthContext, AuthProvider };
+  };
+  
+  // Custom hook for accessing AuthContext easily
+  const useAuth = () => {
+    const context = useContext(AuthContext);
+    if (!context) {
+      throw new Error('useAuth must be used within an AuthProvider');
+    }
+    return context;
+  };
+  
+  export { AuthProvider, useAuth };
+  
