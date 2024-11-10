@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { Container, Row, Col, Tab, Nav } from "react-bootstrap";
 import { data, data2 } from "../../core/static/data";
 import Graphic from "../../core/components/detailFood/Graphic";
-import NutrientAccordion from "../../core/components/detailFood/NutrientAccordion";
+import NutrientAccordionModify from "../../core/components/detailFood/NutrientAccordionModify";
 import nutritionalValue from "../../core/types/nutritionalValue";
 import writeIcon from "../../assets/images/write.png";
 import { useState } from "react";
@@ -136,7 +136,7 @@ const ModifyFoodDetail = () => {
                 <Tab.Content>
                   <Tab.Pane eventKey="first">
                     <div style={{ textAlign: "center" }}>
-                      <NutrientAccordion data={valores_nutricionales} />
+                      <NutrientAccordionModify data={valores_nutricionales} />
                     </div>
                   </Tab.Pane>
                   <Tab.Pane eventKey="second">

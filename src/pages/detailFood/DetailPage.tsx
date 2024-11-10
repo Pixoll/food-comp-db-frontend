@@ -2,17 +2,20 @@
 import Footer from "../../core/components/Footer";
 import { useParams } from "react-router-dom";
 import { Container, Row, Col, Tab, Nav } from "react-bootstrap";
-import { data, data2 } from "../../core/static/data"
+import {data, data2} from "../../core/static/data"
 import Graphic from "../../core/components/detailFood/Graphic";
 import "../../assets/css/_DetailPage.css"
 import NutrientAccordion from "../../core/components/detailFood/NutrientAccordion";
-import nutritionalValue from "../../core/types/nutritionalValue";
+import {SingleFoodResult } from "../../core/types/SingleFoodResult";
+import useFetch from "../../core/hooks/useFetch";
 
 
 const DetailPage = () => {
+   
   const { id } = useParams();
+  const {data, loading, error, handleCancelRequest} = useFetch<SingleFoodResult>(`http://localhost:3000/api/v1/foods/${id}`);;
+  const valores_nutricionales = data?.nutrientMeasurements ?? {};
 
-  const valores_nutricionales: nutritionalValue = data2[0].valores_nutricionales;
 
   return (
     <div className="detail-background">
@@ -22,10 +25,10 @@ const DetailPage = () => {
           <Col md={6}>
             <div className="transparent-container">
               <h2>Datos generales de la comida:</h2>
-              <p><strong>Código: {data2[0].codigo}</strong></p>
-              <p><strong>Nombre español: {data2[0].nombre_espanol}</strong></p>
-              <p><strong>Nombre Portugues: {data2[0].nombre_portugues}</strong></p>
-              <p><strong>Nombre ingles: {data2[0].nombre_ingles}</strong></p>
+              <p><strong>Código: {data?.code}</strong></p>
+              <p><strong>Nombre español: {data?.commonName.es}</strong></p>
+              <p><strong>Nombre Portugues: {data?.commonName.en}</strong></p>
+              <p><strong>Nombre ingles: {data?.commonName.en}</strong></p>
 
               <p><strong>Nombre Cientifico: {data2[0].nombre_cientifico}</strong></p>
 
@@ -39,7 +42,7 @@ const DetailPage = () => {
               <h2>Contenedor 2</h2>
 
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                <Graphic data = {data} />
+                {/*<Graphic data = {data} />*/}
               </div>
             </div>
           </Col>
@@ -84,41 +87,15 @@ const DetailPage = () => {
                 <Tab.Content>
                   <Tab.Pane eventKey="first">
                     <div style={{ textAlign: 'center' }}> 
-                      {/*TABLA NUTRICIONAL
-                      <table style={{
-                        margin: 'auto',
-                        borderCollapse: 'collapse',
-                        width: '80%',
-                        boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-                        borderRadius: '8px',
-                        overflow: 'hidden',
-                      }}>
-                        <thead>
-                          <tr style={{ backgroundColor: '#00796b', color: '#ffffff', fontWeight: 'bold' }}>
-                            <th style={{ padding: '12px', borderBottom: '2px solid #004d40' }}>Nutrientes</th>
-                            <th style={{ padding: '12px', borderBottom: '2px solid #004d40' }}>Cantidad / 100 g</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {nutrients.map((nutrient, index) => (
-                            <tr
-                              key={index}
-                              style={{
-                                backgroundColor: index % 2 === 0 ? '#e0f2f1' : '#b2dfdb',
-                                transition: 'background-color 0.3s ease',
-                              }}
-                              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#80cbc4'}
-                              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = index % 2 === 0 ? '#e0f2f1' : '#b2dfdb'}
-                            >
-                              <td style={{ padding: '12px', borderBottom: '1px solid #004d40', color: nutrient.name === 'Energy' ? 'red' : '#333' }}>
-                                {nutrient.name}
-                              </td>
-                              <td style={{ padding: '12px', borderBottom: '1px solid #004d40' }}>{nutrient.quantity}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>*/}
-                      <NutrientAccordion data={valores_nutricionales}/>
+                    <NutrientAccordion
+                        data={
+                          data?.nutrientMeasurements ?? {
+                            energy: [],
+                            mainNutrients: [],
+                            micronutrients: { vitamins: [], minerals: [] },
+                          }
+                        }
+                      />
                     </div>
                   </Tab.Pane>
                   <Tab.Pane eventKey="second">
