@@ -58,7 +58,7 @@ type LangualCode = {
     code: string;
 };
 
-type Reference = {
+export type Reference = {
     code: number;
     type: "report" | "thesis" | "article" | "website" | "book";
     title: string;

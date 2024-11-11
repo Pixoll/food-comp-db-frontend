@@ -7,13 +7,13 @@ import useForm from "../core/hooks/useForm";
 import { useAuth } from "../core/context/AuthContext";
 
 interface LoginForm {
-    ussername: string;
+    username: string;
     password: string;
 }
 
 const LoginPage = () => {
     const { formState, onInputChange, onResetForm } = useForm<LoginForm>({
-        ussername: "",
+        username: "",
         password: ""
     });
 
@@ -22,7 +22,7 @@ const LoginPage = () => {
     const onLogin = (e: React.FormEvent) => {
         e.preventDefault();
 
-        const url = `http://localhost:3000/api/v1/admins/${formState.ussername}/session`;
+        const url = `http://localhost:3000/api/v1/admins/${formState.username}/session`;
 
         console.log("Enviando solicitud a:", url);
         console.log("Datos enviados:", {
@@ -60,14 +60,14 @@ const LoginPage = () => {
     return (
         <Container fluid style={{ height: '100vh' }}>
             <Row className="login-background h-100 d-flex justify-content-center align-items-center">
-                <div className="login-div">
+                <div className="login-div" style={{width: '450px'}}>
                     <h1>Inicio de sesión</h1>
                     <form onSubmit={onLogin}>
                         <div className="txt_field">
                             <input
                                 type="text"
-                                name="ussername"
-                                value={formState.ussername}
+                                name="username"
+                                value={formState.username}
                                 onChange={onInputChange}
                                 required
                             />

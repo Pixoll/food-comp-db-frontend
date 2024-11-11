@@ -11,13 +11,13 @@ interface GraphicProps {
   }
   const Graphic: React.FC<GraphicProps> = ({ data }) => {
   return (
-    <PieChart width={400} height={400}>
+    <PieChart width={300} height={300}>
       <Pie
         data={data}
         dataKey="value"
         nameKey="name"
-        cx="50%"
-        cy="50%"
+        cx="40%"
+        cy="40%"
         outerRadius={80}
         label
       >
