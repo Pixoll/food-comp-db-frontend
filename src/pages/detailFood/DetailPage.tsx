@@ -71,7 +71,7 @@ export default function DetailPage() {
       .filter((mainNutrient) => mainNutrient.name !== "Cenizas")
       .map((mainNutrient, index) => ({
         name: mainNutrient.name,
-        value: mainNutrient.average / 100,
+        value:(grams / 100) * mainNutrient.average / 100,
         fill: colors[index % colors.length],
       })) || [];
 
