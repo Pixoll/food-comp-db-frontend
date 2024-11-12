@@ -1,5 +1,6 @@
 import { Accordion, Table } from "react-bootstrap";
 import { NutrientsValue } from "../../types/SingleFoodResult";
+import "../../../assets/css/_nutrientAccordion.css";
 
 interface NutrientAccordionProps {
   data: NutrientsValue;
@@ -9,21 +10,14 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({ data }) => {
   return (
     <Accordion defaultActiveKey="0">
       <Accordion.Item eventKey="0">
-        <Accordion.Header>Energy value</Accordion.Header>
+        <Accordion.Header>Valor energetico</Accordion.Header>
         <Accordion.Body>
-          <Table striped bordered hover size="sm">
+          <Table responsive="sm">
             <thead>
               <tr>
                 <th>Nombre</th>
                 <th>Unidad</th>
                 <th>Promedio</th>
-                <th>Desviación</th>
-                <th>Min</th>
-                <th>Max</th>
-                <th>Tamaño de muestra</th>
-                <th>Estandarizado</th>
-                <th>Notas</th>
-                <th>Referencias</th>
               </tr>
             </thead>
             <tbody>
@@ -32,13 +26,6 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({ data }) => {
                   <td>{energy.name}</td>
                   <td>{energy.measurementUnit}</td>
                   <td>{energy.average}</td>
-                  <td>{energy.deviation ?? ""}</td>
-                  <td>{energy.min ?? ""}</td>
-                  <td>{energy.max ?? ""}</td>
-                  <td>{energy.sampleSize ?? ""}</td>
-                  <td>{energy.standardized ?? ""}</td>
-                  <td>{energy.note ?? ""}</td>
-                  <td>{energy.referenceCodes ?? ""}</td>
                 </tr>
               ))}
             </tbody>
@@ -46,61 +33,45 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({ data }) => {
         </Accordion.Body>
       </Accordion.Item>
 
-      {/* Main Nutrients Section */}
       <Accordion.Item eventKey="1">
-        <Accordion.Header>Main nutrients</Accordion.Header>
+        <Accordion.Header>Nutrientes principales</Accordion.Header>
         <Accordion.Body>
-          {data.mainNutrients.map((nutrient, index) => (
-            <Table striped bordered hover size="sm" key={index}>
-              <thead>
-                <tr>
-                  <th>Nombre</th>
-                  <th>Unidad</th>
-                  <th>Promedio</th>
-                  <th>Desviación</th>
-                  <th>Min</th>
-                  <th>Max</th>
-                  <th>Tamaño de muestra</th>
-                  <th>Estandarizado</th>
-                  <th>Notas</th>
-                  <th>Referencias</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{nutrient.name}</td>
-                  <td>{nutrient.measurementUnit}</td>
-                  <td>{nutrient.average}</td>
-                  <td>{nutrient.deviation ?? ""}</td>
-                  <td>{nutrient.min ?? ""}</td>
-                  <td>{nutrient.max ?? ""}</td>
-                  <td>{nutrient.sampleSize ?? ""}</td>
-                  <td>{nutrient.standardized ?? ""}</td>
-                  <td>{nutrient.note ?? ""}</td>
-                  <td>{nutrient.referenceCodes ?? ""}</td>
-                </tr>
-              </tbody>
-            </Table>
-          ))}
-        </Accordion.Body>
-      </Accordion.Item>
-
-      <Accordion.Item eventKey="2">
-        <Accordion.Header>Micronutrients</Accordion.Header>
-        <Accordion.Body>
-          <Table striped bordered hover size="sm">
+          <Table responsive="sm">
             <thead>
               <tr>
                 <th>Nombre</th>
                 <th>Unidad</th>
                 <th>Promedio</th>
-                <th>Desviación</th>
-                <th>Min</th>
-                <th>Max</th>
-                <th>Tamaño de muestra</th>
-                <th>Estandarizado</th>
-                <th>Notas</th>
-                <th>Referencias</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.mainNutrients
+                .filter(
+                  (mainNutrient) =>
+                    !mainNutrient.components ||
+                    mainNutrient.components.length === 0
+                )
+                .map((mainNutrient, index) => (
+                  <tr key={index}>
+                    <td>{mainNutrient.name}</td>
+                    <td>{mainNutrient.measurementUnit}</td>
+                    <td>{mainNutrient.average}</td>
+                  </tr>
+                ))}
+            </tbody>
+          </Table>
+        </Accordion.Body>
+      </Accordion.Item>
+
+      <Accordion.Item eventKey="2">
+        <Accordion.Header>Micronutrientes</Accordion.Header>
+        <Accordion.Body>
+          <Table responsive="sm">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Unidad</th>
+                <th>Promedio</th>
               </tr>
             </thead>
             <tbody>
@@ -109,13 +80,6 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({ data }) => {
                   <td>{micronutrient.name}</td>
                   <td>{micronutrient.measurementUnit}</td>
                   <td>{micronutrient.average}</td>
-                  <td>{micronutrient.deviation ?? ""}</td>
-                  <td>{micronutrient.min ?? ""}</td>
-                  <td>{micronutrient.max ?? ""}</td>
-                  <td>{micronutrient.sampleSize ?? ""}</td>
-                  <td>{micronutrient.standardized ?? ""}</td>
-                  <td>{micronutrient.note ?? ""}</td>
-                  <td>{micronutrient.referenceCodes ?? ""}</td>
                 </tr>
               ))}
               {data.micronutrients.vitamins.map((micronutrient, index) => (
@@ -123,13 +87,6 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({ data }) => {
                   <td>{micronutrient.name}</td>
                   <td>{micronutrient.measurementUnit}</td>
                   <td>{micronutrient.average}</td>
-                  <td>{micronutrient.deviation ?? ""}</td>
-                  <td>{micronutrient.min ?? ""}</td>
-                  <td>{micronutrient.max ?? ""}</td>
-                  <td>{micronutrient.sampleSize ?? ""}</td>
-                  <td>{micronutrient.standardized ?? ""}</td>
-                  <td>{micronutrient.note ?? ""}</td>
-                  <td>{micronutrient.referenceCodes ?? ""}</td>
                 </tr>
               ))}
             </tbody>
