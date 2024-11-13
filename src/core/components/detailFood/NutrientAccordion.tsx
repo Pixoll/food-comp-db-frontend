@@ -1,5 +1,6 @@
 import { Accordion, Table, Button } from "react-bootstrap";
 import { useState } from "react";
+import "../../../assets/css/_nutrientAccordion.css"
 import {
   NutrientsValue,
   NutrientMeasurement,

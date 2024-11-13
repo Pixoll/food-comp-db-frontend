@@ -122,7 +122,6 @@ export default function DetailPage() {
             <div className="transparent-container">
               <h2>Gráficos Nutricionales</h2>
 
-              {/* Fila de gráficos */}
               <Row>
                 <Col md={6}>
                   <Graphic data={graphicData} />
@@ -137,8 +136,8 @@ export default function DetailPage() {
                   <div style={{ textAlign: "center" }}>
                     <input
                       type="number"
-                      value={inputGrams} // Muestra el valor de inputGrams
-                      onChange={(e) => setInputGrams(Number(e.target.value))} // Actualiza inputGrams
+                      value={inputGrams} 
+                      onChange={(e) => setInputGrams(Number(e.target.value))}
                       placeholder="Ingrese gramos"
                       min={1}
                       style={{
@@ -231,7 +230,7 @@ export default function DetailPage() {
 
                 <Tab.Content>
                   <Tab.Pane eventKey="first">
-                    <div style={{ textAlign: "center" }}>
+                    <div style={{ textAlign: "center" , borderRadius: "5px"}}>
                       <NutrientAccordion
                         data={
                           data?.nutrientMeasurements ?? {

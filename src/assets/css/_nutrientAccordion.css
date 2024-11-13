@@ -1,29 +1,18 @@
-.table-container {
-    display: flex;
-    justify-content: center;
-  }
-  
-  .fixed-width-table {
-    width: auto;
-    max-width: 600px;
-  }
-  
-  .fixed-width-table th,
-  .fixed-width-table td {
-    text-align: center;
-    width: 200px; 
-  }
-  @media (max-width: 768px) {
-    .fixed-width-table th,
-    .fixed-width-table td {
-      width: 150px;
-    }
-  }
-  
-  @media (max-width: 576px) {
-    .fixed-width-table th,
-    .fixed-width-table td {
-      width: 100px;
-    }
-  }
-  
+.accordion-header {
+  border-radius: 5px;
+  background-color: darkseagreen;
+  color: white;
+  font-size: 1.1rem;
+}
+
+.accordion-body {
+  background-color: #f8f9fa;
+  border-radius: 5px;
+}
+
+.accordion-button:focus {
+  box-shadow: none;
+  background-color: darkseagreen;
+  color: white;
+  border-radius: 5px;
+}
