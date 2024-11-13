@@ -204,7 +204,7 @@ export default function DetailPage() {
                         transition: "background-color 0.3s ease",
                       }}
                     >
-                      Etiquetado Nutricional ++
+                      Referencias
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>

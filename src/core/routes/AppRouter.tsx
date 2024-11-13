@@ -8,7 +8,6 @@ import HomePage from "../../pages/home/HomePage";
 import LoginPage from "../../pages/LoginPage";
 import DetailPage from "../../pages/detailFood/DetailPage";
 import SearchPage from "../../pages/search/SearchPage";
-import Nutrients from "../components/information/Nutrients";
 import ModifyFoodDetail from "../../pages/detailFood/ModifyFoodDetail";
 
 export const AppRouter = () => {
@@ -19,7 +18,6 @@ export const AppRouter = () => {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="login" element={<LoginPage />} />
-          <Route path="nutrients" element={<Nutrients />} />
           <Route path="search" element={<SearchPage />} />
           <Route path="search/details/:id" element={<DetailPage />} />
 
