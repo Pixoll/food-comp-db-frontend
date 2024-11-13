@@ -37,7 +37,7 @@ export type NutrientsValue = {
         minerals: NutrientMeasurement[];
     };
 };
-type NutrientMeasurement = {
+export type NutrientMeasurement = {
     name: string;
     measurementUnit: string;
     average: number;
