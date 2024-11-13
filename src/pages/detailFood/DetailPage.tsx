@@ -8,11 +8,17 @@ import useFetch from "../../core/hooks/useFetch";
 import { data2 } from "../../core/static/data";
 import { SingleFoodResult } from "../../core/types/SingleFoodResult";
 import Graphic from "../../core/components/detailFood/Graphic";
+import ReferencesList from "../../core/components/detailFood/ReferencesList";
 
 export default function DetailPage() {
+  const [key, setKey] = useState("first"); 
+
+  const handleReferenceClick = (code: string) => {
+    setKey("second"); 
+  };
   const { id } = useParams();
   const [grams, setGrams] = useState<number>(100);
-  const [inputGrams, setInputGrams] = useState<number>(100); 
+  const [inputGrams, setInputGrams] = useState<number>(100);
   const { data } = useFetch<SingleFoodResult>(
     `http://localhost:3000/api/v1/foods/${id}`
   );
@@ -56,7 +62,6 @@ export default function DetailPage() {
   const references = data?.references ?? [];
   const mainNutrients = data?.nutrientMeasurements?.mainNutrients ?? [];
 
-
   const graphicData =
     mainNutrients
       .filter((mainNutrient) => mainNutrient.name !== "Cenizas")
@@ -71,7 +76,7 @@ export default function DetailPage() {
       .filter((mainNutrient) => mainNutrient.name !== "Cenizas")
       .map((mainNutrient, index) => ({
         name: mainNutrient.name,
-        value:(grams / 100) * mainNutrient.average / 100,
+        value: ((grams / 100) * mainNutrient.average) / 100,
         fill: colors[index % colors.length],
       })) || [];
 
@@ -130,7 +135,7 @@ export default function DetailPage() {
               <Row className="mt-3">
                 <Col>
                   <div style={{ textAlign: "center" }}>
-                  <input
+                    <input
                       type="number"
                       value={inputGrams} // Muestra el valor de inputGrams
                       onChange={(e) => setInputGrams(Number(e.target.value))} // Actualiza inputGrams
@@ -176,6 +181,7 @@ export default function DetailPage() {
                   variant="tabs"
                   className="mb-3"
                   style={{ borderBottom: "2px solid #d1e7dd" }}
+                  activeKey={key} onSelect={(k) => setKey(k as string)}
                 >
                   <Nav.Item>
                     <Nav.Link
@@ -234,17 +240,13 @@ export default function DetailPage() {
                             micronutrients: { vitamins: [], minerals: [] },
                           }
                         }
+                        onReferenceClick={handleReferenceClick} 
                       />
                     </div>
                   </Tab.Pane>
                   <Tab.Pane eventKey="second">
-                    <h4>Contenido para Opción 2</h4>
-                    {references.map((reference, index) => (
-                      <div key={index}>
-                        <p>{reference.authors}</p>
-                        <p>{reference.title}</p>
-                      </div>
-                    ))}
+                    <h4>Referencias de nutrientes</h4>
+                      <ReferencesList references={references}/>
                   </Tab.Pane>
                   <Tab.Pane eventKey="third">
                     <h4>Contenido para Opción 3</h4>

@@ -1,14 +1,39 @@
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import { Table } from 'react-bootstrap';
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+import { Table } from "react-bootstrap";
 import { NutrientMeasurement } from "../../types/SingleFoodResult";
 
 interface ModalProps {
   data: NutrientMeasurement;
   onHide: () => void;
+  onReferenceClick: (code: string) => void;  // Agregar la función para cambiar la pestaña
 }
 
-const CenteredModal: React.FC<ModalProps> = ({ data, onHide }) => {
+const CenteredModal: React.FC<ModalProps> = ({ data, onHide, onReferenceClick }) => {
+  console.log(data.referenceCodes);
+
+  // Crear los enlaces para las referencias
+  const referenceLinks =
+    data.referenceCodes?.length ? (
+      data.referenceCodes.map((code, index) => (
+        <span key={code}>
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault(); 
+              onReferenceClick(code.toString());  
+            }}
+            style={{ textDecoration: "underline", color: "#0d6efd" }}
+          >
+            {code}
+          </a>
+          {index < (data.referenceCodes?.length ?? 0) - 1 && ", "}
+        </span>
+      ))
+    ) : (
+      "N/A"
+    );
+
   return (
     <Modal
       show={true}
@@ -22,7 +47,7 @@ const CenteredModal: React.FC<ModalProps> = ({ data, onHide }) => {
           Detalles del Nutriente
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body >
+      <Modal.Body>
         <Table responsive="lg">
           <thead>
             <tr>
@@ -41,7 +66,7 @@ const CenteredModal: React.FC<ModalProps> = ({ data, onHide }) => {
               <td>{data.max || "N/A"}</td>
               <td>{data.note || "N/A"}</td>
               <td>{data.standardized ? "Sí" : "No"}</td>
-              <td>{data.referenceCodes?.join(", ") || "N/A"}</td>
+              <td>{referenceLinks}</td>
             </tr>
           </tbody>
         </Table>

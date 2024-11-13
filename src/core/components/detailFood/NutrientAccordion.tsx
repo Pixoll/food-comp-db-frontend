@@ -10,9 +10,10 @@ import "../../../assets/css/_nutrientAccordion.css";
 
 interface NutrientAccordionProps {
   data: NutrientsValue;
+  onReferenceClick: (code: string) => void;
 }
 
-const NutrientAccordion: React.FC<NutrientAccordionProps> = ({ data }) => {
+const NutrientAccordion: React.FC<NutrientAccordionProps> = ({ data, onReferenceClick }) => {
   const [selectedNutrient, setSelectedNutrient] =
     useState<NutrientMeasurement | null>(null);
   const [showModal, setShowModal] = useState(false);
@@ -150,7 +151,7 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({ data }) => {
         </Accordion.Item>
       </Accordion>
       {showModal && selectedNutrient && (
-        <CenteredModal data={selectedNutrient} onHide={handleCloseModal} />
+        <CenteredModal data={selectedNutrient} onHide={handleCloseModal} onReferenceClick={onReferenceClick} />
       )}
     </>
   );
