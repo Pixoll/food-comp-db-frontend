@@ -1,45 +1,50 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
+.login-background {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: url('/src/assets/images/see.jpg') no-repeat center center;
+    background-size: cover;
+    height: 100vh;
+}
+
 .login-div {
     font-family: 'Poppins', sans-serif;
     color: #ffffff;
     width: 500px;
     height: 500px;
     padding: 40px;
-    position: absolute;
-    top: 40%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     border-radius: 10px;
     box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.05);
     background-size: contain;
     background: rgba(255, 255, 255, 0.25);  
     backdrop-filter: blur(20px);
-  }
-  
-  .login-div h1 {
+}
+
+.login-div h1 {
     text-align: center;
     margin-bottom: 20px;
     font-size: 24px;
     color: #ffffff;
-  }
+}
 
-  .login-title {
-    display: inline-block; /* Permite ajustar el tamaño del fondo */
-    background-color: rgba(255, 255, 255, 0.8); /* Color de fondo (ajústalo según tu preferencia) */
-    padding: 10px 20px; /* Espaciado alrededor del texto */
-    border-radius: 8px; /* Bordes redondeados opcionales */
-    color: #ffffff; /* Color del texto */
-    font-weight: bold; /* Estilización del texto */
-  }
+.login-title {
+    display: inline-block; 
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 10px 20px; 
+    border-radius: 8px; 
+    color: #ffffff;
+    font-weight: bold; 
+}
 
-  form .txt_field {
+form .txt_field {
     position: relative;
     border-bottom: 2px solid #adadad;
     margin: 30px 0;
-  }
-   
-  .txt_field input {
+}
+
+.txt_field input {
     width: 100%;
     padding: 0 5px;
     height: 40px;
@@ -47,9 +52,9 @@
     border: none;
     background: none;
     outline: none;
-  }
-  
-  .txt_field label {
+}
+
+.txt_field label {
     position: absolute;
     top: 50%;
     left: 5px;
@@ -58,9 +63,9 @@
     font-size: 16px;
     pointer-events: none;
     transition: .5s;
-  }
-  
-  .txt_field span::before {
+}
+
+.txt_field span::before {
     content: '';
     position: absolute;
     top: 40px;
@@ -69,43 +74,37 @@
     height: 2px;
     background: #009000;
     transition: .5s;
-  }
-  
-  .txt_field input:focus ~ label,
-  .txt_field input:valid ~ label {
+}
+
+.txt_field input:focus ~ label,
+.txt_field input:valid ~ label {
     top: -5px;
     color: #009000;
-  }
-  
-  .txt_field input:focus ~ span::before,
-  .txt_field input:valid ~ span::before {
+}
+
+.txt_field input:focus ~ span::before,
+.txt_field input:valid ~ span::before {
     width: 100%;
-  }
-  
-  .login-submit {
-    width: 100%; /* Hace que el botón ocupe el 100% del contenedor */
-    height: 50px; /* Define la altura del botón */
-    border: none; /* Elimina el borde por defecto */
-    background-color: #28a745; /* Color de fondo verde */
-    color: #fff; /* Color de texto blanco */
-    font-size: 18px; /* Tamaño de fuente */
-    font-weight: bold; /* Negrita */
-    border-radius: 25px; /* Bordes redondeados */
-    cursor: pointer; /* Apunta el cursor como si fuera un puntero */
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Añadir transición para el cambio de color y animación */
+}
+
+.login-submit {
+    width: 100%; 
+    height: 50px; 
+    border: none; 
+    background-color: #28a745; 
+    color: #fff; 
+    font-size: 18px; 
+    font-weight: bold; 
+    border-radius: 25px; 
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .login-submit:hover {
-    background-color: #218838; /* Color de fondo más oscuro cuando se pasa el ratón por encima */
-    transform: scale(1.05); /* Agranda el botón al pasar el mouse */
+    background-color: #218838; 
+    transform: scale(1.05);
 }
 
 .login-submit:focus {
-    outline: none; /* Elimina el borde del enfoque */
-}
-
-  .login-background {
-    background: url('/src/assets/images/see.jpg') no-repeat center center;
-    background-size: cover;
-    height: 100vh;
+    outline: none; 
 }
