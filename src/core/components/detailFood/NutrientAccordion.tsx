@@ -13,7 +13,10 @@ interface NutrientAccordionProps {
   onReferenceClick: (code: string) => void;
 }
 
-const NutrientAccordion: React.FC<NutrientAccordionProps> = ({ data, onReferenceClick }) => {
+const NutrientAccordion: React.FC<NutrientAccordionProps> = ({
+  data,
+  onReferenceClick,
+}) => {
   const [selectedNutrient, setSelectedNutrient] =
     useState<NutrientMeasurement | null>(null);
   const [showModal, setShowModal] = useState(false);
@@ -78,19 +81,18 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({ data, onReference
               <tbody>
                 {data.mainNutrients
                   .filter(
-                    (mainNutrient) =>
-                      !mainNutrient.components ||
-                      mainNutrient.components.length === 0
+                    (nutrient) =>
+                      !nutrient.components || nutrient.components.length === 0
                   )
-                  .map((mainNutrient, index) => (
+                  .map((nutrient, index) => (
                     <tr key={index}>
-                      <td>{mainNutrient.name}</td>
-                      <td>{mainNutrient.measurementUnit}</td>
-                      <td>{mainNutrient.average}</td>
+                      <td>{nutrient.name}</td>
+                      <td>{nutrient.measurementUnit}</td>
+                      <td>{nutrient.average}</td>
                       <td>
                         <Button
                           variant="link"
-                          onClick={() => handleOpenModal(mainNutrient)}
+                          onClick={() => handleOpenModal(nutrient)}
                         >
                           <BsQuestionCircle size={30} color="green" />
                         </Button>
@@ -99,6 +101,50 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({ data, onReference
                   ))}
               </tbody>
             </Table>
+            {data.mainNutrients
+              .filter(
+                (nutrient) =>
+                  nutrient.components && nutrient.components.length > 0
+              )
+              .map((nutrient, index) => (
+                <Accordion
+                  key={`sub-${index}`}
+                  defaultActiveKey={`sub-${index}`}
+                >
+                  <Accordion.Item eventKey={`sub-${index}`}>
+                    <Accordion.Header>{nutrient.name}</Accordion.Header>
+                    <Accordion.Body>
+                      <Table responsive="sm">
+                        <thead>
+                          <tr>
+                            <th>Nombre</th>
+                            <th>Unidad</th>
+                            <th>Promedio</th>
+                            <th>Detalles</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {nutrient.components.map((subComponent, subIndex) => (
+                            <tr key={subIndex}>
+                              <td>{subComponent.name}</td>
+                              <td>{subComponent.measurementUnit}</td>
+                              <td>{subComponent.average}</td>
+                              <td>
+                                <Button
+                                  variant="link"
+                                  onClick={() => handleOpenModal(subComponent)}
+                                >
+                                  <BsQuestionCircle size={30} color="green" />
+                                </Button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                    </Accordion.Body>
+                  </Accordion.Item>
+                </Accordion>
+              ))}
           </Accordion.Body>
         </Accordion.Item>
 
@@ -151,7 +197,11 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({ data, onReference
         </Accordion.Item>
       </Accordion>
       {showModal && selectedNutrient && (
-        <CenteredModal data={selectedNutrient} onHide={handleCloseModal} onReferenceClick={onReferenceClick} />
+        <CenteredModal
+          data={selectedNutrient}
+          onHide={handleCloseModal}
+          onReferenceClick={onReferenceClick}
+        />
       )}
     </>
   );
