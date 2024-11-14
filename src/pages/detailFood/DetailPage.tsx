@@ -5,7 +5,6 @@ import "../../assets/css/_DetailPage.css";
 import NutrientAccordion from "../../core/components/detailFood/NutrientAccordion";
 import Footer from "../../core/components/Footer";
 import useFetch from "../../core/hooks/useFetch";
-import { data2 } from "../../core/static/data";
 import { SingleFoodResult } from "../../core/types/SingleFoodResult";
 import Graphic from "../../core/components/detailFood/Graphic";
 import ReferencesList from "../../core/components/detailFood/ReferencesList";
@@ -20,6 +19,7 @@ export default function DetailPage() {
   const { id } = useParams();
   const [grams, setGrams] = useState<number>(100);
   const [inputGrams, setInputGrams] = useState<number>(100);
+
   const { data } = useFetch<SingleFoodResult>(
     `http://localhost:3000/api/v1/foods/${id}`
   );
@@ -27,7 +27,6 @@ export default function DetailPage() {
   if (!data) {
     return <h2>Cargando...</h2>;
   }
-  data.langualCodes.map((code) => console.log(code));
   const colors = [
     "#0088FE",
     "#00C49F",
@@ -66,19 +65,20 @@ export default function DetailPage() {
 
   const graphicData =
     mainNutrients
-      .filter((mainNutrient) => mainNutrient.name !== "Cenizas")
+      .filter((mainNutrient) => mainNutrient.nutrientId !== 12)
       .map((mainNutrient, index) => ({
         name: mainNutrient.name,
-        value: (grams / 100) * mainNutrient.average,
+        value: +((grams / 100) * mainNutrient.average).toFixed(2),
         fill: colors[index % colors.length],
       })) || [];
 
+
   const graphicDataPorcent =
     mainNutrients
-      .filter((mainNutrient) => mainNutrient.name !== "Cenizas")
+      .filter((mainNutrient) => mainNutrient.nutrientId !== 12 && mainNutrient.nutrientId !== 1)
       .map((mainNutrient, index) => ({
         name: mainNutrient.name,
-        value: ((grams / 100) * mainNutrient.average) / 100,
+        value: +(((grams / 100) * mainNutrient.average) / 100).toFixed(2),
         fill: colors[index % colors.length],
       })) || [];
 
@@ -166,9 +166,7 @@ export default function DetailPage() {
             </div>
           </Col>
           <Col md={6}>
-            <div className="transparent-container">
-              <h2>Gráficos Nutricionales</h2>
-
+            <div className="transparent-container" >
               <Row>
                 <Col md={6}>
                   <Graphic data={graphicData} />
@@ -184,7 +182,7 @@ export default function DetailPage() {
                     <input
                       type="number"
                       value={inputGrams}
-                      onChange={(e) => setInputGrams(Number(e.target.value))}
+                      onChange={(e) => setInputGrams(+(e.target.value))}
                       placeholder="Ingrese gramos"
                       min={1}
                       style={{

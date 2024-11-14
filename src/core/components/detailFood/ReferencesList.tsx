@@ -6,7 +6,6 @@ interface ReferencesListProps {
 }
 
 const ReferencesList: React.FC<ReferencesListProps> = ({ references }) => {
-  console.log(references.map(reference=>console.log(reference.code)))
   return (
     <ListGroup>
       {references.map((reference, index) => (

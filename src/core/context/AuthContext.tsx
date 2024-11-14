@@ -26,7 +26,6 @@ import React, {
     token: null,
   };
   
-  // Create context with default undefined value
   const AuthContext = createContext<AuthContextType | undefined>(undefined);
   
   const authReducer = (state: AuthState, action: AuthAction): AuthState => {

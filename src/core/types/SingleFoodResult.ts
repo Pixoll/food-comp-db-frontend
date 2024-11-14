@@ -38,6 +38,7 @@ export type NutrientsValue = {
     };
 };
 export type NutrientMeasurement = {
+    nutrientId: number;
     name: string;
     measurementUnit: string;
     average: number;
