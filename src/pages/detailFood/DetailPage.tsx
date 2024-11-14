@@ -9,12 +9,13 @@ import { data2 } from "../../core/static/data";
 import { SingleFoodResult } from "../../core/types/SingleFoodResult";
 import Graphic from "../../core/components/detailFood/Graphic";
 import ReferencesList from "../../core/components/detailFood/ReferencesList";
+import LengualCodeComponent from "../../core/components/detailFood/LengualCodeComponent";
 
 export default function DetailPage() {
-  const [key, setKey] = useState("first"); 
+  const [key, setKey] = useState("first");
 
   const handleReferenceClick = (code: string) => {
-    setKey("second"); 
+    setKey("second");
   };
   const { id } = useParams();
   const [grams, setGrams] = useState<number>(100);
@@ -24,8 +25,9 @@ export default function DetailPage() {
   );
 
   if (!data) {
-    return <h2>data del alimento no encontrada</h2>;
+    return <h2>Cargando...</h2>;
   }
+  data.langualCodes.map((code) => console.log(code));
   const colors = [
     "#0088FE",
     "#00C49F",
@@ -89,33 +91,78 @@ export default function DetailPage() {
         <Row>
           <Col md={6}>
             <div className="transparent-container">
-              <h2>Datos generales de la comida:</h2>
+              <h2>Datos generales del alimento:</h2>
               <p>
-                <strong>Código: {data?.code}</strong>
-              </p>
-              <p>
-                <strong>Nombre español: {data?.commonName?.es}</strong>
-              </p>
-              <p>
-                <strong>Nombre Portugues: {data?.commonName?.en}</strong>
-              </p>
-              <p>
-                <strong>Nombre ingles: {data?.commonName?.en}</strong>
+                <strong>Código:</strong> {data.code}
               </p>
 
-              <p>
-                <strong>Nombre Cientifico: {data2[0].nombre_cientifico}</strong>
-              </p>
+              {data.commonName?.es && (
+                <p>
+                  <strong>Nombre en Español:</strong> {data.commonName.es}
+                </p>
+              )}
+              {data.commonName?.pt && (
+                <p>
+                  <strong>Nombre en Portugués:</strong> {data.commonName.pt}
+                </p>
+              )}
+              {data.commonName?.en && (
+                <p>
+                  <strong>Nombre en Inglés:</strong> {data.commonName.en}
+                </p>
+              )}
+
+              {data.scientificName && (
+                <p>
+                  <strong>Nombre Científico:</strong> {data.scientificName}
+                </p>
+              )}
+              {data.subspecies && (
+                <p>
+                  <strong>Subespecie:</strong> {data.subspecies}
+                </p>
+              )}
+              {data.strain && (
+                <p>
+                  <strong>Cepa:</strong> {data.strain}
+                </p>
+              )}
+              {data.brand && (
+                <p>
+                  <strong>Marca:</strong> {data.brand}
+                </p>
+              )}
+              {data.observation && (
+                <p>
+                  <strong>Observación:</strong> {data.observation}
+                </p>
+              )}
 
               <p>
-                <strong>Origen: {data2[0].region_origen}</strong>
+                <strong>Grupo de comida:</strong> {data.group.name} (Código:{" "}
+                {data.group.code})
               </p>
               <p>
-                <strong>Tipo de alimento: {data2[0].tipo_alimento}</strong>
+                <strong>Tipo de alimento:</strong> {data.type.name} (Código:{" "}
+                {data.type.code})
               </p>
-              <p>
-                <strong>Grupo de comida: {data2[0].grupo}</strong>
-              </p>
+
+              {data.ingredients?.es && (
+                <p>
+                  <strong>Ingredientes (Español):</strong> {data.ingredients.es}
+                </p>
+              )}
+              {data.ingredients?.pt && (
+                <p>
+                  <strong>Ingredientes (Portugués):</strong>{" "}
+                  {data.ingredients.pt}
+                </p>
+              )}
+              {data.ingredients?.en && (
+                <p>
+                  <strong>Ingredientes (Inglés):</strong> {data.ingredients.en}
+                </p>
+              )}
             </div>
           </Col>
           <Col md={6}>
@@ -136,7 +183,7 @@ export default function DetailPage() {
                   <div style={{ textAlign: "center" }}>
                     <input
                       type="number"
-                      value={inputGrams} 
+                      value={inputGrams}
                       onChange={(e) => setInputGrams(Number(e.target.value))}
                       placeholder="Ingrese gramos"
                       min={1}
@@ -180,7 +227,8 @@ export default function DetailPage() {
                   variant="tabs"
                   className="mb-3"
                   style={{ borderBottom: "2px solid #d1e7dd" }}
-                  activeKey={key} onSelect={(k) => setKey(k as string)}
+                  activeKey={key}
+                  onSelect={(k) => setKey(k as string)}
                 >
                   <Nav.Item>
                     <Nav.Link
@@ -230,7 +278,7 @@ export default function DetailPage() {
 
                 <Tab.Content>
                   <Tab.Pane eventKey="first">
-                    <div style={{ textAlign: "center" , borderRadius: "5px"}}>
+                    <div style={{ textAlign: "center", borderRadius: "5px" }}>
                       <NutrientAccordion
                         data={
                           data?.nutrientMeasurements ?? {
@@ -239,17 +287,17 @@ export default function DetailPage() {
                             micronutrients: { vitamins: [], minerals: [] },
                           }
                         }
-                        onReferenceClick={handleReferenceClick} 
+                        onReferenceClick={handleReferenceClick}
                       />
                     </div>
                   </Tab.Pane>
                   <Tab.Pane eventKey="second">
                     <h4>Referencias de nutrientes</h4>
-                      <ReferencesList references={references}/>
+                    <ReferencesList references={references} />
                   </Tab.Pane>
                   <Tab.Pane eventKey="third">
-                    <h4>Contenido para Opción 3</h4>
-                    <p>Aquí va el contenido específico para la opción 3.</p>
+                    <h4>Codigos lenguales</h4>
+                    <LengualCodeComponent data={data.langualCodes} />
                   </Tab.Pane>
                 </Tab.Content>
               </Tab.Container>

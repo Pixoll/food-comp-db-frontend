@@ -6,13 +6,11 @@ import { NutrientMeasurement } from "../../types/SingleFoodResult";
 interface ModalProps {
   data: NutrientMeasurement;
   onHide: () => void;
-  onReferenceClick: (code: string) => void;  // Agregar la función para cambiar la pestaña
+  onReferenceClick: (code: string) => void;  // Agregar la funcion para cambiar la pestaña(no está termianada)
 }
 
 const CenteredModal: React.FC<ModalProps> = ({ data, onHide, onReferenceClick }) => {
-  console.log(data.referenceCodes);
 
-  // Crear los enlaces para las referencias
   const referenceLinks =
     data.referenceCodes?.length ? (
       data.referenceCodes.map((code, index) => (

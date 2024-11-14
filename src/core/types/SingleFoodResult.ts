@@ -54,8 +54,12 @@ type NutrientMeasurementWithComponents = NutrientMeasurement & {
     components: NutrientMeasurement[];
 };
 
-type LangualCode = {
-    code: string;
+export type LangualCode = {
+    descriptor: string;
+    children: Array<{
+        code: string;
+        descriptor: string;
+    }>;
 };
 
 export type Reference = {

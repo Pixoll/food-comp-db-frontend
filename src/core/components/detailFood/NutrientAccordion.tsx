@@ -7,7 +7,6 @@ import {
 } from "../../types/SingleFoodResult";
 import { BsQuestionCircle } from "react-icons/bs";
 import CenteredModal from "./CenteredModal";
-import "../../../assets/css/_nutrientAccordion.css";
 
 interface NutrientAccordionProps {
   data: NutrientsValue;
@@ -33,7 +32,7 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({
   };
   return (
     <>
-      <Accordion defaultActiveKey="0">
+      <Accordion className="mi-accordion" defaultActiveKey="0" >
         <Accordion.Item eventKey="0">
           <Accordion.Header>Valor energetico</Accordion.Header>
           <Accordion.Body>
@@ -109,6 +108,7 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({
               )
               .map((nutrient, index) => (
                 <Accordion
+                 className="mi-accordion"
                   key={`sub-${index}`}
                   defaultActiveKey={`sub-${index}`}
                 >
