@@ -2,6 +2,8 @@ import "../assets/css/_login.css";
 import { Container, Row } from 'react-bootstrap';
 import { FaUserCircle, FaLock } from "react-icons/fa";
 import { BiLogIn } from "react-icons/bi";
+import { useNavigate } from 'react-router-dom';
+
 import axios from 'axios';
 import useForm from "../core/hooks/useForm";
 import { useAuth } from "../core/context/AuthContext";
@@ -16,7 +18,7 @@ const LoginPage = () => {
         username: "",
         password: ""
     });
-
+    const navigate = useNavigate();
     const { dispatch } = useAuth();
 
     const onLogin = (e: React.FormEvent) => {
@@ -41,6 +43,7 @@ const LoginPage = () => {
             });
 
             onResetForm();
+            navigate('/');
         })
         .catch((error) => {
             console.error("Error en el inicio de sesión:", error);

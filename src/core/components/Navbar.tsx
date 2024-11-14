@@ -38,7 +38,6 @@ const AppNavbar = () => {
                                     alt="User Icon"
                                     style={{ width: '28px', marginRight: '5px', fill: '#ffffff' }}
                                 />
-                                Iniciar sesión
                             </Nav.Link>
                         )}
                     </Nav>
