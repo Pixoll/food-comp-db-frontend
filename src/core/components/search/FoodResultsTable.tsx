@@ -14,7 +14,7 @@ interface FoodResultsListProps {
 
 const FoodResultsTable: React.FC<FoodResultsListProps> = ({ url, sortOrder, handleSort,searchForName, setSearchForName}) => {
   const data = [];
-
+  
   for (let i = 1; i < 1000; i++) {
     data.push({ id: i, name: "Item" + i, nutrient: "nutrient" + i });
 

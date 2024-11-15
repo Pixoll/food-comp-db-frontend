@@ -1,15 +1,13 @@
 import { useState } from "react";
 import SearchBox from "./SearchBox";
 import "../../../assets/css/_foodFilter.css";
-import { Collection } from "../../utils/collection";
 import FoodResultsTable from "./FoodResultsTable";
+import GetGroups from "./gets/GetGroups";
+import GetLanguages from "./gets/GetLanguages";
+import GetRegions from "./gets/GetRegions";
+import GetTypes from "./gets/getTypes";
 
-const filterOptions = new Collection<string, string>([]);
-for (let i = 0; i < 100; i++) {
-  filterOptions.set(`animal${i}`, `Animal ${i}`);
-}
 const FoodFilter = () => {
-
   const [foodType, setFoodType] = useState<string>("");
   const [nutrients, setNutrients] = useState<string>("");
   const [other, setOther] = useState<string>("");
@@ -17,7 +15,11 @@ const FoodFilter = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [searchForName, setSearchForName] = useState<string>("");
 
-  
+  const { collectionGroups: groups } = GetGroups();
+  const { collectionRegions: regions } = GetRegions();
+  const { collectionTypes: types } = GetTypes();
+  const { collectionLanguages: languages } = GetLanguages();
+
   const handleSort = () => {
     setSortOrder((prevSortOrder) => (prevSortOrder === "asc" ? "desc" : "asc"));
   };
@@ -27,7 +29,7 @@ const FoodFilter = () => {
     setNutrients("");
     setOther("");
     setSearchForName("");
-    setSortOrder("asc")
+    setSortOrder("asc");
   };
 
   return (
@@ -37,31 +39,36 @@ const FoodFilter = () => {
 
         <div className="filter-group">
           <label htmlFor="other">Tipo de alimento</label>
-          <SearchBox filterOptions={filterOptions} />
+          <SearchBox filterOptions={types} />
         </div>
 
         <div className="filter-group">
-          <label htmlFor="other">Nutriente</label>
-          <SearchBox filterOptions={filterOptions} />
+          <label htmlFor="other">Regiones de Chile</label>
+          <SearchBox filterOptions={regions} />
         </div>
 
         <div className="filter-group">
-          <label htmlFor="other">Otro...</label>
-          <SearchBox filterOptions={filterOptions} />
+          <label htmlFor="other">Grupo alimentario</label>
+          <SearchBox filterOptions={groups} />
+        </div>
+
+        <div className="filter-group">
+          <label htmlFor="other">Lenguajes</label>
+          <SearchBox filterOptions={languages} />
         </div>
 
         <button onClick={resetFilters} className="reset-button">
           Reestablecer filtro
         </button>
       </div>
-      <FoodResultsTable 
-        url={"xd"} 
-        sortOrder={sortOrder} 
-        handleSort={handleSort} 
+      <FoodResultsTable
+        url=""
+        sortOrder={sortOrder}
+        handleSort={handleSort}
         searchForName={searchForName}
         setSearchForName={setSearchForName}
       />
-  </div>
+    </div>
   );
 };
 export default FoodFilter;
