@@ -40,6 +40,7 @@ const AppNavbar = () => {
                                 />
                             </Nav.Link>
                         )}
+                        
                     </Nav>
                 </Navbar.Collapse>
             </Container>

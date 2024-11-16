@@ -32,7 +32,7 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({
   };
   return (
     <>
-      <Accordion className="mi-accordion" defaultActiveKey="0" >
+      <Accordion className="mi-accordion" defaultActiveKey={["0", "1", "2"]} >
         <Accordion.Item eventKey="0">
           <Accordion.Header>Valor energetico</Accordion.Header>
           <Accordion.Body>

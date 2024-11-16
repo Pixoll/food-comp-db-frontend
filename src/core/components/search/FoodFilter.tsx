@@ -6,12 +6,18 @@ import GetGroups from "./gets/GetGroups";
 import GetLanguages from "./gets/GetLanguages";
 import GetRegions from "./gets/GetRegions";
 import GetTypes from "./gets/getTypes";
+import { FoodResult } from "../../types/option";
+import useFetch from "../../hooks/useFetch";
+import qs from "qs";
 
 const FoodFilter = () => {
   const [foodType, setFoodType] = useState<string>("");
   const [nutrients, setNutrients] = useState<string>("");
   const [other, setOther] = useState<string>("");
 
+
+  const {data:FoodResulst} = useFetch<FoodResult[]>("http://localhost:3000/api/v1/foods")
+  console.log(FoodResulst)
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [searchForName, setSearchForName] = useState<string>("");
 
@@ -62,7 +68,7 @@ const FoodFilter = () => {
         </button>
       </div>
       <FoodResultsTable
-        url=""
+        data = {FoodResulst ?? []}
         sortOrder={sortOrder}
         handleSort={handleSort}
         searchForName={searchForName}

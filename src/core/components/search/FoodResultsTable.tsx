@@ -3,32 +3,25 @@ import { useNavigate } from "react-router-dom";
 import Pagination from "./Pagination";
 import "../../../assets/css/_foodResultsTable.css";
 import { useAuth } from "../../context/AuthContext";
+import { FoodResult } from "../../types/option";
 
 interface FoodResultsListProps {
-  url: string;
+  data: FoodResult[];
   sortOrder: "asc" | "desc";
   handleSort: () => void;
   searchForName: string;
   setSearchForName: (value: string) => void;
 }
 
-const FoodResultsTable: React.FC<FoodResultsListProps> = ({ url, sortOrder, handleSort,searchForName, setSearchForName}) => {
-  const data = [];
-  
-  for (let i = 1; i < 1000; i++) {
-    data.push({ id: i, name: "Item" + i, nutrient: "nutrient" + i });
+const FoodResultsTable: React.FC<FoodResultsListProps> = ({ data, sortOrder, handleSort,searchForName, setSearchForName}) => {
 
-  }
-  const sortedData = [...data].sort((a, b) => 
-    sortOrder === "asc" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)
-  );
   
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 10;
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
-  const records = sortedData.slice(firstIndex, lastIndex);
-  const npage = Math.ceil(sortedData.length / recordsPerPage);
+  const records = data.slice(firstIndex, lastIndex);
+  const npage = Math.ceil(data.length / recordsPerPage);
 
   const navigate = useNavigate();
   const { state } = useAuth();
@@ -66,7 +59,7 @@ const FoodResultsTable: React.FC<FoodResultsListProps> = ({ url, sortOrder, hand
             <th style={{fontSize:22 }}>ID</th>
             <th onClick={handleSort} style={{ cursor: "pointer", fontSize: 22 }}>Nombre {sortOrder === "asc" ? "↑" : "↓"}
             </th>
-            <th style={{fontSize:22 }}>Nutriente</th>
+            <th style={{fontSize:22 }}>Tipo</th>
             <th style={{fontSize:22 }}>Acción</th>
           </tr>
         </thead>
@@ -74,14 +67,15 @@ const FoodResultsTable: React.FC<FoodResultsListProps> = ({ url, sortOrder, hand
           {records.map((item) => (
             <tr key={item.id}>
               <td data-label="ID">{item.id}</td>
-              <td data-label="Nombre">{item.name}</td>
-              <td data-label="Nutriente">{item.nutrient}</td>
+              <td data-label="Nombre">{item.commonName.en}</td>
+
+              <td data-label="Nombre cientifico">{item.scientificName}</td>
               <td>
-                <button onClick={() => toFoodDetail(item.id)}>
+                <button onClick={() => toFoodDetail(parseInt(item.id))}>
                   Detalles
                 </button>
                 {state.isAuthenticated && (
-                  <button onClick={() => toModfyFoodDetail(item.id)}>
+                  <button onClick={() => toModfyFoodDetail(parseInt(item.id))}>
                     Modificar
                   </button>
                 )}
