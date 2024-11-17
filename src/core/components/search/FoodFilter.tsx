@@ -26,9 +26,12 @@ const FoodFilter = () => {
   const { collectionTypes: types } = GetTypes();
   const { collectionLanguages: languages } = GetLanguages();
 
-  const handleSort = () => {
-    setSortOrder((prevSortOrder) => (prevSortOrder === "asc" ? "desc" : "asc"));
+  const handleSort = (order: "asc" | "desc") => {
+    if (order === "asc" || order === "desc") {
+      setSortOrder(order);
+    }
   };
+  
 
   const handleFilterChange = (filterKey: keyof typeof selectedFilters, values: string[]) => {
     setSelectedFilters((prevFilters) => ({
