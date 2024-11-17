@@ -11,10 +11,13 @@ import useFetch from "../../hooks/useFetch";
 import qs from "qs";
 
 const FoodFilter = () => {
-  const [foodType, setFoodType] = useState<string>("");
-  const [nutrients, setNutrients] = useState<string>("");
-  const [other, setOther] = useState<string>("");
-
+  const [selectedFilters, setSelectedFilters] = useState({
+    foodTypeFilter: [],
+    regionsFilter: [],
+    groupsFilter: [],
+    languagesFilter: [],
+  });
+  
 
   const {data:FoodResulst} = useFetch<FoodResult[]>("http://localhost:3000/api/v1/foods")
   console.log(FoodResulst)
@@ -31,9 +34,12 @@ const FoodFilter = () => {
   };
 
   const resetFilters = () => {
-    setFoodType("");
-    setNutrients("");
-    setOther("");
+    setSelectedFilters({
+      foodTypeFilter: [],
+      regionsFilter: [],
+      groupsFilter: [],
+      languagesFilter: [],
+    });
     setSearchForName("");
     setSortOrder("asc");
   };

@@ -16,12 +16,12 @@ export default function DetailPage() {
   const handleReferenceClick = (code: string) => {
     setKey("second");
   };
-  const { id } = useParams();
+  const { code } = useParams();
   const [grams, setGrams] = useState<number>(100);
   const [inputGrams, setInputGrams] = useState<number>(100);
-
+  
   const { data } = useFetch<SingleFoodResult>(
-    `http://localhost:3000/api/v1/foods/${id}`
+    `http://localhost:3000/api/v1/foods/${code?.toString()}`
   );
 
   if (!data) {

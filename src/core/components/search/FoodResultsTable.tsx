@@ -25,13 +25,13 @@ const FoodResultsTable: React.FC<FoodResultsListProps> = ({ data, sortOrder, han
 
   const navigate = useNavigate();
   const { state } = useAuth();
-  const toFoodDetail = (id: number) => {
-    navigate(`/search/details/${id}`);
+  const toFoodDetail = (code: string) => {
+    navigate(`/search/details/${code}`);
   };
 
-  const toModfyFoodDetail = (id: number) => {
+  const toModfyFoodDetail = (code: string) => {
     if (state.isAuthenticated) {
-      navigate(`/search/Modifydetails/${id}`);
+      navigate(`/search/Modifydetails/${code}`);
     } else {
       navigate("/login"); 
     }
@@ -71,11 +71,11 @@ const FoodResultsTable: React.FC<FoodResultsListProps> = ({ data, sortOrder, han
 
               <td data-label="Nombre cientifico">{item.scientificName}</td>
               <td>
-                <button onClick={() => toFoodDetail(parseInt(item.id))}>
+                <button onClick={() => toFoodDetail(item.code)}>
                   Detalles
                 </button>
                 {state.isAuthenticated && (
-                  <button onClick={() => toModfyFoodDetail(parseInt(item.id))}>
+                  <button onClick={() => toModfyFoodDetail(item.code)}>
                     Modificar
                   </button>
                 )}

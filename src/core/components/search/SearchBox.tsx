@@ -10,7 +10,7 @@ interface SearchBoxProps {
 
 const SearchBox: React.FC<SearchBoxProps> = ({ filterOptions }) => {
   const [selectedOptions, setSelectedOptions] = useState(new Set<string>());
-
+  console.log(selectedOptions)
   return (
     <div className="search-box">
       <CheckboxFilter
