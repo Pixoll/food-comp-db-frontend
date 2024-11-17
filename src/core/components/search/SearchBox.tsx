@@ -1,22 +1,25 @@
 import React, { useState } from "react";
 import CheckboxFilter from "./CheckboxFilter";
 import { Collection } from "../../utils/collection";
-import { Language, Region, TypeFood, Group } from "../../types/option";
 
 interface SearchBoxProps {
   filterOptions: Collection<string, string>;
-  //data: Array<Language | Region | TypeFood | Group>;
+  onChange: (selectedOptions: string[]) => void;
 }
 
-const SearchBox: React.FC<SearchBoxProps> = ({ filterOptions }) => {
+const SearchBox: React.FC<SearchBoxProps> = ({ filterOptions , onChange }) => {
   const [selectedOptions, setSelectedOptions] = useState(new Set<string>());
-  console.log(selectedOptions)
+
+  const handleSelectionChange = (newSelection: Set<string>) => {
+    setSelectedOptions(newSelection);
+    onChange(Array.from(newSelection)); 
+  };
   return (
     <div className="search-box">
       <CheckboxFilter
         options={filterOptions}
         selectedOptions={selectedOptions}
-        setSelectedOptions={setSelectedOptions}
+        setSelectedOptions={handleSelectionChange}
       />
     </div>
   );

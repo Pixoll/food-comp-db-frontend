@@ -34,7 +34,7 @@ export default function useFetch<T> (url:string) : FetchResult<T>  {
 
         return () => abortController.abort();
 
-    }, []);
+    }, [url]);
 
     const handleCancelRequest = () => {
         if(controller){

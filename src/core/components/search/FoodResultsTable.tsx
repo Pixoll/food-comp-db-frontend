@@ -20,7 +20,7 @@ const FoodResultsTable: React.FC<FoodResultsListProps> = ({ data, sortOrder, han
   const recordsPerPage = 10;
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
-  const records = data.slice(firstIndex, lastIndex);
+  const records = Array.isArray(data) ? data.slice(firstIndex, lastIndex) : [];
   const npage = Math.ceil(data.length / recordsPerPage);
 
   const navigate = useNavigate();
@@ -41,7 +41,7 @@ const FoodResultsTable: React.FC<FoodResultsListProps> = ({ data, sortOrder, han
       setCurrentPage(page);
     }
   };
-
+  console.log(searchForName)
   return (
     <div className="food-list">
       <div className="search-for-name-and-tittle">
