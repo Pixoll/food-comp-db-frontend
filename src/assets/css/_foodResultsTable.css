@@ -1,55 +1,69 @@
-
-.search-for-name-and-tittle h2 {
-    font-size: 32px;
+.food-list h2 {
+    font-size: 24px; 
     color: #007f67; 
-    text-align: center;
+    font-family: 'Arial', sans-serif; 
+    text-align: left; 
+    font-weight: bold; 
+    margin-bottom: 15px; 
+    border-bottom: 2px solid #82c4b7; 
+    padding-bottom: 5px; 
+    letter-spacing: 0.5px; 
+    transition: color 0.3s ease; 
+}
+.filter-name {
+    display: flex;
+    align-items: center; 
+    justify-content: space-between; 
+    flex-wrap: wrap; 
+    gap: 20px; 
     margin-bottom: 20px;
-    font-family: 'Arial', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    font-weight: bold;
-  }
-  
-  .search-for-name-and-tittle input {
-    width: 100%;
-    max-width: 400px;
-    padding: 10px 20px;
+}
+
+.input-name input {
+    flex: 1; 
+    min-width: 300px; 
+    max-width: 100%; 
+    padding: 12px 20px;
     border-radius: 25px;
-    border: 2px solid #82c4b7; 
+    border: 2px solid #82c4b7;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     outline: none;
     transition: border-color 0.3s, box-shadow 0.3s;
-    font-size: 28px;
-  }
-  
-  .search-for-name-and-tittle input::placeholder {
-    color: #a9a9a9;
-  }
-  
-  .search-for-name-and-tittle input:focus {
-    border-color: #007f67; 
-    box-shadow: 0 4px 10px rgba(0, 127, 103, 0.2); 
-  }
-/* Tabla */
-.content-table-foods {
-    border-collapse: collapse;
-    margin: 25px 0;
-    font-size: 0.9em;
-    width: 100%; 
-    border-radius: 5px 5px 0 0;
-    overflow: hidden;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    font-size: 18px;
 }
 
-.content-table-foods thead tr {
-    background-color: #009879;
-    color: #ffffff;
-    text-align: left;
+.input-name input::placeholder {
+    color: #a9a9a9;
+}
+
+.input-name input:focus {
+    border-color: #007f67;
+    box-shadow: 0 4px 10px rgba(0, 127, 103, 0.2);
+}
+
+.translation-name,
+.order-by-name {
+    flex: 1; 
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    color: #007f67;
+    min-width: 150px; 
+}
+
+.translation-name h4,
+.order-by-name h4 {
+    margin-right: 10px;
     font-weight: bold;
 }
-.language-selector, .sortOrder-selector{
-    padding: 5px 10px;
-    border-radius: 20px;
+
+.language-selector,
+.sortOrder-selector {
+    width: auto;
+    padding: 8px 12px;
+    border-radius: 25px;
     border: 2px solid #82c4b7;
     background-color: #ffffff;
     color: #007f67;
@@ -60,9 +74,28 @@
     transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-.language-selector:hover,.sortOrder-selector:hover {
+.language-selector:hover,
+.sortOrder-selector:hover {
     border-color: #007f67;
     box-shadow: 0 4px 10px rgba(0, 127, 103, 0.2);
+}
+
+/* Tabla */
+.content-table-foods {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    width: 100%;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.content-table-foods thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+    font-weight: bold;
 }
 
 .content-table-foods th,
@@ -95,41 +128,39 @@
     transition: all 0.3s;
     border: none;
     font-size: 14px;
-  }
-  
-  .content-table-foods tbody tr button:hover {
-    background-color: #007f67; 
-    transform: translateY(-2px); 
-  }
-  
+}
 
-/* Tabla en pantallas pequeñas */
+.content-table-foods tbody tr button:hover {
+    background-color: #007f67;
+    transform: translateY(-2px);
+}
+
 @media screen and (max-width: 768px) {
     .content-table-foods,
     .content-table-foods thead,
     .content-table-foods tbody,
     .content-table-foods th,
     .content-table-foods td,
-    .content-table-foods tr{
-        display: block; 
+    .content-table-foods tr {
+        display: block;
     }
 
     .content-table-foods thead tr {
-        display: none; 
+        display: none;
     }
 
     .content-table-foods td {
         padding: 12px 15px;
         position: relative;
-        padding-left: 50%; 
+        padding-left: 50%;
         text-align: left;
     }
 
     .content-table-foods td::before {
-        content: attr(data-label); 
+        content: attr(data-label);
         position: absolute;
         left: 0;
-        width: 45%; 
+        width: 45%;
         padding-left: 15px;
         font-weight: bold;
         text-align: left;
@@ -137,6 +168,17 @@
     }
 
     .content-table-foods tr {
-        margin-bottom: 10px; 
+        margin-bottom: 10px;
+    }
+
+    .filter-name {
+        flex-direction: column; 
+        gap: 15px; 
+    }
+
+    .input-name input,
+    .language-selector,
+    .sortOrder-selector {
+        width: 100%; 
     }
 }

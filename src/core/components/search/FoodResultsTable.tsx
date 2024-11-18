@@ -58,19 +58,44 @@ const FoodResultsTable: React.FC<FoodResultsListProps> = ({
   };
 
   const handleOrderChange = (order: "asc" | "desc") => {
-    handleSort(order); 
+    handleSort(order);
   };
 
   return (
     <div className="food-list">
-      <div className="search-for-name-and-tittle">
-        <h2>Lista de resultados</h2>
+      <h2>Lista de resultados</h2>
+      <div className="filter-name">
+        <div className="input-name">
         <input
           type="text"
           placeholder="Buscar por nombre..."
           value={searchForName}
           onChange={(e) => setSearchForName(e.target.value)}
         />
+        </div>
+        <div className="translation-name">
+        <h4>Nombre en:</h4>
+        <select
+          value={selectedLanguage}
+          onChange={handleLanguageChange}
+          className="language-selector"
+        >
+          <option value="en">Inglés</option>
+          <option value="es">Español</option>
+          <option value="pt">Portugués</option>
+        </select>
+        </div>
+        <div className="order-by-name">
+        <h4>Orden del nombre:</h4>
+        <select
+          value={sortOrder}
+          onChange={(e) => handleOrderChange(e.target.value as "asc" | "desc")}
+          className="sortOrder-selector"
+        >
+          <option value="asc">Ascendente</option>
+          <option value="desc">Descendente</option>
+        </select>
+        </div>
       </div>
 
       {!Array.isArray(data) || data.length === 0 ? (
@@ -81,29 +106,7 @@ const FoodResultsTable: React.FC<FoodResultsListProps> = ({
             <thead>
               <tr>
                 <th style={{ fontSize: 22 }}>ID</th>
-                <th style={{ cursor: "pointer", fontSize: 22 }}>
-                  Nombre
-                    <select
-                      value={selectedLanguage}
-                      onChange={handleLanguageChange}
-                      className="language-selector"
-                    >
-                      <option value="en">Inglés</option>
-                      <option value="es">Español</option>
-                      <option value="pt">Portugués</option>
-                    </select>
-
-                    <select
-                      value={sortOrder}
-                      onChange={(e) =>
-                        handleOrderChange(e.target.value as "asc" | "desc")
-                      }
-                      className="sortOrder-selector"
-                    >
-                      <option value="asc">Ascendente</option>
-                      <option value="desc">Descendente</option>
-                    </select>
-                </th>
+                <th style={{ fontSize: 22 }}>Nombre</th>
 
                 <th style={{ fontSize: 22 }}>Tipo</th>
                 <th style={{ fontSize: 22 }}>Acción</th>
