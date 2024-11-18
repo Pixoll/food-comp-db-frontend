@@ -19,13 +19,20 @@
   gap: 20px;
 }
 .custom-container {
-  background-color: #b3f1de;
+  background-color: #cbe0d4;
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   position: relative;
 }
-
+.reset-button {
+  background-color: rgb(29, 103, 53);
+  color: white;
+  padding: 10px;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+}
 .measurent-title {
   font-family: 'Arial', sans-serif;
   font-size: 24px;

@@ -36,3 +36,34 @@ export type Region = {
     scientificName: string;
     subspecies: string;
   };
+
+
+  export type GroupedNutrients = {
+    macronutrients: MacroNutrient[];
+    micronutrients: {
+      vitamins: AnyNutrient[];
+      minerals: AnyNutrient[];
+    };
+  };
+  
+  export type MacroNutrient = AnyNutrient & {
+    isEnergy: boolean;
+    components?: AnyNutrient[];
+  };
+  
+  export type AnyNutrient = Omit<Nutrient, "measurement_unit" | "note" | "type"> & {
+    measurementUnit: string;
+    note?: string;
+  };
+
+  export type Nutrient = {
+
+    id: number;
+    type: "energy" | "macronutrient" | "component" | "micronutrient";
+    name: string;
+    measurementUnit: string;
+    standardized: boolean;
+    note?: string | null;
+  };
+  
+  
