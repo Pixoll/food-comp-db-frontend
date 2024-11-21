@@ -43,7 +43,7 @@ const AppNavbar = () => {
                         
                     </Nav>
                 </Navbar.Collapse>
-            </Container>
+            </Container>    
         </Navbar>
     );
 };
