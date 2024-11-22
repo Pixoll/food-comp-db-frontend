@@ -6,16 +6,12 @@ import NutrientAccordionModify from "../../core/components/detailFood/NutrientAc
 import Footer from "../../core/components/Footer";
 import useFetch from "../../core/hooks/useFetch";
 import { SingleFoodResult } from "../../core/types/SingleFoodResult";
-import Graphic from "../../core/components/detailFood/Graphic";
 import ReferencesList from "../../core/components/detailFood/ReferencesList";
 import LengualCodeComponent from "../../core/components/detailFood/LengualCodeComponent";
 
 export default function ModifyFoodDetail() {
   const [key, setKey] = useState("first");
   const { code } = useParams();
-  const [grams, setGrams] = useState<number>(100);
-  const [inputGrams, setInputGrams] = useState<number>(100);
-  
   const { data } = useFetch<SingleFoodResult>(
     `http://localhost:3000/api/v1/foods/${code?.toString()}`
   );
@@ -23,64 +19,8 @@ export default function ModifyFoodDetail() {
   if (!data) {
     return <h2>Cargando...</h2>;
   }
-  const colors = [
-    "#0088FE",
-    "#00C49F",
-    "#FFBB28",
-    "#FF8042",
-    "#A28CC3",
-    "#FF6361",
-    "#BC5090",
-    "#58508D",
-    "#003F5C",
-    "#FFA600",
-    "#2F4B7C",
-    "#665191",
-    "#D45087",
-    "#F95D6A",
-    "#FF7C43",
-    "#1F77B4",
-    "#AEC7E8",
-    "#FF9896",
-    "#98DF8A",
-    "#C5B0D5",
-    "#FFBB78",
-    "#9467BD",
-    "#C49C94",
-    "#E377C2",
-    "#F7B6D2",
-    "#7F7F7F",
-    "#C7C7C7",
-    "#BCBD22",
-    "#DBDB8D",
-    "#17BECF",
-  ];
 
   const references = data?.references ?? [];
-  const mainNutrients = data?.nutrientMeasurements?.mainNutrients ?? [];
-
-  const graphicData =
-    mainNutrients
-      .filter((mainNutrient) => mainNutrient.nutrientId !== 12)
-      .map((mainNutrient, index) => ({
-        name: mainNutrient.name,
-        value: +((grams / 100) * mainNutrient.average).toFixed(2),
-        fill: colors[index % colors.length],
-      })) || [];
-
-
-  const graphicDataPorcent =
-    mainNutrients
-      .filter((mainNutrient) => mainNutrient.nutrientId !== 12 && mainNutrient.nutrientId !== 1)
-      .map((mainNutrient, index) => ({
-        name: mainNutrient.name,
-        value: +(((grams / 100) * mainNutrient.average) / 100).toFixed(2),
-        fill: colors[index % colors.length],
-      })) || [];
-
-  const handleGramsChange = () => {
-    setGrams(inputGrams);
-  };
   return (
     <div className="detail-background">
       <Container>
