@@ -3,21 +3,45 @@
     display: flex;
     gap: 20px;
     padding: 20px;
-    max-width: 1200px;
+    max-width: 100%;
     margin: 0 auto;
   }
-  
+
+  /*Fondo de la página*/
+  .AdminPage-background {
+    display: flex; 
+    flex-direction: row; 
+    justify-content: space-between; 
+    align-items: flex-start;
+    background-size: cover; 
+    padding: 20px; 
+    background: url('/src/assets/images/fondo_adm2.jpg') no-repeat center center;
+    background-size: cover;
+    width: 100%;
+    height: 100vh;
+  }
+
   /* Columna izquierda (botones) */
   .left-column {
     width: 200px;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    border: 1px solid #ccc;
     border-radius: 8px;
     padding: 20px;
-    background-color: #f9f9f9;
+    background: rgba(255, 255, 255, 0.5); 
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
   }
+
+  .left-column {
+    font-family: 'Poppins', serif; /* Cambia la fuente en la columna izquierda */
+    font-size: 14px;
+    color: #1d521a;
+    text-align: center;
+}
   
   /* Botones de navegación */
   .pagination-button {
@@ -29,7 +53,14 @@
     cursor: pointer;
     text-align: center;
     font-size: 1em;
+    transition: all 0.3s ease;
   }
+
+  .pagination-button:hover {
+    background-color: #218838; /* Cambiar el color de fondo */
+    transform: translateY(-3px); /* Movimiento hacia arriba */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Sombra al pasar el ratón */
+}
   
   .pagination-button.active {
     background-color: #015746;
@@ -41,36 +72,60 @@
   
   /* Contenedor derecho */
   .content-container {
+    background: rgba(255, 255, 255, 0.5); 
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     flex: 2;
-    border: 1px solid #ccc;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
     padding: 20px;
-    background-color: #f9f9f9;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
   }
+
+  .content-container {
+    font-family: 'Poppins', serif; /* Cambia la fuente en la columna izquierda */
+    font-size: 14px;
+    color: #1d521a;
+    text-align: center;
+}
   
   .right-container {
     flex: 1;
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 20px;
-    background-color: #f1f1f1;
     text-align: center;
+    background: rgba(255, 255, 255, 0.5); 
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
   }
+
+  .right-container {
+    font-family: 'Poppins', serif; /* Cambia la fuente en la columna izquierda */
+    font-size: 14px;
+    color: #1d521a;
+    text-align: center;
+}
   
+
    /* Botón */
    .button {
     padding: 10px 20px;
-    background-color: #28a745;
+    background-color: #1e682f;
     color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 1em;
+    transition: all 0.3s ease;
   }
-  
   .button:hover {
-    background-color: #218838;
-  }
+    background-color: #218838; /* Cambiar el color de fondo */
+    transform: translateY(-3px); /* Movimiento hacia arriba */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Sombra al pasar el ratón */
+}
   
   /* Inputs */
     /* Estilos de los inputs */
@@ -93,4 +148,7 @@
         border-radius: 5px;
         width: 100%;
       }
+
+
+    
   
