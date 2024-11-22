@@ -1,113 +1,166 @@
-import AppNavbar from "../../core/components/Navbar";
-import Footer from "../../core/components/Footer";
+import { Col, Container, Nav, Row, Tab } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-import { Container, Row, Col, Tab, Nav } from "react-bootstrap";
-import { data, data2 } from "../../core/static/data";
-import Graphic from "../../core/components/detailFood/Graphic";
-import NutrientAccordionModify from "../../core/components/detailFood/NutrientAccordionModify";
-import nutritionalValue from "../../core/types/nutritionalValue";
-import writeIcon from "../../assets/images/write.png";
 import { useState } from "react";
 import "../../assets/css/_DetailPage.css";
+import NutrientAccordionModify from "../../core/components/detailFood/NutrientAccordionModify";
+import Footer from "../../core/components/Footer";
+import useFetch from "../../core/hooks/useFetch";
+import { SingleFoodResult } from "../../core/types/SingleFoodResult";
+import Graphic from "../../core/components/detailFood/Graphic";
+import ReferencesList from "../../core/components/detailFood/ReferencesList";
+import LengualCodeComponent from "../../core/components/detailFood/LengualCodeComponent";
 
-const ModifyFoodDetail = () => {
-  const { id } = useParams();
+export default function ModifyFoodDetail() {
+  const [key, setKey] = useState("first");
+  const { code } = useParams();
+  const [grams, setGrams] = useState<number>(100);
+  const [inputGrams, setInputGrams] = useState<number>(100);
+  
+  const { data } = useFetch<SingleFoodResult>(
+    `http://localhost:3000/api/v1/foods/${code?.toString()}`
+  );
 
-  const initialValues = [
-    data2[0].codigo,
-    data2[0].nombre_espanol,
-    data2[0].nombre_portugues,
-    data2[0].nombre_ingles,
-    data2[0].nombre_cientifico,
-    data2[0].region_origen,
-    data2[0].tipo_alimento,
-    data2[0].grupo,
+  if (!data) {
+    return <h2>Cargando...</h2>;
+  }
+  const colors = [
+    "#0088FE",
+    "#00C49F",
+    "#FFBB28",
+    "#FF8042",
+    "#A28CC3",
+    "#FF6361",
+    "#BC5090",
+    "#58508D",
+    "#003F5C",
+    "#FFA600",
+    "#2F4B7C",
+    "#665191",
+    "#D45087",
+    "#F95D6A",
+    "#FF7C43",
+    "#1F77B4",
+    "#AEC7E8",
+    "#FF9896",
+    "#98DF8A",
+    "#C5B0D5",
+    "#FFBB78",
+    "#9467BD",
+    "#C49C94",
+    "#E377C2",
+    "#F7B6D2",
+    "#7F7F7F",
+    "#C7C7C7",
+    "#BCBD22",
+    "#DBDB8D",
+    "#17BECF",
   ];
-  const [selectedValue, setSelectedValue] = useState<Array<string>>(initialValues);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
-  const valores_nutricionales: nutritionalValue = data2[0].valores_nutricionales;
+  const references = data?.references ?? [];
+  const mainNutrients = data?.nutrientMeasurements?.mainNutrients ?? [];
 
-  const handleIconClick = (index: number) => {
-    setEditingIndex(index);
-    setIsEditing(true);
+  const graphicData =
+    mainNutrients
+      .filter((mainNutrient) => mainNutrient.nutrientId !== 12)
+      .map((mainNutrient, index) => ({
+        name: mainNutrient.name,
+        value: +((grams / 100) * mainNutrient.average).toFixed(2),
+        fill: colors[index % colors.length],
+      })) || [];
+
+
+  const graphicDataPorcent =
+    mainNutrients
+      .filter((mainNutrient) => mainNutrient.nutrientId !== 12 && mainNutrient.nutrientId !== 1)
+      .map((mainNutrient, index) => ({
+        name: mainNutrient.name,
+        value: +(((grams / 100) * mainNutrient.average) / 100).toFixed(2),
+        fill: colors[index % colors.length],
+      })) || [];
+
+  const handleGramsChange = () => {
+    setGrams(inputGrams);
   };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValues = [...selectedValue];
-    if (editingIndex !== null) {
-      newValues[editingIndex] = e.target.value;
-      setSelectedValue(newValues);
-    }
-  };
-
-  const handleInputBlur = () => {
-    setIsEditing(false);
-    setEditingIndex(null);
-  };
-
-  const handleInputKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      handleInputBlur();
-    }
-  };
-
   return (
     <div className="detail-background">
       <Container>
-        <Row>
-          <Col md={6}>
+          <Col md={12}>
             <div className="transparent-container">
-              <h2>Datos generales de la comida:</h2>
-              {['Codigo','Nombre español', 'Nombre Portugués', 'Nombre Inglés', 'Nombre Científico', 'Origen', 'Tipo de alimento', 'Grupo de comida'].map((label, index) => (
-                <p key={index}>
-                  <strong>{label}: </strong>
-                  {isEditing && editingIndex === index  ? (
-                    <input
-                      type="text"
-                      value={selectedValue[index]}
-                      onChange={handleInputChange}
-                      onBlur={handleInputBlur}
-                      onKeyDown={handleInputKeyDown}
-                      autoFocus
-                      style={{
-                        fontSize: "16px",
-                        padding: "2px 5px",
-                        marginLeft: "10px",
-                      }}
-                    />
-                  ) : (
-                    <>
-                      <span>{selectedValue[index]}</span>
-                      <img
-                        src={writeIcon}
-                        alt="Edit Icon"
-                        style={{ width: "20px", cursor: "pointer", marginLeft: "10px" }}
-                        onClick={() => handleIconClick(index)}
-                      />
-                    </>
-                  )}
+              <h2>Datos generales del alimento:</h2>
+              <p>
+                <strong>Código:</strong> {data.code}
+              </p>
+
+              {data.commonName?.es && (
+                <p>
+                  <strong>Nombre en Español:</strong> {data.commonName.es}
                 </p>
-              ))}
+              )}
+              {data.commonName?.pt && (
+                <p>
+                  <strong>Nombre en Portugués:</strong> {data.commonName.pt}
+                </p>
+              )}
+              {data.commonName?.en && (
+                <p>
+                  <strong>Nombre en Inglés:</strong> {data.commonName.en}
+                </p>
+              )}
+
+              {data.scientificName && (
+                <p>
+                  <strong>Nombre Científico:</strong> {data.scientificName}
+                </p>
+              )}
+              {data.subspecies && (
+                <p>
+                  <strong>Subespecie:</strong> {data.subspecies}
+                </p>
+              )}
+              {data.strain && (
+                <p>
+                  <strong>Cepa:</strong> {data.strain}
+                </p>
+              )}
+              {data.brand && (
+                <p>
+                  <strong>Marca:</strong> {data.brand}
+                </p>
+              )}
+              {data.observation && (
+                <p>
+                  <strong>Observación:</strong> {data.observation}
+                </p>
+              )}
+
+              <p>
+                <strong>Grupo de comida:</strong> {data.group.name} (Código:{" "}
+                {data.group.code})
+              </p>
+              <p>
+                <strong>Tipo de alimento:</strong> {data.type.name} (Código:{" "}
+                {data.type.code})
+              </p>
+
+              {data.ingredients?.es && (
+                <p>
+                  <strong>Ingredientes (Español):</strong> {data.ingredients.es}
+                </p>
+              )}
+              {data.ingredients?.pt && (
+                <p>
+                  <strong>Ingredientes (Portugués):</strong>{" "}
+                  {data.ingredients.pt}
+                </p>
+              )}
+              {data.ingredients?.en && (
+                <p>
+                  <strong>Ingredientes (Inglés):</strong> {data.ingredients.en}
+                </p>
+              )}
             </div>
           </Col>
-          <Col md={6}>
-            <div className="transparent-container">
-              <h2>Contenedor 2</h2>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                }}
-              >
-                <Graphic data={data} />
-              </div>
-            </div>
-          </Col>
-        </Row>
+
         <Row className="mt-4">
           <Col>
             <div
@@ -122,30 +175,76 @@ const ModifyFoodDetail = () => {
                   variant="tabs"
                   className="mb-3"
                   style={{ borderBottom: "2px solid #d1e7dd" }}
+                  activeKey={key}
+                  onSelect={(k) => setKey(k as string)}
                 >
                   <Nav.Item>
-                    <Nav.Link eventKey="first" style={{ /* estilos */ }}>Etiquetado Nutricional</Nav.Link>
+                    <Nav.Link
+                      eventKey="first"
+                      style={{
+                        backgroundColor: "#f8f9fa",
+                        borderRadius: "5px 5px 0 0",
+                        border: "1px solid #d1e7dd",
+                        marginRight: "5px",
+                        color: "#0d6efd",
+                        transition: "background-color 0.3s ease",
+                      }}
+                    >
+                      Etiquetado Nutricional
+                    </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="second" style={{ /* estilos */ }}>Etiquetado Nutricional ++</Nav.Link>
+                    <Nav.Link
+                      eventKey="second"
+                      style={{
+                        backgroundColor: "#f8f9fa",
+                        borderRadius: "5px 5px 0 0",
+                        border: "1px solid #d1e7dd",
+                        marginRight: "5px",
+                        color: "#0d6efd",
+                        transition: "background-color 0.3s ease",
+                      }}
+                    >
+                      Referencias
+                    </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="third" style={{ /* estilos */ }}>Todos los datos</Nav.Link>
+                    <Nav.Link
+                      eventKey="third"
+                      style={{
+                        backgroundColor: "#f8f9fa",
+                        borderRadius: "5px 5px 0 0",
+                        border: "1px solid #d1e7dd",
+                        color: "#0d6efd",
+                        transition: "background-color 0.3s ease",
+                      }}
+                    >
+                      Todos los datos
+                    </Nav.Link>
                   </Nav.Item>
                 </Nav>
+
                 <Tab.Content>
                   <Tab.Pane eventKey="first">
-                    <div style={{ textAlign: "center" }}>
-                      <NutrientAccordionModify data={valores_nutricionales} />
+                    <div style={{ textAlign: "center", borderRadius: "5px" }}>
+                      <NutrientAccordionModify
+                        data={
+                          data?.nutrientMeasurements ?? {
+                            energy: [],
+                            mainNutrients: [],
+                            micronutrients: { vitamins: [], minerals: [] },
+                          }
+                        }
+                      />
                     </div>
                   </Tab.Pane>
                   <Tab.Pane eventKey="second">
-                    <h4>Contenido para Opción 2</h4>
-                    <p>Aquí va el contenido específico para la opción 2.</p>
+                    <h4>Referencias de nutrientes</h4>
+                    <ReferencesList references={references} />
                   </Tab.Pane>
                   <Tab.Pane eventKey="third">
-                    <h4>Contenido para Opción 3</h4>
-                    <p>Aquí va el contenido específico para la opción 3.</p>
+                    <h4>Codigos lenguales</h4>
+                    <LengualCodeComponent data={data.langualCodes} />
                   </Tab.Pane>
                 </Tab.Content>
               </Tab.Container>
@@ -157,6 +256,4 @@ const ModifyFoodDetail = () => {
       <Footer />
     </div>
   );
-};
-
-export default ModifyFoodDetail;
+}
