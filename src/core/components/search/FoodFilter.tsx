@@ -17,7 +17,9 @@ const FoodFilter = () => {
     regionsFilter: new Set<string>(),
     groupsFilter: new Set<string>(),
     languagesFilter: new Set<string>(),
-    nutrientFilter: new Set<string>()
+    nutrientFilter: new Set<string>(),
+    operator: "",
+    value: 0,
   });
 
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
@@ -27,7 +29,7 @@ const FoodFilter = () => {
   const { collectionRegions: regions } = GetRegions();
   const { collectionTypes: types } = GetTypes();
   const { collectionLanguages: languages } = GetLanguages();
-  const {collectionNutrients: nutrients} = GetNutrients();
+  const { collectionNutrients: nutrients } = GetNutrients();
 
   const handleSort = (order: "asc" | "desc") => {
     if (order === "asc" || order === "desc") {
@@ -41,7 +43,7 @@ const FoodFilter = () => {
   ) => {
     setSelectedFilters((prevFilters) => ({
       ...prevFilters,
-      [filterKey]: new Set(values), 
+      [filterKey]: new Set(values),
     }));
   };
 
@@ -51,6 +53,7 @@ const FoodFilter = () => {
     region: Array.from(selectedFilters.regionsFilter),
     group: Array.from(selectedFilters.groupsFilter),
     language: Array.from(selectedFilters.languagesFilter),
+    nutrient: Array.from(selectedFilters.nutrientFilter),
   };
   const queryString = qs.stringify(filters, {
     arrayFormat: "repeat",
@@ -63,16 +66,17 @@ const FoodFilter = () => {
       regionsFilter: new Set<string>(),
       groupsFilter: new Set<string>(),
       languagesFilter: new Set<string>(),
-      nutrientFilter: new Set<string>()
+      nutrientFilter: new Set<string>(),
+      operator: "",
+      value: 0,
     });
     setSearchForName("");
     setSortOrder("asc");
   };
-
   const { data: FoodResulst } = useFetch<FoodResult[]>(
     `http://localhost:3000/api/v1/foods?${queryString}`
   );
-
+  console.log(`http://localhost:3000/api/v1/foods?${queryString}`)
   return (
     <div className="search-container">
       <div className="food-filter">
@@ -83,7 +87,7 @@ const FoodFilter = () => {
           <SearchBox
             filterOptions={types}
             onChange={(values) => handleFilterChange("foodTypeFilter", values)}
-            single = {false}
+            single={false}
           />
         </div>
 
@@ -92,7 +96,7 @@ const FoodFilter = () => {
           <SearchBox
             filterOptions={regions}
             onChange={(values) => handleFilterChange("regionsFilter", values)}
-            single = {false}
+            single={false}
           />
         </div>
 
@@ -101,7 +105,7 @@ const FoodFilter = () => {
           <SearchBox
             filterOptions={groups}
             onChange={(values) => handleFilterChange("groupsFilter", values)}
-            single = {false}
+            single={false}
           />
         </div>
 
@@ -110,7 +114,7 @@ const FoodFilter = () => {
           <SearchBox
             filterOptions={languages}
             onChange={(values) => handleFilterChange("languagesFilter", values)}
-            single = {false}
+            single={false}
           />
         </div>
 
@@ -123,17 +127,26 @@ const FoodFilter = () => {
               <div className="filter-group">
                 <SearchBox
                   filterOptions={nutrients}
-                    onChange={(values) =>
+                  onChange={(values) =>
                     handleFilterChange("nutrientFilter", values)
                   }
-                  single = {true}
+                  single={true}
                 />
               </div>
             </Col>
 
             <Col className="mb-3">
               <Form.Group controlId="operator-select">
-                <Form.Select aria-label="Select operator">
+                <Form.Select
+                  aria-label="Select operator"
+                  value={selectedFilters.operator.toString()}
+                  onChange={(e) =>
+                    setSelectedFilters((prevFilters) => ({
+                      ...prevFilters,
+                      operator: e.target.value,
+                    }))
+                  }
+                >
                   <option value="">Operador</option>
                   <option value="<">Menor que (&lt;)</option>
                   <option value="<=">Menor o igual (&le;)</option>

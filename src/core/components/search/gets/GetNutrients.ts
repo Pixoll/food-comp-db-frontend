@@ -10,18 +10,18 @@ const GetNutrients = () => {
 
   if (data) {
     data.macronutrients.forEach((macro) => {
-      collectionNutrients.set(macro.name, macro.name);
+      collectionNutrients.set(macro.id.toString(), macro.name + " ("+ macro.measurementUnit+")");
       if (macro.components) {
-        macro.components.forEach((component) => collectionNutrients.set(component.name, component.name));
+        macro.components.forEach((component) => collectionNutrients.set(component.id.toString(), component.name+ " ("+ component.measurementUnit+")"));
       }
     });
 
     data.micronutrients.vitamins.forEach((vitamin) => 
-      collectionNutrients.set(vitamin.name, vitamin.name)
+      collectionNutrients.set(vitamin.id.toString(), vitamin.name+ " ("+ vitamin.measurementUnit+")")
     );
 
     data.micronutrients.minerals.forEach((mineral) => 
-      collectionNutrients.set(mineral.name, mineral.name)
+      collectionNutrients.set(mineral.id.toString(), mineral.name+ " ("+ mineral.measurementUnit+")")
     );
   }
   return { data, error, loading, collectionNutrients};

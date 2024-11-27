@@ -13,7 +13,6 @@ const SingleOptionFilter: React.FC<SingleOptionFilterProps> = ({
   selectedOption,
   setSelectedOption,
 }) => {
-  const [searchTerm, setSearchTerm] = useState<string>("");
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
 
   const handleOptionChange = (optionValue: string) => {
@@ -21,7 +20,7 @@ const SingleOptionFilter: React.FC<SingleOptionFilterProps> = ({
   };
 
   const filteredOptions = options.filter((_, label) =>
-    label.toLowerCase().includes(searchTerm.toLowerCase())
+    label.toLowerCase().includes("".toLowerCase())
   );
 
   const getSelectedLabel = () => {

@@ -13,8 +13,6 @@ const CheckboxFilter: React.FC<CheckboxFilterProps> = ({
   selectedOptions,
   setSelectedOptions,
 }) => {
-  
-  const [searchTerm, setSearchTerm] = useState<string>("");
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
 
   const handleCheckboxChange = (optionValue: string) => {
@@ -35,7 +33,7 @@ const CheckboxFilter: React.FC<CheckboxFilterProps> = ({
   };
 
   const filteredOptions = options.filter((_, label) =>
-    label.toLowerCase().includes(searchTerm.toLowerCase())
+    label.toLowerCase().includes("".toLowerCase())
   );
 
   const getSelectedLabel = () => {
