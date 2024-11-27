@@ -6,6 +6,7 @@ import GetGroups from "./gets/GetGroups";
 import GetLanguages from "./gets/GetLanguages";
 import GetRegions from "./gets/GetRegions";
 import GetTypes from "./gets/getTypes";
+import GetNutrients from "./gets/GetNutrients";
 import { FoodResult } from "../../types/option";
 import useFetch from "../../hooks/useFetch";
 import qs from "qs";
@@ -16,6 +17,7 @@ const FoodFilter = () => {
     regionsFilter: new Set<string>(),
     groupsFilter: new Set<string>(),
     languagesFilter: new Set<string>(),
+    nutrientFilter: new Set<string>()
   });
 
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
@@ -25,6 +27,7 @@ const FoodFilter = () => {
   const { collectionRegions: regions } = GetRegions();
   const { collectionTypes: types } = GetTypes();
   const { collectionLanguages: languages } = GetLanguages();
+  const {collectionNutrients: nutrients} = GetNutrients();
 
   const handleSort = (order: "asc" | "desc") => {
     if (order === "asc" || order === "desc") {
@@ -38,7 +41,7 @@ const FoodFilter = () => {
   ) => {
     setSelectedFilters((prevFilters) => ({
       ...prevFilters,
-      [filterKey]: new Set(values), // Actualiza el filtro correspondiente
+      [filterKey]: new Set(values), 
     }));
   };
 
@@ -60,6 +63,7 @@ const FoodFilter = () => {
       regionsFilter: new Set<string>(),
       groupsFilter: new Set<string>(),
       languagesFilter: new Set<string>(),
+      nutrientFilter: new Set<string>()
     });
     setSearchForName("");
     setSortOrder("asc");
@@ -79,6 +83,7 @@ const FoodFilter = () => {
           <SearchBox
             filterOptions={types}
             onChange={(values) => handleFilterChange("foodTypeFilter", values)}
+            single = {false}
           />
         </div>
 
@@ -87,6 +92,7 @@ const FoodFilter = () => {
           <SearchBox
             filterOptions={regions}
             onChange={(values) => handleFilterChange("regionsFilter", values)}
+            single = {false}
           />
         </div>
 
@@ -95,6 +101,7 @@ const FoodFilter = () => {
           <SearchBox
             filterOptions={groups}
             onChange={(values) => handleFilterChange("groupsFilter", values)}
+            single = {false}
           />
         </div>
 
@@ -103,6 +110,7 @@ const FoodFilter = () => {
           <SearchBox
             filterOptions={languages}
             onChange={(values) => handleFilterChange("languagesFilter", values)}
+            single = {false}
           />
         </div>
 
@@ -114,10 +122,11 @@ const FoodFilter = () => {
             <Col className="mb-3">
               <div className="filter-group">
                 <SearchBox
-                  filterOptions={languages}
-                  onChange={(values) =>
-                    handleFilterChange("languagesFilter", values)
+                  filterOptions={nutrients}
+                    onChange={(values) =>
+                    handleFilterChange("nutrientFilter", values)
                   }
+                  single = {true}
                 />
               </div>
             </Col>

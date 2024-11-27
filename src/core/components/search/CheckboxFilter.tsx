@@ -68,7 +68,7 @@ const CheckboxFilter: React.FC<CheckboxFilterProps> = ({
                 readOnly
                 onChange={handleSelectAll}
               />
-              Select All
+              Seleccionar todos
               {selectedOptions.size === options.size && (
                 <span className="checked">✔</span>
               )}
