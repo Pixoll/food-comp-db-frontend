@@ -8,6 +8,7 @@ import {
 } from "../../types/SingleFoodResult";
 import { BsPencil } from "react-icons/bs";
 import CenteredModifyModal from "./CenteredModifyModal";
+import { useTranslation } from "react-i18next";
 
 interface NutrientAccordionProps {
   data: NutrientsValue;
@@ -16,7 +17,7 @@ interface NutrientAccordionProps {
 const NutrientAccordionModify: React.FC<NutrientAccordionProps> = ({
   data
 }) => {
-
+  const {t} = useTranslation("global");
   const [selectedNutrient, setSelectedNutrient] =
     useState<NutrientMeasurement | null>(null);
   const [showModal, setShowModal] = useState(false);
@@ -71,13 +72,13 @@ const NutrientAccordionModify: React.FC<NutrientAccordionProps> = ({
     <>
       <Accordion className="mi-accordion" defaultActiveKey={["0", "1", "2"]} >
         <Accordion.Item eventKey="0">
-          <Accordion.Header>Valor energetico</Accordion.Header>
+          <Accordion.Header>{t('nutrientAccordion.Energy')}</Accordion.Header>
           <Accordion.Body>
             <Table responsive="sm">
               <thead>
                 <tr>
-                  <th>Nombre</th>
-                  <th>Modificar</th>
+                  <th>{t('nutrientAccordion.name')} </th>
+                  <th>{t('nutrientAccordion.modify')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -100,13 +101,13 @@ const NutrientAccordionModify: React.FC<NutrientAccordionProps> = ({
         </Accordion.Item>
 
         <Accordion.Item eventKey="1">
-          <Accordion.Header>Nutrientes principales</Accordion.Header>
+          <Accordion.Header>{t('nutrientAccordion.Main')}</Accordion.Header>
           <Accordion.Body>
             <Table responsive="sm">
               <thead>
                 <tr>
-                  <th>Nombre</th>
-                  <th>Modificar</th>
+                <th>{t('nutrientAccordion.name')} </th>
+                <th>{t('nutrientAccordion.modify')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -147,8 +148,8 @@ const NutrientAccordionModify: React.FC<NutrientAccordionProps> = ({
                       <Table responsive="sm">
                         <thead>
                           <tr>
-                            <th>Nombre</th>
-                            <th>Modificar</th>
+                          <th>{t('nutrientAccordion.name')} </th>
+                          <th>{t('nutrientAccordion.modify')}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -175,13 +176,13 @@ const NutrientAccordionModify: React.FC<NutrientAccordionProps> = ({
         </Accordion.Item>
 
         <Accordion.Item eventKey="2">
-          <Accordion.Header>Micronutrientes</Accordion.Header>
+          <Accordion.Header>{t('nutrientAccordion.Micronutrients')}</Accordion.Header>
           <Accordion.Body>
             <Table responsive="sm">
               <thead>
                 <tr>
-                  <th>Nombre</th>
-                  <th>Modificar</th>
+                <th>{t('nutrientAccordion.name')} </th>
+                <th>{t('nutrientAccordion.modify')}</th>
                 </tr>
               </thead>
               <tbody>

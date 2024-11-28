@@ -3,6 +3,7 @@ import { Container, Row } from 'react-bootstrap';
 import { FaUserCircle, FaLock } from "react-icons/fa";
 import { BiLogIn } from "react-icons/bi";
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from "react-i18next";
 
 import axios from 'axios';
 import useForm from "../core/hooks/useForm";
@@ -20,7 +21,7 @@ const LoginPage = () => {
     });
     const navigate = useNavigate();
     const { dispatch } = useAuth();
-
+    const {t} = useTranslation("global");
     const onLogin = (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -64,7 +65,7 @@ const LoginPage = () => {
         <Container fluid style={{ height: '100vh' }}>
             <Row className="login-background h-100 d-flex justify-content-center align-items-center">
                 <div className="login-div" style={{width: '450px'}}>
-                    <h1>Inicio de sesión</h1>
+                    <h1>{t('loginPage.title')}</h1>
                     <form onSubmit={onLogin}>
                         <div className="txt_field">
                             <input
@@ -75,7 +76,7 @@ const LoginPage = () => {
                                 required
                             />
                             <span></span>
-                            <label><FaUserCircle /> Usuario</label>
+                            <label><FaUserCircle /> {t('loginPage.username')}</label>
                         </div>
                         <div className="txt_field">
                             <input
@@ -86,16 +87,16 @@ const LoginPage = () => {
                                 required
                             />
                             <span></span>
-                            <label><FaLock /> Contraseña</label>
+                            <label><FaLock /> {t('loginPage.password')}</label>
                         </div>
                         <div className="d-flex justify-content-end mb-3">
                             <a href="/forgot-password" style={{ fontSize: '14px', color: '#007bff' }}>
-                                ¿Olvidaste tu contraseña?
+                            {t('loginPage.recover')}
                             </a>
                         </div>
                         <button type="submit" className="login-submit">
                             <BiLogIn style={{ marginRight: '8px' }} />
-                            Iniciar Sesión
+                            {t('loginPage.title')}
                         </button>
                     </form>
                 </div>

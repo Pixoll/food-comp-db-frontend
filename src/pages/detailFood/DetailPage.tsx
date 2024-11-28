@@ -9,8 +9,10 @@ import { SingleFoodResult } from "../../core/types/SingleFoodResult";
 import Graphic from "../../core/components/detailFood/Graphic";
 import ReferencesList from "../../core/components/detailFood/ReferencesList";
 import LengualCodeComponent from "../../core/components/detailFood/LengualCodeComponent";
+import { useTranslation } from "react-i18next";
 
 export default function DetailPage() {
+  const {t} = useTranslation("global");
   const [key, setKey] = useState("first");
 
   const handleReferenceClick = (code: string) => {
@@ -81,86 +83,87 @@ export default function DetailPage() {
         value: +(((grams / 100) * mainNutrient.average) / 100).toFixed(2),
         fill: colors[index % colors.length],
       })) || [];
-
+  
   const handleGramsChange = () => {
     setGrams(inputGrams);
   };
+  
   return (
     <div className="detail-background">
       <Container>
         <Row>
           <Col md={6}>
             <div className="transparent-container">
-              <h2>Datos generales del alimento:</h2>
+              <h2>{t('DetailFood.title')}</h2>
               <p>
-                <strong>Código:</strong> {data.code}
+                <strong>{t('DetailFood.code')}</strong> {data.code}
               </p>
 
               {data.commonName?.es && (
                 <p>
-                  <strong>Nombre en Español:</strong> {data.commonName.es}
+                  <strong>{t('DetailFood.name.Spanish')}</strong> {data.commonName.es}
                 </p>
               )}
               {data.commonName?.pt && (
                 <p>
-                  <strong>Nombre en Portugués:</strong> {data.commonName.pt}
+                  <strong>{t('DetailFood.name.Portuguese')}</strong> {data.commonName.pt}
                 </p>
               )}
               {data.commonName?.en && (
                 <p>
-                  <strong>Nombre en Inglés:</strong> {data.commonName.en}
+                  <strong>{t('DetailFood.name.English')}</strong> {data.commonName.en}
                 </p>
               )}
 
               {data.scientificName && (
                 <p>
-                  <strong>Nombre Científico:</strong> {data.scientificName}
+                  <strong>{t('DetailFood.name.scientific')}</strong> {data.scientificName}
                 </p>
               )}
               {data.subspecies && (
                 <p>
-                  <strong>Subespecie:</strong> {data.subspecies}
+                  <strong>{t('DetailFood.subspecies')}</strong> {data.subspecies}
                 </p>
               )}
               {data.strain && (
                 <p>
-                  <strong>Cepa:</strong> {data.strain}
+                  <strong>{t('DetailFood.strain')}</strong> {data.strain}
                 </p>
               )}
               {data.brand && (
                 <p>
-                  <strong>Marca:</strong> {data.brand}
+                  <strong>{t('DetailFood.brand')}</strong> {data.brand}
                 </p>
               )}
               {data.observation && (
                 <p>
-                  <strong>Observación:</strong> {data.observation}
+                  <strong>{t('DetailFood.observation')}</strong> {data.observation}
                 </p>
               )}
 
               <p>
-                <strong>Grupo de comida:</strong> {data.group.name} (Código:{" "}
+                <strong>{t('DetailFood.group')}</strong> {data.group.name} (Código:{" "}
                 {data.group.code})
               </p>
               <p>
-                <strong>Tipo de alimento:</strong> {data.type.name} (Código:{" "}
+                <strong>{t('DetailFood.type')}</strong> {data.type.name} (Código:{" "}
                 {data.type.code})
               </p>
 
               {data.ingredients?.es && (
                 <p>
-                  <strong>Ingredientes (Español):</strong> {data.ingredients.es}
+                  <strong>{t('DetailFood.ingredients.Spanish')}</strong> {data.ingredients.es}
                 </p>
               )}
               {data.ingredients?.pt && (
                 <p>
-                  <strong>Ingredientes (Portugués):</strong>{" "}
+                  <strong>{t('DetailFood.ingredients.Portuguese')}</strong>{" "}
                   {data.ingredients.pt}
                 </p>
               )}
               {data.ingredients?.en && (
                 <p>
-                  <strong>Ingredientes (Inglés):</strong> {data.ingredients.en}
+                  <strong>{t('DetailFood.ingredients.English')}</strong> {data.ingredients.en}
                 </p>
               )}
             </div>
@@ -183,7 +186,7 @@ export default function DetailPage() {
                       type="number"
                       value={inputGrams}
                       onChange={(e) => setInputGrams(+(e.target.value))}
-                      placeholder="Ingrese gramos"
+                      placeholder= {t('DetailFood.grams.enter')}
                       min={1}
                       style={{
                         marginRight: "10px",
@@ -202,9 +205,9 @@ export default function DetailPage() {
                         marginLeft: "10px",
                       }}
                     >
-                      Cambiar gramos
+                      {t('DetailFood.grams.change')}
                     </button>
-                    <p>Gramos actuales: {grams}g</p>
+                    <p>{t('DetailFood.grams.current')} {grams}g</p>
                   </div>
                 </Col>
               </Row>
@@ -240,7 +243,7 @@ export default function DetailPage() {
                         transition: "background-color 0.3s ease",
                       }}
                     >
-                      Etiquetado Nutricional
+                      {t('DetailFood.labels.Nutritional')} 
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
@@ -255,7 +258,7 @@ export default function DetailPage() {
                         transition: "background-color 0.3s ease",
                       }}
                     >
-                      Referencias
+                      {t('DetailFood.references.title')}
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
@@ -269,7 +272,7 @@ export default function DetailPage() {
                         transition: "background-color 0.3s ease",
                       }}
                     >
-                      Todos los datos
+                      {t('DetailFood.labels.data')}
                     </Nav.Link>
                   </Nav.Item>
                 </Nav>
@@ -290,11 +293,11 @@ export default function DetailPage() {
                     </div>
                   </Tab.Pane>
                   <Tab.Pane eventKey="second">
-                    <h4>Referencias de nutrientes</h4>
+                    <h4>{t('DetailFood.references.nutrients')}</h4>
                     <ReferencesList references={references} />
                   </Tab.Pane>
                   <Tab.Pane eventKey="third">
-                    <h4>Codigos lenguales</h4>
+                    <h4>{t('DetailFood.codes')}</h4>
                     <LengualCodeComponent data={data.langualCodes} />
                   </Tab.Pane>
                 </Tab.Content>

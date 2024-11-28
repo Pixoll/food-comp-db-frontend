@@ -11,6 +11,8 @@ import { FoodResult } from "../../types/option";
 import useFetch from "../../hooks/useFetch";
 import qs from "qs";
 import { Container, Row, Col, Form, InputGroup } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
+
 const FoodFilter = () => {
   const [selectedFilters, setSelectedFilters] = useState({
     foodTypeFilter: new Set<string>(),
@@ -77,13 +79,14 @@ const FoodFilter = () => {
     `http://localhost:3000/api/v1/foods?${queryString}`
   );
   console.log(`http://localhost:3000/api/v1/foods?${queryString}`)
+  const {t} = useTranslation("global");
   return (
     <div className="search-container">
       <div className="food-filter">
-        <h2>Filtros</h2>
+        <h2>{t('Filter.title')}</h2>
 
         <div className="filter-group">
-          <label htmlFor="other">Tipo de alimento</label>
+          <label htmlFor="other">{t('Filter.type')}</label>
           <SearchBox
             filterOptions={types}
             onChange={(values) => handleFilterChange("foodTypeFilter", values)}
@@ -92,7 +95,7 @@ const FoodFilter = () => {
         </div>
 
         <div className="filter-group">
-          <label htmlFor="other">Regiones de Chile</label>
+          <label htmlFor="other">{t('Filter.regions')}</label>
           <SearchBox
             filterOptions={regions}
             onChange={(values) => handleFilterChange("regionsFilter", values)}
@@ -101,7 +104,7 @@ const FoodFilter = () => {
         </div>
 
         <div className="filter-group">
-          <label htmlFor="other">Grupo alimentario</label>
+          <label htmlFor="other">{t('Filter.group')}</label>
           <SearchBox
             filterOptions={groups}
             onChange={(values) => handleFilterChange("groupsFilter", values)}
@@ -110,7 +113,7 @@ const FoodFilter = () => {
         </div>
 
         <div className="filter-group">
-          <label htmlFor="other">Lenguajes</label>
+          <label htmlFor="other">{t('Filter.Languages')}</label>
           <SearchBox
             filterOptions={languages}
             onChange={(values) => handleFilterChange("languagesFilter", values)}
@@ -120,7 +123,7 @@ const FoodFilter = () => {
 
         <Container className="mb-3 custom-container">
           <h3 className="measurent-title">
-            <i className="bi bi-funnel-fill"></i> Medición de nutrientes
+            <i className="bi bi-funnel-fill"></i> {t('Measurement.title')}
           </h3>
           <Row className="align-items-start flex-column">
             <Col className="mb-3">
@@ -147,23 +150,23 @@ const FoodFilter = () => {
                     }))
                   }
                 >
-                  <option value="">Operador</option>
-                  <option value="<">Menor que (&lt;)</option>
-                  <option value="<=">Menor o igual (&le;)</option>
-                  <option value="=">Igual a (=)</option>
-                  <option value=">=">Mayor o igual (&ge;)</option>
-                  <option value=">">Mayor que (&gt;)</option>
+                  <option value="">{t('Measurement.operator.title')}</option>
+                  <option value="<">{t('Measurement.operator.type.less')}(&lt;)</option>
+                  <option value="<=">{t('Measurement.operator.type.less_equal')} (&le;)</option>
+                  <option value="=">{t('Measurement.operator.type.equal')}(=)</option>
+                  <option value=">=">{t('Measurement.operator.type.greater_equal')} (&ge;)</option>
+                  <option value=">">{t('Measurement.operator.type.greater')}(&gt;)</option>
                 </Form.Select>
               </Form.Group>
             </Col>
 
             <Col>
               <Form.Group controlId="content-input">
-                <Form.Label>Contenido</Form.Label>
+                <Form.Label>{t('Measurement.content.title')}</Form.Label>
                 <InputGroup>
                   <Form.Control
                     type="number"
-                    placeholder="Valor"
+                    placeholder={t('Measurement.content.value')}
                     aria-label="Content value"
                   />
                 </InputGroup>
@@ -173,7 +176,7 @@ const FoodFilter = () => {
         </Container>
 
         <button onClick={resetFilters} className="reset-button">
-          Reestablecer filtro
+        {t('Filter.reset')}
         </button>
       </div>
       <FoodResultsTable
