@@ -80,7 +80,7 @@
   "Table_FoodResults":{
     "id":"ID",
     "name":"Nombre",
-    "type":"Tipo",
+    "scientific_name":"Nombre cientifico",
     "action":"Acción",
     "details":"Detalles",
     "modify":"Modificar"

@@ -1,6 +1,6 @@
-import { Col, Container, Nav, Row, Tab } from "react-bootstrap";
+import { Button, Col, Container, Form, Nav, Row, Tab } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../../assets/css/_DetailPage.css";
 import NutrientAccordionModify from "../../core/components/detailFood/NutrientAccordionModify";
 import Footer from "../../core/components/Footer";
@@ -8,100 +8,264 @@ import useFetch from "../../core/hooks/useFetch";
 import { SingleFoodResult } from "../../core/types/SingleFoodResult";
 import ReferencesList from "../../core/components/detailFood/ReferencesList";
 import LengualCodeComponent from "../../core/components/detailFood/LengualCodeComponent";
+import RequiredFieldLabel from "../../core/components/detailFood/RequiredFieldLabel";
 import { useTranslation } from "react-i18next";
 
 export default function ModifyFoodDetail() {
   const [key, setKey] = useState("first");
   const { code } = useParams();
   const { data } = useFetch<SingleFoodResult>(
-    `http://localhost:3000/api/v1/foods/${code?.toString()}`
+    `http://localhost:3000/api/v1/foods/${code}`
   );
   const {t} = useTranslation("global");
+  const [generalData, setGeneralData] = useState({
+    code: "",
+    strain: "",
+    brand: "",
+    observation: "",
+    scientificName: "",
+    subspecies: "",
+  });
+
+  const [namesAndIngredients, setNamesAndIngredients] = useState<{
+    commonName: Record<"es" | "en" | "pt", string>;
+    ingredients: Record<"es" | "en" | "pt", string>;
+  }>({
+    commonName: { es: "", en: "", pt: "" },
+    ingredients: { es: "", en: "", pt: "" },
+  });
+
+  const [groupAndTypeData, setGroupAndTypeData] = useState<{
+    group: { code: string; name: string };
+    type: { code: string; name: string };
+  }>({
+    group: { code: "", name: "" },
+    type: { code: "", name: "" },
+  });
+  useEffect(() => {
+    if (data) {
+      const initialGeneralData = {
+        code: data.code || "",
+        strain: data.strain || "",
+        brand: data.brand || "",
+        observation: data.observation || "",
+        scientificName: data.scientificName || "",
+        subspecies: data.subspecies || "",
+      };
+
+      const initialNamesAndIngredients = {
+        commonName: {
+          es: data.commonName?.es || "",
+          en: data.commonName?.en || "",
+          pt: data.commonName?.pt || "",
+        },
+        ingredients: {
+          es: data.ingredients?.es || "",
+          en: data.ingredients?.en || "",
+          pt: data.ingredients?.pt || "",
+        },
+      };
+
+      const initialGroupAndTypeData = {
+        group: {
+          code: data.group?.code || "",
+          name: data.group?.name || "",
+        },
+        type: {
+          code: data.type?.code || "",
+          name: data.type?.name || "",
+        },
+      };
+
+      setGeneralData(initialGeneralData);
+      setNamesAndIngredients(initialNamesAndIngredients);
+      setGroupAndTypeData(initialGroupAndTypeData);
+    }
+  }, [data]);
+
   if (!data) {
     return <h2>{t('DetailFood.loading')}</h2>;
   }
 
-  const references = data?.references ?? [];
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    if (name.startsWith("commonName.") || name.startsWith("ingredients.")) {
+      const [field, lang] = name.split("."); // Ej.: "commonName.es" -> ["commonName", "es"]
+      setNamesAndIngredients((prevState) => ({
+        ...prevState,
+        [field]: {
+          ...prevState[field as keyof typeof prevState], // Garantiza que sea "commonName" o "ingredients"
+          [lang]: value,
+        },
+      }));
+    } else if (name.startsWith("group.") || name.startsWith("type.")) {
+      const [field, key] = name.split("."); // Ej.: "group.name" -> ["group", "name"]
+      setGroupAndTypeData((prevState) => ({
+        ...prevState,
+        [field]: {
+          ...prevState[field as keyof typeof prevState], // Garantiza que sea "group" o "type"
+          [key]: value,
+        },
+      }));
+    } else {
+      setGeneralData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Datos guardados:", {
+      generalData,
+      groupAndTypeData,
+      namesAndIngredients,
+    });
+  };
+
+  const renderLanguageFields = (field: "commonName" | "ingredients") =>
+    ["es", "en", "pt"].map((lang) => (
+      <Form.Group as={Row} className="mb-3" key={`${field}.${lang}`}>
+        <Form.Label column sm={2}>
+          {field === "commonName" && lang === "es" ? (
+            <>
+              <RequiredFieldLabel
+                label={`Nombre (${lang.toUpperCase()})`}
+                tooltipMessage="Este campo es requerido"
+              />
+            </>
+          ) : (
+            `${field === "commonName" ? "Nombre" : "Ingredientes"} (${lang.toUpperCase()})`
+          )}
+        </Form.Label>
+        <Col sm={10}>
+          <Form.Control
+            type="text"
+            name={`${field}.${lang}`}
+            value={namesAndIngredients[field][lang as "es" | "en" | "pt"]}
+            onChange={handleInputChange}
+          />
+        </Col>
+      </Form.Group>
+    ));
   
+
   return (
     <div className="detail-background">
       <Container>
-          <Col md={12}>
-            <div className="transparent-container">
-              <h2>{t('DetailFood.title')}</h2>
-              <p>
-                <strong>{t('DetailFood.code')}</strong> {data.code}
-              </p>
+      <Form onSubmit={handleSubmit}>
+        <Col md={12}>
+          <div className="transparent-container">
+            <h2>Modificar detalles del alimento</h2>
+            
+              <Form.Group as={Row} className="mb-3" controlId="formCode">
+                <Form.Label column sm={2}>
+                  <RequiredFieldLabel
+                    label="Código"
+                    tooltipMessage="Este campo es requerido"
+                  />
+                </Form.Label>
+                <Col sm={10}>
+                  <Form.Control
+                    type="text"
+                    name="code"
+                    value={generalData.code}
+                    placeholder="Ingresa el código"
+                    onChange={handleInputChange}
+                  />
+                </Col>
+              </Form.Group>
 
-              {data.commonName?.es && (
-                <p>
-                  <strong>{t('DetailFood.name.Spanish')}</strong> {data.commonName.es}
-                </p>
-              )}
-              {data.commonName?.pt && (
-                <p>
-                  <strong>{t('DetailFood.name.Portuguese')}</strong> {data.commonName.pt}
-                </p>
-              )}
-              {data.commonName?.en && (
-                <p>
-                  <strong>{t('DetailFood.name.English')}</strong> {data.commonName.en}
-                </p>
-              )}
+              {renderLanguageFields("commonName")}
 
-              {data.scientificName && (
-                <p>
-                  <strong>{t('DetailFood.name.scientific')}</strong> {data.scientificName}
-                </p>
-              )}
-              {data.subspecies && (
-                <p>
-                  <strong>{t('DetailFood.subspecies')}</strong> {data.subspecies}
-                </p>
-              )}
-              {data.strain && (
-                <p>
-                  <strong>{t('DetailFood.strain')}</strong> {data.strain}
-                </p>
-              )}
-              {data.brand && (
-                <p>
-                  <strong>{t('DetailFood.brand')}</strong> {data.brand}
-                </p>
-              )}
-              {data.observation && (
-                <p>
-                  <strong>{t('DetailFood.observation')}</strong> {data.observation}
-                </p>
-              )}
+              <Form.Group
+                as={Row}
+                className="mb-3"
+                controlId="formScientificName"
+              >
+                <Form.Label column sm={2}>
+                  Nombre Científico:
+                </Form.Label>
+                <Col sm={10}>
+                  <Form.Control
+                    type="text"
+                    name="scientificName"
+                    value={generalData.scientificName}
+                    onChange={handleInputChange}
+                  />
+                </Col>
+              </Form.Group>
 
-              <p>
-                <strong>{t('DetailFood.group')}</strong> {data.group.name} (Código:{" "}
-                {data.group.code})
-              </p>
-              <p>
-                <strong>{t('DetailFood.type')}</strong> {data.type.name} (Código:{" "}
-                {data.type.code})
-              </p>
+              <Form.Group as={Row} className="mb-3" controlId="formSubspecies">
+                <Form.Label column sm={2}>
+                  Subespecie:
+                </Form.Label>
+                <Col sm={10}>
+                  <Form.Control
+                    type="text"
+                    name="subspecies"
+                    value={generalData.subspecies}
+                    onChange={handleInputChange}
+                  />
+                </Col>
+              </Form.Group>
 
-              {data.ingredients?.es && (
-                <p>
-                  <strong>{t('DetailFood.ingredients.Spanish')}</strong> {data.ingredients.es}
-                </p>
-              )}
-              {data.ingredients?.pt && (
-                <p>
-                  <strong>{t('DetailFood.ingredients.Portuguese')}</strong>{" "}
-                  {data.ingredients.pt}
-                </p>
-              )}
-              {data.ingredients?.en && (
-                <p>
-                  <strong>{t('DetailFood.ingredients.English')}</strong> {data.ingredients.en}
-                </p>
-              )}
-            </div>
-          </Col>
+              <Form.Group as={Row} className="mb-3" controlId="formGroup">
+                <Form.Label column sm={2}>
+                <RequiredFieldLabel
+                    label="Grupo"
+                    tooltipMessage="Este campo es requerido"
+                  />
+                </Form.Label>
+                <Col sm={5}>
+                  <Form.Control
+                    type="text"
+                    name="group.name"
+                    value={groupAndTypeData.group.name}
+                    onChange={handleInputChange}
+                  />
+                </Col>
+                <Col sm={5}>
+                  <Form.Control
+                    type="text"
+                    name="group.code"
+                    value={groupAndTypeData.group.code}
+                    onChange={handleInputChange}
+                  />
+                </Col>
+              </Form.Group>
+
+              <Form.Group as={Row} className="mb-3" controlId="formType">
+                <Form.Label column sm={2}>
+                <RequiredFieldLabel
+                    label="Tipo"
+                    tooltipMessage="Este campo es requerido"
+                  />
+                </Form.Label>
+                <Col sm={5}>
+                  <Form.Control
+                    type="text"
+                    name="type.name"
+                    value={groupAndTypeData.type.name}
+                    onChange={handleInputChange}
+                  />
+                </Col>
+                <Col sm={5}>
+                  <Form.Control
+                    type="text"
+                    name="type.code"
+                    value={groupAndTypeData.type.code}
+                    onChange={handleInputChange}
+                  />
+                </Col>
+              </Form.Group>
+
+              {renderLanguageFields("ingredients")}
+
+          </div>
+        </Col>
 
         <Row className="mt-4">
           <Col>
@@ -181,8 +345,8 @@ export default function ModifyFoodDetail() {
                     </div>
                   </Tab.Pane>
                   <Tab.Pane eventKey="second">
-                    <h4>{t('DetailFood.references.nutrients')}</h4>
-                    <ReferencesList references={references} />
+                    <h4>Referencias de nutrientes</h4>
+                    <ReferencesList references={data.references} />
                   </Tab.Pane>
                   <Tab.Pane eventKey="third">
                     <h4>{t('DetailFood.codes')}</h4>
@@ -193,6 +357,12 @@ export default function ModifyFoodDetail() {
             </div>
           </Col>
         </Row>
+        <Form.Group as={Row} className="mb-3">
+                <Col sm={{ span: 10, offset: 2 }}>
+                  <Button type="submit">Guardar Cambios</Button>
+                </Col>
+              </Form.Group>
+        </Form>
       </Container>
 
       <Footer />

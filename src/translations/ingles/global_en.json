@@ -80,7 +80,7 @@
   "Table_FoodResults":{
     "id":"ID",
     "name":"Name",
-    "type":"Type",
+    "scientific_name":"Scientific name",
     "action":"Action",
     "details":"Details",
     "modify":"Modify"

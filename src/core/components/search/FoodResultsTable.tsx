@@ -109,7 +109,7 @@ const FoodResultsTable: React.FC<FoodResultsListProps> = ({
                 <th style={{ fontSize: 22 }}>{t('Table_FoodResults.id')}</th>
                 <th style={{ fontSize: 22 }}>{t('Table_FoodResults.name')}</th>
 
-                <th style={{ fontSize: 22 }}>{t('Table_FoodResults.type')}</th>
+                <th style={{ fontSize: 22 }}>{t('Table_FoodResults.scientific_name')}</th>
                 <th style={{ fontSize: 22 }}>{t('Table_FoodResults.action')}</th>
               </tr>
             </thead>
