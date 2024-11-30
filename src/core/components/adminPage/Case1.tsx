@@ -1,5 +1,5 @@
 import React from "react";
-
+import OriginSelector from "./OriginSelector";
 // Define los tipos para los props
 interface Case1Props {
   formData: {
@@ -45,7 +45,7 @@ const Case1: React.FC<Case1Props> = ({ formData, handleInputChange }) => {
           onChange={(e) => handleInputChange(e, "nombreAlimentoEn")}
         />
       </div>
-      {/* Agregar más campos de "Atributos Básicos" aquí */}
+      <OriginSelector />
     </div>
   );
 };
