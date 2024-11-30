@@ -11,23 +11,27 @@ import SearchPage from "../../pages/search/SearchPage";
 import ModifyFoodDetail from "../../pages/detailFood/ModifyFoodDetail";
 import AdminPage from "../../pages/AdminPage";
 
-
 export const AppRouter = () => {
   return (
     <AuthProvider>
-      <AppNavbar /> 
+      <AppNavbar />
       <Suspense fallback={<FaSpinner />}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="search" element={<SearchPage />} />
           <Route path="search/details/:code" element={<DetailPage />} />
-          <Route path="AdminPanel" element={<AdminPage />} />
-
-
+          <Route
+            path="panel-admin"
+            element={
+              <PrivateRoute>
+                <AdminPage />
+              </PrivateRoute>
+            }
+          />
 
           <Route
-            path="search/Modifydetails/:code"
+            path="search/modify-details-food/:code"
             element={
               <PrivateRoute>
                 <ModifyFoodDetail />

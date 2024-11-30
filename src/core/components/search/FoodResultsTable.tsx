@@ -42,7 +42,7 @@ const FoodResultsTable: React.FC<FoodResultsListProps> = ({
 
   const toModfyFoodDetail = (code: string) => {
     if (state.isAuthenticated) {
-      navigate(`/search/Modifydetails/${code}`);
+      navigate(`/search/modify-details-food/${code}`);
     } else {
       navigate("/login");
     }
