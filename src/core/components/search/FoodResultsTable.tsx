@@ -4,6 +4,7 @@ import Pagination from "./Pagination";
 import "../../../assets/css/_foodResultsTable.css";
 import { useAuth } from "../../context/AuthContext";
 import { FoodResult } from "../../types/option";
+import { useTranslation } from "react-i18next";
 
 interface FoodResultsListProps {
   data: FoodResult[];
@@ -34,7 +35,7 @@ const FoodResultsTable: React.FC<FoodResultsListProps> = ({
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
   const records = Array.isArray(data) ? data.slice(firstIndex, lastIndex) : [];
-
+  const {t} = useTranslation("global");
   const toFoodDetail = (code: string) => {
     navigate(`/search/details/${code}`);
   };
@@ -63,53 +64,53 @@ const FoodResultsTable: React.FC<FoodResultsListProps> = ({
 
   return (
     <div className="food-list">
-      <h2>Lista de resultados</h2>
+      <h2>{t('Table.title')}</h2>
       <div className="filter-name">
         <div className="input-name">
         <input
           type="text"
-          placeholder="Buscar por nombre..."
+          placeholder={t('Table.search')}
           value={searchForName}
           onChange={(e) => setSearchForName(e.target.value)}
         />
         </div>
         <div className="translation-name">
-        <h4>Nombre en:</h4>
+        <h4>{t('Table.name.title')}</h4>
         <select
           value={selectedLanguage}
           onChange={handleLanguageChange}
           className="language-selector"
         >
-          <option value="en">Inglés</option>
-          <option value="es">Español</option>
-          <option value="pt">Portugués</option>
+          <option value="en">{t('Table.name.English')}</option>
+          <option value="es">{t('Table.name.Spanish')}</option>
+          <option value="pt">{t('Table.name.Portuguese')}</option>
         </select>
         </div>
         <div className="order-by-name">
-        <h4>Orden del nombre:</h4>
+        <h4>{t('Table.order.title')}</h4>
         <select
           value={sortOrder}
           onChange={(e) => handleOrderChange(e.target.value as "asc" | "desc")}
           className="sortOrder-selector"
         >
-          <option value="asc">Ascendente</option>
-          <option value="desc">Descendente</option>
+          <option value="asc">{t('Table.order.ascending')}</option>
+          <option value="desc">{t('Table.order.descending')}</option>
         </select>
         </div>
       </div>
 
       {!Array.isArray(data) || data.length === 0 ? (
-        <p>No hay resultados que mostrar.</p>
+        <p>{t('Table.no_results')}</p>
       ) : (
         <>
           <table className="content-table-foods">
             <thead>
               <tr>
-                <th style={{ fontSize: 22 }}>ID</th>
-                <th style={{ fontSize: 22 }}>Nombre</th>
+                <th style={{ fontSize: 22 }}>{t('Table_FoodResults.id')}</th>
+                <th style={{ fontSize: 22 }}>{t('Table_FoodResults.name')}</th>
 
-                <th style={{ fontSize: 22 }}>Tipo</th>
-                <th style={{ fontSize: 22 }}>Acción</th>
+                <th style={{ fontSize: 22 }}>{t('Table_FoodResults.scientific_name')}</th>
+                <th style={{ fontSize: 22 }}>{t('Table_FoodResults.action')}</th>
               </tr>
             </thead>
             <tbody>
@@ -122,11 +123,11 @@ const FoodResultsTable: React.FC<FoodResultsListProps> = ({
                   <td data-label="Nombre científico">{item.scientificName}</td>
                   <td>
                     <button onClick={() => toFoodDetail(item.code)}>
-                      Detalles
+                    {t('Table_FoodResults.details')}
                     </button>
                     {state.isAuthenticated && (
                       <button onClick={() => toModfyFoodDetail(item.code)}>
-                        Modificar
+                        {t('Table_FoodResults.modify')}
                       </button>
                     )}
                   </td>

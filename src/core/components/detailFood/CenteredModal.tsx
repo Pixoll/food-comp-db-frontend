@@ -2,6 +2,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { Table } from "react-bootstrap";
 import { NutrientMeasurement } from "../../types/SingleFoodResult";
+import { useTranslation } from "react-i18next";
 
 interface ModalProps {
   data: NutrientMeasurement;
@@ -10,7 +11,7 @@ interface ModalProps {
 }
 
 const CenteredModal: React.FC<ModalProps> = ({ data, onHide, onReferenceClick }) => {
-
+  const {t} = useTranslation("global");
   const referenceLinks =
     data.referenceCodes?.length ? (
       data.referenceCodes.map((code, index) => (
@@ -42,19 +43,19 @@ const CenteredModal: React.FC<ModalProps> = ({ data, onHide, onReferenceClick })
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          Detalles del Nutriente
+        {t('Centered.details')}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Table responsive="lg">
           <thead>
             <tr>
-              <th>Desviación</th>
-              <th>Mínimo</th>
-              <th>Máximo</th>
-              <th>Notas</th>
-              <th>Estandarizado</th>
-              <th>Referencias</th>
+              <th>{t('Centered.deviation')}</th>
+              <th>{t('Centered.min')}</th>
+              <th>{t('Centered.max')}</th>
+              <th>{t('Centered.note')}</th>
+              <th>{t('Centered.standardized')}</th>
+              <th>{t('Centered.references')}</th>
             </tr>
           </thead>
           <tbody>

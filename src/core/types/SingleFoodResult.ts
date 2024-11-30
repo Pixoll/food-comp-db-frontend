@@ -51,7 +51,7 @@ export type NutrientMeasurement = {
     referenceCodes?: number[];
 };
 
-type NutrientMeasurementWithComponents = NutrientMeasurement & {
+export type NutrientMeasurementWithComponents = NutrientMeasurement & {
     components: NutrientMeasurement[];
 };
 

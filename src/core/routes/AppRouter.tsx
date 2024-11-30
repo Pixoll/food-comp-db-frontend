@@ -12,7 +12,6 @@ import ModifyFoodDetail from "../../pages/detailFood/ModifyFoodDetail";
 import AdminPage from "../../pages/AdminPage";
 
 
-
 export const AppRouter = () => {
   return (
     <AuthProvider>
@@ -23,7 +22,8 @@ export const AppRouter = () => {
           <Route path="login" element={<LoginPage />} />
           <Route path="search" element={<SearchPage />} />
           <Route path="search/details/:code" element={<DetailPage />} />
-          <Route path="AdminPage" element={<AdminPage />} />
+          <Route path="AdminPanel" element={<AdminPage />} />
+
 
 
           <Route

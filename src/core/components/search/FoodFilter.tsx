@@ -6,16 +6,22 @@ import GetGroups from "./gets/GetGroups";
 import GetLanguages from "./gets/GetLanguages";
 import GetRegions from "./gets/GetRegions";
 import GetTypes from "./gets/getTypes";
+import GetNutrients from "./gets/GetNutrients";
 import { FoodResult } from "../../types/option";
 import useFetch from "../../hooks/useFetch";
 import qs from "qs";
 import { Container, Row, Col, Form, InputGroup } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
+
 const FoodFilter = () => {
   const [selectedFilters, setSelectedFilters] = useState({
     foodTypeFilter: new Set<string>(),
     regionsFilter: new Set<string>(),
     groupsFilter: new Set<string>(),
     languagesFilter: new Set<string>(),
+    nutrientFilter: new Set<string>(),
+    operator: "",
+    value: 0,
   });
 
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
@@ -25,6 +31,7 @@ const FoodFilter = () => {
   const { collectionRegions: regions } = GetRegions();
   const { collectionTypes: types } = GetTypes();
   const { collectionLanguages: languages } = GetLanguages();
+  const { collectionNutrients: nutrients } = GetNutrients();
 
   const handleSort = (order: "asc" | "desc") => {
     if (order === "asc" || order === "desc") {
@@ -38,7 +45,7 @@ const FoodFilter = () => {
   ) => {
     setSelectedFilters((prevFilters) => ({
       ...prevFilters,
-      [filterKey]: new Set(values), // Actualiza el filtro correspondiente
+      [filterKey]: new Set(values),
     }));
   };
 
@@ -48,6 +55,7 @@ const FoodFilter = () => {
     region: Array.from(selectedFilters.regionsFilter),
     group: Array.from(selectedFilters.groupsFilter),
     language: Array.from(selectedFilters.languagesFilter),
+    nutrient: Array.from(selectedFilters.nutrientFilter),
   };
   const queryString = qs.stringify(filters, {
     arrayFormat: "repeat",
@@ -60,88 +68,105 @@ const FoodFilter = () => {
       regionsFilter: new Set<string>(),
       groupsFilter: new Set<string>(),
       languagesFilter: new Set<string>(),
+      nutrientFilter: new Set<string>(),
+      operator: "",
+      value: 0,
     });
     setSearchForName("");
     setSortOrder("asc");
   };
-
   const { data: FoodResulst } = useFetch<FoodResult[]>(
     `http://localhost:3000/api/v1/foods?${queryString}`
   );
-
+  console.log(`http://localhost:3000/api/v1/foods?${queryString}`)
+  const {t} = useTranslation("global");
   return (
     <div className="search-container">
       <div className="food-filter">
-        <h2>Filtros</h2>
+        <h2>{t('Filter.title')}</h2>
 
         <div className="filter-group">
-          <label htmlFor="other">Tipo de alimento</label>
+          <label htmlFor="other">{t('Filter.type')}</label>
           <SearchBox
             filterOptions={types}
             onChange={(values) => handleFilterChange("foodTypeFilter", values)}
+            single={false}
           />
         </div>
 
         <div className="filter-group">
-          <label htmlFor="other">Regiones de Chile</label>
+          <label htmlFor="other">{t('Filter.regions')}</label>
           <SearchBox
             filterOptions={regions}
             onChange={(values) => handleFilterChange("regionsFilter", values)}
+            single={false}
           />
         </div>
 
         <div className="filter-group">
-          <label htmlFor="other">Grupo alimentario</label>
+          <label htmlFor="other">{t('Filter.group')}</label>
           <SearchBox
             filterOptions={groups}
             onChange={(values) => handleFilterChange("groupsFilter", values)}
+            single={false}
           />
         </div>
 
         <div className="filter-group">
-          <label htmlFor="other">Lenguajes</label>
+          <label htmlFor="other">{t('Filter.Languages')}</label>
           <SearchBox
             filterOptions={languages}
             onChange={(values) => handleFilterChange("languagesFilter", values)}
+            single={false}
           />
         </div>
 
         <Container className="mb-3 custom-container">
           <h3 className="measurent-title">
-            <i className="bi bi-funnel-fill"></i> Medición de nutrientes
+            <i className="bi bi-funnel-fill"></i> {t('Measurement.title')}
           </h3>
           <Row className="align-items-start flex-column">
             <Col className="mb-3">
               <div className="filter-group">
                 <SearchBox
-                  filterOptions={languages}
+                  filterOptions={nutrients}
                   onChange={(values) =>
-                    handleFilterChange("languagesFilter", values)
+                    handleFilterChange("nutrientFilter", values)
                   }
+                  single={true}
                 />
               </div>
             </Col>
 
             <Col className="mb-3">
               <Form.Group controlId="operator-select">
-                <Form.Select aria-label="Select operator">
-                  <option value="">Operador</option>
-                  <option value="<">Menor que (&lt;)</option>
-                  <option value="<=">Menor o igual (&le;)</option>
-                  <option value="=">Igual a (=)</option>
-                  <option value=">=">Mayor o igual (&ge;)</option>
-                  <option value=">">Mayor que (&gt;)</option>
+                <Form.Select
+                  aria-label="Select operator"
+                  value={selectedFilters.operator.toString()}
+                  onChange={(e) =>
+                    setSelectedFilters((prevFilters) => ({
+                      ...prevFilters,
+                      operator: e.target.value,
+                    }))
+                  }
+                >
+                  <option value="">{t('Measurement.operator.title')}</option>
+                  <option value="<">{t('Measurement.operator.type.less')}(&lt;)</option>
+                  <option value="<=">{t('Measurement.operator.type.less_equal')} (&le;)</option>
+                  <option value="=">{t('Measurement.operator.type.equal')}(=)</option>
+                  <option value=">=">{t('Measurement.operator.type.greater_equal')} (&ge;)</option>
+                  <option value=">">{t('Measurement.operator.type.greater')}(&gt;)</option>
                 </Form.Select>
               </Form.Group>
             </Col>
 
             <Col>
               <Form.Group controlId="content-input">
-                <Form.Label>Contenido</Form.Label>
+                <Form.Label>{t('Measurement.content.title')}</Form.Label>
                 <InputGroup>
                   <Form.Control
                     type="number"
-                    placeholder="Valor"
+                    placeholder={t('Measurement.content.value')}
                     aria-label="Content value"
                   />
                 </InputGroup>
@@ -151,7 +176,7 @@ const FoodFilter = () => {
         </Container>
 
         <button onClick={resetFilters} className="reset-button">
-          Reestablecer filtro
+        {t('Filter.reset')}
         </button>
       </div>
       <FoodResultsTable

@@ -1,6 +1,8 @@
 import { Container, Row, Col, Form, Button} from 'react-bootstrap';
+import { useTranslation } from "react-i18next";
 
 const HeroSection = () => {
+  const {t} = useTranslation("global");
   return (
     <div
       style={{
@@ -19,10 +21,10 @@ const HeroSection = () => {
         <Row className="h-100 d-flex justify-content-center align-items-center">
           <Col md={8}>
             <h1 style={{ fontWeight: 'bold', fontSize: '3rem', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.7)', fontFamily: 'Montserrat, sans-serif' }}>
-              Food Composition Database
+            {t('homepage.title')}
             </h1>
             <p style={{ fontSize: '1.5rem', marginBottom: '30px', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.7)', fontFamily: 'Montserrat, sans-serif' }}>
-              A data collection of food composition and more... something like that must be here hehe 
+            {t('homepage.subtitle')}
             </p>
 
             {/* Barra de búsqueda */}
@@ -30,7 +32,7 @@ const HeroSection = () => {
               <Form.Group className="d-flex" style={{ maxWidth: '600px', margin: '0 auto' }}>
                 <Form.Control
                   type="text"
-                  placeholder="Buscar..."
+                  placeholder={t('search.placeholder')}
                   style={{
                     padding: '15px',
                     fontSize: '1.2rem',
@@ -48,7 +50,7 @@ const HeroSection = () => {
                     backgroundColor: '#019803'
                   }}
                 >
-                  Buscar
+                  {t('search.button')}
                 </Button>
               </Form.Group>
             </Form>
@@ -65,7 +67,7 @@ const HeroSection = () => {
                 }}
                 onClick={() => window.location.href = '/search'}
               >
-                Búsqueda avanzada
+                 {t('search.advancedSearch')}
               </Button>
             </div>
           </Col>

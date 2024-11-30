@@ -1,103 +1,148 @@
 {
-    "navbar": {
-      "home": "Main Page",
-      "search": "Search",
-      "languages": "Languages",
-      "spanish": "Spanish",
-      "english": "English"
-    },
-    "homepage": {
-      "title": "Food Composition Database",
-      "subtitle": "A data collection of food composition and more... something like that must be here hehe"
-    },
-    "search": {
-      "placeholder": "Search...",
-      "button": "Search",
-      "advancedSearch": "Search advanced"
-    },
-    "footer": {
-        "contact": {
-            "title": "Contact",
-            "email": "Email: contacto@ejemplo.com",
-            "phone": "Phone: +123 456 7890"
-        },
-        "address": {
-            "title": "Address",
-            "details": "123 Calle Falsa, Ciudad, País"
-        },
-        "policies": {
-            "title": "Policies",
-            "privacy": "Privacy Policies",
-            "terms": "Terms and Conditions",
-            "cookies": "Cookies Policy"
-        },
-        "copyright": "© 2024 Mi Empresa. All rights reserved."
-    },
-    "Table":{
-      "title": "Results list",
-      "search":"Search by name...",
-      "attributes":{
-        "Id":"ID",
-        "name":"Name",
-        "nutrient":"Nutrient",
-        "action":"Action"
-      },  
-      "details":"Details",
-      "modify":"Modify"
-    },
-    "Filter":{
-      "title": "Filters",
-      "type":"Type of food",
-      "nutrient":"Nutrient",
-      "other":"Other...",
-      "reset":"Reset filters"
-    },
-    "DetailPage":{
-      "title":"General food information",
-      "code":"Code:",
-      "name":{
-        "Spanish":"Spanish Name:",
-        "Portuguese":"Portuguese Name:",
-        "English":"English Name:",
-        "scientific":"Scientific Name:" 
+  "navbar": {
+    "home": "Main Page",
+    "search": "Search",
+    "languages": "Languages",
+    "spanish": "Spanish",
+    "english": "English"
+  },
+  "homepage": {
+    "title": "Food Composition Database",
+    "subtitle": "A data collection of food composition and more... something like that must be here hehe"
+  },
+  "search": {
+    "placeholder": "Search...",
+    "button": "Search",
+    "advancedSearch": "Search advanced"
+  },
+  "footer": {
+      "contact": {
+          "title": "Contact",
+          "email": "Email: contacto@ejemplo.com"
       },
-      "origin":"Origin:",
-      "type":"Type of food:",
-      "group":"Food group:",
-      "labels":{
-        "Nutritional":"Nutritional Labeling",
-        "plus":"Nutritional Labeling ++",
-        "data":"All data"
-      }
-    },
-    "loginPage":{
-      "title":"Login",
-      "username":"Username",
-      "password":"Password",
-      "button": "Start"
-    },
-   "nutrientAccordion":{
-    "attributes":{
-          "type":"Type",
-          "amount":"Amount",
-          "unit":"Unit",
-          "action":"Action",
-          "nutrient":"Nutrient"
-        },
-      "Energy":"Energy value",
-      "Main":{
-        "title":"Main nutrients",
-        "components":"Components of "
+      "address": {
+          "title": "Address",
+          "details": "123 Calle Falsa, Ciudad, País"
       },
-      "Micronutrients":"Micronutrients",
-
-      "buttons":{
-        "remove":"Remove",
-        "edit":"Edit",
-        "save":"Save"
+      "policies": {
+          "title": "Policies",
+          "privacy": "Privacy Policies"
+      },
+      "copyright": "© 2024 Mi Empresa. All rights reserved."
+  },
+  "loginPage":{
+    "title":"Login",
+    "username":"Username",
+    "password":"Password",
+    "recover":"Forgot your password?"
+  },
+  "Filter":{
+    "title": "Filters",
+    "type":"Type of food",
+    "reset":"Reset filters",
+    "regions":"Regions of Chile",
+    "group":"Food group",
+    "Languages":"Languages"
+  },
+  "Measurement":{
+    "title":"Nutrient measurement",
+    "operator": {
+          "title": "Operator",
+          "type":{
+            "less":"Less than",
+            "less_equal":"Less than or equal",
+            "equal":"Equal to", 
+            "greater_equal":"Greater than or equal",
+            "greater": "Greater than"
+        }
+      },
+      "content":{
+        "title":"Content",
+        "value":"Value"
       }
-    
-
+  },
+  "Table":{
+    "title": "Results list",
+    "search":"Search by name...",
+    "name":{
+      "title": "Name in:",
+      "Spanish":"Spanish",
+      "Portuguese":"Portuguese",
+      "English":"English"
+    },
+    "order":{
+      "title":"Name order:",
+      "ascending":"Ascending",
+      "descending":"Descending"
+    },
+    "no_results":"There are no results to show."
+  },
+  "Table_FoodResults":{
+    "id":"ID",
+    "name":"Name",
+    "scientific_name":"Scientific name",
+    "action":"Action",
+    "details":"Details",
+    "modify":"Modify"
+  },
+  "DetailFood":{
+    "loading":"Loading....",
+    "title":"General food information:",
+    "code":"Code:",
+    "name":{
+      "Spanish":"Name in Spanish:",
+      "Portuguese":"Name in Portuguese",
+      "English":"Name in English:",
+      "scientific":"Scientific Name:" 
+    },
+    "subspecies":"Subspecies:",
+    "strain":"Strain:",
+    "brand":"Brand:",
+    "observation":"Observation:",
+    "type":"Type of food:",
+    "group":"Food group:",
+    "ingredients":{
+      "Spanish":"Ingredients (Spanish):",
+      "Portuguese":"Ingredients (Portuguese):",
+      "English":"Ingredients (English):"
+    },
+    "grams":{
+      "enter": "Enter grams",
+      "change":"Change grams",
+      "current":"Current grams:"
+    },
+    "labels":{
+      "Nutritional":"Nutritional Labeling",
+      "data":"All data"
+    },
+    "codes":"Lenguales codes",
+    "references":{
+    "title":"References",
+    "nutrients":"Nutrient References"
     }
+
+  },
+  "components_home":{
+    "title":"Search Composition"
+
+  },
+  "nutrientAccordion":{
+    "Energy":"Energy value",
+    "Main":"Main nutrients",
+    "Micronutrients":"Micronutrients",
+    "name":"Name",
+    "modify":"Modify"
+  },
+  "Centered":{
+    "details":"Nutrient Details",
+    "mean":"Mean",
+    "deviation":"Deviation",
+    "min":"Minimum",
+    "max":"Maximum",
+    "note":"Note",
+    "standardized":"Standardized",
+    "save":"Save",
+    "close":"Close",
+    "references":"References"
+  }
 }
-  

@@ -1,75 +1,137 @@
 import React, { useState } from "react";
 import "../assets/css/_AdminPage.css";
+import Case1 from "../core/components/adminPage/Case1";
+import Case2 from "../core/components/adminPage/Case2";
+import Case3 from "../core/components/adminPage/Case3";
+import Case4 from "../core/components/adminPage/Case4";
+import Case5 from "../core/components/adminPage/Case5";
+import Case6 from "../core/components/adminPage/Case6";
+import Case7 from "../core/components/adminPage/Case7";
+import Case8 from "../core/components/adminPage/Case8";
+import Case9 from "../core/components/adminPage/Case9";
+
+
+const sectionNames = [
+  "Nombre",
+  "Grupo y tipo",
+  "Ingredientes",
+  "Subespecie",
+  "Macronutrientes",
+  "Alcohol y Compuestos",
+  "Grasas y Ácidos Grasos",
+  "Minerales",
+  "Vitaminas"
+];
 
 const DataUploader: React.FC = () => {
-  const [activeSection, setActiveSection] = useState<number>(1); // Estado para controlar la sección activa
+  const [activeSection, setActiveSection] = useState<number>(1);
+  const [formData, setFormData] = useState({
+    // Atributos Básicos
+    nombreAlimentoEsp: "",
+    nombreAlimentoPortu: "",
+    nombreAlimentoEn: "",
+    nombreCienficio: "",
+    origen_region: "",
+    codigo: "",
+    ubicacion: "",
+    brand: "",
+    observation: "",
+    groupName: "",
+    groupCode: "",
+    typeName: "",
+    typeCode: "",
 
+    ingredients_es: "",
+    ingredients_pt: "",
+    ingredients_en: "",
+
+    strain: "",
+    subspecies: "",
+
+    // Componentes nutricionales
+    carbohidratosTotales: "",
+    carbohidratosDisponibles: "",
+    proteina: "",
+    lipidoTotalOtroMetodo: "",
+    fibraTotal: "",
+    alcohol: "",
+    acidosOrganicos: "",
+    poliolesTotales: "",
+    cenizas: "",
+    acGrasosSaturados: "",
+    acGrasosMonoinsat: "",
+    acGrasosPolinsat: "",
+    acGrasosTrans: "",
+    colesterol: "",
+    c18_2n6: "",
+    c18_3n3: "",
+    calcio: "",
+    hierro: "",
+    sodio: "",
+    magnesio: "",
+    fosforo: "",
+    potasio: "",
+    manganeso: "",
+    zinc: "",
+    cobre: "",
+    selenio: "",
+    vitaminaA: "",
+    vitaminaRAE: "",
+    vitaminaD: "",
+    alfaTocoferol: "",
+    tiamina: "",
+    riboflavina: "",
+    niacinaPreformada: "",
+    vitaminaB6: "",
+    vitaminaB12: "",
+    vitaminaC: "",
+    equivalenteFolato: "",
+    salAdicion: "",
+    azucarAdicion: "",
+    grasaAdicion: "",
+    proteinaVegetal: "",
+    proteinaAnimal: "",
+  });
+
+  // Función para manejar los cambios en los inputs
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>, field: string) => {
+    const value = event.target.value;
+    setFormData((prevData) => ({
+      ...prevData,
+      [field]: value,
+    }));
+  };
+
+  // Renderizar la sección activa
   const renderSection = () => {
     switch (activeSection) {
       case 1:
-        return (
-          <div className="section">
-            <h3 className="subtitle">Sección 1</h3>
-            <div className="form-row">
-              <label className="label">Nombre alimento:</label>
-              <input className="input" type="text" placeholder="Nombre" />
-            </div>
-            <div className="form-row">
-              <label className="label">TEXTO EJEMPLO:</label>
-              <input className="input" type="email" placeholder="Correo" />
-            </div>
-          </div>
-        );
+        return <Case1 formData={formData} handleInputChange={handleInputChange} />;
       case 2:
-        return (
-          <div className="section">
-            <h3 className="subtitle">Sección 2</h3>
-            <div className="form-row">
-              <label className="label">Cantidad:</label>
-              <input className="input" type="number" placeholder="Cantidad" />
-            </div>
-            <div className="form-row">
-              <label className="label">Descripción:</label>
-              <input className="input" type="text" placeholder="Descripción" />
-            </div>
-          </div>
-        );
+        return <Case2 formData={formData} handleInputChange={handleInputChange} />;
       case 3:
-        return (
-          <div className="section">
-            <h3 className="subtitle">Sección 3</h3>
-            <div className="form-row">
-              <label className="label">Precio:</label>
-              <input className="input" type="number" placeholder="Precio" />
-            </div>
-            <div className="form-row">
-              <label className="label">Categoría:</label>
-              <input className="input" type="text" placeholder="Categoría" />
-            </div>
-          </div>
-        );
+        return <Case3 formData={formData} handleInputChange={handleInputChange} />;
       case 4:
-        return (
-          <div className="section">
-            <h3 className="subtitle">Sección 4</h3>
-            <div className="form-row">
-              <label className="label">Código:</label>
-              <input className="input" type="text" placeholder="Código" />
-            </div>
-            <div className="form-row">
-              <label className="label">Ubicación:</label>
-              <input className="input" type="text" placeholder="Ubicación" />
-            </div>
-          </div>
-        );
-      case 5:
-        return (
-          <div className="section">
-            <h3 className="subtitle">AGREGAR ALIMENTO A LA BASE</h3>
+        return <Case4 formData={formData} handleInputChange={handleInputChange} />;
 
-            
-          </div>
-        );
+      case 5: // Macronutrientes
+        return <Case5 formData={formData} handleInputChange={handleInputChange} />;
+
+      case 6: // Alcohol y Compuestos Específicos
+        return <Case6 formData={formData} handleInputChange={handleInputChange} />;
+
+      case 7: // Grasas y Ácidos Grasos
+
+        return <Case7 formData={formData} handleInputChange={handleInputChange} />;
+
+      case 8: // Minerales
+        return <Case8 formData={formData} handleInputChange={handleInputChange} />;
+
+      case 9: // Vitaminas
+        return <Case9 formData={formData} handleInputChange={handleInputChange} />;
+
+
+
       default:
         return null;
     }
@@ -77,25 +139,38 @@ const DataUploader: React.FC = () => {
 
   return (
     <div className="AdminPage-background data-uploader">
-      {/* Contenedor para botones, contenido y formulario */}
       <div className="left-column">
-        {/* Botones de navegación como columna */}
         <h3 className="subtitle">Secciones</h3>
-        {[1, 2, 3, 4, 5].map((section) => (
+        {sectionNames.map((name, index) => (
           <button
-            key={section}
-            className={`pagination-button ${activeSection === section ? "active" : ""}`}
-            onClick={() => setActiveSection(section)}
+            key={index + 1}
+            className={`pagination-button ${activeSection === index + 1 ? "active" : ""}`}
+            onClick={() => setActiveSection(index + 1)}
           >
-            Sección {section}
+            {name}
           </button>
         ))}
       </div>
 
       {/* Contenedor principal */}
       <div className="content-container">
-        <h2 className="title">Ingresar Alimentos</h2>
+
+        <h2 className="title">Ingresar Datos deAlimentos</h2>
         {renderSection()}
+        <div className="section-buttons">
+          <button
+            className="section-button back-button"
+            onClick={() => setActiveSection(prev => prev > 1 ? prev - 1 : prev)} // Navegar a la sección anterior
+          >
+            Atras
+          </button>
+          <button
+            className="section-button next-button"
+            onClick={() => setActiveSection(prev => prev < sectionNames.length ? prev + 1 : prev)} // Navegar a la siguiente sección
+          >
+            Siguiente
+          </button>
+        </div>
       </div>
 
       {/* Formulario para importar plantillas */}
@@ -109,7 +184,7 @@ const DataUploader: React.FC = () => {
           <button className="button">Procesar Datos</button>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

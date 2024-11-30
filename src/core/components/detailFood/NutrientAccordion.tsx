@@ -7,11 +7,13 @@ import {
 } from "../../types/SingleFoodResult";
 import { BsQuestionCircle } from "react-icons/bs";
 import CenteredModal from "./CenteredModal";
+import { useTranslation } from 'react-i18next';
 
 interface NutrientAccordionProps {
   data: NutrientsValue;
   onReferenceClick: (code: string) => void;
 }
+
 
 const NutrientAccordion: React.FC<NutrientAccordionProps> = ({
   data,
@@ -30,11 +32,12 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({
     setShowModal(false);
     setSelectedNutrient(null);
   };
+  const {t} = useTranslation("global");
   return (
     <>
       <Accordion className="mi-accordion" defaultActiveKey={["0", "1", "2"]} >
         <Accordion.Item eventKey="0">
-          <Accordion.Header>Valor energetico</Accordion.Header>
+          <Accordion.Header>{t('nutrientAccordion.Energy')}</Accordion.Header>
           <Accordion.Body>
             <Table responsive="sm">
               <thead>

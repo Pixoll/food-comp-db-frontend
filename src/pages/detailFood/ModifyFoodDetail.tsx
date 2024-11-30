@@ -1,113 +1,272 @@
-import AppNavbar from "../../core/components/Navbar";
-import Footer from "../../core/components/Footer";
+import { Button, Col, Container, Form, Nav, Row, Tab } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-import { Container, Row, Col, Tab, Nav } from "react-bootstrap";
-import { data, data2 } from "../../core/static/data";
-import Graphic from "../../core/components/detailFood/Graphic";
-import NutrientAccordionModify from "../../core/components/detailFood/NutrientAccordionModify";
-import nutritionalValue from "../../core/types/nutritionalValue";
-import writeIcon from "../../assets/images/write.png";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../../assets/css/_DetailPage.css";
+import NutrientAccordionModify from "../../core/components/detailFood/NutrientAccordionModify";
+import Footer from "../../core/components/Footer";
+import useFetch from "../../core/hooks/useFetch";
+import { SingleFoodResult } from "../../core/types/SingleFoodResult";
+import ReferencesList from "../../core/components/detailFood/ReferencesList";
+import LengualCodeComponent from "../../core/components/detailFood/LengualCodeComponent";
+import RequiredFieldLabel from "../../core/components/detailFood/RequiredFieldLabel";
+import { useTranslation } from "react-i18next";
 
-const ModifyFoodDetail = () => {
-  const { id } = useParams();
+export default function ModifyFoodDetail() {
+  const [key, setKey] = useState("first");
+  const { code } = useParams();
+  const { data } = useFetch<SingleFoodResult>(
+    `http://localhost:3000/api/v1/foods/${code}`
+  );
+  const {t} = useTranslation("global");
+  const [generalData, setGeneralData] = useState({
+    code: "",
+    strain: "",
+    brand: "",
+    observation: "",
+    scientificName: "",
+    subspecies: "",
+  });
 
-  const initialValues = [
-    data2[0].codigo,
-    data2[0].nombre_espanol,
-    data2[0].nombre_portugues,
-    data2[0].nombre_ingles,
-    data2[0].nombre_cientifico,
-    data2[0].region_origen,
-    data2[0].tipo_alimento,
-    data2[0].grupo,
-  ];
-  const [selectedValue, setSelectedValue] = useState<Array<string>>(initialValues);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [namesAndIngredients, setNamesAndIngredients] = useState<{
+    commonName: Record<"es" | "en" | "pt", string>;
+    ingredients: Record<"es" | "en" | "pt", string>;
+  }>({
+    commonName: { es: "", en: "", pt: "" },
+    ingredients: { es: "", en: "", pt: "" },
+  });
 
-  const valores_nutricionales: nutritionalValue = data2[0].valores_nutricionales;
+  const [groupAndTypeData, setGroupAndTypeData] = useState<{
+    group: { code: string; name: string };
+    type: { code: string; name: string };
+  }>({
+    group: { code: "", name: "" },
+    type: { code: "", name: "" },
+  });
+  useEffect(() => {
+    if (data) {
+      const initialGeneralData = {
+        code: data.code || "",
+        strain: data.strain || "",
+        brand: data.brand || "",
+        observation: data.observation || "",
+        scientificName: data.scientificName || "",
+        subspecies: data.subspecies || "",
+      };
 
-  const handleIconClick = (index: number) => {
-    setEditingIndex(index);
-    setIsEditing(true);
-  };
+      const initialNamesAndIngredients = {
+        commonName: {
+          es: data.commonName?.es || "",
+          en: data.commonName?.en || "",
+          pt: data.commonName?.pt || "",
+        },
+        ingredients: {
+          es: data.ingredients?.es || "",
+          en: data.ingredients?.en || "",
+          pt: data.ingredients?.pt || "",
+        },
+      };
+
+      const initialGroupAndTypeData = {
+        group: {
+          code: data.group?.code || "",
+          name: data.group?.name || "",
+        },
+        type: {
+          code: data.type?.code || "",
+          name: data.type?.name || "",
+        },
+      };
+
+      setGeneralData(initialGeneralData);
+      setNamesAndIngredients(initialNamesAndIngredients);
+      setGroupAndTypeData(initialGroupAndTypeData);
+    }
+  }, [data]);
+
+  if (!data) {
+    return <h2>{t('DetailFood.loading')}</h2>;
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValues = [...selectedValue];
-    if (editingIndex !== null) {
-      newValues[editingIndex] = e.target.value;
-      setSelectedValue(newValues);
+    const { name, value } = e.target;
+
+    if (name.startsWith("commonName.") || name.startsWith("ingredients.")) {
+      const [field, lang] = name.split("."); // Ej.: "commonName.es" -> ["commonName", "es"]
+      setNamesAndIngredients((prevState) => ({
+        ...prevState,
+        [field]: {
+          ...prevState[field as keyof typeof prevState], // Garantiza que sea "commonName" o "ingredients"
+          [lang]: value,
+        },
+      }));
+    } else if (name.startsWith("group.") || name.startsWith("type.")) {
+      const [field, key] = name.split("."); // Ej.: "group.name" -> ["group", "name"]
+      setGroupAndTypeData((prevState) => ({
+        ...prevState,
+        [field]: {
+          ...prevState[field as keyof typeof prevState], // Garantiza que sea "group" o "type"
+          [key]: value,
+        },
+      }));
+    } else {
+      setGeneralData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
     }
   };
 
-  const handleInputBlur = () => {
-    setIsEditing(false);
-    setEditingIndex(null);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Datos guardados:", {
+      generalData,
+      groupAndTypeData,
+      namesAndIngredients,
+    });
   };
 
-  const handleInputKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      handleInputBlur();
-    }
-  };
+  const renderLanguageFields = (field: "commonName" | "ingredients") =>
+    ["es", "en", "pt"].map((lang) => (
+      <Form.Group as={Row} className="mb-3" key={`${field}.${lang}`}>
+        <Form.Label column sm={2}>
+          {field === "commonName" && lang === "es" ? (
+            <>
+              <RequiredFieldLabel
+                label={`Nombre (${lang.toUpperCase()})`}
+                tooltipMessage="Este campo es requerido"
+              />
+            </>
+          ) : (
+            `${field === "commonName" ? "Nombre" : "Ingredientes"} (${lang.toUpperCase()})`
+          )}
+        </Form.Label>
+        <Col sm={10}>
+          <Form.Control
+            type="text"
+            name={`${field}.${lang}`}
+            value={namesAndIngredients[field][lang as "es" | "en" | "pt"]}
+            onChange={handleInputChange}
+          />
+        </Col>
+      </Form.Group>
+    ));
+  
 
   return (
     <div className="detail-background">
       <Container>
-        <Row>
-          <Col md={6}>
-            <div className="transparent-container">
-              <h2>Datos generales de la comida:</h2>
-              {['Codigo','Nombre español', 'Nombre Portugués', 'Nombre Inglés', 'Nombre Científico', 'Origen', 'Tipo de alimento', 'Grupo de comida'].map((label, index) => (
-                <p key={index}>
-                  <strong>{label}: </strong>
-                  {isEditing && editingIndex === index  ? (
-                    <input
-                      type="text"
-                      value={selectedValue[index]}
-                      onChange={handleInputChange}
-                      onBlur={handleInputBlur}
-                      onKeyDown={handleInputKeyDown}
-                      autoFocus
-                      style={{
-                        fontSize: "16px",
-                        padding: "2px 5px",
-                        marginLeft: "10px",
-                      }}
-                    />
-                  ) : (
-                    <>
-                      <span>{selectedValue[index]}</span>
-                      <img
-                        src={writeIcon}
-                        alt="Edit Icon"
-                        style={{ width: "20px", cursor: "pointer", marginLeft: "10px" }}
-                        onClick={() => handleIconClick(index)}
-                      />
-                    </>
-                  )}
-                </p>
-              ))}
-            </div>
-          </Col>
-          <Col md={6}>
-            <div className="transparent-container">
-              <h2>Contenedor 2</h2>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                }}
+      <Form onSubmit={handleSubmit}>
+        <Col md={12}>
+          <div className="transparent-container">
+            <h2>Modificar detalles del alimento</h2>
+            
+              <Form.Group as={Row} className="mb-3" controlId="formCode">
+                <Form.Label column sm={2}>
+                  <RequiredFieldLabel
+                    label="Código"
+                    tooltipMessage="Este campo es requerido"
+                  />
+                </Form.Label>
+                <Col sm={10}>
+                  <Form.Control
+                    type="text"
+                    name="code"
+                    value={generalData.code}
+                    placeholder="Ingresa el código"
+                    onChange={handleInputChange}
+                  />
+                </Col>
+              </Form.Group>
+
+              {renderLanguageFields("commonName")}
+
+              <Form.Group
+                as={Row}
+                className="mb-3"
+                controlId="formScientificName"
               >
-                <Graphic data={data} />
-              </div>
-            </div>
-          </Col>
-        </Row>
+                <Form.Label column sm={2}>
+                  Nombre Científico:
+                </Form.Label>
+                <Col sm={10}>
+                  <Form.Control
+                    type="text"
+                    name="scientificName"
+                    value={generalData.scientificName}
+                    onChange={handleInputChange}
+                  />
+                </Col>
+              </Form.Group>
+
+              <Form.Group as={Row} className="mb-3" controlId="formSubspecies">
+                <Form.Label column sm={2}>
+                  Subespecie:
+                </Form.Label>
+                <Col sm={10}>
+                  <Form.Control
+                    type="text"
+                    name="subspecies"
+                    value={generalData.subspecies}
+                    onChange={handleInputChange}
+                  />
+                </Col>
+              </Form.Group>
+
+              <Form.Group as={Row} className="mb-3" controlId="formGroup">
+                <Form.Label column sm={2}>
+                <RequiredFieldLabel
+                    label="Grupo"
+                    tooltipMessage="Este campo es requerido"
+                  />
+                </Form.Label>
+                <Col sm={5}>
+                  <Form.Control
+                    type="text"
+                    name="group.name"
+                    value={groupAndTypeData.group.name}
+                    onChange={handleInputChange}
+                  />
+                </Col>
+                <Col sm={5}>
+                  <Form.Control
+                    type="text"
+                    name="group.code"
+                    value={groupAndTypeData.group.code}
+                    onChange={handleInputChange}
+                  />
+                </Col>
+              </Form.Group>
+
+              <Form.Group as={Row} className="mb-3" controlId="formType">
+                <Form.Label column sm={2}>
+                <RequiredFieldLabel
+                    label="Tipo"
+                    tooltipMessage="Este campo es requerido"
+                  />
+                </Form.Label>
+                <Col sm={5}>
+                  <Form.Control
+                    type="text"
+                    name="type.name"
+                    value={groupAndTypeData.type.name}
+                    onChange={handleInputChange}
+                  />
+                </Col>
+                <Col sm={5}>
+                  <Form.Control
+                    type="text"
+                    name="type.code"
+                    value={groupAndTypeData.type.code}
+                    onChange={handleInputChange}
+                  />
+                </Col>
+              </Form.Group>
+
+              {renderLanguageFields("ingredients")}
+
+          </div>
+        </Col>
+
         <Row className="mt-4">
           <Col>
             <div
@@ -122,41 +281,91 @@ const ModifyFoodDetail = () => {
                   variant="tabs"
                   className="mb-3"
                   style={{ borderBottom: "2px solid #d1e7dd" }}
+                  activeKey={key}
+                  onSelect={(k) => setKey(k as string)}
                 >
                   <Nav.Item>
-                    <Nav.Link eventKey="first" style={{ /* estilos */ }}>Etiquetado Nutricional</Nav.Link>
+                    <Nav.Link
+                      eventKey="first"
+                      style={{
+                        backgroundColor: "#f8f9fa",
+                        borderRadius: "5px 5px 0 0",
+                        border: "1px solid #d1e7dd",
+                        marginRight: "5px",
+                        color: "#0d6efd",
+                        transition: "background-color 0.3s ease",
+                      }}
+                    >
+                      {t('DetailFood.labels.Nutritional')}
+                    </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="second" style={{ /* estilos */ }}>Etiquetado Nutricional ++</Nav.Link>
+                    <Nav.Link
+                      eventKey="second"
+                      style={{
+                        backgroundColor: "#f8f9fa",
+                        borderRadius: "5px 5px 0 0",
+                        border: "1px solid #d1e7dd",
+                        marginRight: "5px",
+                        color: "#0d6efd",
+                        transition: "background-color 0.3s ease",
+                      }}
+                    >
+                      {t('DetailFood.references.title')}
+                    </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
-                    <Nav.Link eventKey="third" style={{ /* estilos */ }}>Todos los datos</Nav.Link>
+                    <Nav.Link
+                      eventKey="third"
+                      style={{
+                        backgroundColor: "#f8f9fa",
+                        borderRadius: "5px 5px 0 0",
+                        border: "1px solid #d1e7dd",
+                        color: "#0d6efd",
+                        transition: "background-color 0.3s ease",
+                      }}
+                    >
+                      {t('DetailFood.labels.data')}
+                    </Nav.Link>
                   </Nav.Item>
                 </Nav>
+
                 <Tab.Content>
                   <Tab.Pane eventKey="first">
-                    <div style={{ textAlign: "center" }}>
-                      <NutrientAccordionModify data={valores_nutricionales} />
+                    <div style={{ textAlign: "center", borderRadius: "5px" }}>
+                      <NutrientAccordionModify
+                        data={
+                          data?.nutrientMeasurements ?? {
+                            energy: [],
+                            mainNutrients: [],
+                            micronutrients: { vitamins: [], minerals: [] },
+                          }
+                        }
+                      />
                     </div>
                   </Tab.Pane>
                   <Tab.Pane eventKey="second">
-                    <h4>Contenido para Opción 2</h4>
-                    <p>Aquí va el contenido específico para la opción 2.</p>
+                    <h4>Referencias de nutrientes</h4>
+                    <ReferencesList references={data.references} />
                   </Tab.Pane>
                   <Tab.Pane eventKey="third">
-                    <h4>Contenido para Opción 3</h4>
-                    <p>Aquí va el contenido específico para la opción 3.</p>
+                    <h4>{t('DetailFood.codes')}</h4>
+                    <LengualCodeComponent data={data.langualCodes} />
                   </Tab.Pane>
                 </Tab.Content>
               </Tab.Container>
             </div>
           </Col>
         </Row>
+        <Form.Group as={Row} className="mb-3">
+                <Col sm={{ span: 10, offset: 2 }}>
+                  <Button type="submit">Guardar Cambios</Button>
+                </Col>
+              </Form.Group>
+        </Form>
       </Container>
 
       <Footer />
     </div>
   );
-};
-
-export default ModifyFoodDetail;
+}
