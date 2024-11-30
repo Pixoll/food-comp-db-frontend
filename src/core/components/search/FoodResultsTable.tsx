@@ -99,7 +99,7 @@ const FoodResultsTable: React.FC<FoodResultsListProps> = ({
         </div>
       </div>
 
-      {!Array.isArray(data) || data.length === 0 ? (
+      {data.length === 0 ? (
         <p>{t('Table.no_results')}</p>
       ) : (
         <>
