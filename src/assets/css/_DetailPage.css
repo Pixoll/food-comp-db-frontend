@@ -1,8 +1,9 @@
 .transparent-container {
-    background: rgba(255, 255, 255); 
-    border-radius: 15px;
-    padding: 20px; 
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+    background: rgba(255, 255, 255); /* Fondo blanco con transparencia */
+    border-radius: 15px; /* Bordes redondeados */
+    padding: 20px; /* Espaciado interno */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra suave */
+
   }
   
 .detail-background {

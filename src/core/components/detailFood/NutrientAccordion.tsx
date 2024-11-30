@@ -27,7 +27,6 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({
     setSelectedNutrient(nutrient);
     setShowModal(true);
   };
-  console.log(typeof data.energy[0].average)
 
   const handleCloseModal = () => {
     setShowModal(false);

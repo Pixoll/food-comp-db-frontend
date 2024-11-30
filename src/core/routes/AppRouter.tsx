@@ -9,6 +9,8 @@ import LoginPage from "../../pages/LoginPage";
 import DetailPage from "../../pages/detailFood/DetailPage";
 import SearchPage from "../../pages/search/SearchPage";
 import ModifyFoodDetail from "../../pages/detailFood/ModifyFoodDetail";
+import AdminPage from "../../pages/AdminPage";
+
 
 export const AppRouter = () => {
   return (
@@ -20,6 +22,9 @@ export const AppRouter = () => {
           <Route path="login" element={<LoginPage />} />
           <Route path="search" element={<SearchPage />} />
           <Route path="search/details/:code" element={<DetailPage />} />
+          <Route path="AdminPanel" element={<AdminPage />} />
+
+
 
           <Route
             path="search/Modifydetails/:code"
