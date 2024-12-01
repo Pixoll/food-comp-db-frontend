@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 // Definir los tipos de los props
 interface AlcoholAndSpecificCompoundsProps {
@@ -11,38 +12,39 @@ interface AlcoholAndSpecificCompoundsProps {
 }
 
 const AlcoholAndSpecificCompounds: React.FC<AlcoholAndSpecificCompoundsProps> = ({ formData, handleInputChange }) => {
+  const {t} = useTranslation("global");
   return (
     <div className="section">
-      <h3 className="subtitle">Alcohol y Compuestos Específicos</h3>
+      <h3 className="subtitle">{t('Case_6.title')}</h3>
 
       <div className="form-row">
-        <label className="label">Alcohol (g):</label>
+        <label className="label">{t('Case_6.Alcohol')}(g):</label>
         <input
           className="input"
           type="text"
-          placeholder="Alcohol"
+          placeholder={t('Case_6.Alcohol')}
           value={formData.alcohol}
           onChange={(e) => handleInputChange(e, "alcohol")}
         />
       </div>
 
       <div className="form-row">
-        <label className="label">Ácidos Orgánicos Totales (g):</label>
+        <label className="label">{t('Case_6.acids_T_G')}</label>
         <input
           className="input"
           type="text"
-          placeholder="Ácidos Orgánicos"
+          placeholder={t('Case_6.acids')}
           value={formData.acidosOrganicos}
           onChange={(e) => handleInputChange(e, "acidosOrganicos")}
         />
       </div>
 
       <div className="form-row">
-        <label className="label">Polioles Totales (g):</label>
+        <label className="label">{t('Case_6.Polyols')}(g):</label>
         <input
           className="input"
           type="text"
-          placeholder="Polioles Totales"
+          placeholder={t('Case_6.Polyols')}
           value={formData.poliolesTotales}
           onChange={(e) => handleInputChange(e, "poliolesTotales")}
         />

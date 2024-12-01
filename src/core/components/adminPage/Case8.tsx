@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 // Definir los tipos de los props
 interface MineralsProps {
@@ -18,82 +19,83 @@ interface MineralsProps {
 }
 
 const Minerals: React.FC<MineralsProps> = ({ formData, handleInputChange }) => {
+  const {t} = useTranslation("global");
   return (
     <div className="section">
-      <h3 className="subtitle">Minerales</h3>
+      <h3 className="subtitle">{t('Case_8.title')}</h3>
 
       <div className="form-row">
-        <label className="label">Calcio (mg):</label>
+        <label className="label">{t('Case_8.Calcium')} (mg):</label>
         <input
           className="input"
           type="text"
-          placeholder="Calcio"
+          placeholder={t('Case_8.Calcium')}
           value={formData.calcio}
           onChange={(e) => handleInputChange(e, "calcio")}
         />
       </div>
 
       <div className="form-row">
-        <label className="label">Hierro (mg):</label>
+        <label className="label">{t('Case_8.Iron')} (mg):</label>
         <input
           className="input"
           type="text"
-          placeholder="Hierro"
+          placeholder={t('Case_8.Iron')}
           value={formData.hierro}
           onChange={(e) => handleInputChange(e, "hierro")}
         />
       </div>
 
       <div className="form-row">
-        <label className="label">Sodio (mg):</label>
+        <label className="label">{t('Case_8.Sodium')} (mg):</label>
         <input
           className="input"
           type="text"
-          placeholder="Sodio"
+          placeholder={t('Case_8.Sodium')}
           value={formData.sodio}
           onChange={(e) => handleInputChange(e, "sodio")}
         />
       </div>
 
       <div className="form-row">
-        <label className="label">Magnesio (mg):</label>
+        <label className="label">{t('Case_8.Magnesium')} (mg):</label>
         <input
           className="input"
           type="text"
-          placeholder="Magnesio"
+          placeholder={t('Case_8.Magnesium')}
           value={formData.magnesio}
           onChange={(e) => handleInputChange(e, "magnesio")}
         />
       </div>
 
       <div className="form-row">
-        <label className="label">Fósforo (mg):</label>
+        <label className="label">{t('Case_8.Phosphorus')} (mg):</label>
         <input
           className="input"
           type="text"
-          placeholder="Fósforo"
+          placeholder={t('Case_8.Phosphorus')}
           value={formData.fosforo}
           onChange={(e) => handleInputChange(e, "fosforo")}
         />
       </div>
 
       <div className="form-row">
-        <label className="label">Potasio (mg):</label>
+        <label className="label">{t('Case_8.Potassium')} (mg):</label>
         <input
           className="input"
           type="text"
-          placeholder="Potasio"
+          placeholder={t('Case_8.Potassium')}
           value={formData.potasio}
           onChange={(e) => handleInputChange(e, "potasio")}
         />
       </div>
 
       <div className="form-row">
-        <label className="label">Manganeso (mg):</label>
+        <label className="label">{t('Case_8.Manganese')} (mg):</label>
         <input
           className="input"
           type="text"
-          placeholder="Manganeso"
+          placeholder={t('Case_8.Manganese')}
           value={formData.manganeso}
           onChange={(e) => handleInputChange(e, "manganeso")}
         />
@@ -111,22 +113,22 @@ const Minerals: React.FC<MineralsProps> = ({ formData, handleInputChange }) => {
       </div>
 
       <div className="form-row">
-        <label className="label">Cobre (mg):</label>
+        <label className="label">{t('Case_8.Copper')} (mg):</label>
         <input
           className="input"
           type="text"
-          placeholder="Cobre"
+          placeholder={t('Case_8.Copper')}
           value={formData.cobre}
           onChange={(e) => handleInputChange(e, "cobre")}
         />
       </div>
 
       <div className="form-row">
-        <label className="label">Selenio (mcg):</label>
+        <label className="label">{t('Case_8.Selenium')} (mcg):</label>
         <input
           className="input"
           type="text"
-          placeholder="Selenio"
+          placeholder={t('Case_8.Selenium')}
           value={formData.selenio}
           onChange={(e) => handleInputChange(e, "selenio")}
         />

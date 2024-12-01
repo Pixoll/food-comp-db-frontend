@@ -1,5 +1,5 @@
 import React from "react";
-
+import { useTranslation } from "react-i18next";
 // Definir los tipos de los props
 interface IngredientsProps {
   formData: {
@@ -13,35 +13,37 @@ interface IngredientsProps {
 }
 
 const Ingredients: React.FC<IngredientsProps> = ({ formData, handleInputChange }) => {
+  const {t} = useTranslation("global");
+
   return (
     <div className="section">
-      <h3 className="subtitle">Ingredientes</h3>
+      <h3 className="subtitle">{t('Case_3.title')}</h3>
       <div className="form-row">
-        <label className="label">Ingredientes (Español):</label>
+        <label className="label">{t('Case_3.Ingredients_E')}</label>
         <input
           className="input"
           type="text"
-          placeholder="Ingredientes en Español"
+          placeholder={t('Case_3.Spanish')}
           value={formData.ingredients_es}
           onChange={(e) => handleInputChange(e, "ingredients_es")}
         />
       </div>
       <div className="form-row">
-        <label className="label">Ingredientes (Portugués):</label>
+        <label className="label">{t('Case_3.Ingredients_P')}</label>
         <input
           className="input"
           type="text"
-          placeholder="Ingredientes en Portugués"
+          placeholder={t('Case_3.Portuguese')}
           value={formData.ingredients_pt}
           onChange={(e) => handleInputChange(e, "ingredients_pt")}
         />
       </div>
       <div className="form-row">
-        <label className="label">Ingredientes (Inglés):</label>
+        <label className="label">{t('Case_3.Ingredients_I')}</label>
         <input
           className="input"
           type="text"
-          placeholder="Ingredientes en Inglés"
+          placeholder={t('Case_3.English')}
           value={formData.ingredients_en}
           onChange={(e) => handleInputChange(e, "ingredients_en")}
         />

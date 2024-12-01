@@ -1,32 +1,34 @@
 import { ListGroup } from "react-bootstrap";
 import { Reference } from "../../types/SingleFoodResult";
+import { useTranslation } from "react-i18next";
 
 interface ReferencesListProps {
   references: Reference[];
 }
 
 const ReferencesList: React.FC<ReferencesListProps> = ({ references }) => {
+  const {t} = useTranslation("global");
   return (
     <ListGroup>
       {references.map((reference, index) => (
         <ListGroup.Item key={index} id={reference.code.toString()}>
           <strong>{reference.title}</strong> 
-          <div>Tipo: {reference.type}</div>
-          <div>Autores: {reference.authors.join(", ")}</div>
-          {reference.refYear && <div>Año: {reference.refYear}</div>}
-          {reference.cityName && <div>Ciudad: {reference.cityName}</div>}
-          {reference.journalName && <div>Revista: {reference.journalName}</div>}
+          <div>{t('References.type')} {reference.type}</div>
+          <div>{t('References.authors')} {reference.authors.join(", ")}</div>
+          {reference.refYear && <div>{t('References.year')} {reference.refYear}</div>}
+          {reference.cityName && <div>{t('References.city')} {reference.cityName}</div>}
+          {reference.journalName && <div>{t('References.magazine')} {reference.journalName}</div>}
           {reference.volume && (
             <div>
-              Volumen: {reference.volume}
+              {t('References.Volume')} {reference.volume}
               {reference.issue && `, Número: ${reference.issue}`}
             </div>
           )}
           {reference.pageStart && (
-            <div>Páginas: {reference.pageStart} - {reference.pageEnd}</div>
+            <div>{t('References.pages')} {reference.pageStart} - {reference.pageEnd}</div>
           )}
           
-          {reference.other && <div>Otra información: {reference.other}</div>}
+          {reference.other && <div>{t('References.additional')} {reference.other}</div>}
         </ListGroup.Item>
       ))}
     </ListGroup>

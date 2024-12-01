@@ -4,6 +4,7 @@ import RegionsOrigin from "./getters/RegionsOrigin";
 import ProvincesOrigin from "./getters/ProvincesOrigin";
 import CommunesOrigin from "./getters/CommunesOrigin";
 import LocationsOrigin from "./getters/LocationsOrigin";
+import { useTranslation } from "react-i18next";
 
 const Origins: React.FC = () => {
   const regions = RegionsOrigin();
@@ -14,15 +15,15 @@ const Origins: React.FC = () => {
   const [selectedRegion, setSelectedRegion] = useState<number | null>(null);
   const [selectedProvince, setSelectedProvince] = useState<number | null>(null);
   const [selectedCommune, setSelectedCommune] = useState<number | null>(null);
-  
+  const {t} = useTranslation("global");
   return (
     <table className="table">
       <thead>
         <tr>
-          <th>Región</th>
-          <th>Provincia</th>
-          <th>Comuna</th>
-          <th>Locación</th>
+          <th>{t('Origins.Region')}</th>
+          <th>{t('Origins.Province')}</th>
+          <th>{t('Origins.Commune')}</th>
+          <th>{t('Origins.Location')}</th>
         </tr>
       </thead>
       <tbody>
@@ -30,7 +31,7 @@ const Origins: React.FC = () => {
           <td>
               <OriginSelector
                 options={regions || []}
-                placeholder="Selecciona una región"
+                placeholder={t('Origins.select_region')}
                 onSelect={(id) => {
                   setSelectedRegion(id);
                   setSelectedProvince(null);
@@ -41,7 +42,7 @@ const Origins: React.FC = () => {
           <td>
               <OriginSelector
                 options={regions || []}
-                placeholder="Selecciona una"
+                placeholder={t('Origins.select')}
                 onSelect={(id) => {
                   setSelectedRegion(id);
                   setSelectedProvince(null);
@@ -52,7 +53,7 @@ const Origins: React.FC = () => {
           <td>
               <OriginSelector
                 options={regions || []}
-                placeholder="Selecciona una"
+                placeholder={t('Origins.select')}
                 onSelect={(id) => {
                   setSelectedRegion(id);
                   setSelectedProvince(null);
@@ -63,7 +64,7 @@ const Origins: React.FC = () => {
           <td>
               <OriginSelector
                 options={regions || []}
-                placeholder="Selecciona una"
+                placeholder={t('Origins.select')}
                 onSelect={(id) => {
                   setSelectedRegion(id);
                   setSelectedProvince(null);

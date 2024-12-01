@@ -132,12 +132,12 @@ export default function ModifyFoodDetail() {
           {field === "commonName" && lang === "es" ? (
             <>
               <RequiredFieldLabel
-                label={`Nombre (${lang.toUpperCase()})`}
-                tooltipMessage="Este campo es requerido"
+              label={`${t('DetailFood.name.title')} (${lang.toUpperCase()})`}
+              tooltipMessage={t('DetailFood.required')}
               />
             </>
           ) : (
-            `${field === "commonName" ? "Nombre" : "Ingredientes"} (${lang.toUpperCase()})`
+            `${field === "commonName" ? t('DetailFood.name.title') : t('DetailFood.ingredients.title')} (${lang.toUpperCase()})`
           )}
         </Form.Label>
         <Col sm={10}>
@@ -158,13 +158,13 @@ export default function ModifyFoodDetail() {
       <Form onSubmit={handleSubmit}>
         <Col md={12}>
           <div className="transparent-container">
-            <h2>Modificar detalles del alimento</h2>
+            <h2>{t('DetailFood.modify')}</h2>
             
               <Form.Group as={Row} className="mb-3" controlId="formCode">
                 <Form.Label column sm={2}>
                   <RequiredFieldLabel
-                    label="Código"
-                    tooltipMessage="Este campo es requerido"
+                    label={t('DetailFood.code')}
+                    tooltipMessage={t('DetailFood.required')}
                   />
                 </Form.Label>
                 <Col sm={10}>
@@ -172,7 +172,7 @@ export default function ModifyFoodDetail() {
                     type="text"
                     name="code"
                     value={generalData.code}
-                    placeholder="Ingresa el código"
+                    placeholder={t('DetailFood.enter')}
                     onChange={handleInputChange}
                   />
                 </Col>
@@ -186,7 +186,7 @@ export default function ModifyFoodDetail() {
                 controlId="formScientificName"
               >
                 <Form.Label column sm={2}>
-                  Nombre Científico:
+                {t('DetailFood.name.scientific')}
                 </Form.Label>
                 <Col sm={10}>
                   <Form.Control
@@ -200,7 +200,7 @@ export default function ModifyFoodDetail() {
 
               <Form.Group as={Row} className="mb-3" controlId="formSubspecies">
                 <Form.Label column sm={2}>
-                  Subespecie:
+                  {t('DetailFood.subspecies')}
                 </Form.Label>
                 <Col sm={10}>
                   <Form.Control
@@ -215,8 +215,8 @@ export default function ModifyFoodDetail() {
               <Form.Group as={Row} className="mb-3" controlId="formGroup">
                 <Form.Label column sm={2}>
                 <RequiredFieldLabel
-                    label="Grupo"
-                    tooltipMessage="Este campo es requerido"
+                    label={t('DetailFood.label_group')}
+                    tooltipMessage={t('DetailFood.required')}
                   />
                 </Form.Label>
                 <Col sm={5}>
@@ -240,8 +240,8 @@ export default function ModifyFoodDetail() {
               <Form.Group as={Row} className="mb-3" controlId="formType">
                 <Form.Label column sm={2}>
                 <RequiredFieldLabel
-                    label="Tipo"
-                    tooltipMessage="Este campo es requerido"
+                    label={t('DetailFood.label_type')}
+                    tooltipMessage={t('DetailFood.required')}
                   />
                 </Form.Label>
                 <Col sm={5}>
@@ -345,7 +345,7 @@ export default function ModifyFoodDetail() {
                     </div>
                   </Tab.Pane>
                   <Tab.Pane eventKey="second">
-                    <h4>Referencias de nutrientes</h4>
+                    <h4>{t('DetailFood.references.nutrients')}</h4>
                     <ReferencesList references={data.references} />
                   </Tab.Pane>
                   <Tab.Pane eventKey="third">
@@ -359,7 +359,7 @@ export default function ModifyFoodDetail() {
         </Row>
         <Form.Group as={Row} className="mb-3">
                 <Col sm={{ span: 10, offset: 2 }}>
-                  <Button type="submit">Guardar Cambios</Button>
+                  <Button type="submit">{t('DetailFood.save')}</Button>
                 </Col>
               </Form.Group>
         </Form>

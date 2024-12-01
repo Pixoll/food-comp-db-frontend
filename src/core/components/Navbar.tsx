@@ -42,9 +42,9 @@ const AppNavbar = () => {
             {state.isAuthenticated ? (
               <>
                 <Nav.Link as={Link} to="/panel-admin">
-                  Panel
+                {t("navbar.panel")}
                 </Nav.Link>
-                <Nav.Link onClick={handleLogout}>Cerrar Sesión</Nav.Link>
+                <Nav.Link onClick={handleLogout}>{t("navbar.close")}</Nav.Link>
               </>
             ) : (
               <Nav.Link as={Link} to="/login">

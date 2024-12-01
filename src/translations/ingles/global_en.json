@@ -4,7 +4,9 @@
     "search": "Search",
     "languages": "Languages",
     "spanish": "Spanish",
-    "english": "English"
+    "english": "English",
+    "panel":"Panel",
+    "close":"Sign out"
   },
   "homepage": {
     "title": "Food Composition Database",
@@ -34,7 +36,19 @@
     "title":"Login",
     "username":"Username",
     "password":"Password",
-    "recover":"Forgot your password?"
+    "recover":"Forgot your password?",
+    "state":{
+      "request":"Sending request to:",
+      "send":"Data sent:",
+      "Response":"Response received:"
+    },
+    "errors":{
+      "login":"Login failed",
+      "response":"Error response:",
+      "state":"State code:",
+      "received":"No response received:",
+      "unknown ":"Unknown error:"
+    }  
   },
   "Filter":{
     "title": "Filters",
@@ -88,8 +102,9 @@
   "DetailFood":{
     "loading":"Loading....",
     "title":"General food information:",
-    "code":"Code:",
+    "code":"Code",
     "name":{
+      "title":"Name",
       "Spanish":"Name in Spanish:",
       "Portuguese":"Name in Portuguese",
       "English":"Name in English:",
@@ -102,6 +117,7 @@
     "type":"Type of food:",
     "group":"Food group:",
     "ingredients":{
+      "title":"Ingredients",
       "Spanish":"Ingredients (Spanish):",
       "Portuguese":"Ingredients (Portuguese):",
       "English":"Ingredients (English):"
@@ -117,21 +133,29 @@
     },
     "codes":"Lenguales codes",
     "references":{
-    "title":"References",
-    "nutrients":"Nutrient References"
-    }
-
+      "title":"References",
+      "nutrients":"Nutrient References"
+    },
+    "modify":"Modify food details",
+    "required":"This field is required",
+    "enter":"Enter the code",
+    "save":"Save Changes",
+    "label_type":"Type",
+    "label_group":"Group"
   },
+
   "components_home":{
     "title":"Search Composition"
-
   },
   "nutrientAccordion":{
     "Energy":"Energy value",
     "Main":"Main nutrients",
     "Micronutrients":"Micronutrients",
     "name":"Name",
-    "modify":"Modify"
+    "modify":"Modify",
+    "unit":"Unit",
+    "mean":"Mean",
+    "details":"Details"
   },
   "Centered":{
     "details":"Nutrient Details",
@@ -143,6 +167,132 @@
     "standardized":"Standardized",
     "save":"Save",
     "close":"Close",
-    "references":"References"
+    "references":"References",
+    "yes":"Yes"
+  },
+  "LangualCode":{
+    "description_main":"Main Description",
+    "code":"Code",
+    "description":"Description"
+  },
+  "References":{
+    "type":"Type:",
+    "authors":"Authors:",
+    "year":"Year:",
+    "city":"City:",
+    "magazine":"Magazine:",
+    "Volume ":"Volume:",
+    "pages":"Pages:",
+    "additional":"Other information:"
+  },
+  "Origins":{
+    "title":"Origins",
+    "Region":"Region",
+    "Province":"Province",
+    "Commune":"Commune",
+    "Location":"Location",
+    "select_region":"Select a region",
+    "select":"Select one"
+  },
+  "Case_1":{
+    "name":"Name",
+    "title":"Basic Attributes",
+    "food_E":"Food name (Spanish):",
+    "Spanish":"Name in Spanish",
+    "food_P":"Food name (Portuguese):",
+    "Portuguese":"Name in Portuguese",
+    "food_I":"Food name (English):",
+    "English":"Name in English"
+  },
+  "Case_2":{
+    "title":"Group and Type",
+    "group_name":"Group (Name):",
+    "name_G":"Group Name",
+    "group_code":"Group (Code):",
+    "code_G":"Group Code",
+    "type_name":"Type (Name):",
+    "name_T":"Type Name",
+    "type_code":"Type (Code):",
+    "code_T":"Type Code"
+  },
+  "Case_3":{
+    "title":"Ingredients",
+    "Ingredients_E":"Ingredients (Spanish):",
+    "Spanish":"Ingredients in Spanish",
+    "Ingredients_P":"Ingredients (Portuguese):",
+    "Portuguese":"Ingredients in Portuguese",
+    "Ingredients_I":"Ingredients (English):",
+    "English":"Ingredients in English"
+  },
+  "Case_4":{
+    "title":"Subspecies and Strain",
+    "Subspecies":"Subspecies",
+    "strain":"Strain"
+  },
+  "Case_5":{
+    "title":"Macronutrients",
+    "carbohydrates_T":"Total Carbohydrates",
+    "carbohydrates_D":"Available Carbohydrates",
+    "Protein":"Protein",
+    "Lipid":"Total Lipid",
+    "fiber_G":"Total Dietary Fiber (g):",
+    "fiber":"Dietary Fiber"
+  },
+  "Case_6":{
+    "section":"Alcohol and Compounds",
+    "title":"Alcohol and Specific Compounds",
+    "Alcohol":"Alcohol",
+    "acids_T_G":"Total Organic Acids (g):",
+    "acids":"Organic Acids",
+    "Polyols":"Total Polyols"
+  },
+  "Case_7":{
+    "title":"Fats and Fatty Acids",
+    "Saturated":"Saturated Fatty Acids",
+    "Monounsaturated":"Monounsaturated Fatty Acids",
+    "Polyunsaturated":"Polyunsaturated Fatty Acids",
+    "Trans":"Trans Fatty Acids",
+    "Cholesterol":"Cholesterol"
+  },
+  "Case_8":{
+    "title":"Minerals",
+    "Calcium":"Calcium",
+    "Iron":"Iron",
+    "Sodium":"Sodium",
+    "Magnesium":"Magnesium",
+    "Phosphorus":"Phosphorus",
+    "Potassium":"Potassium",
+    "Manganese":"Manganese",
+    "Copper":"Copper",
+    "Selenium":"Selenium"
+  },
+  "Case_9":{
+    "title":"Vitamins",
+    "A": "Vitamin A",
+    "RAE": "Vitamin RAE",
+    "D":"Vitamin D",
+    "Tocopherol": "Alpha Tocopherol",
+    "Thiamin":"Thiamin",
+    "Riboflavin":"Riboflavin",
+    "Niacin": "Preformed Niacin",
+    "B6":"Vitamin B6",
+    "B12":"Vitamin B12",
+    "C": "Vitamin C"
+  },
+  "AdminPage":{
+    "manual":"Manual Entry",
+    "load":"Load from File",
+    "title":"Sections",
+    "enter":"Enter Food Data",
+    "back":"Back",
+    "next":"Next",
+    "import":"Import Template",
+    "process":"Process Data",
+    "upload":"Upload a file in",
+    "or":"or",
+    "point":"format."
   }
 }
+
+
+ 

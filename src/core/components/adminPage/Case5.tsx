@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 // Definir los tipos de los props
 interface MacronutrientsProps {
@@ -13,60 +14,61 @@ interface MacronutrientsProps {
 }
 
 const Macronutrients: React.FC<MacronutrientsProps> = ({ formData, handleInputChange }) => {
+  const {t} = useTranslation("global");
   return (
     <div className="section">
-      <h3 className="subtitle">Macronutrientes</h3>
+      <h3 className="subtitle">{t('Case_5.title')}</h3>
 
       <div className="form-row">
-        <label className="label">Carbohidratos Totales (g):</label>
+        <label className="label">{t('Case_5.carbohydrates_T')}(g):</label>
         <input
           className="input"
           type="text"
-          placeholder="Carbohidratos Totales"
+          placeholder={t('Case_5.carbohydrates_T')}
           value={formData.carbohidratosTotales}
           onChange={(e) => handleInputChange(e, "carbohidratosTotales")}
         />
       </div>
 
       <div className="form-row">
-        <label className="label">Carbohidratos Disponibles (g):</label>
+        <label className="label">{t('Case_5.carbohydrates_D')}(g):</label>
         <input
           className="input"
           type="text"
-          placeholder="Carbohidratos Disponibles"
+          placeholder={t('Case_5.carbohydrates_D')}
           value={formData.carbohidratosDisponibles}
           onChange={(e) => handleInputChange(e, "carbohidratosDisponibles")}
         />
       </div>
 
       <div className="form-row">
-        <label className="label">Proteína (g):</label>
+        <label className="label">{t('Case_5.Protein')}(g):</label>
         <input
           className="input"
           type="text"
-          placeholder="Proteína"
+          placeholder={t('Case_5.Protein')}
           value={formData.proteina}
           onChange={(e) => handleInputChange(e, "proteina")}
         />
       </div>
 
       <div className="form-row">
-        <label className="label">Lípido Total (Otro Método):</label>
+        <label className="label">{t('Case_5.Lipid')}(Otro Método):</label>
         <input
           className="input"
           type="text"
-          placeholder="Lípido Total"
+          placeholder={t('Case_5.Lipid')}
           value={formData.lipidoTotalOtroMetodo}
           onChange={(e) => handleInputChange(e, "lipidoTotalOtroMetodo")}
         />
       </div>
 
       <div className="form-row">
-        <label className="label">Fibra Alimentaria Total (g):</label>
+        <label className="label">{t('Case_5.fiber_G')}</label>
         <input
           className="input"
           type="text"
-          placeholder="Fibra Alimentaria"
+          placeholder={t('Case_5.fiber')}
           value={formData.fibraTotal}
           onChange={(e) => handleInputChange(e, "fibraTotal")}
         />

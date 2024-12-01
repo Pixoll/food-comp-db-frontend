@@ -27,8 +27,8 @@ const LoginPage = () => {
 
         const url = `http://localhost:3000/api/v1/admins/${formState.username}/session`;
 
-        console.log("Enviando solicitud a:", url);
-        console.log("Datos enviados:", {
+        console.log(t('loginPage.state.request'), url);
+        console.log(t('loginPage.state.send'), {
             password: formState.password,
         });
 
@@ -36,7 +36,7 @@ const LoginPage = () => {
             password: formState.password,
         })
         .then((response) => {
-            console.log("Respuesta recibida:", response.data);
+            console.log(t('loginPage.state.Response'), response.data);
             const { token } = response.data;
             dispatch({
                 type: 'LOGIN',
@@ -47,15 +47,15 @@ const LoginPage = () => {
             navigate('/');
         })
         .catch((error) => {
-            console.error("Error en el inicio de sesión:", error);
+            console.error(t('loginPage.errors.login'), error);
 
             if (error.response) {
-                console.error("Respuesta de error:", error.response.data);
-                console.error("Codigo de estado:", error.response.status);
+                console.error(t('loginPage.errors.response'), error.response.data);
+                console.error(t('loginPage.errors.state'), error.response.status);
             } else if (error.request) {
-                console.error("No se recibió respuesta:", error.request);
+                console.error(t('loginPage.errors.received'), error.request);
             } else {
-                console.error("Error desconocido:", error.message);
+                console.error(t('loginPage.errors.unknown'), error.message);
             }
         });
     };

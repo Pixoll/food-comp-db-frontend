@@ -71,7 +71,7 @@ const CenteredModal: React.FC<ModalProps> = ({ data, onHide, onReferenceClick })
         </Table>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={onHide}>Cerrar</Button>
+        <Button onClick={onHide}>{t('Centered.close')}</Button>
       </Modal.Footer>
     </Modal>
   );

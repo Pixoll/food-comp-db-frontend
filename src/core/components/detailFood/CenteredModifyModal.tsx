@@ -103,7 +103,7 @@ const CenteredModifyModal: React.FC<ModalProps> = ({
               value={formData.standardized ? "true" : "false"}
               onChange={handleChange}
             >
-              <option value="true">Sí</option>
+              <option value="true">{t('Centered.yes')}</option>
               <option value="false">No</option>
             </Form.Select>
           </Form.Group>

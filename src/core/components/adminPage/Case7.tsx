@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 // Definir los tipos de los props
 interface FatsAndFattyAcidsProps {
@@ -15,60 +16,61 @@ interface FatsAndFattyAcidsProps {
 }
 
 const FatsAndFattyAcids: React.FC<FatsAndFattyAcidsProps> = ({ formData, handleInputChange }) => {
+  const {t} = useTranslation("global");
   return (
     <div className="section">
-      <h3 className="subtitle">Grasas y Ácidos Grasos</h3>
+      <h3 className="subtitle">{t('Case_7.title')}</h3>
 
       <div className="form-row">
-        <label className="label">Ácidos Grasos Saturados (g):</label>
+        <label className="label">{t('Case_7.Saturated')} (g):</label>
         <input
           className="input"
           type="text"
-          placeholder="Ácidos Grasos Saturados"
+          placeholder={t('Case_7.Saturated')}
           value={formData.acGrasosSaturados}
           onChange={(e) => handleInputChange(e, "acGrasosSaturados")}
         />
       </div>
 
       <div className="form-row">
-        <label className="label">Ácidos Grasos Monoinsaturados (g):</label>
+        <label className="label">{t('Case_7.Monounsaturated')} (g):</label>
         <input
           className="input"
           type="text"
-          placeholder="Ácidos Grasos Monoinsaturados"
+          placeholder={t('Case_7.Monounsaturated')}
           value={formData.acGrasosMonoinsat}
           onChange={(e) => handleInputChange(e, "acGrasosMonoinsat")}
         />
       </div>
 
       <div className="form-row">
-        <label className="label">Ácidos Grasos Poliinsaturados (g):</label>
+        <label className="label">{t('Case_7.Polyunsaturated')} (g):</label>
         <input
           className="input"
           type="text"
-          placeholder="Ácidos Grasos Poliinsaturados"
+          placeholder={t('Case_7.Polyunsaturated')}
           value={formData.acGrasosPolinsat}
           onChange={(e) => handleInputChange(e, "acGrasosPolinsat")}
         />
       </div>
 
       <div className="form-row">
-        <label className="label">Ácidos Grasos Trans (g):</label>
+        <label className="label">{t('Case_7.Trans')} (g):</label>
         <input
           className="input"
           type="text"
-          placeholder="Ácidos Grasos Trans"
+          placeholder={t('Case_7.Trans')}
           value={formData.acGrasosTrans}
           onChange={(e) => handleInputChange(e, "acGrasosTrans")}
         />
       </div>
 
       <div className="form-row">
-        <label className="label">Colesterol (mg):</label>
+        <label className="label">{t('Case_7.Cholesterol')} (mg):</label>
         <input
           className="input"
           type="text"
-          placeholder="Colesterol"
+          placeholder={t('Case_7.Cholesterol')}
           value={formData.colesterol}
           onChange={(e) => handleInputChange(e, "colesterol")}
         />

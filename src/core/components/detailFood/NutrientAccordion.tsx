@@ -42,10 +42,10 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({
             <Table responsive="sm">
               <thead>
                 <tr>
-                  <th>Nombre</th>
-                  <th>Unidad</th>
-                  <th>Promedio</th>
-                  <th>Detalles</th>
+                  <th>{t('nutrientAccordion.name')}</th>
+                  <th>{t('nutrientAccordion.unit')}</th>
+                  <th>{t('nutrientAccordion.mean')}</th>
+                  <th>{t('nutrientAccordion.details')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -70,15 +70,15 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({
         </Accordion.Item>
 
         <Accordion.Item eventKey="1">
-          <Accordion.Header>Nutrientes principales</Accordion.Header>
+          <Accordion.Header>{t('nutrientAccordion.Main')}</Accordion.Header>
           <Accordion.Body>
             <Table responsive="sm">
               <thead>
                 <tr>
-                  <th>Nombre</th>
-                  <th>Unidad</th>
-                  <th>Promedio</th>
-                  <th>Detalles</th>
+                  <th>{t('nutrientAccordion.name')}</th>
+                  <th> {t('nutrientAccordion.unit')} </th>
+                  <th>{t('nutrientAccordion.mean')}</th>
+                  <th>{t('nutrientAccordion.details')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -121,10 +121,10 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({
                       <Table responsive="sm">
                         <thead>
                           <tr>
-                            <th>Nombre</th>
-                            <th>Unidad</th>
-                            <th>Promedio</th>
-                            <th>Detalles</th>
+                            <th>{t('nutrientAccordion.name')}</th>
+                            <th>{t('nutrientAccordion.unit')}</th>
+                            <th>{t('nutrientAccordion.mean')}</th>
+                            <th>{t('nutrientAccordion.details')}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -153,15 +153,15 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({
         </Accordion.Item>
 
         <Accordion.Item eventKey="2">
-          <Accordion.Header>Micronutrientes</Accordion.Header>
+          <Accordion.Header>{t('nutrientAccordion.Micronutrients')}</Accordion.Header>
           <Accordion.Body>
             <Table responsive="sm">
               <thead>
                 <tr>
-                  <th>Nombre</th>
-                  <th>Unidad</th>
-                  <th>Promedio</th>
-                  <th>Detalles</th>
+                  <th>{t('nutrientAccordion.name')}</th>
+                  <th>{t('nutrientAccordion.unit')}</th>
+                  <th>{t('nutrientAccordion.mean')}</th>
+                  <th>{t('nutrientAccordion.details')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -212,3 +212,4 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({
 };
 
 export default NutrientAccordion;
+ 

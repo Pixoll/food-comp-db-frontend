@@ -96,7 +96,7 @@ export default function DetailPage() {
             <div className="transparent-container">
               <h2>{t('DetailFood.title')}</h2>
               <p>
-                <strong>{t('DetailFood.code')}</strong> {data.code}
+                <strong>{t('DetailFood.code')}:</strong> {data.code}
               </p>
 
               {data.commonName?.es && (

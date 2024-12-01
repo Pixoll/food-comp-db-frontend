@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "../../../assets/css/_OriginSelector.css"
+import { useTranslation } from "react-i18next";
+
 type OriginsSelectorProps = {
     options: Array<{ id: number; name: string }>;
     placeholder: string;
@@ -10,7 +12,8 @@ const OriginSelector: React.FC<OriginsSelectorProps> = ({
     placeholder,
     onSelect,
   }) => {
-    const [isActive, setIsActive] = useState(false);
+  const {t} = useTranslation("global");
+  const [isActive, setIsActive] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedValue, setSelectedValue] = useState("");
 
@@ -39,7 +42,7 @@ const OriginSelector: React.FC<OriginsSelectorProps> = ({
           <div className="search-origin">
             <input
               type="text"
-              placeholder="Buscar"
+              placeholder= {t('search.button')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />

@@ -1,18 +1,20 @@
 import { LangualCode } from "../../types/SingleFoodResult";
 import Table from "react-bootstrap/Table";
+import { useTranslation } from "react-i18next";
 
 interface LengualCodeComponentProps {
   data: LangualCode[];
 }
 
 const LengualCodeComponent: React.FC<LengualCodeComponentProps> = ({ data }) => {
+  const {t} = useTranslation("global");
   return (
     <Table responsive="sm" bordered hover striped className="mt-3">
       <thead className="table-primary">
         <tr>
-          <th>Descripción Principal</th>
-          <th>Código</th>
-          <th>Descripción</th>
+          <th>{t('LangualCode.description_main')}</th>
+          <th>{t('LangualCode.code')}</th>
+          <th>{t('LangualCode.description')}</th>
         </tr>
       </thead>
       <tbody>

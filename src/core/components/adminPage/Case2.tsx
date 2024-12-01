@@ -1,5 +1,5 @@
 import React from "react";
-
+import { useTranslation } from "react-i18next";
 // Define los tipos para los props
 interface Case2Props {
   formData: {
@@ -12,45 +12,46 @@ interface Case2Props {
 }
 
 const Case2: React.FC<Case2Props> = ({ formData, handleInputChange }) => {
+  const {t} = useTranslation("global");
   return (
     <div className="section">
-      <h3 className="subtitle">Grupo y Tipo</h3>
+      <h3 className="subtitle">{t('Case_2.title')} </h3>
       <div className="form-row">
-        <label className="label">Grupo (Nombre):</label>
+        <label className="label">{t('Case_2.group_name')}</label>
         <input
           className="input"
           type="text"
-          placeholder="Nombre del Grupo"
+          placeholder={t('Case_2.name_G')}
           value={formData.groupName}
           onChange={(e) => handleInputChange(e, "groupName")}
         />
       </div>
       <div className="form-row">
-        <label className="label">Grupo (Código):</label>
+        <label className="label">{t('Case_2.group_code')}</label>
         <input
           className="input"
           type="text"
-          placeholder="Código del Grupo"
+          placeholder={t('Case_2.code_G')}
           value={formData.groupCode}
           onChange={(e) => handleInputChange(e, "groupCode")}
         />
       </div>
       <div className="form-row">
-        <label className="label">Tipo (Nombre):</label>
+        <label className="label">{t('Case_2.type_name')}</label>
         <input
           className="input"
           type="text"
-          placeholder="Nombre del Tipo"
+          placeholder={t('Case_2.name_T')}
           value={formData.typeName}
           onChange={(e) => handleInputChange(e, "typeName")}
         />
       </div>
       <div className="form-row">
-        <label className="label">Tipo (Código):</label>
+        <label className="label">{t('Case_2.type_code')}</label>
         <input
           className="input"
           type="text"
-          placeholder="Código del Tipo"
+          placeholder={t('Case_2.code_T')}
           value={formData.typeCode}
           onChange={(e) => handleInputChange(e, "typeCode")}
         />
