@@ -88,24 +88,13 @@ const CenteredModifyModal: React.FC<ModalProps> = ({
             />
           </Form.Group>
           <Form.Group>
-            <Form.Label>{t('Centered.note')}</Form.Label>
+            <Form.Label>Tipo de dato</Form.Label>
             <Form.Control
               type="text"
-              name="note"
-              value={formData.note || ""}
+              name="dataType"
+              value={formData.dataType || ""}
               onChange={handleChange}
             />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>{t('Centered.standardized')}</Form.Label>
-            <Form.Select
-              name="standardized"
-              value={formData.standardized ? "true" : "false"}
-              onChange={handleChange}
-            >
-              <option value="true">{t('Centered.yes')}</option>
-              <option value="false">No</option>
-            </Form.Select>
           </Form.Group>
         </Form>
       </Modal.Body>

@@ -4,7 +4,6 @@ import Names from "../core/components/adminPage/Names";
 import Case2 from "../core/components/adminPage/Case2";
 import Case3 from "../core/components/adminPage/Case3";
 import Case4 from "../core/components/adminPage/Case4";
-import Case5 from "../core/components/adminPage/Case5";
 import Case8 from "../core/components/adminPage/Case8";
 import Case9 from "../core/components/adminPage/Case9";
 import Origins from "../core/components/adminPage/Origins";

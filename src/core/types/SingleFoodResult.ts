@@ -47,6 +47,7 @@ export type NutrientMeasurement = {
     max?: number;
     sampleSize?: number;
     standardized: boolean;
+    dataType: "analytic" | "calculated" | "assumed" | "borrowed";
     note?: string;
     referenceCodes?: number[];
 };

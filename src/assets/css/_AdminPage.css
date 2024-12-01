@@ -51,7 +51,7 @@
   }
 
   .left-column {
-    flex: 0 0 350px;
+    flex: 0 0 180px;
     display: flex;
     flex-direction: column;
     gap: 10px;
