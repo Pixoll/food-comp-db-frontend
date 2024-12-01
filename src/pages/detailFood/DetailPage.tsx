@@ -13,11 +13,12 @@ import { useTranslation } from "react-i18next";
 
 export default function DetailPage() {
   const {t} = useTranslation("global");
-  const [key, setKey] = useState("first");
+  const [key, setKey] = useState<string | undefined>(undefined); 
 
   const handleReferenceClick = (code: string) => {
-    setKey("second");
+    setKey("second"); 
   };
+
   const { code } = useParams();
   const [grams, setGrams] = useState<number>(100);
   const [inputGrams, setInputGrams] = useState<number>(100);
@@ -29,65 +30,38 @@ export default function DetailPage() {
   if (!data) {
     return <h2>Cargando...</h2>;
   }
+
   const colors = [
-    "#0088FE",
-    "#00C49F",
-    "#FFBB28",
-    "#FF8042",
-    "#A28CC3",
-    "#FF6361",
-    "#BC5090",
-    "#58508D",
-    "#003F5C",
-    "#FFA600",
-    "#2F4B7C",
-    "#665191",
-    "#D45087",
-    "#F95D6A",
-    "#FF7C43",
-    "#1F77B4",
-    "#AEC7E8",
-    "#FF9896",
-    "#98DF8A",
-    "#C5B0D5",
-    "#FFBB78",
-    "#9467BD",
-    "#C49C94",
-    "#E377C2",
-    "#F7B6D2",
-    "#7F7F7F",
-    "#C7C7C7",
-    "#BCBD22",
-    "#DBDB8D",
-    "#17BECF",
+    "#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#A28CC3", "#FF6361","#BC5090", "#58508D",
+    "#003F5C", "#FFA600", "#2F4B7C", "#665191","#D45087", "#F95D6A", "#FF7C43", "#1F77B4", 
+    "#AEC7E8", "#FF9896","#98DF8A", "#C5B0D5", "#FFBB78", "#9467BD", "#C49C94", "#E377C2",
+    "#F7B6D2", "#7F7F7F", "#C7C7C7", "#BCBD22", "#DBDB8D", "#17BECF",
   ];
 
   const references = data?.references ?? [];
   const mainNutrients = data?.nutrientMeasurements?.mainNutrients ?? [];
 
-  const graphicData =
-    mainNutrients
-      .filter((mainNutrient) => mainNutrient.nutrientId !== 12)
-      .map((mainNutrient, index) => ({
-        name: mainNutrient.name,
-        value: +((grams / 100) * mainNutrient.average).toFixed(2),
-        fill: colors[index % colors.length],
-      })) || [];
-
-
-  const graphicDataPorcent =
-    mainNutrients
-      .filter((mainNutrient) => mainNutrient.nutrientId !== 12 && mainNutrient.nutrientId !== 1)
-      .map((mainNutrient, index) => ({
-        name: mainNutrient.name,
-        value: +(((grams / 100) * mainNutrient.average) / 100).toFixed(2),
-        fill: colors[index % colors.length],
-      })) || [];
+  const graphicData = mainNutrients
+    .filter((mainNutrient) => mainNutrient.nutrientId !== 12)
+    .map((mainNutrient, index) => ({
+      name: mainNutrient.name,
+      value: +((grams / 100) * mainNutrient.average).toFixed(2),
+      fill: colors[index % colors.length],
+    })) || [];
   
+
+  const graphicDataPorcent = mainNutrients
+    .filter((mainNutrient) => mainNutrient.nutrientId !== 12 && mainNutrient.nutrientId !== 1)
+    .map((mainNutrient, index) => ({
+      name: mainNutrient.name,
+      value: +(((grams / 100) * mainNutrient.average) / 100).toFixed(2),
+      fill: colors[index % colors.length],
+    })) || [];
+
   const handleGramsChange = () => {
     setGrams(inputGrams);
   };
-  
+
   return (
     <div className="detail-background">
       <Container>
@@ -169,7 +143,7 @@ export default function DetailPage() {
             </div>
           </Col>
           <Col md={6}>
-            <div className="transparent-container" >
+            <div className="transparent-container">
               <Row>
                 <Col md={6}>
                   <Graphic data={graphicData} />
@@ -178,7 +152,6 @@ export default function DetailPage() {
                   <Graphic data={graphicDataPorcent} />
                 </Col>
               </Row>
-
               <Row className="mt-3">
                 <Col>
                   <div style={{ textAlign: "center" }}>
@@ -186,13 +159,9 @@ export default function DetailPage() {
                       type="number"
                       value={inputGrams}
                       onChange={(e) => setInputGrams(+(e.target.value))}
-                      placeholder= {t('DetailFood.grams.enter')}
+                      placeholder={t('DetailFood.grams.enter')}
                       min={1}
-                      style={{
-                        marginRight: "10px",
-                        padding: "5px",
-                        width: "120px",
-                      }}
+                      style={{ marginRight: "10px", padding: "5px", width: "120px" }}
                     />
                     <button
                       onClick={handleGramsChange}
@@ -202,7 +171,6 @@ export default function DetailPage() {
                         color: "#fff",
                         border: "none",
                         borderRadius: "5px",
-                        marginLeft: "10px",
                       }}
                     >
                       {t('DetailFood.grams.change')}
@@ -214,36 +182,35 @@ export default function DetailPage() {
             </div>
           </Col>
         </Row>
+
         <Row className="mt-4">
           <Col>
-            <div
-              style={{
-                backgroundColor: "#d1e7dd",
-                padding: "20px",
-                borderRadius: "5px",
-              }}
-            >
-              <Tab.Container defaultActiveKey="first">
-                <Nav
-                  variant="tabs"
-                  className="mb-3"
-                  style={{ borderBottom: "2px solid #d1e7dd" }}
-                  activeKey={key}
-                  onSelect={(k) => setKey(k as string)}
-                >
+            <div style={{
+               backgroundColor: "#d1e7dd", 
+               padding: "20px 10px 5px 15px", 
+               borderRadius: "5px",
+               height: "auto" 
+               }}>
+              <Tab.Container activeKey={key} onSelect={(k) => setKey(k as string)}>
+                <Nav variant="tabs" className="mb-3" style={{ 
+                  borderBottom: "1px solid #d1e7dd",
+                  paddingLeft: "50px"
+                  }}>
                   <Nav.Item>
                     <Nav.Link
                       eventKey="first"
                       style={{
+
                         backgroundColor: "#f8f9fa",
-                        borderRadius: "5px 5px 0 0",
+                        borderRadius: "5px 5px 5px 5px",
                         border: "1px solid #d1e7dd",
                         marginRight: "5px",
                         color: "#0d6efd",
                         transition: "background-color 0.3s ease",
+                        padding: "8px 80px",
                       }}
                     >
-                      {t('DetailFood.labels.Nutritional')} 
+                      {t('DetailFood.labels.Nutritional')}
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item>
@@ -251,11 +218,12 @@ export default function DetailPage() {
                       eventKey="second"
                       style={{
                         backgroundColor: "#f8f9fa",
-                        borderRadius: "5px 5px 0 0",
+                        borderRadius: "5px 5px 5px 5px",
                         border: "1px solid #d1e7dd",
                         marginRight: "5px",
                         color: "#0d6efd",
                         transition: "background-color 0.3s ease",
+                        padding: "8px 120px",
                       }}
                     >
                       {t('DetailFood.references.title')}
@@ -266,31 +234,24 @@ export default function DetailPage() {
                       eventKey="third"
                       style={{
                         backgroundColor: "#f8f9fa",
-                        borderRadius: "5px 5px 0 0",
+                        borderRadius: "5px 5px 5px 5px",
                         border: "1px solid #d1e7dd",
                         color: "#0d6efd",
                         transition: "background-color 0.3s ease",
+                        padding: "8px 100px",
+                        
                       }}
                     >
                       {t('DetailFood.labels.data')}
                     </Nav.Link>
                   </Nav.Item>
                 </Nav>
-
                 <Tab.Content>
                   <Tab.Pane eventKey="first">
-                    <div style={{ textAlign: "center", borderRadius: "5px" }}>
-                      <NutrientAccordion
-                        data={
-                          data?.nutrientMeasurements ?? {
-                            energy: [],
-                            mainNutrients: [],
-                            micronutrients: { vitamins: [], minerals: [] },
-                          }
-                        }
-                        onReferenceClick={handleReferenceClick}
-                      />
-                    </div>
+                    <NutrientAccordion
+                      data={data?.nutrientMeasurements ?? { energy: [], mainNutrients: [], micronutrients: { vitamins: [], minerals: [] } }}
+                      onReferenceClick={handleReferenceClick}
+                    />
                   </Tab.Pane>
                   <Tab.Pane eventKey="second">
                     <h4>{t('DetailFood.references.nutrients')}</h4>
@@ -306,7 +267,6 @@ export default function DetailPage() {
           </Col>
         </Row>
       </Container>
-
       <Footer />
     </div>
   );
