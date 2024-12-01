@@ -111,7 +111,7 @@
       "scientific":"Nombre Científico:" 
     },
     "subspecies":"Subespecie:",
-    "strain":"Cepa:",
+    "strain":"Variante:",
     "brand":"Marca:",
     "observation":"Observación:",
     "type":"Tipo de alimento:",
@@ -225,9 +225,9 @@
     "English":"Ingredientes en Inglés"
   },
   "Case_4":{
-    "title":"Subespecie y Cepa",
+    "title":"Subespecie y variante",
     "Subspecies":"Subespecie",
-    "strain":"Cepa"
+    "strain":"Variante"
   },
   "Case_5":{
     "title":"Macronutrientes",

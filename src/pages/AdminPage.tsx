@@ -1,17 +1,16 @@
 import React, { useState } from "react";
 import "../assets/css/_AdminPage.css";
-import Case1 from "../core/components/adminPage/Case1";
+import Names from "../core/components/adminPage/Names";
 import Case2 from "../core/components/adminPage/Case2";
 import Case3 from "../core/components/adminPage/Case3";
 import Case4 from "../core/components/adminPage/Case4";
 import Case5 from "../core/components/adminPage/Case5";
-import Case6 from "../core/components/adminPage/Case6";
-import Case7 from "../core/components/adminPage/Case7";
 import Case8 from "../core/components/adminPage/Case8";
 import Case9 from "../core/components/adminPage/Case9";
 import Origins from "../core/components/adminPage/Origins";
 import { useTranslation } from "react-i18next";
-
+import useNutrients,{MacroNutrient, AnyNutrient, GroupedNutrients} from "../core/components/adminPage/getters/useNutrients";
+import NewMacronutrientWithComponent from "../core/components/adminPage/NewMacronutrientWithComponent";
 
 
 const DataUploader: React.FC = () => {
@@ -21,7 +20,7 @@ const DataUploader: React.FC = () => {
     nombreAlimentoEsp: "",
     nombreAlimentoPortu: "",
     nombreAlimentoEn: "",
-    nombreCienficio: "",
+    cientificName: "",
     origen_region: "",
     codigo: "",
     ubicacion: "",
@@ -84,7 +83,32 @@ const DataUploader: React.FC = () => {
     proteinaAnimal: "",
   });
 
-  // Función para manejar los cambios en los inputs
+  const{data} = useNutrients()
+
+  const vitamins = data?.micronutrients.vitamins
+  const minerals = data?.micronutrients.minerals
+
+  const { macronutrients, macronutrientsWithComponents } = 
+    data?.macronutrients.reduce<{
+        macronutrients: MacroNutrient[];
+        macronutrientsWithComponents: MacroNutrient[];
+    }>(
+        (acc, n) => {
+            if ((n.components?.length ?? 0) > 0) {
+                acc.macronutrientsWithComponents.push(n);
+            } else {
+                acc.macronutrients.push(n);
+            }
+            return acc;
+        },
+        {
+            macronutrients: [],
+            macronutrientsWithComponents: [],
+        }
+    ) ?? { macronutrients: [], macronutrientsWithComponents: [] };
+
+
+
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     field: string
@@ -101,7 +125,7 @@ const DataUploader: React.FC = () => {
     switch (activeSection) {
       case 1:
         return (
-          <Case1 formData={formData} handleInputChange={handleInputChange} />
+          <Names formData={formData} handleInputChange={handleInputChange} />
         );
       case 2:
         return (
@@ -118,19 +142,8 @@ const DataUploader: React.FC = () => {
 
       case 5: // Macronutrientes
         return (
-          <Case5 formData={formData} handleInputChange={handleInputChange} />
+          <NewMacronutrientWithComponent macronutrientsWithComponents={macronutrientsWithComponents} />
         );
-
-      case 6: // Alcohol y Compuestos Específicos
-        return (
-          <Case6 formData={formData} handleInputChange={handleInputChange} />
-        );
-
-      case 7: // Grasas y Ácidos Grasos
-        return (
-          <Case7 formData={formData} handleInputChange={handleInputChange} />
-        );
-
       case 8: // Minerales
         return (
           <Case8 formData={formData} handleInputChange={handleInputChange} />
@@ -158,8 +171,6 @@ const DataUploader: React.FC = () => {
     t('Case_3.title'),
     t('Case_4.Subspecies'),
     t('Case_5.title'),
-    t('Case_6.section'),
-    t('Case_7.title'),
     t('Case_8.title'),
     t('Case_9.title'),
     t('Origins.title'),
