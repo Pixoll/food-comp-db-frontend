@@ -45,7 +45,6 @@ const Case1: React.FC<Case1Props> = ({ formData, handleInputChange }) => {
           onChange={(e) => handleInputChange(e, "nombreAlimentoEn")}
         />
       </div>
-      <OriginSelector />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 .select-box-for-origin {
-    margin-top: 150px;
-    width: 380px;
+    margin: 0;
+    width: 100%;
     position: relative;
 }
 .select-option {
@@ -12,21 +12,22 @@
     color: #000;
     border-radius: 7px;
     cursor: pointer;
-    font-size: 22px;
-    padding: 15px 20px;
+    font-size: 15px;
+    padding: 5px 12px;
     border: 0 !important;
     outline: 0 !important;
 }
-.select-option:after {
+/*.select-option:after {
     content: "";
     border-top: 12px solid #000;
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
     position: absolute;
-    right: 15px;
+    right: 4px;
     top: 50%;
     margin-top: -8px;
-}
+
+}*/
 .origins-content {
     background-color: #fff;
     position: absolute;
@@ -48,13 +49,13 @@
 }
 .originsOptions {
     margin-top: 10px;
-    max-height: 250px;
+    max-height: 170px;
     overflow-y: auto;
     padding: 0;
 }
 .originsOptions li {
     padding: 10px 15px;
-    font-size: 21px;
+    font-size: 15px;
     cursor: pointer;
     border-bottom: 1px solid gray;
 }

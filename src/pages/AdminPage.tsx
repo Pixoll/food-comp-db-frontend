@@ -9,6 +9,7 @@ import Case6 from "../core/components/adminPage/Case6";
 import Case7 from "../core/components/adminPage/Case7";
 import Case8 from "../core/components/adminPage/Case8";
 import Case9 from "../core/components/adminPage/Case9";
+import Origins from "../core/components/adminPage/Origins";
 
 
 const sectionNames = [
@@ -20,7 +21,8 @@ const sectionNames = [
   "Alcohol y Compuestos",
   "Grasas y Ácidos Grasos",
   "Minerales",
-  "Vitaminas"
+  "Vitaminas",
+  "Origines",
 ];
 
 const DataUploader: React.FC = () => {
@@ -130,7 +132,8 @@ const DataUploader: React.FC = () => {
       case 9: // Vitaminas
         return <Case9 formData={formData} handleInputChange={handleInputChange} />;
 
-
+      case 10: // Origines
+        return <Origins />;
 
       default:
         return null;
@@ -138,50 +141,59 @@ const DataUploader: React.FC = () => {
   };
 
   return (
-    <div className="AdminPage-background data-uploader">
-      <div className="left-column">
-        <h3 className="subtitle">Secciones</h3>
-        {sectionNames.map((name, index) => (
-          <button
-            key={index + 1}
-            className={`pagination-button ${activeSection === index + 1 ? "active" : ""}`}
-            onClick={() => setActiveSection(index + 1)}
-          >
-            {name}
-          </button>
-        ))}
-      </div>
-
-      {/* Contenedor principal */}
-      <div className="content-container">
-
-        <h2 className="title">Ingresar Datos deAlimentos</h2>
-        {renderSection()}
-        <div className="section-buttons">
-          <button
-            className="section-button back-button"
-            onClick={() => setActiveSection(prev => prev > 1 ? prev - 1 : prev)} // Navegar a la sección anterior
-          >
-            Atras
-          </button>
-          <button
-            className="section-button next-button"
-            onClick={() => setActiveSection(prev => prev < sectionNames.length ? prev + 1 : prev)} // Navegar a la siguiente sección
-          >
-            Siguiente
-          </button>
+    
+    <div className="AdminPage-background">
+       <div className="row first-row">
+        <div className="tabs-container">
+          <button className="tab">Ingreso Manual</button>
+          <button className="tab">Cargar desde Archivo</button>
         </div>
       </div>
+      <div className="row second-row">
+        <div className="left-column">
+          <h3 className="subtitle">Secciones</h3>
+          {sectionNames.map((name, index) => (
+            <button
+              key={index + 1}
+              className={`pagination-button ${activeSection === index + 1 ? "active" : ""}`}
+              onClick={() => setActiveSection(index + 1)}
+            >
+              {name}
+            </button>
+          ))}
+        </div>
 
-      {/* Formulario para importar plantillas */}
-      <div className="right-container">
-        <h3 className="subtitle">Importar Plantilla</h3>
-        <input className="file-input" type="file" accept=".xlsx, .xls, .csv" />
-        <p className="helper-text">
-          Suba un archivo en formato <strong>Excel</strong> o <strong>CSV</strong>.
-        </p>
-        <div className="button-container">
-          <button className="button">Procesar Datos</button>
+        {/* Contenedor principal */}
+        <div className="content-container">
+
+          <h2 className="title">Ingresar Datos deAlimentos</h2>
+          {renderSection()}
+          <div className="section-buttons">
+            <button
+              className="section-button back-button"
+              onClick={() => setActiveSection(prev => prev > 1 ? prev - 1 : prev)} // Navegar a la sección anterior
+            >
+              Atras
+            </button>
+            <button
+              className="section-button next-button"
+              onClick={() => setActiveSection(prev => prev < sectionNames.length ? prev + 1 : prev)} // Navegar a la siguiente sección
+            >
+              Siguiente
+            </button>
+          </div>
+        </div>
+
+        {/* Formulario para importar plantillas */}
+        <div className="right-container">
+          <h3 className="subtitle">Importar Plantilla</h3>
+          <input className="file-input" type="file" accept=".xlsx, .xls, .csv" />
+          <p className="helper-text">
+            Suba un archivo en formato <strong>Excel</strong> o <strong>CSV</strong>.
+          </p>
+          <div className="button-container">
+            <button className="button">Procesar Datos</button>
+          </div>
         </div>
       </div>
     </div >

@@ -1,64 +1,60 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import "../../../assets/css/_OriginSelector.css"
-const OriginSelector: React.FC = () => {
-    const [isActive, setIsActive] = useState(false); // Controla la visibilidad del menú desplegable
-    const [searchTerm, setSearchTerm] = useState(""); // Maneja la búsqueda
-    const [selectedValue, setSelectedValue] = useState(""); // Almacena el valor seleccionado
-    const options = ["Region1", "Region2", "Region3"]; // Opciones disponibles
+type OriginsSelectorProps = {
+    options: Array<{ id: number; name: string }>;
+    placeholder: string;
+    onSelect: (id: number) => void;
+};
+const OriginSelector: React.FC<OriginsSelectorProps> = ({
+    options,
+    placeholder,
+    onSelect,
+  }) => {
+    const [isActive, setIsActive] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedValue, setSelectedValue] = useState("");
 
-    const filteredOptions = options.filter((option) =>
-        option.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+  const filteredOptions = options.filter((option) =>
+    option.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-    const handleSelectOption = (option: string) => {
-        setSelectedValue(option);
-        setIsActive(false); // Cierra el menú desplegable
-    };
+  const handleSelectOption = (option: { id: number; name: string }) => {
+    setSelectedValue(option.name);
+    setIsActive(false);
+    onSelect(option.id); 
+  };
 
-    return (
-        <div className={`select-box-for-origin ${isActive ? "active" : ""}`}>
-            {/* Input para mostrar el valor seleccionado */}
-            <div
-                className="select-option"
-                onClick={() => setIsActive(!isActive)}
-            >
-                <input
-                    type="text"
-                    placeholder="Selecciona"
-                    value={selectedValue}
-                    id="soValue"
-                    readOnly
-                />
-            </div>
-
-            {/* Contenedor desplegable */}
-            {isActive && (
-                <div className="origins-content">
-                    {/* Input de búsqueda */}
-                    <div className="search-origin">
-                        <input
-                            type="text"
-                            id="originOptionSearch"
-                            placeholder="Buscar"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                    </div>
-                    {/* Opciones filtradas */}
-                    <ul className="originsOptions">
-                        {filteredOptions.map((option) => (
-                            <li
-                                key={option}
-                                onClick={() => handleSelectOption(option)}
-                            >
-                                {option}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
+  return (
+    <div className={`select-box-for-origin ${isActive ? "active" : ""}`}>
+      <div className="select-option" onClick={() => setIsActive(!isActive)}>
+        <input
+          type="text"
+          placeholder={placeholder}
+          value={selectedValue}
+          readOnly
+        />
+      </div>
+      {isActive && (
+        <div className="origins-content">
+          <div className="search-origin">
+            <input
+              type="text"
+              placeholder="Buscar"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <ul className="originsOptions">
+            {filteredOptions.map((option) => (
+              <li key={option.id} onClick={() => handleSelectOption(option)}>
+                {option.name}
+              </li>
+            ))}
+          </ul>
         </div>
-    );
+      )}
+    </div>
+  );
 };
 
 export default OriginSelector;
