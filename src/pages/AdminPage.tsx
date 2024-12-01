@@ -11,7 +11,6 @@ import Case8 from "../core/components/adminPage/Case8";
 import Case9 from "../core/components/adminPage/Case9";
 import Origins from "../core/components/adminPage/Origins";
 
-
 const sectionNames = [
   "Nombre",
   "Grupo y tipo",
@@ -96,7 +95,10 @@ const DataUploader: React.FC = () => {
   });
 
   // Función para manejar los cambios en los inputs
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>, field: string) => {
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    field: string
+  ) => {
     const value = event.target.value;
     setFormData((prevData) => ({
       ...prevData,
@@ -108,29 +110,46 @@ const DataUploader: React.FC = () => {
   const renderSection = () => {
     switch (activeSection) {
       case 1:
-        return <Case1 formData={formData} handleInputChange={handleInputChange} />;
+        return (
+          <Case1 formData={formData} handleInputChange={handleInputChange} />
+        );
       case 2:
-        return <Case2 formData={formData} handleInputChange={handleInputChange} />;
+        return (
+          <Case2 formData={formData} handleInputChange={handleInputChange} />
+        );
       case 3:
-        return <Case3 formData={formData} handleInputChange={handleInputChange} />;
+        return (
+          <Case3 formData={formData} handleInputChange={handleInputChange} />
+        );
       case 4:
-        return <Case4 formData={formData} handleInputChange={handleInputChange} />;
+        return (
+          <Case4 formData={formData} handleInputChange={handleInputChange} />
+        );
 
       case 5: // Macronutrientes
-        return <Case5 formData={formData} handleInputChange={handleInputChange} />;
+        return (
+          <Case5 formData={formData} handleInputChange={handleInputChange} />
+        );
 
       case 6: // Alcohol y Compuestos Específicos
-        return <Case6 formData={formData} handleInputChange={handleInputChange} />;
+        return (
+          <Case6 formData={formData} handleInputChange={handleInputChange} />
+        );
 
       case 7: // Grasas y Ácidos Grasos
-
-        return <Case7 formData={formData} handleInputChange={handleInputChange} />;
+        return (
+          <Case7 formData={formData} handleInputChange={handleInputChange} />
+        );
 
       case 8: // Minerales
-        return <Case8 formData={formData} handleInputChange={handleInputChange} />;
+        return (
+          <Case8 formData={formData} handleInputChange={handleInputChange} />
+        );
 
       case 9: // Vitaminas
-        return <Case9 formData={formData} handleInputChange={handleInputChange} />;
+        return (
+          <Case9 formData={formData} handleInputChange={handleInputChange} />
+        );
 
       case 10: // Origines
         return <Origins />;
@@ -146,8 +165,12 @@ const DataUploader: React.FC = () => {
     <div className="AdminPage-background data-uploader">
       <div className="row first-row">
         <div className="tabs-container">
-          <button className="tab" onClick={() => setView("manual")}>Ingreso Manual</button>
-          <button className="tab" onClick={() => setView("file")}>Cargar desde Archivo</button>
+          <button className="tab" onClick={() => setView("manual")}>
+            Ingreso Manual
+          </button>
+          <button className="tab" onClick={() => setView("file")}>
+            Cargar desde Archivo
+          </button>
         </div>
       </div>
       <div className="row second-row">
@@ -158,7 +181,9 @@ const DataUploader: React.FC = () => {
               {sectionNames.map((name, index) => (
                 <button
                   key={index + 1}
-                  className={`pagination-button ${activeSection === index + 1 ? "active" : ""}`}
+                  className={`pagination-button ${
+                    activeSection === index + 1 ? "active" : ""
+                  }`}
                   onClick={() => setActiveSection(index + 1)}
                 >
                   {name}
@@ -171,13 +196,19 @@ const DataUploader: React.FC = () => {
               <div className="section-buttons">
                 <button
                   className="section-button back-button"
-                  onClick={() => setActiveSection(prev => prev > 1 ? prev - 1 : prev)} // Navegar a la sección anterior
+                  onClick={() =>
+                    setActiveSection((prev) => (prev > 1 ? prev - 1 : prev))
+                  } // Navegar a la sección anterior
                 >
                   Atras
                 </button>
                 <button
                   className="section-button next-button"
-                  onClick={() => setActiveSection(prev => prev < sectionNames.length ? prev + 1 : prev)} // Navegar a la siguiente sección
+                  onClick={() =>
+                    setActiveSection((prev) =>
+                      prev < sectionNames.length ? prev + 1 : prev
+                    )
+                  } // Navegar a la siguiente sección
                 >
                   Siguiente
                 </button>
@@ -188,9 +219,18 @@ const DataUploader: React.FC = () => {
         {view === "file" && (
           <div className="right-container">
             <h3 className="subtitle">Importar Plantilla</h3>
-            <input className="file-input" type="file" accept=".xlsx, .xls, .csv" />
+            <input
+              id="fileInput" // Asegúrate de darle un id único
+              className="file-input"
+              type="file"
+              accept=".xlsx, .xls, .csv"
+            />
+            <label htmlFor="fileInput" className="file-input-label">
+              Seleccionar archivo
+            </label>
             <p className="helper-text">
-              Suba un archivo en formato <strong>Excel</strong> o <strong>CSV</strong>.
+              Suba un archivo en formato <strong>Excel</strong> o{" "}
+              <strong>CSV</strong>.
             </p>
             <div className="button-container">
               <button className="button">Procesar Datos</button>
