@@ -1,84 +1,93 @@
 import React, { useState } from "react";
 import { Table, Card, Collapse, Button, Form } from "react-bootstrap";
-import { MacroNutrient, AnyNutrient } from "./getters/useNutrients";
+import { NutrientMeasurementWithComponentsForm , NutrientMeasurementForm} from "../../../pages/AdminPage";
 
-export type NutrientMeasurementForm = {
-  nutrientId?: number;
-  average: number;
-  deviation?: number;
-  min?: number;
-  max?: number;
-  sampleSize?: number;
-  dataType: "analytic" | "calculated" | "assumed" | "borrowed";
-  referenceCodes?: number[];
-};
 
 type NewMacronutrientWithComponentProps = {
-  macronutrientsWithComponents: MacroNutrient[];
+  macronutrientsWithComponents: NutrientMeasurementWithComponentsForm[];
+  onMacronutrientUpdate: (
+    updatedNutrient: NutrientMeasurementWithComponentsForm
+  ) => void;
 };
 
-const NewMacronutrientWithComponent: React.FC<
-  NewMacronutrientWithComponentProps
-> = ({ macronutrientsWithComponents }) => {
-  const [open, setOpen] = useState<Set<string>>(
-    new Set(macronutrientsWithComponents.map((n) => n.id.toString()))
-  );
 
-  const [editingComponentId, setEditingComponentId] = useState<number | null>(
-    null
+const NewMacronutrientWithComponent: React.FC<NewMacronutrientWithComponentProps> = ({ 
+  macronutrientsWithComponents,
+  onMacronutrientUpdate,
+}) => {
+  const [open, setOpen] = useState<Set<string >>(
+    new Set(macronutrientsWithComponents.map((n) => n.nutrientId.toString() ))
   );
-  const [formData, setFormData] = useState<NutrientMeasurementForm | null>(
-    null
-  );
+  const [editingComponentId, setEditingComponentId] = useState<number | null>(null);
+  const [formData, setFormData] = useState<NutrientMeasurementForm | null>(null);
+
 
   const toggleCollapse = (id: string) => {
     setOpen((prev) => {
       const newSet = new Set(prev);
-      if (newSet.has(id)) {
-        newSet.delete(id);
-      } else {
-        newSet.add(id);
-      }
+      newSet.has(id) ? newSet.delete(id) : newSet.add(id);
       return newSet;
     });
   };
 
-  const startEditing = (component: AnyNutrient | null) => {
-    setEditingComponentId(component?.id || null);
-    setFormData(
-      component
-        ? {
-            nutrientId: component.id,
-            average: 0, 
-            deviation: 0,
-            min: 0,
-            max: 0,
-            sampleSize: 0,
-            dataType: "analytic",
-          }
-        : null
-    );
+  const startEditing = (component: NutrientMeasurementForm) => {
+    setEditingComponentId(component.nutrientId);
+    setFormData({
+      ...component, 
+      average: component.average || 0,
+      deviation: component.deviation || 0,
+      min: component.min || 0,
+      max: component.max || 0,
+      sampleSize: component.sampleSize || 0,
+      dataType: component.dataType || "analytic",
+    });
+
   };
+  
 
   const handleInputChange = (field: keyof NutrientMeasurementForm, value: any) => {
     if (formData) {
       setFormData({ ...formData, [field]: value });
     }
+    console.log("formData")
+    console.log(formData)
   };
 
   const saveChanges = () => {
-    if (formData) {
-      console.log("Guardando datos:", formData);
+    if (formData && editingComponentId !== null) {
+      const updatedNutrients = macronutrientsWithComponents.map((nutrient) => {
+        if (nutrient.components.some((component) => component.nutrientId === editingComponentId)) {
+          const updatedComponents = nutrient.components.map((component) =>
+            component.nutrientId === editingComponentId
+              ? { ...component, ...formData } 
+              : component
+          );
+          return { ...nutrient, components: updatedComponents }; 
+        }
+        return nutrient;
+      });
+  
+      const updatedNutrient = updatedNutrients.find((nutrient) =>
+        nutrient.components.some((component) => component.nutrientId === editingComponentId)
+      );
+  
+      if (updatedNutrient) {
+
+        onMacronutrientUpdate(updatedNutrient); // Propaga el cambio
+      }
+  
+      // Limpia el estado de edición
       setEditingComponentId(null);
       setFormData(null);
     }
   };
-
+  
+  
+  
   const cancelEditing = () => {
     setEditingComponentId(null);
     setFormData(null);
   };
-
  /* const handleDeleteComponent = (nutrientId: number, componentId: number) => {
     setMacronutrientsWithComponents((prevState) => {
       return prevState.map((nutrient) => {
@@ -99,27 +108,24 @@ const NewMacronutrientWithComponent: React.FC<
   return (
     <div>
       {macronutrientsWithComponents.map((nutrient) => (
-        <Card key={nutrient.id} style={{ marginBottom: "15px" }}>
+        <Card key={nutrient.nutrientId} style={{ marginBottom: "15px" }}>
           <Card.Header>
             <Button
-              onClick={() => toggleCollapse(nutrient.id.toString())}
-              aria-controls={`collapse-${nutrient.id}`}
-              aria-expanded={
-                open.has(nutrient.id.toString()) ? "true" : "false"
-              }
+              onClick={() => toggleCollapse(nutrient.nutrientId.toString())}
+              aria-controls={`collapse-${nutrient.nutrientId}`}
+              aria-expanded={open.has(nutrient.nutrientId.toString())}
               variant="link"
               style={{ fontWeight: "bold", textDecoration: "none" }}
             >
-              {nutrient.name}
+              {`Nutriente ${nutrient.nutrientId}`}
             </Button>
           </Card.Header>
-          <Collapse in={open.has(nutrient.id.toString())}>
+          <Collapse in={open.has(nutrient.nutrientId.toString())}>
             <Card.Body>
               <Table striped bordered hover responsive>
                 <thead>
                   <tr>
                     <th>Componente</th>
-                    <th>Unidad de medida</th>
                     <th>Promedio</th>
                     <th>Mínimo</th>
                     <th>Máximo</th>
@@ -130,11 +136,10 @@ const NewMacronutrientWithComponent: React.FC<
                 </thead>
                 <tbody>
                   {nutrient.components?.map((component) => (
-                    <tr key={component.id}>
-                      {editingComponentId === component.id ? (
+                    <tr key={component.nutrientId}>
+                      {editingComponentId === component.nutrientId ? (
                         <>
-                          <td>{component.name}</td>
-                          <td>{component.measurementUnit}</td>
+                          <td>{component.nutrientId}</td>
                           <td>
                             <Form.Control
                               type="number"
@@ -195,13 +200,17 @@ const NewMacronutrientWithComponent: React.FC<
                         </>
                       ) : (
                         <>
-                          <td>{component.name}</td>
-                          <td>{component.measurementUnit}</td>
-                          <td>---</td>
-                          <td>---</td>
-                          <td>---</td>
-                          <td>---</td>
-                          <td>---</td>
+                          <td>{component.nutrientId}</td>
+                          <td>{component.average || "---"}</td>
+                          <td>{component.min || "---"}</td>
+                          <td>{component.max || "---"}</td>
+                          <td>{component.sampleSize || "---"}</td>
+                          <td>
+                            {component.dataType
+                              ? component.dataType.charAt(0).toUpperCase() +
+                                component.dataType.slice(1)
+                              : "---"}
+                          </td>
                           <td>
                             <Button
                               variant="warning"
@@ -209,12 +218,7 @@ const NewMacronutrientWithComponent: React.FC<
                             >
                               Editar
                             </Button>{" "}
-                            <Button
-                              variant="danger"
-                              
-                            >
-                              Eliminar
-                            </Button>
+                            <Button variant="danger">Eliminar</Button>
                           </td>
                         </>
                       )}
@@ -228,6 +232,7 @@ const NewMacronutrientWithComponent: React.FC<
       ))}
     </div>
   );
+  
 };
 
 export default NewMacronutrientWithComponent;

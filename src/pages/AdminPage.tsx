@@ -8,9 +8,41 @@ import useNutrients, {
   GroupedNutrients,
 } from "../core/components/adminPage/getters/useNutrients";
 import NewMacronutrientWithComponent from "../core/components/adminPage/NewMacronutrientWithComponent";
-import { NutrientMeasurementForm } from "../core/components/adminPage/NewMacronutrientWithComponent";
 
-type NutrientMeasurementWithComponentsForm = NutrientMeasurementForm & {
+const mapMacroNutrientToForm = (
+  macronutrient: MacroNutrient
+): NutrientMeasurementWithComponentsForm => ({
+  nutrientId: macronutrient.id,
+  average: 0,
+  deviation: 0,
+  min: 0,
+  max: 0,
+  sampleSize: 0,
+  dataType: "analytic",
+  components:
+    macronutrient.components?.map((component) => ({
+      nutrientId: component.id,
+      average: 0,
+      deviation: 0,
+      min: 0,
+      max: 0,
+      sampleSize: 0,
+      dataType: "analytic",
+    })) || [],
+});
+
+export type NutrientMeasurementForm = {
+  nutrientId: number;
+  average: number;
+  deviation?: number;
+  min?: number;
+  max?: number;
+  sampleSize?: number;
+  dataType: "analytic" | "calculated" | "assumed" | "borrowed";
+  referenceCodes?: number[];
+};
+
+export type NutrientMeasurementWithComponentsForm = NutrientMeasurementForm & {
   components: NutrientMeasurementForm[];
 };
 type NutrientsValueForm = {
@@ -43,7 +75,6 @@ type foodForm = {
 };
 
 const AdminPage: React.FC = () => {
-  
   const [activeSection, setActiveSection] = useState<number>(1);
   const [formData, setFormData] = useState<foodForm>({
     code: "",
@@ -62,25 +93,6 @@ const AdminPage: React.FC = () => {
   });
 
   const { data } = useNutrients();
-
-  const { macronutrients, macronutrientsWithComponents } =
-    data?.macronutrients.reduce<{
-      macronutrients: MacroNutrient[];
-      macronutrientsWithComponents: MacroNutrient[];
-    }>(
-      (acc, n) => {
-        if ((n.components?.length ?? 0) > 0) {
-          acc.macronutrientsWithComponents.push(n);
-        } else {
-          acc.macronutrients.push(n);
-        }
-        return acc;
-      },
-      {
-        macronutrients: [],
-        macronutrientsWithComponents: [],
-      }
-    ) ?? { macronutrients: [], macronutrientsWithComponents: [] };
 
   useEffect(() => {
     if (data) {
@@ -111,32 +123,11 @@ const AdminPage: React.FC = () => {
                 dataType: "analytic",
                 references: [],
               })) || [],
+
           mainNutrients:
-            data?.macronutrients
-              ?.filter(
-                (macronutrient: MacroNutrient) => !macronutrient.isEnergy
-              )
-              .map((macronutrient: MacroNutrient) => ({
-                nutrientId: macronutrient.id,
-                standardized: macronutrient.standardized,
-                average: 0,
-                min: 0,
-                max: 0,
-                sampleSize: 0,
-                dataType: "analytic",
-                references: [],
-                components:
-                  macronutrient.components?.map((component: AnyNutrient) => ({
-                    nutrientId: component.id,
-                    standardized: component.standardized,
-                    average: 0,
-                    min: 0,
-                    max: 0,
-                    sampleSize: 0,
-                    dataType: "analytic",
-                    references: [],
-                  })) || [],
-              })) || [],
+            data.macronutrients
+              ?.filter((m) => !m.isEnergy)
+              .map((m) => mapMacroNutrientToForm(m)) || [],
 
           micronutrients: {
             vitamins:
@@ -168,9 +159,30 @@ const AdminPage: React.FC = () => {
       setFormData(initialFormData);
     }
   }, [data, data?.macronutrients, data?.micronutrients]);
-  console.log(formData)
 
-
+  const {
+    macronutrients: macronutrientsInitial,
+    macronutrientsWithComponents: macronutrientsWithComponentsInitial,
+  } = formData.nutrientsValueForm.mainNutrients.reduce<{
+    macronutrients: NutrientMeasurementForm[];
+    macronutrientsWithComponents: NutrientMeasurementWithComponentsForm[];
+  }>(
+    (acc, n) => {
+      if ((n.components?.length ?? 0) > 0) {
+        acc.macronutrientsWithComponents.push(
+          n as NutrientMeasurementWithComponentsForm
+        );
+      } else {
+        acc.macronutrients.push(n as NutrientMeasurementForm);
+      }
+      return acc;
+    },
+    {
+      macronutrients: [],
+      macronutrientsWithComponents: [],
+    }
+  );
+  
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     field: string
@@ -182,12 +194,32 @@ const AdminPage: React.FC = () => {
     }));
   };
 
+  const handleMacronutrientUpdate = (
+    updatedNutrient: NutrientMeasurementWithComponentsForm
+  ) => {
+    console.log(updatedNutrient)
+    setFormData((prev) => ({
+      ...prev,
+      nutrientsValueForm: {
+        ...prev.nutrientsValueForm,
+        mainNutrients: prev.nutrientsValueForm.mainNutrients.map((n) =>
+          n.nutrientId === updatedNutrient.nutrientId
+            ? { ...n, ...updatedNutrient }
+            : n
+        ),
+      },
+    }));
+  };
+
   const renderSection = () => {
     switch (activeSection) {
       case 3:
         return (
           <NewMacronutrientWithComponent
-            macronutrientsWithComponents={macronutrientsWithComponents}
+            macronutrientsWithComponents={formData.nutrientsValueForm.mainNutrients.filter(
+              (n) => n.components.length > 0
+            )}
+            onMacronutrientUpdate={handleMacronutrientUpdate}
           />
         );
       case 7: // Origines
@@ -218,7 +250,7 @@ const AdminPage: React.FC = () => {
     "Vitaminas",
     "Origines del alimento",
     "Referencias",
-  ]
+  ];
 
   return (
     <div className="AdminPage-background data-uploader">
@@ -259,7 +291,7 @@ const AdminPage: React.FC = () => {
           <div className="right-container">
             <h3 className="subtitle">{t("AdminPage.import")}</h3>
             <input
-              id="fileInput" 
+              id="fileInput"
               className="file-input"
               type="file"
               accept=".xlsx, .xls, .csv"
