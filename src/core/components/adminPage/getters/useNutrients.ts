@@ -25,8 +25,6 @@ export const useNutrients = () => {
   const { data, error, loading } = useFetch<GroupedNutrients>(
     "http://localhost:3000/api/v1/nutrients"
   );
-  console.log(data)
-
   return { data, error, loading };
 };
 

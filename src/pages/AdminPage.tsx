@@ -5,11 +5,23 @@ import { useTranslation } from "react-i18next";
 import useNutrients, {
   MacroNutrient,
   AnyNutrient,
-  GroupedNutrients,
 } from "../core/components/adminPage/getters/useNutrients";
 import NewMacronutrientWithComponent from "../core/components/adminPage/NewMacronutrientWithComponent";
+import NewNutrients from "../core/components/adminPage/NewNutrients";
 
-const mapMacroNutrientToForm = (
+const mapMacroNutrientWithoutComponentsToForm = (
+  macronutrient: MacroNutrient
+): NutrientMeasurementForm => ({
+  nutrientId: macronutrient.id,
+  average: 0,
+  deviation: 0,
+  min: 0,
+  max: 0,
+  sampleSize: 0,
+  dataType: "analytic",
+});
+
+const mapMacroNutrientWithComponentsToForm = (
   macronutrient: MacroNutrient
 ): NutrientMeasurementWithComponentsForm => ({
   nutrientId: macronutrient.id,
@@ -127,14 +139,21 @@ const AdminPage: React.FC = () => {
           mainNutrients:
             data.macronutrients
               ?.filter((m) => !m.isEnergy)
-              .map((m) => mapMacroNutrientToForm(m)) || [],
+              .map((m) =>
+                (m.components?.length ?? 0) > 0
+                  ? mapMacroNutrientWithComponentsToForm(m)
+                  : {
+                      ...mapMacroNutrientWithoutComponentsToForm(m),
+                      components: [],
+                    }
+              ) || [],
 
           micronutrients: {
             vitamins:
               data.micronutrients?.vitamins?.map((vitamin: AnyNutrient) => ({
                 nutrientId: vitamin.id,
-                standardized: vitamin.standardized,
                 average: 0,
+                deviation: 0,
                 min: 0,
                 max: 0,
                 sampleSize: 0,
@@ -144,8 +163,8 @@ const AdminPage: React.FC = () => {
             minerals:
               data.micronutrients?.minerals?.map((mineral: AnyNutrient) => ({
                 nutrientId: mineral.id,
-                standardized: mineral.standardized,
                 average: 0,
+                deviation: 0,
                 min: 0,
                 max: 0,
                 sampleSize: 0,
@@ -160,29 +179,7 @@ const AdminPage: React.FC = () => {
     }
   }, [data, data?.macronutrients, data?.micronutrients]);
 
-  const {
-    macronutrients: macronutrientsInitial,
-    macronutrientsWithComponents: macronutrientsWithComponentsInitial,
-  } = formData.nutrientsValueForm.mainNutrients.reduce<{
-    macronutrients: NutrientMeasurementForm[];
-    macronutrientsWithComponents: NutrientMeasurementWithComponentsForm[];
-  }>(
-    (acc, n) => {
-      if ((n.components?.length ?? 0) > 0) {
-        acc.macronutrientsWithComponents.push(
-          n as NutrientMeasurementWithComponentsForm
-        );
-      } else {
-        acc.macronutrients.push(n as NutrientMeasurementForm);
-      }
-      return acc;
-    },
-    {
-      macronutrients: [],
-      macronutrientsWithComponents: [],
-    }
-  );
-  
+  //Este sera para el data general
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     field: string
@@ -193,11 +190,23 @@ const AdminPage: React.FC = () => {
       [field]: value,
     }));
   };
-
+  //Este es para los macronutrientes con componentes
   const handleMacronutrientUpdate = (
     updatedNutrient: NutrientMeasurementWithComponentsForm
   ) => {
-    console.log(updatedNutrient)
+    setFormData((prev) => ({
+      ...prev,
+      nutrientsValueForm: {
+        ...prev.nutrientsValueForm,
+        mainNutrients: prev.nutrientsValueForm.mainNutrients.map((n) =>
+          n.nutrientId === updatedNutrient.nutrientId
+            ? { ...n, ...updatedNutrient }
+            : n
+        ),
+      },
+    }));
+  };
+  const handleNutrientstUpdate = (updatedNutrient: NutrientMeasurementForm) => {
     setFormData((prev) => ({
       ...prev,
       nutrientsValueForm: {
@@ -211,25 +220,59 @@ const AdminPage: React.FC = () => {
     }));
   };
 
+  console.log(
+    formData.nutrientsValueForm.mainNutrients.filter(
+      (n) => n.components?.length === 0
+    )
+  );
+
   const renderSection = () => {
     switch (activeSection) {
+      case 2:
+        return (
+          <NewNutrients
+            nutrients={formData.nutrientsValueForm.energy}
+            onNutrientUpdate={handleNutrientstUpdate}
+          />
+        );
       case 3:
         return (
           <NewMacronutrientWithComponent
             macronutrientsWithComponents={formData.nutrientsValueForm.mainNutrients.filter(
-              (n) => n.components.length > 0
+              (n) => n.components?.length > 0
             )}
             onMacronutrientUpdate={handleMacronutrientUpdate}
           />
         );
+      case 4:
+        return (
+          <NewNutrients
+            nutrients={formData.nutrientsValueForm.mainNutrients.filter(
+              (n) => n.components?.length === 0
+            )}
+            onNutrientUpdate={handleNutrientstUpdate}
+          />
+        );
+      case 5:
+        return (
+          <NewNutrients
+            nutrients={formData.nutrientsValueForm.micronutrients.vitamins}
+            onNutrientUpdate={handleNutrientstUpdate}
+          />
+        );
+      case 6:
+        return (
+          <NewNutrients
+            nutrients={formData.nutrientsValueForm.micronutrients.minerals}
+            onNutrientUpdate={handleNutrientstUpdate}
+          />
+        );
       case 7: // Origines
         return <Origins />;
-
       default:
         return null;
     }
   };
-
   const [view, setView] = useState<string>("manual");
   const { t } = useTranslation("global");
 
