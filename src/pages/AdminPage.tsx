@@ -1,111 +1,174 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../assets/css/_AdminPage.css";
-import Names from "../core/components/adminPage/Names";
-import Case2 from "../core/components/adminPage/Case2";
-import Case3 from "../core/components/adminPage/Case3";
-import Case4 from "../core/components/adminPage/Case4";
-import Case8 from "../core/components/adminPage/Case8";
-import Case9 from "../core/components/adminPage/Case9";
 import Origins from "../core/components/adminPage/Origins";
 import { useTranslation } from "react-i18next";
-import useNutrients,{MacroNutrient, AnyNutrient, GroupedNutrients} from "../core/components/adminPage/getters/useNutrients";
+import useNutrients, {
+  MacroNutrient,
+  AnyNutrient,
+  GroupedNutrients,
+} from "../core/components/adminPage/getters/useNutrients";
 import NewMacronutrientWithComponent from "../core/components/adminPage/NewMacronutrientWithComponent";
+import { NutrientMeasurementForm } from "../core/components/adminPage/NewMacronutrientWithComponent";
 
+type NutrientMeasurementWithComponentsForm = NutrientMeasurementForm & {
+  components: NutrientMeasurementForm[];
+};
+type NutrientsValueForm = {
+  energy: NutrientMeasurementForm[];
+  mainNutrients: NutrientMeasurementWithComponentsForm[];
+  micronutrients: {
+    vitamins: NutrientMeasurementForm[];
+    minerals: NutrientMeasurementForm[];
+  };
+};
 
-const DataUploader: React.FC = () => {
+type foodForm = {
+  code: string;
+  strain?: string;
+  brand?: string;
+  observation?: string;
+  group: {
+    code: string;
+    name: string;
+  };
+  type: {
+    code: string;
+    name: string;
+  };
+  scientificName?: string;
+  subspecies?: string;
+  commonName: Partial<Record<"es" | "en" | "pt", string>>;
+  ingredients: Partial<Record<"es" | "en" | "pt", string>>;
+  nutrientsValueForm: NutrientsValueForm;
+};
+
+const AdminPage: React.FC = () => {
+  
   const [activeSection, setActiveSection] = useState<number>(1);
-  const [formData, setFormData] = useState({
-    // Atributos Básicos
-    nombreAlimentoEsp: "",
-    nombreAlimentoPortu: "",
-    nombreAlimentoEn: "",
-    cientificName: "",
-    origen_region: "",
-    codigo: "",
-    ubicacion: "",
-    brand: "",
-    observation: "",
-    groupName: "",
-    groupCode: "",
-    typeName: "",
-    typeCode: "",
-
-    ingredients_es: "",
-    ingredients_pt: "",
-    ingredients_en: "",
-
-    strain: "",
-    subspecies: "",
-
-    // Componentes nutricionales
-    carbohidratosTotales: "",
-    carbohidratosDisponibles: "",
-    proteina: "",
-    lipidoTotalOtroMetodo: "",
-    fibraTotal: "",
-    alcohol: "",
-    acidosOrganicos: "",
-    poliolesTotales: "",
-    cenizas: "",
-    acGrasosSaturados: "",
-    acGrasosMonoinsat: "",
-    acGrasosPolinsat: "",
-    acGrasosTrans: "",
-    colesterol: "",
-    c18_2n6: "",
-    c18_3n3: "",
-    calcio: "",
-    hierro: "",
-    sodio: "",
-    magnesio: "",
-    fosforo: "",
-    potasio: "",
-    manganeso: "",
-    zinc: "",
-    cobre: "",
-    selenio: "",
-    vitaminaA: "",
-    vitaminaRAE: "",
-    vitaminaD: "",
-    alfaTocoferol: "",
-    tiamina: "",
-    riboflavina: "",
-    niacinaPreformada: "",
-    vitaminaB6: "",
-    vitaminaB12: "",
-    vitaminaC: "",
-    equivalenteFolato: "",
-    salAdicion: "",
-    azucarAdicion: "",
-    grasaAdicion: "",
-    proteinaVegetal: "",
-    proteinaAnimal: "",
+  const [formData, setFormData] = useState<foodForm>({
+    code: "",
+    commonName: { es: "", en: "", pt: "" },
+    ingredients: { es: "", en: "", pt: "" },
+    group: { code: "", name: "" },
+    type: { code: "", name: "" },
+    nutrientsValueForm: {
+      energy: [],
+      mainNutrients: [],
+      micronutrients: {
+        vitamins: [],
+        minerals: [],
+      },
+    },
   });
 
-  const{data} = useNutrients()
+  const { data } = useNutrients();
 
-  const vitamins = data?.micronutrients.vitamins
-  const minerals = data?.micronutrients.minerals
-
-  const { macronutrients, macronutrientsWithComponents } = 
+  const { macronutrients, macronutrientsWithComponents } =
     data?.macronutrients.reduce<{
-        macronutrients: MacroNutrient[];
-        macronutrientsWithComponents: MacroNutrient[];
+      macronutrients: MacroNutrient[];
+      macronutrientsWithComponents: MacroNutrient[];
     }>(
-        (acc, n) => {
-            if ((n.components?.length ?? 0) > 0) {
-                acc.macronutrientsWithComponents.push(n);
-            } else {
-                acc.macronutrients.push(n);
-            }
-            return acc;
-        },
-        {
-            macronutrients: [],
-            macronutrientsWithComponents: [],
+      (acc, n) => {
+        if ((n.components?.length ?? 0) > 0) {
+          acc.macronutrientsWithComponents.push(n);
+        } else {
+          acc.macronutrients.push(n);
         }
+        return acc;
+      },
+      {
+        macronutrients: [],
+        macronutrientsWithComponents: [],
+      }
     ) ?? { macronutrients: [], macronutrientsWithComponents: [] };
 
+  useEffect(() => {
+    if (data) {
+      const initialFormData: foodForm = {
+        code: "",
+        commonName: {
+          es: "",
+          en: "",
+          pt: "",
+        },
+        ingredients: {
+          es: "",
+          en: "",
+          pt: "",
+        },
+        group: { code: "defaultGroup", name: "Default Group" },
+        type: { code: "defaultType", name: "Default Type" },
+        nutrientsValueForm: {
+          energy:
+            data.macronutrients
+              ?.filter((macronutrient: MacroNutrient) => macronutrient.isEnergy)
+              .map((macronutrient: MacroNutrient) => ({
+                nutrientId: macronutrient.id,
+                average: 0,
+                min: 0,
+                max: 0,
+                sampleSize: 0,
+                dataType: "analytic",
+                references: [],
+              })) || [],
+          mainNutrients:
+            data?.macronutrients
+              ?.filter(
+                (macronutrient: MacroNutrient) => !macronutrient.isEnergy
+              )
+              .map((macronutrient: MacroNutrient) => ({
+                nutrientId: macronutrient.id,
+                standardized: macronutrient.standardized,
+                average: 0,
+                min: 0,
+                max: 0,
+                sampleSize: 0,
+                dataType: "analytic",
+                references: [],
+                components:
+                  macronutrient.components?.map((component: AnyNutrient) => ({
+                    nutrientId: component.id,
+                    standardized: component.standardized,
+                    average: 0,
+                    min: 0,
+                    max: 0,
+                    sampleSize: 0,
+                    dataType: "analytic",
+                    references: [],
+                  })) || [],
+              })) || [],
+
+          micronutrients: {
+            vitamins:
+              data.micronutrients?.vitamins?.map((vitamin: AnyNutrient) => ({
+                nutrientId: vitamin.id,
+                standardized: vitamin.standardized,
+                average: 0,
+                min: 0,
+                max: 0,
+                sampleSize: 0,
+                dataType: "analytic",
+                references: [],
+              })) || [],
+            minerals:
+              data.micronutrients?.minerals?.map((mineral: AnyNutrient) => ({
+                nutrientId: mineral.id,
+                standardized: mineral.standardized,
+                average: 0,
+                min: 0,
+                max: 0,
+                sampleSize: 0,
+                dataType: "analytic",
+                references: [],
+              })) || [],
+          },
+        },
+      };
+
+      setFormData(initialFormData);
+    }
+  }, [data, data?.macronutrients, data?.micronutrients]);
+  console.log(formData)
 
 
   const handleInputChange = (
@@ -119,41 +182,15 @@ const DataUploader: React.FC = () => {
     }));
   };
 
-  // Renderizar la sección activa
   const renderSection = () => {
     switch (activeSection) {
-      case 1:
-        return (
-          <Names formData={formData} handleInputChange={handleInputChange} />
-        );
-      case 2:
-        return (
-          <Case2 formData={formData} handleInputChange={handleInputChange} />
-        );
       case 3:
         return (
-          <Case3 formData={formData} handleInputChange={handleInputChange} />
+          <NewMacronutrientWithComponent
+            macronutrientsWithComponents={macronutrientsWithComponents}
+          />
         );
-      case 4:
-        return (
-          <Case4 formData={formData} handleInputChange={handleInputChange} />
-        );
-
-      case 5: // Macronutrientes
-        return (
-          <NewMacronutrientWithComponent macronutrientsWithComponents={macronutrientsWithComponents} />
-        );
-      case 8: // Minerales
-        return (
-          <Case8 formData={formData} handleInputChange={handleInputChange} />
-        );
-
-      case 9: // Vitaminas
-        return (
-          <Case9 formData={formData} handleInputChange={handleInputChange} />
-        );
-
-      case 10: // Origines
+      case 7: // Origines
         return <Origins />;
 
       default:
@@ -161,33 +198,45 @@ const DataUploader: React.FC = () => {
     }
   };
 
-  const [view, setView] = useState<string>("manual"); // Estado para controlar el tipo de vista
-  const {t} = useTranslation("global");
+  const [view, setView] = useState<string>("manual");
+  const { t } = useTranslation("global");
+
+  /*const sectionNames = [
+    t("Case_1.name"),
+    t("Case_5.title"),
+    t("Case_8.title"),
+    t("Case_9.title"),
+    t("Origins.title"),
+  ];*/
 
   const sectionNames = [
-    t('Case_1.name'),
-    t('Case_2.title'),
-    t('Case_3.title'),
-    t('Case_4.Subspecies'),
-    t('Case_5.title'),
-    t('Case_8.title'),
-    t('Case_9.title'),
-    t('Origins.title'),
-  ];
+    "Datos generales",
+    "Valor energetico",
+    "Macronutrientes compuestos",
+    "Macronutrientes no compuestos",
+    "Minerales",
+    "Vitaminas",
+    "Origines del alimento",
+    "Referencias",
+  ]
 
   return (
     <div className="AdminPage-background data-uploader">
       <div className="row first-row">
         <div className="tabs-container">
-          <button className="tab" onClick={() => setView("manual")}>{t('AdminPage.manual')}</button>
-          <button className="tab" onClick={() => setView("file")}>{t('AdminPage.load')}</button>
+          <button className="tab" onClick={() => setView("manual")}>
+            {t("AdminPage.manual")}
+          </button>
+          <button className="tab" onClick={() => setView("file")}>
+            {t("AdminPage.load")}
+          </button>
         </div>
       </div>
       <div className="row second-row">
         {view === "manual" && (
           <>
             <div className="left-column">
-              <h3 className="subtitle">{t('AdminPage.title')}</h3>
+              <h3 className="subtitle">{t("AdminPage.title")}</h3>
               {sectionNames.map((name, index) => (
                 <button
                   key={index + 1}
@@ -201,36 +250,16 @@ const DataUploader: React.FC = () => {
               ))}
             </div>
             <div className="content-container">
-              <h2 className="title">{t('AdminPage.enter')}</h2>
+              <h2 className="title">{t("AdminPage.enter")}</h2>
               {renderSection()}
-              <div className="section-buttons">
-                <button
-                  className="section-button back-button"
-                  onClick={() =>
-                    setActiveSection((prev) => (prev > 1 ? prev - 1 : prev))
-                  } // Navegar a la sección anterior
-                >
-                  {t('AdminPage.back')}
-                </button>
-                <button
-                  className="section-button next-button"
-                  onClick={() =>
-                    setActiveSection((prev) =>
-                      prev < sectionNames.length ? prev + 1 : prev
-                    )
-                  } // Navegar a la siguiente sección
-                >
-                  {t('AdminPage.next')}
-                </button>
-              </div>
             </div>
           </>
         )}
         {view === "file" && (
           <div className="right-container">
-            <h3 className="subtitle">{t('AdminPage.import')}</h3>
+            <h3 className="subtitle">{t("AdminPage.import")}</h3>
             <input
-              id="fileInput" // Asegúrate de darle un id único
+              id="fileInput" 
               className="file-input"
               type="file"
               accept=".xlsx, .xls, .csv"
@@ -239,10 +268,11 @@ const DataUploader: React.FC = () => {
               Seleccionar archivo
             </label>
             <p className="helper-text">
-              {t('AdminPage.upload')} <strong>Excel</strong> {t('AdminPage.or')} <strong>CSV</strong> {t('AdminPage.point')}
+              {t("AdminPage.upload")} <strong>Excel</strong> {t("AdminPage.or")}{" "}
+              <strong>CSV</strong> {t("AdminPage.point")}
             </p>
             <div className="button-container">
-              <button className="button">{t('AdminPage.process')}</button>
+              <button className="button">{t("AdminPage.process")}</button>
             </div>
           </div>
         )}
@@ -251,4 +281,4 @@ const DataUploader: React.FC = () => {
   );
 };
 
-export default DataUploader;
+export default AdminPage;

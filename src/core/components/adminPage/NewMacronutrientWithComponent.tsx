@@ -1,22 +1,16 @@
 import React, { useState } from "react";
-import { MacroNutrient } from "./getters/useNutrients";
-import { Table, Card, Collapse, Button } from "react-bootstrap";
-import CenteredModifyModal from "../detailFood/CenteredModifyModal";
-import { NutrientMeasurement } from "../../types/SingleFoodResult";
+import { Table, Card, Collapse, Button, Form } from "react-bootstrap";
+import { MacroNutrient, AnyNutrient } from "./getters/useNutrients";
 
-const convertToNutrientMeasurement = (component: any): NutrientMeasurement => {
-  return {
-    nutrientId: component.id,
-    name: component.name,
-    measurementUnit: component.measurementUnit,
-    average: component.average || 0,
-    deviation: component.deviation,
-    min: component.min,
-    max: component.max,
-    standardized: component.standardized,
-    referenceCodes: component.referenceCodes || [],
-    dataType: component.dataType
-  };
+export type NutrientMeasurementForm = {
+  nutrientId?: number;
+  average: number;
+  deviation?: number;
+  min?: number;
+  max?: number;
+  sampleSize?: number;
+  dataType: "analytic" | "calculated" | "assumed" | "borrowed";
+  referenceCodes?: number[];
 };
 
 type NewMacronutrientWithComponentProps = {
@@ -26,33 +20,81 @@ type NewMacronutrientWithComponentProps = {
 const NewMacronutrientWithComponent: React.FC<
   NewMacronutrientWithComponentProps
 > = ({ macronutrientsWithComponents }) => {
-    const allCodes = macronutrientsWithComponents.map((macronutrient) =>macronutrient.id.toString())
-  const [open, setOpen] = useState<Set<string>>(new Set(allCodes)); // Estado como conjunto de IDs abiertos
-  const [showModal, setShowModal] = useState(false);
-  const [selectedComponent, setSelectedComponent] =
-    useState<NutrientMeasurement | null>(null);
+  const [open, setOpen] = useState<Set<string>>(
+    new Set(macronutrientsWithComponents.map((n) => n.id.toString()))
+  );
+
+  const [editingComponentId, setEditingComponentId] = useState<number | null>(
+    null
+  );
+  const [formData, setFormData] = useState<NutrientMeasurementForm | null>(
+    null
+  );
 
   const toggleCollapse = (id: string) => {
     setOpen((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(id)) {
-        newSet.delete(id); // Si ya está abierto, lo cierra
+        newSet.delete(id);
       } else {
-        newSet.add(id); // Si está cerrado, lo abre
+        newSet.add(id);
       }
       return newSet;
     });
   };
 
-  const handleEdit = (component: any) => {
-    const nutrientMeasurement = convertToNutrientMeasurement(component);
-    setSelectedComponent(nutrientMeasurement);
-    setShowModal(true);
+  const startEditing = (component: AnyNutrient | null) => {
+    setEditingComponentId(component?.id || null);
+    setFormData(
+      component
+        ? {
+            nutrientId: component.id,
+            average: 0, 
+            deviation: 0,
+            min: 0,
+            max: 0,
+            sampleSize: 0,
+            dataType: "analytic",
+          }
+        : null
+    );
   };
 
-  const handleSave = (updatedData: NutrientMeasurement) => {
-    setShowModal(false);
+  const handleInputChange = (field: keyof NutrientMeasurementForm, value: any) => {
+    if (formData) {
+      setFormData({ ...formData, [field]: value });
+    }
   };
+
+  const saveChanges = () => {
+    if (formData) {
+      console.log("Guardando datos:", formData);
+      setEditingComponentId(null);
+      setFormData(null);
+    }
+  };
+
+  const cancelEditing = () => {
+    setEditingComponentId(null);
+    setFormData(null);
+  };
+
+ /* const handleDeleteComponent = (nutrientId: number, componentId: number) => {
+    setMacronutrientsWithComponents((prevState) => {
+      return prevState.map((nutrient) => {
+        if (nutrient.id === nutrientId) {
+          return {
+            ...nutrient,
+            components: nutrient.components?.filter(
+              (component) => component.id !== componentId
+            ),
+          };
+        }
+        return nutrient;
+      });
+    });
+  };
+  */
 
   return (
     <div>
@@ -78,71 +120,112 @@ const NewMacronutrientWithComponent: React.FC<
                   <tr>
                     <th>Componente</th>
                     <th>Unidad de medida</th>
+                    <th>Promedio</th>
+                    <th>Mínimo</th>
+                    <th>Máximo</th>
+                    <th>Tamaño de muestra</th>
+                    <th>Tipo de dato</th>
                     <th>Acción</th>
                   </tr>
                 </thead>
                 <tbody>
                   {nutrient.components?.map((component) => (
                     <tr key={component.id}>
-                      <td>{component.name}</td>
-                      <td>{component.measurementUnit}</td>
-                      <td>
-                        <Button
-                          variant="warning"
-                          onClick={() => handleEdit(component)}
-                        >
-                          Modificar
-                        </Button>
-                      </td>
+                      {editingComponentId === component.id ? (
+                        <>
+                          <td>{component.name}</td>
+                          <td>{component.measurementUnit}</td>
+                          <td>
+                            <Form.Control
+                              type="number"
+                              value={formData?.average || ""}
+                              onChange={(e) =>
+                                handleInputChange("average", +e.target.value)
+                              }
+                            />
+                          </td>
+                          <td>
+                            <Form.Control
+                              type="number"
+                              value={formData?.min || ""}
+                              onChange={(e) =>
+                                handleInputChange("min", +e.target.value)
+                              }
+                            />
+                          </td>
+                          <td>
+                            <Form.Control
+                              type="number"
+                              value={formData?.max || ""}
+                              onChange={(e) =>
+                                handleInputChange("max", +e.target.value)
+                              }
+                            />
+                          </td>
+                          <td>
+                            <Form.Control
+                              type="number"
+                              value={formData?.sampleSize || ""}
+                              onChange={(e) =>
+                                handleInputChange("sampleSize", +e.target.value)
+                              }
+                            />
+                          </td>
+                          <td>
+                            <Form.Select
+                              value={formData?.dataType || "analytic"}
+                              onChange={(e) =>
+                                handleInputChange("dataType", e.target.value)
+                              }
+                            >
+                              <option value="analytic">Analítico</option>
+                              <option value="calculated">Calculado</option>
+                              <option value="assumed">Asumido</option>
+                              <option value="borrowed">Prestado</option>
+                            </Form.Select>
+                          </td>
+                          <td>
+                            <Button variant="success" onClick={saveChanges}>
+                              Guardar
+                            </Button>{" "}
+                            <Button variant="danger" onClick={cancelEditing}>
+                              Cancelar
+                            </Button>
+                          </td>
+                        </>
+                      ) : (
+                        <>
+                          <td>{component.name}</td>
+                          <td>{component.measurementUnit}</td>
+                          <td>---</td>
+                          <td>---</td>
+                          <td>---</td>
+                          <td>---</td>
+                          <td>---</td>
+                          <td>
+                            <Button
+                              variant="warning"
+                              onClick={() => startEditing(component)}
+                            >
+                              Editar
+                            </Button>{" "}
+                            <Button
+                              variant="danger"
+                              
+                            >
+                              Eliminar
+                            </Button>
+                          </td>
+                        </>
+                      )}
                     </tr>
                   ))}
-                  {/* Fila del total */}
-                  <tr
-                    style={{ fontWeight: "bold", backgroundColor: "#f8f9fa" }}
-                  >
-                    <td>Total</td>
-                    <td>{nutrient.measurementUnit}</td>
-                    <td>
-                      <Button
-                        variant="warning"
-                        onClick={() => handleEdit(nutrient)}
-                      >
-                        Modificar Total
-                      </Button>
-                    </td>
-                  </tr>
                 </tbody>
               </Table>
-              <Button
-                variant="primary"
-                onClick={() =>
-                  handleEdit({
-                    id: "new",
-                    name: "Nuevo Componente",
-                    measurementUnit: "unidad",
-                    average: 0,
-                    deviation: 0,
-                    min: 0,
-                    max: 0,
-                    note: "",
-                    standardized: false,
-                  })
-                }
-              >
-                Agregar Componente
-              </Button>
             </Card.Body>
           </Collapse>
         </Card>
       ))}
-
-      {showModal && selectedComponent && (
-        <CenteredModifyModal
-          data={selectedComponent}
-          onHide={() => setShowModal(false)}
-          onSave={handleSave}
-        />
-      )}
     </div>
   );
 };

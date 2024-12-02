@@ -9,7 +9,7 @@ export type GroupedNutrients = {
 };
 
 export type MacroNutrient = AnyNutrient & {
-  isEnergy: boolean;
+  isEnergy?: boolean;
   components?: AnyNutrient[];
 };
 
