@@ -13,45 +13,48 @@ const mapMacroNutrientWithoutComponentsToForm = (
   macronutrient: MacroNutrient
 ): NutrientMeasurementForm => ({
   nutrientId: macronutrient.id,
-  average: 0,
-  deviation: 0,
-  min: 0,
-  max: 0,
-  sampleSize: 0,
-  dataType: "analytic",
+  average: null,
+  deviation: null,
+  min: null,
+  max: null,
+  sampleSize: null,
+  dataType: null,
+  referenceCodes: [],
 });
 
 const mapMacroNutrientWithComponentsToForm = (
   macronutrient: MacroNutrient
 ): NutrientMeasurementWithComponentsForm => ({
   nutrientId: macronutrient.id,
-  average: 0,
-  deviation: 0,
-  min: 0,
-  max: 0,
-  sampleSize: 0,
-  dataType: "analytic",
+  average: null,
+  deviation: null,
+  min: null,
+  max: null,
+  sampleSize: null,
+  dataType: null,
+  referenceCodes: [],
   components:
     macronutrient.components?.map((component) => ({
       nutrientId: component.id,
-      average: 0,
-      deviation: 0,
-      min: 0,
-      max: 0,
-      sampleSize: 0,
-      dataType: "analytic",
+      average: null,
+      deviation: null,
+      min: null,
+      max: null,
+      sampleSize: null,
+      dataType: null,
+      referenceCodes: [],
     })) || [],
 });
 
 export type NutrientMeasurementForm = {
   nutrientId: number;
-  average: number;
-  deviation?: number;
-  min?: number;
-  max?: number;
-  sampleSize?: number;
-  dataType: "analytic" | "calculated" | "assumed" | "borrowed";
-  referenceCodes?: number[];
+  average: number | null;
+  deviation: number | null;
+  min: number | null;
+  max: number | null;
+  sampleSize: number | null;
+  dataType: "analytic" | "calculated" | "assumed" | "borrowed" | null;
+  referenceCodes: number[];
 };
 
 export type NutrientMeasurementWithComponentsForm = NutrientMeasurementForm & {
@@ -66,11 +69,11 @@ type NutrientsValueForm = {
   };
 };
 
-type foodForm = {
+type FoodForm = {
   code: string;
-  strain?: string;
-  brand?: string;
-  observation?: string;
+  strain?: string | null;
+  brand?: string | null;
+  observation?: string | null;
   group: {
     code: string;
     name: string;
@@ -79,19 +82,19 @@ type foodForm = {
     code: string;
     name: string;
   };
-  scientificName?: string;
-  subspecies?: string;
-  commonName: Partial<Record<"es" | "en" | "pt", string>>;
-  ingredients: Partial<Record<"es" | "en" | "pt", string>>;
+  scientificName?: string | null;
+  subspecies?: string | null;
+  commonName: Record<"es", string> & Partial<Record<"en" | "pt", string | null>>;
+  ingredients: Partial<Record<"es" | "en" | "pt", string | null>>;
   nutrientsValueForm: NutrientsValueForm;
 };
 
-const AdminPage: React.FC = () => {
+export default function AdminPage() {
   const [activeSection, setActiveSection] = useState<number>(1);
-  const [formData, setFormData] = useState<foodForm>({
+  const [formData, setFormData] = useState<FoodForm>({
     code: "",
-    commonName: { es: "", en: "", pt: "" },
-    ingredients: { es: "", en: "", pt: "" },
+    commonName: { es: "" },
+    ingredients: {},
     group: { code: "", name: "" },
     type: { code: "", name: "" },
     nutrientsValueForm: {
@@ -108,18 +111,12 @@ const AdminPage: React.FC = () => {
 
   useEffect(() => {
     if (data) {
-      const initialFormData: foodForm = {
+      const initialFormData: FoodForm = {
         code: "",
         commonName: {
           es: "",
-          en: "",
-          pt: "",
         },
-        ingredients: {
-          es: "",
-          en: "",
-          pt: "",
-        },
+        ingredients: {},
         group: { code: "defaultGroup", name: "Default Group" },
         type: { code: "defaultType", name: "Default Type" },
         nutrientsValueForm: {
@@ -128,12 +125,14 @@ const AdminPage: React.FC = () => {
               ?.filter((macronutrient: MacroNutrient) => macronutrient.isEnergy)
               .map((macronutrient: MacroNutrient) => ({
                 nutrientId: macronutrient.id,
-                average: 0,
-                min: 0,
-                max: 0,
-                sampleSize: 0,
-                dataType: "analytic",
-                references: [],
+                average: null,
+                deviation: null,
+                min: null,
+                max: null,
+                sampleSize: null,
+                dataType: null,
+                references: null,
+                referenceCodes: [],
               })) || [],
 
           mainNutrients:
@@ -152,24 +151,24 @@ const AdminPage: React.FC = () => {
             vitamins:
               data.micronutrients?.vitamins?.map((vitamin: AnyNutrient) => ({
                 nutrientId: vitamin.id,
-                average: 0,
-                deviation: 0,
-                min: 0,
-                max: 0,
-                sampleSize: 0,
-                dataType: "analytic",
-                references: [],
+                average: null,
+                deviation: null,
+                min: null,
+                max: null,
+                sampleSize: null,
+                dataType: null,
+                referenceCodes: [],
               })) || [],
             minerals:
               data.micronutrients?.minerals?.map((mineral: AnyNutrient) => ({
                 nutrientId: mineral.id,
-                average: 0,
-                deviation: 0,
-                min: 0,
-                max: 0,
-                sampleSize: 0,
-                dataType: "analytic",
-                references: [],
+                average: null,
+                deviation: null,
+                min: null,
+                max: null,
+                sampleSize: null,
+                dataType: null,
+                referenceCodes: [],
               })) || [],
           },
         },
@@ -355,5 +354,3 @@ const AdminPage: React.FC = () => {
     </div>
   );
 };
-
-export default AdminPage;

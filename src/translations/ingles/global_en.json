@@ -5,8 +5,8 @@
     "languages": "Languages",
     "spanish": "Spanish",
     "english": "English",
-    "panel":"Panel",
-    "close":"Sign out"
+    "panel": "Panel",
+    "close": "Sign out"
   },
   "homepage": {
     "title": "Food Composition Database",
@@ -18,281 +18,278 @@
     "advancedSearch": "Search advanced"
   },
   "footer": {
-      "contact": {
-          "title": "Contact",
-          "email": "Email: contacto@ejemplo.com"
-      },
-      "address": {
-          "title": "Address",
-          "details": "123 Calle Falsa, Ciudad, País"
-      },
-      "policies": {
-          "title": "Policies",
-          "privacy": "Privacy Policies"
-      },
-      "copyright": "© 2024 Mi Empresa. All rights reserved."
-  },
-  "loginPage":{
-    "title":"Login",
-    "username":"Username",
-    "password":"Password",
-    "recover":"Forgot your password?",
-    "state":{
-      "request":"Sending request to:",
-      "send":"Data sent:",
-      "Response":"Response received:"
+    "contact": {
+      "title": "Contact",
+      "email": "Email: contacto@ejemplo.com"
     },
-    "errors":{
-      "login":"Login failed",
-      "response":"Error response:",
-      "state":"State code:",
-      "received":"No response received:",
-      "unknown ":"Unknown error:"
-    }  
+    "address": {
+      "title": "Address",
+      "details": "123 Calle Falsa, Ciudad, País"
+    },
+    "policies": {
+      "title": "Policies",
+      "privacy": "Privacy Policies"
+    },
+    "copyright": "© 2024 Mi Empresa. All rights reserved."
   },
-  "Filter":{
+  "loginPage": {
+    "title": "Login",
+    "username": "Username",
+    "password": "Password",
+    "recover": "Forgot your password?",
+    "state": {
+      "request": "Sending request to:",
+      "send": "Data sent:",
+      "Response": "Response received:"
+    },
+    "errors": {
+      "login": "Login failed",
+      "response": "Error response:",
+      "state": "State code:",
+      "received": "No response received:",
+      "unknown ": "Unknown error:"
+    }
+  },
+  "Filter": {
     "title": "Filters",
-    "type":"Type of food",
-    "reset":"Reset filters",
-    "regions":"Regions of Chile",
-    "group":"Food group",
-    "Languages":"Languages"
+    "type": "Type of food",
+    "reset": "Reset filters",
+    "regions": "Regions of Chile",
+    "group": "Food group",
+    "Languages": "Languages"
   },
-  "Measurement":{
-    "title":"Nutrient measurement",
+  "Measurement": {
+    "title": "Nutrient measurement",
     "operator": {
-          "title": "Operator",
-          "type":{
-            "less":"Less than",
-            "less_equal":"Less than or equal",
-            "equal":"Equal to", 
-            "greater_equal":"Greater than or equal",
-            "greater": "Greater than"
-        }
-      },
-      "content":{
-        "title":"Content",
-        "value":"Value"
+      "title": "Operator",
+      "type": {
+        "less": "Less than",
+        "less_equal": "Less than or equal",
+        "equal": "Equal to",
+        "greater_equal": "Greater than or equal",
+        "greater": "Greater than"
       }
+    },
+    "content": {
+      "title": "Content",
+      "value": "Value"
+    }
   },
-  "Table":{
+  "Table": {
     "title": "Results list",
-    "search":"Search by name...",
-    "name":{
+    "search": "Search by name...",
+    "name": {
       "title": "Name in:",
-      "Spanish":"Spanish",
-      "Portuguese":"Portuguese",
-      "English":"English"
+      "Spanish": "Spanish",
+      "Portuguese": "Portuguese",
+      "English": "English"
     },
-    "order":{
-      "title":"Name order:",
-      "ascending":"Ascending",
-      "descending":"Descending"
+    "order": {
+      "title": "Name order:",
+      "ascending": "Ascending",
+      "descending": "Descending"
     },
-    "no_results":"There are no results to show."
+    "no_results": "There are no results to show."
   },
-  "Table_FoodResults":{
-    "id":"ID",
-    "name":"Name",
-    "scientific_name":"Scientific name",
-    "action":"Action",
-    "details":"Details",
-    "modify":"Modify"
+  "Table_FoodResults": {
+    "id": "ID",
+    "name": "Name",
+    "scientific_name": "Scientific name",
+    "action": "Action",
+    "details": "Details",
+    "modify": "Modify"
   },
-  "DetailFood":{
-    "loading":"Loading....",
-    "title":"General food information:",
-    "code":"Code",
-    "name":{
-      "title":"Name",
-      "Spanish":"Name in Spanish:",
-      "Portuguese":"Name in Portuguese",
-      "English":"Name in English:",
-      "scientific":"Scientific Name:" 
+  "DetailFood": {
+    "loading": "Loading....",
+    "title": "General food information:",
+    "code": "Code",
+    "name": {
+      "title": "Name",
+      "Spanish": "Name in Spanish:",
+      "Portuguese": "Name in Portuguese",
+      "English": "Name in English:",
+      "scientific": "Scientific Name:"
     },
-    "subspecies":"Subspecies:",
-    "strain":"Strain:",
-    "brand":"Brand:",
-    "observation":"Observation:",
-    "type":"Type of food:",
-    "group":"Food group:",
-    "ingredients":{
-      "title":"Ingredients",
-      "Spanish":"Ingredients (Spanish):",
-      "Portuguese":"Ingredients (Portuguese):",
-      "English":"Ingredients (English):"
+    "subspecies": "Subspecies:",
+    "strain": "Strain:",
+    "brand": "Brand:",
+    "observation": "Observation:",
+    "type": "Type of food:",
+    "group": "Food group:",
+    "ingredients": {
+      "title": "Ingredients",
+      "Spanish": "Ingredients (Spanish):",
+      "Portuguese": "Ingredients (Portuguese):",
+      "English": "Ingredients (English):"
     },
-    "grams":{
+    "grams": {
       "enter": "Enter grams",
-      "change":"Change grams",
-      "current":"Current grams:"
+      "change": "Change grams",
+      "current": "Current grams:"
     },
-    "labels":{
-      "Nutritional":"Nutritional Labeling",
-      "data":"All data"
+    "labels": {
+      "Nutritional": "Nutritional Labeling",
+      "data": "All data"
     },
-    "codes":"Lenguales codes",
-    "references":{
-      "title":"References",
-      "nutrients":"Nutrient References"
+    "codes": "Lenguales codes",
+    "references": {
+      "title": "References",
+      "nutrients": "Nutrient References"
     },
-    "modify":"Modify food details",
-    "required":"This field is required",
-    "enter":"Enter the code",
-    "save":"Save Changes",
-    "label_type":"Type",
-    "label_group":"Group"
+    "modify": "Modify food details",
+    "required": "This field is required",
+    "enter": "Enter the code",
+    "save": "Save Changes",
+    "label_type": "Type",
+    "label_group": "Group"
   },
 
-  "components_home":{
-    "title":"Search Composition"
+  "components_home": {
+    "title": "Search Composition"
   },
-  "nutrientAccordion":{
-    "Energy":"Energy value",
-    "Main":"Main nutrients",
-    "Micronutrients":"Micronutrients",
-    "name":"Name",
-    "modify":"Modify",
-    "unit":"Unit",
-    "mean":"Mean",
-    "details":"Details"
+  "nutrientAccordion": {
+    "Energy": "Energy value",
+    "Main": "Main nutrients",
+    "Micronutrients": "Micronutrients",
+    "name": "Name",
+    "modify": "Modify",
+    "unit": "Unit",
+    "mean": "Mean",
+    "details": "Details"
   },
-  "Centered":{
-    "details":"Nutrient Details",
-    "mean":"Mean",
-    "deviation":"Deviation",
-    "min":"Minimum",
-    "max":"Maximum",
-    "note":"Note",
-    "standardized":"Standardized",
-    "save":"Save",
-    "close":"Close",
-    "references":"References",
-    "yes":"Yes"
+  "Centered": {
+    "details": "Nutrient Details",
+    "mean": "Mean",
+    "deviation": "Deviation",
+    "min": "Minimum",
+    "max": "Maximum",
+    "note": "Note",
+    "standardized": "Standardized",
+    "save": "Save",
+    "close": "Close",
+    "references": "References",
+    "yes": "Yes"
   },
-  "LangualCode":{
-    "description_main":"Main Description",
-    "code":"Code",
-    "description":"Description"
+  "LangualCode": {
+    "description_main": "Main Description",
+    "code": "Code",
+    "description": "Description"
   },
-  "References":{
-    "type":"Type:",
-    "authors":"Authors:",
-    "year":"Year:",
-    "city":"City:",
-    "magazine":"Magazine:",
-    "Volume ":"Volume:",
-    "pages":"Pages:",
-    "additional":"Other information:"
+  "References": {
+    "type": "Type:",
+    "authors": "Authors:",
+    "year": "Year:",
+    "city": "City:",
+    "magazine": "Magazine:",
+    "Volume ": "Volume:",
+    "pages": "Pages:",
+    "additional": "Other information:"
   },
-  "Origins":{
-    "title":"Origins",
-    "Region":"Region",
-    "Province":"Province",
-    "Commune":"Commune",
-    "Location":"Location",
-    "select_region":"Select a region",
-    "select":"Select one"
+  "Origins": {
+    "title": "Origins",
+    "Region": "Region",
+    "Province": "Province",
+    "Commune": "Commune",
+    "Location": "Location",
+    "select_region": "Select a region",
+    "select": "Select one"
   },
-  "Case_1":{
-    "name":"Name",
-    "title":"Basic Attributes",
-    "food_E":"Food name (Spanish):",
-    "Spanish":"Name in Spanish",
-    "food_P":"Food name (Portuguese):",
-    "Portuguese":"Name in Portuguese",
-    "food_I":"Food name (English):",
-    "English":"Name in English"
+  "Case_1": {
+    "name": "Name",
+    "title": "Basic Attributes",
+    "food_E": "Food name (Spanish):",
+    "Spanish": "Name in Spanish",
+    "food_P": "Food name (Portuguese):",
+    "Portuguese": "Name in Portuguese",
+    "food_I": "Food name (English):",
+    "English": "Name in English"
   },
-  "Case_2":{
-    "title":"Group and Type",
-    "group_name":"Group (Name):",
-    "name_G":"Group Name",
-    "group_code":"Group (Code):",
-    "code_G":"Group Code",
-    "type_name":"Type (Name):",
-    "name_T":"Type Name",
-    "type_code":"Type (Code):",
-    "code_T":"Type Code"
+  "Case_2": {
+    "title": "Group and Type",
+    "group_name": "Group (Name):",
+    "name_G": "Group Name",
+    "group_code": "Group (Code):",
+    "code_G": "Group Code",
+    "type_name": "Type (Name):",
+    "name_T": "Type Name",
+    "type_code": "Type (Code):",
+    "code_T": "Type Code"
   },
-  "Case_3":{
-    "title":"Ingredients",
-    "Ingredients_E":"Ingredients (Spanish):",
-    "Spanish":"Ingredients in Spanish",
-    "Ingredients_P":"Ingredients (Portuguese):",
-    "Portuguese":"Ingredients in Portuguese",
-    "Ingredients_I":"Ingredients (English):",
-    "English":"Ingredients in English"
+  "Case_3": {
+    "title": "Ingredients",
+    "Ingredients_E": "Ingredients (Spanish):",
+    "Spanish": "Ingredients in Spanish",
+    "Ingredients_P": "Ingredients (Portuguese):",
+    "Portuguese": "Ingredients in Portuguese",
+    "Ingredients_I": "Ingredients (English):",
+    "English": "Ingredients in English"
   },
-  "Case_4":{
-    "title":"Subspecies and Strain",
-    "Subspecies":"Subspecies",
-    "strain":"Strain"
+  "Case_4": {
+    "title": "Subspecies and Strain",
+    "Subspecies": "Subspecies",
+    "strain": "Strain"
   },
-  "Case_5":{
-    "title":"Macronutrients",
-    "carbohydrates_T":"Total Carbohydrates",
-    "carbohydrates_D":"Available Carbohydrates",
-    "Protein":"Protein",
-    "Lipid":"Total Lipid",
-    "fiber_G":"Total Dietary Fiber (g):",
-    "fiber":"Dietary Fiber"
+  "Case_5": {
+    "title": "Macronutrients",
+    "carbohydrates_T": "Total Carbohydrates",
+    "carbohydrates_D": "Available Carbohydrates",
+    "Protein": "Protein",
+    "Lipid": "Total Lipid",
+    "fiber_G": "Total Dietary Fiber (g):",
+    "fiber": "Dietary Fiber"
   },
-  "Case_6":{
-    "section":"Alcohol and Compounds",
-    "title":"Alcohol and Specific Compounds",
-    "Alcohol":"Alcohol",
-    "acids_T_G":"Total Organic Acids (g):",
-    "acids":"Organic Acids",
-    "Polyols":"Total Polyols"
+  "Case_6": {
+    "section": "Alcohol and Compounds",
+    "title": "Alcohol and Specific Compounds",
+    "Alcohol": "Alcohol",
+    "acids_T_G": "Total Organic Acids (g):",
+    "acids": "Organic Acids",
+    "Polyols": "Total Polyols"
   },
-  "Case_7":{
-    "title":"Fats and Fatty Acids",
-    "Saturated":"Saturated Fatty Acids",
-    "Monounsaturated":"Monounsaturated Fatty Acids",
-    "Polyunsaturated":"Polyunsaturated Fatty Acids",
-    "Trans":"Trans Fatty Acids",
-    "Cholesterol":"Cholesterol"
+  "Case_7": {
+    "title": "Fats and Fatty Acids",
+    "Saturated": "Saturated Fatty Acids",
+    "Monounsaturated": "Monounsaturated Fatty Acids",
+    "Polyunsaturated": "Polyunsaturated Fatty Acids",
+    "Trans": "Trans Fatty Acids",
+    "Cholesterol": "Cholesterol"
   },
-  "Case_8":{
-    "title":"Minerals",
-    "Calcium":"Calcium",
-    "Iron":"Iron",
-    "Sodium":"Sodium",
-    "Magnesium":"Magnesium",
-    "Phosphorus":"Phosphorus",
-    "Potassium":"Potassium",
-    "Manganese":"Manganese",
-    "Copper":"Copper",
-    "Selenium":"Selenium"
+  "Case_8": {
+    "title": "Minerals",
+    "Calcium": "Calcium",
+    "Iron": "Iron",
+    "Sodium": "Sodium",
+    "Magnesium": "Magnesium",
+    "Phosphorus": "Phosphorus",
+    "Potassium": "Potassium",
+    "Manganese": "Manganese",
+    "Copper": "Copper",
+    "Selenium": "Selenium"
   },
-  "Case_9":{
-    "title":"Vitamins",
+  "Case_9": {
+    "title": "Vitamins",
     "A": "Vitamin A",
     "RAE": "Vitamin RAE",
-    "D":"Vitamin D",
+    "D": "Vitamin D",
     "Tocopherol": "Alpha Tocopherol",
-    "Thiamin":"Thiamin",
-    "Riboflavin":"Riboflavin",
+    "Thiamin": "Thiamin",
+    "Riboflavin": "Riboflavin",
     "Niacin": "Preformed Niacin",
-    "B6":"Vitamin B6",
-    "B12":"Vitamin B12",
+    "B6": "Vitamin B6",
+    "B12": "Vitamin B12",
     "C": "Vitamin C"
   },
-  "AdminPage":{
-    "manual":"Manual Entry",
-    "load":"Load from File",
-    "title":"Sections",
-    "enter":"Enter Food Data",
-    "back":"Back",
-    "next":"Next",
-    "import":"Import Template",
-    "process":"Process Data",
-    "upload":"Upload a file in",
-    "or":"or",
-    "point":"format."
+  "AdminPage": {
+    "manual": "Manual Entry",
+    "load": "Load from File",
+    "title": "Sections",
+    "enter": "Enter Food Data",
+    "back": "Back",
+    "next": "Next",
+    "import": "Import Template",
+    "process": "Process Data",
+    "upload": "Upload a file in",
+    "or": "or",
+    "point": "format."
   }
 }
-
-
- 

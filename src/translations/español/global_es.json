@@ -5,8 +5,8 @@
     "languages": "Idiomas",
     "spanish": "ESPAÑOL",
     "english": "INGLES",
-    "panel":"Panel",
-    "close":"Cerrar Sesión"
+    "panel": "Panel",
+    "close": "Cerrar Sesión"
   },
   "homepage": {
     "title": "Base de Datos de Composición de Alimentos",
@@ -18,281 +18,277 @@
     "advancedSearch": "Búsqueda avanzada"
   },
   "footer": {
-      "contact": {
-          "title": "Contacto",
-          "email": "Email: contacto@ejemplo.com"
-      },
-      "address": {
-          "title": "Dirección",
-          "details": "123 Calle Falsa, Ciudad, País"
-      },
-      "policies": {
-          "title": "Políticas",
-          "privacy": "Política de Privacidad"
-      },
-      "copyright": "© 2024 Mi Empresa. Todos los derechos reservados."
-  },
-  "loginPage":{
-    "title":"Iniciar Sesion",
-    "username":"Nombre de usuario",
-    "password":"Contraseña",
-    "recover":"¿Olvidaste tu contraseña?",
-    "state":{
-      "request":"Enviando solicitud a:",
-      "send":"Datos enviados:",
-      "Response":"Respuesta recibida:"
+    "contact": {
+      "title": "Contacto",
+      "email": "Email: contacto@ejemplo.com"
     },
-    "errors":{
-      "login":"Error en el inicio de sesión",
-      "response":"Respuesta de error:",
-      "state":"Codigo de estado:",
-      "received":"No se recibió respuesta:",
-      "unknown ":"Error desconocido:"
+    "address": {
+      "title": "Dirección",
+      "details": "123 Calle Falsa, Ciudad, País"
+    },
+    "policies": {
+      "title": "Políticas",
+      "privacy": "Política de Privacidad"
+    },
+    "copyright": "© 2024 Mi Empresa. Todos los derechos reservados."
+  },
+  "loginPage": {
+    "title": "Iniciar Sesion",
+    "username": "Nombre de usuario",
+    "password": "Contraseña",
+    "recover": "¿Olvidaste tu contraseña?",
+    "state": {
+      "request": "Enviando solicitud a:",
+      "send": "Datos enviados:",
+      "Response": "Respuesta recibida:"
+    },
+    "errors": {
+      "login": "Error en el inicio de sesión",
+      "response": "Respuesta de error:",
+      "state": "Codigo de estado:",
+      "received": "No se recibió respuesta:",
+      "unknown ": "Error desconocido:"
     }
   },
-  "Filter":{
+  "Filter": {
     "title": "Filtros",
-    "type":"Tipo de alimento",
-    "reset":"Restablecer filtros",
-    "regions":"Regiones de Chile",
-    "group":"Grupo alimentario",
-    "Languages":"Lenguajes"
+    "type": "Tipo de alimento",
+    "reset": "Reestablecer filtros",
+    "regions": "Regiones de Chile",
+    "group": "Grupo alimentario",
+    "Languages": "Lenguajes"
   },
-  "Measurement":{
-    "title":"Medición de nutrientes",
+  "Measurement": {
+    "title": "Medición de nutrientes",
     "operator": {
-          "title": "Operador",
-          "type":{
-            "less":"Menor que",
-            "less_equal":"Menor o igual",
-            "equal":"Igual a", 
-            "greater_equal":"Mayor o igual",
-            "greater": "Mayor que"
-        }
-      },
-      "content":{
-        "title":"Contenido",
-        "value":"Valor"
+      "title": "Operador",
+      "type": {
+        "less": "Menor que",
+        "less_equal": "Menor o igual",
+        "equal": "Igual a",
+        "greater_equal": "Mayor o igual",
+        "greater": "Mayor que"
       }
+    },
+    "content": {
+      "title": "Contenido",
+      "value": "Valor"
+    }
   },
-  "Table":{
+  "Table": {
     "title": "Lista de resultados",
-    "search":"Buscar por nombre...",
-    "name":{
+    "search": "Buscar por nombre...",
+    "name": {
       "title": "Nombre en:",
-      "Spanish":"Español",
-      "Portuguese":"Portugues",
-      "English":"Ingles"
+      "Spanish": "Español",
+      "Portuguese": "Portugues",
+      "English": "Ingles"
     },
-    "order":{
-      "title":"Orden del nombre:",
-      "ascending":"Ascendente",
-      "descending":"Descendente"
+    "order": {
+      "title": "Orden del nombre:",
+      "ascending": "Ascendente",
+      "descending": "Descendente"
     },
-    "no_results":"No hay resultados que mostrar."
+    "no_results": "No hay resultados que mostrar."
   },
-  "Table_FoodResults":{
-    "id":"ID",
-    "name":"Nombre",
-    "scientific_name":"Nombre cientifico",
-    "action":"Acción",
-    "details":"Detalles",
-    "modify":"Modificar"
+  "Table_FoodResults": {
+    "id": "ID",
+    "name": "Nombre",
+    "scientific_name": "Nombre cientifico",
+    "action": "Acción",
+    "details": "Detalles",
+    "modify": "Modificar"
   },
-  "DetailFood":{
-    "loading":"Cargando...",
-    "title":"Datos generales del alimento:",
-    "code":"Código",
-    "name":{
-      "title":"Nombre",
-      "Spanish":"Nombre en Español:",
-      "Portuguese":"Nombre en Portugués",
-      "English":"Nombre en Inglés:",
-      "scientific":"Nombre Científico:" 
+  "DetailFood": {
+    "loading": "Cargando...",
+    "title": "Datos generales del alimento:",
+    "code": "Código",
+    "name": {
+      "title": "Nombre",
+      "Spanish": "Nombre en Español:",
+      "Portuguese": "Nombre en Portugués",
+      "English": "Nombre en Inglés:",
+      "scientific": "Nombre Científico:"
     },
-    "subspecies":"Subespecie:",
-    "strain":"Variante:",
-    "brand":"Marca:",
-    "observation":"Observación:",
-    "type":"Tipo de alimento:",
-    "group":"Grupo de comida:",
-    "ingredients":{
-      "title":"Ingredientes",
-      "Spanish":"Ingredientes (Español):",
-      "Portuguese":"Ingredientes (Portugués):",
-      "English":"Ingredientes (Inglés):"
+    "subspecies": "Subespecie:",
+    "strain": "Variante:",
+    "brand": "Marca:",
+    "observation": "Observación:",
+    "type": "Tipo de alimento:",
+    "group": "Grupo de comida:",
+    "ingredients": {
+      "title": "Ingredientes",
+      "Spanish": "Ingredientes (Español):",
+      "Portuguese": "Ingredientes (Portugués):",
+      "English": "Ingredientes (Inglés):"
     },
-    "grams":{
+    "grams": {
       "enter": "Ingrese gramos",
-      "change":"Cambiar gramos",
-      "current":"Gramos actuales:"
+      "change": "Cambiar gramos",
+      "current": "Gramos actuales:"
     },
-    "labels":{
-      "Nutritional":"Etiquetado Nutricional",
-      "data":"Todos los datos"
+    "labels": {
+      "Nutritional": "Etiquetado Nutricional",
+      "data": "Todos los datos"
     },
-    "codes":"Codigos lenguales",
-    "references":{
-      "title":"Referencias",
-      "nutrients":"Referencias de nutrientes"
+    "codes": "Codigos lenguales",
+    "references": {
+      "title": "Referencias",
+      "nutrients": "Referencias de nutrientes"
     },
-    "modify":"Modificar detalles del alimento",
-    "required":"Este campo es requerido",
-    "enter":"Ingresa el código",
-    "save":"Guardar Cambios",
-    "label_type":"Tipo",
-    "label_group":"Grupo"
+    "modify": "Modificar detalles del alimento",
+    "required": "Este campo es requerido",
+    "enter": "Ingresa el código",
+    "save": "Guardar Cambios",
+    "label_type": "Tipo",
+    "label_group": "Grupo"
   },
-
-  "components_home":{
-    "title":"Buscar Composición"
+  "components_home": {
+    "title": "Buscar Composición"
   },
-  "nutrientAccordion":{
-    "Energy":"Valor energético",
-    "Main":"Nutrientes principales",
-    "Micronutrients":"Micronutrientes",
-    "name":"Nombre",
-    "modify":"Modificar",
-    "unit":"Unidad",
-    "mean":"Promedio",
-    "details":"Detalles"
+  "nutrientAccordion": {
+    "Energy": "Valor energético",
+    "Main": "Nutrientes principales",
+    "Micronutrients": "Micronutrientes",
+    "name": "Nombre",
+    "modify": "Modificar",
+    "unit": "Unidad",
+    "mean": "Promedio",
+    "details": "Detalles"
   },
-  "Centered":{
-    "details":"Detalles del Nutriente",
-    "mean":"Promedio",
-    "deviation":"Desviación",
-    "min":"Mínimo",
-    "max":"Máximo",
-    "note":"Notas",
-    "standardized":"Estandarizado",
-    "save":"Guardar",
-    "close":"Cerrar",
-    "references":"Referencias",
-    "yes":"Sí"
+  "Centered": {
+    "details": "Detalles del Nutriente",
+    "mean": "Promedio",
+    "deviation": "Desviación",
+    "min": "Mínimo",
+    "max": "Máximo",
+    "note": "Notas",
+    "standardized": "Estandarizado",
+    "save": "Guardar",
+    "close": "Cerrar",
+    "references": "Referencias",
+    "yes": "Sí"
   },
-  "LangualCode":{
-    "description_main":"Descripción Principal",
-    "code":"Código",
-    "description":"Descripción"
+  "LangualCode": {
+    "description_main": "Descripción Principal",
+    "code": "Código",
+    "description": "Descripción"
   },
-  "References":{
-    "type":"Tipo:",
-    "authors":"Autores:",
-    "year":"Año:",
-    "city":"Ciudad:",
-    "magazine":"Revista:",
-    "Volume ":"Volumen:",
-    "pages":"Páginas:",
-    "additional":"Otra información:"
+  "References": {
+    "type": "Tipo:",
+    "authors": "Autores:",
+    "year": "Año:",
+    "city": "Ciudad:",
+    "magazine": "Revista:",
+    "Volume ": "Volumen:",
+    "pages": "Páginas:",
+    "additional": "Otra información:"
   },
-  "Origins":{
-    "title":"Origines",
-    "Region":"Región",
-    "Province":"Provincia",
-    "Commune":"Comuna",
-    "Location":"Locación",
-    "select_region":"Selecciona una región",
-    "select":"Selecciona una"
+  "Origins": {
+    "title": "Origines",
+    "Region": "Región",
+    "Province": "Provincia",
+    "Commune": "Comuna",
+    "Location": "Locación",
+    "select_region": "Selecciona una región",
+    "select": "Selecciona una"
   },
-  "Case_1":{
-    "name":"Nombre",
-    "title":"Atributos Básicos",
-    "food_E":"Nombre alimento (Español):",
-    "Spanish":"Nombre en Español",
-    "food_P":"Nombre alimento (Portugués):",
-    "Portuguese":"Nombre en Portugués",
-    "food_I":"Nombre alimento (Inglés):",
-    "English":"Nombre en Inglés"
+  "Case_1": {
+    "name": "Nombre",
+    "title": "Atributos Básicos",
+    "food_E": "Nombre alimento (Español):",
+    "Spanish": "Nombre en Español",
+    "food_P": "Nombre alimento (Portugués):",
+    "Portuguese": "Nombre en Portugués",
+    "food_I": "Nombre alimento (Inglés):",
+    "English": "Nombre en Inglés"
   },
-  "Case_2":{
-    "title":"Grupo y Tipo",
-    "group_name":"Grupo (Nombre):",
-    "name_G":"Nombre del Grupo",
-    "group_code":"Grupo (Código):",
-    "code_G":"Código del Grupo",
-    "type_name":"Tipo (Nombre):",
-    "name_T":"Nombre del Tipo",
-    "type_code":"Tipo (Código):",
-    "code_T":"Código del Tipo"
+  "Case_2": {
+    "title": "Grupo y Tipo",
+    "group_name": "Grupo (Nombre):",
+    "name_G": "Nombre del Grupo",
+    "group_code": "Grupo (Código):",
+    "code_G": "Código del Grupo",
+    "type_name": "Tipo (Nombre):",
+    "name_T": "Nombre del Tipo",
+    "type_code": "Tipo (Código):",
+    "code_T": "Código del Tipo"
   },
-  "Case_3":{
-    "title":"Ingredientes",
-    "Ingredients_E":"Ingredientes (Español):",
-    "Spanish":"Ingredientes en Español",
-    "Ingredients_P":"Ingredientes (Portugués):",
-    "Portuguese":"Ingredientes en Portugués",
-    "Ingredients_I":"Ingredientes (Inglés):",
-    "English":"Ingredientes en Inglés"
+  "Case_3": {
+    "title": "Ingredientes",
+    "Ingredients_E": "Ingredientes (Español):",
+    "Spanish": "Ingredientes en Español",
+    "Ingredients_P": "Ingredientes (Portugués):",
+    "Portuguese": "Ingredientes en Portugués",
+    "Ingredients_I": "Ingredientes (Inglés):",
+    "English": "Ingredientes en Inglés"
   },
-  "Case_4":{
-    "title":"Subespecie y variante",
-    "Subspecies":"Subespecie",
-    "strain":"Variante"
+  "Case_4": {
+    "title": "Subespecie y variante",
+    "Subspecies": "Subespecie",
+    "strain": "Variante"
   },
-  "Case_5":{
-    "title":"Macronutrientes",
-    "carbohydrates_T":"Carbohidratos Totales",
-    "carbohydrates_D":"Carbohidratos Disponibles",
-    "Protein":"Proteína",
-    "Lipid":"Lípido Total",
-    "fiber_G":"Fibra Alimentaria Total (g):",
-    "fiber":"Fibra Alimentaria"
+  "Case_5": {
+    "title": "Macronutrientes",
+    "carbohydrates_T": "Carbohidratos Totales",
+    "carbohydrates_D": "Carbohidratos Disponibles",
+    "Protein": "Proteína",
+    "Lipid": "Lípido Total",
+    "fiber_G": "Fibra Alimentaria Total (g):",
+    "fiber": "Fibra Alimentaria"
   },
-  "Case_6":{
-    "section":"Alcohol y Compuestos",
-    "title":"Alcohol y Compuestos Específicos",
-    "Alcohol":"Alcohol",
-    "acids_T_G":"Ácidos Orgánicos Totales (g):",
-    "acids":"Ácidos Orgánicos",
-    "Polyols":"Polioles Totales"
+  "Case_6": {
+    "section": "Alcohol y Compuestos",
+    "title": "Alcohol y Compuestos Específicos",
+    "Alcohol": "Alcohol",
+    "acids_T_G": "Ácidos Orgánicos Totales (g):",
+    "acids": "Ácidos Orgánicos",
+    "Polyols": "Polioles Totales"
   },
-  "Case_7":{
-    "title":"Grasas y Ácidos Grasos",
-    "Saturated":"Ácidos Grasos Saturados",
-    "Monounsaturated":"Ácidos Grasos Monoinsaturados",
-    "Polyunsaturated":"Ácidos Grasos Poliinsaturados",
-    "Trans":"Ácidos Grasos Trans",
-    "Cholesterol":"Colesterol"
+  "Case_7": {
+    "title": "Grasas y Ácidos Grasos",
+    "Saturated": "Ácidos Grasos Saturados",
+    "Monounsaturated": "Ácidos Grasos Monoinsaturados",
+    "Polyunsaturated": "Ácidos Grasos Poliinsaturados",
+    "Trans": "Ácidos Grasos Trans",
+    "Cholesterol": "Colesterol"
   },
-  "Case_8":{
-    "title":"Minerales",
-    "Calcium":"Calcio",
-    "Iron":"Hierro",
-    "Sodium":"Sodio",
-    "Magnesium":"Magnesio",
-    "Phosphorus":"Fósforo",
-    "Potassium":"Potasio",
-    "Manganese":"Manganeso",
-    "Copper":"Cobre",
-    "Selenium":"Selenio"
+  "Case_8": {
+    "title": "Minerales",
+    "Calcium": "Calcio",
+    "Iron": "Hierro",
+    "Sodium": "Sodio",
+    "Magnesium": "Magnesio",
+    "Phosphorus": "Fósforo",
+    "Potassium": "Potasio",
+    "Manganese": "Manganeso",
+    "Copper": "Cobre",
+    "Selenium": "Selenio"
   },
-  "Case_9":{
-    "title":"Vitaminas",
-    "A":"Vitamina A",
-    "RAE":"Vitamina RAE",
-    "D":"Vitamina D",
-    "Tocopherol":"Alfa Tocoferol",
-    "Thiamin":"Tiamina",
-    "Riboflavin":"Riboflavina",
-    "Niacin":"Niacina Preformada",
-    "B6":"Vitamina B6",
-    "B12":"Vitamina B12",
-    "C":"Vitamina C"
+  "Case_9": {
+    "title": "Vitaminas",
+    "A": "Vitamina A",
+    "RAE": "Vitamina RAE",
+    "D": "Vitamina D",
+    "Tocopherol": "Alfa Tocoferol",
+    "Thiamin": "Tiamina",
+    "Riboflavin": "Riboflavina",
+    "Niacin": "Niacina Preformada",
+    "B6": "Vitamina B6",
+    "B12": "Vitamina B12",
+    "C": "Vitamina C"
   },
-  "AdminPage":{
-    "manual":"Ingreso Manual",
-    "load":"Cargar desde Archivo",
-    "title":"Secciones",
-    "enter":"Ingresar Datos de Alimentos",
-    "back":"Atras",
-    "next":"Siguiente",
-    "import":"Importar Plantilla",
-    "process":"Procesar Datos",
-    "upload":"Suba un archivo en formato",
-    "or":"o",
-    "point":"."
+  "AdminPage": {
+    "manual": "Ingreso Manual",
+    "load": "Cargar desde Archivo",
+    "title": "Secciones",
+    "enter": "Ingresar Datos de Alimentos",
+    "back": "Atras",
+    "next": "Siguiente",
+    "import": "Importar Plantilla",
+    "process": "Procesar Datos",
+    "upload": "Suba un archivo en formato",
+    "or": "o",
+    "point": "."
   }
 }
-
-
- 
