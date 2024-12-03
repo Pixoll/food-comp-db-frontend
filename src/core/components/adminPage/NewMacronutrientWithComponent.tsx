@@ -34,12 +34,13 @@ const NewMacronutrientWithComponent: React.FC<NewMacronutrientWithComponentProps
     setEditingComponentId(component.nutrientId);
     setFormData({
       ...component, 
-      average: component.average || 0,
-      deviation: component.deviation || 0,
-      min: component.min || 0,
-      max: component.max || 0,
-      sampleSize: component.sampleSize || 0,
-      dataType: component.dataType || "analytic",
+      average: component.average || null,
+      deviation: component.deviation || null,
+      min: component.min || null,
+      max: component.max || null,
+      sampleSize: component.sampleSize || null,
+      dataType: component.dataType || null,
+      referenceCodes: component.referenceCodes || []
     });
 
   };
@@ -73,37 +74,18 @@ const NewMacronutrientWithComponent: React.FC<NewMacronutrientWithComponentProps
   
       if (updatedNutrient) {
 
-        onMacronutrientUpdate(updatedNutrient); // Propaga el cambio
+        onMacronutrientUpdate(updatedNutrient);
       }
-  
-      // Limpia el estado de edición
+
       setEditingComponentId(null);
       setFormData(null);
     }
   };
   
-  
-  
   const cancelEditing = () => {
     setEditingComponentId(null);
     setFormData(null);
   };
- /* const handleDeleteComponent = (nutrientId: number, componentId: number) => {
-    setMacronutrientsWithComponents((prevState) => {
-      return prevState.map((nutrient) => {
-        if (nutrient.id === nutrientId) {
-          return {
-            ...nutrient,
-            components: nutrient.components?.filter(
-              (component) => component.id !== componentId
-            ),
-          };
-        }
-        return nutrient;
-      });
-    });
-  };
-  */
 
   return (
     <div>
@@ -127,6 +109,7 @@ const NewMacronutrientWithComponent: React.FC<NewMacronutrientWithComponentProps
                   <tr>
                     <th>Componente</th>
                     <th>Promedio</th>
+                    <th>Desviación</th>
                     <th>Mínimo</th>
                     <th>Máximo</th>
                     <th>Tamaño de muestra</th>
@@ -146,6 +129,15 @@ const NewMacronutrientWithComponent: React.FC<NewMacronutrientWithComponentProps
                               value={formData?.average || ""}
                               onChange={(e) =>
                                 handleInputChange("average", +e.target.value)
+                              }
+                            />
+                          </td>
+                          <td>
+                            <Form.Control
+                              type="number"
+                              value={formData?.deviation || ""}
+                              onChange={(e) =>
+                                handleInputChange("deviation", +e.target.value)
                               }
                             />
                           </td>
@@ -201,6 +193,7 @@ const NewMacronutrientWithComponent: React.FC<NewMacronutrientWithComponentProps
                       ) : (
                         <>
                           <td>{component.nutrientId}</td>
+                          <td>{component.deviation || "---"}</td>
                           <td>{component.average || "---"}</td>
                           <td>{component.min || "---"}</td>
                           <td>{component.max || "---"}</td>
@@ -218,7 +211,6 @@ const NewMacronutrientWithComponent: React.FC<NewMacronutrientWithComponentProps
                             >
                               Editar
                             </Button>{" "}
-                            <Button variant="danger">Eliminar</Button>
                           </td>
                         </>
                       )}

@@ -220,9 +220,7 @@ export default function AdminPage() {
   };
 
   console.log(
-    formData.nutrientsValueForm.mainNutrients.filter(
-      (n) => n.components?.length === 0
-    )
+    formData.nutrientsValueForm.mainNutrients
   );
 
   const renderSection = () => {

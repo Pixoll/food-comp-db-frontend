@@ -26,7 +26,6 @@ export default function DetailPage() {
   const { data } = useFetch<SingleFoodResult>(
     `http://localhost:3000/api/v1/foods/${code?.toString()}`
   );
-
   if (!data) {
     return <h2>Cargando...</h2>;
   }
@@ -108,6 +107,13 @@ export default function DetailPage() {
                 <p>
                   <strong>{t('DetailFood.brand')}</strong> {data.brand}
                 </p>
+              )}
+              {data.origins && (
+                  data.origins.map((origin,index)=>(
+                    <div key = {index}>
+                      <p>Origen {index+1}: {origin}</p>
+                    </div>
+                  ))
               )}
               {data.observation && (
                 <p>

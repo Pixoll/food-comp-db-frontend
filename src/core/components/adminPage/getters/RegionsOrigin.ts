@@ -9,7 +9,7 @@ type Region = {
 
 const RegionsOrigin = () => {
   const { data: regions } = useFetch<Region[]>(
-    `http://localhost:3000/api/v1/origins/regions`
+    `http://localhost:3000/api/v1/origins/`
   );
 
   const transformedRegions = regions?.map((region) => ({ id: region.id, name: region.name }));

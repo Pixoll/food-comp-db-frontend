@@ -26,6 +26,7 @@ export type SingleFoodResult = {
             minerals: NutrientMeasurement[];
         };
     };
+    origins?: string[];
     langualCodes: LangualCode[];
     references: Reference[];
 };
