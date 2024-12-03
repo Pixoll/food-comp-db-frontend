@@ -8,6 +8,7 @@ import useNutrients, {
 } from "../core/components/adminPage/getters/useNutrients";
 import NewMacronutrientWithComponent from "../core/components/adminPage/NewMacronutrientWithComponent";
 import NewNutrients from "../core/components/adminPage/NewNutrients";
+import NewGeneralData from "../core/components/adminPage/NewGeneralData";
 
 const mapMacroNutrientWithoutComponentsToForm = (
   macronutrient: MacroNutrient
@@ -69,7 +70,7 @@ type NutrientsValueForm = {
   };
 };
 
-type FoodForm = {
+type GeneralData = {
   code: string;
   strain?: string | null;
   brand?: string | null;
@@ -84,19 +85,25 @@ type FoodForm = {
   };
   scientificName?: string | null;
   subspecies?: string | null;
-  commonName: Record<"es", string> & Partial<Record<"en" | "pt", string | null>>;
+  commonName: Record<"es", string> &
+    Partial<Record<"en" | "pt", string | null>>;
   ingredients: Partial<Record<"es" | "en" | "pt", string | null>>;
+};
+type FoodForm = {
+  generalData: GeneralData;
   nutrientsValueForm: NutrientsValueForm;
 };
 
 export default function AdminPage() {
   const [activeSection, setActiveSection] = useState<number>(1);
   const [formData, setFormData] = useState<FoodForm>({
-    code: "",
-    commonName: { es: "" },
-    ingredients: {},
-    group: { code: "", name: "" },
-    type: { code: "", name: "" },
+    generalData: {
+      code: "",
+      commonName: { es: "" },
+      ingredients: {},
+      group: { code: "", name: "" },
+      type: { code: "", name: "" },
+    },
     nutrientsValueForm: {
       energy: [],
       mainNutrients: [],
@@ -112,13 +119,15 @@ export default function AdminPage() {
   useEffect(() => {
     if (data) {
       const initialFormData: FoodForm = {
-        code: "",
-        commonName: {
-          es: "",
+        generalData: {
+          code: "",
+          commonName: {
+            es: "",
+          },
+          ingredients: {},
+          group: { code: "defaultGroup", name: "Default Group" },
+          type: { code: "defaultType", name: "Default Type" },
         },
-        ingredients: {},
-        group: { code: "defaultGroup", name: "Default Group" },
-        type: { code: "defaultType", name: "Default Type" },
         nutrientsValueForm: {
           energy:
             data.macronutrients
@@ -178,58 +187,62 @@ export default function AdminPage() {
     }
   }, [data, data?.macronutrients, data?.micronutrients]);
 
-  //Este sera para el data general
-  const handleInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    field: string
-  ) => {
-    const value = event.target.value;
-    setFormData((prevData) => ({
-      ...prevData,
-      [field]: value,
-    }));
-  };
-  //Este es para los macronutrientes con componentes
-  const handleMacronutrientUpdate = (
-    updatedNutrient: NutrientMeasurementWithComponentsForm
-  ) => {
+  const handleUpdate = (updatedData: Partial<GeneralData>) => {
     setFormData((prev) => ({
       ...prev,
-      nutrientsValueForm: {
-        ...prev.nutrientsValueForm,
-        mainNutrients: prev.nutrientsValueForm.mainNutrients.map((n) =>
-          n.nutrientId === updatedNutrient.nutrientId
-            ? { ...n, ...updatedNutrient }
-            : n
-        ),
+      generalData: {
+        ...prev.generalData,
+        ...updatedData, 
       },
     }));
   };
-  const handleNutrientstUpdate = (updatedNutrient: NutrientMeasurementForm) => {
-    setFormData((prev) => ({
-      ...prev,
-      nutrientsValueForm: {
-        ...prev.nutrientsValueForm,
-        mainNutrients: prev.nutrientsValueForm.mainNutrients.map((n) =>
-          n.nutrientId === updatedNutrient.nutrientId
-            ? { ...n, ...updatedNutrient }
-            : n
-        ),
-      },
-    }));
+  
+  
+  
+  //Para cada medición de nutriente
+  const handleNutrientUpdate = (updatedNutrient: NutrientMeasurementForm) => {
+    setFormData((prev) => {
+      const updateSection = (nutrients: NutrientMeasurementForm[]) =>
+        nutrients.map((nutrient) =>
+          nutrient.nutrientId === updatedNutrient.nutrientId
+            ? { ...nutrient, ...updatedNutrient }
+            : nutrient
+        );
+
+      return {
+        ...prev,
+        nutrientsValueForm: {
+          ...prev.nutrientsValueForm,
+          energy: updateSection(prev.nutrientsValueForm.energy),
+          mainNutrients: prev.nutrientsValueForm.mainNutrients.map((nutrient) =>
+            nutrient.nutrientId === updatedNutrient.nutrientId
+              ? { ...nutrient, ...updatedNutrient }
+              : nutrient
+          ),
+          micronutrients: {
+            vitamins: updateSection(
+              prev.nutrientsValueForm.micronutrients.vitamins
+            ),
+            minerals: updateSection(
+              prev.nutrientsValueForm.micronutrients.minerals
+            ),
+          },
+        },
+      };
+    });
   };
 
-  console.log(
-    formData.nutrientsValueForm.mainNutrients
-  );
-
+  console.log(formData.generalData)
   const renderSection = () => {
     switch (activeSection) {
+      case 1:
+        return (<NewGeneralData data = {formData.generalData} onUpdate={handleUpdate} />);
+
       case 2:
         return (
           <NewNutrients
             nutrients={formData.nutrientsValueForm.energy}
-            onNutrientUpdate={handleNutrientstUpdate}
+            onNutrientUpdate={handleNutrientUpdate}
           />
         );
       case 3:
@@ -238,7 +251,7 @@ export default function AdminPage() {
             macronutrientsWithComponents={formData.nutrientsValueForm.mainNutrients.filter(
               (n) => n.components?.length > 0
             )}
-            onMacronutrientUpdate={handleMacronutrientUpdate}
+            onMacronutrientUpdate={handleNutrientUpdate}
           />
         );
       case 4:
@@ -247,21 +260,21 @@ export default function AdminPage() {
             nutrients={formData.nutrientsValueForm.mainNutrients.filter(
               (n) => n.components?.length === 0
             )}
-            onNutrientUpdate={handleNutrientstUpdate}
+            onNutrientUpdate={handleNutrientUpdate}
           />
         );
       case 5:
         return (
           <NewNutrients
             nutrients={formData.nutrientsValueForm.micronutrients.vitamins}
-            onNutrientUpdate={handleNutrientstUpdate}
+            onNutrientUpdate={handleNutrientUpdate}
           />
         );
       case 6:
         return (
           <NewNutrients
             nutrients={formData.nutrientsValueForm.micronutrients.minerals}
-            onNutrientUpdate={handleNutrientstUpdate}
+            onNutrientUpdate={handleNutrientUpdate}
           />
         );
       case 7: // Origines
@@ -270,6 +283,7 @@ export default function AdminPage() {
         return null;
     }
   };
+
   const [view, setView] = useState<string>("manual");
   const { t } = useTranslation("global");
 
@@ -351,4 +365,4 @@ export default function AdminPage() {
       </div>
     </div>
   );
-};
+}
