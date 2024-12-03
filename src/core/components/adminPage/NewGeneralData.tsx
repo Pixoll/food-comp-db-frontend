@@ -25,10 +25,13 @@ type GeneralData = {
     Partial<Record<"en" | "pt", string | null>>;
   ingredients: Partial<Record<"es" | "en" | "pt", string | null>>;
 };
+
 type NewGeneralDataProps = {
   data: GeneralData;
   onUpdate: (updatedData: Partial<GeneralData>) => void;
 };
+
+
 const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
   const groupsResult = useGroups();
   const typesResult = useTypes();
@@ -49,7 +52,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
     onUpdate(updatedFormData);
   };
 
-  const handleGroupSelect = (id: number) => {
+  const handleGroupSelect = (id: number | null) => {
     const selectedGroup = groups.find((group) => group.id === id);
     if (selectedGroup) {
       const updatedFormData = {
@@ -61,7 +64,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
     }
   };
   
-  const handleTypeSelect = (id: number) => {
+  const handleTypeSelect = (id: number | null) => {
     const selectedType = types.find((type) => type.id === id);
     if (selectedType) {
       const updatedFormData = {

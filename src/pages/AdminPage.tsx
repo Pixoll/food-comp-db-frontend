@@ -8,6 +8,7 @@ import useNutrients, {
 import NewMacronutrientWithComponent from "../core/components/adminPage/NewMacronutrientWithComponent";
 import NewNutrients from "../core/components/adminPage/NewNutrients";
 import NewGeneralData from "../core/components/adminPage/NewGeneralData";
+import Origins from "../core/components/adminPage/Origins";
 import { FetchStatus } from "../core/hooks/useFetch";
 
 const mapMacroNutrientWithoutComponentsToForm = (
@@ -279,7 +280,7 @@ export default function AdminPage() {
           />
         );
       case 7: // Origines
-        return <></>;
+        return (<Origins />);
       default:
         return null;
     }

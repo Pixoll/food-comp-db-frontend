@@ -6,7 +6,7 @@ type OriginsSelectorProps = {
   options: Array<{ id: number; name: string }>;
   placeholder: string;
   selectedValue: string; // Recibirá el valor seleccionado desde el padre
-  onSelect: (id: number, name: string) => void; // Enviará el valor seleccionado al padre
+  onSelect: (id: number | null, name: string) => void; // Enviará el valor seleccionado al padre
 };
 
 const OriginSelector: React.FC<OriginsSelectorProps> = ({
@@ -24,8 +24,12 @@ const OriginSelector: React.FC<OriginsSelectorProps> = ({
   );
 
   const handleSelectOption = (option: { id: number; name: string }) => {
-    setIsActive(false); // Cierra el menú
-    onSelect(option.id, option.name); // Llama al controlador para actualizar el estado en el padre
+    setIsActive(false); 
+    if (selectedValue === option.name) {
+      onSelect(null, ""); 
+    } else {
+      onSelect(option.id, option.name); 
+    }
   };
 
   return (
@@ -34,7 +38,7 @@ const OriginSelector: React.FC<OriginsSelectorProps> = ({
         <input
           type="text"
           placeholder={placeholder}
-          value={selectedValue} // Muestra el valor proporcionado por el padre
+          value={selectedValue} 
           readOnly
         />
       </div>
