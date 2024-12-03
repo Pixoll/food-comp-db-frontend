@@ -1,30 +1,31 @@
 import React, { useState } from "react";
-import "../../../assets/css/_OriginSelector.css"
+import "../../../assets/css/_OriginSelector.css";
 import { useTranslation } from "react-i18next";
 
 type OriginsSelectorProps = {
-    options: Array<{ id: number; name: string }>;
-    placeholder: string;
-    onSelect: (id: number) => void;
+  options: Array<{ id: number; name: string }>;
+  placeholder: string;
+  selectedValue: string; // Recibirá el valor seleccionado desde el padre
+  onSelect: (id: number, name: string) => void; // Enviará el valor seleccionado al padre
 };
+
 const OriginSelector: React.FC<OriginsSelectorProps> = ({
-    options,
-    placeholder,
-    onSelect,
-  }) => {
-  const {t} = useTranslation("global");
+  options,
+  placeholder,
+  selectedValue,
+  onSelect,
+}) => {
+  const { t } = useTranslation("global");
   const [isActive, setIsActive] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedValue, setSelectedValue] = useState("");
 
   const filteredOptions = options.filter((option) =>
     option.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleSelectOption = (option: { id: number; name: string }) => {
-    setSelectedValue(option.name);
-    setIsActive(false);
-    onSelect(option.id); 
+    setIsActive(false); // Cierra el menú
+    onSelect(option.id, option.name); // Llama al controlador para actualizar el estado en el padre
   };
 
   return (
@@ -33,7 +34,7 @@ const OriginSelector: React.FC<OriginsSelectorProps> = ({
         <input
           type="text"
           placeholder={placeholder}
-          value={selectedValue}
+          value={selectedValue} // Muestra el valor proporcionado por el padre
           readOnly
         />
       </div>
@@ -42,7 +43,7 @@ const OriginSelector: React.FC<OriginsSelectorProps> = ({
           <div className="search-origin">
             <input
               type="text"
-              placeholder= {t('search.button')}
+              placeholder={t("search.button")}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />

@@ -127,6 +127,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
                 id: group.id,
                 name: group.name,
               }))}
+              selectedValue={formData.group.name}
               placeholder="Select a group"
               onSelect={handleGroupSelect}
             />
@@ -137,6 +138,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
           {types && (
             <OriginSelector
               options={types.map((type) => ({ id: type.id, name: type.name }))}
+              selectedValue={formData.type.name}
               placeholder="Selecciona un tipo de alimento"
               onSelect={handleTypeSelect}
             />

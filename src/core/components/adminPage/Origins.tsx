@@ -32,6 +32,7 @@ const Origins: React.FC = () => {
               <OriginSelector
                 options={regions || []}
                 placeholder={t('Origins.select_region')}
+                selectedValue=""
                 onSelect={(id) => {
                   setSelectedRegion(id);
                   setSelectedProvince(null);
@@ -43,6 +44,7 @@ const Origins: React.FC = () => {
               <OriginSelector
                 options={regions || []}
                 placeholder={t('Origins.select')}
+                selectedValue=""
                 onSelect={(id) => {
                   setSelectedRegion(id);
                   setSelectedProvince(null);
@@ -54,6 +56,7 @@ const Origins: React.FC = () => {
               <OriginSelector
                 options={regions || []}
                 placeholder={t('Origins.select')}
+                selectedValue=""
                 onSelect={(id) => {
                   setSelectedRegion(id);
                   setSelectedProvince(null);
@@ -65,6 +68,7 @@ const Origins: React.FC = () => {
               <OriginSelector
                 options={regions || []}
                 placeholder={t('Origins.select')}
+                selectedValue=""
                 onSelect={(id) => {
                   setSelectedRegion(id);
                   setSelectedProvince(null);

@@ -278,7 +278,7 @@ export default function AdminPage() {
           />
         );
       case 7: // Origines
-        return <Origins />;
+        return <></>;
       default:
         return null;
     }
