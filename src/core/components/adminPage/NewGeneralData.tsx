@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { Form, Row, Col } from "react-bootstrap";
 import useGroups from "./getters/useGroups";
 import useTypes from "./getters/useTypes";
+import { FetchStatus } from "../../hooks/useFetch";
 import useLanguages from "./getters/useLanguages";
 import OriginSelector from "./OriginSelector";
-import { group } from "console";
+
 type GeneralData = {
   code: string;
   strain?: string | null;
@@ -29,11 +30,15 @@ type NewGeneralDataProps = {
   onUpdate: (updatedData: Partial<GeneralData>) => void;
 };
 const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
-  const { data: groups = [] } = useGroups();
-  const { data: types = [] } = useTypes();
-  const { data: languages = [] } = useLanguages();
+  const groupsResult = useGroups();
+  const typesResult = useTypes();
+  const languagesResult = useLanguages();
 
   const [formData, setFormData] = useState<GeneralData>(data);
+
+  const groups = groupsResult.status === FetchStatus.Success ? groupsResult.data : [];
+  const types = typesResult.status === FetchStatus.Success ? typesResult.data : [];
+  const languages = languagesResult.status === FetchStatus.Success ? languagesResult.data : [];
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -45,7 +50,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
   };
 
   const handleGroupSelect = (id: number) => {
-    const selectedGroup = groups?.find((group) => group.id === id);
+    const selectedGroup = groups.find((group) => group.id === id);
     if (selectedGroup) {
       const updatedFormData = {
         ...formData,
@@ -57,7 +62,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
   };
   
   const handleTypeSelect = (id: number) => {
-    const selectedType = types?.find((type) => type.id === id);
+    const selectedType = types.find((type) => type.id === id);
     if (selectedType) {
       const updatedFormData = {
         ...formData,
@@ -120,7 +125,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
       </Row>
       <Row>
         <Col md={6}>
-          <Form.Label>Grupo alimentario</Form.Label>
+          <Form.Label>Grupo alimenticio</Form.Label>
           {groups && (
             <OriginSelector
               options={groups.map((group) => ({
@@ -128,7 +133,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
                 name: group.name,
               }))}
               selectedValue={formData.group.name}
-              placeholder="Select a group"
+              placeholder="Selecciona un grupo alimenticio"
               onSelect={handleGroupSelect}
             />
           )}

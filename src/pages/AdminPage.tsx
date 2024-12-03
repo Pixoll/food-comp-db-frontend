@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "../assets/css/_AdminPage.css";
-import Origins from "../core/components/adminPage/Origins";
 import { useTranslation } from "react-i18next";
 import useNutrients, {
   MacroNutrient,
@@ -9,6 +8,7 @@ import useNutrients, {
 import NewMacronutrientWithComponent from "../core/components/adminPage/NewMacronutrientWithComponent";
 import NewNutrients from "../core/components/adminPage/NewNutrients";
 import NewGeneralData from "../core/components/adminPage/NewGeneralData";
+import { FetchStatus } from "../core/hooks/useFetch";
 
 const mapMacroNutrientWithoutComponentsToForm = (
   macronutrient: MacroNutrient
@@ -114,10 +114,11 @@ export default function AdminPage() {
     },
   });
 
-  const { data } = useNutrients();
+  const nutrientsResult = useNutrients();
+  const nutrients = nutrientsResult.status === FetchStatus.Success ? nutrientsResult.data : null;
 
   useEffect(() => {
-    if (data) {
+    if (nutrients) {
       const initialFormData: FoodForm = {
         generalData: {
           code: "",
@@ -130,7 +131,7 @@ export default function AdminPage() {
         },
         nutrientsValueForm: {
           energy:
-            data.macronutrients
+          nutrients.macronutrients
               ?.filter((macronutrient: MacroNutrient) => macronutrient.isEnergy)
               .map((macronutrient: MacroNutrient) => ({
                 nutrientId: macronutrient.id,
@@ -145,7 +146,7 @@ export default function AdminPage() {
               })) || [],
 
           mainNutrients:
-            data.macronutrients
+          nutrients.macronutrients
               ?.filter((m) => !m.isEnergy)
               .map((m) =>
                 (m.components?.length ?? 0) > 0
@@ -158,7 +159,7 @@ export default function AdminPage() {
 
           micronutrients: {
             vitamins:
-              data.micronutrients?.vitamins?.map((vitamin: AnyNutrient) => ({
+            nutrients.micronutrients?.vitamins?.map((vitamin: AnyNutrient) => ({
                 nutrientId: vitamin.id,
                 average: null,
                 deviation: null,
@@ -169,7 +170,7 @@ export default function AdminPage() {
                 referenceCodes: [],
               })) || [],
             minerals:
-              data.micronutrients?.minerals?.map((mineral: AnyNutrient) => ({
+            nutrients.micronutrients?.minerals?.map((mineral: AnyNutrient) => ({
                 nutrientId: mineral.id,
                 average: null,
                 deviation: null,
@@ -185,7 +186,7 @@ export default function AdminPage() {
 
       setFormData(initialFormData);
     }
-  }, [data, data?.macronutrients, data?.micronutrients]);
+  }, [nutrients, nutrients?.macronutrients, nutrients?.micronutrients]);
 
   const handleUpdate = (updatedData: Partial<GeneralData>) => {
     setFormData((prev) => ({

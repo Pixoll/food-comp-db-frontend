@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import "../../assets/css/_DetailPage.css";
 import NutrientAccordionModify from "../../core/components/detailFood/NutrientAccordionModify";
 import Footer from "../../core/components/Footer";
-import useFetch from "../../core/hooks/useFetch";
+import useFetch, { FetchStatus } from "../../core/hooks/useFetch";
 import { SingleFoodResult } from "../../core/types/SingleFoodResult";
 import ReferencesList from "../../core/components/detailFood/ReferencesList";
 import LengualCodeComponent from "../../core/components/detailFood/LengualCodeComponent";
@@ -14,9 +14,11 @@ import { useTranslation } from "react-i18next";
 export default function ModifyFoodDetail() {
   const [key, setKey] = useState("first");
   const { code } = useParams();
-  const { data } = useFetch<SingleFoodResult>(
+  const result = useFetch<SingleFoodResult>(
     `http://localhost:3000/api/v1/foods/${code}`
   );
+  const data = result.status === FetchStatus.Success ? result.data : null;
+
   const {t} = useTranslation("global");
   const [generalData, setGeneralData] = useState({
     code: "",

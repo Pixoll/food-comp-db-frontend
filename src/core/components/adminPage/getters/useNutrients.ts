@@ -1,4 +1,4 @@
-import useFetch from "../../../hooks/useFetch";
+import useFetch from "../../../hooks/useFetch"
 
 export type GroupedNutrients = {
   macronutrients: MacroNutrient[];
@@ -22,10 +22,7 @@ export type AnyNutrient = {
 };
 
 export const useNutrients = () => {
-  const { data, error, loading } = useFetch<GroupedNutrients>(
-    "http://localhost:3000/api/v1/nutrients"
-  );
-  return { data, error, loading };
+  return useFetch<GroupedNutrients>("http://localhost:3000/api/v1/nutrients");
 };
 
 export default useNutrients;

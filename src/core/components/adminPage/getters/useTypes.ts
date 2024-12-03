@@ -6,10 +6,7 @@ type Type ={
 }
 
 const useTypes = ()=>{
-
- const{data, loading, error} = useFetch<Type[]>("http://localhost:3000/api/v1/types")
-
- return {data, loading, error}
+ return useFetch<Type[]>("http://localhost:3000/api/v1/types")
 }
 
 export default useTypes;

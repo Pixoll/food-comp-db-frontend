@@ -1,4 +1,5 @@
 import useFetch from "../../../hooks/useFetch"
+
 type Group ={
     id: number,
     code: string,
@@ -6,10 +7,7 @@ type Group ={
 }
 
 const useGroups = ()=>{
-
- const{data, loading, error} = useFetch<Group[]>("http://localhost:3000/api/v1/groups")
-
- return {data, loading, error}
+ return useFetch<Group[]>("http://localhost:3000/api/v1/groups")
 }
 
 export default useGroups;

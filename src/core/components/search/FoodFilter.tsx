@@ -12,6 +12,7 @@ import useFetch from "../../hooks/useFetch";
 import qs from "qs";
 import { Container, Row, Col, Form, InputGroup } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import { FetchStatus } from "../../hooks/useFetch";
 
 const FoodFilter = () => {
   const [selectedFilters, setSelectedFilters] = useState({
@@ -75,10 +76,11 @@ const FoodFilter = () => {
     setSearchForName("");
     setSortOrder("asc");
   };
-  const { data: FoodResulst } = useFetch<FoodResult[]>(
+  const FoodResults = useFetch<FoodResult[]>(
     `http://localhost:3000/api/v1/foods?${queryString}`
   );
-  console.log(`http://localhost:3000/api/v1/foods?${queryString}`)
+  const foods = FoodResults.status === FetchStatus.Success ? FoodResults.data : [];
+
   const {t} = useTranslation("global");
   return (
     <div className="search-container">
@@ -180,7 +182,7 @@ const FoodFilter = () => {
         </button>
       </div>
       <FoodResultsTable
-        data={FoodResulst ?? []}
+        data={foods}
         sortOrder={sortOrder}
         handleSort={handleSort}
         searchForName={searchForName}

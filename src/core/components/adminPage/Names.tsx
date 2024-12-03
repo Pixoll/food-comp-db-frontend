@@ -1,6 +1,5 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import useNutrients from "./getters/useNutrients";
 // Define los tipos para los props
 interface Case1Props {
   formData: {
@@ -14,7 +13,6 @@ interface Case1Props {
 
 const Names: React.FC<Case1Props> = ({ formData, handleInputChange }) => {
   const {t} = useTranslation("global");
-  const{data: newNutrients} = useNutrients();
   return (
     <div className="section">
       <h3 className="subtitle">{t('Case_1.title')}</h3>

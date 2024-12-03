@@ -4,7 +4,7 @@ import { useState } from "react";
 import "../../assets/css/_DetailPage.css";
 import NutrientAccordion from "../../core/components/detailFood/NutrientAccordion";
 import Footer from "../../core/components/Footer";
-import useFetch from "../../core/hooks/useFetch";
+import useFetch, { FetchStatus } from "../../core/hooks/useFetch";
 import { SingleFoodResult } from "../../core/types/SingleFoodResult";
 import Graphic from "../../core/components/detailFood/Graphic";
 import ReferencesList from "../../core/components/detailFood/ReferencesList";
@@ -23,12 +23,14 @@ export default function DetailPage() {
   const [grams, setGrams] = useState<number>(100);
   const [inputGrams, setInputGrams] = useState<number>(100);
   
-  const { data } = useFetch<SingleFoodResult>(
+  const result = useFetch<SingleFoodResult>(
     `http://localhost:3000/api/v1/foods/${code?.toString()}`
   );
-  if (!data) {
+  if (result.status !== FetchStatus.Success) {
     return <h2>Cargando...</h2>;
   }
+
+  const { data } = result;
 
   const colors = [
     "#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#A28CC3", "#FF6361","#BC5090", "#58508D",
