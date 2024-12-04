@@ -310,7 +310,7 @@ export default function AdminPage() {
       case 8: 
         return <></>
       case 9:
-        return (<PreviewDataForm  data={formData}/>)
+        return (<PreviewDataForm  data={formData} nameAndIdNutrients={nameAndIdNutrients}/>)
       default:
         return null;
     }
@@ -332,8 +332,8 @@ export default function AdminPage() {
     "Valor energetico",
     "Macronutrientes compuestos",
     "Macronutrientes no compuestos",
-    "Minerales",
     "Vitaminas",
+    "Minerales",
     "Origines del alimento",
     "Referencias",
     "Vista de información actual"

@@ -51,6 +51,7 @@ const NewNutrients: React.FC<NewNutrientsProps> = ({ nutrients, onNutrientUpdate
       <Table striped bordered hover responsive>
         <thead>
           <tr>
+            <th>{t("NewMacronutrient.name")}</th>
             <th>{t("NewMacronutrient.mean")}</th>
             <th>{t("NewMacronutrient.Deviation")}</th>
             <th>{t("NewMacronutrient.min")}</th>
