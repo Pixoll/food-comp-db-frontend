@@ -255,7 +255,9 @@ export default function AdminPage() {
     });
   };
 
-  console.log(formData.nutrientsValueForm.mainNutrients)
+  console.log(formData.nutrientsValueForm.mainNutrients.filter(
+    (n) => n.components?.length > 0
+  ))
   const renderSection = () => {
     switch (activeSection) {
       case 1:
