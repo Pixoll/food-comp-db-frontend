@@ -1,5 +1,7 @@
 import { Container, Row, Col, Form, Button} from 'react-bootstrap';
 import { useTranslation } from "react-i18next";
+import fondo from "../../../src/assets/images/fondo.png"; // Importa la imagen
+
 
 const HeroSection = () => {
   const {t} = useTranslation("global");
@@ -7,7 +9,7 @@ const HeroSection = () => {
     <div
       style={{
         //ESTA IMAGEN ES DE PRUEBA! Es de https://foodb.ca
-        backgroundImage: `url(https://foodb.ca/assets/foodb_banner-f4a7d9c3f1870c021612d621e3130f3350a3072734ab0c6127dda4745e88b485.jpg)`, // Cambia la URL a tu imagen
+        backgroundImage: `url(${fondo})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         height: '100vh',
@@ -20,10 +22,10 @@ const HeroSection = () => {
       <Container fluid style={{ height: '100%' }}>
         <Row className="h-100 d-flex justify-content-center align-items-center">
           <Col md={8}>
-            <h1 style={{ fontWeight: 'bold', fontSize: '3rem', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.7)', fontFamily: 'Montserrat, sans-serif' }}>
+            <h1 style={{ fontWeight: 'bold', fontSize: '3rem', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.7)',fontFamily: 'Poppins, sans-serif' }}>
             {t('homepage.title')}
             </h1>
-            <p style={{ fontSize: '1.5rem', marginBottom: '30px', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.7)', fontFamily: 'Montserrat, sans-serif' }}>
+            <p style={{ fontSize: '1.5rem', marginBottom: '30px', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.7)', fontFamily: 'Poppins, sans-serif' }}>
             {t('homepage.subtitle')}
             </p>
 
@@ -47,7 +49,8 @@ const HeroSection = () => {
                     padding: '15px 30px',
                     fontSize: '1.2rem',
                     borderRadius: '0 30px 30px 0',
-                    backgroundColor: '#019803'
+                    backgroundColor: '#019803',
+                    borderColor: '#28a745',
                   }}
                 >
                   {t('search.button')}
@@ -64,6 +67,7 @@ const HeroSection = () => {
                   color: 'white',
                   border: 'none',
                   borderRadius: '5px',
+                  borderColor: '#28a745',
                 }}
                 onClick={() => window.location.href = '/search'}
               >

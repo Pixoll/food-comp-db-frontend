@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 
 export default function DetailPage() {
   const {t} = useTranslation("global");
-  const [key, setKey] = useState<string | undefined>(undefined); 
+  const [key, setKey] = useState<string>("first"); 
 
   const handleReferenceClick = (code: string) => {
     setKey("second"); 
@@ -174,6 +174,7 @@ export default function DetailPage() {
                     <button
                       onClick={handleGramsChange}
                       style={{
+                        className="change-grams-button"
                         padding: "5px 10px",
                         backgroundColor: "#0d6efd",
                         color: "#fff",
