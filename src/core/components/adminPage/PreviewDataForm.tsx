@@ -1,7 +1,6 @@
 import React from "react";
 import { Card, Table, Row, Col } from "react-bootstrap";
 import { FoodForm } from "../../../pages/AdminPage";
-import RequiredFieldLabel from "../detailFood/RequiredFieldLabel";
 import {
   NutrientSummary,
   getNutrientNameById,

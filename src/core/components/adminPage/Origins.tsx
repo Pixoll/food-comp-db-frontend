@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";
@@ -6,34 +6,73 @@ import OriginRow from "./OriginRow";
 import { useTranslation } from "react-i18next";
 
 const Origins: React.FC = () => {
+  const { t } = useTranslation("global");
+
   const [rows, setRows] = useState<number[]>([0]);
   const [addresses, setAddresses] = useState<string[]>([]);
-  const { t } = useTranslation("global");
-  const addRow = () => {
-    setRows((prevRows) => [...prevRows, prevRows.length]);
-    setAddresses((prev) => [...prev, ""]); 
-  };
-  
 
-  const removeRow = (index: number) => {
+  const [originIds, setOriginIds] = useState<(number | null)[]>([]); 
+
+  const [uniqueOriginIds, setUniqueOriginIds] = useState<Set<number>>(new Set());
+
+  const handleAddRow = useCallback(() => {
+    setRows((prevRows) => {
+      const newRow = prevRows.length;
+      return [...prevRows, newRow];
+    });
+    setAddresses((prevAddresses) => [...prevAddresses, ""]);
+    setOriginIds((prevOriginIds) => [...prevOriginIds, null]); 
+  }, []);
+  const handleRemoveLastRow = () => {
     if (rows.length > 1) {
-      setRows((prevRows) => prevRows.filter((_, i) => i !== index));
-      setAddresses((prev) => prev.filter((_, i) => i !== index));
+      const lastOriginId = originIds[originIds.length - 1];
+
+      setRows((prevRows) => prevRows.slice(0, -1));
+      setAddresses((prevAddresses) => prevAddresses.slice(0, -1));
+      setOriginIds((prevOriginIds) => prevOriginIds.slice(0, -1)); 
+
+      setUniqueOriginIds((prevUniqueIds) => {
+        const updatedUniqueIds = new Set(prevUniqueIds);
+        if (lastOriginId !== null) {
+          updatedUniqueIds.delete(lastOriginId);
+        }
+        return updatedUniqueIds;
+      });
     } else {
-      alert("Debe haber al menos un Origen.");
+      alert("El mínimo de origenes es 1");
     }
   };
 
-  const updateAddress = (index: number, address: string) => {
-    setAddresses((prev) => {
-      const updated = [...prev]; // Crear una copia del array
-      updated[index] = address; // Actualizar el índice correspondiente
-      console.log("Updated addresses array:", updated);
-      return updated;
+  const handleAddressChange = useCallback((index: number, address: string) => {
+    setAddresses((prevAddresses) => {
+      const updatedAddresses = [...prevAddresses];
+      updatedAddresses[index] = address;
+      return updatedAddresses;
+    });
+  }, []);
+
+  const handleIdsChange = (id: number | null, index: number) => {
+    setOriginIds((prevOriginIds) => {
+      const updatedIds = [...prevOriginIds];
+      updatedIds[index] = id; 
+      return updatedIds;
+    });
+
+    setUniqueOriginIds((prevUniqueIds) => {
+      const updatedUniqueIds = new Set(prevUniqueIds);
+      const previousId = originIds[index];
+      
+      if (previousId !== null) {
+        updatedUniqueIds.delete(previousId); 
+      }
+
+      if (id !== null) {
+        updatedUniqueIds.add(id);
+      }
+
+      return updatedUniqueIds;
     });
   };
-  
-  
 
   return (
     <div>
@@ -44,36 +83,40 @@ const Origins: React.FC = () => {
             <th>{t("Origins.Province")}</th>
             <th>{t("Origins.Commune")}</th>
             <th>{t("Origins.Location")}</th>
-            <th>{t("Origins.action")}</th>
           </tr>
         </thead>
         <tbody>
-          {rows.map((_, index) => (
+          {rows.map((row, index) => (
             <OriginRow
-              key={index}
-              onRemove={() => removeRow(index)}
-              isRemovable={rows.length > 1}
+              key={row}
               onAddressChange={(address: string) =>
-                updateAddress(index, address)
+                handleAddressChange(index, address)
               }
+              onIdChange={handleIdsChange}
+              index={index}
             />
           ))}
         </tbody>
       </Table>
 
-      <Button onClick={addRow} className="mt-3">
-      {t("Origins.add")}
+      <Button onClick={handleAddRow} className="mt-3">
+        {t("Origins.Add")}
       </Button>
-        <div className="mt-4">
-          <h5>{t("Origins.selected")}</h5>
-          <ListGroup>
-            {addresses.map((address, index) => (
-              <ListGroup.Item key={index}>
-                {address || t("Origins.no_direction")}
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
-        </div>
+
+      <Button onClick={handleRemoveLastRow} className="mt-3 ml-3" variant="danger">
+        {t("Origins.RemoveLast")}
+      </Button>
+
+      <div className="mt-4">
+        <h5>{t("Origins.Selected")}</h5>
+        <ListGroup>
+          {addresses.map((address, index) => (
+            <ListGroup.Item key={index}>
+              {address || t("Origins.NoDirection")}
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
+      </div>
     </div>
   );
 };
