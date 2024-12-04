@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import { Table, Card, Button, Form } from "react-bootstrap";
-import { NutrientMeasurementForm } from "../../../pages/AdminPage";
+import { Table, Button, Form } from "react-bootstrap";
+import { NutrientMeasurementForm , NutrientSummary, getNutrientNameById} from "../../../pages/AdminPage";
 
 type NewNutrientsProps = {
   nutrients: NutrientMeasurementForm[];
   onNutrientUpdate: (updatedNutrient: NutrientMeasurementForm) => void;
+  nameAndIdNutrients: NutrientSummary[]
 };
 
-const NewNutrients: React.FC<NewNutrientsProps> = ({ nutrients, onNutrientUpdate }) => {
+const NewNutrients: React.FC<NewNutrientsProps> = ({ nutrients, onNutrientUpdate , nameAndIdNutrients}) => {
   const [editingNutrientId, setEditingNutrientId] = useState<number | null>(null);
   const [formData, setFormData] = useState<NutrientMeasurementForm | null>(null);
 
@@ -49,7 +50,7 @@ const NewNutrients: React.FC<NewNutrientsProps> = ({ nutrients, onNutrientUpdate
       <Table striped bordered hover responsive>
         <thead>
           <tr>
-            <th>ID</th>
+            <th>Nombre</th>
             <th>Promedio</th>
             <th>Desviación</th>
             <th>Mínimo</th>
@@ -64,7 +65,7 @@ const NewNutrients: React.FC<NewNutrientsProps> = ({ nutrients, onNutrientUpdate
             <tr key={nutrient.nutrientId}>
               {editingNutrientId === nutrient.nutrientId ? (
                 <>
-                  <td>{nutrient.nutrientId}</td>
+                  <td>{getNutrientNameById(nutrient.nutrientId, nameAndIdNutrients)}</td>
                   <td>
                     <Form.Control
                       type="number"
@@ -122,7 +123,7 @@ const NewNutrients: React.FC<NewNutrientsProps> = ({ nutrients, onNutrientUpdate
                 </>
               ) : (
                 <>
-                  <td>{nutrient.nutrientId}</td>
+                  <td>{getNutrientNameById(nutrient.nutrientId, nameAndIdNutrients)}</td>
                   <td>{nutrient.average || "---"}</td>
                   <td>{nutrient.deviation || "---"}</td>
                   <td>{nutrient.min || "---"}</td>

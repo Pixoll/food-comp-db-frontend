@@ -12,7 +12,6 @@ import Origins from "../core/components/adminPage/Origins";
 import PreviewDataForm from "../core/components/adminPage/PreviewDataForm";
 import { FetchStatus } from "../core/hooks/useFetch";
 
-
 export type NutrientSummary = {
   id: number;
   name: string;
@@ -138,7 +137,6 @@ export default function AdminPage() {
   })
   nutrients?.micronutrients.minerals.forEach((mineral)=>{nameAndIdNutrients.push({id:mineral.id, name:mineral.name})})
   nutrients?.micronutrients.vitamins.forEach((vitamin)=>{nameAndIdNutrients.push({id:vitamin.id, name:vitamin.name})})
-  
   useEffect(() => {
     if (nutrients) {
       const initialFormData: FoodForm = {
@@ -268,6 +266,7 @@ export default function AdminPage() {
           <NewNutrients
             nutrients={formData.nutrientsValueForm.energy}
             onNutrientUpdate={handleNutrientUpdate}
+            nameAndIdNutrients={nameAndIdNutrients}
           />
         );
       case 3:
@@ -287,6 +286,7 @@ export default function AdminPage() {
               (n) => n.components?.length === 0
             )}
             onNutrientUpdate={handleNutrientUpdate}
+            nameAndIdNutrients={nameAndIdNutrients}
           />
         );
       case 5:
@@ -294,6 +294,7 @@ export default function AdminPage() {
           <NewNutrients
             nutrients={formData.nutrientsValueForm.micronutrients.vitamins}
             onNutrientUpdate={handleNutrientUpdate}
+            nameAndIdNutrients={nameAndIdNutrients}
           />
         );
       case 6:
@@ -301,6 +302,7 @@ export default function AdminPage() {
           <NewNutrients
             nutrients={formData.nutrientsValueForm.micronutrients.minerals}
             onNutrientUpdate={handleNutrientUpdate}
+            nameAndIdNutrients={nameAndIdNutrients}
           />
         );
       case 7: // Origines
