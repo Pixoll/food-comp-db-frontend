@@ -1,27 +1,27 @@
 import React, { useState } from "react";
 import { Table, Card, Collapse, Button, Form } from "react-bootstrap";
-import { NutrientMeasurementWithComponentsForm , NutrientMeasurementForm} from "../../../pages/AdminPage";
-
+import { NutrientMeasurementWithComponentsForm , NutrientMeasurementForm, NutrientSummary, getNutrientNameById} from "../../../pages/AdminPage";
 
 type NewMacronutrientWithComponentProps = {
   macronutrientsWithComponents: NutrientMeasurementWithComponentsForm[];
   onMacronutrientUpdate: (
     updatedNutrient: NutrientMeasurementWithComponentsForm
   ) => void;
+  nameAndIdNutrients: NutrientSummary[]
 };
 
 
 const NewMacronutrientWithComponent: React.FC<NewMacronutrientWithComponentProps> = ({ 
   macronutrientsWithComponents,
   onMacronutrientUpdate,
+  nameAndIdNutrients
 }) => {
   const [open, setOpen] = useState<Set<string >>(
     new Set(macronutrientsWithComponents.map((n) => n.nutrientId.toString() ))
   );
   const [editingComponentId, setEditingComponentId] = useState<number | null>(null);
   const [formData, setFormData] = useState<NutrientMeasurementForm | null>(null);
-
-
+  
   const toggleCollapse = (id: string) => {
     setOpen((prev) => {
       const newSet = new Set(prev);
@@ -99,7 +99,7 @@ const NewMacronutrientWithComponent: React.FC<NewMacronutrientWithComponentProps
               variant="link"
               style={{ fontWeight: "bold", textDecoration: "none" }}
             >
-              {`Nutriente ${nutrient.nutrientId}`}
+              {`${getNutrientNameById(nutrient.nutrientId, nameAndIdNutrients)}`}
             </Button>
           </Card.Header>
           <Collapse in={open.has(nutrient.nutrientId.toString())}>
@@ -107,7 +107,7 @@ const NewMacronutrientWithComponent: React.FC<NewMacronutrientWithComponentProps
               <Table striped bordered hover responsive>
                 <thead>
                   <tr>
-                    <th>Componente</th>
+                    <th>Nombre nutriente</th>
                     <th>Promedio</th>
                     <th>Desviación</th>
                     <th>Mínimo</th>
@@ -122,7 +122,7 @@ const NewMacronutrientWithComponent: React.FC<NewMacronutrientWithComponentProps
                     <tr key={component.nutrientId}>
                       {editingComponentId === component.nutrientId ? (
                         <>
-                          <td>{component.nutrientId}</td>
+                          <td>{getNutrientNameById(component.nutrientId, nameAndIdNutrients)}</td>
                           <td>
                             <Form.Control
                               type="number"
@@ -192,7 +192,7 @@ const NewMacronutrientWithComponent: React.FC<NewMacronutrientWithComponentProps
                         </>
                       ) : (
                         <>
-                          <td>{component.nutrientId}</td>
+                          <td>{getNutrientNameById(component.nutrientId, nameAndIdNutrients)}</td>
                           <td>{component.deviation || "---"}</td>
                           <td>{component.average || "---"}</td>
                           <td>{component.min || "---"}</td>
@@ -216,6 +216,9 @@ const NewMacronutrientWithComponent: React.FC<NewMacronutrientWithComponentProps
                       )}
                     </tr>
                   ))}
+                  <tr>
+                    <td><strong>Nutriente Padre:</strong> {getNutrientNameById(nutrient.nutrientId, nameAndIdNutrients)}</td>
+                  </tr>
                 </tbody>
               </Table>
             </Card.Body>

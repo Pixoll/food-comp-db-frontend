@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "../assets/css/_AdminPage.css";
 import { useTranslation } from "react-i18next";
 import useNutrients, {
@@ -9,8 +9,18 @@ import NewMacronutrientWithComponent from "../core/components/adminPage/NewMacro
 import NewNutrients from "../core/components/adminPage/NewNutrients";
 import NewGeneralData from "../core/components/adminPage/NewGeneralData";
 import Origins from "../core/components/adminPage/Origins";
+import PreviewDataForm from "../core/components/adminPage/PreviewDataForm";
 import { FetchStatus } from "../core/hooks/useFetch";
 
+
+export type NutrientSummary = {
+  id: number;
+  name: string;
+};
+export const getNutrientNameById = (id: number, nameAndIdNutrients:NutrientSummary[]): string => {
+  const nutrient = nameAndIdNutrients.find(nutrient => nutrient.id === id)?.name;
+  return nutrient ?? ""; 
+};
 const mapMacroNutrientWithoutComponentsToForm = (
   macronutrient: MacroNutrient
 ): NutrientMeasurementForm => ({
@@ -90,7 +100,7 @@ type GeneralData = {
     Partial<Record<"en" | "pt", string | null>>;
   ingredients: Partial<Record<"es" | "en" | "pt", string | null>>;
 };
-type FoodForm = {
+export type FoodForm = {
   generalData: GeneralData;
   nutrientsValueForm: NutrientsValueForm;
 };
@@ -117,7 +127,18 @@ export default function AdminPage() {
 
   const nutrientsResult = useNutrients();
   const nutrients = nutrientsResult.status === FetchStatus.Success ? nutrientsResult.data : null;
+  
+  const nameAndIdNutrients: NutrientSummary[] = [];
 
+  nutrients?.macronutrients.forEach((macronutrient)=>{
+    nameAndIdNutrients.push({id:macronutrient.id, name:macronutrient.name})
+    macronutrient.components?.forEach((component)=>{
+      nameAndIdNutrients.push({id:component.id, name: component.name})
+    })
+  })
+  nutrients?.micronutrients.minerals.forEach((mineral)=>{nameAndIdNutrients.push({id:mineral.id, name:mineral.name})})
+  nutrients?.micronutrients.vitamins.forEach((vitamin)=>{nameAndIdNutrients.push({id:vitamin.id, name:vitamin.name})})
+  
   useEffect(() => {
     if (nutrients) {
       const initialFormData: FoodForm = {
@@ -234,7 +255,7 @@ export default function AdminPage() {
     });
   };
 
-  console.log(formData.generalData)
+  console.log(formData.nutrientsValueForm.mainNutrients)
   const renderSection = () => {
     switch (activeSection) {
       case 1:
@@ -254,6 +275,7 @@ export default function AdminPage() {
               (n) => n.components?.length > 0
             )}
             onMacronutrientUpdate={handleNutrientUpdate}
+            nameAndIdNutrients={nameAndIdNutrients}
           />
         );
       case 4:
@@ -281,6 +303,10 @@ export default function AdminPage() {
         );
       case 7: // Origines
         return (<Origins />);
+      case 8: 
+        return <></>
+      case 9:
+        return (<PreviewDataForm  data={formData}/>)
       default:
         return null;
     }
@@ -306,6 +332,7 @@ export default function AdminPage() {
     "Vitaminas",
     "Origines del alimento",
     "Referencias",
+    "Vista de información actual"
   ];
 
   return (
