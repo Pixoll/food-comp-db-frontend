@@ -90,7 +90,7 @@ const LoginPage = () => {
                             <label><FaLock /> {t('loginPage.password')}</label>
                         </div>
                         <div className="d-flex justify-content-end mb-3">
-                            <a href="/forgot-password" style={{ fontSize: '14px', color: '#007bff' }}>
+                            <a href="/forgot-password" style={{ fontSize: '14px', color: '#ffffff' }}>
                             {t('loginPage.recover')}
                             </a>
                         </div>
