@@ -15,10 +15,11 @@ import { FetchStatus } from "../core/hooks/useFetch";
 export type NutrientSummary = {
   id: number;
   name: string;
+  measurementUnit: string;
 };
 export const getNutrientNameById = (id: number, nameAndIdNutrients:NutrientSummary[]): string => {
-  const nutrient = nameAndIdNutrients.find(nutrient => nutrient.id === id)?.name;
-  return nutrient ?? ""; 
+  const nutrient = nameAndIdNutrients.find(nutrient => nutrient.id === id);
+  return `${nutrient?.name} (${nutrient?.measurementUnit})`; 
 };
 const mapMacroNutrientWithoutComponentsToForm = (
   macronutrient: MacroNutrient
@@ -130,13 +131,13 @@ export default function AdminPage() {
   const nameAndIdNutrients: NutrientSummary[] = [];
 
   nutrients?.macronutrients.forEach((macronutrient)=>{
-    nameAndIdNutrients.push({id:macronutrient.id, name:macronutrient.name})
+    nameAndIdNutrients.push({id:macronutrient.id, name:macronutrient.name, measurementUnit: macronutrient.measurementUnit})
     macronutrient.components?.forEach((component)=>{
-      nameAndIdNutrients.push({id:component.id, name: component.name})
+      nameAndIdNutrients.push({id:component.id, name: component.name,  measurementUnit: component.measurementUnit})
     })
   })
-  nutrients?.micronutrients.minerals.forEach((mineral)=>{nameAndIdNutrients.push({id:mineral.id, name:mineral.name})})
-  nutrients?.micronutrients.vitamins.forEach((vitamin)=>{nameAndIdNutrients.push({id:vitamin.id, name:vitamin.name})})
+  nutrients?.micronutrients.minerals.forEach((mineral)=>{nameAndIdNutrients.push({id:mineral.id, name:mineral.name,  measurementUnit: mineral.measurementUnit})})
+  nutrients?.micronutrients.vitamins.forEach((vitamin)=>{nameAndIdNutrients.push({id:vitamin.id, name:vitamin.name ,  measurementUnit: vitamin.measurementUnit})})
   useEffect(() => {
     if (nutrients) {
       const initialFormData: FoodForm = {

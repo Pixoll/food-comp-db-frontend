@@ -6,6 +6,7 @@ import { FetchStatus } from "../../hooks/useFetch";
 import useLanguages from "./getters/useLanguages";
 import OriginSelector from "./OriginSelector";
 import { useTranslation } from "react-i18next";
+import RequiredFieldLabel from "../detailFood/RequiredFieldLabel";
 
 type GeneralData = {
   code: string;
@@ -32,7 +33,6 @@ type NewGeneralDataProps = {
   onUpdate: (updatedData: Partial<GeneralData>) => void;
 };
 
-
 const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
   const groupsResult = useGroups();
   const typesResult = useTypes();
@@ -40,14 +40,16 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
 
   const [formData, setFormData] = useState<GeneralData>(data);
 
-  const groups = groupsResult.status === FetchStatus.Success ? groupsResult.data : [];
-  const types = typesResult.status === FetchStatus.Success ? typesResult.data : [];
-  const languages = languagesResult.status === FetchStatus.Success ? languagesResult.data : [];
+  const groups =
+    groupsResult.status === FetchStatus.Success ? groupsResult.data : [];
+  const types =
+    typesResult.status === FetchStatus.Success ? typesResult.data : [];
+  const languages =
+    languagesResult.status === FetchStatus.Success ? languagesResult.data : [];
   const { t } = useTranslation("global");
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    
     const { name, value } = e.target;
     const updatedFormData = { ...formData, [name]: value };
     setFormData(updatedFormData);
@@ -62,10 +64,10 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
         group: { code: selectedGroup.code, name: selectedGroup.name },
       };
       setFormData(updatedFormData);
-      onUpdate(updatedFormData); 
+      onUpdate(updatedFormData);
     }
   };
-  
+
   const handleTypeSelect = (id: number | null) => {
     const selectedType = types.find((type) => type.id === id);
     if (selectedType) {
@@ -74,16 +76,21 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
         type: { code: selectedType.code, name: selectedType.name },
       };
       setFormData(updatedFormData);
-      onUpdate(updatedFormData); 
+      onUpdate(updatedFormData);
     }
   };
-  
+
   return (
     <Form>
       <Row>
         <Col md={6}>
           <Form.Group controlId="code">
-            <Form.Label>{t("NewGeneralData.code")}</Form.Label>
+            <Form.Label column sm={2}>
+              <RequiredFieldLabel
+                label={t("DetailFood.code")}
+                tooltipMessage={t("DetailFood.required")}
+              />
+            </Form.Label>
             <Form.Control
               type="text"
               name="code"
@@ -130,7 +137,12 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
       </Row>
       <Row>
         <Col md={6}>
-          <Form.Label>{t("NewGeneralData.group")}</Form.Label>
+          <Form.Label column sm={2}>
+            <RequiredFieldLabel
+              label={t("DetailFood.label_group")}
+              tooltipMessage={t("DetailFood.required")}
+            />
+          </Form.Label>
           {groups && (
             <OriginSelector
               options={groups.map((group) => ({
@@ -144,7 +156,12 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
           )}
         </Col>
         <Col md={6}>
-        <Form.Label>{t("NewGeneralData.type")}</Form.Label>
+          <Form.Label column sm={2}>
+            <RequiredFieldLabel
+              label={t("DetailFood.label_type")}
+              tooltipMessage={t("DetailFood.required")}
+            />
+          </Form.Label>
           {types && (
             <OriginSelector
               options={types.map((type) => ({ id: type.id, name: type.name }))}
@@ -182,25 +199,33 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
       <Row>
         <Col md={12}>
           <Form.Group controlId="commonName">
-            <Form.Label>{t("NewGeneralData.name_common")}</Form.Label>
+            <Form.Label>
+              <RequiredFieldLabel
+                label={'Nombres comunes'}
+                tooltipMessage={`${t("DetailFood.name.title")} (es): ${t(
+                  "DetailFood.required"
+                )}`}
+              />
+            </Form.Label>
+
             {languages?.map((lang) => (
               <Form.Control
-              key={lang.code}
-              type="text"
-              placeholder={`${t("NewGeneralData.name_com")} (${lang.code})`}
-              value={formData.commonName[lang.code] || ""}
-              onChange={(e) => {
-                const updatedFormData = {
-                  ...formData,
-                  commonName: {
-                    ...formData.commonName,
-                    [lang.code]: e.target.value,
-                  },
-                };
-                setFormData(updatedFormData);
-                onUpdate(updatedFormData); 
-              }}
-            />
+                key={lang.code}
+                type="text"
+                placeholder={`${t("NewGeneralData.name_com")} (${lang.code})`}
+                value={formData.commonName[lang.code] || ""}
+                onChange={(e) => {
+                  const updatedFormData = {
+                    ...formData,
+                    commonName: {
+                      ...formData.commonName,
+                      [lang.code]: e.target.value,
+                    },
+                  };
+                  setFormData(updatedFormData);
+                  onUpdate(updatedFormData);
+                }}
+              />
             ))}
           </Form.Group>
         </Col>
@@ -211,22 +236,22 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
             <Form.Label>{t("NewGeneralData.Ingredients")}</Form.Label>
             {languages?.map((lang) => (
               <Form.Control
-              key={lang.code}
-              type="text"
-              placeholder={`${t("NewGeneralData.Ingredient")} (${lang.code})`}
-              value={formData.ingredients[lang.code] || ""}
-              onChange={(e) => {
-                const updatedFormData = {
-                  ...formData,
-                  ingredients: {
-                    ...formData.ingredients,
-                    [lang.code]: e.target.value,
-                  },
-                };
-                setFormData(updatedFormData);
-                onUpdate(updatedFormData); 
-              }}
-            />
+                key={lang.code}
+                type="text"
+                placeholder={`${t("NewGeneralData.Ingredient")} (${lang.code})`}
+                value={formData.ingredients[lang.code] || ""}
+                onChange={(e) => {
+                  const updatedFormData = {
+                    ...formData,
+                    ingredients: {
+                      ...formData.ingredients,
+                      [lang.code]: e.target.value,
+                    },
+                  };
+                  setFormData(updatedFormData);
+                  onUpdate(updatedFormData);
+                }}
+              />
             ))}
           </Form.Group>
         </Col>
@@ -236,5 +261,3 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
 };
 
 export default NewGeneralData;
-
-

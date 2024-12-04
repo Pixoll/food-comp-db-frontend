@@ -223,7 +223,6 @@ const NewMacronutrientWithComponent: React.FC<
                               component.nutrientId,
                               nameAndIdNutrients
                             )}
-                            {" "}{ (component.nutrientId)}
                           </td>
                           <td>{component.deviation || "---"}</td>
                           <td>{component.average || "---"}</td>
@@ -333,7 +332,7 @@ const NewMacronutrientWithComponent: React.FC<
                             {getNutrientNameById(
                               nutrient.nutrientId,
                               nameAndIdNutrients
-                            )}{ " "}{nutrient.nutrientId}
+                            )}
                           </strong>
                         </td>
                         <td>{nutrient.deviation || "---"}</td>
