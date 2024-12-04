@@ -8,6 +8,7 @@ import {
   NutrientMeasurementWithComponentsForm,
 } from "../../../pages/AdminPage";
 import { useTranslation } from "react-i18next";
+import "../../../assets/css/_PreviewDataForm.css"
 
 type PreviewDataFormProps = {
   data: FoodForm;
@@ -316,6 +317,7 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
           )}
         </Card.Body>
       </Card>
+      <button className="button-form-of-food">Validar y enviar</button>
     </div>
   );
 };

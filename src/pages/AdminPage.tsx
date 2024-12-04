@@ -33,7 +33,10 @@ const mapMacroNutrientWithoutComponentsToForm = (
   dataType: null,
   referenceCodes: [],
 });
-
+export type originsForm = {
+  id: number,
+  origin: string,
+}
 const mapMacroNutrientWithComponentsToForm = (
   macronutrient: MacroNutrient
 ): NutrientMeasurementWithComponentsForm => ({
@@ -99,6 +102,7 @@ type GeneralData = {
   commonName: Record<"es", string> &
     Partial<Record<"en" | "pt", string | null>>;
   ingredients: Partial<Record<"es" | "en" | "pt", string | null>>;
+  origins: originsForm[]
 };
 export type FoodForm = {
   generalData: GeneralData;
@@ -114,6 +118,7 @@ export default function AdminPage() {
       ingredients: {},
       group: { code: "", name: "" },
       type: { code: "", name: "" },
+      origins: []
     },
     nutrientsValueForm: {
       energy: [],
@@ -149,6 +154,7 @@ export default function AdminPage() {
           ingredients: {},
           group: { code: "defaultGroup", name: "Default Group" },
           type: { code: "defaultType", name: "Default Type" },
+          origins: []
         },
         nutrientsValueForm: {
           energy:
