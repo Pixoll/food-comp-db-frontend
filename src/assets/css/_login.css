@@ -10,6 +10,7 @@
 }
 
 .login-div {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 2);
     font-family: 'Poppins', sans-serif;
     color: #ffffff;
     width: 500px;
@@ -20,6 +21,7 @@
     background-size: contain;
     background: rgba(255, 255, 255, 0.25);  
     backdrop-filter: blur(20px);
+
 }
 
 .login-div h1 {
@@ -39,6 +41,7 @@
 }
 
 form .txt_field {
+    
     position: relative;
     border-bottom: 2px solid #adadad;
     margin: 30px 0;
@@ -55,6 +58,8 @@ form .txt_field {
 }
 
 .txt_field label {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 2);
+
     position: absolute;
     top: 50%;
     left: 5px;

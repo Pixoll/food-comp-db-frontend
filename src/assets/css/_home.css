@@ -140,7 +140,7 @@
 .custom-navbar .nav-link, 
 .custom-navbar .navbar-brand, 
 .custom-navbar .dropdown-item {
-    font-family: 'Montserrat', sans-serif; /* O cualquier otra fuente */
+    font-family: 'Poppins', serif;
     font-size: 1.1rem; /* Ajusta el tamaño de la fuente si es necesario */
     font-weight: bold; /* Puedes cambiar o eliminar esto según tu necesidad */
 }
