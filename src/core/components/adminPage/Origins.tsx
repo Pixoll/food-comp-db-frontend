@@ -3,11 +3,12 @@ import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";
 import OriginRow from "./OriginRow";
+import { useTranslation } from "react-i18next";
 
 const Origins: React.FC = () => {
   const [rows, setRows] = useState<number[]>([0]);
   const [addresses, setAddresses] = useState<string[]>([]);
-
+  const { t } = useTranslation("global");
   const addRow = () => {
     setRows((prevRows) => [...prevRows, prevRows.length]);
     setAddresses((prev) => [...prev, ""]); 
@@ -39,11 +40,11 @@ const Origins: React.FC = () => {
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>Región</th>
-            <th>Provincia</th>
-            <th>Comuna</th>
-            <th>Localidad</th>
-            <th>Acciones</th>
+            <th>{t("Origins.Region")}</th>
+            <th>{t("Origins.Province")}</th>
+            <th>{t("Origins.Commune")}</th>
+            <th>{t("Origins.Location")}</th>
+            <th>{t("Origins.action")}</th>
           </tr>
         </thead>
         <tbody>
@@ -61,14 +62,14 @@ const Origins: React.FC = () => {
       </Table>
 
       <Button onClick={addRow} className="mt-3">
-        Agregar origen
+      {t("Origins.add")}
       </Button>
         <div className="mt-4">
-          <h5>Direcciones seleccionadas:</h5>
+          <h5>{t("Origins.selected")}</h5>
           <ListGroup>
             {addresses.map((address, index) => (
               <ListGroup.Item key={index}>
-                {address || "Sin dirección seleccionada"}
+                {address || t("Origins.no_direction")}
               </ListGroup.Item>
             ))}
           </ListGroup>

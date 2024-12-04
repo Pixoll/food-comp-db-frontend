@@ -143,7 +143,6 @@
     "label_type": "Type",
     "label_group": "Group"
   },
-
   "components_home": {
     "title": "Search Composition"
   },
@@ -168,7 +167,8 @@
     "save": "Save",
     "close": "Close",
     "references": "References",
-    "yes": "Yes"
+    "yes": "Yes",
+    "type":"Data type"
   },
   "LangualCode": {
     "description_main": "Main Description",
@@ -192,7 +192,11 @@
     "Commune": "Commune",
     "Location": "Location",
     "select_region": "Select a region",
-    "select": "Select one"
+    "select": "Select one",
+    "action":"Actions",
+    "add":"Add source",
+    "selected":"Selected addresses:",
+    "no_direction":"No direction selected"
   },
   "Case_1": {
     "name": "Name",
@@ -291,5 +295,65 @@
     "upload": "Upload a file in",
     "or": "or",
     "point": "format."
+  },
+  "NewGeneralData":{
+    "code":"Food code",
+    "strain":"Strain",
+    "brand":"Brand",
+    "Observation":"Observation",
+    "group":"Food group",
+    "select_G":"Select a food group",
+    "type":"Type of food",
+    "select_A":"Select a type of food",
+    "name_scientist":"Scientist name",
+    "Subspecies":"Subspecies",
+    "name_common":"Common names",
+    "name_com":"Common name",
+    "Ingredients":"Ingredients",
+    "Ingredient":"Ingredient"
+  },
+  "NewMacronutrient":{
+    "name":"Nutrient name",
+    "mean":"Average",
+    "Deviation":"Deviation",
+    "min":"Minimum",
+    "max":"Maximum",
+    "Size":"Sample size",
+    "type":"Data type",
+    "Action":"Action",
+    "Analytical":"Analytical",
+    "Calculated":"Calculated",
+    "Taken":"Assumed",
+    "Borrowed":"Borrowed",
+    "Edit":"Edit",
+    "parent":"Parent Nutrient:",
+    "save":"Save",
+    "cancel":"Cancel"
+  },
+  "OriginRow":{
+    "selected":"Nothing selected",
+    "remove":"Delete"
+  },
+  "PreviewDataFrom":{
+    "General":"General Data",
+    "Code":"Code:",
+    "Scientific":"Scientific Name:",
+    "Group":"Group:",
+    "Type":"Type:",
+    "Subspecies":"Subspecies:",
+    "Strain":"Strain:",
+    "Brand":"Brand:",
+    "Observation":"Observation:",
+    "Common":"Common Name ",
+    "Nutritional":"Nutritional Data",
+    "Energy":"Energy",
+    "Nutrient":"Nutrient ID:",
+    "Average":"Average:",
+    "Components":"Components:",
+    "Micronutrients":"Micronutrients",
+    "Vitamins":"Vitamins",
+    "Main":"Main Nutrients",
+    "Minerals":"Minerals"
   }
 }
+

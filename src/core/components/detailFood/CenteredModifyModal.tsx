@@ -88,7 +88,7 @@ const CenteredModifyModal: React.FC<ModalProps> = ({
             />
           </Form.Group>
           <Form.Group>
-            <Form.Label>Tipo de dato</Form.Label>
+            <Form.Label>{t('Centered.type')}</Form.Label>
             <Form.Control
               type="text"
               name="dataType"

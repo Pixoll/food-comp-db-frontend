@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Table, Card, Button, Form } from "react-bootstrap";
 import { NutrientMeasurementForm } from "../../../pages/AdminPage";
+import { useTranslation } from "react-i18next";
 
 type NewNutrientsProps = {
   nutrients: NutrientMeasurementForm[];
@@ -10,7 +11,7 @@ type NewNutrientsProps = {
 const NewNutrients: React.FC<NewNutrientsProps> = ({ nutrients, onNutrientUpdate }) => {
   const [editingNutrientId, setEditingNutrientId] = useState<number | null>(null);
   const [formData, setFormData] = useState<NutrientMeasurementForm | null>(null);
-
+  const { t } = useTranslation("global");
   const startEditing = (nutrient: NutrientMeasurementForm) => {
     setEditingNutrientId(nutrient.nutrientId);
     setFormData({
@@ -50,13 +51,13 @@ const NewNutrients: React.FC<NewNutrientsProps> = ({ nutrients, onNutrientUpdate
         <thead>
           <tr>
             <th>ID</th>
-            <th>Promedio</th>
-            <th>Desviación</th>
-            <th>Mínimo</th>
-            <th>Máximo</th>
-            <th>Tamaño de muestra</th>
-            <th>Tipo de dato</th>
-            <th>Acción</th>
+            <th>{t("NewMacronutrient.mean")}</th>
+            <th>{t("NewMacronutrient.Deviation")}</th>
+            <th>{t("NewMacronutrient.min")}</th>
+            <th>{t("NewMacronutrient.max")}</th>
+            <th>{t("NewMacronutrient.Size")}</th>
+            <th>{t("NewMacronutrient.type")}</th>
+            <th>{t("NewMacronutrient.Action")}</th>
           </tr>
         </thead>
         <tbody>
@@ -105,18 +106,18 @@ const NewNutrients: React.FC<NewNutrientsProps> = ({ nutrients, onNutrientUpdate
                       value={formData?.dataType || "analytic"}
                       onChange={(e) => handleInputChange("dataType", e.target.value)}
                     >
-                      <option value="analytic">Analítico</option>
-                      <option value="calculated">Calculado</option>
-                      <option value="assumed">Asumido</option>
-                      <option value="borrowed">Prestado</option>
+                      <option value="analytic">{t("NewMacronutrient.Analytical")}</option>
+                      <option value="calculated">{t("NewMacronutrient.Calculated")}</option>
+                      <option value="assumed">{t("NewMacronutrient.Taken")}</option>
+                      <option value="borrowed">{t("NewMacronutrient.Borrowed")}</option>
                     </Form.Select>
                   </td>
                   <td>
                     <Button variant="success" onClick={saveChanges}>
-                      Guardar
+                    {t("NewMacronutrient.save")}
                     </Button>{" "}
                     <Button variant="danger" onClick={cancelEditing}>
-                      Cancelar
+                    {t("NewMacronutrient.cancel")}
                     </Button>
                   </td>
                 </>
@@ -136,7 +137,7 @@ const NewNutrients: React.FC<NewNutrientsProps> = ({ nutrients, onNutrientUpdate
                   </td>
                   <td>
                     <Button variant="warning" onClick={() => startEditing(nutrient)}>
-                      Editar
+                    {t("NewMacronutrient.Edit")}
                     </Button>
                   </td>
                 </>

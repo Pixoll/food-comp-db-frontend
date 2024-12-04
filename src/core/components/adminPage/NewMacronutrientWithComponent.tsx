@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Table, Card, Collapse, Button, Form } from "react-bootstrap";
 import { NutrientMeasurementWithComponentsForm , NutrientMeasurementForm, NutrientSummary, getNutrientNameById} from "../../../pages/AdminPage";
+import { useTranslation } from "react-i18next";
 
 type NewMacronutrientWithComponentProps = {
   macronutrientsWithComponents: NutrientMeasurementWithComponentsForm[];
@@ -21,7 +22,8 @@ const NewMacronutrientWithComponent: React.FC<NewMacronutrientWithComponentProps
   );
   const [editingComponentId, setEditingComponentId] = useState<number | null>(null);
   const [formData, setFormData] = useState<NutrientMeasurementForm | null>(null);
-  
+  const { t } = useTranslation("global");
+
   const toggleCollapse = (id: string) => {
     setOpen((prev) => {
       const newSet = new Set(prev);
@@ -107,14 +109,14 @@ const NewMacronutrientWithComponent: React.FC<NewMacronutrientWithComponentProps
               <Table striped bordered hover responsive>
                 <thead>
                   <tr>
-                    <th>Nombre nutriente</th>
-                    <th>Promedio</th>
-                    <th>Desviación</th>
-                    <th>Mínimo</th>
-                    <th>Máximo</th>
-                    <th>Tamaño de muestra</th>
-                    <th>Tipo de dato</th>
-                    <th>Acción</th>
+                    <th>{t("NewMacronutrient.name")}</th>
+                    <th>{t("NewMacronutrient.mean")}</th>
+                    <th>{t("NewMacronutrient.Deviation")}</th>
+                    <th>{t("NewMacronutrient.min")}</th>
+                    <th>{t("NewMacronutrient.max")}</th>
+                    <th>{t("NewMacronutrient.Size")}</th>
+                    <th>{t("NewMacronutrient.type")}</th>
+                    <th>{t("NewMacronutrient.Action")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -175,18 +177,18 @@ const NewMacronutrientWithComponent: React.FC<NewMacronutrientWithComponentProps
                                 handleInputChange("dataType", e.target.value)
                               }
                             >
-                              <option value="analytic">Analítico</option>
-                              <option value="calculated">Calculado</option>
-                              <option value="assumed">Asumido</option>
-                              <option value="borrowed">Prestado</option>
+                              <option value="analytic">{t("NewMacronutrient.Analytical")}</option>
+                              <option value="calculated">{t("NewMacronutrient.Calculated")}</option>
+                              <option value="assumed">{t("NewMacronutrient.Taken")}</option>
+                              <option value="borrowed">{t("NewMacronutrient.Borrowed")}</option>
                             </Form.Select>
                           </td>
                           <td>
                             <Button variant="success" onClick={saveChanges}>
-                              Guardar
+                            {t("NewMacronutrient.save")}
                             </Button>{" "}
                             <Button variant="danger" onClick={cancelEditing}>
-                              Cancelar
+                            {t("NewMacronutrient.cancel")}
                             </Button>
                           </td>
                         </>
@@ -209,7 +211,7 @@ const NewMacronutrientWithComponent: React.FC<NewMacronutrientWithComponentProps
                               variant="warning"
                               onClick={() => startEditing(component)}
                             >
-                              Editar
+                              {t("NewMacronutrient.Edit")}
                             </Button>{" "}
                           </td>
                         </>
@@ -217,7 +219,7 @@ const NewMacronutrientWithComponent: React.FC<NewMacronutrientWithComponentProps
                     </tr>
                   ))}
                   <tr>
-                    <td><strong>Nutriente Padre:</strong> {getNutrientNameById(nutrient.nutrientId, nameAndIdNutrients)}</td>
+                    <td><strong>{t("NewMacronutrient.parent")}</strong> {getNutrientNameById(nutrient.nutrientId, nameAndIdNutrients)}</td>
                   </tr>
                 </tbody>
               </Table>

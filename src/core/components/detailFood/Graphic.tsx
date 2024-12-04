@@ -11,7 +11,7 @@ interface GraphicProps {
   }
   const Graphic: React.FC<GraphicProps> = ({ data }) => {
   return (
-    <ResponsiveContainer width="100%" height={370}>
+    <ResponsiveContainer width="100%" height={450}>
     <PieChart>
       <Pie
         data={data}

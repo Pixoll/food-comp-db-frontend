@@ -1,6 +1,8 @@
   import React, { useState } from "react";
   import OriginSelector from "./OriginSelector";
   import useOrigins from "./getters/useOrigins";
+  import { useTranslation } from "react-i18next";
+
   type OriginRowProps = {
     onRemove: () => void;
     isRemovable: boolean;
@@ -26,6 +28,7 @@
     const [selectedLocationName, setSelectedLocationName] = useState<string>("");
 
     const regionOptions = Array.from(regions.values());
+    const { t } = useTranslation("global");
 
     const provincesOptions =
       selectedRegion !== null
@@ -169,7 +172,7 @@
         <td>
           <OriginSelector
             options={regionOptions}
-            placeholder="Nada seleccionado"
+            placeholder={t("OriginRow.selected")}
             selectedValue={selectedRegionName}
             onSelect={(id, name) => handleSelection("region", id, name)}
           />
@@ -177,7 +180,7 @@
         <td>
           <OriginSelector
             options={provincesOptions}
-            placeholder="Nada seleccionado"
+            placeholder={t("OriginRow.selected")}
             selectedValue={selectedProvinceName}
             onSelect={(id, name) => handleSelection("province", id, name)}
           />
@@ -185,7 +188,7 @@
         <td>
           <OriginSelector
             options={communesOptions}
-            placeholder="Nada seleccionado"
+            placeholder={t("OriginRow.selected")}
             selectedValue={selectedCommuneName}
             onSelect={(id, name) => handleSelection("commune", id, name)}
           />
@@ -193,12 +196,12 @@
         <td>
           <OriginSelector
             options={locationOptions}
-            placeholder="Nada seleccionado"
+            placeholder={t("OriginRow.selected")}
             selectedValue={selectedLocationName}
             onSelect={(id, name) => handleSelection("location", id, name)}
           />
         </td>
-        <td>{isRemovable && <button onClick={onRemove}>Eliminar</button>}</td>
+        <td>{isRemovable && <button onClick={onRemove}>{t("OriginRow.remove")}</button>}</td>
       </tr>
     );
   };

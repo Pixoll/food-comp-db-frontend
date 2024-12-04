@@ -5,6 +5,7 @@ import useTypes from "./getters/useTypes";
 import { FetchStatus } from "../../hooks/useFetch";
 import useLanguages from "./getters/useLanguages";
 import OriginSelector from "./OriginSelector";
+import { useTranslation } from "react-i18next";
 
 type GeneralData = {
   code: string;
@@ -42,10 +43,11 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
   const groups = groupsResult.status === FetchStatus.Success ? groupsResult.data : [];
   const types = typesResult.status === FetchStatus.Success ? typesResult.data : [];
   const languages = languagesResult.status === FetchStatus.Success ? languagesResult.data : [];
-
+  const { t } = useTranslation("global");
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
+    
     const { name, value } = e.target;
     const updatedFormData = { ...formData, [name]: value };
     setFormData(updatedFormData);
@@ -81,7 +83,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
       <Row>
         <Col md={6}>
           <Form.Group controlId="code">
-            <Form.Label>Código del alimento</Form.Label>
+            <Form.Label>{t("NewGeneralData.code")}</Form.Label>
             <Form.Control
               type="text"
               name="code"
@@ -92,7 +94,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
         </Col>
         <Col md={6}>
           <Form.Group controlId="strain">
-            <Form.Label>Strain</Form.Label>
+            <Form.Label>{t("NewGeneralData.strain")}</Form.Label>
             <Form.Control
               type="text"
               name="strain"
@@ -105,7 +107,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
       <Row>
         <Col md={6}>
           <Form.Group controlId="brand">
-            <Form.Label>Marca</Form.Label>
+            <Form.Label>{t("NewGeneralData.brand")}</Form.Label>
             <Form.Control
               type="text"
               name="brand"
@@ -116,7 +118,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
         </Col>
         <Col md={6}>
           <Form.Group controlId="observation">
-            <Form.Label>Observación</Form.Label>
+            <Form.Label>{t("NewGeneralData.Observation")}</Form.Label>
             <Form.Control
               as="textarea"
               name="observation"
@@ -128,7 +130,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
       </Row>
       <Row>
         <Col md={6}>
-          <Form.Label>Grupo alimenticio</Form.Label>
+          <Form.Label>{t("NewGeneralData.group")}</Form.Label>
           {groups && (
             <OriginSelector
               options={groups.map((group) => ({
@@ -136,18 +138,18 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
                 name: group.name,
               }))}
               selectedValue={formData.group.name}
-              placeholder="Selecciona un grupo alimenticio"
+              placeholder={t("NewGeneralData.select_G")}
               onSelect={handleGroupSelect}
             />
           )}
         </Col>
         <Col md={6}>
-        <Form.Label>Tipo de alimento</Form.Label>
+        <Form.Label>{t("NewGeneralData.type")}</Form.Label>
           {types && (
             <OriginSelector
               options={types.map((type) => ({ id: type.id, name: type.name }))}
               selectedValue={formData.type.name}
-              placeholder="Selecciona un tipo de alimento"
+              placeholder={t("NewGeneralData.select_A")}
               onSelect={handleTypeSelect}
             />
           )}
@@ -156,7 +158,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
       <Row>
         <Col md={6}>
           <Form.Group controlId="scientificName">
-            <Form.Label>Nombre científico</Form.Label>
+            <Form.Label>{t("NewGeneralData.name_scientist")}</Form.Label>
             <Form.Control
               type="text"
               name="scientificName"
@@ -167,7 +169,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
         </Col>
         <Col md={6}>
           <Form.Group controlId="subspecies">
-            <Form.Label>Subespecie</Form.Label>
+            <Form.Label>{t("NewGeneralData.Subspecies")}</Form.Label>
             <Form.Control
               type="text"
               name="subspecies"
@@ -180,12 +182,12 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
       <Row>
         <Col md={12}>
           <Form.Group controlId="commonName">
-            <Form.Label>Nombres comunes</Form.Label>
+            <Form.Label>{t("NewGeneralData.name_common")}</Form.Label>
             {languages?.map((lang) => (
               <Form.Control
               key={lang.code}
               type="text"
-              placeholder={`Nombre común (${lang.code})`}
+              placeholder={`${t("NewGeneralData.name_com")} (${lang.code})`}
               value={formData.commonName[lang.code] || ""}
               onChange={(e) => {
                 const updatedFormData = {
@@ -206,12 +208,12 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
       <Row>
         <Col md={12}>
           <Form.Group controlId="ingredients">
-            <Form.Label>Ingredientes</Form.Label>
+            <Form.Label>{t("NewGeneralData.Ingredients")}</Form.Label>
             {languages?.map((lang) => (
               <Form.Control
               key={lang.code}
               type="text"
-              placeholder={`Ingrediente (${lang.code})`}
+              placeholder={`${t("NewGeneralData.Ingredient")} (${lang.code})`}
               value={formData.ingredients[lang.code] || ""}
               onChange={(e) => {
                 const updatedFormData = {
@@ -234,3 +236,5 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
 };
 
 export default NewGeneralData;
+
+

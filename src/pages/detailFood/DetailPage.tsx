@@ -226,8 +226,6 @@ export default function DetailPage() {
                       }}
                     >
                       {t("DetailFood.grams.change")}
-
-                      {t("DetailFood.grams.change")}
                     </button>
                     <p>
                       {t("DetailFood.grams.current")} {grams}g
@@ -340,3 +338,5 @@ export default function DetailPage() {
     </div>
   );
 }
+
+

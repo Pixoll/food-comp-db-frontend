@@ -167,7 +167,8 @@
     "save": "Guardar",
     "close": "Cerrar",
     "references": "Referencias",
-    "yes": "Sí"
+    "yes": "Sí",
+    "type":"Tipo de dato"
   },
   "LangualCode": {
     "description_main": "Descripción Principal",
@@ -191,7 +192,11 @@
     "Commune": "Comuna",
     "Location": "Localidad",
     "select_region": "Selecciona una región",
-    "select": "Selecciona una"
+    "select": "Selecciona una",
+    "action":"Acciones",
+    "add":"Agregar origen",
+    "selected":"Direcciones seleccionadas:",
+    "no_direction":"Sin dirección seleccionada"
   },
   "Case_1": {
     "name": "Nombre",
@@ -290,5 +295,68 @@
     "upload": "Suba un archivo en formato",
     "or": "o",
     "point": "."
+  },
+  "NewGeneralData":{
+    "code":"Código del alimento",
+    "strain":"Cepa",
+    "brand":"Marca",
+    "Observation":"Observación",
+    "group":"Grupo alimenticio",
+    "select_G":"Selecciona un grupo alimenticio",
+    "type":"Tipo de alimento",
+    "select_A":"Selecciona un tipo de alimento",
+    "name_scientist":"Nombre científico",
+    "Subspecies":"Subespecie",
+    "name_common":"Nombres comunes",
+    "name_com":"Nombre común",
+    "Ingredients":"Ingredientes",
+    "Ingredient":"Ingrediente"
+  },
+  "NewMacronutrient":{
+    "name":"Nombre nutriente",
+    "mean":"Promedio",
+    "Deviation":"Desviación",
+    "min":"Mínimo",
+    "max":"Máximo",
+    "Size":"Tamaño de muestra",
+    "type":"Tipo de dato",
+    "Action":"Acción",
+    "Analytical":"Analítico",
+    "Calculated":"Calculado",
+    "Taken":"Asumido",
+    "Borrowed":"Prestado",
+    "Edit":"Editar",
+    "parent":"Nutriente Padre:",
+    "save":"Guardar",
+    "cancel":"Cancelar"
+  },
+  "OriginRow":{
+    "selected":"Nada seleccionado",
+    "remove":"Eliminar"
+  },
+  "PreviewDataFrom":{
+    "General":"Datos Generales",
+    "Code":"Código:",
+    "Scientific":"Nombre científico:",
+    "Group": "Grupo:",
+    "Type":"Tipo:",
+    "Subspecies":"Subespecie:",
+    "Strain":"Cepa:",
+    "Brand": "Marca:",
+    "Observation":"Observación:",
+    "Common": "Nombre común",
+    "Nutritional":"Datos Nutricionales",
+    "Energy":"Energía",
+    "Nutrient":"ID de nutriente:",
+    "Average":"Promedio:",
+    "Components":"Componentes:",
+    "Micronutrients":"Micronutrientes",
+    "Vitamins":"Vitaminas",
+    "Main":"Nutrientes Principales",
+    "Minerals":"Minerales"
   }
+  
 }
+
+
+
