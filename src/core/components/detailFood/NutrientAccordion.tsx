@@ -1,23 +1,24 @@
 import { Accordion, Table, Button } from "react-bootstrap";
 import { useState } from "react";
-import "../../../assets/css/_nutrientAccordion.css"
+import "../../../assets/css/_nutrientAccordion.css";
 import {
   NutrientsValue,
   NutrientMeasurement,
 } from "../../types/SingleFoodResult";
 import { BsQuestionCircle } from "react-icons/bs";
 import CenteredModal from "./CenteredModal";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 interface NutrientAccordionProps {
   data: NutrientsValue;
   onReferenceClick: (code: string) => void;
+  actualGrams: number;
 }
-
 
 const NutrientAccordion: React.FC<NutrientAccordionProps> = ({
   data,
   onReferenceClick,
+  actualGrams,
 }) => {
   const [selectedNutrient, setSelectedNutrient] =
     useState<NutrientMeasurement | null>(null);
@@ -32,20 +33,20 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({
     setShowModal(false);
     setSelectedNutrient(null);
   };
-  const {t} = useTranslation("global");
+  const { t } = useTranslation("global");
   return (
     <>
-      <Accordion className="mi-accordion" defaultActiveKey={["0", "1", "2"]} >
+      <Accordion className="mi-accordion" defaultActiveKey={["0", "1", "2"]}>
         <Accordion.Item eventKey="0">
-          <Accordion.Header>{t('nutrientAccordion.Energy')}</Accordion.Header>
+          <Accordion.Header>{t("nutrientAccordion.Energy")}</Accordion.Header>
           <Accordion.Body>
             <Table responsive="sm">
               <thead>
                 <tr>
-                  <th>{t('nutrientAccordion.name')}</th>
-                  <th>{t('nutrientAccordion.unit')}</th>
-                  <th>{t('nutrientAccordion.mean')}</th>
-                  <th>{t('nutrientAccordion.details')}</th>
+                  <th>{t("nutrientAccordion.name")}</th>
+                  <th>{t("nutrientAccordion.unit")}</th>
+                  <th>{t("nutrientAccordion.mean")}</th>
+                  <th>{t("nutrientAccordion.details")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -70,15 +71,15 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({
         </Accordion.Item>
 
         <Accordion.Item eventKey="1">
-          <Accordion.Header>{t('nutrientAccordion.Main')}</Accordion.Header>
+          <Accordion.Header>{t("nutrientAccordion.Main")}</Accordion.Header>
           <Accordion.Body>
             <Table responsive="sm">
               <thead>
                 <tr>
-                  <th>{t('nutrientAccordion.name')}</th>
-                  <th> {t('nutrientAccordion.unit')} </th>
-                  <th>{t('nutrientAccordion.mean')}</th>
-                  <th>{t('nutrientAccordion.details')}</th>
+                  <th>{t("nutrientAccordion.name")}</th>
+                  <th> {t("nutrientAccordion.unit")} </th>
+                  <th>{t("nutrientAccordion.mean")}</th>
+                  <th>{t("nutrientAccordion.details")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -90,7 +91,10 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({
                   .map((nutrient, index) => (
                     <tr key={index}>
                       <td>{nutrient.name}</td>
-                      <td>{nutrient.measurementUnit}</td>
+                      <td>
+                        {actualGrams}
+                        {nutrient.measurementUnit}
+                      </td>
                       <td>{nutrient.average}</td>
                       <td>
                         <Button
@@ -111,7 +115,7 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({
               )
               .map((nutrient, index) => (
                 <Accordion
-                 className="mi-accordion"
+                  className="mi-accordion"
                   key={`sub-${index}`}
                   defaultActiveKey={`sub-${index}`}
                 >
@@ -121,17 +125,21 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({
                       <Table responsive="sm">
                         <thead>
                           <tr>
-                            <th>{t('nutrientAccordion.name')}</th>
-                            <th>{t('nutrientAccordion.unit')}</th>
-                            <th>{t('nutrientAccordion.mean')}</th>
-                            <th>{t('nutrientAccordion.details')}</th>
+                            <th>{t("nutrientAccordion.name")}</th>
+                            <th>{t("nutrientAccordion.unit")}</th>
+                            <th>{t("nutrientAccordion.mean")}</th>
+                            <th>{t("nutrientAccordion.details")}</th>
                           </tr>
                         </thead>
                         <tbody>
+                          {/* Iterar sobre los subcomponentes */}
                           {nutrient.components.map((subComponent, subIndex) => (
                             <tr key={subIndex}>
                               <td>{subComponent.name}</td>
-                              <td>{subComponent.measurementUnit}</td>
+                              <td>
+                                {actualGrams}
+                                {subComponent.measurementUnit}
+                              </td>
                               <td>{subComponent.average}</td>
                               <td>
                                 <Button
@@ -143,6 +151,24 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({
                               </td>
                             </tr>
                           ))}
+                          <tr>
+                            <td>
+                              <strong>{nutrient.name}(Total)</strong>
+                            </td>
+                            <td>
+                              {actualGrams}
+                              {nutrient.measurementUnit}
+                            </td>
+                            <td>{nutrient.average}</td>
+                            <td>
+                              <Button
+                                variant="link"
+                                onClick={() => handleOpenModal(nutrient)}
+                              >
+                                <BsQuestionCircle size={30} color="green" />
+                              </Button>
+                            </td>
+                          </tr>
                         </tbody>
                       </Table>
                     </Accordion.Body>
@@ -153,15 +179,17 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({
         </Accordion.Item>
 
         <Accordion.Item eventKey="2">
-          <Accordion.Header>{t('nutrientAccordion.Micronutrients')}</Accordion.Header>
+          <Accordion.Header>
+            {t("nutrientAccordion.Micronutrients")}
+          </Accordion.Header>
           <Accordion.Body>
             <Table responsive="sm">
               <thead>
                 <tr>
-                  <th>{t('nutrientAccordion.name')}</th>
-                  <th>{t('nutrientAccordion.unit')}</th>
-                  <th>{t('nutrientAccordion.mean')}</th>
-                  <th>{t('nutrientAccordion.details')}</th>
+                  <th>{t("nutrientAccordion.name")}</th>
+                  <th>{t("nutrientAccordion.unit")}</th>
+                  <th>{t("nutrientAccordion.mean")}</th>
+                  <th>{t("nutrientAccordion.details")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -212,4 +240,3 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({
 };
 
 export default NutrientAccordion;
- 

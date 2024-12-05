@@ -298,6 +298,7 @@ export default function DetailPage() {
                         }
                       }
                       onReferenceClick={handleReferenceClick}
+                      actualGrams={grams}
                     />
                   </Tab.Pane>
                   <Tab.Pane eventKey="second">
