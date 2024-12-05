@@ -1,19 +1,26 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";
 import OriginRow from "./OriginRow";
 import { useTranslation } from "react-i18next";
 
-const Origins: React.FC = () => {
+type OriginsProps = {
+  updateOrigins: (ids: (number | null)[], addresses: string[]) => void;
+  origins: (number | null)[];
+};
+
+const Origins: React.FC<OriginsProps> = ({ updateOrigins, origins }) => {
   const { t } = useTranslation("global");
 
   const [rows, setRows] = useState<number[]>([0]);
   const [addresses, setAddresses] = useState<string[]>([]);
 
-  const [originIds, setOriginIds] = useState<(number | null)[]>([]); 
+  const [originIds, setOriginIds] = useState<(number | null)[]>(origins);
 
-  const [uniqueOriginIds, setUniqueOriginIds] = useState<Set<number>>(new Set());
+  const [uniqueOriginIds, setUniqueOriginIds] = useState<Set<number>>(
+    new Set()
+  );
 
   const handleAddRow = useCallback(() => {
     setRows((prevRows) => {
@@ -21,27 +28,26 @@ const Origins: React.FC = () => {
       return [...prevRows, newRow];
     });
     setAddresses((prevAddresses) => [...prevAddresses, ""]);
-    setOriginIds((prevOriginIds) => [...prevOriginIds, null]); 
+    setOriginIds((prevOriginIds) => [...prevOriginIds, null]);
   }, []);
   const handleRemoveLastRow = () => {
     if (rows.length > 1) {
-      const lastOriginId = originIds[originIds.length - 1];
-
       setRows((prevRows) => prevRows.slice(0, -1));
       setAddresses((prevAddresses) => prevAddresses.slice(0, -1));
-      setOriginIds((prevOriginIds) => prevOriginIds.slice(0, -1)); 
-
-      setUniqueOriginIds((prevUniqueIds) => {
-        const updatedUniqueIds = new Set(prevUniqueIds);
-        if (lastOriginId !== null) {
-          updatedUniqueIds.delete(lastOriginId);
-        }
-        return updatedUniqueIds;
+      setOriginIds((prevOriginIds) => {
+        const lastOriginId = prevOriginIds[prevOriginIds.length - 1];
+        setUniqueOriginIds((prevUniqueIds) => {
+          const updatedUniqueIds = new Set(prevUniqueIds);
+          if (lastOriginId !== null) updatedUniqueIds.delete(lastOriginId);
+          return updatedUniqueIds;
+        });
+        return prevOriginIds.slice(0, -1);
       });
     } else {
-      alert("El mínimo de origenes es 1");
+      alert("El mínimo de orígenes es 1");
     }
   };
+  
 
   const handleAddressChange = useCallback((index: number, address: string) => {
     setAddresses((prevAddresses) => {
@@ -54,16 +60,17 @@ const Origins: React.FC = () => {
   const handleIdsChange = (id: number | null, index: number) => {
     setOriginIds((prevOriginIds) => {
       const updatedIds = [...prevOriginIds];
-      updatedIds[index] = id; 
+      updatedIds[index] = id;
+      console.log(updatedIds)
       return updatedIds;
     });
 
     setUniqueOriginIds((prevUniqueIds) => {
       const updatedUniqueIds = new Set(prevUniqueIds);
       const previousId = originIds[index];
-      
+
       if (previousId !== null) {
-        updatedUniqueIds.delete(previousId); 
+        updatedUniqueIds.delete(previousId);
       }
 
       if (id !== null) {
@@ -92,8 +99,12 @@ const Origins: React.FC = () => {
               onAddressChange={(address: string) =>
                 handleAddressChange(index, address)
               }
-              onIdChange={handleIdsChange}
+              onIdChange={(id: number | null, index: number) =>
+                handleIdsChange(id, index)
+              }
               index={index}
+              originId={originIds[index]} 
+              address={addresses[index]} 
             />
           ))}
         </tbody>
@@ -103,7 +114,11 @@ const Origins: React.FC = () => {
         {t("Origins.Add")}
       </Button>
 
-      <Button onClick={handleRemoveLastRow} className="mt-3 ml-3" variant="danger">
+      <Button
+        onClick={handleRemoveLastRow}
+        className="mt-3 ml-3"
+        variant="danger"
+      >
         {t("Origins.RemoveLast")}
       </Button>
 

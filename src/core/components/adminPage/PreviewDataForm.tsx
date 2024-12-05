@@ -8,16 +8,18 @@ import {
   NutrientMeasurementWithComponentsForm,
 } from "../../../pages/AdminPage";
 import { useTranslation } from "react-i18next";
-import "../../../assets/css/_PreviewDataForm.css"
+import "../../../assets/css/_PreviewDataForm.css";
 
 type PreviewDataFormProps = {
   data: FoodForm;
   nameAndIdNutrients: NutrientSummary[];
+  origins: string[];
 };
 
 const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
   data,
   nameAndIdNutrients,
+  origins,
 }) => {
   const { generalData, nutrientsValueForm } = data;
   const { t } = useTranslation("global");
@@ -86,7 +88,7 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
         (!nutrient.components || nutrient.components.length === 0) &&
         hasValidData(nutrient)
     );
-
+    
     return (
       <>
         {nutrientsWithComponents.length > 0 && (
@@ -279,18 +281,18 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
                   <Col md={6}>{generalData.commonName.es || "N/A"}</Col>
                 </Row>
 
-                  <Row className="mb-3">
-                    <Col md={6}>
-                      <strong>{t("PreviewDataFrom.Common")} (EN)</strong>
-                    </Col>
-                    <Col md={6}>{generalData.commonName.en || "N/A"}</Col>
-                  </Row>
-                  <Row className="mb-3">
-                    <Col md={6}>
-                      <strong>{t("PreviewDataFrom.Common")} (PT)</strong>
-                    </Col>
-                    <Col md={6}>{generalData.commonName.pt || "N/A"}</Col>
-                  </Row>
+                <Row className="mb-3">
+                  <Col md={6}>
+                    <strong>{t("PreviewDataFrom.Common")} (EN)</strong>
+                  </Col>
+                  <Col md={6}>{generalData.commonName.en || "N/A"}</Col>
+                </Row>
+                <Row className="mb-3">
+                  <Col md={6}>
+                    <strong>{t("PreviewDataFrom.Common")} (PT)</strong>
+                  </Col>
+                  <Col md={6}>{generalData.commonName.pt || "N/A"}</Col>
+                </Row>
               </Col>
             </Row>
           </div>
@@ -317,6 +319,30 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
           )}
         </Card.Body>
       </Card>
+
+      {origins.length > 0 && (
+        <Card>
+          <Card.Body>
+            <h5>Origen(es) actual(es)</h5>
+            <Table bordered size="sm" className="mb-3">
+              <thead className="thead-light">
+                <tr>
+                  <th style={{ width: "10%" }}>Número</th>
+                  <th style={{ width: "90%" }}>Descripción</th>
+                </tr>
+              </thead>
+              <tbody>
+                {origins.map((origin, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{origin}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </Card.Body>
+        </Card>
+      )}
       <button className="button-form-of-food">Validar y enviar</button>
     </div>
   );

@@ -17,9 +17,18 @@ export type NutrientSummary = {
   name: string;
   measurementUnit: string;
 };
-export const getNutrientNameById = (id: number, nameAndIdNutrients:NutrientSummary[]): string => {
-  const nutrient = nameAndIdNutrients.find(nutrient => nutrient.id === id);
-  return `${nutrient?.name} (${nutrient?.measurementUnit})`; 
+
+export const getNutrientNameById = (
+  id: number,
+  nameAndIdNutrients: NutrientSummary[]
+): string => {
+  const nutrient = nameAndIdNutrients.find((nutrient) => nutrient.id === id);
+  return `${nutrient?.name} (${nutrient?.measurementUnit})`;
+};
+
+export type OriginsByForm = {
+  ids: (number| null)[];
+  origins: string[];
 };
 const mapMacroNutrientWithoutComponentsToForm = (
   macronutrient: MacroNutrient
@@ -33,10 +42,7 @@ const mapMacroNutrientWithoutComponentsToForm = (
   dataType: null,
   referenceCodes: [],
 });
-export type originsForm = {
-  id: number,
-  origin: string,
-}
+
 const mapMacroNutrientWithComponentsToForm = (
   macronutrient: MacroNutrient
 ): NutrientMeasurementWithComponentsForm => ({
@@ -102,7 +108,7 @@ type GeneralData = {
   commonName: Record<"es", string> &
     Partial<Record<"en" | "pt", string | null>>;
   ingredients: Partial<Record<"es" | "en" | "pt", string | null>>;
-  origins: originsForm[]
+  origins: (number | null)[];
 };
 export type FoodForm = {
   generalData: GeneralData;
@@ -110,6 +116,18 @@ export type FoodForm = {
 };
 
 export default function AdminPage() {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    if (e.target.files && e.target.files.length > 0) {
+      setSelectedFile(e.target.files[0]);
+    }
+  };
+  const [origins, setOrigins] = useState<OriginsByForm>({
+    ids: [],
+    origins: [],
+  });
+
   const [activeSection, setActiveSection] = useState<number>(1);
   const [formData, setFormData] = useState<FoodForm>({
     generalData: {
@@ -118,7 +136,7 @@ export default function AdminPage() {
       ingredients: {},
       group: { code: "", name: "" },
       type: { code: "", name: "" },
-      origins: []
+      origins: origins.ids,
     },
     nutrientsValueForm: {
       energy: [],
@@ -131,18 +149,41 @@ export default function AdminPage() {
   });
 
   const nutrientsResult = useNutrients();
-  const nutrients = nutrientsResult.status === FetchStatus.Success ? nutrientsResult.data : null;
-  
+  const nutrients =
+    nutrientsResult.status === FetchStatus.Success
+      ? nutrientsResult.data
+      : null;
+
   const nameAndIdNutrients: NutrientSummary[] = [];
 
-  nutrients?.macronutrients.forEach((macronutrient)=>{
-    nameAndIdNutrients.push({id:macronutrient.id, name:macronutrient.name, measurementUnit: macronutrient.measurementUnit})
-    macronutrient.components?.forEach((component)=>{
-      nameAndIdNutrients.push({id:component.id, name: component.name,  measurementUnit: component.measurementUnit})
-    })
-  })
-  nutrients?.micronutrients.minerals.forEach((mineral)=>{nameAndIdNutrients.push({id:mineral.id, name:mineral.name,  measurementUnit: mineral.measurementUnit})})
-  nutrients?.micronutrients.vitamins.forEach((vitamin)=>{nameAndIdNutrients.push({id:vitamin.id, name:vitamin.name ,  measurementUnit: vitamin.measurementUnit})})
+  nutrients?.macronutrients.forEach((macronutrient) => {
+    nameAndIdNutrients.push({
+      id: macronutrient.id,
+      name: macronutrient.name,
+      measurementUnit: macronutrient.measurementUnit,
+    });
+    macronutrient.components?.forEach((component) => {
+      nameAndIdNutrients.push({
+        id: component.id,
+        name: component.name,
+        measurementUnit: component.measurementUnit,
+      });
+    });
+  });
+  nutrients?.micronutrients.minerals.forEach((mineral) => {
+    nameAndIdNutrients.push({
+      id: mineral.id,
+      name: mineral.name,
+      measurementUnit: mineral.measurementUnit,
+    });
+  });
+  nutrients?.micronutrients.vitamins.forEach((vitamin) => {
+    nameAndIdNutrients.push({
+      id: vitamin.id,
+      name: vitamin.name,
+      measurementUnit: vitamin.measurementUnit,
+    });
+  });
   useEffect(() => {
     if (nutrients) {
       const initialFormData: FoodForm = {
@@ -154,11 +195,11 @@ export default function AdminPage() {
           ingredients: {},
           group: { code: "defaultGroup", name: "Default Group" },
           type: { code: "defaultType", name: "Default Type" },
-          origins: []
+          origins: origins.ids,
         },
         nutrientsValueForm: {
           energy:
-          nutrients.macronutrients
+            nutrients.macronutrients
               ?.filter((macronutrient: MacroNutrient) => macronutrient.isEnergy)
               .map((macronutrient: MacroNutrient) => ({
                 nutrientId: macronutrient.id,
@@ -173,7 +214,7 @@ export default function AdminPage() {
               })) || [],
 
           mainNutrients:
-          nutrients.macronutrients
+            nutrients.macronutrients
               ?.filter((m) => !m.isEnergy)
               .map((m) =>
                 (m.components?.length ?? 0) > 0
@@ -186,27 +227,31 @@ export default function AdminPage() {
 
           micronutrients: {
             vitamins:
-            nutrients.micronutrients?.vitamins?.map((vitamin: AnyNutrient) => ({
-                nutrientId: vitamin.id,
-                average: null,
-                deviation: null,
-                min: null,
-                max: null,
-                sampleSize: null,
-                dataType: null,
-                referenceCodes: [],
-              })) || [],
+              nutrients.micronutrients?.vitamins?.map(
+                (vitamin: AnyNutrient) => ({
+                  nutrientId: vitamin.id,
+                  average: null,
+                  deviation: null,
+                  min: null,
+                  max: null,
+                  sampleSize: null,
+                  dataType: null,
+                  referenceCodes: [],
+                })
+              ) || [],
             minerals:
-            nutrients.micronutrients?.minerals?.map((mineral: AnyNutrient) => ({
-                nutrientId: mineral.id,
-                average: null,
-                deviation: null,
-                min: null,
-                max: null,
-                sampleSize: null,
-                dataType: null,
-                referenceCodes: [],
-              })) || [],
+              nutrients.micronutrients?.minerals?.map(
+                (mineral: AnyNutrient) => ({
+                  nutrientId: mineral.id,
+                  average: null,
+                  deviation: null,
+                  min: null,
+                  max: null,
+                  sampleSize: null,
+                  dataType: null,
+                  referenceCodes: [],
+                })
+              ) || [],
           },
         },
       };
@@ -214,20 +259,25 @@ export default function AdminPage() {
       setFormData(initialFormData);
     }
   }, [nutrients, nutrients?.macronutrients, nutrients?.micronutrients]);
-
   const handleUpdate = (updatedData: Partial<GeneralData>) => {
     setFormData((prev) => ({
       ...prev,
       generalData: {
         ...prev.generalData,
-        ...updatedData, 
+        ...updatedData,
       },
     }));
   };
-  
-  
-  
-  //Para cada medición de nutriente
+  const handleOrigins = (
+    updateOriginsIds: (number | null)[],
+    updateOrigins: string[]
+  ): void => {
+    setOrigins({
+      ids: updateOriginsIds, 
+      origins: updateOrigins,
+    });
+  };
+
   const handleNutrientUpdate = (updatedNutrient: NutrientMeasurementForm) => {
     setFormData((prev) => {
       const updateSection = (nutrients: NutrientMeasurementForm[]) =>
@@ -260,13 +310,12 @@ export default function AdminPage() {
     });
   };
 
-  console.log(formData.nutrientsValueForm.mainNutrients.filter(
-    (n) => n.components?.length > 0
-  ))
   const renderSection = () => {
     switch (activeSection) {
       case 1:
-        return (<NewGeneralData data = {formData.generalData} onUpdate={handleUpdate} />);
+        return (
+          <NewGeneralData data={formData.generalData} onUpdate={handleUpdate} />
+        );
 
       case 2:
         return (
@@ -313,11 +362,17 @@ export default function AdminPage() {
           />
         );
       case 7: // Origines
-        return (<Origins />);
-      case 8: 
-        return <></>
+        return <Origins updateOrigins={handleOrigins} origins={formData.generalData.origins}/>;
+      case 8: //Aqui para las referencias
+        return <></>;
       case 9:
-        return (<PreviewDataForm  data={formData} nameAndIdNutrients={nameAndIdNutrients}/>)
+        return (
+          <PreviewDataForm
+            data={formData}
+            nameAndIdNutrients={nameAndIdNutrients}
+            origins={origins.origins}
+          />
+        );
       default:
         return null;
     }
@@ -325,14 +380,6 @@ export default function AdminPage() {
 
   const [view, setView] = useState<string>("manual");
   const { t } = useTranslation("global");
-
-  /*const sectionNames = [
-    t("Case_1.name"),
-    t("Case_5.title"),
-    t("Case_8.title"),
-    t("Case_9.title"),
-    t("Origins.title"),
-  ];*/
 
   const sectionNames = [
     "Datos generales",
@@ -343,7 +390,7 @@ export default function AdminPage() {
     "Minerales",
     "Origines del alimento",
     "Referencias",
-    "Vista de información actual"
+    "Vista de información actual",
   ];
 
   return (
@@ -389,17 +436,21 @@ export default function AdminPage() {
               className="file-input"
               type="file"
               accept=".xlsx, .xls, .csv"
+              onChange={(e) => handleFileChange(e)}
             />
             <label htmlFor="fileInput" className="file-input-label">
               Seleccionar archivo
             </label>
+            {selectedFile && <p className="file-name">{selectedFile.name}</p>}
             <p className="helper-text">
               {t("AdminPage.upload")} <strong>Excel</strong> {t("AdminPage.or")}{" "}
               <strong>CSV</strong> {t("AdminPage.point")}
             </p>
-            <div className="button-container">
-              <button className="button">{t("AdminPage.process")}</button>
-            </div>
+            {selectedFile && (
+              <div className="button-container">
+                <button className="button">{t("AdminPage.process")}</button>
+              </div>
+            )}
           </div>
         )}
       </div>

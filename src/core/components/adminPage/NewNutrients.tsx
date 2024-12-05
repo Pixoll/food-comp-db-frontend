@@ -10,9 +10,11 @@ type NewNutrientsProps = {
 };
 
 const NewNutrients: React.FC<NewNutrientsProps> = ({ nutrients, onNutrientUpdate , nameAndIdNutrients}) => {
+
   const [editingNutrientId, setEditingNutrientId] = useState<number | null>(null);
   const [formData, setFormData] = useState<NutrientMeasurementForm | null>(null);
   const { t } = useTranslation("global");
+  
   const startEditing = (nutrient: NutrientMeasurementForm) => {
     setEditingNutrientId(nutrient.nutrientId);
     setFormData({

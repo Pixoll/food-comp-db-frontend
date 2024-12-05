@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import OriginSelector from "./OriginSelector";
 import useOrigins from "./getters/useOrigins";
 import { useTranslation } from "react-i18next";
@@ -7,11 +7,16 @@ type OriginRowProps = {
   onAddressChange: (address: string) => void;
   onIdChange: (id: number | null, index: number) => void;
   index: number;
+  originId: number | null; 
+  address: string;         
 };
+
 const OriginRow: React.FC<OriginRowProps> = ({
   onAddressChange,
   onIdChange,
-  index
+  index,
+  originId,
+  address,
 }) => {
   const { regions, provinces, communes, locations } = useOrigins();
 
@@ -30,24 +35,18 @@ const OriginRow: React.FC<OriginRowProps> = ({
   const regionOptions = Array.from(regions.values());
   const { t } = useTranslation("global");
 
-  const notifyIdsChange = () => {
+  const notifyIdsChange = useCallback(() => {
     const selectedId =
       selectedLocation ??
       selectedCommune ??
       selectedProvince ??
       selectedRegion ??
       null;
-
-    if (selectedId !== null) {
+    console.log(originId)
+    if (selectedId !== originId) {
       onIdChange(selectedId, index);
-    } else {
-      onIdChange(null, index); 
     }
-  };
-  
-  useEffect(() => {
-    notifyIdsChange();
-  }, [selectedRegion, selectedProvince, selectedCommune, selectedLocation]);
+  }, [selectedRegion, selectedProvince, selectedCommune, selectedLocation, originId, index, onIdChange]);
   
 
   const provincesOptions =

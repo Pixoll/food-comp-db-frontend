@@ -171,7 +171,27 @@
   outline: none;
   box-shadow: 0 0 8px rgba(43, 184, 160, 0.5);
 }
+.file-input {
+  display: none; 
+}
+.file-name {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1A7862;
+  background-color: #dbf5e2;
+  padding: 8px 12px;
+  border: 1px solid #1A7862;
+  border-radius: 5px;
+  text-align: center;
+}
 
+.file-name:before {
+  content: "Archivo seleccionado: ";
+  font-weight: 400;
+  color: #555;
+}
 .file-input-label {
   display: inline-block;
   padding: 12px 25px;
