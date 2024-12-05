@@ -46,8 +46,8 @@ const SingleOptionFilter: React.FC<SingleOptionFilterProps> = ({
               <input
                 type="checkbox" 
                 value={option}
-                checked={selectedOption === option}
-                onChange={() => handleOptionChange(option)}
+                checked={selectedOption === option} 
+                onChange={() => handleOptionChange(option)} 
               />
               {label}
               {selectedOption === option && (

@@ -61,7 +61,6 @@ const Origins: React.FC<OriginsProps> = ({ updateOrigins, origins }) => {
     setOriginIds((prevOriginIds) => {
       const updatedIds = [...prevOriginIds];
       updatedIds[index] = id;
-      console.log(updatedIds)
       return updatedIds;
     });
 

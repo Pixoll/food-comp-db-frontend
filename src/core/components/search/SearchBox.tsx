@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CheckboxFilter from "./CheckboxFilter";
 import SingleOptionFilter from "./SingleOptionFilter";
 import { Collection } from "../../utils/collection";
@@ -7,15 +7,23 @@ interface SearchBoxProps {
   filterOptions: Collection<string, string>;
   onChange: (selectedOptions: string[]) => void;
   single: boolean;
+  selectedOptions: string[]; 
 }
 
-const SearchBox: React.FC<SearchBoxProps> = ({ filterOptions, onChange, single }) => {
-  const [selectedOptions, setSelectedOptions] = useState(new Set<string>());
-  const [selectedOption, setSelectedOption] = useState<string | null>(null); 
+const SearchBox: React.FC<SearchBoxProps> = ({ filterOptions, onChange, single, selectedOptions, }) => {
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (single && selectedOptions.length > 0) {
+      setSelectedOption(selectedOptions[0]);
+    } else if (selectedOptions.length === 0) {
+      setSelectedOption(null);
+    }
+  }, [selectedOptions, single]);
 
   const handleMultiSelectionChange = (newSelection: Set<string>) => {
-    setSelectedOptions(newSelection);
-    onChange(Array.from(newSelection));
+    const newSelectionsArray = Array.from(newSelection);
+    onChange(newSelectionsArray);
   };
 
   const handleSingleSelectionChange = (newSelection: string | null) => {
@@ -28,7 +36,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ filterOptions, onChange, single }
       {!single ? (
         <CheckboxFilter
           options={filterOptions}
-          selectedOptions={selectedOptions}
+          selectedOptions={new Set(selectedOptions)}
           setSelectedOptions={handleMultiSelectionChange}
         />
       ) : (

@@ -4,7 +4,7 @@ import "../../../assets/css/_foodFilter.css";
 import FoodResultsTable from "./FoodResultsTable";
 import GetGroups from "./gets/GetGroups";
 import GetLanguages from "./gets/GetLanguages";
-import GetRegions from "./gets/GetRegions";
+import useOrigins from "../adminPage/getters/useOrigins";
 import GetTypes from "./gets/getTypes";
 import GetNutrients from "./gets/GetNutrients";
 import { FoodResult } from "../../types/option";
@@ -13,6 +13,7 @@ import qs from "qs";
 import { Container, Row, Col, Form, InputGroup } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { FetchStatus } from "../../hooks/useFetch";
+import { Collection } from "../../utils/collection";
 
 const FoodFilter = () => {
   const [selectedFilters, setSelectedFilters] = useState({
@@ -24,21 +25,17 @@ const FoodFilter = () => {
     operator: "",
     value: 0,
   });
-
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [searchForName, setSearchForName] = useState<string>("");
 
   const { collectionGroups: groups } = GetGroups();
-  const { collectionRegions: regions } = GetRegions();
+  const {regions} = useOrigins();
+
+  const regionOptions = new Collection<string, string>(
+    Array.from(regions.values()).map((region) => [region.id.toString(), region.name])
+  );
   const { collectionTypes: types } = GetTypes();
   const { collectionLanguages: languages } = GetLanguages();
   const { collectionNutrients: nutrients } = GetNutrients();
-
-  const handleSort = (order: "asc" | "desc") => {
-    if (order === "asc" || order === "desc") {
-      setSortOrder(order);
-    }
-  };
 
   const handleFilterChange = (
     filterKey: keyof typeof selectedFilters,
@@ -58,6 +55,7 @@ const FoodFilter = () => {
     language: Array.from(selectedFilters.languagesFilter),
     nutrient: Array.from(selectedFilters.nutrientFilter),
   };
+
   const queryString = qs.stringify(filters, {
     arrayFormat: "repeat",
     skipNulls: true,
@@ -74,14 +72,15 @@ const FoodFilter = () => {
       value: 0,
     });
     setSearchForName("");
-    setSortOrder("asc");
   };
+
   const FoodResults = useFetch<FoodResult[]>(
     `http://localhost:3000/api/v1/foods?${queryString}`
   );
   const foods = FoodResults.status === FetchStatus.Success ? FoodResults.data : [];
-
+  console.log(`http://localhost:3000/api/v1/foods?${queryString}`)
   const {t} = useTranslation("global");
+
   return (
     <div className="search-container">
       <div className="food-filter">
@@ -93,15 +92,17 @@ const FoodFilter = () => {
             filterOptions={types}
             onChange={(values) => handleFilterChange("foodTypeFilter", values)}
             single={false}
+            selectedOptions={Array.from(selectedFilters.foodTypeFilter)}
           />
         </div>
 
         <div className="filter-group">
           <label htmlFor="other">{t('Filter.regions')}</label>
           <SearchBox
-            filterOptions={regions}
+            filterOptions={regionOptions}
             onChange={(values) => handleFilterChange("regionsFilter", values)}
             single={false}
+            selectedOptions={Array.from(selectedFilters.regionsFilter)}
           />
         </div>
 
@@ -111,6 +112,7 @@ const FoodFilter = () => {
             filterOptions={groups}
             onChange={(values) => handleFilterChange("groupsFilter", values)}
             single={false}
+            selectedOptions={Array.from(selectedFilters.groupsFilter)}
           />
         </div>
 
@@ -120,6 +122,7 @@ const FoodFilter = () => {
             filterOptions={languages}
             onChange={(values) => handleFilterChange("languagesFilter", values)}
             single={false}
+            selectedOptions={Array.from(selectedFilters.languagesFilter)}
           />
         </div>
 
@@ -136,6 +139,7 @@ const FoodFilter = () => {
                     handleFilterChange("nutrientFilter", values)
                   }
                   single={true}
+                  selectedOptions={Array.from(selectedFilters.nutrientFilter)}
                 />
               </div>
             </Col>
@@ -178,17 +182,17 @@ const FoodFilter = () => {
         </Container>
 
         <button onClick={resetFilters} className="reset-button">
-        {t('Filter.reset')}
+          {t('Filter.reset')}
         </button>
       </div>
+
       <FoodResultsTable
         data={foods}
-        sortOrder={sortOrder}
-        handleSort={handleSort}
         searchForName={searchForName}
         setSearchForName={setSearchForName}
       />
     </div>
   );
 };
+
 export default FoodFilter;
