@@ -95,7 +95,10 @@ export default function DetailPage() {
 
   return (
     <div className="detail-background">
-      <Container>
+      <Container
+        className="custom-container-of-detail-page mt-1 mb-1 ml-1 mr-1"
+        fluid="xxl  "
+      >
         <Row>
           <Col md={6}>
             <div className="transparent-container">
@@ -253,24 +256,16 @@ export default function DetailPage() {
               >
                 <Nav
                   variant="tabs"
+                  justify
                   className="mb-3"
                   style={{
                     borderBottom: "1px solid #d1e7dd",
-                    paddingLeft: "50px",
                   }}
                 >
                   <Nav.Item>
                     <Nav.Link
                       eventKey="first"
-                      style={{
-                        backgroundColor: "#f8f9fa",
-                        borderRadius: "5px 5px 5px 5px",
-                        border: "1px solid #d1e7dd",
-                        marginRight: "5px",
-                        color: "#0d6efd",
-                        transition: "background-color 0.3s ease",
-                        padding: "8px 80px",
-                      }}
+                      className="custom-tab-link text-center px-4"
                     >
                       {t("DetailFood.labels.Nutritional")}
                     </Nav.Link>
@@ -278,15 +273,7 @@ export default function DetailPage() {
                   <Nav.Item>
                     <Nav.Link
                       eventKey="second"
-                      style={{
-                        backgroundColor: "#f8f9fa",
-                        borderRadius: "5px 5px 5px 5px",
-                        border: "1px solid #d1e7dd",
-                        marginRight: "5px",
-                        color: "#0d6efd",
-                        transition: "background-color 0.3s ease",
-                        padding: "8px 120px",
-                      }}
+                      className="custom-tab-link text-center px-4"
                     >
                       {t("DetailFood.references.title")}
                     </Nav.Link>
@@ -294,14 +281,7 @@ export default function DetailPage() {
                   <Nav.Item>
                     <Nav.Link
                       eventKey="third"
-                      style={{
-                        backgroundColor: "#f8f9fa",
-                        borderRadius: "5px 5px 5px 5px",
-                        border: "1px solid #d1e7dd",
-                        color: "#0d6efd",
-                        transition: "background-color 0.3s ease",
-                        padding: "8px 100px",
-                      }}
+                      className="custom-tab-link text-center px-4"
                     >
                       {t("DetailFood.labels.data")}
                     </Nav.Link>
@@ -338,5 +318,3 @@ export default function DetailPage() {
     </div>
   );
 }
-
-
