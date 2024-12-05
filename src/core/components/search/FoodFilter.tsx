@@ -22,13 +22,13 @@ const FoodFilter = () => {
     groupsFilter: new Set<string>(),
     languagesFilter: new Set<string>(),
     nutrientFilter: new Set<string>(),
-    operator: "",
+    operator: "=",
     value: 0,
   });
   const [searchForName, setSearchForName] = useState<string>("");
 
   const { collectionGroups: groups } = GetGroups();
-  const {regions} = useOrigins();
+  const { regions } = useOrigins();
 
   const regionOptions = new Collection<string, string>(
     Array.from(regions.values()).map((region) => [region.id.toString(), region.name])
@@ -53,8 +53,16 @@ const FoodFilter = () => {
     region: Array.from(selectedFilters.regionsFilter),
     group: Array.from(selectedFilters.groupsFilter),
     language: Array.from(selectedFilters.languagesFilter),
-    nutrient: Array.from(selectedFilters.nutrientFilter),
+    ...(selectedFilters.nutrientFilter.size > 0 &&
+      selectedFilters.operator &&
+      selectedFilters.value && {
+        nutrient: Array.from(selectedFilters.nutrientFilter),
+        operator: selectedFilters.operator,
+        value: selectedFilters.value,
+      }),
   };
+  
+  
 
   const queryString = qs.stringify(filters, {
     arrayFormat: "repeat",
@@ -68,7 +76,7 @@ const FoodFilter = () => {
       groupsFilter: new Set<string>(),
       languagesFilter: new Set<string>(),
       nutrientFilter: new Set<string>(),
-      operator: "",
+      operator: "=",
       value: 0,
     });
     setSearchForName("");
@@ -78,14 +86,15 @@ const FoodFilter = () => {
     `http://localhost:3000/api/v1/foods?${queryString}`
   );
   const foods = FoodResults.status === FetchStatus.Success ? FoodResults.data : [];
-  console.log(`http://localhost:3000/api/v1/foods?${queryString}`)
-  const {t} = useTranslation("global");
+  console.log(`http://localhost:3000/api/v1/foods?${queryString}`);
+  const { t } = useTranslation("global");
 
   return (
     <div className="search-container">
       <div className="food-filter">
         <h2>{t('Filter.title')}</h2>
 
+        {/* Filter Sections */}
         <div className="filter-group">
           <label htmlFor="other">{t('Filter.type')}</label>
           <SearchBox
@@ -126,6 +135,7 @@ const FoodFilter = () => {
           />
         </div>
 
+        {/* Measurement Section */}
         <Container className="mb-3 custom-container">
           <h3 className="measurent-title">
             <i className="bi bi-funnel-fill"></i> {t('Measurement.title')}
@@ -148,11 +158,11 @@ const FoodFilter = () => {
               <Form.Group controlId="operator-select">
                 <Form.Select
                   aria-label="Select operator"
-                  value={selectedFilters.operator.toString()}
+                  value={selectedFilters.operator}
                   onChange={(e) =>
                     setSelectedFilters((prevFilters) => ({
                       ...prevFilters,
-                      operator: e.target.value,
+                      operator: e.target.value || "=",
                     }))
                   }
                 >
@@ -174,6 +184,13 @@ const FoodFilter = () => {
                     type="number"
                     placeholder={t('Measurement.content.value')}
                     aria-label="Content value"
+                    value={selectedFilters.value || 0}
+                    onChange={(e) =>
+                      setSelectedFilters((prevFilters) => ({
+                        ...prevFilters,
+                        value: parseFloat(e.target.value) || 0,
+                      }))
+                    }
                   />
                 </InputGroup>
               </Form.Group>
