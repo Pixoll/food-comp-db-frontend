@@ -1,5 +1,5 @@
 import { Accordion, Table, Button } from "react-bootstrap";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../../../assets/css/_nutrientAccordion.css"
 import {
   NutrientsValue,
@@ -12,10 +12,12 @@ import { useTranslation } from "react-i18next";
 
 interface NutrientAccordionProps {
   data: NutrientsValue;
+  onUpdate: (updatedData: NutrientsValue) => void;
 }
 
 const NutrientAccordionModify: React.FC<NutrientAccordionProps> = ({
-  data
+  data,
+  onUpdate
 }) => {
   const {t} = useTranslation("global");
   const [selectedNutrient, setSelectedNutrient] =
@@ -34,40 +36,48 @@ const NutrientAccordionModify: React.FC<NutrientAccordionProps> = ({
   const [nutrientData, setNutrientData] = useState<NutrientsValue>(data);
 
   const handleSave = (
-    updatedNutrient: NutrientMeasurement | NutrientMeasurementWithComponents
-  ) => {
-    setNutrientData((prevData) => {
-      const updateCategory = (category: NutrientMeasurementWithComponents[] | NutrientMeasurement[]) =>
-        category.map((item) =>
-          item.nutrientId === updatedNutrient.nutrientId
-            ? { ...item, ...updatedNutrient }
-            : item
-        );
-  
-      return {
-        ...prevData,
-        energy: updateCategory(prevData.energy),
-        mainNutrients: prevData.mainNutrients.map((nutrient) => {
-          if (nutrient.nutrientId === updatedNutrient.nutrientId) {
-            return { ...nutrient, ...updatedNutrient };
-          }
-          if (nutrient.components) {
-            return {
-              ...nutrient,
-              components: updateCategory(nutrient.components),
-            };
-          }
-          return nutrient;
-        }),
-        micronutrients: {
-          vitamins: updateCategory(prevData.micronutrients.vitamins),
-          minerals: updateCategory(prevData.micronutrients.minerals),
-        },
-      };
-    });
-  };
-  console.log(nutrientData)
-  
+  updatedNutrient: NutrientMeasurement | NutrientMeasurementWithComponents
+) => {
+  setNutrientData((prevData) => {
+    const updateCategory = (
+      category: NutrientMeasurementWithComponents[] | NutrientMeasurement[]
+    ) =>
+      category.map((item) =>
+        item.nutrientId === updatedNutrient.nutrientId
+          ? { ...item, ...updatedNutrient }
+          : item
+      );
+
+    const updatedData = {
+      ...prevData,
+      energy: updateCategory(prevData.energy),
+      mainNutrients: prevData.mainNutrients.map((nutrient) => {
+        if (nutrient.nutrientId === updatedNutrient.nutrientId) {
+          return { ...nutrient, ...updatedNutrient };
+        }
+        if (nutrient.components) {
+          return {
+            ...nutrient,
+            components: updateCategory(nutrient.components),
+          };
+        }
+        return nutrient;
+      }),
+      micronutrients: {
+        vitamins: updateCategory(prevData.micronutrients.vitamins),
+        minerals: updateCategory(prevData.micronutrients.minerals),
+      },
+    };
+
+    onUpdate(updatedData);
+    console.log("desde el accordion: ",updatedData )
+    return updatedData;
+  });
+};
+useEffect(() => {
+  setNutrientData(data);
+}, [data]);
+
   return (
     <>
       <Accordion className="mi-accordion" defaultActiveKey={["0", "1", "2"]} >

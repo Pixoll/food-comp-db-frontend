@@ -1,4 +1,4 @@
-import { PieChart, Pie, Tooltip, Legend, Cell, ResponsiveContainer, Text } from "recharts";
+import { PieChart, Pie, Legend, ResponsiveContainer } from "recharts";
 
 interface DataItem {
   name: string;
