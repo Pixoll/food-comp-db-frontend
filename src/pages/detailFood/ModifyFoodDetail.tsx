@@ -70,8 +70,8 @@ export default function ModifyFoodDetail() {
   });
 
     const [namesAndIngredients, setNamesAndIngredients] = useState<{
-      commonName: Record<"es", string> & Record<"en" | "pt", string | undefined>;
-    ingredients: Record<"es" | "en" | "pt", string | undefined>;
+      commonName: Record<"es" |"en" | "pt", string | undefined>;
+      ingredients: Record<"es" | "en" | "pt", string | undefined>;
     }>({
       commonName: { es: data?.commonName.es || "", en: "", pt: "" },
       ingredients: { es: "", en: "", pt: "" },
@@ -169,10 +169,13 @@ export default function ModifyFoodDetail() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Datos guardados:", {
-      generalData,
-      groupAndTypeData,
-      namesAndIngredients,
-      nutrientValue,
+      commonName: namesAndIngredients.commonName,
+      ingredients:namesAndIngredients.ingredients,
+      groupId: groupAndTypeData.groupId,
+      typeId: groupAndTypeData.typeId,
+      strain: generalData.strain,
+      brand: generalData.brand, 
+      nutrientMeasurements:nutrientValue,
     });
   };
 
@@ -290,7 +293,19 @@ export default function ModifyFoodDetail() {
                   />
                 </Col>
               </Form.Group>
-
+              <Form.Group as={Row} className="mb-3" controlId="formObservation">
+                <Form.Label column sm={2}>
+                  {"Observación: "}
+                </Form.Label>
+                <Col sm={10}>
+                  <Form.Control
+                    type="text"
+                    name="observation"
+                    value={generalData.observation}
+                    onChange={handleInputChange}
+                  />
+                </Col>
+              </Form.Group>
               <Form.Group as={Row} className="mb-3" controlId="formGroup">
                 <Form.Label column sm={2}>
                   <RequiredFieldLabel
