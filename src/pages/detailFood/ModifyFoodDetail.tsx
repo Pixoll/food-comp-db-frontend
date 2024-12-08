@@ -9,7 +9,7 @@ import {
   SingleFoodResult,
   NutrientsValue,
   Origin,
-  LangualCode
+  LangualCode,
 } from "../../core/types/SingleFoodResult";
 import axios from "axios";
 import ReferencesList from "../../core/components/detailFood/ReferencesList";
@@ -63,11 +63,15 @@ export default function ModifyFoodDetail() {
     const type = types.find((type) => type.code === code);
     return type?.id;
   };
-  const searchScientificNameByName = (name: string | undefined): number | undefined => {
+  const searchScientificNameByName = (
+    name: string | undefined
+  ): number | undefined => {
     const scientificName = scientificNames.find((sn) => sn.name === name);
     return scientificName?.id;
   };
-  const searchSubspeciesByName = (name: string | undefined): number | undefined => {
+  const searchSubspeciesByName = (
+    name: string | undefined
+  ): number | undefined => {
     const result = subspecies.find((sp) => sp.name === name);
     return result?.id;
   };
@@ -88,7 +92,7 @@ export default function ModifyFoodDetail() {
     scientificName?: string;
     subspecies?: string;
     origins?: Origin[];
-    langualCodes?: LangualCode[]
+    langualCodes?: LangualCode[];
   }>({
     code: data?.code || "",
     strain: data?.strain,
@@ -97,7 +101,7 @@ export default function ModifyFoodDetail() {
     scientificName: data?.scientificName,
     subspecies: data?.subspecies,
     origins: data?.origins,
-    langualCodes: data?.langualCodes
+    langualCodes: data?.langualCodes,
   });
 
   const [namesAndIngredients, setNamesAndIngredients] = useState<{
@@ -140,7 +144,7 @@ export default function ModifyFoodDetail() {
         observation: data.observation,
         scientificName: data.scientificName,
         subspecies: data.subspecies,
-        origins: data.origins
+        origins: data.origins,
       };
 
       const initialNamesAndIngredients = {
@@ -222,41 +226,40 @@ export default function ModifyFoodDetail() {
   };
 
   const getUniqueRegionIds = (): number[] | undefined => {
-    const allRegionIds = [...regions.keys()] as number[]; 
-  
+    const allRegionIds = [...regions.keys()] as number[];
+
     if (!generalData.origins) {
       return undefined;
     }
     const uniqueRegionIds = [
       ...new Set(
-        generalData.origins.flatMap(origin =>
+        generalData.origins.flatMap((origin) =>
           origin.id !== 0 ? origin.id : allRegionIds
         )
       ),
     ];
-  
+
     return uniqueRegionIds;
   };
 
   const getUniqueLangualCodeIds = (): number[] | undefined => {
     if (!generalData.langualCodes) return undefined;
-  
+
     const uniqueLangualCodeIds = [
       ...new Set(
-        generalData.langualCodes.flatMap(langualCode => [
-          langualCode.id, 
-          ...langualCode.children.map(child => child.id),
+        generalData.langualCodes.flatMap((langualCode) => [
+          langualCode.id,
+          ...langualCode.children.map((child) => child.id),
         ])
       ),
     ];
-  
+
     return uniqueLangualCodeIds;
   };
-  
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const payload={
+    const payload = {
       commonName: namesAndIngredients.commonName,
       ingredients: namesAndIngredients.ingredients,
       scientificNameId: searchScientificNameByName(generalData.scientificName),
@@ -266,7 +269,7 @@ export default function ModifyFoodDetail() {
       strain: generalData.strain,
       brand: generalData.brand,
       observation: generalData.observation,
-      originIds:getUniqueRegionIds(),
+      originIds: getUniqueRegionIds(),
       nutrientMeasurements: [
         ...nutrientValue.energy.map((energy) => ({
           nutrientId: energy.nutrientId,
@@ -274,7 +277,9 @@ export default function ModifyFoodDetail() {
           deviation: stringToNumberOrUndefined(energy.deviation?.toString()),
           min: stringToNumberOrUndefined(energy.min?.toString()),
           max: stringToNumberOrUndefined(energy.max?.toString()),
-          sampleSize: stringToNumberOrUndefined(energy.sampleSize?.toString()) || undefined,
+          sampleSize:
+            stringToNumberOrUndefined(energy.sampleSize?.toString()) ||
+            undefined,
           dataType: energy.dataType,
           referencesCodes: energy.referenceCodes,
         })),
@@ -287,20 +292,26 @@ export default function ModifyFoodDetail() {
             ),
             min: stringToNumberOrUndefined(mainNutrient.min?.toString()),
             max: stringToNumberOrUndefined(mainNutrient.max?.toString()),
-            sampleSize: stringToNumberOrUndefined(
-              mainNutrient.sampleSize?.toString()
-            )|| undefined,
+            sampleSize:
+              stringToNumberOrUndefined(mainNutrient.sampleSize?.toString()) ||
+              undefined,
             dataType: mainNutrient.dataType,
             referencesCodes: mainNutrient.referenceCodes,
           },
           ...(mainNutrient.components
             ? mainNutrient.components.map((component) => ({
                 nutrientId: component.nutrientId,
-                average: stringToNumberOrUndefined(component.average.toString()),
-                deviation: stringToNumberOrUndefined(component.deviation?.toString()),
+                average: stringToNumberOrUndefined(
+                  component.average.toString()
+                ),
+                deviation: stringToNumberOrUndefined(
+                  component.deviation?.toString()
+                ),
                 min: stringToNumberOrUndefined(component.min?.toString()),
                 max: stringToNumberOrUndefined(component.max?.toString()),
-                sampleSize: stringToNumberOrUndefined(component.sampleSize?.toString()) || undefined,
+                sampleSize:
+                  stringToNumberOrUndefined(component.sampleSize?.toString()) ||
+                  undefined,
                 dataType: component.dataType,
                 referencesCodes: component.referenceCodes,
               }))
@@ -312,7 +323,9 @@ export default function ModifyFoodDetail() {
           deviation: stringToNumberOrUndefined(mineral.deviation?.toString()),
           min: stringToNumberOrUndefined(mineral.min?.toString()),
           max: stringToNumberOrUndefined(mineral.max?.toString()),
-          sampleSize: stringToNumberOrUndefined(mineral.sampleSize?.toString()) || undefined,
+          sampleSize:
+            stringToNumberOrUndefined(mineral.sampleSize?.toString()) ||
+            undefined,
           dataType: mineral.dataType,
           referencesCodes: mineral.referenceCodes,
         })),
@@ -322,34 +335,41 @@ export default function ModifyFoodDetail() {
           deviation: stringToNumberOrUndefined(vitamin.deviation?.toString()),
           min: stringToNumberOrUndefined(vitamin.min?.toString()),
           max: stringToNumberOrUndefined(vitamin.max?.toString()),
-          sampleSize: stringToNumberOrUndefined(vitamin.sampleSize?.toString()) || undefined,
+          sampleSize:
+            stringToNumberOrUndefined(vitamin.sampleSize?.toString()) ||
+            undefined,
           dataType: vitamin.dataType,
           referencesCodes: vitamin.referenceCodes,
         })),
       ],
-      langualCodes: getUniqueLangualCodeIds()
+      langualCodes: getUniqueLangualCodeIds(),
     };
     try {
-
-      console.log(payload)
-      const response = await axios.patch(`http://localhost:3000/api/v1/foods/${code}`, payload, {
-        headers: {
-          Authorization: `Bearer ${token}`, 
-        },
-      });
-      console.log('Datos actualizados exitosamente:', response.data);
-    }
-      catch (error) {
-        if (axios.isAxiosError(error)) {
-          if((error.response?.status || -1) < 400){
-            return;
-          }
-          console.error('Error en la solicitud:', error.response?.data || error.message);
-        } else {
-          console.error('Error desconocido:', error);
+      console.log(payload);
+      const response = await axios.patch(
+        `http://localhost:3000/api/v1/foods/${code}`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
+      );
+      console.log("Datos actualizados exitosamente:", response.data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if ((error.response?.status || -1) < 400) {
+          return;
+        }
+        console.error(
+          "Error en la solicitud:",
+          error.response?.data || error.message
+        );
+      } else {
+        console.error("Error desconocido:", error);
       }
-    };
+    }
+  };
 
   const renderLanguageFields = (field: "commonName" | "ingredients") =>
     ["es", "en", "pt"].map((lang) => (
@@ -383,7 +403,7 @@ export default function ModifyFoodDetail() {
 
   return (
     <div className="detail-background">
-      <Container>
+      <Container className="custom-container-of-detail-page">
         <Form onSubmit={handleSubmit}>
           <Col md={12}>
             <div className="transparent-container">
@@ -536,7 +556,7 @@ export default function ModifyFoodDetail() {
             </div>
           </Col>
 
-          <Row className="mt-4">
+          <Col className="mt-4">
             <Col>
               <div
                 style={{
@@ -548,22 +568,16 @@ export default function ModifyFoodDetail() {
                 <Tab.Container defaultActiveKey="first">
                   <Nav
                     variant="tabs"
+                    justify
                     className="mb-3"
-                    style={{ borderBottom: "2px solid #d1e7dd" }}
-                    activeKey={key}
-                    onSelect={(k) => setKey(k as string)}
+                    style={{
+                      borderBottom: "1px solid #d1e7dd",
+                    }}
                   >
                     <Nav.Item>
                       <Nav.Link
                         eventKey="first"
-                        style={{
-                          backgroundColor: "#f8f9fa",
-                          borderRadius: "5px 5px 0 0",
-                          border: "1px solid #d1e7dd",
-                          marginRight: "5px",
-                          color: "#0d6efd",
-                          transition: "background-color 0.3s ease",
-                        }}
+                        className="custom-tab-link text-center px-4"
                       >
                         {t("DetailFood.labels.Nutritional")}
                       </Nav.Link>
@@ -571,14 +585,7 @@ export default function ModifyFoodDetail() {
                     <Nav.Item>
                       <Nav.Link
                         eventKey="second"
-                        style={{
-                          backgroundColor: "#f8f9fa",
-                          borderRadius: "5px 5px 0 0",
-                          border: "1px solid #d1e7dd",
-                          marginRight: "5px",
-                          color: "#0d6efd",
-                          transition: "background-color 0.3s ease",
-                        }}
+                        className="custom-tab-link text-center px-4"
                       >
                         {t("DetailFood.references.title")}
                       </Nav.Link>
@@ -586,13 +593,7 @@ export default function ModifyFoodDetail() {
                     <Nav.Item>
                       <Nav.Link
                         eventKey="third"
-                        style={{
-                          backgroundColor: "#f8f9fa",
-                          borderRadius: "5px 5px 0 0",
-                          border: "1px solid #d1e7dd",
-                          color: "#0d6efd",
-                          transition: "background-color 0.3s ease",
-                        }}
+                        className="custom-tab-link text-center px-4"
                       >
                         {t("DetailFood.labels.data")}
                       </Nav.Link>
@@ -619,13 +620,17 @@ export default function ModifyFoodDetail() {
                   </Tab.Content>
                 </Tab.Container>
               </div>
-            </Col>
-          </Row>
-          <Form.Group as={Row} className="mb-3">
-            <Col sm={{ span: 10, offset: 2 }}>
-              <Button type="submit">{t("DetailFood.save")}</Button>
-            </Col>
-          </Form.Group>
+            </Col>  
+          </Col>
+          <Col md={12}>
+            <button
+              className="button-submit w-100"
+              type="submit"
+              onClick={handleSubmit}
+            >
+              {t("DetailFood.save")}
+            </button>
+          </Col>
         </Form>
       </Container>
 
