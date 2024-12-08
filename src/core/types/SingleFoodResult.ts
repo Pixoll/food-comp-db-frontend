@@ -26,7 +26,7 @@ export type SingleFoodResult = {
             minerals: NutrientMeasurement[];
         };
     };
-    origins?: string[];
+    origins?: Origin[];
     langualCodes: LangualCode[];
     references: Reference[];
 };
@@ -38,6 +38,10 @@ export type NutrientsValue = {
         minerals: NutrientMeasurement[];
     };
 };
+export type Origin = {
+    id: number;
+    name: string;
+}
 export type NutrientMeasurement = {
     nutrientId: number;
     name: string;

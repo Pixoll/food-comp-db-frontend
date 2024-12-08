@@ -150,7 +150,7 @@ export default function DetailPage() {
                 data.origins.map((origin, index) => (
                   <div key={index}>
 
-                    <p><strong>Origen {index + 1}: </strong>{origin}</p>
+                    <p><strong>Origen {index + 1}: </strong>{origin.name}</p>
                   </div>
                 ))}
               {data.observation && (

@@ -16,6 +16,8 @@ import { useTranslation } from "react-i18next";
 import OriginSelector from "../../core/components/adminPage/OriginSelector";
 import useGroups from "../../core/components/adminPage/getters/useGroups";
 import useTypes from "../../core/components/adminPage/getters/useTypes";
+import useScientificNames from "../../core/components/adminPage/getters/useScientificNames";
+import useSubspecies from "../../core/components/adminPage/getters/useSubspecies";
 
 export default function ModifyFoodDetail() {
   const [key, setKey] = useState("first");
@@ -25,30 +27,49 @@ export default function ModifyFoodDetail() {
 
   const groupsResult = useGroups();
   const typesResult = useTypes();
+  const scientificNamesResult = useScientificNames();
+  const subspeciesResult = useSubspecies();
 
   const groups =
     groupsResult.status === FetchStatus.Success ? groupsResult.data : [];
   const types =
     typesResult.status === FetchStatus.Success ? typesResult.data : [];
 
+  const scientificNames =
+    scientificNamesResult.status === FetchStatus.Success
+      ? scientificNamesResult.data
+      : [];
+  const subspecies =
+    subspeciesResult.status === FetchStatus.Success
+      ? subspeciesResult.data
+      : [];
+
   const { t } = useTranslation("global");
 
   const searchGroupByCode = (code: string): number | undefined => {
     const group = groups.find((group) => group.code === code);
-    return group ? group.id : undefined;
+    return group?.id;
   };
   const searchTypeByCode = (code: string): number | undefined => {
     const type = types.find((type) => type.code === code);
-    return type ? type.id : undefined;
+    return type?.id;
+  };
+  const searchScientificNameByName = (name: string | undefined): number | undefined => {
+    const scientificName = scientificNames.find((sn) => sn.name === name);
+    return scientificName?.id;
+  };
+  const searchSubspeciesByName = (name: string | undefined): number | undefined => {
+    const result = subspecies.find((sp) => sp.name === name);
+    return result?.id;
   };
 
   const searchNameGroupByID = (id: number | undefined): string => {
     const group = groups.find((group) => group.id === id);
-    return group ? group.name : "";
+    return group?.name || "";
   };
   const searchNameTypeByID = (id: number): string => {
     const type = types.find((type) => type.id === id);
-    return type ? type.name : "";
+    return type?.name || "";
   };
   const [generalData, setGeneralData] = useState<{
     code: string;
@@ -192,6 +213,8 @@ export default function ModifyFoodDetail() {
     console.log("Datos guardados:", {
       commonName: namesAndIngredients.commonName,
       ingredients: namesAndIngredients.ingredients,
+      scientificNameId: searchScientificNameByName(generalData.scientificName),
+      subspeciesId: searchSubspeciesByName(generalData.subspecies),
       groupId: groupAndTypeData.groupId,
       typeId: groupAndTypeData.typeId,
       strain: generalData.strain,

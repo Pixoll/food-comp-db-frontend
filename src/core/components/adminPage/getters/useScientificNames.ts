@@ -8,3 +8,4 @@ type ScientificName = {
 const useScientificNames = () =>{
     return useFetch<ScientificName[]>(`/scientific_names`)
 }
+export default useScientificNames
