@@ -62,8 +62,11 @@ export type NutrientMeasurementWithComponents = NutrientMeasurement & {
 };
 
 export type LangualCode = {
+    id: number;
+    code: string;
     descriptor: string;
     children: Array<{
+        id: number;
         code: string;
         descriptor: string;
     }>;

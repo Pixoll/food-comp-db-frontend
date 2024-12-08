@@ -1,14 +1,17 @@
 import { Button, Col, Container, Form, Nav, Row, Tab } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import "../../assets/css/_DetailPage.css";
+import "../../assets/css/_ModifyDetailFood.css";
 import NutrientAccordionModify from "../../core/components/detailFood/NutrientAccordionModify";
 import Footer from "../../core/components/Footer";
 import useFetch, { FetchStatus } from "../../core/hooks/useFetch";
 import {
   SingleFoodResult,
   NutrientsValue,
+  Origin,
+  LangualCode
 } from "../../core/types/SingleFoodResult";
+import axios from "axios";
 import ReferencesList from "../../core/components/detailFood/ReferencesList";
 import LengualCodeComponent from "../../core/components/detailFood/LengualCodeComponent";
 import RequiredFieldLabel from "../../core/components/detailFood/RequiredFieldLabel";
@@ -18,17 +21,23 @@ import useGroups from "../../core/components/adminPage/getters/useGroups";
 import useTypes from "../../core/components/adminPage/getters/useTypes";
 import useScientificNames from "../../core/components/adminPage/getters/useScientificNames";
 import useSubspecies from "../../core/components/adminPage/getters/useSubspecies";
+import useOrigins from "../../core/components/adminPage/getters/useOrigins";
+import { useAuth } from "../../core/context/AuthContext";
 
 export default function ModifyFoodDetail() {
   const [key, setKey] = useState("first");
   const { code } = useParams();
   const result = useFetch<SingleFoodResult>(`/foods/${code}`);
   const data = result.status === FetchStatus.Success ? result.data : null;
-
   const groupsResult = useGroups();
   const typesResult = useTypes();
   const scientificNamesResult = useScientificNames();
+  const { state } = useAuth();
+  const token = state.token;
+
   const subspeciesResult = useSubspecies();
+
+  const { regions, provinces, communes, locations } = useOrigins();
 
   const groups =
     groupsResult.status === FetchStatus.Success ? groupsResult.data : [];
@@ -78,6 +87,8 @@ export default function ModifyFoodDetail() {
     observation?: string;
     scientificName?: string;
     subspecies?: string;
+    origins?: Origin[];
+    langualCodes?: LangualCode[]
   }>({
     code: data?.code || "",
     strain: data?.strain,
@@ -85,6 +96,8 @@ export default function ModifyFoodDetail() {
     observation: data?.observation,
     scientificName: data?.scientificName,
     subspecies: data?.subspecies,
+    origins: data?.origins,
+    langualCodes: data?.langualCodes
   });
 
   const [namesAndIngredients, setNamesAndIngredients] = useState<{
@@ -127,6 +140,7 @@ export default function ModifyFoodDetail() {
         observation: data.observation,
         scientificName: data.scientificName,
         subspecies: data.subspecies,
+        origins: data.origins
       };
 
       const initialNamesAndIngredients = {
@@ -156,7 +170,6 @@ export default function ModifyFoodDetail() {
       };
       setNutrientValue(initialNutrientData);
       setGeneralData(initialGeneralData);
-      console.log(initialNamesAndIngredients);
       setNamesAndIngredients(initialNamesAndIngredients);
       setGroupAndTypeData(groupAndTypeDataForm);
     }
@@ -208,9 +221,42 @@ export default function ModifyFoodDetail() {
     return parsedNumber;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const getUniqueRegionIds = (): number[] | undefined => {
+    const allRegionIds = [...regions.keys()] as number[]; 
+  
+    if (!generalData.origins) {
+      return undefined;
+    }
+    const uniqueRegionIds = [
+      ...new Set(
+        generalData.origins.flatMap(origin =>
+          origin.id !== 0 ? origin.id : allRegionIds
+        )
+      ),
+    ];
+  
+    return uniqueRegionIds;
+  };
+
+  const getUniqueLangualCodeIds = (): number[] | undefined => {
+    if (!generalData.langualCodes) return undefined;
+  
+    const uniqueLangualCodeIds = [
+      ...new Set(
+        generalData.langualCodes.flatMap(langualCode => [
+          langualCode.id, 
+          ...langualCode.children.map(child => child.id),
+        ])
+      ),
+    ];
+  
+    return uniqueLangualCodeIds;
+  };
+  
+  
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Datos guardados:", {
+    const payload={
       commonName: namesAndIngredients.commonName,
       ingredients: namesAndIngredients.ingredients,
       scientificNameId: searchScientificNameByName(generalData.scientificName),
@@ -219,6 +265,8 @@ export default function ModifyFoodDetail() {
       typeId: groupAndTypeData.typeId,
       strain: generalData.strain,
       brand: generalData.brand,
+      observation: generalData.observation,
+      originIds:getUniqueRegionIds(),
       nutrientMeasurements: [
         ...nutrientValue.energy.map((energy) => ({
           nutrientId: energy.nutrientId,
@@ -226,7 +274,7 @@ export default function ModifyFoodDetail() {
           deviation: stringToNumberOrUndefined(energy.deviation?.toString()),
           min: stringToNumberOrUndefined(energy.min?.toString()),
           max: stringToNumberOrUndefined(energy.max?.toString()),
-          sampleSize: stringToNumberOrUndefined(energy.sampleSize?.toString()),
+          sampleSize: stringToNumberOrUndefined(energy.sampleSize?.toString()) || undefined,
           dataType: energy.dataType,
           referencesCodes: energy.referenceCodes,
         })),
@@ -241,18 +289,18 @@ export default function ModifyFoodDetail() {
             max: stringToNumberOrUndefined(mainNutrient.max?.toString()),
             sampleSize: stringToNumberOrUndefined(
               mainNutrient.sampleSize?.toString()
-            ),
+            )|| undefined,
             dataType: mainNutrient.dataType,
             referencesCodes: mainNutrient.referenceCodes,
           },
           ...(mainNutrient.components
             ? mainNutrient.components.map((component) => ({
                 nutrientId: component.nutrientId,
-                average: component.average,
-                deviation: component.deviation,
-                min: component.min,
-                max: component.max,
-                sampleSize: component.sampleSize,
+                average: stringToNumberOrUndefined(component.average.toString()),
+                deviation: stringToNumberOrUndefined(component.deviation?.toString()),
+                min: stringToNumberOrUndefined(component.min?.toString()),
+                max: stringToNumberOrUndefined(component.max?.toString()),
+                sampleSize: stringToNumberOrUndefined(component.sampleSize?.toString()) || undefined,
                 dataType: component.dataType,
                 referencesCodes: component.referenceCodes,
               }))
@@ -260,27 +308,48 @@ export default function ModifyFoodDetail() {
         ]),
         ...nutrientValue.micronutrients.minerals.map((mineral) => ({
           nutrientId: mineral.nutrientId,
-          average: mineral.average,
-          deviation: mineral.deviation,
-          min: mineral.min,
-          max: mineral.max,
-          sampleSize: mineral.sampleSize,
+          average: stringToNumberOrUndefined(mineral.average.toString()),
+          deviation: stringToNumberOrUndefined(mineral.deviation?.toString()),
+          min: stringToNumberOrUndefined(mineral.min?.toString()),
+          max: stringToNumberOrUndefined(mineral.max?.toString()),
+          sampleSize: stringToNumberOrUndefined(mineral.sampleSize?.toString()) || undefined,
           dataType: mineral.dataType,
           referencesCodes: mineral.referenceCodes,
         })),
         ...nutrientValue.micronutrients.vitamins.map((vitamin) => ({
           nutrientId: vitamin.nutrientId,
-          average: vitamin.average,
-          deviation: vitamin.deviation,
-          min: vitamin.min,
-          max: vitamin.max,
-          sampleSize: vitamin.sampleSize,
+          average: stringToNumberOrUndefined(vitamin.average.toString()),
+          deviation: stringToNumberOrUndefined(vitamin.deviation?.toString()),
+          min: stringToNumberOrUndefined(vitamin.min?.toString()),
+          max: stringToNumberOrUndefined(vitamin.max?.toString()),
+          sampleSize: stringToNumberOrUndefined(vitamin.sampleSize?.toString()) || undefined,
           dataType: vitamin.dataType,
           referencesCodes: vitamin.referenceCodes,
         })),
       ],
-    });
-  };
+      langualCodes: getUniqueLangualCodeIds()
+    };
+    try {
+
+      console.log(payload)
+      const response = await axios.patch(`http://localhost:3000/api/v1/foods/${code}`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`, 
+        },
+      });
+      console.log('Datos actualizados exitosamente:', response.data);
+    }
+      catch (error) {
+        if (axios.isAxiosError(error)) {
+          if((error.response?.status || -1) < 400){
+            return;
+          }
+          console.error('Error en la solicitud:', error.response?.data || error.message);
+        } else {
+          console.error('Error desconocido:', error);
+        }
+      }
+    };
 
   const renderLanguageFields = (field: "commonName" | "ingredients") =>
     ["es", "en", "pt"].map((lang) => (
