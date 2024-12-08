@@ -70,7 +70,6 @@ const NutrientAccordionModify: React.FC<NutrientAccordionProps> = ({
     };
 
     onUpdate(updatedData);
-    console.log("desde el accordion: ",updatedData )
     return updatedData;
   });
 };
@@ -176,6 +175,19 @@ useEffect(() => {
                               </td>
                             </tr>
                           ))}
+                          <tr>
+                            <td>
+                              <strong>{nutrient.name}(Total)</strong>
+                            </td>
+                            <td>
+                              <Button
+                                variant="link"
+                                onClick={() => handleOpenModal(nutrient)}
+                              >
+                                <BsPencil size={30} color="#caca16" />
+                              </Button>
+                            </td>
+                          </tr>
                         </tbody>
                       </Table>
                     </Accordion.Body>

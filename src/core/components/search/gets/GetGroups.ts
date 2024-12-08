@@ -2,7 +2,7 @@ import useFetch, { FetchStatus } from '../../../hooks/useFetch';
 import { Group } from '../../../types/option';
 import { Collection } from '../../../utils/collection';
 const GetGroups = () => {
-  const result = useFetch<Group[]>("http://localhost:3000/api/v1/groups");
+  const result = useFetch<Group[]>("/groups");
 
   const collectionGroups = new Collection<string, string>();
   if (result.status === FetchStatus.Success) {

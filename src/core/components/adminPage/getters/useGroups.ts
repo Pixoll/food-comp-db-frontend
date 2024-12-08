@@ -7,7 +7,7 @@ type Group ={
 }
 
 const useGroups = ()=>{
- return useFetch<Group[]>("http://localhost:3000/api/v1/groups")
+ return useFetch<Group[]>("/groups")
 }
 
 export default useGroups;

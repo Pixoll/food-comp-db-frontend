@@ -41,7 +41,7 @@ type Location = CommonOrigin & {
 };
 
 const useOrigins = () => {
-  const result = useFetch<Origin[]>(`http://localhost:3000/api/v1/origins/`);
+  const result = useFetch<Origin[]>(`/origins`);
   const origins = result.status === FetchStatus.Success ? result.data : [];
 
   const regions = new Collection<number, Region>();

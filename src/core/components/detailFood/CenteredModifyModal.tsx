@@ -19,6 +19,7 @@ const CenteredModifyModal: React.FC<ModalProps> = ({
 
 }) => {
   const [formData, setFormData] = useState<NutrientMeasurement>(data);
+  const processValue = (value: string) => value.trim() === "" ? undefined : value;
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -26,11 +27,12 @@ const CenteredModifyModal: React.FC<ModalProps> = ({
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "standardized" ? value === "true" : value,
+      [name]: name === "standardized" ? value === "true" : processValue(value),
     }));
   };
 
   const handleSave = () => {
+
     onSave(formData); 
     onHide();
   };
@@ -51,6 +53,15 @@ const CenteredModifyModal: React.FC<ModalProps> = ({
       </Modal.Header>
       <Modal.Body>
         <Form>
+        <Form.Group>
+            <Form.Label>{"Tamaño de muestra"}</Form.Label>
+            <Form.Control
+              type="number"
+              name="sampleSize"
+              value={formData.sampleSize || ""}
+              onChange={handleChange}
+            />
+          </Form.Group>
         <Form.Group>
             <Form.Label>{t('Centered.mean')}</Form.Label>
             <Form.Control

@@ -25,7 +25,7 @@ const LoginPage = () => {
     const onLogin = (e: React.FormEvent) => {
         e.preventDefault();
 
-        const url = `http://localhost:3000/api/v1/admins/${formState.username}/session`;
+        const url = `/admins/${formState.username}/session`;
 
         console.log(t('loginPage.state.request'), url);
         console.log(t('loginPage.state.send'), {

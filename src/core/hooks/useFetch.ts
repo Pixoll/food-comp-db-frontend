@@ -33,7 +33,7 @@ export default function useFetch<T>(url: string): FetchResult<T> {
         const abortController = new AbortController();
         setController(abortController);
 
-        fetch(url, { signal: abortController.signal })
+        fetch("http://localhost:3000/api/v1" + url, { signal: abortController.signal })
             .then(async (response) => {
                 const json = await response.json();
                 if (response.status >= 400) {

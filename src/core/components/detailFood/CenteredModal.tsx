@@ -50,6 +50,7 @@ const CenteredModal: React.FC<ModalProps> = ({ data, onHide, onReferenceClick })
         <Table responsive="lg">
           <thead>
             <tr>
+              <th>Tamaño de muestra</th>
               <th>{t('Centered.deviation')}</th>
               <th>{t('Centered.min')}</th>
               <th>{t('Centered.max')}</th>
@@ -60,6 +61,7 @@ const CenteredModal: React.FC<ModalProps> = ({ data, onHide, onReferenceClick })
           </thead>
           <tbody>
             <tr>
+              <td>{data.sampleSize || "N/A"}</td>
               <td>{data.deviation || "N/A"}</td>
               <td>{data.min || "N/A"}</td>
               <td>{data.max || "N/A"}</td>

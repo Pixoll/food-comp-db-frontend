@@ -4,7 +4,7 @@ import { Collection } from '../../../utils/collection';
 
 
 const GetNutrients = () => {
-  const result = useFetch<GroupedNutrients>("http://localhost:3000/api/v1/nutrients");
+  const result = useFetch<GroupedNutrients>("/nutrients");
 
   const collectionNutrients = new Collection<string,string>()
 

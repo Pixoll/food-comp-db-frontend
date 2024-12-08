@@ -22,7 +22,7 @@ export type AnyNutrient = {
 };
 
 export const useNutrients = () => {
-  return useFetch<GroupedNutrients>("http://localhost:3000/api/v1/nutrients");
+  return useFetch<GroupedNutrients>("/nutrients");
 };
 
 export default useNutrients;

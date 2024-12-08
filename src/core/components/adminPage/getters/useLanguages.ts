@@ -6,7 +6,7 @@ type Language ={
 }
 
 const useLanguages = ()=>{
- return useFetch<Language[]>("http://localhost:3000/api/v1/languages")
+ return useFetch<Language[]>("/languages")
 }
 
 export default useLanguages;

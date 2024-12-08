@@ -17,13 +17,10 @@ import OriginSelector from "../../core/components/adminPage/OriginSelector";
 import useGroups from "../../core/components/adminPage/getters/useGroups";
 import useTypes from "../../core/components/adminPage/getters/useTypes";
 
-
 export default function ModifyFoodDetail() {
   const [key, setKey] = useState("first");
   const { code } = useParams();
-  const result = useFetch<SingleFoodResult>(
-    `http://localhost:3000/api/v1/foods/${code}`
-  );
+  const result = useFetch<SingleFoodResult>(`/foods/${code}`);
   const data = result.status === FetchStatus.Success ? result.data : null;
 
   const groupsResult = useGroups();
@@ -35,7 +32,7 @@ export default function ModifyFoodDetail() {
     typesResult.status === FetchStatus.Success ? typesResult.data : [];
 
   const { t } = useTranslation("global");
-  
+
   const searchGroupByCode = (code: string): number | undefined => {
     const group = groups.find((group) => group.code === code);
     return group ? group.id : undefined;
@@ -45,7 +42,7 @@ export default function ModifyFoodDetail() {
     return type ? type.id : undefined;
   };
 
-  const searchNameGroupByID = (id: number): string => {
+  const searchNameGroupByID = (id: number | undefined): string => {
     const group = groups.find((group) => group.id === id);
     return group ? group.name : "";
   };
@@ -69,13 +66,21 @@ export default function ModifyFoodDetail() {
     subspecies: data?.subspecies,
   });
 
-    const [namesAndIngredients, setNamesAndIngredients] = useState<{
-      commonName: Record<"es" |"en" | "pt", string | undefined>;
-      ingredients: Record<"es" | "en" | "pt", string | undefined>;
-    }>({
-      commonName: { es: data?.commonName.es || "", en: "", pt: "" },
-      ingredients: { es: "", en: "", pt: "" },
-    });
+  const [namesAndIngredients, setNamesAndIngredients] = useState<{
+    commonName: Record<"es" | "en" | "pt", string | undefined>;
+    ingredients: Record<"es" | "en" | "pt", string | undefined>;
+  }>({
+    commonName: {
+      es: data?.commonName.es || undefined,
+      en: data?.commonName.en || undefined,
+      pt: data?.commonName.pt || undefined,
+    },
+    ingredients: {
+      es: data?.ingredients.es || undefined,
+      en: data?.ingredients.en || undefined,
+      pt: data?.ingredients.pt || undefined,
+    },
+  });
 
   const [groupAndTypeData, setGroupAndTypeData] = useState<{
     groupId: number | undefined;
@@ -105,14 +110,14 @@ export default function ModifyFoodDetail() {
 
       const initialNamesAndIngredients = {
         commonName: {
-          es: data?.commonName?.es || "",
-          en: data?.commonName?.en?.trim() === "" ? undefined : data?.commonName?.en,
-          pt: data?.commonName?.pt?.trim() === "" ? undefined : data?.commonName?.pt,
+          es: data?.commonName?.es?.trim() || undefined,
+          en: data?.commonName?.en?.trim() || undefined,
+          pt: data?.commonName?.pt?.trim() || undefined,
         },
         ingredients: {
-          es: data?.ingredients?.es?.trim() === "" ? undefined : data?.ingredients?.es,
-          en: data?.ingredients?.en?.trim() === "" ? undefined : data?.ingredients?.en,
-          pt: data?.ingredients?.pt?.trim() === "" ? undefined : data?.ingredients?.pt,
+          es: data?.ingredients?.es?.trim() || undefined,
+          en: data?.ingredients?.en?.trim() || undefined,
+          pt: data?.ingredients?.pt?.trim() || undefined,
         },
       };
 
@@ -130,11 +135,11 @@ export default function ModifyFoodDetail() {
       };
       setNutrientValue(initialNutrientData);
       setGeneralData(initialGeneralData);
+      console.log(initialNamesAndIngredients);
       setNamesAndIngredients(initialNamesAndIngredients);
       setGroupAndTypeData(groupAndTypeDataForm);
     }
   }, [data]);
-
 
   if (!data) {
     return <h2>{t("DetailFood.loading")}</h2>;
@@ -145,9 +150,10 @@ export default function ModifyFoodDetail() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-  
-    const processValue = (value: string) => value.trim() === "" ? undefined : value;
-  
+
+    const processValue = (value: string) =>
+      value.trim() === "" ? undefined : value;
+
     if (name.startsWith("commonName.") || name.startsWith("ingredients.")) {
       const [field, lang] = name.split(".");
       setNamesAndIngredients((prevState) => ({
@@ -164,18 +170,92 @@ export default function ModifyFoodDetail() {
       }));
     }
   };
-  
+
+  const stringToNumberOrUndefined = (
+    number: string | undefined
+  ): number | undefined => {
+    if (!number?.trim()) {
+      return undefined;
+    }
+
+    const parsedNumber = +number.replace(",", ".");
+
+    if (isNaN(parsedNumber)) {
+      return undefined;
+    }
+
+    return parsedNumber;
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Datos guardados:", {
       commonName: namesAndIngredients.commonName,
-      ingredients:namesAndIngredients.ingredients,
+      ingredients: namesAndIngredients.ingredients,
       groupId: groupAndTypeData.groupId,
       typeId: groupAndTypeData.typeId,
       strain: generalData.strain,
-      brand: generalData.brand, 
-      nutrientMeasurements:nutrientValue,
+      brand: generalData.brand,
+      nutrientMeasurements: [
+        ...nutrientValue.energy.map((energy) => ({
+          nutrientId: energy.nutrientId,
+          average: stringToNumberOrUndefined(energy.average.toString()),
+          deviation: stringToNumberOrUndefined(energy.deviation?.toString()),
+          min: stringToNumberOrUndefined(energy.min?.toString()),
+          max: stringToNumberOrUndefined(energy.max?.toString()),
+          sampleSize: stringToNumberOrUndefined(energy.sampleSize?.toString()),
+          dataType: energy.dataType,
+          referencesCodes: energy.referenceCodes,
+        })),
+        ...nutrientValue.mainNutrients.flatMap((mainNutrient) => [
+          {
+            nutrientId: mainNutrient.nutrientId,
+            average: stringToNumberOrUndefined(mainNutrient.average.toString()),
+            deviation: stringToNumberOrUndefined(
+              mainNutrient.deviation?.toString()
+            ),
+            min: stringToNumberOrUndefined(mainNutrient.min?.toString()),
+            max: stringToNumberOrUndefined(mainNutrient.max?.toString()),
+            sampleSize: stringToNumberOrUndefined(
+              mainNutrient.sampleSize?.toString()
+            ),
+            dataType: mainNutrient.dataType,
+            referencesCodes: mainNutrient.referenceCodes,
+          },
+          ...(mainNutrient.components
+            ? mainNutrient.components.map((component) => ({
+                nutrientId: component.nutrientId,
+                average: component.average,
+                deviation: component.deviation,
+                min: component.min,
+                max: component.max,
+                sampleSize: component.sampleSize,
+                dataType: component.dataType,
+                referencesCodes: component.referenceCodes,
+              }))
+            : []),
+        ]),
+        ...nutrientValue.micronutrients.minerals.map((mineral) => ({
+          nutrientId: mineral.nutrientId,
+          average: mineral.average,
+          deviation: mineral.deviation,
+          min: mineral.min,
+          max: mineral.max,
+          sampleSize: mineral.sampleSize,
+          dataType: mineral.dataType,
+          referencesCodes: mineral.referenceCodes,
+        })),
+        ...nutrientValue.micronutrients.vitamins.map((vitamin) => ({
+          nutrientId: vitamin.nutrientId,
+          average: vitamin.average,
+          deviation: vitamin.deviation,
+          min: vitamin.min,
+          max: vitamin.max,
+          sampleSize: vitamin.sampleSize,
+          dataType: vitamin.dataType,
+          referencesCodes: vitamin.referenceCodes,
+        })),
+      ],
     });
   };
 
@@ -316,7 +396,7 @@ export default function ModifyFoodDetail() {
                 <Col sm={10}>
                   <OriginSelector
                     selectedValue={searchNameGroupByID(
-                      groupAndTypeData.groupId || -1
+                      groupAndTypeData.groupId
                     )}
                     options={groups.map((group) => ({
                       id: group.id,
@@ -342,12 +422,14 @@ export default function ModifyFoodDetail() {
                 </Form.Label>
                 <Col sm={10}>
                   <OriginSelector
-                    selectedValue={searchNameTypeByID(groupAndTypeData.typeId || -1)}
+                    selectedValue={searchNameTypeByID(
+                      groupAndTypeData.typeId || -1
+                    )}
                     options={types.map((type) => ({
                       id: type.id,
                       name: type.name,
                     }))}
-                    placeholder={t("DetailFood.placeholder_type")}
+                    placeholder={"Nada seleccionado"}
                     onSelect={(id) => {
                       setGroupAndTypeData((prevState) => ({
                         ...prevState,

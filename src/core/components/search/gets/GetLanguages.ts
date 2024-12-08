@@ -3,7 +3,7 @@ import { Language } from '../../../types/option';
 import { Collection } from '../../../utils/collection';
 
 const GetLanguages = () => {
-  const result = useFetch<Language[]>("http://localhost:3000/api/v1/languages");
+  const result = useFetch<Language[]>("/languages");
   const collectionLanguages = new Collection<string,string>()
   if (result.status === FetchStatus.Success) {
     result.data.forEach((language)=>{

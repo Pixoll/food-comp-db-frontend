@@ -23,9 +23,7 @@ export default function DetailPage() {
   const [grams, setGrams] = useState<number>(100);
   const [inputGrams, setInputGrams] = useState<number>(100);
 
-  const result = useFetch<SingleFoodResult>(
-    `http://localhost:3000/api/v1/foods/${code?.toString()}`
-  );
+  const result = useFetch<SingleFoodResult>(`/foods/${code?.toString()}`);
   if (result.status !== FetchStatus.Success) {
     return <h2>Cargando...</h2>;
   }
@@ -151,9 +149,8 @@ export default function DetailPage() {
               {data.origins &&
                 data.origins.map((origin, index) => (
                   <div key={index}>
-                    <p>
-                      Origen {index + 1}: {origin}
-                    </p>
+
+                    <p><strong>Origen {index + 1}: </strong>{origin}</p>
                   </div>
                 ))}
               {data.observation && (
@@ -196,10 +193,14 @@ export default function DetailPage() {
             <div className="transparent-container">
               <Row>
                 <Col md={6}>
-                  <Graphic key={grams} data={graphicData} title="Composición"/>
+                  <Graphic key={grams} data={graphicData} title="Composición" />
                 </Col>
                 <Col md={6}>
-                  <Graphic key={grams} data={graphicDataPorcent} title="Contenido energetico"/>
+                  <Graphic
+                    key={grams}
+                    data={graphicDataPorcent}
+                    title="Contenido energetico"
+                  />
                 </Col>
               </Row>
               <Row className="mt-3">

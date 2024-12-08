@@ -82,11 +82,9 @@ const FoodFilter = () => {
     setSearchForName("");
   };
 
-  const FoodResults = useFetch<FoodResult[]>(
-    `http://localhost:3000/api/v1/foods?${queryString}`
-  );
+  const FoodResults = useFetch<FoodResult[]>(`/foods?${queryString}`);
   const foods = FoodResults.status === FetchStatus.Success ? FoodResults.data : [];
-  console.log(`http://localhost:3000/api/v1/foods?${queryString}`);
+  console.log(`/foods?${queryString}`);
   const { t } = useTranslation("global");
 
   return (
