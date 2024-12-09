@@ -9,7 +9,7 @@ import { Collection } from "../../utils/collection";
 import { Origin } from "../../types/SingleFoodResult";
 
 type OriginsProps = {
-  originsForm: Origin[]
+  originsForm: Origin[];
   data: {
     regions: Collection<number, Region>;
     provinces: Collection<number, Province>;
@@ -19,27 +19,39 @@ type OriginsProps = {
   updateOrigins: (origins: Origin[] | undefined) => void;
 };
 
-const Origins: React.FC<OriginsProps> = ({ data, updateOrigins, originsForm }) => {
+const Origins: React.FC<OriginsProps> = ({
+  data,
+  updateOrigins,
+  originsForm,
+}) => {
   const { t } = useTranslation("global");
 
-  const [rows, setRows] = useState<number[]>([0]);
+  const [rows, setRows] = useState<number[]>(
+    originsForm.length > 0 ? originsForm.map((_, i) => i) : [0]
+  );
 
   const [addresses, setAddresses] = useState<string[]>(
-    originsForm.map((origin) => origin.name || "")
+    originsForm.map((origin) => origin.name)
   );
 
   const [originIds, setOriginIds] = useState<(number | null)[]>(
-    originsForm.map((origin) => origin.id || null)
+    originsForm.map((origin) => origin.id)
   );
   useEffect(() => {
-    const updatedOrigins: Origin[] = originIds.map((id, index) => ({
-      id: id || 0, 
-      name: addresses[index] || "", 
-    }));
-    console.log(updatedOrigins)
+    const updatedOrigins: Origin[] = [];
+
+    for (let index = 0; index < originIds.length; index++) {
+      const id = originIds[index];
+      const name = addresses[index];
+      if (id === null || !name) {
+        continue;
+      }
+
+      updatedOrigins.push({ id, name });
+    }
+
     updateOrigins(updatedOrigins);
   }, [addresses, originIds]);
-  
 
   const handleAddRow = useCallback(() => {
     setRows((prevRows) => [...prevRows, prevRows.length]);
@@ -94,14 +106,14 @@ const Origins: React.FC<OriginsProps> = ({ data, updateOrigins, originsForm }) =
               }
               onIdChange={(id: number | null) => handleIdsChange(id, index)}
               index={index}
-              initialId={originIds[index] || -1}
+              initialId={originIds[index] ?? -1}
             />
           ))}
         </tbody>
       </Table>
 
       <Button onClick={handleAddRow} className="mt-3">
-        {t("Origins.Add")}
+        Añadir un origen
       </Button>
 
       <Button
@@ -109,11 +121,11 @@ const Origins: React.FC<OriginsProps> = ({ data, updateOrigins, originsForm }) =
         className="mt-3 ml-3"
         variant="danger"
       >
-        {t("Origins.RemoveLast")}
+        Eliminar un origen
       </Button>
 
       <div className="mt-4">
-        <h5>{t("Origins.Selected")}</h5>
+        <h5>{"Origines seleccionados"}</h5>
         <ListGroup>
           {addresses.map((address, index) => (
             <ListGroup.Item key={index}>

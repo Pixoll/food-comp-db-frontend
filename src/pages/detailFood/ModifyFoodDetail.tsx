@@ -527,7 +527,7 @@ export default function ModifyFoodDetail() {
               </Form.Group>
               <Form.Group as={Row} className="mb-3" controlId="fromStrain">
                 <Form.Label column sm={2}>
-                  {"Cepa: "}
+                  {"Variante: "}
                 </Form.Label>
                 <Col sm={10}>
                   <Form.Control

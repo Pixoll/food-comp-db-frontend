@@ -3,7 +3,7 @@ import OriginSelector from "./OriginSelector";
 import { useTranslation } from "react-i18next";
 import { Region, Province, Commune, Location } from "./getters/useOrigins";
 import { Collection } from "../../utils/collection";
-const search = () => {};
+
 type OriginRowProps = {
   data: {
     regions: Collection<number, Region>;
@@ -26,19 +26,25 @@ const OriginRow: React.FC<OriginRowProps> = ({
 }) => {
   const { regions, provinces, communes, locations } = data;
 
-  const [selectedRegion, setSelectedRegion] = useState<number | null>(null);
-  const [selectedRegionName, setSelectedRegionName] = useState<string>("");
+  const location = locations.get(initialId);
+  const commune = communes.get(location?.parent.id ?? initialId);
+  const province = provinces.get(commune?.parent.id ?? initialId);
+  const region = regions.get(province?.parent.id ?? initialId);
+  
+  const [selectedRegion, setSelectedRegion] = useState<number | null>(region?.id ?? null);
+  const [selectedRegionName, setSelectedRegionName] = useState<string>(region?.name ?? "");
 
-  const [selectedProvince, setSelectedProvince] = useState<number | null>(null);
-  const [selectedProvinceName, setSelectedProvinceName] = useState<string>("");
+  const [selectedProvince, setSelectedProvince] = useState<number | null>(province?.id ?? null);
+  const [selectedProvinceName, setSelectedProvinceName] = useState<string>(province?.name ?? "");
 
-  const [selectedCommune, setSelectedCommune] = useState<number | null>(null);
-  const [selectedCommuneName, setSelectedCommuneName] = useState<string>("");
+  const [selectedCommune, setSelectedCommune] = useState<number | null>(commune?.id ?? null);
+  const [selectedCommuneName, setSelectedCommuneName] = useState<string>(commune?.name ?? "");
 
-  const [selectedLocation, setSelectedLocation] = useState<number | null>(null);
-  const [selectedLocationName, setSelectedLocationName] = useState<string>("");
+  const [selectedLocation, setSelectedLocation] = useState<number | null>(location?.id ?? null);
+  const [selectedLocationName, setSelectedLocationName] = useState<string>(location?.name ?? "");
 
   const regionOptions = Array.from(regions.values());
+  
   const { t } = useTranslation("global");
 
   const notifyIdsChange = (

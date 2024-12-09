@@ -269,12 +269,20 @@ export default function AdminPage() {
       },
     }));
   };
-  const handleOrigins = (
-    updateOrigins: Origin[] | undefined
-  ): void => {
-    setOrigins(updateOrigins);
+  const handleOrigins = (updateOrigins: Origin[] | undefined): void => {
+    if (!updateOrigins) {
+      setOrigins([]);
+      return;
+    }
+    const validOrigins = updateOrigins.filter(o => o.id !== 0 && o.name !== "");
+  
+    const uniqueOrigins = Array.from(
+      new Map(validOrigins.map(o => [o.id, o])).values()
+    );
+    console.log(uniqueOrigins)
+    setOrigins(uniqueOrigins);
   };
-
+  
   const handleNutrientUpdate = (updatedNutrient: NutrientMeasurementForm) => {
     setFormData((prev) => {
       const updateSection = (nutrients: NutrientMeasurementForm[]) =>
