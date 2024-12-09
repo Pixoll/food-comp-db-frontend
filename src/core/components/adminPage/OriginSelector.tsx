@@ -5,8 +5,8 @@ import { useTranslation } from "react-i18next";
 type OriginsSelectorProps = {
   options: Array<{ id: number; name: string }>;
   placeholder: string;
-  selectedValue: string; // Recibirá el valor seleccionado desde el padre
-  onSelect: (id: number | null, name: string) => void; // Enviará el valor seleccionado al padre
+  selectedValue: string;
+  onSelect: (id: number | null, name: string) => void; 
 };
 
 const OriginSelector: React.FC<OriginsSelectorProps> = ({
@@ -26,9 +26,11 @@ const OriginSelector: React.FC<OriginsSelectorProps> = ({
   const handleSelectOption = (option: { id: number; name: string }) => {
     setIsActive(false); 
     if (selectedValue === option.name) {
+      console.log(option.id, option.name)
       onSelect(null, ""); 
     } else {
       onSelect(option.id, option.name); 
+      console.log(option)
     }
   };
 

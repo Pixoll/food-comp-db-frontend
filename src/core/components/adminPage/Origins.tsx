@@ -94,6 +94,7 @@ const Origins: React.FC<OriginsProps> = ({ data, updateOrigins, originsForm }) =
               }
               onIdChange={(id: number | null) => handleIdsChange(id, index)}
               index={index}
+              initialId={originIds[index] || -1}
             />
           ))}
         </tbody>
