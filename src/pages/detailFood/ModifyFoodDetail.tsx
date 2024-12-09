@@ -30,6 +30,8 @@ export default function ModifyFoodDetail() {
   const { code } = useParams();
   const result = useFetch<SingleFoodResult>(`/foods/${code}`);
   const data = result.status === FetchStatus.Success ? result.data : null;
+  console.log(data?.scientificName)
+  console.log(data?.subspecies)
   const groupsResult = useGroups();
   const typesResult = useTypes();
 
@@ -144,6 +146,11 @@ export default function ModifyFoodDetail() {
           console.error("Error al actualizar:", error.response?.data ?? error);
         }
       );
+    }else if(payload.scientificNameId && payload.scientificName){
+      setScientificNameAndSubspecies({
+        ...scientificNameAndSubspecies,
+        scientificName: searchScientificNameById(payload.scientificNameId)
+      })
     }
   };
 
@@ -158,10 +165,9 @@ export default function ModifyFoodDetail() {
         ? normalizeValue(scientificNameAndSubspecies.subspecies)
         : undefined,
     };
-  
+    
     if (!payload.subspeciesId && payload.subspecies) {
       const name = payload.subspecies;
-      console.log(name)
       makeRequest(
         "post",
         "/subspecies",
@@ -445,7 +451,7 @@ export default function ModifyFoodDetail() {
       langualCodes: getUniqueLangualCodeIds(),
     };
     try {
-      console.log(payload);
+      console.log(payload.subspeciesId, payload.scientificNameId);
       const response = await axios.patch(
         `http://localhost:3000/api/v1/foods/${code}`,
         payload,
