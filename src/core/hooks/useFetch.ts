@@ -16,11 +16,13 @@ type FetchInProgress = {
 type FetchSuccess<T> = {
     status: FetchStatus.Success;
     data: T;
+    forceReload: () => void;
 };
 
 type FetchFailed = {
     status: FetchStatus.Failed;
     error: string;
+    forceReload: () => void;
 };
 
 export default function useFetch<T>(url: string): FetchResult<T> {
@@ -28,6 +30,7 @@ export default function useFetch<T>(url: string): FetchResult<T> {
     const [data, setData] = useState<T | null>(null);
     const [error, setError] = useState<null | string>(null);
     const [controller, setController] = useState<null | AbortController>(null);
+    const [counter, setCounter] = useState(0);
 
     useEffect(() => {
         const abortController = new AbortController();
@@ -56,7 +59,7 @@ export default function useFetch<T>(url: string): FetchResult<T> {
             });
 
         return () => abortController.abort();
-    }, [url]);
+    }, [url, counter]);
 
     const handleCancelRequest = () => {
         if (controller) {
@@ -65,9 +68,11 @@ export default function useFetch<T>(url: string): FetchResult<T> {
         }
     };
 
+    const forceReload = () => setCounter(x => x + 1);
+
     switch (status) {
         case FetchStatus.Loading: return { status, handleCancelRequest };
-        case FetchStatus.Success: return { status, data: data! };
-        case FetchStatus.Failed: return { status, error: error! };
+        case FetchStatus.Success: return { status, data: data!, forceReload };
+        case FetchStatus.Failed: return { status, error: error!, forceReload };
     }
 }

@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import axios from 'axios';
 import useForm from "../core/hooks/useForm";
 import { useAuth } from "../core/context/AuthContext";
+import makeRequest from "../core/utils/makeRequest";
 
 interface LoginForm {
     username: string;
@@ -25,39 +26,42 @@ const LoginPage = () => {
     const onLogin = (e: React.FormEvent) => {
         e.preventDefault();
 
-        const url = `/admins/${formState.username}/session`;
-
-        console.log(t('loginPage.state.request'), url);
+        console.log(t('loginPage.state.request'), `/admins/${formState.username}/session`);
         console.log(t('loginPage.state.send'), {
             password: formState.password,
         });
 
-        axios.post(url, {
-            password: formState.password,
-        })
-        .then((response) => {
-            console.log(t('loginPage.state.Response'), response.data);
-            const { token } = response.data;
-            dispatch({
-                type: 'LOGIN',
-                payload: { token }
-            });
-
-            onResetForm();
-            navigate('/');
-        })
-        .catch((error) => {
-            console.error(t('loginPage.errors.login'), error);
-
-            if (error.response) {
-                console.error(t('loginPage.errors.response'), error.response.data);
-                console.error(t('loginPage.errors.state'), error.response.status);
-            } else if (error.request) {
-                console.error(t('loginPage.errors.received'), error.request);
-            } else {
-                console.error(t('loginPage.errors.unknown'), error.message);
+        makeRequest(
+            "post",
+            `/admins/${formState.username}/session`,
+            {
+                password: formState.password,
+            },
+            null,
+            (response) => {
+                console.log(t('loginPage.state.Response'), response.data);
+                const { token } = response.data;
+                dispatch({
+                    type: 'LOGIN',
+                    payload: { token }
+                });
+    
+                onResetForm();
+                navigate('/');
+            },
+            (error) => {
+                console.error(t('loginPage.errors.login'), error);
+    
+                if (error.response) {
+                    console.error(t('loginPage.errors.response'), error.response.data);
+                    console.error(t('loginPage.errors.state'), error.response.status);
+                } else if (error.request) {
+                    console.error(t('loginPage.errors.received'), error.request);
+                } else {
+                    console.error(t('loginPage.errors.unknown'), error.message);
+                }
             }
-        });
+        );
     };
 
 

@@ -6,7 +6,7 @@ type SelectorWithInputProps = {
   options: Array<{ id: number; name: string }>;
   placeholder: string;
   selectedValue: string | undefined; 
-  onSelect: (id: number | undefined, name: string) => void; 
+  onSelect: (id: number | undefined, name: string) => void;
 };
 
 const SelectorWithInput: React.FC<SelectorWithInputProps> = ({

@@ -24,6 +24,7 @@ import useScientificNames from "../../core/components/adminPage/getters/useScien
 import useSubspecies from "../../core/components/adminPage/getters/useSubspecies";
 import useOrigins from "../../core/components/adminPage/getters/useOrigins";
 import { useAuth } from "../../core/context/AuthContext";
+import makeRequest from "../../core/utils/makeRequest";
 
 export default function ModifyFoodDetail() {
   const { code } = useParams();
@@ -72,13 +73,14 @@ export default function ModifyFoodDetail() {
     const type = types.find((type) => type.id === id);
     return type?.name || "";
   };
-  const [snameAndSubspecie, setSnameAndSubspecie] = useState<{
-    scientificName?: string;
-    subspecies?: string;
-  }>({
-    scientificName: data?.scientificName,
-    subspecies: data?.subspecies,
-  });
+  const [scientificNameAndSubspecies, setScientificNameAndSubspecies] =
+    useState<{
+      scientificName?: string;
+      subspecies?: string;
+    }>({
+      scientificName: data?.scientificName,
+      subspecies: data?.subspecies,
+    });
 
   const searchScientificNameByName = (
     name: string | undefined
@@ -92,48 +94,96 @@ export default function ModifyFoodDetail() {
     const result = subspecies.find((sp) => sp.name === name);
     return result?.id;
   };
-  const normalizeValue = (value: string | undefined) => {
-    return value?.trim() === "" ? undefined : value;
+
+  const searchScientificNameById = (
+    id: number | undefined
+  ): string | undefined => {
+    const scientificName = scientificNames.find((sn) => sn.id === id);
+    return scientificName?.name;
   };
-
-  const handleSnameAndSubspecie = () => {
-
-    const scientificNameId = searchScientificNameByName(snameAndSubspecie.scientificName);
-    const subspeciesId = searchSubspeciesByName(snameAndSubspecie.subspecies);
-
+  const searchSubspeciesNameById = (
+    id: number | undefined
+  ): string | undefined => {
+    const result = subspecies.find((sp) => sp.id === id);
+    return result?.name;
+  };
+  const normalizeValue = (value: string | undefined) => {
+    return value?.trim() || undefined;
+  };
+  const handleScientificName = () => {
+    const scientificNameId = searchScientificNameByName(
+      scientificNameAndSubspecies.scientificName
+    );
+  
     const payload = {
       scientificNameId: scientificNameId,
       scientificName: !scientificNameId
-        ? normalizeValue(snameAndSubspecie.scientificName)
+        ? normalizeValue(scientificNameAndSubspecies.scientificName)
         : undefined,
-      subspeciesId: subspeciesId,
-      subspecies: !subspeciesId ? normalizeValue(snameAndSubspecie.subspecies) : undefined,
     };
-    /*if (!!scientificNameId && snameAndSubspecie.subspecies) {
-      axios
-        .post("url", payload)
-        .then((response) => {
+  
+    if (!payload.scientificNameId && payload.scientificName) {
+      const name = payload.scientificName;
+      console.log(name)
+      makeRequest(
+        "post",
+        "/scientific_names",
+        { name },
+        state.token,
+        (response) => {
           console.log("Actualización exitosa:", response.data);
-        })
-        .catch((error) => {
-          console.error("Error al actualizar:", error);
-        });
+          if (scientificNamesResult.status !== FetchStatus.Loading) {
+            scientificNamesResult.forceReload();
+            setScientificNameAndSubspecies({
+              ...scientificNameAndSubspecies,
+              scientificName: name[0].toUpperCase() + name.slice(1).toLowerCase(),
+            });
+          }
+        },
+        (error) => {
+          console.error("Error al actualizar:", error.response?.data ?? error);
+        }
+      );
     }
-  
-    if (!!subspeciesId && snameAndSubspecie.scientificName) {
-      axios
-        .post("url", payload)
-        .then((response) => {
-          console.log("Actualización exitosa:", response.data);
-        })
-        .catch((error) => {
-          console.error("Error al actualizar:", error);
-        });
-    }*/
-  
-    console.log(payload); 
   };
 
+  const handleSubspecies = () => {
+    const subspeciesId = searchSubspeciesByName(
+      scientificNameAndSubspecies.subspecies
+    );
+    
+    const payload = {
+      subspeciesId: subspeciesId,
+      subspecies: !subspeciesId
+        ? normalizeValue(scientificNameAndSubspecies.subspecies)
+        : undefined,
+    };
+  
+    if (!payload.subspeciesId && payload.subspecies) {
+      const name = payload.subspecies;
+      console.log(name)
+      makeRequest(
+        "post",
+        "/subspecies",
+        { name },
+        state.token,
+        (response) => {
+          console.log("Actualización exitosa:", response.data);
+          if (subspeciesResult.status !== FetchStatus.Loading) {
+            subspeciesResult.forceReload();
+            setScientificNameAndSubspecies({
+              ...scientificNameAndSubspecies,
+              subspecies: name[0].toUpperCase() + name.slice(1).toLowerCase(),
+            });
+          }
+        },
+        (error) => {
+          console.error("Error al actualizar:", error.response?.data ?? error);
+        }
+      );
+    }
+  };
+  
   const [generalData, setGeneralData] = useState<{
     code: string;
     strain?: string;
@@ -192,8 +242,8 @@ export default function ModifyFoodDetail() {
         origins: data.origins,
       };
       const initialSnameAndSubspecie = {
-        scientificName: normalizeValue(data.scientificName),
-        subspecies: normalizeValue(data.subspecies),
+        scientificName: data.scientificName,
+        subspecies: data.subspecies,
       };
 
       const initialNamesAndIngredients = {
@@ -221,7 +271,7 @@ export default function ModifyFoodDetail() {
           minerals: data.nutrientMeasurements.micronutrients?.minerals || [],
         },
       };
-      setSnameAndSubspecie(initialSnameAndSubspecie);
+      setScientificNameAndSubspecies(initialSnameAndSubspecie);
       setNutrientValue(initialNutrientData);
       setGeneralData(initialGeneralData);
       setNamesAndIngredients(initialNamesAndIngredients);
@@ -312,8 +362,8 @@ export default function ModifyFoodDetail() {
     const payload = {
       commonName: namesAndIngredients.commonName,
       ingredients: namesAndIngredients.ingredients,
-      scientificNameId: snameAndSubspecie.scientificName,
-      subspeciesId: snameAndSubspecie.subspecies,
+      scientificNameId: searchScientificNameByName(scientificNameAndSubspecies.scientificName),
+      subspeciesId: searchSubspeciesByName(scientificNameAndSubspecies.subspecies),
       groupId: groupAndTypeData.groupId,
       typeId: groupAndTypeData.typeId,
       strain: generalData.strain,
@@ -458,7 +508,6 @@ export default function ModifyFoodDetail() {
           <Col md={12}>
             <div className="transparent-container">
               <h2>{t("DetailFood.modify")}</h2>
-
               <Form.Group as={Row} className="mb-3" controlId="formCode">
                 <Form.Label column sm={2}>
                   <RequiredFieldLabel
@@ -476,9 +525,8 @@ export default function ModifyFoodDetail() {
                   />
                 </Col>
               </Form.Group>
-
               {renderLanguageFields("commonName")}
-
+              {renderLanguageFields("ingredients")}
               <Form.Group
                 as={Row}
                 className="mb-3"
@@ -493,49 +541,24 @@ export default function ModifyFoodDetail() {
                       <SelectorWithInput
                         options={scientificNames}
                         placeholder="Nada seleccionado"
-                        selectedValue={snameAndSubspecie?.scientificName}
+                        selectedValue={
+                          scientificNameAndSubspecies?.scientificName
+                        }
                         onSelect={(id, name) => {
-                          setSnameAndSubspecie((prevState) => ({
+                          setScientificNameAndSubspecies((prevState) => ({
                             ...prevState,
-                            scientificName: name || undefined, 
+                            scientificName: name || undefined,
                           }));
                         }}
                       />
                     </div>
                     <Button
                       style={{ alignSelf: "stretch" }}
-                      onClick={handleSnameAndSubspecie}
+                      onClick={handleScientificName}
                     >
                       Aplicar cambios
                     </Button>
                   </div>
-                </Col>
-              </Form.Group>
-
-              <Form.Group as={Row} className="mb-3" controlId="formBrand">
-                <Form.Label column sm={2}>
-                  {"Marca: "}
-                </Form.Label>
-                <Col sm={10}>
-                  <Form.Control
-                    type="text"
-                    name="brand"
-                    value={generalData.brand}
-                    onChange={handleInputChange}
-                  />
-                </Col>
-              </Form.Group>
-              <Form.Group as={Row} className="mb-3" controlId="fromStrain">
-                <Form.Label column sm={2}>
-                  {"Variante: "}
-                </Form.Label>
-                <Col sm={10}>
-                  <Form.Control
-                    type="text"
-                    name="strain"
-                    value={generalData.strain}
-                    onChange={handleInputChange}
-                  />
                 </Col>
               </Form.Group>
               <Form.Group as={Row} className="mb-3" controlId="formSubspecies">
@@ -547,35 +570,34 @@ export default function ModifyFoodDetail() {
                     <div style={{ flex: 1, marginRight: "10px" }}>
                       <SelectorWithInput
                         options={subspecies}
-                        selectedValue={snameAndSubspecie?.subspecies}
+                        selectedValue={scientificNameAndSubspecies?.subspecies}
                         placeholder="Nada seleccionado"
                         onSelect={(id, name) => {
-                          setSnameAndSubspecie((prevState) => ({
+                          setScientificNameAndSubspecies((prevState) => ({
                             ...prevState,
-                            subspecies: name || undefined, 
+                            subspecies: name || undefined,
                           }));
                         }}
                       />
                     </div>
                     <Button
                       style={{ alignSelf: "stretch" }}
-                      onClick={handleSnameAndSubspecie}
+                      onClick={handleSubspecies}
                     >
                       Aplicar cambios
                     </Button>
                   </div>
                 </Col>
               </Form.Group>
-
-              <Form.Group as={Row} className="mb-3" controlId="formObservation">
+              <Form.Group as={Row} className="mb-3" controlId="fromStrain">
                 <Form.Label column sm={2}>
-                  {"Observación: "}
+                  {"Variante: "}
                 </Form.Label>
                 <Col sm={10}>
                   <Form.Control
                     type="text"
-                    name="observation"
-                    value={generalData.observation}
+                    name="strain"
+                    value={generalData.strain}
                     onChange={handleInputChange}
                   />
                 </Col>
@@ -606,7 +628,6 @@ export default function ModifyFoodDetail() {
                   />
                 </Col>
               </Form.Group>
-
               <Form.Group as={Row} className="mb-3" controlId="formType">
                 <Form.Label column sm={2}>
                   <RequiredFieldLabel
@@ -633,8 +654,32 @@ export default function ModifyFoodDetail() {
                   />
                 </Col>
               </Form.Group>
-
-              {renderLanguageFields("ingredients")}
+              <Form.Group as={Row} className="mb-3" controlId="formBrand">
+                <Form.Label column sm={2}>
+                  {"Marca: "}
+                </Form.Label>
+                <Col sm={10}>
+                  <Form.Control
+                    type="text"
+                    name="brand"
+                    value={generalData.brand}
+                    onChange={handleInputChange}
+                  />
+                </Col>
+              </Form.Group>
+              <Form.Group as={Row} className="mb-3" controlId="formObservation">
+                <Form.Label column sm={2}>
+                  {"Observación: "}
+                </Form.Label>
+                <Col sm={10}>
+                  <Form.Control
+                    type="text"
+                    name="observation"
+                    value={generalData.observation}
+                    onChange={handleInputChange}
+                  />
+                </Col>
+              </Form.Group>
             </div>
           </Col>
 
