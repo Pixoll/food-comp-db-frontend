@@ -17,7 +17,7 @@
     border: 0 !important;
     outline: 0 !important;
 }
-/*.select-option:after {
+.select-option:after {
     content: "";
     border-top: 12px solid #000;
     border-left: 8px solid transparent;
@@ -27,7 +27,7 @@
     top: 50%;
     margin-top: -8px;
 
-}*/
+}
 .origins-content {
     background-color: #fff;
     position: absolute;

@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "../../assets/css/_ModifyDetailFood.css";
 import NutrientAccordionModify from "../../core/components/detailFood/NutrientAccordionModify";
+import SelectorWithInput from "../../core/components/detailFood/SelectorWithInput";
 import Footer from "../../core/components/Footer";
 import useFetch, { FetchStatus } from "../../core/hooks/useFetch";
 import {
@@ -25,19 +26,18 @@ import useOrigins from "../../core/components/adminPage/getters/useOrigins";
 import { useAuth } from "../../core/context/AuthContext";
 
 export default function ModifyFoodDetail() {
-  const [key, setKey] = useState("first");
   const { code } = useParams();
   const result = useFetch<SingleFoodResult>(`/foods/${code}`);
   const data = result.status === FetchStatus.Success ? result.data : null;
   const groupsResult = useGroups();
   const typesResult = useTypes();
-  const scientificNamesResult = useScientificNames();
+
   const { state } = useAuth();
   const token = state.token;
-
+  const scientificNamesResult = useScientificNames();
   const subspeciesResult = useSubspecies();
 
-  const { regions, provinces, communes, locations } = useOrigins();
+  const { regions } = useOrigins();
 
   const groups =
     groupsResult.status === FetchStatus.Success ? groupsResult.data : [];
@@ -63,6 +63,23 @@ export default function ModifyFoodDetail() {
     const type = types.find((type) => type.code === code);
     return type?.id;
   };
+
+  const searchNameGroupByID = (id: number | undefined): string => {
+    const group = groups.find((group) => group.id === id);
+    return group?.name || "";
+  };
+  const searchNameTypeByID = (id: number): string => {
+    const type = types.find((type) => type.id === id);
+    return type?.name || "";
+  };
+  const [snameAndSubspecie, setSnameAndSubspecie] = useState<{
+    scientificName?: string;
+    subspecies?: string;
+  }>({
+    scientificName: data?.scientificName,
+    subspecies: data?.subspecies,
+  });
+
   const searchScientificNameByName = (
     name: string | undefined
   ): number | undefined => {
@@ -75,22 +92,53 @@ export default function ModifyFoodDetail() {
     const result = subspecies.find((sp) => sp.name === name);
     return result?.id;
   };
+  const normalizeValue = (value: string | undefined) => {
+    return value?.trim() === "" ? undefined : value;
+  };
 
-  const searchNameGroupByID = (id: number | undefined): string => {
-    const group = groups.find((group) => group.id === id);
-    return group?.name || "";
+  const handleSnameAndSubspecie = () => {
+
+    const scientificNameId = searchScientificNameByName(snameAndSubspecie.scientificName);
+    const subspeciesId = searchSubspeciesByName(snameAndSubspecie.subspecies);
+
+    const payload = {
+      scientificNameId: scientificNameId,
+      scientificName: !scientificNameId
+        ? normalizeValue(snameAndSubspecie.scientificName)
+        : undefined,
+      subspeciesId: subspeciesId,
+      subspecies: !subspeciesId ? normalizeValue(snameAndSubspecie.subspecies) : undefined,
+    };
+    /*if (!!scientificNameId && snameAndSubspecie.subspecies) {
+      axios
+        .post("url", payload)
+        .then((response) => {
+          console.log("Actualización exitosa:", response.data);
+        })
+        .catch((error) => {
+          console.error("Error al actualizar:", error);
+        });
+    }
+  
+    if (!!subspeciesId && snameAndSubspecie.scientificName) {
+      axios
+        .post("url", payload)
+        .then((response) => {
+          console.log("Actualización exitosa:", response.data);
+        })
+        .catch((error) => {
+          console.error("Error al actualizar:", error);
+        });
+    }*/
+  
+    console.log(payload); 
   };
-  const searchNameTypeByID = (id: number): string => {
-    const type = types.find((type) => type.id === id);
-    return type?.name || "";
-  };
+
   const [generalData, setGeneralData] = useState<{
     code: string;
     strain?: string;
     brand?: string;
     observation?: string;
-    scientificName?: string;
-    subspecies?: string;
     origins?: Origin[];
     langualCodes?: LangualCode[];
   }>({
@@ -98,8 +146,6 @@ export default function ModifyFoodDetail() {
     strain: data?.strain,
     brand: data?.brand,
     observation: data?.observation,
-    scientificName: data?.scientificName,
-    subspecies: data?.subspecies,
     origins: data?.origins,
     langualCodes: data?.langualCodes,
   });
@@ -127,6 +173,7 @@ export default function ModifyFoodDetail() {
     groupId: searchGroupByCode(data?.group.code || ""),
     typeId: searchTypeByCode(data?.type.code || ""),
   });
+
   const [nutrientValue, setNutrientValue] = useState<NutrientsValue>({
     energy: data?.nutrientMeasurements.energy || [],
     mainNutrients: data?.nutrientMeasurements.mainNutrients || [],
@@ -142,9 +189,11 @@ export default function ModifyFoodDetail() {
         strain: data.strain,
         brand: data.brand,
         observation: data.observation,
-        scientificName: data.scientificName,
-        subspecies: data.subspecies,
         origins: data.origins,
+      };
+      const initialSnameAndSubspecie = {
+        scientificName: normalizeValue(data.scientificName),
+        subspecies: normalizeValue(data.subspecies),
       };
 
       const initialNamesAndIngredients = {
@@ -172,6 +221,7 @@ export default function ModifyFoodDetail() {
           minerals: data.nutrientMeasurements.micronutrients?.minerals || [],
         },
       };
+      setSnameAndSubspecie(initialSnameAndSubspecie);
       setNutrientValue(initialNutrientData);
       setGeneralData(initialGeneralData);
       setNamesAndIngredients(initialNamesAndIngredients);
@@ -262,8 +312,8 @@ export default function ModifyFoodDetail() {
     const payload = {
       commonName: namesAndIngredients.commonName,
       ingredients: namesAndIngredients.ingredients,
-      scientificNameId: searchScientificNameByName(generalData.scientificName),
-      subspeciesId: searchSubspeciesByName(generalData.subspecies),
+      scientificNameId: snameAndSubspecie.scientificName,
+      subspeciesId: snameAndSubspecie.subspecies,
       groupId: groupAndTypeData.groupId,
       typeId: groupAndTypeData.typeId,
       strain: generalData.strain,
@@ -438,14 +488,30 @@ export default function ModifyFoodDetail() {
                   {t("DetailFood.name.scientific")}
                 </Form.Label>
                 <Col sm={10}>
-                  <Form.Control
-                    type="text"
-                    name="scientificName"
-                    value={generalData.scientificName}
-                    onChange={handleInputChange}
-                  />
+                  <div className="d-flex justify-content-between align-items-stretch">
+                    <div style={{ flex: 1, marginRight: "10px" }}>
+                      <SelectorWithInput
+                        options={scientificNames}
+                        placeholder="Nada seleccionado"
+                        selectedValue={snameAndSubspecie?.scientificName}
+                        onSelect={(id, name) => {
+                          setSnameAndSubspecie((prevState) => ({
+                            ...prevState,
+                            scientificName: name || undefined, 
+                          }));
+                        }}
+                      />
+                    </div>
+                    <Button
+                      style={{ alignSelf: "stretch" }}
+                      onClick={handleSnameAndSubspecie}
+                    >
+                      Aplicar cambios
+                    </Button>
+                  </div>
                 </Col>
               </Form.Group>
+
               <Form.Group as={Row} className="mb-3" controlId="formBrand">
                 <Form.Label column sm={2}>
                   {"Marca: "}
@@ -477,14 +543,30 @@ export default function ModifyFoodDetail() {
                   {t("DetailFood.subspecies")}
                 </Form.Label>
                 <Col sm={10}>
-                  <Form.Control
-                    type="text"
-                    name="subspecies"
-                    value={generalData.subspecies}
-                    onChange={handleInputChange}
-                  />
+                  <div className="d-flex justify-content-between align-items-center">
+                    <div style={{ flex: 1, marginRight: "10px" }}>
+                      <SelectorWithInput
+                        options={subspecies}
+                        selectedValue={snameAndSubspecie?.subspecies}
+                        placeholder="Nada seleccionado"
+                        onSelect={(id, name) => {
+                          setSnameAndSubspecie((prevState) => ({
+                            ...prevState,
+                            subspecies: name || undefined, 
+                          }));
+                        }}
+                      />
+                    </div>
+                    <Button
+                      style={{ alignSelf: "stretch" }}
+                      onClick={handleSnameAndSubspecie}
+                    >
+                      Aplicar cambios
+                    </Button>
+                  </div>
                 </Col>
               </Form.Group>
+
               <Form.Group as={Row} className="mb-3" controlId="formObservation">
                 <Form.Label column sm={2}>
                   {"Observación: "}
@@ -620,7 +702,7 @@ export default function ModifyFoodDetail() {
                   </Tab.Content>
                 </Tab.Container>
               </div>
-            </Col>  
+            </Col>
           </Col>
           <Col md={12}>
             <button

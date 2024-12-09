@@ -1,0 +1,125 @@
+.select-box-for {
+    margin: 0;
+    width: 100%;
+    position: relative;
+}
+.select-option {
+    position: relative;
+}
+.select-option input {
+    width: 100%;
+    background-color: #fff;
+    color: #000;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 15px;
+    padding: 5px 12px;
+    border: 0 !important;
+    outline: 0 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.select-option:after {
+    content: "";
+    border-top: 12px solid #000;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: transform 0.3s ease;
+}
+.content-box {
+    background-color: #fff;
+    position: absolute;
+    color: #000;
+    border-radius: 7px;
+    margin-top: 10px;
+    width: 100%;
+    z-index: 999;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: none;
+    animation: fadeIn 0.3s ease-in-out;
+}
+.search-options input {
+    width: 100%;
+    font-size: 17px;
+    padding: 10px;
+    outline: 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+.options {
+    margin-top: 10px;
+    max-height: 170px;
+    overflow-y: auto;
+    padding: 0;
+    list-style: none;
+}
+.options li {
+    padding: 10px 15px;
+    font-size: 15px;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s ease;
+}
+.options li:hover {
+    background-color: #f9f9f9;
+}
+.select-box-for.active .content-box {
+    display: block;
+}
+.select-box-for.active .select-option:after {
+    transform: rotate(180deg) translateY(-50%);
+}
+.custom-option-input {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideIn 0.3s ease-in-out;
+}
+.custom-option-input input {
+    flex: 1;
+    font-size: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.custom-option-input button {
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+.custom-option-input button:hover {
+    background-color: #0056b3;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
