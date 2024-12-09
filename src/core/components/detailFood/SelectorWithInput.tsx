@@ -19,7 +19,7 @@ const SelectorWithInput: React.FC<SelectorWithInputProps> = ({
   const [isActive, setIsActive] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [customOption, setCustomOption] = useState(""); 
-  const [isCustomOptionActive, setIsCustomOptionActive] = useState(false); // Nuevo estado
+  const [isCustomOptionActive, setIsCustomOptionActive] = useState(false); 
 
   const filteredOptions = options.filter((option) =>
     option.name.toLowerCase().includes(searchTerm.toLowerCase())

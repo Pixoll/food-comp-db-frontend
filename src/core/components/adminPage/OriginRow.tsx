@@ -2,23 +2,28 @@ import React, { useState, useCallback } from "react";
 import OriginSelector from "./OriginSelector";
 import useOrigins from "./getters/useOrigins";
 import { useTranslation } from "react-i18next";
+import { Region, Province, Commune, Location } from "./getters/useOrigins";
+import { Collection } from "../../utils/collection";
 
 type OriginRowProps = {
+  data: {
+    regions: Collection<number, Region>;
+    provinces: Collection<number, Province>;
+    communes: Collection<number, Commune>;
+    locations: Collection<number, Location>;
+  };
   onAddressChange: (address: string) => void;
-  onIdChange: (id: number | null, index: number) => void;
-  index: number;
-  originId: number | null; 
-  address: string;         
+  onIdChange: (id: number | null, index: number) => void;     
+  index: number   
 };
 
 const OriginRow: React.FC<OriginRowProps> = ({
+  data,
   onAddressChange,
   onIdChange,
-  index,
-  originId,
-  address,
+  index
 }) => {
-  const { regions, provinces, communes, locations } = useOrigins();
+  const { regions, provinces, communes, locations } = data;
 
   const [selectedRegion, setSelectedRegion] = useState<number | null>(null);
   const [selectedRegionName, setSelectedRegionName] = useState<string>("");
@@ -42,11 +47,8 @@ const OriginRow: React.FC<OriginRowProps> = ({
       selectedProvince ??
       selectedRegion ??
       null;
-    console.log(originId)
-    if (selectedId !== originId) {
       onIdChange(selectedId, index);
-    }
-  }, [selectedRegion, selectedProvince, selectedCommune, selectedLocation, originId, index, onIdChange]);
+  }, [selectedRegion, selectedProvince, selectedCommune, selectedLocation, onIdChange]);
   
 
   const provincesOptions =

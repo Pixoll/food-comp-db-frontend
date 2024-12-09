@@ -4,50 +4,58 @@ import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";
 import OriginRow from "./OriginRow";
 import { useTranslation } from "react-i18next";
+import { Region, Province, Commune, Location } from "./getters/useOrigins";
+import { Collection } from "../../utils/collection";
+import { Origin } from "../../types/SingleFoodResult";
 
 type OriginsProps = {
-  updateOrigins: (ids: (number | null)[], addresses: string[]) => void;
-  origins: (number | null)[];
+  originsForm: Origin[]
+  data: {
+    regions: Collection<number, Region>;
+    provinces: Collection<number, Province>;
+    communes: Collection<number, Commune>;
+    locations: Collection<number, Location>;
+  };
+  updateOrigins: (origins: Origin[] | undefined) => void;
 };
 
-const Origins: React.FC<OriginsProps> = ({ updateOrigins, origins }) => {
+const Origins: React.FC<OriginsProps> = ({ data, updateOrigins, originsForm }) => {
   const { t } = useTranslation("global");
 
   const [rows, setRows] = useState<number[]>([0]);
-  const [addresses, setAddresses] = useState<string[]>([]);
 
-  const [originIds, setOriginIds] = useState<(number | null)[]>(origins);
-
-  const [uniqueOriginIds, setUniqueOriginIds] = useState<Set<number>>(
-    new Set()
+  const [addresses, setAddresses] = useState<string[]>(
+    originsForm.map((origin) => origin.name || "")
   );
 
+  const [originIds, setOriginIds] = useState<(number | null)[]>(
+    originsForm.map((origin) => origin.id || null)
+  );
+  useEffect(() => {
+    const updatedOrigins: Origin[] = originIds.map((id, index) => ({
+      id: id || 0, 
+      name: addresses[index] || "", 
+    }));
+    console.log(updatedOrigins)
+    updateOrigins(updatedOrigins);
+  }, [addresses, originIds]);
+  
+
   const handleAddRow = useCallback(() => {
-    setRows((prevRows) => {
-      const newRow = prevRows.length;
-      return [...prevRows, newRow];
-    });
+    setRows((prevRows) => [...prevRows, prevRows.length]);
     setAddresses((prevAddresses) => [...prevAddresses, ""]);
     setOriginIds((prevOriginIds) => [...prevOriginIds, null]);
   }, []);
+
   const handleRemoveLastRow = () => {
     if (rows.length > 1) {
       setRows((prevRows) => prevRows.slice(0, -1));
       setAddresses((prevAddresses) => prevAddresses.slice(0, -1));
-      setOriginIds((prevOriginIds) => {
-        const lastOriginId = prevOriginIds[prevOriginIds.length - 1];
-        setUniqueOriginIds((prevUniqueIds) => {
-          const updatedUniqueIds = new Set(prevUniqueIds);
-          if (lastOriginId !== null) updatedUniqueIds.delete(lastOriginId);
-          return updatedUniqueIds;
-        });
-        return prevOriginIds.slice(0, -1);
-      });
+      setOriginIds((prevOriginIds) => prevOriginIds.slice(0, -1));
     } else {
       alert("El mínimo de orígenes es 1");
     }
   };
-  
 
   const handleAddressChange = useCallback((index: number, address: string) => {
     setAddresses((prevAddresses) => {
@@ -62,21 +70,6 @@ const Origins: React.FC<OriginsProps> = ({ updateOrigins, origins }) => {
       const updatedIds = [...prevOriginIds];
       updatedIds[index] = id;
       return updatedIds;
-    });
-
-    setUniqueOriginIds((prevUniqueIds) => {
-      const updatedUniqueIds = new Set(prevUniqueIds);
-      const previousId = originIds[index];
-
-      if (previousId !== null) {
-        updatedUniqueIds.delete(previousId);
-      }
-
-      if (id !== null) {
-        updatedUniqueIds.add(id);
-      }
-
-      return updatedUniqueIds;
     });
   };
 
@@ -94,16 +87,13 @@ const Origins: React.FC<OriginsProps> = ({ updateOrigins, origins }) => {
         <tbody>
           {rows.map((row, index) => (
             <OriginRow
+              data={data}
               key={row}
               onAddressChange={(address: string) =>
                 handleAddressChange(index, address)
               }
-              onIdChange={(id: number | null, index: number) =>
-                handleIdsChange(id, index)
-              }
+              onIdChange={(id: number | null) => handleIdsChange(id, index)}
               index={index}
-              originId={originIds[index]} 
-              address={addresses[index]} 
             />
           ))}
         </tbody>

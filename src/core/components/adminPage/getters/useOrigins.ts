@@ -19,23 +19,23 @@ type CommonOrigin = {
   name: string;
 };
 
-type Region = CommonOrigin & {
+export type Region = CommonOrigin & {
   number: number;
   place: number;
   provinces: Collection<number, Province>;
 };
 
-type Province = CommonOrigin & {
+export type Province = CommonOrigin & {
   parent: Region;
   communes: Collection<number, Commune>;
 };
 
-type Commune = CommonOrigin & {
+export type Commune = CommonOrigin & {
   parent: Province;
   locations: Collection<number, Location>;
 };
 
-type Location = CommonOrigin & {
+export type Location = CommonOrigin & {
   parent: Commune;
   type: "city" | "town";
 };

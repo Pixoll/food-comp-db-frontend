@@ -11,6 +11,8 @@ import NewGeneralData from "../core/components/adminPage/NewGeneralData";
 import Origins from "../core/components/adminPage/Origins";
 import PreviewDataForm from "../core/components/adminPage/PreviewDataForm";
 import { FetchStatus } from "../core/hooks/useFetch";
+import useOrigins from "../core/components/adminPage/getters/useOrigins";
+import { Origin } from "../core/types/SingleFoodResult";
 
 export type NutrientSummary = {
   id: number;
@@ -117,16 +119,15 @@ export type FoodForm = {
 
 export default function AdminPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFile(e.target.files[0]);
     }
   };
-  const [origins, setOrigins] = useState<OriginsByForm>({
-    ids: [],
-    origins: [],
-  });
+  const {regions, provinces, communes, locations} = useOrigins();
+  const [origins, setOrigins] = useState<Origin[] | undefined>([]);
 
   const [activeSection, setActiveSection] = useState<number>(1);
   const [formData, setFormData] = useState<FoodForm>({
@@ -136,7 +137,7 @@ export default function AdminPage() {
       ingredients: {},
       group: { code: "", name: "" },
       type: { code: "", name: "" },
-      origins: origins.ids,
+      origins: [...new Set(origins?.map((o)=>(o.id)))],
     },
     nutrientsValueForm: {
       energy: [],
@@ -195,7 +196,7 @@ export default function AdminPage() {
           ingredients: {},
           group: { code: "defaultGroup", name: "Default Group" },
           type: { code: "defaultType", name: "Default Type" },
-          origins: origins.ids,
+          origins: [...new Set(origins?.map((o)=>(o.id)))],
         },
         nutrientsValueForm: {
           energy:
@@ -269,13 +270,9 @@ export default function AdminPage() {
     }));
   };
   const handleOrigins = (
-    updateOriginsIds: (number | null)[],
-    updateOrigins: string[]
+    updateOrigins: Origin[] | undefined
   ): void => {
-    setOrigins({
-      ids: updateOriginsIds, 
-      origins: updateOrigins,
-    });
+    setOrigins(updateOrigins);
   };
 
   const handleNutrientUpdate = (updatedNutrient: NutrientMeasurementForm) => {
@@ -362,7 +359,7 @@ export default function AdminPage() {
           />
         );
       case 7: // Origines
-        return <Origins updateOrigins={handleOrigins} origins={formData.generalData.origins}/>;
+        return <Origins originsForm={origins || []} data = {{regions, provinces, communes, locations}} updateOrigins={handleOrigins} />;
       case 8: //Aqui para las referencias
         return <></>;
       case 9:
@@ -370,7 +367,7 @@ export default function AdminPage() {
           <PreviewDataForm
             data={formData}
             nameAndIdNutrients={nameAndIdNutrients}
-            origins={origins.origins}
+            origins={origins?.map((o)=>(o.name)) || []}
           />
         );
       default:
