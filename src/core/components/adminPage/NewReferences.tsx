@@ -1,6 +1,12 @@
 import React, { useState } from "react";
-import { Card, Row, Col, Button } from "react-bootstrap";
-import { NutrientsValueForm, getNutrientNameById, NutrientSummary, NutrientMeasurementForm, NutrientMeasurementWithComponentsForm } from "../../../pages/AdminPage";
+import { Card, Row, Col, Button} from "react-bootstrap";
+import {
+  NutrientsValueForm,
+  getNutrientNameById,
+  NutrientSummary,
+  NutrientMeasurementForm,
+  NutrientMeasurementWithComponentsForm,
+} from "../../../pages/AdminPage";
 import { Reference } from "./getters/UseReferences";
 import ModalReferences from "./ModalReferences";
 
@@ -10,16 +16,23 @@ type NewReferencesProps = {
   nameAndIdNutrients: NutrientSummary[];
 };
 
-const NewReferences: React.FC<NewReferencesProps> = ({ references, nutrientValueForm, nameAndIdNutrients }) => {
-  const [modalsState, setModalsState] = useState<{ [key: number]: boolean }>({});
+const NewReferences: React.FC<NewReferencesProps> = ({
+  references,
+  nutrientValueForm,
+  nameAndIdNutrients,
+}) => {
+  const [modalsState, setModalsState] = useState<{ [key: number]: boolean }>(
+    {}
+  );
   const [selectedNutrientIds, setSelectedNutrientIds] = useState<number[]>([]);
-  const [selectedReferenceIndex, setSelectedReferenceIndex] = useState<number | null>(null);
+  const [selectedReferenceIndex, setSelectedReferenceIndex] = useState<
+    number | null
+  >(null);
 
   type NutrientConvert = {
     id: number;
     name: string;
   };
-
   const convert = (): NutrientConvert[] => {
     const nutrientsConvert: NutrientConvert[] = [];
 
@@ -79,7 +92,10 @@ const NewReferences: React.FC<NewReferencesProps> = ({ references, nutrientValue
       const updatedForm = { ...nutrientValueForm };
 
       const updateNutrientReferences = (
-        nutrientsArray: (NutrientMeasurementForm | NutrientMeasurementWithComponentsForm)[]
+        nutrientsArray: (
+          | NutrientMeasurementForm
+          | NutrientMeasurementWithComponentsForm
+        )[]
       ) => {
         nutrientsArray.forEach((nutrient) => {
           if (ids.includes(nutrient.nutrientId)) {
@@ -112,7 +128,8 @@ const NewReferences: React.FC<NewReferencesProps> = ({ references, nutrientValue
               <Card.Body>
                 <Card.Title className="text-primary">{ref.title}</Card.Title>
                 <Card.Subtitle className="mb-2 text-muted">
-                  {ref.type.charAt(0).toUpperCase() + ref.type.slice(1)} - {ref.year || "Unknown Year"}
+                  {ref.type.charAt(0).toUpperCase() + ref.type.slice(1)} -{" "}
+                  {ref.year || "Unknown Year"}
                 </Card.Subtitle>
                 <Card.Text>
                   {ref.authors && (
@@ -144,9 +161,12 @@ const NewReferences: React.FC<NewReferencesProps> = ({ references, nutrientValue
               </Card.Body>
             </Card>
           </Col>
-          <Col md={4} className="d-flex justify-content-center align-items-center">
+          <Col
+            md={4}
+            className="d-flex justify-content-center align-items-center"
+          >
             <Button variant="success" onClick={() => handleShowModal(index)}>
-              Add
+              Agregar
             </Button>
           </Col>
         </Row>

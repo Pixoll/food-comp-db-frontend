@@ -15,8 +15,7 @@ import useOrigins from "../core/components/adminPage/getters/useOrigins";
 import useReferences from "../core/components/adminPage/getters/UseReferences";
 import { Origin } from "../core/types/SingleFoodResult";
 import NewReferences from "../core/components/adminPage/NewReferences";
-
-import PaginationAdmin from "../core/components/adminPage/PaginationAdmin";
+import NewReference from "../core/components/adminPage/NewReference";
 import FoodTableAdmin from "../core/components/adminPage/FoodTableAdmin";
 
 export type NutrientSummary = {
@@ -291,7 +290,7 @@ export default function AdminPage() {
       setFormData(initialFormData);
     }
   }, [nutrients, nutrients?.macronutrients, nutrients?.micronutrients]);
-  
+
   const handleUpdate = (updatedData: Partial<GeneralData>) => {
     setFormData((prev) => ({
       ...prev,
@@ -448,6 +447,9 @@ export default function AdminPage() {
     <div className="AdminPage-background data-uploader">
       <div className="row first-row">
         <div className="tabs-container">
+          <button className="tab" onClick={() => setView("post-reference")}>
+          {"Ingresar una nueva referencia"}
+          </button>
           <button className="tab" onClick={() => setView("manual")}>
             {t("AdminPage.manual")}
           </button>
@@ -457,6 +459,14 @@ export default function AdminPage() {
         </div>
       </div>
       <div className="row second-row">
+        {view === "post-reference" && (
+          <>
+            <div className="content-container">
+              <h2 className="title">{"Ingresa una nueva referencia"}</h2>
+               <NewReference />
+            </div>
+          </>
+        )}
         {view === "manual" && (
           <>
             <div className="left-column">
@@ -478,8 +488,6 @@ export default function AdminPage() {
             </div>
           </>
         )}
-
-
 
         {view === "file" && (
           <div className="right-container">
@@ -504,19 +512,11 @@ export default function AdminPage() {
                 <button className="button">{t("AdminPage.process")}</button>
               </div>
             )}
-
             <div>
               <FoodTableAdmin data={adminData}/>
             </div>
-
-
           </div>
-
         )}
-
-
-
-
       </div>
     </div>
   );
