@@ -12,7 +12,9 @@ import Origins from "../core/components/adminPage/Origins";
 import PreviewDataForm from "../core/components/adminPage/PreviewDataForm";
 import { FetchStatus } from "../core/hooks/useFetch";
 import useOrigins from "../core/components/adminPage/getters/useOrigins";
+import useReferences from "../core/components/adminPage/getters/UseReferences";
 import { Origin } from "../core/types/SingleFoodResult";
+import NewReferences from "../core/components/adminPage/NewReferences";
 
 import PaginationAdmin from "../core/components/adminPage/PaginationAdmin";
 import FoodTableAdmin from "../core/components/adminPage/FoodTableAdmin";
@@ -108,7 +110,7 @@ export type NutrientMeasurementForm = {
 export type NutrientMeasurementWithComponentsForm = NutrientMeasurementForm & {
   components: NutrientMeasurementForm[];
 };
-type NutrientsValueForm = {
+export type NutrientsValueForm = {
   energy: NutrientMeasurementForm[];
   mainNutrients: NutrientMeasurementWithComponentsForm[];
   micronutrients: {
@@ -145,7 +147,6 @@ export type FoodForm = {
 export default function AdminPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFile(e.target.files[0]);
@@ -162,7 +163,7 @@ export default function AdminPage() {
       ingredients: {},
       group: { code: "", name: "" },
       type: { code: "", name: "" },
-      origins: [...new Set(origins?.map((o) => (o.id)))],
+      origins: [...new Set(origins?.map((o) => o.id))],
     },
     nutrientsValueForm: {
       energy: [],
@@ -173,6 +174,11 @@ export default function AdminPage() {
       },
     },
   });
+  const referencesResult = useReferences();
+  const references =
+    referencesResult.status === FetchStatus.Success
+      ? referencesResult.data
+      : null;
 
   const nutrientsResult = useNutrients();
   const nutrients =
@@ -221,7 +227,7 @@ export default function AdminPage() {
           ingredients: {},
           group: { code: "defaultGroup", name: "Default Group" },
           type: { code: "defaultType", name: "Default Type" },
-          origins: [...new Set(origins?.map((o) => (o.id)))],
+          origins: [...new Set(origins?.map((o) => o.id))],
         },
         nutrientsValueForm: {
           energy:
@@ -299,12 +305,14 @@ export default function AdminPage() {
       setOrigins([]);
       return;
     }
-    const validOrigins = updateOrigins.filter(o => o.id !== 0 && o.name !== "");
+    const validOrigins = updateOrigins.filter(
+      (o) => o.id !== 0 && o.name !== ""
+    );
 
     const uniqueOrigins = Array.from(
-      new Map(validOrigins.map(o => [o.id, o])).values()
+      new Map(validOrigins.map((o) => [o.id, o])).values()
     );
-    console.log(uniqueOrigins)
+
     setOrigins(uniqueOrigins);
   };
 
@@ -339,7 +347,7 @@ export default function AdminPage() {
       };
     });
   };
-
+  console.log(formData);
   const renderSection = () => {
     switch (activeSection) {
       case 1:
@@ -391,16 +399,28 @@ export default function AdminPage() {
             nameAndIdNutrients={nameAndIdNutrients}
           />
         );
-      case 7: // Origenes
-        return <Origins originsForm={origins || []} data={{ regions, provinces, communes, locations }} updateOrigins={handleOrigins} />;
-      case 8: //Aqui para las referencias
-        return <></>;
+      case 7: // Origines
+        return (
+          <Origins
+            originsForm={origins || []}
+            data={{ regions, provinces, communes, locations }}
+            updateOrigins={handleOrigins}
+          />
+        );
+      case 8:
+        return (
+          <NewReferences
+            references={references || []}
+            nutrientValueForm={formData.nutrientsValueForm}
+            nameAndIdNutrients={nameAndIdNutrients}
+          />
+        );
       case 9:
         return (
           <PreviewDataForm
             data={formData}
             nameAndIdNutrients={nameAndIdNutrients}
-            origins={origins?.map((o) => (o.name)) || []}
+            origins={origins?.map((o) => o.name) || []}
           />
         );
       default:
