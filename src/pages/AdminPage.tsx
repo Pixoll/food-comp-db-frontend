@@ -14,6 +14,9 @@ import { FetchStatus } from "../core/hooks/useFetch";
 import useOrigins from "../core/components/adminPage/getters/useOrigins";
 import { Origin } from "../core/types/SingleFoodResult";
 
+import PaginationAdmin from "../core/components/adminPage/PaginationAdmin";
+import FoodTableAdmin from "../core/components/adminPage/FoodTableAdmin";
+
 export type NutrientSummary = {
   id: number;
   name: string;
@@ -29,7 +32,7 @@ export const getNutrientNameById = (
 };
 
 export type OriginsByForm = {
-  ids: (number| null)[];
+  ids: (number | null)[];
   origins: string[];
 };
 const mapMacroNutrientWithoutComponentsToForm = (
@@ -44,6 +47,28 @@ const mapMacroNutrientWithoutComponentsToForm = (
   dataType: null,
   referenceCodes: [],
 });
+
+
+// ----------------TESTEANDO---------------
+//Esto es la base para ver la tabla con cosas temporales, debe linkearse a lo que llega del CSV...
+const adminData = [
+  { id: "1", name: "Manzana", code: "apple" },
+  { id: "2", name: "Banana", code: "banana" },
+  { id: "3", name: "Pera", code: "pear" },
+  { id: "4", name: "Pera", code: "pear" },
+  { id: "5", name: "Pera", code: "pear" },
+  { id: "6", name: "Pera", code: "pear" },
+  { id: "7", name: "Pera", code: "pear" },
+  { id: "8", name: "Pera", code: "pear" },
+  { id: "9", name: "Pera", code: "pear" },
+  { id: "10", name: "Pera", code: "pear" },
+
+];
+// -----------------------------------------
+
+
+
+
 
 const mapMacroNutrientWithComponentsToForm = (
   macronutrient: MacroNutrient
@@ -108,7 +133,7 @@ type GeneralData = {
   scientificName?: string | null;
   subspecies?: string | null;
   commonName: Record<"es", string> &
-    Partial<Record<"en" | "pt", string | null>>;
+  Partial<Record<"en" | "pt", string | null>>;
   ingredients: Partial<Record<"es" | "en" | "pt", string | null>>;
   origins: (number | null)[];
 };
@@ -119,14 +144,14 @@ export type FoodForm = {
 
 export default function AdminPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  
+
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFile(e.target.files[0]);
     }
   };
-  const {regions, provinces, communes, locations} = useOrigins();
+  const { regions, provinces, communes, locations } = useOrigins();
   const [origins, setOrigins] = useState<Origin[] | undefined>([]);
 
   const [activeSection, setActiveSection] = useState<number>(1);
@@ -137,7 +162,7 @@ export default function AdminPage() {
       ingredients: {},
       group: { code: "", name: "" },
       type: { code: "", name: "" },
-      origins: [...new Set(origins?.map((o)=>(o.id)))],
+      origins: [...new Set(origins?.map((o) => (o.id)))],
     },
     nutrientsValueForm: {
       energy: [],
@@ -196,7 +221,7 @@ export default function AdminPage() {
           ingredients: {},
           group: { code: "defaultGroup", name: "Default Group" },
           type: { code: "defaultType", name: "Default Type" },
-          origins: [...new Set(origins?.map((o)=>(o.id)))],
+          origins: [...new Set(origins?.map((o) => (o.id)))],
         },
         nutrientsValueForm: {
           energy:
@@ -221,9 +246,9 @@ export default function AdminPage() {
                 (m.components?.length ?? 0) > 0
                   ? mapMacroNutrientWithComponentsToForm(m)
                   : {
-                      ...mapMacroNutrientWithoutComponentsToForm(m),
-                      components: [],
-                    }
+                    ...mapMacroNutrientWithoutComponentsToForm(m),
+                    components: [],
+                  }
               ) || [],
 
           micronutrients: {
@@ -275,14 +300,14 @@ export default function AdminPage() {
       return;
     }
     const validOrigins = updateOrigins.filter(o => o.id !== 0 && o.name !== "");
-  
+
     const uniqueOrigins = Array.from(
       new Map(validOrigins.map(o => [o.id, o])).values()
     );
     console.log(uniqueOrigins)
     setOrigins(uniqueOrigins);
   };
-  
+
   const handleNutrientUpdate = (updatedNutrient: NutrientMeasurementForm) => {
     setFormData((prev) => {
       const updateSection = (nutrients: NutrientMeasurementForm[]) =>
@@ -366,8 +391,8 @@ export default function AdminPage() {
             nameAndIdNutrients={nameAndIdNutrients}
           />
         );
-      case 7: // Origines
-        return <Origins originsForm={origins || []} data = {{regions, provinces, communes, locations}} updateOrigins={handleOrigins} />;
+      case 7: // Origenes
+        return <Origins originsForm={origins || []} data={{ regions, provinces, communes, locations }} updateOrigins={handleOrigins} />;
       case 8: //Aqui para las referencias
         return <></>;
       case 9:
@@ -375,7 +400,7 @@ export default function AdminPage() {
           <PreviewDataForm
             data={formData}
             nameAndIdNutrients={nameAndIdNutrients}
-            origins={origins?.map((o)=>(o.name)) || []}
+            origins={origins?.map((o) => (o.name)) || []}
           />
         );
       default:
@@ -418,9 +443,8 @@ export default function AdminPage() {
               {sectionNames.map((name, index) => (
                 <button
                   key={index + 1}
-                  className={`pagination-button ${
-                    activeSection === index + 1 ? "active" : ""
-                  }`}
+                  className={`pagination-button ${activeSection === index + 1 ? "active" : ""
+                    }`}
                   onClick={() => setActiveSection(index + 1)}
                 >
                   {name}
@@ -433,6 +457,9 @@ export default function AdminPage() {
             </div>
           </>
         )}
+
+
+
         {view === "file" && (
           <div className="right-container">
             <h3 className="subtitle">{t("AdminPage.import")}</h3>
@@ -456,8 +483,19 @@ export default function AdminPage() {
                 <button className="button">{t("AdminPage.process")}</button>
               </div>
             )}
+
+            <div>
+              <FoodTableAdmin data={adminData}/>
+            </div>
+
+
           </div>
+
         )}
+
+
+
+
       </div>
     </div>
   );
