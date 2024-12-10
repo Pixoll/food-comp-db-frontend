@@ -16,9 +16,11 @@ import useReferences from "../core/components/adminPage/getters/UseReferences";
 import { Origin } from "../core/types/SingleFoodResult";
 import NewReferences from "../core/components/adminPage/NewReferences";
 import NewReference from "../core/components/adminPage/NewReference";
+import NewAuthors from "../core/components/adminPage/NewAuthors";
+import NewVolumeByReference from "../core/components/adminPage/NewVolumeByReference";
 import FoodTableAdmin from "../core/components/adminPage/FoodTableAdmin";
 import { ReferenceForm } from "../core/components/adminPage/NewReference";
-import NewAuthors from "../core/components/adminPage/NewAuthors";
+
 export type NutrientSummary = {
   id: number;
   name: string;
@@ -50,7 +52,6 @@ const mapMacroNutrientWithoutComponentsToForm = (
   referenceCodes: [],
 });
 
-
 // ----------------TESTEANDO---------------
 //Esto es la base para ver la tabla con cosas temporales, debe linkearse a lo que llega del CSV...
 const adminData = [
@@ -64,10 +65,8 @@ const adminData = [
   { id: "8", name: "Pera", code: "pear" },
   { id: "9", name: "Pera", code: "pear" },
   { id: "10", name: "Pera", code: "pear" },
-
 ];
 // -----------------------------------------
-
 
 const mapMacroNutrientWithComponentsToForm = (
   macronutrient: MacroNutrient
@@ -132,7 +131,7 @@ type GeneralData = {
   scientificName?: string | null;
   subspecies?: string | null;
   commonName: Record<"es", string> &
-  Partial<Record<"en" | "pt", string | null>>;
+    Partial<Record<"en" | "pt", string | null>>;
   ingredients: Partial<Record<"es" | "en" | "pt", string | null>>;
   origins: (number | null)[];
 };
@@ -144,16 +143,16 @@ export type FoodForm = {
 export default function AdminPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [referenceForm, setReferenceForm] = useState<ReferenceForm>({
-    type: "article",
-    title: "",
-    authorIds: undefined,
-    newAuthors: undefined,
-    year: undefined,
-    refVolumeId: undefined,
-    newRefVolume: undefined,
-    refCityId: undefined,
-    newCity: undefined,
-    other: undefined,
+    type: "article", //Listo <NewReference>
+    title: "", //Listo <NewReference>
+    authorIds: undefined, //Listo <NewAuthor>
+    newAuthors: undefined, //Listo<NewAuthor>
+    year: undefined, //Listo <NewReference>
+    refVolumeId: undefined, //No listo <Para otro componente>
+    newRefVolume: undefined, //No listo <Para otro componente>
+    refCityId: undefined, //Listo <NewReference>
+    newCity: undefined, //Listo <NewReference>
+    other: undefined, //Listo <NewReference>
   });
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -165,7 +164,8 @@ export default function AdminPage() {
   const [origins, setOrigins] = useState<Origin[] | undefined>([]);
 
   const [activeSection, setActiveSection] = useState<number>(1);
-  const [activeSectionByNewReference, setActiveSectionByNewReference] = useState<number>(1);
+  const [activeSectionByNewReference, setActiveSectionByNewReference] =
+    useState<number>(1);
 
   const [formData, setFormData] = useState<FoodForm>({
     generalData: {
@@ -185,7 +185,8 @@ export default function AdminPage() {
       },
     },
   });
-  const {references, authors, cities, journals, journalsVolumes, volumes} = useReferences();
+  const { references, authors, cities, journals, journalVolumes, volumes } =
+    useReferences();
 
   const nutrientsResult = useNutrients();
   const nutrients =
@@ -259,9 +260,9 @@ export default function AdminPage() {
                 (m.components?.length ?? 0) > 0
                   ? mapMacroNutrientWithComponentsToForm(m)
                   : {
-                    ...mapMacroNutrientWithoutComponentsToForm(m),
-                    components: [],
-                  }
+                      ...mapMacroNutrientWithoutComponentsToForm(m),
+                      components: [],
+                    }
               ) || [],
 
           micronutrients: {
@@ -454,30 +455,47 @@ export default function AdminPage() {
     "Datos generales",
     "Autores",
     "Volumen",
-    "Previsualización"
-  ]
+    "Previsualización",
+  ];
   const renderSectionByNewReference = () => {
-
     switch (activeSectionByNewReference) {
       case 1:
-        return (<NewReference />)
+        return <NewReference />;
       case 2:
-        return (<NewAuthors authorIds={referenceForm.authorIds} newAuthors={referenceForm.newAuthors} data={authors || []}/>)
+        return (
+          <NewAuthors
+            authorIds={referenceForm.authorIds}
+            newAuthors={referenceForm.newAuthors}
+            data={authors || []}
+          />
+        );
       case 3:
-        return <></>
+        return (
+          <NewVolumeByReference
+            data={{
+              journals: journals || [],
+              journalVolumes: journalVolumes || [],
+              volumes: volumes || [],
+            }}
+            dataForm={{
+              refVolumeId: referenceForm.refVolumeId,
+              newRefVolume: referenceForm.newRefVolume,
+            }}
+          />
+        );
       case 4:
-        return <></>
+        return <></>; // aqui para previsualizar la referencia
       default:
         return null;
-      }
-  }
+    }
+  };
 
   return (
     <div className="AdminPage-background data-uploader">
       <div className="row first-row">
         <div className="tabs-container">
           <button className="tab" onClick={() => setView("post-reference")}>
-          {"Ingresar una nueva referencia"}
+            {"Ingresar una nueva referencia"}
           </button>
           <button className="tab" onClick={() => setView("manual")}>
             {t("AdminPage.manual")}
@@ -495,8 +513,9 @@ export default function AdminPage() {
               {sectionNamesByNewReference.map((name, index) => (
                 <button
                   key={index + 1}
-                  className={`pagination-button ${activeSection === index + 1 ? "active" : ""
-                    }`}
+                  className={`pagination-button ${
+                    activeSection === index + 1 ? "active" : ""
+                  }`}
                   onClick={() => setActiveSectionByNewReference(index + 1)}
                 >
                   {name}
@@ -516,8 +535,9 @@ export default function AdminPage() {
               {sectionNames.map((name, index) => (
                 <button
                   key={index + 1}
-                  className={`pagination-button ${activeSection === index + 1 ? "active" : ""
-                    }`}
+                  className={`pagination-button ${
+                    activeSection === index + 1 ? "active" : ""
+                  }`}
                   onClick={() => setActiveSection(index + 1)}
                 >
                   {name}
@@ -555,7 +575,7 @@ export default function AdminPage() {
               </div>
             )}
             <div>
-              <FoodTableAdmin data={adminData}/>
+              <FoodTableAdmin data={adminData} />
             </div>
           </div>
         )}

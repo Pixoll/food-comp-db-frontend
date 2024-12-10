@@ -52,7 +52,7 @@ const useReferences = () => {
       authors: authorsResult.status === FetchStatus.Success ? authorsResult.data : null,
       cities: citiesResult.status === FetchStatus.Success ? citiesResult.data : null,
       journals: journalsResult.status === FetchStatus.Success ? journalsResult.data : null,
-      journalsVolumes: journalsVolumesResult.status === FetchStatus.Success ? journalsVolumesResult.data : null,
+      journalVolumes: journalsVolumesResult.status === FetchStatus.Success ? journalsVolumesResult.data : null,
       volumes: volumesResult.status === FetchStatus.Success ? volumesResult.data : null,
     };
   };

@@ -34,8 +34,6 @@ const NewReference = () => {
     const [referenceForm, setReferenceForm] = useState<ReferenceForm>({
       type: "article",
       title: "",
-      authorIds: undefined,
-      newAuthors: undefined,
       year: undefined,
       refVolumeId: undefined,
       newRefVolume: undefined,
@@ -79,34 +77,6 @@ const NewReference = () => {
                 <option value="website">Sitio web</option>
                 <option value="book">Libro</option>
               </Form.Select>
-            </Form.Group>
-  
-            <Form.Group controlId="formReferenceAuthors">
-              <Form.Label>Autores</Form.Label>
-              <SelectorWithInput
-                options={[
-                  { id: 1, name: "Autor 1" },
-                  { id: 2, name: "Autor 2" },
-                ]}
-                placeholder="Seleccione o ingrese un autor"
-                selectedValue={
-                  referenceForm.newAuthors?.[0] ||
-                  (referenceForm.authorIds?.length ? "Seleccionado" : undefined)
-                }
-                onSelect={(id, name) => {
-                  if (id) {
-                    handleInputChange("authorIds", [
-                      ...(referenceForm.authorIds || []),
-                      id,
-                    ]);
-                  } else {
-                    handleInputChange("newAuthors", [
-                      ...(referenceForm.newAuthors || []),
-                      name,
-                    ]);
-                  }
-                }}
-              />
             </Form.Group>
   
             <Form.Group controlId="formReferenceCity">
