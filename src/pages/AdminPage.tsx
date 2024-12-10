@@ -155,6 +155,8 @@ export default function AdminPage() {
   const [origins, setOrigins] = useState<Origin[] | undefined>([]);
 
   const [activeSection, setActiveSection] = useState<number>(1);
+  const [activeSectionByNewReference, setActiveSectionByNewReference] = useState<number>(1);
+
   const [formData, setFormData] = useState<FoodForm>({
     generalData: {
       code: "",
@@ -173,11 +175,7 @@ export default function AdminPage() {
       },
     },
   });
-  const referencesResult = useReferences();
-  const references =
-    referencesResult.status === FetchStatus.Success
-      ? referencesResult.data
-      : null;
+  const {references, authors, cities, journals, journalsVolumes, volumes} = useReferences();
 
   const nutrientsResult = useNutrients();
   const nutrients =
@@ -347,7 +345,7 @@ export default function AdminPage() {
       };
     });
   };
-  console.log(formData);
+
   const renderSection = () => {
     switch (activeSection) {
       case 1:
@@ -442,6 +440,27 @@ export default function AdminPage() {
     "Referencias",
     "Vista de información actual",
   ];
+  const sectionNamesByNewReference = [
+    "Datos generales",
+    "Autores",
+    "Volumen",
+    "Previsualización"
+  ]
+  const renderSectionByNewReference = () => {
+
+    switch (activeSectionByNewReference) {
+      case 1:
+        return (<NewReference />)
+      case 2:
+        return <></>
+      case 3:
+        return <></>
+      case 4:
+        return <></>
+      default:
+        return null;
+      }
+  }
 
   return (
     <div className="AdminPage-background data-uploader">
@@ -461,9 +480,22 @@ export default function AdminPage() {
       <div className="row second-row">
         {view === "post-reference" && (
           <>
+            <div className="left-column">
+              <h3 className="subtitle">{t("AdminPage.title")}</h3>
+              {sectionNamesByNewReference.map((name, index) => (
+                <button
+                  key={index + 1}
+                  className={`pagination-button ${activeSection === index + 1 ? "active" : ""
+                    }`}
+                  onClick={() => setActiveSectionByNewReference(index + 1)}
+                >
+                  {name}
+                </button>
+              ))}
+            </div>
             <div className="content-container">
-              <h2 className="title">{"Ingresa una nueva referencia"}</h2>
-               <NewReference />
+              <h2 className="title">{"Nueva referencia xd"}</h2>
+              {renderSectionByNewReference()}
             </div>
           </>
         )}
