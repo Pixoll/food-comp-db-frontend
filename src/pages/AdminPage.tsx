@@ -12,7 +12,9 @@ import Origins from "../core/components/adminPage/Origins";
 import PreviewDataForm from "../core/components/adminPage/PreviewDataForm";
 import { FetchStatus } from "../core/hooks/useFetch";
 import useOrigins from "../core/components/adminPage/getters/useOrigins";
+import useReferences from "../core/components/adminPage/getters/UseReferences";
 import { Origin } from "../core/types/SingleFoodResult";
+import NewReferences from "../core/components/adminPage/NewReferences";
 
 export type NutrientSummary = {
   id: number;
@@ -29,7 +31,7 @@ export const getNutrientNameById = (
 };
 
 export type OriginsByForm = {
-  ids: (number| null)[];
+  ids: (number | null)[];
   origins: string[];
 };
 const mapMacroNutrientWithoutComponentsToForm = (
@@ -83,7 +85,7 @@ export type NutrientMeasurementForm = {
 export type NutrientMeasurementWithComponentsForm = NutrientMeasurementForm & {
   components: NutrientMeasurementForm[];
 };
-type NutrientsValueForm = {
+export type NutrientsValueForm = {
   energy: NutrientMeasurementForm[];
   mainNutrients: NutrientMeasurementWithComponentsForm[];
   micronutrients: {
@@ -119,14 +121,13 @@ export type FoodForm = {
 
 export default function AdminPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFile(e.target.files[0]);
     }
   };
-  const {regions, provinces, communes, locations} = useOrigins();
+  const { regions, provinces, communes, locations } = useOrigins();
   const [origins, setOrigins] = useState<Origin[] | undefined>([]);
 
   const [activeSection, setActiveSection] = useState<number>(1);
@@ -137,7 +138,7 @@ export default function AdminPage() {
       ingredients: {},
       group: { code: "", name: "" },
       type: { code: "", name: "" },
-      origins: [...new Set(origins?.map((o)=>(o.id)))],
+      origins: [...new Set(origins?.map((o) => o.id))],
     },
     nutrientsValueForm: {
       energy: [],
@@ -148,6 +149,11 @@ export default function AdminPage() {
       },
     },
   });
+  const referencesResult = useReferences();
+  const references =
+    referencesResult.status === FetchStatus.Success
+      ? referencesResult.data
+      : null;
 
   const nutrientsResult = useNutrients();
   const nutrients =
@@ -196,7 +202,7 @@ export default function AdminPage() {
           ingredients: {},
           group: { code: "defaultGroup", name: "Default Group" },
           type: { code: "defaultType", name: "Default Type" },
-          origins: [...new Set(origins?.map((o)=>(o.id)))],
+          origins: [...new Set(origins?.map((o) => o.id))],
         },
         nutrientsValueForm: {
           energy:
@@ -274,15 +280,17 @@ export default function AdminPage() {
       setOrigins([]);
       return;
     }
-    const validOrigins = updateOrigins.filter(o => o.id !== 0 && o.name !== "");
-  
-    const uniqueOrigins = Array.from(
-      new Map(validOrigins.map(o => [o.id, o])).values()
+    const validOrigins = updateOrigins.filter(
+      (o) => o.id !== 0 && o.name !== ""
     );
-    console.log(uniqueOrigins)
+
+    const uniqueOrigins = Array.from(
+      new Map(validOrigins.map((o) => [o.id, o])).values()
+    );
+
     setOrigins(uniqueOrigins);
   };
-  
+
   const handleNutrientUpdate = (updatedNutrient: NutrientMeasurementForm) => {
     setFormData((prev) => {
       const updateSection = (nutrients: NutrientMeasurementForm[]) =>
@@ -314,7 +322,7 @@ export default function AdminPage() {
       };
     });
   };
-
+  console.log(formData);
   const renderSection = () => {
     switch (activeSection) {
       case 1:
@@ -367,15 +375,27 @@ export default function AdminPage() {
           />
         );
       case 7: // Origines
-        return <Origins originsForm={origins || []} data = {{regions, provinces, communes, locations}} updateOrigins={handleOrigins} />;
-      case 8: //Aqui para las referencias
-        return <></>;
+        return (
+          <Origins
+            originsForm={origins || []}
+            data={{ regions, provinces, communes, locations }}
+            updateOrigins={handleOrigins}
+          />
+        );
+      case 8:
+        return (
+          <NewReferences
+            references={references || []}
+            nutrientValueForm={formData.nutrientsValueForm}
+            nameAndIdNutrients={nameAndIdNutrients}
+          />
+        );
       case 9:
         return (
           <PreviewDataForm
             data={formData}
             nameAndIdNutrients={nameAndIdNutrients}
-            origins={origins?.map((o)=>(o.name)) || []}
+            origins={origins?.map((o) => o.name) || []}
           />
         );
       default:
