@@ -3,7 +3,7 @@ import { Card, Form, Button } from 'react-bootstrap'
 import OriginSelector from './OriginSelector';
 import SelectorWithInput from '../detailFood/SelectorWithInput';
 
-type ReferenceForm = {
+export type ReferenceForm = {
     type: "report" | "thesis" | "article" | "website" | "book";
     title: string;
     authorIds?: number[];
@@ -15,14 +15,14 @@ type ReferenceForm = {
     newCity?: string;
     other?: string;
 };
-type NewRefVolume = {
+export type NewRefVolume = {
     pageStart: number;
     pageEnd: number;
     volumeId?: number;
     newVolume?: NewVolume;
 };
 
-type NewVolume = {
+export type NewVolume = {
     volume: number;
     issue: number;
     year: number;

@@ -17,7 +17,8 @@ import { Origin } from "../core/types/SingleFoodResult";
 import NewReferences from "../core/components/adminPage/NewReferences";
 import NewReference from "../core/components/adminPage/NewReference";
 import FoodTableAdmin from "../core/components/adminPage/FoodTableAdmin";
-
+import { ReferenceForm } from "../core/components/adminPage/NewReference";
+import NewAuthors from "../core/components/adminPage/NewAuthors";
 export type NutrientSummary = {
   id: number;
   name: string;
@@ -66,9 +67,6 @@ const adminData = [
 
 ];
 // -----------------------------------------
-
-
-
 
 
 const mapMacroNutrientWithComponentsToForm = (
@@ -145,6 +143,18 @@ export type FoodForm = {
 
 export default function AdminPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [referenceForm, setReferenceForm] = useState<ReferenceForm>({
+    type: "article",
+    title: "",
+    authorIds: undefined,
+    newAuthors: undefined,
+    year: undefined,
+    refVolumeId: undefined,
+    newRefVolume: undefined,
+    refCityId: undefined,
+    newCity: undefined,
+    other: undefined,
+  });
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files && e.target.files.length > 0) {
@@ -452,7 +462,7 @@ export default function AdminPage() {
       case 1:
         return (<NewReference />)
       case 2:
-        return <></>
+        return (<NewAuthors authorIds={referenceForm.authorIds} newAuthors={referenceForm.newAuthors} data={authors || []}/>)
       case 3:
         return <></>
       case 4:
