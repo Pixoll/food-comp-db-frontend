@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Card, Row, Col, Button } from "react-bootstrap";
-import { NutrientsValueForm, getNutrientNameById, NutrientSummary } from "../../../pages/AdminPage";
+import { NutrientsValueForm, getNutrientNameById, NutrientSummary, NutrientMeasurementForm, NutrientMeasurementWithComponentsForm } from "../../../pages/AdminPage";
 import { Reference } from "./getters/UseReferences";
 import ModalReferences from "./ModalReferences";
 
@@ -11,7 +11,7 @@ type NewReferencesProps = {
 };
 
 const NewReferences: React.FC<NewReferencesProps> = ({ references, nutrientValueForm, nameAndIdNutrients }) => {
-  const [showModal, setShowModal] = useState(false);
+  const [modalsState, setModalsState] = useState<{ [key: number]: boolean }>({});
   const [selectedNutrientIds, setSelectedNutrientIds] = useState<number[]>([]);
   const [selectedReferenceIndex, setSelectedReferenceIndex] = useState<number | null>(null);
 
@@ -64,33 +64,32 @@ const NewReferences: React.FC<NewReferencesProps> = ({ references, nutrientValue
   };
 
   const handleShowModal = (index: number) => {
+    setModalsState((prev) => ({ ...prev, [index]: true }));
     setSelectedReferenceIndex(index);
-    setShowModal(true);
   };
 
-  const handleHideModal = () => {
-    setShowModal(false);
-    setSelectedNutrientIds([]); // Limpia la selección al cerrar el modal
+  const handleHideModal = (index: number) => {
+    setModalsState((prev) => ({ ...prev, [index]: false }));
+    setSelectedNutrientIds([]);
   };
 
-  const handleSelectNutrients = (ids: number[]) => {
-    setSelectedNutrientIds(ids);
-  };
-
-  const handleAddReference = () => {
-    if (selectedReferenceIndex !== null && selectedNutrientIds.length > 0) {
-      const referenceCode = references[selectedReferenceIndex].code;
+  const handleAddReference = (ids: number[], reference: number) => {
+    if (selectedReferenceIndex !== null && ids.length > 0) {
+      const referenceCode = reference;
       const updatedForm = { ...nutrientValueForm };
 
-      const updateNutrientReferences = (nutrientsArray: any[]) => {
+      const updateNutrientReferences = (
+        nutrientsArray: (NutrientMeasurementForm | NutrientMeasurementWithComponentsForm)[]
+      ) => {
         nutrientsArray.forEach((nutrient) => {
-          if (selectedNutrientIds.includes(nutrient.nutrientId)) {
+          if (ids.includes(nutrient.nutrientId)) {
             nutrient.referenceCodes = nutrient.referenceCodes || [];
             if (!nutrient.referenceCodes.includes(referenceCode)) {
               nutrient.referenceCodes.push(referenceCode);
             }
           }
-          if (nutrient.components) {
+
+          if ("components" in nutrient) {
             updateNutrientReferences(nutrient.components);
           }
         });
@@ -100,9 +99,7 @@ const NewReferences: React.FC<NewReferencesProps> = ({ references, nutrientValue
       updateNutrientReferences(updatedForm.mainNutrients);
       updateNutrientReferences(updatedForm.micronutrients.minerals);
       updateNutrientReferences(updatedForm.micronutrients.vitamins);
-
-      console.log("Updated NutrientValueForm:", updatedForm);
-      setShowModal(false);
+      setModalsState((prev) => ({ ...prev, [selectedReferenceIndex]: false }));
     }
   };
 
@@ -154,16 +151,16 @@ const NewReferences: React.FC<NewReferencesProps> = ({ references, nutrientValue
           </Col>
         </Row>
       ))}
-      <ModalReferences
-        nutrients={convert()}
-        show={showModal}
-        onHide={handleHideModal}
-        onSelectReferenceForNutrients={handleSelectNutrients} // Cambiado
-        selectedReference={selectedReferenceIndex !== null ? references[selectedReferenceIndex].code : null}
-      />
-      <Button variant="primary" onClick={handleAddReference} disabled={selectedNutrientIds.length === 0}>
-        Confirm Add Reference
-      </Button>
+      {references.map((ref, index) => (
+        <ModalReferences
+          key={index}
+          nutrients={convert()}
+          show={modalsState[index] || false}
+          onHide={() => handleHideModal(index)}
+          onSelectReferenceForNutrients={handleAddReference}
+          selectedReference={ref.code}
+        />
+      ))}
     </div>
   );
 };

@@ -27,8 +27,8 @@ const ModalReferences: React.FC<ModalReferencesProps> = ({
     setSelectedNutrientIds((prev) =>
       prev.includes(id) ? prev.filter((nid) => nid !== id) : [...prev, id]
     );
+    
   };
-
   const handleAddReference = () => {
     if (selectedReference !== null && selectedNutrientIds.length > 0) {
       onSelectReferenceForNutrients(selectedNutrientIds, selectedReference);
@@ -39,7 +39,7 @@ const ModalReferences: React.FC<ModalReferencesProps> = ({
   return (
     <Modal show={show} onHide={onHide} centered scrollable>
       <Modal.Header closeButton>
-        <Modal.Title>Select Nutrients</Modal.Title>
+        <Modal.Title>Seleccionar nutrientes</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <ListGroup>
@@ -50,21 +50,21 @@ const ModalReferences: React.FC<ModalReferencesProps> = ({
               onClick={() => handleSelect(nutrient.id)}
               active={selectedNutrientIds.includes(nutrient.id)}
             >
-              {nutrient.name} (ID: {nutrient.id})
+              {nutrient.name}
             </ListGroup.Item>
           ))}
         </ListGroup>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onHide}>
-          Close
+          Cerrar
         </Button>
         <Button
           variant="primary"
           onClick={handleAddReference}
           disabled={selectedNutrientIds.length === 0 || selectedReference === null}
         >
-          Add Reference
+          Añadir referencia
         </Button>
       </Modal.Footer>
     </Modal>

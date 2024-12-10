@@ -291,6 +291,7 @@ export default function AdminPage() {
       setFormData(initialFormData);
     }
   }, [nutrients, nutrients?.macronutrients, nutrients?.micronutrients]);
+  
   const handleUpdate = (updatedData: Partial<GeneralData>) => {
     setFormData((prev) => ({
       ...prev,
