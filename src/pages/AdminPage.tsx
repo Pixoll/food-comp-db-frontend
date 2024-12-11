@@ -512,9 +512,9 @@ export default function AdminPage() {
               <h3 className="subtitle">{t("AdminPage.title")}</h3>
               {sectionNamesByNewReference.map((name, index) => (
                 <button
-                  key={index + 1}
+                  key={`post-reference-${index}`}
                   className={`pagination-button ${
-                    activeSection === index + 1 ? "active" : ""
+                    activeSectionByNewReference === index + 1 ? "active" : ""
                   }`}
                   onClick={() => setActiveSectionByNewReference(index + 1)}
                 >
@@ -534,7 +534,7 @@ export default function AdminPage() {
               <h3 className="subtitle">{t("AdminPage.title")}</h3>
               {sectionNames.map((name, index) => (
                 <button
-                  key={index + 1}
+                  key={`manual-${index}`}
                   className={`pagination-button ${
                     activeSection === index + 1 ? "active" : ""
                   }`}
