@@ -50,6 +50,7 @@ const useReferences = () => {
     const journalsResult = useFetch<Journal[]>("/references/journals");
     const journalsVolumesResult = useFetch<JournalVolume[]>("/references/journal_volumes");
     const articlesResult = useFetch<Article[]>("/references/articles");
+    console.log(articlesResult)
   
     return {
       references: referencesResult.status === FetchStatus.Success ? referencesResult.data : null,
