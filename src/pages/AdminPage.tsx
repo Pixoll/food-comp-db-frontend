@@ -148,9 +148,9 @@ export default function AdminPage() {
     authorIds: undefined, //Listo <NewAuthor>
     newAuthors: undefined, //Listo<NewAuthor>
     year: undefined, //Listo <NewReference>
-    refVolumeId: undefined, //No listo <Para otro componente>
-    newRefVolume: undefined, //No listo <Para otro componente>
-    refCityId: undefined, //Listo <NewReference>
+    articleId: undefined, //No listo <Para otro componente>
+    newArticle: undefined, //No listo <Para otro componente>
+    cityId: undefined, //Listo <NewReference>
     newCity: undefined, //Listo <NewReference>
     other: undefined, //Listo <NewReference>
   });
@@ -185,7 +185,7 @@ export default function AdminPage() {
       },
     },
   });
-  const { references, authors, cities, journals, journalVolumes, volumes } =
+  const { references, authors, cities, journals, journalVolumes, articles } =
     useReferences();
 
   const nutrientsResult = useNutrients();
@@ -475,11 +475,11 @@ export default function AdminPage() {
             data={{
               journals: journals || [],
               journalVolumes: journalVolumes || [],
-              volumes: volumes || [],
+              articles: articles || [],
             }}
             dataForm={{
-              refVolumeId: referenceForm.refVolumeId,
-              newRefVolume: referenceForm.newRefVolume,
+              articleId: referenceForm.articleId,
+              newArticle: referenceForm.newArticle,
             }}
           />
         );
@@ -523,7 +523,7 @@ export default function AdminPage() {
               ))}
             </div>
             <div className="content-container">
-              <h2 className="title">{"Nueva referencia xd"}</h2>
+              <h2 className="title">{"Nueva referencia"}</h2>
               {renderSectionByNewReference()}
             </div>
           </>

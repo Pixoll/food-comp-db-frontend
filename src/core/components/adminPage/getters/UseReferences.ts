@@ -20,32 +20,36 @@ export type Author = {
     id: number;
     name: string;
 }
-export type Citie = {
+export type City = {
     id: number;
     name: string;
 }
+//articulo depende del
 export type Journal = {
     id: number;
     name: string;
 }
 export type JournalVolume = {
     id: number;
-    name: string;
+    journalId: number;
+    volume: number;
+    issue: number;
+    year: number;
 }
-export type Volume = {
+export type Article = {
     id: number;
     volumeId: number;
     pageStart: number;
-    pageEnd:number
-}
+    pageEnd: number;
+};
 
 const useReferences = () => {
     const referencesResult = useFetch<Reference[]>("/references");
     const authorsResult = useFetch<Author[]>("/references/authors");
-    const citiesResult = useFetch<Citie[]>("/references/cities");
+    const citiesResult = useFetch<City[]>("/references/cities");
     const journalsResult = useFetch<Journal[]>("/references/journals");
     const journalsVolumesResult = useFetch<JournalVolume[]>("/references/journal_volumes");
-    const volumesResult = useFetch<Volume[]>("/references/volumes");
+    const articlesResult = useFetch<Article[]>("/references/articles");
   
     return {
       references: referencesResult.status === FetchStatus.Success ? referencesResult.data : null,
@@ -53,7 +57,7 @@ const useReferences = () => {
       cities: citiesResult.status === FetchStatus.Success ? citiesResult.data : null,
       journals: journalsResult.status === FetchStatus.Success ? journalsResult.data : null,
       journalVolumes: journalsVolumesResult.status === FetchStatus.Success ? journalsVolumesResult.data : null,
-      volumes: volumesResult.status === FetchStatus.Success ? volumesResult.data : null,
+      articles: articlesResult.status === FetchStatus.Success ? articlesResult.data : null,
     };
   };
   

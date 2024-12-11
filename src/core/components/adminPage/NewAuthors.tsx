@@ -61,6 +61,7 @@ const NewAuthors: React.FC<NewAuthorsProps> = ({
       const newAuthor: Author = { id: -1, name };
       updatedAuthors[index] = newAuthor;
     }
+    console.log(updatedAuthors)
     setSelectedAuthors(updatedAuthors);
     updateParent();
   };

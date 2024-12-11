@@ -54,7 +54,6 @@ const useOrigins = () => {
       id: o.id,
       name: o.name,
     };
-
     switch (o.type) {
       case "region": {
         regions.set(o.id, {
