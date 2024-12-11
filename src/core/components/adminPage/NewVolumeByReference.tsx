@@ -3,6 +3,8 @@ import { NewArticle, NewVolume } from "./NewReference";
 import { Journal, JournalVolume, Article } from "./getters/UseReferences";
 import OriginSelector from "./OriginSelector";
 import { Button, Row, Col, Container, Form } from "react-bootstrap";
+import "../../../assets/css/_NewVolumByReference.css";
+
 
 const searchJournalNameById = (id: number | undefined, journals: Journal[]) => {
   const journal = journals.find((journal) => journal.id === id);
@@ -189,7 +191,7 @@ const NewVolumeByReference: React.FC<NewVolumeByReferenceProps> = ({
                 />
               </Col>
               <Col md={4}>
-                <Button onClick={() => handleAddJournal()} variant="primary">
+                <Button className="button" onClick={() => handleAddJournal()} variant="primary">
                   Agregar Revista
                 </Button>
               </Col>

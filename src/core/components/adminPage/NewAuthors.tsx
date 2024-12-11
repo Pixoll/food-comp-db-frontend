@@ -2,6 +2,8 @@ import React, { useState, useCallback } from "react";
 import { Button, ListGroup, Row, Col, Container } from "react-bootstrap";
 import { Author } from "./getters/UseReferences";
 import SelectorWithInput from "../detailFood/SelectorWithInput";
+import "../../../assets/css/_NewAuthors.css";
+
 
 type NewAuthorsProps = {
   authorIds?: number[];
@@ -81,7 +83,7 @@ const NewAuthors: React.FC<NewAuthorsProps> = ({
 
   return (
     <Container>
-      <Row className="mb-3">
+      <Row className="row">
         {selectors.map((_, index) => (
           <Col key={index} md={12} className="mb-2">
             <Row>
@@ -113,7 +115,7 @@ const NewAuthors: React.FC<NewAuthorsProps> = ({
           </ListGroup.Item>
         ))}
       </ListGroup>
-      <Button  variant="primary" onClick={handleAddSelector} className="mb-3">
+      <Button className="button" variant="primary" onClick={handleAddSelector}>
         Agregar autor
       </Button>
     </Container>
