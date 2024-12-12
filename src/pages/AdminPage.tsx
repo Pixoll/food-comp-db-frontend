@@ -261,6 +261,17 @@ export default function AdminPage() {
       measurementUnit: vitamin.measurementUnit,
     });
   });
+  const handleReferences = (updatedData: Partial<NutrientsValueForm>) => {
+    setFormData((prev) => ({
+      ...prev,
+      nutrientsValueForm: {
+        ...prev.nutrientsValueForm, 
+        ...updatedData, 
+      },
+    }));
+  };
+  
+  
   useEffect(() => {
     if (nutrients) {
       const initialFormData: FoodForm = {
@@ -270,8 +281,8 @@ export default function AdminPage() {
             es: "",
           },
           ingredients: {},
-          group: { code: "defaultGroup", name: "Default Group" },
-          type: { code: "defaultType", name: "Default Type" },
+          group: { code: "", name: "" },
+          type: { code: "", name: "" },
           origins: [...new Set(origins?.map((o) => o.id))],
         },
         nutrientsValueForm: {
@@ -286,7 +297,6 @@ export default function AdminPage() {
                 max: null,
                 sampleSize: null,
                 dataType: null,
-                references: null,
                 referenceCodes: [],
               })) || [],
 
@@ -459,6 +469,7 @@ export default function AdminPage() {
             references={references || []}
             nutrientValueForm={formData.nutrientsValueForm}
             nameAndIdNutrients={nameAndIdNutrients}
+            onSelectReferenceForNutrients={handleReferences}
           />
         );
       case 9:

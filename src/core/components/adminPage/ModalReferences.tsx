@@ -1,17 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, ListGroup } from "react-bootstrap";
 
 type NutrientConvert = {
   id: number;
   name: string;
+  selected: boolean;
 };
 
 type ModalReferencesProps = {
   nutrients: NutrientConvert[];
   show: boolean;
   onHide: () => void;
-  onSelectReferenceForNutrients: (nutrientIds: number[], referenceId: number) => void; 
-  selectedReference: number | null; 
+  onSelectReferenceForNutrients: (nutrientIds: number[], referenceId: number) => void;
+  selectedReference: number | null;
 };
 
 const ModalReferences: React.FC<ModalReferencesProps> = ({
@@ -23,14 +24,25 @@ const ModalReferences: React.FC<ModalReferencesProps> = ({
 }) => {
   const [selectedNutrientIds, setSelectedNutrientIds] = useState<number[]>([]);
 
+  useEffect(() => {
+    if (show) {
+      const initialSelectedIds = nutrients
+        .filter((n) => n.selected)
+        .map((n) => n.id);
+      setSelectedNutrientIds(initialSelectedIds);
+    }
+  }, [nutrients, show]);
+
   const handleSelect = (id: number) => {
     setSelectedNutrientIds((prev) =>
-      prev.includes(id) ? prev.filter((nid) => nid !== id) : [...prev, id]
+      prev.includes(id) 
+        ? prev.filter((nid) => nid !== id) 
+        : [...prev, id]
     );
-    
   };
+
   const handleAddReference = () => {
-    if (selectedReference !== null && selectedNutrientIds.length > 0) {
+    if (selectedReference !== null) {
       onSelectReferenceForNutrients(selectedNutrientIds, selectedReference);
       onHide();
     }
@@ -62,9 +74,9 @@ const ModalReferences: React.FC<ModalReferencesProps> = ({
         <Button
           variant="primary"
           onClick={handleAddReference}
-          disabled={selectedNutrientIds.length === 0 || selectedReference === null}
+          disabled={selectedReference === null}
         >
-          Añadir referencia
+          Guardar cambios
         </Button>
       </Modal.Footer>
     </Modal>

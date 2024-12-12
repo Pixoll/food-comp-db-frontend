@@ -14,12 +14,19 @@ type NewReferencesProps = {
   references: Reference[];
   nutrientValueForm: NutrientsValueForm;
   nameAndIdNutrients: NutrientSummary[];
+  onSelectReferenceForNutrients: (updatedForm: NutrientsValueForm) => void;
 };
-
+const hasValidData = (nutrient: NutrientMeasurementForm): boolean => {
+    return (
+      nutrient.average !== null  &&
+      nutrient.dataType !== null
+    );
+  };
 const NewReferences: React.FC<NewReferencesProps> = ({
   references,
   nutrientValueForm,
   nameAndIdNutrients,
+  onSelectReferenceForNutrients
 }) => {
   const [modalsState, setModalsState] = useState<{ [key: number]: boolean }>(
     {}
@@ -32,47 +39,54 @@ const NewReferences: React.FC<NewReferencesProps> = ({
   type NutrientConvert = {
     id: number;
     name: string;
+    selected: boolean;
   };
   const convert = (): NutrientConvert[] => {
     const nutrientsConvert: NutrientConvert[] = [];
-
-    nutrientValueForm.energy.forEach((energy) => {
+  
+    const isReferenceAssigned = (nutrient: NutrientMeasurementForm, refCode: number) => {
+      return nutrient.referenceCodes?.includes(refCode);
+    };
+  
+    const addNutrientWithSelection = (
+      nutrient: NutrientMeasurementForm,
+      refCode: number
+    ) => {
       nutrientsConvert.push({
-        id: energy.nutrientId,
-        name: getNutrientNameById(energy.nutrientId, nameAndIdNutrients),
+        id: nutrient.nutrientId,
+        name: getNutrientNameById(nutrient.nutrientId, nameAndIdNutrients),
+        selected: isReferenceAssigned(nutrient, refCode),
       });
-    });
-
-    nutrientValueForm.mainNutrients.forEach((mainNutrient) => {
-      nutrientsConvert.push({
-        id: mainNutrient.nutrientId,
-        name: getNutrientNameById(mainNutrient.nutrientId, nameAndIdNutrients),
+    };
+  
+    const referenceCode = references[selectedReferenceIndex!]?.code;
+  
+    nutrientValueForm.energy
+      .filter(hasValidData)
+      .forEach((energy) => addNutrientWithSelection(energy, referenceCode));
+  
+    nutrientValueForm.mainNutrients
+      .filter(hasValidData)
+      .forEach((mainNutrient) => {
+        addNutrientWithSelection(mainNutrient, referenceCode);
+  
+        if (mainNutrient.components) {
+          mainNutrient.components
+            .filter(hasValidData)
+            .forEach((component) =>
+              addNutrientWithSelection(component, referenceCode)
+            );
+        }
       });
-
-      if (mainNutrient.components) {
-        mainNutrient.components.forEach((component) => {
-          nutrientsConvert.push({
-            id: component.nutrientId,
-            name: getNutrientNameById(component.nutrientId, nameAndIdNutrients),
-          });
-        });
-      }
-    });
-
-    nutrientValueForm.micronutrients.minerals.forEach((mineral) => {
-      nutrientsConvert.push({
-        id: mineral.nutrientId,
-        name: getNutrientNameById(mineral.nutrientId, nameAndIdNutrients),
-      });
-    });
-
-    nutrientValueForm.micronutrients.vitamins.forEach((vitamin) => {
-      nutrientsConvert.push({
-        id: vitamin.nutrientId,
-        name: getNutrientNameById(vitamin.nutrientId, nameAndIdNutrients),
-      });
-    });
-
+  
+    nutrientValueForm.micronutrients.minerals
+      .filter(hasValidData)
+      .forEach((mineral) => addNutrientWithSelection(mineral, referenceCode));
+  
+    nutrientValueForm.micronutrients.vitamins
+      .filter(hasValidData)
+      .forEach((vitamin) => addNutrientWithSelection(vitamin, referenceCode));
+  
     return nutrientsConvert;
   };
 
@@ -87,10 +101,10 @@ const NewReferences: React.FC<NewReferencesProps> = ({
   };
 
   const handleAddReference = (ids: number[], reference: number) => {
-    if (selectedReferenceIndex !== null && ids.length > 0) {
+    if (selectedReferenceIndex !== null) {
       const referenceCode = reference;
       const updatedForm = { ...nutrientValueForm };
-
+  
       const updateNutrientReferences = (
         nutrientsArray: (
           | NutrientMeasurementForm
@@ -104,17 +118,26 @@ const NewReferences: React.FC<NewReferencesProps> = ({
               nutrient.referenceCodes.push(referenceCode);
             }
           }
-
+          else if (nutrient.referenceCodes) {
+            nutrient.referenceCodes = nutrient.referenceCodes.filter(
+              (code) => code !== referenceCode
+            );
+          }
+  
           if ("components" in nutrient) {
-            updateNutrientReferences(nutrient.components);
+            const components = nutrient.components as (NutrientMeasurementForm | NutrientMeasurementWithComponentsForm)[];
+            updateNutrientReferences(components);
           }
         });
       };
-
+  
       updateNutrientReferences(updatedForm.energy);
       updateNutrientReferences(updatedForm.mainNutrients);
       updateNutrientReferences(updatedForm.micronutrients.minerals);
       updateNutrientReferences(updatedForm.micronutrients.vitamins);
+  
+      onSelectReferenceForNutrients(updatedForm);
+  
       setModalsState((prev) => ({ ...prev, [selectedReferenceIndex]: false }));
     }
   };

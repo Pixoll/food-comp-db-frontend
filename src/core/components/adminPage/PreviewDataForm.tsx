@@ -26,14 +26,11 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
 
   const hasValidData = (nutrient: NutrientMeasurementForm): boolean => {
     return (
-      nutrient.average !== null ||
-      nutrient.deviation !== null ||
-      nutrient.min !== null ||
-      nutrient.max !== null ||
-      nutrient.sampleSize !== null ||
+      nutrient.average !== null  &&
       nutrient.dataType !== null
     );
   };
+
   const renderNutrientTable = (
     title: string,
     nutrients: NutrientMeasurementForm[]
@@ -54,6 +51,7 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
               <th>Máximo</th>
               <th>Tamaño de muestra</th>
               <th>Tipo de dato</th>
+              <th>Codigos de referencias</th>
             </tr>
           </thead>
           <tbody>
@@ -68,6 +66,7 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
                 <td>{nutrient.max ?? "N/A"}</td>
                 <td>{nutrient.sampleSize ?? "N/A"}</td>
                 <td>{nutrient.dataType ?? "N/A"}</td>
+                <td>{nutrient.referenceCodes ?? "N/A"}</td>
               </tr>
             ))}
           </tbody>
