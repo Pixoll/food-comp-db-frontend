@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import { NewArticle, NewVolume } from "./NewReference";
 import { Journal, JournalVolume, Article } from "./getters/UseReferences";
 import OriginSelector from "./OriginSelector";
@@ -52,14 +52,16 @@ const NewVolumeByReference: React.FC<NewVolumeByReferenceProps> = ({
 
   const { journals, journalVolumes, articles } = data;
 
-  const [newJournal, setNewJournal] = useState(false);
   const [selectedIdJournal, setSelectedIdJournal] = useState<
     number | undefined
-  >(searchIdJournalByIdVolume(dataForm.newArticle?.volumeId, journalVolumes));
+  >(searchIdJournalByIdVolume(dataForm.newArticle?.volumeId, journalVolumes) || dataForm.newArticle?.newVolume?.journalId);
   const [newJournalName, setNewJournalName] = useState<string | undefined>(
     dataForm.newArticle?.newVolume?.newJournal
   );
-  const [newVolume, setnewVolume] = useState(false);
+  const [newJournal, setNewJournal] = useState<boolean>(
+    !!newJournalName 
+  );
+  
   const [selectedIdVolume, setSelectedIdVolume] = useState<number | undefined>(
     dataForm.newArticle?.volumeId
   );
@@ -70,7 +72,8 @@ const NewVolumeByReference: React.FC<NewVolumeByReferenceProps> = ({
       ? { ...dataForm.newArticle.newVolume }
       : undefined
   );
-
+  const [newVolume, setnewVolume] = useState(!!selectedVolume);
+  
   const [selectedArticle, setSelectedArticle] = useState<
     Partial<NewArticle> | undefined
   >(dataForm.newArticle);
@@ -128,12 +131,16 @@ const NewVolumeByReference: React.FC<NewVolumeByReferenceProps> = ({
     }
   };
 
-  const handleUpdateArticle = (field: keyof NewArticle, value: any) => {
+  const handleUpdateArticle = <K extends keyof NewArticle>(
+    field: K,
+    value: NewArticle[K]
+  ) => {
     setSelectedArticle((prev) => ({
       ...prev,
       [field]: value,
     }));
   };
+  
 
   const handleAddArticle = () => {
     if (
@@ -145,11 +152,12 @@ const NewVolumeByReference: React.FC<NewVolumeByReferenceProps> = ({
         ...selectedArticle,
         volumeId: selectedIdVolume,
       };
-      setSelectedArticle(newArticle);
+      updateNewArticle(newArticle as NewArticle); 
     } else {
       console.error("Los valores de 'pageStart' y 'pageEnd' son obligatorios.");
     }
   };
+  
 
   const goToNextSection = () => {
     if (activeSection < 3) {
@@ -202,7 +210,7 @@ const NewVolumeByReference: React.FC<NewVolumeByReferenceProps> = ({
                   : undefined,
             };
 
-            updateNewArticle(article); // Pasar el objeto completo
+            updateNewArticle(article);
             setActiveSection((prev) => prev + 1);
           } else {
             alert("Por favor, seleccione o agregue un volumen.");

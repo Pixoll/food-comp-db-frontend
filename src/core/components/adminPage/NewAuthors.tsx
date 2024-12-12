@@ -9,23 +9,31 @@ type NewAuthorsProps = {
   authorIds?: number[];
   newAuthors?: string[];
   data: Author[];
-  updateAuthors?: (authors: Author[]) => void;
+  updateAuthors: (authors: Author[]) => void;
 };
 
 const convert = (
   authorIds?: number[],
   newAuthors?: string[],
-  authors: Author[] = []
+  authors?: Author[]
 ): Author[] => {
-  const list: Author[] = [...authors];
-  if (!authorIds || !newAuthors) {
-    return list;
+  const list: Author[] = [];
+
+  if (authorIds) {
+    authorIds.forEach((authorId) => {
+      const existingAuthor = authors?.find((author) => author.id === authorId);
+      if (existingAuthor){
+        list.push({id:existingAuthor.id, name:existingAuthor.name})
+      };
+    });
   }
-  for (let i = 0; i < (authorIds?.length ?? 0); i++) {
-    if (authorIds[i] && newAuthors && newAuthors[i]) {
-      list.push({ id: authorIds[i], name: newAuthors[i] });
-    }
+
+  if (newAuthors) {
+    newAuthors.forEach((name, index) => {
+      if (name) list.push({ id: -1, name });
+    });
   }
+  console.log(list)
   return list;
 };
 
@@ -36,16 +44,16 @@ const NewAuthors: React.FC<NewAuthorsProps> = ({
   updateAuthors,
 }) => {
   const [selectedAuthors, setSelectedAuthors] = useState<Author[]>(
-    convert(authorIds, newAuthors)
+    convert(authorIds, newAuthors, data)
   );
   const [selectors, setSelectors] = useState<number[]>(
     Array(selectedAuthors.length || 1).fill(0).map((_, i) => i)
   );
 
   const updateParent = useCallback(() => {
-    if (updateAuthors) {
+
       updateAuthors(selectedAuthors);
-    }
+    
   }, [selectedAuthors, updateAuthors]);
 
   const handleSelectAuthor = (
@@ -63,10 +71,10 @@ const NewAuthors: React.FC<NewAuthorsProps> = ({
       const newAuthor: Author = { id: -1, name };
       updatedAuthors[index] = newAuthor;
     }
-    console.log(updatedAuthors)
     setSelectedAuthors(updatedAuthors);
-    updateParent();
+    updateAuthors(updatedAuthors); 
   };
+  
 
   const handleRemoveRow = (index: number) => {
     const updatedAuthors = selectedAuthors.filter((_, i) => i !== index);

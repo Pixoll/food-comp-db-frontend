@@ -12,7 +12,7 @@ import Origins from "../core/components/adminPage/Origins";
 import PreviewDataForm from "../core/components/adminPage/PreviewDataForm";
 import { FetchStatus } from "../core/hooks/useFetch";
 import useOrigins from "../core/components/adminPage/getters/useOrigins";
-import useReferences from "../core/components/adminPage/getters/UseReferences";
+import useReferences , {Author} from "../core/components/adminPage/getters/UseReferences";
 import { Origin } from "../core/types/SingleFoodResult";
 import NewReferences from "../core/components/adminPage/NewReferences";
 import NewReference from "../core/components/adminPage/NewReference";
@@ -160,7 +160,23 @@ export default function AdminPage() {
       newArticle: updatedArticle,
     }));
   };
-  console.log(referenceForm.newArticle)
+
+  const handleUpdateAuthors = (authors: Author[]) => {
+    const newAuthors = authors
+      .filter((author) => author.id < 0)
+      .map((author) => author.name);
+    const authorIds = authors
+      .filter((author) => author.id > 0)
+      .map((author) => author.id);
+  
+    setReferenceForm((prev) => ({
+      ...prev,
+      authorIds,
+      newAuthors,
+    }));
+  };
+  
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFile(e.target.files[0]);
@@ -473,6 +489,7 @@ export default function AdminPage() {
             authorIds={referenceForm.authorIds}
             newAuthors={referenceForm.newAuthors}
             data={authors || []}
+            updateAuthors={handleUpdateAuthors}
           />
         );
       case 3:
