@@ -50,7 +50,7 @@ const NewVolumeByReference: React.FC<NewVolumeByReferenceProps> = ({
   const [newJournalName, setNewJournalName] = useState<string | undefined>(
     undefined
   );
-  const [newVolume, setnewVolume] = useState(true);
+  const [newVolume, setnewVolume] = useState(false);
   const [selectedIdVolume, setSelectedIdVolume] = useState<number | undefined>(
     undefined
   );
@@ -73,7 +73,7 @@ const NewVolumeByReference: React.FC<NewVolumeByReferenceProps> = ({
     newVolume: undefined,
   });
 
-  //para seleccionar el volumen por id
+
   const handleSelectVolume = (id: number | undefined) => {
     if (id !== undefined) {
       const selectedJournalVolume = journalVolumes.find((v) => v.id === id);
@@ -86,7 +86,6 @@ const NewVolumeByReference: React.FC<NewVolumeByReferenceProps> = ({
     setSelectedIdVolume(undefined);
   };
 
-  //para añadir un nuevo volumen
   const handleUpdateVolume = <K extends keyof NewVolume>(
     field: K,
     value: NewVolume[K]
@@ -115,9 +114,7 @@ const NewVolumeByReference: React.FC<NewVolumeByReferenceProps> = ({
   const handleAddVolume = () => {
     setnewVolume(!newVolume);
 
-    // Limpia los estados relacionados al alternar
-    if (!newVolume) {
-      setSelectedIdVolume(undefined);
+    if (newVolume) {
       setSelectedVolume({
         volume: undefined,
         issue: undefined,
@@ -125,34 +122,9 @@ const NewVolumeByReference: React.FC<NewVolumeByReferenceProps> = ({
         journalId: undefined,
         newJournal: undefined,
       });
+    } else {
+      setSelectedIdVolume(undefined);
     }
-
-    /*if (selectedVolume) {
-      if (
-        selectedVolume.volume !== undefined &&
-        selectedVolume.issue !== undefined &&
-        selectedVolume.year !== undefined
-      ) {
-        setSelectedIdVolume(undefined);
-
-        const updatedVolume = {
-          journalId: selectedVolume.journalId,
-          newJournal: selectedVolume.newJournal,
-          volume: selectedVolume.volume,
-          issue: selectedVolume.issue,
-          year: selectedVolume.year,
-        };
-
-        setSelectedVolume(updatedVolume);
-
-        if (selectedArticle) {
-          setSelectedArticle((prev) => ({
-            ...prev,
-            volumeId: undefined,
-            newVolume: updatedVolume,
-          }));
-        }
-      }*/
   };
 
   const handleUpdateArticle = (field: keyof NewArticle, value: any) => {
@@ -182,7 +154,7 @@ const NewVolumeByReference: React.FC<NewVolumeByReferenceProps> = ({
     if (activeSection < 3) {
       switch (activeSection) {
         case 1:
-          if (selectedIdJournal !== undefined || newJournalName?.trim()) {
+          if (selectedIdJournal || newJournalName?.trim()) {
             setActiveSection((prev) => prev + 1);
           } else {
             alert("Por favor, seleccione o agregue una revista.");
@@ -190,11 +162,28 @@ const NewVolumeByReference: React.FC<NewVolumeByReferenceProps> = ({
           break;
         case 2:
           if (
-            selectedIdVolume !== undefined ||
+            selectedIdVolume ||
             (selectedVolume?.volume &&
               selectedVolume?.issue &&
               selectedVolume?.year)
           ) {
+            setSelectedArticle((prev) => ({
+              ...prev,
+              volumeId: selectedIdVolume,
+              newVolume:
+                selectedVolume?.volume &&
+                selectedVolume?.issue &&
+                selectedVolume?.year 
+                  ? {
+                      volume: selectedVolume.volume,
+                      issue: selectedVolume.issue,
+                      year: selectedVolume.year,
+                      journalId: selectedIdJournal,
+                      newJournal: newJournalName,
+                    }
+                  : undefined, 
+            }));
+            
             setActiveSection((prev) => prev + 1);
           } else {
             alert("Por favor, seleccione o agregue un volumen.");
@@ -209,7 +198,7 @@ const NewVolumeByReference: React.FC<NewVolumeByReferenceProps> = ({
       setActiveSection((prev) => prev - 1);
     }
   };
-  
+
   const renderSectios = () => {
     switch (activeSection) {
       case 1:
@@ -244,11 +233,6 @@ const NewVolumeByReference: React.FC<NewVolumeByReferenceProps> = ({
                     onSelect={(id, name) => {
                       setSelectedIdJournal(id || undefined);
                       setNewJournalName(undefined);
-                      setSelectedVolume((prev) => ({
-                        ...prev,
-                        journalId: id || undefined,
-                        newJournal: undefined,
-                      }));
                     }}
                   />
                 </Col>
@@ -266,7 +250,7 @@ const NewVolumeByReference: React.FC<NewVolumeByReferenceProps> = ({
         return (
           <Row className="mb-3">
             <h4>Seleccionar un volumen</h4>
-            {newVolume ? (
+            {!newVolume ? (
               <Row>
                 <Col md={8}>
                   <OriginSelector
@@ -281,10 +265,6 @@ const NewVolumeByReference: React.FC<NewVolumeByReferenceProps> = ({
                     }
                     onSelect={(id) => {
                       handleSelectVolume(id || undefined);
-                      setSelectedVolume((prev) => ({
-                        ...prev,
-                        journalId: id || undefined,
-                      }));
                     }}
                   />
                 </Col>
@@ -326,6 +306,9 @@ const NewVolumeByReference: React.FC<NewVolumeByReferenceProps> = ({
                     }
                   />
                 </Col>
+                <Button onClick={handleAddVolume} variant="secondary">
+                  Agregar volumen existente
+                </Button>
               </Row>
             )}
           </Row>
@@ -395,8 +378,7 @@ const NewVolumeByReference: React.FC<NewVolumeByReferenceProps> = ({
           <pre>
             {JSON.stringify(
               {
-                selectedVolume,
-                selectedIdVolume,
+                selectedArticle
               },
               null,
               2
