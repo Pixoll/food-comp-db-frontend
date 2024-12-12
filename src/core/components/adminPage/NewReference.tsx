@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Card, Form, Button } from "react-bootstrap";
-import OriginSelector from "./OriginSelector";
+import { Card, Form} from "react-bootstrap";
 import { City } from "./getters/UseReferences";
 import SelectorWithInput from "../detailFood/SelectorWithInput";
 import RequiredFieldLabel from "../detailFood/RequiredFieldLabel";

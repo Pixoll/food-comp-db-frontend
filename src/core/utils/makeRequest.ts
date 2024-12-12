@@ -10,8 +10,9 @@ export default function makeRequest(
 ): void {
   axios[method]("http://localhost:3000/api/v1" + endpoint, payload, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,  
     },
+
   })
     .then(successCallback)
     .catch(errorCallback);

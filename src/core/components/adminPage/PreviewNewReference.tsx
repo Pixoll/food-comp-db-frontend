@@ -3,6 +3,8 @@ import { Card, Col, Row } from "react-bootstrap";
 import { ReferenceForm } from "./NewReference";
 import { City, Author, Journal, JournalVolume } from "./getters/UseReferences";
 import { NewArticle } from "./NewReference";
+import { useAuth } from "../../context/AuthContext";
+import makeRequest from "../../utils/makeRequest";
 import "../../../assets/css/_PreviewNewReference.css";
 type PreviewNewReferenceProps = {
   data: ReferenceForm;
@@ -51,6 +53,8 @@ const PreviewNewReference: React.FC<PreviewNewReferenceProps> = ({
   journals,
   journalVolumes,
 }) => {
+  const { state } = useAuth();
+  const token = state.token;
   const formatNewArticle = (newArticle: NewArticle): string => {
     const { pageStart, pageEnd, volumeId, newVolume } = newArticle;
 
@@ -82,6 +86,23 @@ const PreviewNewReference: React.FC<PreviewNewReferenceProps> = ({
         .map((id) => searchAuthorNameByID(id, authors))
         .filter((name) => name)
     : [];
+    
+  const handleSubmit = () => {
+    makeRequest(
+      "post",
+      "/references",
+      data,
+      state.token,
+      (response) => {
+        console.log("Request successful:", response);
+      },
+      (error) => {
+        console.error("Request failed:", error);
+      }
+    );
+  };
+
+
   return (
     <Col>
       <Row className="justify-content-md-center">
@@ -124,7 +145,9 @@ const PreviewNewReference: React.FC<PreviewNewReferenceProps> = ({
         </Card>
       </Row>
       <Row>
-        <button className="button-form-of-reference">Validar y enviar</button>
+        <button className="button-form-of-reference" onClick={handleSubmit}>
+          Validar y enviar
+        </button>
       </Row>
     </Col>
   );
