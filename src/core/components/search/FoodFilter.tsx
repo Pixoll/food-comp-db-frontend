@@ -48,7 +48,7 @@ const FoodFilter = () => {
   };
 
   const filters = {
-    name: searchForName.toString(),
+    name: searchForName.trim(),
     type: Array.from(selectedFilters.foodTypeFilter),
     region: Array.from(selectedFilters.regionsFilter),
     group: Array.from(selectedFilters.groupsFilter),
