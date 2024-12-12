@@ -36,7 +36,17 @@ type NewArticleByReferenceProps = {
   dataForm: {
     newArticle?: NewArticle;
   };
-  updateNewArticle: (updatedArticle: NewArticle) => void;
+  updateNewArticle: (updatedArticle: RecursivePartial<NewArticle>) => void;
+};
+
+export type RecursivePartial<T> = {
+  [K in keyof T]?: NonNullable<T[K]> extends Array<infer U>
+    ? Array<RecursivePartial<U>>
+    : NonNullable<T[K]> extends ReadonlyArray<infer U>
+    ? ReadonlyArray<RecursivePartial<U>>
+    : NonNullable<T[K]> extends object
+    ? RecursivePartial<NonNullable<T[K]>>
+    : T[K];
 };
 
 const NewArticleByReference: React.FC<NewArticleByReferenceProps> = ({
@@ -72,7 +82,7 @@ const NewArticleByReference: React.FC<NewArticleByReferenceProps> = ({
   const [newVolume, setNewVolume] = useState(!!selectedVolume);
 
   const [selectedArticle, setSelectedArticle] = useState<
-    Partial<NewArticle> | undefined
+    RecursivePartial<NewArticle> | undefined
   >(dataForm.newArticle);
 
   const handleSelectVolume = (id: number | undefined) => {
@@ -140,14 +150,25 @@ const NewArticleByReference: React.FC<NewArticleByReferenceProps> = ({
     setActiveSection(2);
   };
 
+  type a = RecursivePartial<NewArticle>;
+
   const handleUpdateArticle = <K extends keyof NewArticle>(
     field: K,
     value: NewArticle[K]
   ) => {
-    setSelectedArticle((prev) => ({
-      ...prev,
+    const updatedArticle: RecursivePartial<NewArticle> = {
+      ...selectedArticle,
       [field]: value,
-    }));
+      volumeId: selectedIdVolume,
+      newVolume: selectedVolume && {
+        ...selectedVolume,
+        journalId: selectedIdJournal,
+        newJournal: newJournalName,
+      },
+    };
+
+    setSelectedArticle(updatedArticle);
+    updateNewArticle(updatedArticle);
   };
 
   const handleAddArticle = () => {
@@ -156,11 +177,11 @@ const NewArticleByReference: React.FC<NewArticleByReferenceProps> = ({
       selectedArticle.pageStart !== undefined &&
       selectedArticle.pageEnd !== undefined
     ) {
-      const newArticle: Partial<NewArticle> = {
+      const newArticle: RecursivePartial<NewArticle> = {
         ...selectedArticle,
         volumeId: selectedIdVolume,
       };
-      updateNewArticle(newArticle as NewArticle);
+      updateNewArticle(newArticle);
     } else {
       console.error("Los valores de 'pageStart' y 'pageEnd' son obligatorios.");
     }
@@ -315,11 +336,7 @@ const NewArticleByReference: React.FC<NewArticleByReferenceProps> = ({
               }
             />
           </Col>
-          <Col md={2}>
-            <Button onClick={handleAddArticle} variant="secondary">
-              Agregar Artículo
-            </Button>
-          </Col>
+          <Col md={2}></Col>
         </Row>
       )}
 

@@ -44,8 +44,6 @@ const searchVolumeInfoById = (
   return "Volumen no encontrado";
 };
 
-
-
 const PreviewNewReference: React.FC<PreviewNewReferenceProps> = ({
   data,
   cities,
@@ -53,25 +51,27 @@ const PreviewNewReference: React.FC<PreviewNewReferenceProps> = ({
   journals,
   journalVolumes,
 }) => {
-  
+  const formatNewArticle = (newArticle: NewArticle): string => {
+    const { pageStart, pageEnd, volumeId, newVolume } = newArticle;
 
-const formatNewArticle = (newArticle: NewArticle): string => {
-  const { pageStart, pageEnd, volumeId, newVolume } = newArticle;
+    let articleInfo = `Páginas: ${pageStart}-${pageEnd}`;
 
-  let articleInfo = `Páginas: ${pageStart}-${pageEnd}`;
-
-  if (newVolume) {
-    const { volume, issue, year, journalId, newJournal } = newVolume;
-    articleInfo += `, Volumen: ${volume}, Número: ${issue}, Año: ${year}`;
-    if (newJournal) {
-      articleInfo += `, Revista: ${newJournal}`;
+    if (newVolume) {
+      const { volume, issue, year, journalId, newJournal } = newVolume;
+      articleInfo += `, Volumen: ${volume}, Número: ${issue}, Año: ${year}`;
+      if (newJournal) {
+        articleInfo += `, Revista: ${newJournal}`;
+      }
+    } else if (volumeId) {
+      articleInfo += `, ${searchVolumeInfoById(
+        volumeId,
+        journalVolumes,
+        journals
+      )}`;
     }
-  } else if (volumeId) {
-    articleInfo += `, ${searchVolumeInfoById(volumeId, journalVolumes, journals)}`;
-  }
 
-  return articleInfo;
-};
+    return articleInfo;
+  };
 
   const cityName = data.cityId
     ? searchCityNameByID(data.cityId, cities)
@@ -84,45 +84,47 @@ const formatNewArticle = (newArticle: NewArticle): string => {
     : [];
   return (
     <Col>
-      <Card className="shadow-sm">
-        <Card.Body>
-          <Card.Title className="text-primary">{data.title}</Card.Title>
-          <Card.Subtitle className="mb-2 text-muted">
-            {data.type.charAt(0).toUpperCase() + data.type.slice(1)} -{" "}
-            {data.year}
-          </Card.Subtitle>
-          <Card.Text>
-            {authorNames.length > 0 && (
-              <div>
-                <strong>Autores:</strong> {authorNames.join(", ")}
-              </div>
-            )}
-            {data.newAuthors && data.newAuthors.length > 0 && (
-              <div>
-                <strong>Nuevos Autores:</strong> {data.newAuthors.join(", ")}
-              </div>
-            )}
-            {data.newArticle && (
-              <div>
-                <strong>Artículo Nuevo:</strong>{" "}
-                {formatNewArticle(data.newArticle)}
-              </div>
-            )}
-            {cityName && (
-              <div>
-                <strong>Ciudad:</strong> {cityName}
-              </div>
-            )}
-            {data.other && (
-              <div>
-                <strong>Otro:</strong> {data.other}
-              </div>
-            )}
-          </Card.Text>
-        </Card.Body>
-      </Card>
+      <Row className="justify-content-md-center">
+        <Card className="shadow-sm">
+          <Card.Body>
+            <Card.Title className="text-primary">{data.title}</Card.Title>
+            <Card.Subtitle className="mb-2 text-muted">
+              {data.type.charAt(0).toUpperCase() + data.type.slice(1)} -{" "}
+              {data.year}
+            </Card.Subtitle>
+            <Card.Text>
+              {authorNames.length > 0 && (
+                <div>
+                  <strong>Autores:</strong> {authorNames.join(", ")}
+                </div>
+              )}
+              {data.newAuthors && data.newAuthors.length > 0 && (
+                <div>
+                  <strong>Nuevos Autores:</strong> {data.newAuthors.join(", ")}
+                </div>
+              )}
+              {data.newArticle && (
+                <div>
+                  <strong>Artículo Nuevo:</strong>{" "}
+                  {formatNewArticle(data.newArticle)}
+                </div>
+              )}
+              {cityName && (
+                <div>
+                  <strong>Ciudad:</strong> {cityName}
+                </div>
+              )}
+              {data.other && (
+                <div>
+                  <strong>Otro:</strong> {data.other}
+                </div>
+              )}
+            </Card.Text>
+          </Card.Body>
+        </Card>
+      </Row>
       <Row>
-        <button className="button-form-of-food">Validar y enviar</button>
+        <button className="button-form-of-reference">Validar y enviar</button>
       </Row>
     </Col>
   );

@@ -17,16 +17,16 @@ export type ReferenceForm = {
 };
 
 export type NewArticle = {
-  pageStart: number;
-  pageEnd: number;
+  pageStart?: number;
+  pageEnd?: number;
   volumeId?: number;
   newVolume?: NewVolume;
 };
 
 export type NewVolume = {
-  volume: number;
-  issue: number;
-  year: number;
+  volume?: number;
+  issue?: number;
+  year?: number;
   journalId?: number;
   newJournal?: string;
 };

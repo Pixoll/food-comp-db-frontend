@@ -19,7 +19,7 @@ import { Origin } from "../core/types/SingleFoodResult";
 import NewReferences from "../core/components/adminPage/NewReferences";
 import NewReference from "../core/components/adminPage/NewReference";
 import NewAuthors from "../core/components/adminPage/NewAuthors";
-import NewArticleByReference from "../core/components/adminPage/NewArticleByReference";
+import NewArticleByReference, { RecursivePartial } from "../core/components/adminPage/NewArticleByReference";
 import FoodTableAdmin from "../core/components/adminPage/FoodTableAdmin";
 import {
   ReferenceForm,
@@ -170,7 +170,7 @@ export default function AdminPage() {
     setReferenceForm((prev) => ({ ...prev, ...updatedFields }));
   };
 
-  const handleUpdateNewArticle = (updatedArticle: NewArticle) => {
+  const handleUpdateNewArticle = (updatedArticle: RecursivePartial<NewArticle>) => {
     setReferenceForm((prev) => ({
       ...prev,
       newArticle: updatedArticle,
