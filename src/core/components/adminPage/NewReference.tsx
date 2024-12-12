@@ -9,7 +9,6 @@ export type ReferenceForm = {
   authorIds?: number[];
   newAuthors?: string[];
   year?: number;
-  articleId?: number;
   newArticle?: NewArticle;
   cityId?: number;
   newCity?: string;
@@ -36,7 +35,6 @@ const NewReference = () => {
     type: "article",
     title: "",
     year: undefined,
-    articleId: undefined,
     newArticle: undefined,
     cityId: undefined,
     newCity: undefined,

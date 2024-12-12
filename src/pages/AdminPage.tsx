@@ -19,7 +19,8 @@ import NewReference from "../core/components/adminPage/NewReference";
 import NewAuthors from "../core/components/adminPage/NewAuthors";
 import NewVolumeByReference from "../core/components/adminPage/NewVolumeByReference";
 import FoodTableAdmin from "../core/components/adminPage/FoodTableAdmin";
-import { ReferenceForm } from "../core/components/adminPage/NewReference";
+import { ReferenceForm , NewArticle} from "../core/components/adminPage/NewReference";
+import PreviewNewReference from "../core/components/adminPage/PreviewNewReference";
 
 export type NutrientSummary = {
   id: number;
@@ -148,13 +149,18 @@ export default function AdminPage() {
     authorIds: undefined, //Listo <NewAuthor>
     newAuthors: undefined, //Listo<NewAuthor>
     year: undefined, //Listo <NewReference>
-    articleId: undefined, //No listo <Para otro componente>
     newArticle: undefined, //No listo <Para otro componente>
     cityId: undefined, //Listo <NewReference>
     newCity: undefined, //Listo <NewReference>
     other: undefined, //Listo <NewReference>
   });
-
+  const handleUpdateNewArticle = (updatedArticle: NewArticle) => {
+    setReferenceForm((prev) => ({
+      ...prev,
+      newArticle: updatedArticle,
+    }));
+  };
+  console.log(referenceForm.newArticle)
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFile(e.target.files[0]);
@@ -478,13 +484,13 @@ export default function AdminPage() {
               articles: articles || [],
             }}
             dataForm={{
-              articleId: referenceForm.articleId,
               newArticle: referenceForm.newArticle,
             }}
+            updateNewArticle={handleUpdateNewArticle}
           />
         );
       case 4:
-        return <></>; // aqui para previsualizar la referencia
+        return (<PreviewNewReference data = {referenceForm}/>); 
       default:
         return null;
     }

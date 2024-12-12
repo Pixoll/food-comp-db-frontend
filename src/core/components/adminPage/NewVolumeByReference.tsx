@@ -23,6 +23,14 @@ const searchArticleNameById = (id: number | undefined, articles: Article[]) => {
   const article = articles.find((article) => article.id === id);
   return article ? `Páginas: ${article.pageEnd}-${article.pageStart}` : "";
 };
+
+const searchIdJournalByIdVolume = (
+  id: number | undefined,
+  volumes: JournalVolume[]
+) => {
+  const volume = volumes.find((volume) => volume.id === id);
+  return volume?.journalId;
+};
 type NewVolumeByReferenceProps = {
   data: {
     journals: Journal[];
@@ -30,14 +38,15 @@ type NewVolumeByReferenceProps = {
     articles: Article[];
   };
   dataForm: {
-    articleId?: number;
     newArticle?: NewArticle;
   };
+  updateNewArticle: (updatedArticle: NewArticle) => void;
 };
 
 const NewVolumeByReference: React.FC<NewVolumeByReferenceProps> = ({
   data,
   dataForm,
+  updateNewArticle,
 }) => {
   const [activeSection, setActiveSection] = useState<number>(1);
 
@@ -46,33 +55,25 @@ const NewVolumeByReference: React.FC<NewVolumeByReferenceProps> = ({
   const [newJournal, setNewJournal] = useState(false);
   const [selectedIdJournal, setSelectedIdJournal] = useState<
     number | undefined
-  >(undefined);
+  >(searchIdJournalByIdVolume(dataForm.newArticle?.volumeId, journalVolumes));
   const [newJournalName, setNewJournalName] = useState<string | undefined>(
-    undefined
+    dataForm.newArticle?.newVolume?.newJournal
   );
   const [newVolume, setnewVolume] = useState(false);
   const [selectedIdVolume, setSelectedIdVolume] = useState<number | undefined>(
-    undefined
+    dataForm.newArticle?.volumeId
   );
   const [selectedVolume, setSelectedVolume] = useState<
     Partial<NewVolume> | undefined
-  >({
-    volume: undefined,
-    issue: undefined,
-    year: undefined,
-    journalId: undefined,
-    newJournal: undefined,
-  });
+  >(
+    dataForm.newArticle?.newVolume
+      ? { ...dataForm.newArticle.newVolume }
+      : undefined
+  );
 
   const [selectedArticle, setSelectedArticle] = useState<
     Partial<NewArticle> | undefined
-  >({
-    pageStart: undefined,
-    pageEnd: undefined,
-    volumeId: undefined,
-    newVolume: undefined,
-  });
-
+  >(dataForm.newArticle);
 
   const handleSelectVolume = (id: number | undefined) => {
     if (id !== undefined) {
@@ -173,7 +174,7 @@ const NewVolumeByReference: React.FC<NewVolumeByReferenceProps> = ({
               newVolume:
                 selectedVolume?.volume &&
                 selectedVolume?.issue &&
-                selectedVolume?.year 
+                selectedVolume?.year
                   ? {
                       volume: selectedVolume.volume,
                       issue: selectedVolume.issue,
@@ -181,9 +182,27 @@ const NewVolumeByReference: React.FC<NewVolumeByReferenceProps> = ({
                       journalId: selectedIdJournal,
                       newJournal: newJournalName,
                     }
-                  : undefined, 
+                  : undefined,
             }));
-            
+            const article: NewArticle = {
+              pageStart: selectedArticle?.pageStart!,
+              pageEnd: selectedArticle?.pageEnd!,
+              volumeId: selectedIdVolume,
+              newVolume:
+                selectedVolume?.volume &&
+                selectedVolume?.issue &&
+                selectedVolume?.year
+                  ? {
+                      volume: selectedVolume.volume,
+                      issue: selectedVolume.issue,
+                      year: selectedVolume.year,
+                      journalId: selectedIdJournal,
+                      newJournal: newJournalName,
+                    }
+                  : undefined,
+            };
+
+            updateNewArticle(article); // Pasar el objeto completo
             setActiveSection((prev) => prev + 1);
           } else {
             alert("Por favor, seleccione o agregue un volumen.");
@@ -378,7 +397,7 @@ const NewVolumeByReference: React.FC<NewVolumeByReferenceProps> = ({
           <pre>
             {JSON.stringify(
               {
-                selectedArticle
+                selectedArticle,
               },
               null,
               2
