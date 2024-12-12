@@ -66,8 +66,8 @@ const LoginPage = () => {
 
 
     return (
-        <Container fluid style={{ height: '100vh' }}>
-            <Row className="login-background h-100 d-flex justify-content-center align-items-center">
+        <Container className="login-background" fluid style={{ height: '100vh' }}>
+            <Row className="h-100 d-flex justify-content-center align-items-center">
                 <div className="login-div" style={{width: '450px'}}>
                     <h1>{t('loginPage.title')}</h1>
                     <form onSubmit={onLogin}>

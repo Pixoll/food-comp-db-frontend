@@ -4,7 +4,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: url('/src/assets/images/see.jpg') no-repeat center center;
+    background: url('/src/assets/images/admin_login_bg.jpg') no-repeat center center;
     background-size: cover;
     height: 100vh;
 }
