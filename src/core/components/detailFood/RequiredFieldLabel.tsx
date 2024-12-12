@@ -1,7 +1,7 @@
 import React from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
-const RequiredFieldLabel: React.FC<{ label: string; tooltipMessage: string }> = ({
+const RequiredFieldLabel: React.FC<{ label?: string; tooltipMessage: string }> = ({
   label,
   tooltipMessage,
 }) => {

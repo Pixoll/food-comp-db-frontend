@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Card, Form, Button } from "react-bootstrap";
 import OriginSelector from "./OriginSelector";
+import { City } from "./getters/UseReferences";
 import SelectorWithInput from "../detailFood/SelectorWithInput";
-
+import RequiredFieldLabel from "../detailFood/RequiredFieldLabel";
 export type ReferenceForm = {
   type: "report" | "thesis" | "article" | "website" | "book";
   title: string;
@@ -29,24 +30,61 @@ export type NewVolume = {
   journalId?: number;
   newJournal?: string;
 };
+type NewReferenceProps = {
+  type: "report" | "thesis" | "article" | "website" | "book";
+  title: string;
+  year?: number;
+  cityId?: number;
+  newCity?: string;
+  other?: string;
+  cities: City[];
+  onFormUpdate: (updatedFields: Partial<ReferenceForm>) => void;
+};
+const searchCityNameByID = (
+  id: number | undefined,
+  cities: City[]
+): string | undefined => {
+  if (!id) {
+    return undefined;
+  }
+  const city = cities.find((city) => city.id === id);
+  return city?.name;
+};
 
-const NewReference = () => {
+const NewReference: React.FC<NewReferenceProps> = ({
+  type,
+  title,
+  year,
+  cityId,
+  newCity,
+  other,
+  cities,
+  onFormUpdate,
+}) => {
   const [referenceForm, setReferenceForm] = useState<ReferenceForm>({
-    type: "article",
-    title: "",
-    year: undefined,
-    newArticle: undefined,
-    cityId: undefined,
-    newCity: undefined,
-    other: undefined,
+    type: type,
+    title: title,
+    year: year,
+    cityId: cityId,
+    newCity: newCity,
+    other: other,
   });
 
   const handleInputChange = (field: keyof ReferenceForm, value: any) => {
-    setReferenceForm({ ...referenceForm, [field]: value });
-  };
+    const updatedForm = { ...referenceForm } as ReferenceForm;
 
-  const handleSave = () => {
-    console.log("Referencia guardada:", referenceForm);
+    if (field === "cityId") {
+      updatedForm.cityId = value;
+      updatedForm.newCity = undefined;
+    } else if (field === "newCity") {
+      updatedForm.newCity = value;
+      updatedForm.cityId = undefined;
+    } else {
+      updatedForm[field] = value as never;
+    }
+
+    setReferenceForm(updatedForm);
+    onFormUpdate(updatedForm);
   };
 
   return (
@@ -55,7 +93,10 @@ const NewReference = () => {
         <Card.Title>Agregar Nueva Referencia</Card.Title>
         <Form>
           <Form.Group controlId="formReferenceTitle">
-            <Form.Label>Título</Form.Label>
+            <Form.Label>
+              Título
+              <RequiredFieldLabel tooltipMessage={"Es obligatorio"} />
+            </Form.Label>
             <Form.Control
               type="text"
               placeholder="Ingrese el título"
@@ -65,7 +106,10 @@ const NewReference = () => {
           </Form.Group>
 
           <Form.Group controlId="formReferenceType">
-            <Form.Label>Tipo</Form.Label>
+            <Form.Label>
+              Tipo
+              <RequiredFieldLabel tooltipMessage={"Es obligatorio"} />
+            </Form.Label>
             <Form.Select
               value={referenceForm.type}
               onChange={(e) => handleInputChange("type", e.target.value)}
@@ -80,23 +124,29 @@ const NewReference = () => {
 
           <Form.Group controlId="formReferenceCity">
             <Form.Label>Ciudad</Form.Label>
-            <OriginSelector
-              options={[
-                { id: 1, name: "Ciudad A" },
-                { id: 2, name: "Ciudad B" },
-              ]}
+            <SelectorWithInput
+              options={cities}
               placeholder="Seleccione una ciudad"
-              selectedValue={referenceForm.newCity || ""}
-              onSelect={(id, name) =>
-                id
-                  ? handleInputChange("cityId", id)
-                  : handleInputChange("newCity", name)
+              selectedValue={
+                searchCityNameByID(referenceForm.cityId, cities) || newCity
               }
+              onSelect={(id, name) => {
+                if (id) {
+                  handleInputChange("cityId", id);
+                } else {
+                  handleInputChange("newCity", name);
+                }
+              }}
             />
           </Form.Group>
 
           <Form.Group controlId="formReferenceYear">
-            <Form.Label>Año</Form.Label>
+            <Form.Label>
+              Año
+              {type !== "article" && type !== "website" && (
+                <RequiredFieldLabel tooltipMessage={"Es obligatorio"} />
+              )}
+            </Form.Label>
             <Form.Control
               type="number"
               placeholder="Ingrese el año"
@@ -106,10 +156,20 @@ const NewReference = () => {
               }
             />
           </Form.Group>
-
-          <Button variant="success" className="mt-3" onClick={handleSave}>
-            Guardar Referencia
-          </Button>
+          <Form.Group controlId="formReferenceOther">
+            <Form.Label>
+              Otro
+              {(type === "website" || type === "book") && (
+                <RequiredFieldLabel tooltipMessage={"Es obligatorio"} />
+              )}
+            </Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Otro"
+              value={referenceForm.other || ""}
+              onChange={(e) => handleInputChange("other", e.target.value)}
+            />
+          </Form.Group>
         </Form>
       </Card.Body>
     </Card>

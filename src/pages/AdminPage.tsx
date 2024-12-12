@@ -12,14 +12,19 @@ import Origins from "../core/components/adminPage/Origins";
 import PreviewDataForm from "../core/components/adminPage/PreviewDataForm";
 import { FetchStatus } from "../core/hooks/useFetch";
 import useOrigins from "../core/components/adminPage/getters/useOrigins";
-import useReferences , {Author} from "../core/components/adminPage/getters/UseReferences";
+import useReferences, {
+  Author,
+} from "../core/components/adminPage/getters/UseReferences";
 import { Origin } from "../core/types/SingleFoodResult";
 import NewReferences from "../core/components/adminPage/NewReferences";
 import NewReference from "../core/components/adminPage/NewReference";
 import NewAuthors from "../core/components/adminPage/NewAuthors";
-import NewVolumeByReference from "../core/components/adminPage/NewVolumeByReference";
+import NewArticleByReference from "../core/components/adminPage/NewArticleByReference";
 import FoodTableAdmin from "../core/components/adminPage/FoodTableAdmin";
-import { ReferenceForm , NewArticle} from "../core/components/adminPage/NewReference";
+import {
+  ReferenceForm,
+  NewArticle,
+} from "../core/components/adminPage/NewReference";
 import PreviewNewReference from "../core/components/adminPage/PreviewNewReference";
 
 export type NutrientSummary = {
@@ -40,6 +45,12 @@ export type OriginsByForm = {
   ids: (number | null)[];
   origins: string[];
 };
+
+type Section = {
+  id: string;
+  name: string;
+};
+
 const mapMacroNutrientWithoutComponentsToForm = (
   macronutrient: MacroNutrient
 ): NutrientMeasurementForm => ({
@@ -154,6 +165,11 @@ export default function AdminPage() {
     newCity: undefined, //Listo <NewReference>
     other: undefined, //Listo <NewReference>
   });
+
+  const handleDataFormReference = (updatedFields: Partial<ReferenceForm>) => {
+    setReferenceForm((prev) => ({ ...prev, ...updatedFields }));
+  };
+
   const handleUpdateNewArticle = (updatedArticle: NewArticle) => {
     setReferenceForm((prev) => ({
       ...prev,
@@ -168,14 +184,13 @@ export default function AdminPage() {
     const authorIds = authors
       .filter((author) => author.id > 0)
       .map((author) => author.id);
-  
+
     setReferenceForm((prev) => ({
       ...prev,
       authorIds,
       newAuthors,
     }));
   };
-  
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files && e.target.files.length > 0) {
@@ -187,7 +202,7 @@ export default function AdminPage() {
 
   const [activeSection, setActiveSection] = useState<number>(1);
   const [activeSectionByNewReference, setActiveSectionByNewReference] =
-    useState<number>(1);
+    useState<string>("general");
 
   const [formData, setFormData] = useState<FoodForm>({
     generalData: {
@@ -473,17 +488,39 @@ export default function AdminPage() {
     "Referencias",
     "Vista de información actual",
   ];
-  const sectionNamesByNewReference = [
-    "Datos generales",
-    "Autores",
-    "Volumen",
-    "Previsualización",
-  ];
+
+  let sectionNamesByNewReference: Section[] = [];
+
+  if (referenceForm.type === "article") {
+    sectionNamesByNewReference = [
+      { id: "general", name: "Datos generales"},
+      { id: "authors", name: "Autores"},
+      { id: "article", name: "Artículo"},
+      { id: "preview", name: "Previsualización"},
+    ];
+  } else {
+    sectionNamesByNewReference = [
+      { id: "general", name: "Datos generales"},
+      { id: "authors", name: "Autores"},
+      { id: "preview", name: "Previsualización"},
+    ];
+  }
   const renderSectionByNewReference = () => {
     switch (activeSectionByNewReference) {
-      case 1:
-        return <NewReference />;
-      case 2:
+      case "general":
+        return (
+          <NewReference
+            type={referenceForm.type}
+            title={referenceForm.title}
+            year={referenceForm.year}
+            cityId={referenceForm.cityId}
+            newCity={referenceForm.newCity}
+            other={referenceForm.other}
+            cities={cities || []}
+            onFormUpdate={handleDataFormReference}
+          />
+        );
+      case "authors":
         return (
           <NewAuthors
             authorIds={referenceForm.authorIds}
@@ -492,9 +529,9 @@ export default function AdminPage() {
             updateAuthors={handleUpdateAuthors}
           />
         );
-      case 3:
+      case "article":
         return (
-          <NewVolumeByReference
+          <NewArticleByReference
             data={{
               journals: journals || [],
               journalVolumes: journalVolumes || [],
@@ -506,8 +543,16 @@ export default function AdminPage() {
             updateNewArticle={handleUpdateNewArticle}
           />
         );
-      case 4:
-        return (<PreviewNewReference data = {referenceForm}/>); 
+      case "preview":
+        return (
+          <PreviewNewReference
+            data={referenceForm}
+            authors={authors || []}
+            cities={cities || []}
+            journals={journals || []}
+            journalVolumes={journalVolumes || []}
+          />
+        );
       default:
         return null;
     }
@@ -533,13 +578,13 @@ export default function AdminPage() {
           <>
             <div className="left-column">
               <h3 className="subtitle">{t("AdminPage.title")}</h3>
-              {sectionNamesByNewReference.map((name, index) => (
+              {sectionNamesByNewReference.map(({ id, name }) => (
                 <button
-                  key={`post-reference-${index}`}
+                  key={`post-reference-${id}`}
                   className={`pagination-button ${
-                    activeSectionByNewReference === index + 1 ? "active" : ""
+                    activeSectionByNewReference === id ? "active" : ""
                   }`}
-                  onClick={() => setActiveSectionByNewReference(index + 1)}
+                  onClick={() => setActiveSectionByNewReference(id)}
                 >
                   {name}
                 </button>
