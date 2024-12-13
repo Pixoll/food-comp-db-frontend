@@ -65,16 +65,22 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
   const scientificNamesResult = useScientificNames();
   const subspeciesResult = useSubspecies();
   const languagesResult = useLanguages();
-
   const { state } = useAuth();
   const token = state.token;
-
-  const [newGroup, setNewGroup] = useState<string | null>(null);
-  const [newType, setNewType] = useState<string | null>(null);
-  const [newScientificName, setNewScientificName] = useState<string | null>(
-    null
+  const [actualIdSubspecies, setActualIdSubspecies] = useState<
+    number | undefined
+  >(undefined);
+  const [newGroup, setNewGroup] = useState<string | undefined>(undefined);
+  const [newType, setNewType] = useState<string | undefined>(undefined);
+  const [newScientificName, setNewScientificName] = useState<
+    string | undefined
+  >(undefined);
+  const [newSubspecies, setNewSubspecies] = useState<string | undefined>(
+    undefined
   );
-  const [newSubspecies, setNewSubspecies] = useState<string | null>(null);
+
+  const [groupCode, setGroupCode] = useState<string>("");
+  const [typeCode, setTypeCode] = useState<string>("");
 
   const [formData, setFormData] = useState<GeneralData>(data);
 
@@ -103,16 +109,24 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
     onUpdate(updatedFormData);
   };
 
-  const handleCreateGroup = (groupName: string) => {
+  const handleCreateGroup = () => {
     if (!token) {
       alert("No authentication token available");
       return;
     }
-    console.log(groupName);
+
+    if (!newGroup || !groupCode) {
+      alert("Por favor, ingrese tanto el nombre como el código del grupo");
+      return;
+    }
+
     makeRequest(
       "post",
       "/groups",
-      { groupName },
+      {
+        groupName: newGroup,
+        code: groupCode,
+      },
       token,
       (response) => {
         const newGroupId = response.data.id;
@@ -122,23 +136,36 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
         };
         setFormData(updatedFormData);
         onUpdate(updatedFormData);
+        setNewGroup(undefined);
+        setGroupCode("");
       },
       (error) => {
         console.error("Error creating group:", error);
-        alert("fallo al crear el grupo");
+        alert("Fallo al crear el grupo");
       }
     );
   };
   console.log(formData);
-  const handleCreateType = (typeName: string) => {
+
+  const handleCreateType = () => {
     if (!token) {
       alert("No authentication token available");
       return;
     }
+
+    // Verificar que tanto el nombre como el código estén presentes
+    if (!newType || !typeCode) {
+      alert("Por favor, ingrese tanto el nombre como el código del tipo");
+      return;
+    }
+
     makeRequest(
       "post",
       "/types",
-      { name: typeName },
+      {
+        name: newType,
+        code: typeCode,
+      },
       token,
       (response) => {
         const newTypeId = response.data.id;
@@ -148,24 +175,32 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
         };
         setFormData(updatedFormData);
         onUpdate(updatedFormData);
+
+        setNewType(undefined);
+        setTypeCode("");
       },
       (error) => {
         console.error("Error creating type:", error);
-        alert("Failed to create type");
+        alert("Fallo al crear el tipo");
       }
     );
   };
 
-  const handleCreateScientificName = (scientificName: string) => {
+  const handleCreateScientificName = () => {
     if (!token) {
       alert("No authentication token available");
+      return;
+    }
+
+    if (!newScientificName) {
+      alert("Por favor, ingrese un nombre científico");
       return;
     }
 
     makeRequest(
       "post",
       "/scientific_names",
-      { name: scientificName },
+      { name: newScientificName },
       token,
       (response) => {
         const newScientificNameId = response.data.id;
@@ -175,24 +210,32 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
         };
         setFormData(updatedFormData);
         onUpdate(updatedFormData);
+
+        // Limpiar el campo después de crear
+        setNewScientificName(undefined);
       },
       (error) => {
         console.error("Error creating scientific name:", error);
-        alert("Failed to create scientific name");
+        alert("Fallo al crear el nombre científico");
       }
     );
   };
 
-  const handleCreateSubspecies = (subspeciesName: string) => {
+  const handleCreateSubspecies = () => {
     if (!token) {
       alert("No authentication token available");
+      return;
+    }
+
+    if (!newSubspecies) {
+      alert("Por favor, ingrese una subespecie");
       return;
     }
 
     makeRequest(
       "post",
       "/subspecies",
-      { name: subspeciesName },
+      { name: newSubspecies },
       token,
       (response) => {
         const newSubspeciesId = response.data.id;
@@ -202,13 +245,15 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
         };
         setFormData(updatedFormData);
         onUpdate(updatedFormData);
+        setNewSubspecies(undefined);
       },
       (error) => {
         console.error("Error creating subspecies:", error);
-        alert("Failed to create subspecies");
+        alert("Fallo al crear la subespecie");
       }
     );
   };
+
   return (
     <Form>
       <Row>
@@ -265,129 +310,209 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
         </Col>
       </Row>
 
-      <Col md={6}>
-        <Form.Label column sm={2}>
-          <RequiredFieldLabel
-            label={t("DetailFood.label_group")}
-            tooltipMessage={t("DetailFood.required")}
-          />
-        </Form.Label>
-        {groups && (
-          <SelectorWithInput
-            options={groups.map((group) => ({
-              id: group.id,
-              name: group.name,
-            }))}
-            selectedValue={searchGroupNameById(formData.groupId, groups)}
-            placeholder={t("NewGeneralData.select_G")}
-            onSelect={(id, name) => {
-              if (id !== undefined) {
-                const updatedFormData = {
-                  ...formData,
-                  groupId: id,
-                };
-                setFormData(updatedFormData);
-                onUpdate(updatedFormData);
-              } else if (name) {
-                handleCreateGroup(name);
-              }
-            }}
-          />
-        )}
-      </Col>
+      <Row xs={1} md={2}>
+        {/* Sección Grupo */}
+        <Row
+          xs={1}
+          md={3}
+          className="d-flex justify-content-between align-items-stretch mb-3"
+        >
+          <Col md={4} className="d-flex flex-column">
+            <Form.Label>
+              <RequiredFieldLabel
+                label={t("DetailFood.label_group")}
+                tooltipMessage={t("DetailFood.required")}
+              />
+            </Form.Label>
+            {groups && (
+              <SelectorWithInput
+                options={groups.map((group) => ({
+                  id: group.id,
+                  name: group.name,
+                }))}
+                selectedValue={searchGroupNameById(formData.groupId, groups)}
+                placeholder={t("NewGeneralData.select_G")}
+                onSelect={(id, name) => {
+                  if (id !== undefined) {
+                    const updatedFormData = {
+                      ...formData,
+                      groupId: id,
+                    };
+                    setGroupCode("");
+                    setFormData(updatedFormData);
+                    onUpdate(updatedFormData);
+                  } else if (name) {
+                    setNewGroup(name);
+                  }
+                }}
+              />
+            )}
+          </Col>
+          <Col md={4} className="d-flex align-items-stretch">
+            <Form.Control
+              type="text"
+              placeholder="Código del grupo"
+              value={groupCode}
+              onChange={(e) => setGroupCode(e.target.value)}
+              className="h-100"
+            />
+          </Col>
+          <Col md={4} className="d-flex align-items-stretch">
+            <Button
+              onClick={handleCreateGroup}
+              disabled={!newGroup || !groupCode}
+              className="w-100"
+            >
+              Crear Grupo
+            </Button>
+          </Col>
+        </Row>
 
-      <Col md={6}>
-        <Form.Label column sm={2}>
-          <RequiredFieldLabel
-            label={t("DetailFood.label_type")}
-            tooltipMessage={t("DetailFood.required")}
-          />
-        </Form.Label>
-        {types && (
-          <SelectorWithInput
-            options={types.map((type) => ({
-              id: type.id,
-              name: type.name,
-            }))}
-            selectedValue={searchTypeNameById(formData.typeId, types)}
-            placeholder={t("NewGeneralData.select_A")}
-            onSelect={(id, name) => {
-              if (id !== undefined) {
-                const updatedFormData = {
-                  ...formData,
-                  typeId: id,
-                };
-                setFormData(updatedFormData);
-                onUpdate(updatedFormData);
-              } else if (name) {
-                handleCreateType(name);
-              }
-            }}
-          />
-        )}
-      </Col>
-      <Row>
-        <Col md={6}>
-          <Form.Group controlId="scientificName">
-            <Form.Label>{t("NewGeneralData.name_scientist")}</Form.Label>
-            {scientificNames && (
+        {/* Sección Tipo */}
+        <Row
+          xs={1}
+          md={3}
+          className="d-flex justify-content-between align-items-stretch"
+        >
+          <Col md={4} className="d-flex flex-column">
+            <Form.Label>
+              <RequiredFieldLabel
+                label={t("DetailFood.label_type")}
+                tooltipMessage={t("DetailFood.required")}
+              />
+            </Form.Label>
+            {types && (
               <SelectorWithInput
-                options={scientificNames.map((sname) => ({
-                  id: sname.id,
-                  name: sname.name,
+                options={types.map((type) => ({
+                  id: type.id,
+                  name: type.name,
                 }))}
-                selectedValue={searchScientificNameById(
-                  formData.scientificNameId,
-                  scientificNames
-                )}
-                placeholder={"Selecciona un nombre cientifico"}
+                selectedValue={searchTypeNameById(formData.typeId, types)}
+                placeholder={t("NewGeneralData.select_A")}
                 onSelect={(id, name) => {
                   if (id !== undefined) {
                     const updatedFormData = {
                       ...formData,
-                      scientificNameId: id,
+                      typeId: id,
                     };
+                    setTypeCode("");
                     setFormData(updatedFormData);
                     onUpdate(updatedFormData);
                   } else if (name) {
-                    handleCreateScientificName(name);
+                    setNewType(name);
                   }
                 }}
               />
             )}
-          </Form.Group>
-        </Col>
-        <Col md={6}>
-          <Form.Group controlId="subspecies">
-            <Form.Label>{t("NewGeneralData.Subspecies")}</Form.Label>
-            {subspecies && (
-              <SelectorWithInput
-                options={subspecies.map((sname) => ({
-                  id: sname.id,
-                  name: sname.name,
-                }))}
-                selectedValue={searchSubspeciesNameById(
-                  formData.subspeciesId,
-                  subspecies
-                )}
-                placeholder={"Selecciona una subespecie"}
-                onSelect={(id, name) => {
-                  if (id !== undefined) {
-                    const updatedFormData = {
-                      ...formData,
-                      subspeciesId: id,
-                    };
-                    setFormData(updatedFormData);
-                    onUpdate(updatedFormData);
-                  } else if (name) {
-                    handleCreateSubspecies(name);
-                  }
-                }}
-              />
-            )}
-          </Form.Group>
-        </Col>
+          </Col>
+          <Col md={4} className="d-flex align-items-stretch">
+            <Form.Control
+              type="text"
+              placeholder="Código del tipo"
+              value={typeCode}
+              onChange={(e) => setTypeCode(e.target.value)}
+              className="h-100"
+            />
+          </Col>
+          <Col md={4} className="d-flex align-items-stretch">
+            <Button
+              onClick={handleCreateType}
+              disabled={!newType || !typeCode}
+              className="w-100"
+            >
+              Crear Tipo
+            </Button>
+          </Col>
+        </Row>
       </Row>
+      <Row xs={1} md={2}>
+        {/* Sección Nombre Científico */}
+        <Row className="d-flex justify-content-between align-items-stretch mb-3">
+          <Col md={6} className="d-flex flex-column">
+            <Form.Group controlId="scientificName">
+              <Form.Label>{t("NewGeneralData.name_scientist")}</Form.Label>
+              {scientificNames && (
+                <SelectorWithInput
+                  options={scientificNames.map((sname) => ({
+                    id: sname.id,
+                    name: sname.name,
+                  }))}
+                  selectedValue={searchScientificNameById(
+                    formData.scientificNameId,
+                    scientificNames
+                  )}
+                  placeholder={"Selecciona un nombre científico"}
+                  onSelect={(id, name) => {
+                    if (id !== undefined) {
+                      const updatedFormData = {
+                        ...formData,
+                        scientificNameId: id,
+                      };
+                      setFormData(updatedFormData);
+                      onUpdate(updatedFormData);
+                    } else if (name) {
+                      setNewScientificName(name);
+                    }
+                  }}
+                />
+              )}
+            </Form.Group>
+          </Col>
+          <Col className="d-flex align-items-stretch">
+            <Button
+              onClick={handleCreateScientificName}
+              disabled={!newScientificName}
+              className="w-100"
+            >
+              Crear Nombre Científico
+            </Button>
+          </Col>
+        </Row>
+
+        {/* Sección Subespecie */}
+        <Row className="d-flex justify-content-between align-items-stretch">
+          <Col md={6} className="d-flex flex-column">
+            <Form.Group controlId="subspecies">
+              <Form.Label>{t("NewGeneralData.Subspecies")}</Form.Label>
+              {subspecies && (
+                <SelectorWithInput
+                  options={subspecies.map((sname) => ({
+                    id: sname.id,
+                    name: sname.name,
+                  }))}
+                  selectedValue={searchSubspeciesNameById(
+                    formData.subspeciesId,
+                    subspecies
+                  )}
+                  placeholder={"Selecciona una subespecie"}
+                  onSelect={(id, name) => {
+                    if (id !== undefined) {
+                      const updatedFormData = {
+                        ...formData,
+                        subspeciesId: id,
+                      };
+                      setFormData(updatedFormData);
+                      onUpdate(updatedFormData);
+                    } else if (name) {
+                      setNewSubspecies(name);
+                    }
+                  }}
+                />
+              )}
+            </Form.Group>
+          </Col>
+          <Col className="d-flex align-items-stretch">
+            <Button
+              onClick={handleCreateSubspecies}
+              disabled={!newSubspecies}
+              className="w-100"
+            >
+              Crear Subespecie
+            </Button>
+          </Col>
+        </Row>
+      </Row>
+
       <Row>
         <Col md={12}>
           <Form.Group controlId="commonName">

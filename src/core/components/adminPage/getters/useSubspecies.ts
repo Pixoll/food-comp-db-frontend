@@ -6,6 +6,7 @@ export type Subspecies = {
 };
 
 const useSubspecies = () =>{
+    
     return useFetch<Subspecies[]>(`/subspecies`)
 }
 export default useSubspecies
