@@ -318,12 +318,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
           className="d-flex justify-content-between align-items-stretch mb-3"
         >
           <Col md={4} className="d-flex flex-column">
-            <Form.Label>
-              <RequiredFieldLabel
-                label={t("DetailFood.label_group")}
-                tooltipMessage={t("DetailFood.required")}
-              />
-            </Form.Label>
+
             {groups && (
               <SelectorWithInput
                 options={groups.map((group) => ({
@@ -375,12 +370,6 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
           className="d-flex justify-content-between align-items-stretch"
         >
           <Col md={4} className="d-flex flex-column">
-            <Form.Label>
-              <RequiredFieldLabel
-                label={t("DetailFood.label_type")}
-                tooltipMessage={t("DetailFood.required")}
-              />
-            </Form.Label>
             {types && (
               <SelectorWithInput
                 options={types.map((type) => ({
@@ -430,7 +419,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
         <Row className="d-flex justify-content-between align-items-stretch mb-3">
           <Col md={6} className="d-flex flex-column">
             <Form.Group controlId="scientificName">
-              <Form.Label>{t("NewGeneralData.name_scientist")}</Form.Label>
+
               {scientificNames && (
                 <SelectorWithInput
                   options={scientificNames.map((sname) => ({
@@ -473,7 +462,6 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
         <Row className="d-flex justify-content-between align-items-stretch">
           <Col md={6} className="d-flex flex-column">
             <Form.Group controlId="subspecies">
-              <Form.Label>{t("NewGeneralData.Subspecies")}</Form.Label>
               {subspecies && (
                 <SelectorWithInput
                   options={subspecies.map((sname) => ({

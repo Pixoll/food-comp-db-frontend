@@ -46,7 +46,7 @@ const SelectorWithInput: React.FC<SelectorWithInputProps> = ({
 
   return (
     <div className={`select-box-for ${isActive ? "active" : ""}`}>
-      <div className="select-option" onClick={() => setIsActive(!isActive)}>
+      <div className="select-option-with-input" onClick={() => setIsActive(!isActive)}>
         <input
           type="text"
           placeholder={placeholder}
