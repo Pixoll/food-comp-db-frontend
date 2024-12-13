@@ -16,6 +16,7 @@ import useReferences, {
   Author,
 } from "../core/components/adminPage/getters/UseReferences";
 import { Origin } from "../core/types/SingleFoodResult";
+import NewLangualCodes from "../core/components/adminPage/NewLangualCode";
 import NewReferences from "../core/components/adminPage/NewReferences";
 import NewReference from "../core/components/adminPage/NewReference";
 import NewAuthors from "../core/components/adminPage/NewAuthors";
@@ -435,6 +436,10 @@ export default function AdminPage() {
           />
         );
       case 9:
+        return(
+          <NewLangualCodes />
+        )
+      case 10:
         return (
           <PreviewDataForm
             data={formData}
@@ -459,6 +464,7 @@ export default function AdminPage() {
     "Minerales",
     "Origines del alimento",
     "Referencias",
+    "Codigos languales",
     "Vista de información actual",
   ];
 

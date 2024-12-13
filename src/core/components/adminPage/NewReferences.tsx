@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Row, Col, Button} from "react-bootstrap";
+import { Card, Row, Col, Button } from "react-bootstrap";
 import {
   NutrientsValueForm,
   getNutrientNameById,
@@ -9,28 +9,42 @@ import {
 } from "../../../pages/AdminPage";
 import { Reference } from "./getters/UseReferences";
 import ModalReferences from "./ModalReferences";
-import { PlusCircle } from 'lucide-react';
+import Pagination from "../search/Pagination";
+import { PlusCircle } from "lucide-react";
+
 type NewReferencesProps = {
   references: Reference[];
   nutrientValueForm: NutrientsValueForm;
   nameAndIdNutrients: NutrientSummary[];
   onSelectReferenceForNutrients: (updatedForm: NutrientsValueForm) => void;
 };
- const hasValidData = <T extends NutrientMeasurementForm>(
-    nutrient: T
-    // @ts-expect-error
-  ): nutrient is Omit<T, "average" | "dataType"> & Required<Pick<T, "average" | "dataType">> => {
-    return (
-      typeof nutrient.average !== "undefined" &&
-      typeof nutrient.dataType !== "undefined"
-    );
-  };
+const ITEMS_PER_PAGE = 5;
+
+const hasValidData = <T extends NutrientMeasurementForm>(
+  nutrient: T
+  // @ts-expect-error
+): nutrient is Omit<T, "average" | "dataType"> &
+  Required<Pick<T, "average" | "dataType">> => {
+  return (
+    typeof nutrient.average !== "undefined" &&
+    typeof nutrient.dataType !== "undefined"
+  );
+};
 const NewReferences: React.FC<NewReferencesProps> = ({
   references,
   nutrientValueForm,
   nameAndIdNutrients,
-  onSelectReferenceForNutrients
+  onSelectReferenceForNutrients,
 }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const totalItems = references.length;
+  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentReferences = references.slice(startIndex, endIndex);
+
   const [modalsState, setModalsState] = useState<{ [key: number]: boolean }>(
     {}
   );
@@ -44,13 +58,17 @@ const NewReferences: React.FC<NewReferencesProps> = ({
     name: string;
     selected: boolean;
   };
+
   const convert = (): NutrientConvert[] => {
     const nutrientsConvert: NutrientConvert[] = [];
-  
-    const isReferenceAssigned = (nutrient: NutrientMeasurementForm, refCode: number) => {
+
+    const isReferenceAssigned = (
+      nutrient: NutrientMeasurementForm,
+      refCode: number
+    ) => {
       return nutrient.referenceCodes?.includes(refCode);
     };
-  
+
     const addNutrientWithSelection = (
       nutrient: NutrientMeasurementForm,
       refCode: number
@@ -61,18 +79,18 @@ const NewReferences: React.FC<NewReferencesProps> = ({
         selected: isReferenceAssigned(nutrient, refCode),
       });
     };
-  
-    const referenceCode = references[selectedReferenceIndex!]?.code;
-  
+
+    const referenceCode = currentReferences[selectedReferenceIndex!]?.code;
+
     nutrientValueForm.energy
       .filter(hasValidData)
       .forEach((energy) => addNutrientWithSelection(energy, referenceCode));
-  
+
     nutrientValueForm.mainNutrients
       .filter(hasValidData)
       .forEach((mainNutrient) => {
         addNutrientWithSelection(mainNutrient, referenceCode);
-  
+
         if (mainNutrient.components) {
           mainNutrient.components
             .filter(hasValidData)
@@ -81,25 +99,27 @@ const NewReferences: React.FC<NewReferencesProps> = ({
             );
         }
       });
-  
+
     nutrientValueForm.micronutrients.minerals
       .filter(hasValidData)
       .forEach((mineral) => addNutrientWithSelection(mineral, referenceCode));
-  
+
     nutrientValueForm.micronutrients.vitamins
       .filter(hasValidData)
       .forEach((vitamin) => addNutrientWithSelection(vitamin, referenceCode));
-  
+
     return nutrientsConvert;
   };
 
   const handleShowModal = (index: number) => {
-    setModalsState((prev) => ({ ...prev, [index]: true }));
-    setSelectedReferenceIndex(index);
+    const globalIndex = startIndex + index;
+    setModalsState((prev) => ({ ...prev, [globalIndex]: true }));
+    setSelectedReferenceIndex(globalIndex);
   };
 
   const handleHideModal = (index: number) => {
-    setModalsState((prev) => ({ ...prev, [index]: false }));
+    const globalIndex = startIndex + index; // Índice global
+    setModalsState((prev) => ({ ...prev, [globalIndex]: false }));
     setSelectedNutrientIds([]);
   };
 
@@ -107,7 +127,7 @@ const NewReferences: React.FC<NewReferencesProps> = ({
     if (selectedReferenceIndex !== null) {
       const referenceCode = reference;
       const updatedForm = { ...nutrientValueForm };
-  
+
       const updateNutrientReferences = (
         nutrientsArray: (
           | NutrientMeasurementForm
@@ -120,35 +140,42 @@ const NewReferences: React.FC<NewReferencesProps> = ({
             if (!nutrient.referenceCodes.includes(referenceCode)) {
               nutrient.referenceCodes.push(referenceCode);
             }
-          }
-          else if (nutrient.referenceCodes) {
+          } else if (nutrient.referenceCodes) {
             nutrient.referenceCodes = nutrient.referenceCodes.filter(
               (code) => code !== referenceCode
             );
           }
-  
+
           if ("components" in nutrient) {
-            const components = nutrient.components as (NutrientMeasurementForm | NutrientMeasurementWithComponentsForm)[];
+            const components = nutrient.components as (
+              | NutrientMeasurementForm
+              | NutrientMeasurementWithComponentsForm
+            )[];
             updateNutrientReferences(components);
           }
         });
       };
-  
+
       updateNutrientReferences(updatedForm.energy);
       updateNutrientReferences(updatedForm.mainNutrients);
       updateNutrientReferences(updatedForm.micronutrients.minerals);
       updateNutrientReferences(updatedForm.micronutrients.vitamins);
-  
+
       onSelectReferenceForNutrients(updatedForm);
-  
+
       setModalsState((prev) => ({ ...prev, [selectedReferenceIndex]: false }));
+    }
+  };
+  const handlePageChange = (page: number) => {
+    if (page > 0 && page <= totalPages) {
+      setCurrentPage(page);
     }
   };
   return (
     <div className="references-container space-y-4 py-4">
-      {references.map((ref, index) => (
+      {currentReferences.map((ref, index) => (
         <Card
-          key={index}
+          key={ref.code}
           className="shadow-lg border-0 overflow-hidden mb-4 hover:scale-[1.01] transition-transform duration-300"
         >
           <Row className="g-0 h-100 align-items-stretch">
@@ -162,9 +189,7 @@ const NewReferences: React.FC<NewReferencesProps> = ({
                     {ref.type.toLowerCase()}
                   </span>
                   {ref.year && (
-                    <span className="ml-2 text-gray-500">
-                      • {ref.year}
-                    </span>
+                    <span className="ml-2 text-gray-500">• {ref.year}</span>
                   )}
                 </div>
                 <div className="space-y-1 text-sm text-gray-700">
@@ -188,23 +213,21 @@ const NewReferences: React.FC<NewReferencesProps> = ({
                   )}
                   {ref.city && (
                     <div>
-                      <span className="font-semibold">Ciudad:</span>{" "}
-                      {ref.city}
+                      <span className="font-semibold">Ciudad:</span> {ref.city}
                     </div>
                   )}
                   {ref.other && (
                     <div>
-                      <span className="font-semibold">Información adicional:</span>{" "}
+                      <span className="font-semibold">
+                        Información adicional:
+                      </span>{" "}
                       {ref.other}
                     </div>
                   )}
                 </div>
               </div>
             </Col>
-            <Col
-              md={3}
-              className="d-flex"
-            >
+            <Col md={3} className="d-flex">
               <Button
                 variant="success"
                 className="w-100 d-flex align-items-center justify-content-center border-0 rounded-0 hover:bg-green-700 transition-colors duration-300"
@@ -219,16 +242,22 @@ const NewReferences: React.FC<NewReferencesProps> = ({
           </Row>
         </Card>
       ))}
-      {references.map((ref, index) => (
+      {currentReferences.map((ref, index) => (
         <ModalReferences
-          key={index}
+          key={ref.code}
           nutrients={convert()}
-          show={modalsState[index] || false}
+          show={modalsState[startIndex + index] || false}
           onHide={() => handleHideModal(index)}
           onSelectReferenceForNutrients={handleAddReference}
           selectedReference={ref.code}
         />
       ))}
+
+      <Pagination
+        currentPage={currentPage}
+        npage={totalPages}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 };
