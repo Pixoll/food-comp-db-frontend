@@ -1,6 +1,6 @@
 import useFetch from "../../../hooks/useFetch";
 
-type Subspecies = {
+export type Subspecies = {
     id: number;
     name: string;
 };

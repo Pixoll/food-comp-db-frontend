@@ -132,16 +132,10 @@ type GeneralData = {
   strain?: string | null;
   brand?: string | null;
   observation?: string | null;
-  group: {
-    code: string;
-    name: string;
-  };
-  type: {
-    code: string;
-    name: string;
-  };
-  scientificName?: string | null;
-  subspecies?: string | null;
+  scientificNameId?: number;
+  subspeciesId?: number;
+  groupId: number;
+  typeId: number;
   commonName: Record<"es", string> &
     Partial<Record<"en" | "pt", string | null>>;
   ingredients: Partial<Record<"es" | "en" | "pt", string | null>>;
@@ -209,8 +203,10 @@ export default function AdminPage() {
       code: "",
       commonName: { es: "" },
       ingredients: {},
-      group: { code: "", name: "" },
-      type: { code: "", name: "" },
+      scientificNameId: undefined,
+      subspeciesId: undefined,
+      groupId: -1,
+      typeId: -1,
       origins: [...new Set(origins?.map((o) => o.id))],
     },
     nutrientsValueForm: {
@@ -281,8 +277,10 @@ export default function AdminPage() {
             es: "",
           },
           ingredients: {},
-          group: { code: "", name: "" },
-          type: { code: "", name: "" },
+          scientificNameId: undefined,
+          subspeciesId: undefined,
+          groupId: -1,
+          typeId: -1,
           origins: [...new Set(origins?.map((o) => o.id))],
         },
         nutrientsValueForm: {

@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, Table, Row, Col } from "react-bootstrap";
 import { FoodForm } from "../../../pages/AdminPage";
+import makeRequest from "../../utils/makeRequest";
 import {
   NutrientSummary,
   getNutrientNameById,
@@ -9,7 +10,32 @@ import {
 } from "../../../pages/AdminPage";
 import { useTranslation } from "react-i18next";
 import "../../../assets/css/_PreviewDataForm.css";
+type NewFood = {
+  commonName:  Record<"es", string> &
+  Partial<Record<"en" | "pt", string | null>>;
+  ingredients?: Partial<Record<"es" | "en" | "pt", string | null>>;
+  scientificNameId?: number;
+  subspeciesId?: number;
+  groupId: number;
+  typeId: number;
+  strain?: string;
+  brand?: string;
+  observation?: string;
+  originIds?: number[];
+  nutrientMeasurements: NewNutrientMeasurement[];
+  langualCodes: number[];
+};
 
+type NewNutrientMeasurement = {
+  nutrientId: number;
+  average: number;
+  deviation?: number;
+  min?: number;
+  max?: number;
+  sampleSize?: number;
+  dataType: "analytic" | "calculated" | "assumed" | "borrowed";
+  referenceCodes?: number[];
+};
 type PreviewDataFormProps = {
   data: FoodForm;
   nameAndIdNutrients: NutrientSummary[];
@@ -30,7 +56,14 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
       nutrient.dataType !== null
     );
   };
+  /*const handleSubmit = () =>{
+    const payload : NewFood = {
+      commonName: {es: data.generalData.commonName.es, en:data.generalData.commonName.en, pt:data.generalData.commonName.pt},
+      ingredients: data.generalData.ingredients,
+      scientificNameId: data.generalData.scientificName
 
+    } 
+  }*/
   const renderNutrientTable = (
     title: string,
     nutrients: NutrientMeasurementForm[]
@@ -112,6 +145,7 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
                       <th>Máximo</th>
                       <th>Tamaño de muestra</th>
                       <th>Tipo de dato</th>
+                      <th>Codigos de referencias</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -131,6 +165,7 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
                           <td>{component.max ?? "N/A"}</td>
                           <td>{component.sampleSize ?? "N/A"}</td>
                           <td>{component.dataType ?? "N/A"}</td>
+                          <td>{component.referenceCodes ?? "N/A"}</td>
                         </tr>
                       ))}
                     <tr>
@@ -147,6 +182,7 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
                       <td>{mainNutrient.max ?? "N/A"}</td>
                       <td>{mainNutrient.sampleSize ?? "N/A"}</td>
                       <td>{mainNutrient.dataType ?? "N/A"}</td>
+                      <td>{mainNutrient.referenceCodes ?? "N/A"}</td>
                     </tr>
                   </tbody>
                 </Table>
@@ -171,7 +207,9 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
                 </tr>
               </thead>
               <tbody>
-                {nutrientsWithoutComponents.map((nutrient, index) => (
+                {nutrientsWithoutComponents
+                ?.filter(hasValidData)
+                .map((nutrient, index) => (
                   <tr key={index}>
                     <td>
                       {getNutrientNameById(
@@ -210,27 +248,27 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
               <Col md={3}>
                 <strong>{t("PreviewDataFrom.Scientific")}</strong>
               </Col>
-              <Col md={3}>{generalData.scientificName || "N/A"}</Col>
+              <Col md={3}>{generalData.scientificNameId || "N/A"}</Col>
             </Row>
             <Row className="mb-3">
               <Col md={3}>
                 <strong>{t("PreviewDataFrom.Group")}</strong>
               </Col>
               <Col md={3}>
-                {generalData.group.name} (Code: {generalData.group.code})
+                {generalData.groupId}
               </Col>
               <Col md={3}>
                 <strong>{t("PreviewDataFrom.Type")}</strong>
               </Col>
               <Col md={3}>
-                {generalData.type.name} (Code: {generalData.type.code})
+                {generalData.typeId}
               </Col>
             </Row>
             <Row className="mb-3">
               <Col md={3}>
                 <strong>{t("PreviewDataFrom.Subspecies")}</strong>
               </Col>
-              <Col md={3}>{generalData.subspecies || "N/A"}</Col>
+              <Col md={3}>{generalData.subspeciesId || "N/A"}</Col>
               <Col md={3}>
                 <strong>{t("PreviewDataFrom.Strain")}</strong>
               </Col>

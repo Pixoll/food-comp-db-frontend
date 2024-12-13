@@ -1,6 +1,6 @@
 import useFetch from "../../../hooks/useFetch";
 
-type ScientificName = {
+export type ScientificName = {
     id: number;
     name: string;
 };

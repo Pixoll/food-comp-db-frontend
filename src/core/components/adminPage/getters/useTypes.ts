@@ -1,5 +1,5 @@
 import useFetch from "../../../hooks/useFetch"
-type Type ={
+export type Type ={
     id: number,
     code: string,
     name: string,

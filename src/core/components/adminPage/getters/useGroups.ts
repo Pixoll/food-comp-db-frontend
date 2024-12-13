@@ -1,6 +1,6 @@
 import useFetch from "../../../hooks/useFetch"
 
-type Group ={
+export type Group ={
     id: number,
     code: string,
     name: string,
