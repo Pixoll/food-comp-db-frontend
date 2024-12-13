@@ -20,7 +20,9 @@ import NewLangualCodes from "../core/components/adminPage/NewLangualCode";
 import NewReferences from "../core/components/adminPage/NewReferences";
 import NewReference from "../core/components/adminPage/NewReference";
 import NewAuthors from "../core/components/adminPage/NewAuthors";
-import NewArticleByReference, { RecursivePartial } from "../core/components/adminPage/NewArticleByReference";
+import NewArticleByReference, {
+  RecursivePartial,
+} from "../core/components/adminPage/NewArticleByReference";
 import FoodTableAdmin from "../core/components/adminPage/FoodTableAdmin";
 import {
   ReferenceForm,
@@ -123,6 +125,7 @@ type GeneralData = {
     Partial<Record<"en" | "pt", string | null>>;
   ingredients: Partial<Record<"es" | "en" | "pt", string | null>>;
   origins: number[];
+  langualCodes: number[];
 };
 export type FoodForm = {
   generalData: GeneralData;
@@ -147,7 +150,9 @@ export default function AdminPage() {
     setReferenceForm((prev) => ({ ...prev, ...updatedFields }));
   };
 
-  const handleUpdateNewArticle = (updatedArticle: RecursivePartial<NewArticle>) => {
+  const handleUpdateNewArticle = (
+    updatedArticle: RecursivePartial<NewArticle>
+  ) => {
     setReferenceForm((prev) => ({
       ...prev,
       newArticle: updatedArticle,
@@ -191,6 +196,7 @@ export default function AdminPage() {
       groupId: undefined,
       typeId: undefined,
       origins: [...new Set(origins?.map((o) => o.id))],
+      langualCodes: [],
     },
     nutrientsValueForm: {
       energy: [],
@@ -244,13 +250,30 @@ export default function AdminPage() {
     setFormData((prev) => ({
       ...prev,
       nutrientsValueForm: {
-        ...prev.nutrientsValueForm, 
-        ...updatedData, 
+        ...prev.nutrientsValueForm,
+        ...updatedData,
       },
     }));
   };
-  
-  
+  const handleLangualCodes = (updatedLangualCodeId: number) => {
+    setFormData((prev) => {
+      const alreadySelected =
+        prev.generalData.langualCodes.includes(updatedLangualCodeId);
+
+      return {
+        ...prev,
+        generalData: {
+          ...prev.generalData,
+          langualCodes: alreadySelected
+            ? prev.generalData.langualCodes.filter(
+                (id) => id !== updatedLangualCodeId
+              )
+            : [...prev.generalData.langualCodes, updatedLangualCodeId],
+        },
+      };
+    });
+  };
+
   useEffect(() => {
     if (nutrients) {
       const initialFormData: FoodForm = {
@@ -262,9 +285,10 @@ export default function AdminPage() {
           ingredients: {},
           scientificNameId: undefined,
           subspeciesId: undefined,
-          groupId: -1,
-          typeId: -1,
+          groupId: undefined,
+          typeId: undefined,
           origins: [...new Set(origins?.map((o) => o.id))],
+          langualCodes: [],
         },
         nutrientsValueForm: {
           energy:
@@ -436,9 +460,12 @@ export default function AdminPage() {
           />
         );
       case 9:
-        return(
-          <NewLangualCodes />
-        )
+        return (
+          <NewLangualCodes
+            onLangualCodesChange={handleLangualCodes}
+            selectedLangualCodes={formData.generalData.langualCodes}
+          />
+        );
       case 10:
         return (
           <PreviewDataForm
@@ -472,16 +499,16 @@ export default function AdminPage() {
 
   if (referenceForm.type === "article") {
     sectionNamesByNewReference = [
-      { id: "general", name: "Datos generales"},
-      { id: "authors", name: "Autores"},
-      { id: "article", name: "Artículo"},
-      { id: "preview", name: "Previsualización"},
+      { id: "general", name: "Datos generales" },
+      { id: "authors", name: "Autores" },
+      { id: "article", name: "Artículo" },
+      { id: "preview", name: "Previsualización" },
     ];
   } else {
     sectionNamesByNewReference = [
-      { id: "general", name: "Datos generales"},
-      { id: "authors", name: "Autores"},
-      { id: "preview", name: "Previsualización"},
+      { id: "general", name: "Datos generales" },
+      { id: "authors", name: "Autores" },
+      { id: "preview", name: "Previsualización" },
     ];
   }
   const renderSectionByNewReference = () => {

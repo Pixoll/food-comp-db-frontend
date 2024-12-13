@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { Card, Row, Col, Button, Form } from "react-bootstrap";
-import { PlusCircle , DeleteIcon } from "lucide-react";
+import { PlusCircle , Trash2  } from "lucide-react";
 import useLangualCodes from "./getters/useLangualCodes";
 import { FetchStatus } from "../../hooks/useFetch";
 import Pagination from "../search/Pagination";
 
 const ITEMS_PER_PAGE = 5;
-
-const NewLangualCodes = () => {
+type NewLangualCodesProps = {
+    selectedLangualCodes: number[];
+  onLangualCodesChange: (id: number) => void;
+}
+const NewLangualCodes: React.FC<NewLangualCodesProps> = ({selectedLangualCodes, onLangualCodesChange}) => {
   const langualCodesResult = useLangualCodes();
   const langualCodes =
     langualCodesResult.status === FetchStatus.Success
@@ -48,42 +51,53 @@ const NewLangualCodes = () => {
           onChange={handleSearch}
         />
       </Form>
-      {currentItems.map((langualCode) => (
-        <Card
-          key={langualCode.id}
-          className="shadow-lg border-0 overflow-hidden mb-4 hover:scale-[1.01] transition-transform duration-300"
-        >
-          <Row className="g-0 h-100 align-items-stretch">
-            <Col md={9} className="p-4">
-              <div className="space-y-2 h-100">
-                <h3 className="text-xl font-bold text-gray-800 mb-2">
-                  Codigo Langual: {langualCode.code}
-                </h3>
-                <div className="space-y-1 text-sm text-gray-700">
-                  <div>
-                    <span className="font-semibold">Descriptor:</span>{" "}
-                    {langualCode.descriptor}
+      {currentItems.map((langualCode) => {
+        const isSelected = selectedLangualCodes.includes(langualCode.id);
+
+        return (
+          <Card
+            key={langualCode.id}
+            className="shadow-lg border-0 overflow-hidden mb-4 hover:scale-[1.01] transition-transform duration-300"
+          >
+            <Row className="g-0 h-100 align-items-stretch">
+              <Col md={9} className="p-4">
+                <div className="space-y-2 h-100">
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">
+                    Codigo Langual: {langualCode.code}
+                  </h3>
+                  <div className="space-y-1 text-sm text-gray-700">
+                    <div>
+                      <span className="font-semibold">Descriptor:</span>{" "}
+                      {langualCode.descriptor}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Col>
-            <Col md={3} className="d-flex">
-              <Button
-                variant="success"
-                className="w-100 d-flex align-items-center justify-content-center border-0 rounded-0 hover:bg-green-700 transition-colors duration-300"
-                onClick={() => {
-                  /* Acción de agregar */
-                }}
-              >
-                <div className="text-center">
-                  <PlusCircle className="mx-auto mb-2" size={24} />
-                  <span className="d-block">Agregar</span>
-                </div>
-              </Button>
-            </Col>
-          </Row>
-        </Card>
-      ))}
+              </Col>
+              <Col md={3} className="d-flex">
+                <Button
+                  variant={isSelected ? "danger" : "success"}
+                  className="w-100 d-flex align-items-center justify-content-center border-0 rounded-0 hover:scale-105 transition-transform duration-300"
+                  onClick={() => onLangualCodesChange(langualCode.id)}
+                >
+                  <div className="text-center">
+                    {isSelected ? (
+                      <>
+                        <Trash2 className="mx-auto mb-2" size={24} />
+                        <span className="d-block">Eliminar</span>
+                      </>
+                    ) : (
+                      <>
+                        <PlusCircle className="mx-auto mb-2" size={24} />
+                        <span className="d-block">Agregar</span>
+                      </>
+                    )}
+                  </div>
+                </Button>
+              </Col>
+            </Row>
+          </Card>
+        );
+      })}
 
       <Pagination
         currentPage={currentPage}
@@ -93,4 +107,5 @@ const NewLangualCodes = () => {
     </div>
   );
 };
+
 export default NewLangualCodes;

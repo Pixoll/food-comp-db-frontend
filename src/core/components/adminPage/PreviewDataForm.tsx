@@ -372,6 +372,10 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
                 <strong>{t("PreviewDataFrom.Observation")}</strong>
               </Col>
               <Col md={3}>{generalData.observation || "N/A"}</Col>
+              <Col md={3}>
+                <strong>{"Codigos languales"}</strong>
+              </Col>
+              <Col md={3}>{generalData.langualCodes || "N/A"}</Col>
             </Row>
 
             {/* Ingredientes y Nombres Comunes */}
