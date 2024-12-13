@@ -51,10 +51,10 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
   const { generalData, nutrientsValueForm } = data;
   const { t } = useTranslation("global");
 
-  const hasValidData = (
-    nutrient: NutrientMeasurementForm 
-  ): nutrient is Omit<NewNutrientMeasurement, "referenceCodes"> &
-    Required<Pick<NewNutrientMeasurement, "referenceCodes">> => {
+  const hasValidData = <T extends NutrientMeasurementForm>(
+    nutrient: T
+    // @ts-expect-error
+  ): nutrient is Omit<T, "average" | "dataType"> & Required<Pick<T, "average" | "dataType">> => {
     return (
       typeof nutrient.average !== "undefined" &&
       typeof nutrient.dataType !== "undefined"
@@ -111,7 +111,7 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
                 average: component.average,
                 deviation: component.deviation ?? undefined,
                 min: component.min ?? undefined,
-                max: component.max ?? undefined, 
+                max: component.max ?? undefined,
                 sampleSize: component.sampleSize ?? undefined,
                 dataType: component.dataType,
                 referenceCodes:
@@ -120,7 +120,7 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
                     : undefined,
               }))
           ),
-          ...data.nutrientsValueForm.micronutrients.minerals
+        ...data.nutrientsValueForm.micronutrients.minerals
           .filter(hasValidData)
           .map((mineral) => ({
             nutrientId: mineral.nutrientId,
@@ -131,11 +131,11 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
             sampleSize: mineral.sampleSize ?? undefined,
             dataType: mineral.dataType,
             referenceCodes:
-            mineral.referenceCodes.length > 0
+              mineral.referenceCodes.length > 0
                 ? mineral.referenceCodes
                 : undefined,
           })),
-          ...data.nutrientsValueForm.micronutrients.vitamins
+        ...data.nutrientsValueForm.micronutrients.vitamins
           .filter(hasValidData)
           .map((vitamin) => ({
             nutrientId: vitamin.nutrientId,
@@ -146,11 +146,11 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
             sampleSize: vitamin.sampleSize ?? undefined,
             dataType: vitamin.dataType,
             referenceCodes:
-            vitamin.referenceCodes.length > 0
+              vitamin.referenceCodes.length > 0
                 ? vitamin.referenceCodes
                 : undefined,
           })),
-        ],      
+      ],
       brand: data.generalData.brand || undefined,
       observation: data.generalData.observation || undefined,
       originIds: data.generalData.origins,
