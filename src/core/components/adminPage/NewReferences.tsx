@@ -8,9 +8,9 @@ import {
   NutrientMeasurementWithComponentsForm,
 } from "../../../pages/AdminPage";
 import { Reference } from "./getters/UseReferences";
+import { PlusCircle } from "lucide-react";
 import ModalReferences from "./ModalReferences";
 import Pagination from "../search/Pagination";
-import { PlusCircle } from "lucide-react";
 
 type NewReferencesProps = {
   references: Reference[];

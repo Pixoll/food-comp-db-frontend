@@ -1,33 +1,53 @@
-import React, { useState } from 'react';
-import { Card, Row, Col, Button } from 'react-bootstrap';
-import { PlusCircle } from 'lucide-react';
-import useLangualCodes from './getters/useLangualCodes';
-import { FetchStatus } from '../../hooks/useFetch';
-import Pagination from '../search/Pagination';
+import React, { useState } from "react";
+import { Card, Row, Col, Button, Form } from "react-bootstrap";
+import { PlusCircle , DeleteIcon } from "lucide-react";
+import useLangualCodes from "./getters/useLangualCodes";
+import { FetchStatus } from "../../hooks/useFetch";
+import Pagination from "../search/Pagination";
 
 const ITEMS_PER_PAGE = 5;
 
 const NewLangualCodes = () => {
-  const langualCodesResult = useLangualCodes()
-  const langualCodes = langualCodesResult.status === FetchStatus.Success ? langualCodesResult.data : [];
+  const langualCodesResult = useLangualCodes();
+  const langualCodes =
+    langualCodesResult.status === FetchStatus.Success
+      ? langualCodesResult.data
+      : [];
+  const [searchTerm, setSearchTerm] = useState("");
 
-const [currentPage, setCurrentPage] = useState(1);
+  const filteredLangualCodes = langualCodes.filter((langualCode) =>
+    langualCode.code.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  const [currentPage, setCurrentPage] = useState(1);
 
-const totalItems = langualCodes.length;
-const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+  const totalItems = filteredLangualCodes.length;
+  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
-const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-const endIndex = startIndex + ITEMS_PER_PAGE;
-const currentItems = langualCodes.slice(startIndex, endIndex);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const currentItems = filteredLangualCodes.slice(startIndex, endIndex);
 
-const handlePageChange = (page: number) => {
-  if (page > 0 && page <= totalPages) {
-    setCurrentPage(page);
-  }
-};
+  const handlePageChange = (page: number) => {
+    if (page > 0 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
 
-return (
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+    setCurrentPage(1); 
+  };
+
+  return (
     <div className="langual-codes-container space-y-4 py-4">
+      <Form className="mb-4">
+        <Form.Control
+          type="text"
+          placeholder="Buscar por código Langual"
+          value={searchTerm}
+          onChange={handleSearch}
+        />
+      </Form>
       {currentItems.map((langualCode) => (
         <Card
           key={langualCode.id}
@@ -41,7 +61,7 @@ return (
                 </h3>
                 <div className="space-y-1 text-sm text-gray-700">
                   <div>
-                    <span className="font-semibold">Descriptor:</span>{' '}
+                    <span className="font-semibold">Descriptor:</span>{" "}
                     {langualCode.descriptor}
                   </div>
                 </div>
