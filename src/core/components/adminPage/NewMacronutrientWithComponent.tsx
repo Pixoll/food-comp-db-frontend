@@ -107,14 +107,14 @@ const NewMacronutrientWithComponent: React.FC<
   return (
     <div>
       {macronutrientsWithComponents.map((nutrient) => (
-        <Card key={nutrient.nutrientId} style={{ marginBottom: "15px" }}>
-          <Card.Header>
+        <Card key={nutrient.nutrientId} className="card-of-new-nutrient" >
+          <Card.Header className="card-of-new-nutrient-header">
             <Button
               onClick={() => toggleCollapse(nutrient.nutrientId.toString())}
               aria-controls={`collapse-${nutrient.nutrientId}`}
               aria-expanded={open.has(nutrient.nutrientId.toString())}
               variant="link"
-              style={{ fontWeight: "bold", textDecoration: "none" }}
+              className="card-of-new-nutrient-toggle"
             >
               {`${getNutrientNameById(
                 nutrient.nutrientId,
@@ -123,7 +123,7 @@ const NewMacronutrientWithComponent: React.FC<
             </Button>
           </Card.Header>
           <Collapse in={open.has(nutrient.nutrientId.toString())}>
-            <Card.Body>
+            <Card.Body className="card-of-new-nutrient-collapse">
               <Table striped bordered hover responsive>
                 <thead>
                   <tr>
@@ -208,10 +208,10 @@ const NewMacronutrientWithComponent: React.FC<
                             </Form.Select>
                           </td>
                           <td>
-                            <Button variant="success" onClick={saveChanges}>
+                            <Button className="btn-save" onClick={saveChanges}>
                             {t("NewMacronutrient.save")}
                             </Button>{" "}
-                            <Button variant="danger" onClick={cancelEditing}>
+                            <Button className="btn-cancel" onClick={cancelEditing}>
                             {t("NewMacronutrient.cancel")}
                             </Button>
                           </td>
@@ -237,7 +237,7 @@ const NewMacronutrientWithComponent: React.FC<
                           </td>
                           <td>
                             <Button
-                              variant="warning"
+                              className="btn-edit"
                               onClick={() => startEditing(component)}
                             >
                               {t("NewMacronutrient.Edit")}
@@ -317,10 +317,10 @@ const NewMacronutrientWithComponent: React.FC<
                           </Form.Select>
                         </td>
                         <td>
-                          <Button variant="success" onClick={saveChanges}>
+                          <Button className="btn-save" onClick={saveChanges}>
                           {t("NewMacronutrient.save")}
                           </Button>{" "}
-                          <Button variant="danger" onClick={cancelEditing}>
+                          <Button className="btn-cancel" onClick={cancelEditing}>
                           {t("NewMacronutrient.cancel")}
                           </Button>
                         </td>
@@ -348,7 +348,7 @@ const NewMacronutrientWithComponent: React.FC<
                         </td>
                         <td>
                           <Button
-                            variant="warning"
+                            className="btn-edit"
                             onClick={() =>
                               startEditing({
                                 ...nutrient,

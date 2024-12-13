@@ -1,0 +1,103 @@
+.new-nutrients-container {
+  padding: 20px !important;
+  border-radius: 8px !important;
+  font-family: Poppins, sans-serif !important;
+  font-size: 14px;
+}
+
+.nutrients-table {
+  border: 1px solid #dee2e6 !important;
+}
+
+.table-new-nutrients-header {
+  background-color: #8fbc8f !important;
+  color: white !important;
+  font-weight: bold !important;
+}
+.table-new-nutrients-header th {
+  background-color: white !important;
+  color: black !important;
+  font-weight: bold !important;
+}
+
+.nutrient-row:nth-child(odd) > * {
+  background-color: #f2f2f2 !important; 
+}
+
+.nutrient-row:nth-child(even) > * {
+  background-color: white !important;
+}
+
+.btn-edit {
+  background-color: #6b8e23 !important;
+  color: white !important;
+  border: none !important;
+}
+
+.btn-edit:hover {
+  background-color: #556b2f !important;
+}
+
+.btn-save {
+  background-color: #3cb371 !important;
+  color: white !important;
+  border: none !important;
+}
+
+.btn-save:hover {
+  background-color: #2e8b57 !important;
+}
+
+.btn-cancel {
+  background-color: #cd5c5c !important;
+  color: white !important;
+  border: none !important;
+}
+
+.btn-cancel:hover {
+  background-color: #b22222 !important;
+}
+
+.card-of-new-nutrient {
+    margin-bottom: 15px;
+    background-color: #f9f9f9; 
+    border: 1px solid #dcdcdc; 
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.card-of-new-nutrient-header {
+    background-color: #37a86a !important; 
+    color: #ffffff !important;         
+    font-size: 1.2em !important; 
+    padding: 0 !important; 
+    text-align: left !important; 
+}
+
+.card-of-new-nutrient-toggle {
+    background-color: transparent;
+    color: #ffffff !important;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    font-size: 1em;
+    text-align: center !important;
+    text-decoration: none !important;
+    height: 100%;
+    width: 100%;
+    padding: 15px !important;
+    text-align: left !important;
+}
+
+.card-of-new-nutrient-toggle:hover {
+    color: #dff0d8; 
+}
+
+.card-of-new-nutrient-collapse {
+    background-color: #b3dac2; 
+    padding: 15px;
+    border-top: 1px solid #dcdcdc; 
+    color: #333; 
+    font-size: 1em;
+}

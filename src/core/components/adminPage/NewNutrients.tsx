@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Table, Button, Form } from "react-bootstrap";
 import { NutrientMeasurementForm , NutrientSummary, getNutrientNameById} from "../../../pages/AdminPage";
 import { useTranslation } from "react-i18next";
-
+import "../../../assets/css/_NewNutrient.css"
 type NewNutrientsProps = {
   nutrients: NutrientMeasurementForm[];
   onNutrientUpdate: (updatedNutrient: NutrientMeasurementForm) => void;
@@ -49,10 +49,10 @@ const NewNutrients: React.FC<NewNutrientsProps> = ({ nutrients, onNutrientUpdate
   };
 
   return (
-    <div>
-      <Table striped bordered hover responsive>
+    <div className="new-nutrients-container">
+      <Table className="nutrients-table" bordered hover responsive>
         <thead>
-          <tr>
+          <tr className="table-new-nutrients-header">
             <th>{t("NewMacronutrient.name")}</th>
             <th>{t("NewMacronutrient.mean")}</th>
             <th>{t("NewMacronutrient.Deviation")}</th>
@@ -63,9 +63,9 @@ const NewNutrients: React.FC<NewNutrientsProps> = ({ nutrients, onNutrientUpdate
             <th>{t("NewMacronutrient.Action")}</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="table-new-nutrients-body">
           {nutrients.map((nutrient) => (
-            <tr key={nutrient.nutrientId}>
+            <tr key={nutrient.nutrientId} className="nutrient-row">
               {editingNutrientId === nutrient.nutrientId ? (
                 <>
                   <td>{getNutrientNameById(nutrient.nutrientId, nameAndIdNutrients)}</td>
@@ -116,11 +116,11 @@ const NewNutrients: React.FC<NewNutrientsProps> = ({ nutrients, onNutrientUpdate
                     </Form.Select>
                   </td>
                   <td>
-                    <Button variant="success" onClick={saveChanges}>
-                    {t("NewMacronutrient.save")}
+                    <Button className="btn-save" onClick={saveChanges}>
+                      {t("NewMacronutrient.save")}
                     </Button>{" "}
-                    <Button variant="danger" onClick={cancelEditing}>
-                    {t("NewMacronutrient.cancel")}
+                    <Button className="btn-cancel" onClick={cancelEditing}>
+                      {t("NewMacronutrient.cancel")}
                     </Button>
                   </td>
                 </>
@@ -132,15 +132,10 @@ const NewNutrients: React.FC<NewNutrientsProps> = ({ nutrients, onNutrientUpdate
                   <td>{nutrient.min || "---"}</td>
                   <td>{nutrient.max || "---"}</td>
                   <td>{nutrient.sampleSize || "---"}</td>
+                  <td>{nutrient.dataType ? nutrient.dataType.charAt(0).toUpperCase() + nutrient.dataType.slice(1) : "---"}</td>
                   <td>
-                    {nutrient.dataType
-                      ? nutrient.dataType.charAt(0).toUpperCase() +
-                        nutrient.dataType.slice(1)
-                      : "---"}
-                  </td>
-                  <td>
-                    <Button variant="warning" onClick={() => startEditing(nutrient)}>
-                    {t("NewMacronutrient.Edit")}
+                    <Button className="btn-edit" onClick={() => startEditing(nutrient)}>
+                      {t("NewMacronutrient.Edit")}
                     </Button>
                   </td>
                 </>
