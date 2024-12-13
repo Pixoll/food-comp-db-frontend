@@ -46,12 +46,12 @@ const NewMacronutrientWithComponent: React.FC<
     setEditingComponentId(component.nutrientId);
     setFormData({
       ...component,
-      average: component.average || null,
-      deviation: component.deviation || null,
-      min: component.min || null,
-      max: component.max || null,
-      sampleSize: component.sampleSize || null,
-      dataType: component.dataType || null,
+      average: component.average || undefined,
+      deviation: component.deviation || undefined,
+      min: component.min || undefined,
+      max: component.max || undefined,
+      sampleSize: component.sampleSize || undefined,
+      dataType: component.dataType || undefined,
       referenceCodes: component.referenceCodes || [],
     });
   };

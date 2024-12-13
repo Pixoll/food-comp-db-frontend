@@ -7,12 +7,14 @@
 
 .nutrients-table {
   border: 1px solid #dee2e6 !important;
+  border-radius: 5px !important;
 }
 
 .table-new-nutrients-header {
   background-color: #8fbc8f !important;
   color: white !important;
   font-weight: bold !important;
+  border-radius: 5px !important;
 }
 .table-new-nutrients-header th {
   background-color: white !important;

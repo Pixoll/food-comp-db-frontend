@@ -10,9 +10,10 @@ import {
 } from "../../../pages/AdminPage";
 import { useTranslation } from "react-i18next";
 import "../../../assets/css/_PreviewDataForm.css";
+
 type NewFood = {
-  commonName:  Record<"es", string> &
-  Partial<Record<"en" | "pt", string | null>>;
+  commonName: Record<"es", string> &
+    Partial<Record<"en" | "pt", string | null>>;
   ingredients?: Partial<Record<"es" | "en" | "pt", string | null>>;
   scientificNameId?: number;
   subspeciesId?: number;
@@ -50,20 +51,112 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
   const { generalData, nutrientsValueForm } = data;
   const { t } = useTranslation("global");
 
-  const hasValidData = (nutrient: NutrientMeasurementForm): boolean => {
+  const hasValidData = (
+    nutrient: NutrientMeasurementForm 
+  ): nutrient is Omit<NewNutrientMeasurement, "referenceCodes"> &
+    Required<Pick<NewNutrientMeasurement, "referenceCodes">> => {
     return (
-      nutrient.average !== null  &&
-      nutrient.dataType !== null
+      typeof nutrient.average !== "undefined" &&
+      typeof nutrient.dataType !== "undefined"
     );
   };
-  /*const handleSubmit = () =>{
-    const payload : NewFood = {
-      commonName: {es: data.generalData.commonName.es, en:data.generalData.commonName.en, pt:data.generalData.commonName.pt},
+  const handleSubmit = () => {
+    const payload: NewFood = {
+      commonName: {
+        es: data.generalData.commonName.es,
+        en: data.generalData.commonName.en,
+        pt: data.generalData.commonName.pt,
+      },
       ingredients: data.generalData.ingredients,
-      scientificNameId: data.generalData.scientificName
-
-    } 
-  }*/
+      scientificNameId: data.generalData.scientificNameId,
+      subspeciesId: data.generalData.subspeciesId,
+      groupId: data.generalData.groupId || -1,
+      typeId: data.generalData.typeId || -1,
+      langualCodes: [],
+      nutrientMeasurements: [
+        ...data.nutrientsValueForm.energy
+          .filter(hasValidData)
+          .map((energy) => ({
+            nutrientId: energy.nutrientId,
+            average: energy.average,
+            deviation: energy.deviation ?? undefined,
+            min: energy.min ?? undefined,
+            max: energy.max ?? undefined,
+            sampleSize: energy.sampleSize ?? undefined,
+            dataType: energy.dataType,
+            referenceCodes:
+              energy.referenceCodes.length > 0 ? energy.referenceCodes : undefined,
+          })),
+        ...data.nutrientsValueForm.mainNutrients
+          .filter(hasValidData)
+          .map((mainNutrient) => ({
+            nutrientId: mainNutrient.nutrientId,
+            average: mainNutrient.average,
+            deviation: mainNutrient.deviation ?? undefined,
+            min: mainNutrient.min ?? undefined,
+            max: mainNutrient.max ?? undefined,
+            sampleSize: mainNutrient.sampleSize ?? undefined,
+            dataType: mainNutrient.dataType,
+            referenceCodes:
+              mainNutrient.referenceCodes.length > 0
+                ? mainNutrient.referenceCodes
+                : undefined,
+          })),
+        ...data.nutrientsValueForm.mainNutrients
+          .flatMap((mainNutrient) =>
+            mainNutrient.components
+              .filter(hasValidData)
+              .map((component) => ({
+                nutrientId: component.nutrientId,
+                average: component.average,
+                deviation: component.deviation ?? undefined,
+                min: component.min ?? undefined,
+                max: component.max ?? undefined, 
+                sampleSize: component.sampleSize ?? undefined,
+                dataType: component.dataType,
+                referenceCodes:
+                  component.referenceCodes.length > 0
+                    ? component.referenceCodes
+                    : undefined,
+              }))
+          ),
+          ...data.nutrientsValueForm.micronutrients.minerals
+          .filter(hasValidData)
+          .map((mineral) => ({
+            nutrientId: mineral.nutrientId,
+            average: mineral.average,
+            deviation: mineral.deviation ?? undefined,
+            min: mineral.min ?? undefined,
+            max: mineral.max ?? undefined,
+            sampleSize: mineral.sampleSize ?? undefined,
+            dataType: mineral.dataType,
+            referenceCodes:
+            mineral.referenceCodes.length > 0
+                ? mineral.referenceCodes
+                : undefined,
+          })),
+          ...data.nutrientsValueForm.micronutrients.vitamins
+          .filter(hasValidData)
+          .map((vitamin) => ({
+            nutrientId: vitamin.nutrientId,
+            average: vitamin.average,
+            deviation: vitamin.deviation ?? undefined,
+            min: vitamin.min ?? undefined,
+            max: vitamin.max ?? undefined,
+            sampleSize: vitamin.sampleSize ?? undefined,
+            dataType: vitamin.dataType,
+            referenceCodes:
+            vitamin.referenceCodes.length > 0
+                ? vitamin.referenceCodes
+                : undefined,
+          })),
+        ],      
+      brand: data.generalData.brand || undefined,
+      observation: data.generalData.observation || undefined,
+      originIds: data.generalData.origins,
+      strain: data.generalData.strain || undefined,
+    };
+  };
   const renderNutrientTable = (
     title: string,
     nutrients: NutrientMeasurementForm[]
@@ -120,7 +213,7 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
         (!nutrient.components || nutrient.components.length === 0) &&
         hasValidData(nutrient)
     );
-    
+
     return (
       <>
         {nutrientsWithComponents.length > 0 && (
@@ -208,23 +301,23 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
               </thead>
               <tbody>
                 {nutrientsWithoutComponents
-                ?.filter(hasValidData)
-                .map((nutrient, index) => (
-                  <tr key={index}>
-                    <td>
-                      {getNutrientNameById(
-                        nutrient.nutrientId,
-                        nameAndIdNutrients
-                      )}
-                    </td>
-                    <td>{nutrient.average ?? "N/A"}</td>
-                    <td>{nutrient.deviation ?? "N/A"}</td>
-                    <td>{nutrient.min ?? "N/A"}</td>
-                    <td>{nutrient.max ?? "N/A"}</td>
-                    <td>{nutrient.sampleSize ?? "N/A"}</td>
-                    <td>{nutrient.dataType ?? "N/A"}</td>
-                  </tr>
-                ))}
+                  ?.filter(hasValidData)
+                  .map((nutrient, index) => (
+                    <tr key={index}>
+                      <td>
+                        {getNutrientNameById(
+                          nutrient.nutrientId,
+                          nameAndIdNutrients
+                        )}
+                      </td>
+                      <td>{nutrient.average ?? "N/A"}</td>
+                      <td>{nutrient.deviation ?? "N/A"}</td>
+                      <td>{nutrient.min ?? "N/A"}</td>
+                      <td>{nutrient.max ?? "N/A"}</td>
+                      <td>{nutrient.sampleSize ?? "N/A"}</td>
+                      <td>{nutrient.dataType ?? "N/A"}</td>
+                    </tr>
+                  ))}
               </tbody>
             </Table>
           </>
@@ -254,15 +347,11 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
               <Col md={3}>
                 <strong>{t("PreviewDataFrom.Group")}</strong>
               </Col>
-              <Col md={3}>
-                {generalData.groupId}
-              </Col>
+              <Col md={3}>{generalData.groupId}</Col>
               <Col md={3}>
                 <strong>{t("PreviewDataFrom.Type")}</strong>
               </Col>
-              <Col md={3}>
-                {generalData.typeId}
-              </Col>
+              <Col md={3}>{generalData.typeId}</Col>
             </Row>
             <Row className="mb-3">
               <Col md={3}>

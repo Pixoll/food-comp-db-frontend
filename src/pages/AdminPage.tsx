@@ -55,12 +55,6 @@ const mapMacroNutrientWithoutComponentsToForm = (
   macronutrient: MacroNutrient
 ): NutrientMeasurementForm => ({
   nutrientId: macronutrient.id,
-  average: null,
-  deviation: null,
-  min: null,
-  max: null,
-  sampleSize: null,
-  dataType: null,
   referenceCodes: [],
 });
 
@@ -84,34 +78,22 @@ const mapMacroNutrientWithComponentsToForm = (
   macronutrient: MacroNutrient
 ): NutrientMeasurementWithComponentsForm => ({
   nutrientId: macronutrient.id,
-  average: null,
-  deviation: null,
-  min: null,
-  max: null,
-  sampleSize: null,
-  dataType: null,
   referenceCodes: [],
   components:
     macronutrient.components?.map((component) => ({
       nutrientId: component.id,
-      average: null,
-      deviation: null,
-      min: null,
-      max: null,
-      sampleSize: null,
-      dataType: null,
       referenceCodes: [],
     })) || [],
 });
 
 export type NutrientMeasurementForm = {
   nutrientId: number;
-  average: number | null;
-  deviation: number | null;
-  min: number | null;
-  max: number | null;
-  sampleSize: number | null;
-  dataType: "analytic" | "calculated" | "assumed" | "borrowed" | null;
+  average?: number;
+  deviation?: number;
+  min?: number;
+  max?: number;
+  sampleSize?: number;
+  dataType?: "analytic" | "calculated" | "assumed" | "borrowed";
   referenceCodes: number[];
 };
 
@@ -134,12 +116,12 @@ type GeneralData = {
   observation?: string | null;
   scientificNameId?: number;
   subspeciesId?: number;
-  groupId: number;
-  typeId: number;
+  groupId?: number;
+  typeId?: number;
   commonName: Record<"es", string> &
     Partial<Record<"en" | "pt", string | null>>;
   ingredients: Partial<Record<"es" | "en" | "pt", string | null>>;
-  origins: (number | null)[];
+  origins: number[];
 };
 export type FoodForm = {
   generalData: GeneralData;
@@ -205,8 +187,8 @@ export default function AdminPage() {
       ingredients: {},
       scientificNameId: undefined,
       subspeciesId: undefined,
-      groupId: -1,
-      typeId: -1,
+      groupId: undefined,
+      typeId: undefined,
       origins: [...new Set(origins?.map((o) => o.id))],
     },
     nutrientsValueForm: {
@@ -289,12 +271,6 @@ export default function AdminPage() {
               ?.filter((macronutrient: MacroNutrient) => macronutrient.isEnergy)
               .map((macronutrient: MacroNutrient) => ({
                 nutrientId: macronutrient.id,
-                average: null,
-                deviation: null,
-                min: null,
-                max: null,
-                sampleSize: null,
-                dataType: null,
                 referenceCodes: [],
               })) || [],
 
@@ -315,12 +291,6 @@ export default function AdminPage() {
               nutrients.micronutrients?.vitamins?.map(
                 (vitamin: AnyNutrient) => ({
                   nutrientId: vitamin.id,
-                  average: null,
-                  deviation: null,
-                  min: null,
-                  max: null,
-                  sampleSize: null,
-                  dataType: null,
                   referenceCodes: [],
                 })
               ) || [],
@@ -328,12 +298,6 @@ export default function AdminPage() {
               nutrients.micronutrients?.minerals?.map(
                 (mineral: AnyNutrient) => ({
                   nutrientId: mineral.id,
-                  average: null,
-                  deviation: null,
-                  min: null,
-                  max: null,
-                  sampleSize: null,
-                  dataType: null,
                   referenceCodes: [],
                 })
               ) || [],

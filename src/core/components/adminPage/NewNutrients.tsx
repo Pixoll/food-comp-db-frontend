@@ -19,12 +19,12 @@ const NewNutrients: React.FC<NewNutrientsProps> = ({ nutrients, onNutrientUpdate
     setEditingNutrientId(nutrient.nutrientId);
     setFormData({
       ...nutrient,
-      average: nutrient.average || null,
-      deviation: nutrient.deviation || null,
-      min: nutrient.min || null,
-      max: nutrient.max || null,
-      sampleSize: nutrient.sampleSize || null,
-      dataType: nutrient.dataType || null,
+      average: nutrient.average || undefined,
+      deviation: nutrient.deviation || undefined,
+      min: nutrient.min || undefined,
+      max: nutrient.max || undefined,
+      sampleSize: nutrient.sampleSize || undefined,
+      dataType: nutrient.dataType || undefined,
       referenceCodes: nutrient.referenceCodes || [],
     });
   };

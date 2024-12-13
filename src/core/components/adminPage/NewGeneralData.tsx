@@ -47,8 +47,8 @@ type GeneralData = {
   observation?: string | null;
   scientificNameId?: number;
   subspeciesId?: number;
-  groupId: number;
-  typeId: number;
+  groupId?: number;
+  typeId?: number;
   commonName: Record<"es", string> &
     Partial<Record<"en" | "pt", string | null>>;
   ingredients: Partial<Record<"es" | "en" | "pt", string | null>>;
