@@ -17,7 +17,8 @@
     flex-grow: 1;
     height: 100%;
     width: 100%;
-    min-height: 80px;
+    
+    min-height: 70px;
     background-color: transparent;
     color: #000;
     border: 0 !important;
@@ -87,22 +88,25 @@
 }
 .custom-option-input {
     margin-top: 10px;
-    display: flex;
+    width: 100%;
+    display: flex; /* Para alinear el contenido */
     align-items: center;
     gap: 10px;
     animation: slideIn 0.3s ease-in-out;
 }
+
 .custom-option-input input {
-    flex: 1;
+    width: 100%; /* Asegura que el input ocupe todo el ancho disponible */
     font-size: 15px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box; /* Asegura que el padding no afecte el ancho */
 }
+
 .custom-option-input button {
-    padding: 8px 12px;
-    font-size: 14px;
+    font-size: 17px;
     color: #fff;
     background-color: #007bff;
     border: none;
@@ -110,9 +114,11 @@
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
+
 .custom-option-input button:hover {
     background-color: #0056b3;
 }
+
 
 /* Animations */
 @keyframes fadeIn {

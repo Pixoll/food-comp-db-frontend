@@ -310,15 +310,18 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
         </Col>
       </Row>
 
-      <Row xs={1} md={2}>
+      <Row xs={1} md={2} className="g-3">
         {/* Sección Grupo */}
-        <Row
-          xs={1}
-          md={3}
-          className="d-flex justify-content-between align-items-stretch mb-3"
-        >
+        <Row className="d-flex justify-content-between align-items-stretch g-3">
+          <Row>
+          <Form.Label>
+              <RequiredFieldLabel
+                label={t("DetailFood.label_group")}
+                tooltipMessage={t("DetailFood.required")}
+              />
+            </Form.Label>
+          </Row>
           <Col md={4} className="d-flex flex-column">
-
             {groups && (
               <SelectorWithInput
                 options={groups.map((group) => ({
@@ -354,6 +357,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
           </Col>
           <Col md={4} className="d-flex align-items-stretch">
             <Button
+              variant="success"
               onClick={handleCreateGroup}
               disabled={!newGroup || !groupCode}
               className="w-100"
@@ -364,11 +368,15 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
         </Row>
 
         {/* Sección Tipo */}
-        <Row
-          xs={1}
-          md={3}
-          className="d-flex justify-content-between align-items-stretch"
-        >
+        <Row className="d-flex justify-content-between align-items-stretch g-3">
+          <Row>
+            <Form.Label>
+              <RequiredFieldLabel
+                label={t("DetailFood.label_type")}
+                tooltipMessage={t("DetailFood.required")}
+              />
+            </Form.Label>
+          </Row>
           <Col md={4} className="d-flex flex-column">
             {types && (
               <SelectorWithInput
@@ -405,6 +413,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
           </Col>
           <Col md={4} className="d-flex align-items-stretch">
             <Button
+            variant="success"
               onClick={handleCreateType}
               disabled={!newType || !typeCode}
               className="w-100"
@@ -416,10 +425,13 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
       </Row>
       <Row xs={1} md={2}>
         {/* Sección Nombre Científico */}
-        <Row className="d-flex justify-content-between align-items-stretch mb-3">
+
+        <Row className="d-flex justify-content-between align-items-stretch g-3">
+          <Row>
+            <Form.Label>{t("NewGeneralData.name_scientist")}</Form.Label>
+          </Row>
           <Col md={6} className="d-flex flex-column">
             <Form.Group controlId="scientificName">
-
               {scientificNames && (
                 <SelectorWithInput
                   options={scientificNames.map((sname) => ({
@@ -449,6 +461,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
           </Col>
           <Col className="d-flex align-items-stretch">
             <Button
+            variant="success"
               onClick={handleCreateScientificName}
               disabled={!newScientificName}
               className="w-100"
@@ -459,7 +472,10 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
         </Row>
 
         {/* Sección Subespecie */}
-        <Row className="d-flex justify-content-between align-items-stretch">
+        <Row className="d-flex justify-content-between align-items-stretch g-3">
+          <Row>
+            <Form.Label>{t("NewGeneralData.Subspecies")}</Form.Label>
+          </Row>
           <Col md={6} className="d-flex flex-column">
             <Form.Group controlId="subspecies">
               {subspecies && (
@@ -491,6 +507,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
           </Col>
           <Col className="d-flex align-items-stretch">
             <Button
+            variant="success"
               onClick={handleCreateSubspecies}
               disabled={!newSubspecies}
               className="w-100"
