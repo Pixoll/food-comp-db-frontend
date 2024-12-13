@@ -9,17 +9,20 @@ import {
 } from "../../../pages/AdminPage";
 import { Reference } from "./getters/UseReferences";
 import ModalReferences from "./ModalReferences";
-
+import { PlusCircle } from 'lucide-react';
 type NewReferencesProps = {
   references: Reference[];
   nutrientValueForm: NutrientsValueForm;
   nameAndIdNutrients: NutrientSummary[];
   onSelectReferenceForNutrients: (updatedForm: NutrientsValueForm) => void;
 };
-const hasValidData = (nutrient: NutrientMeasurementForm): boolean => {
+ const hasValidData = <T extends NutrientMeasurementForm>(
+    nutrient: T
+    // @ts-expect-error
+  ): nutrient is Omit<T, "average" | "dataType"> & Required<Pick<T, "average" | "dataType">> => {
     return (
-      nutrient.average !== null  &&
-      nutrient.dataType !== null
+      typeof nutrient.average !== "undefined" &&
+      typeof nutrient.dataType !== "undefined"
     );
   };
 const NewReferences: React.FC<NewReferencesProps> = ({
@@ -141,58 +144,80 @@ const NewReferences: React.FC<NewReferencesProps> = ({
       setModalsState((prev) => ({ ...prev, [selectedReferenceIndex]: false }));
     }
   };
-
   return (
-    <div className="references-container">
+    <div className="references-container space-y-4 py-4">
       {references.map((ref, index) => (
-        <Row key={index} className="mb-4 align-items-center">
-          <Col md={8}>
-            <Card className="shadow-sm">
-              <Card.Body>
-                <Card.Title className="text-primary">{ref.title}</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">
-                  {ref.type.charAt(0).toUpperCase() + ref.type.slice(1)} -{" "}
-                  {ref.year || "Unknown Year"}
-                </Card.Subtitle>
-                <Card.Text>
+        <Card
+          key={index}
+          className="shadow-lg border-0 overflow-hidden mb-4 hover:scale-[1.01] transition-transform duration-300"
+        >
+          <Row className="g-0 h-100 align-items-stretch">
+            <Col md={9} className="p-4">
+              <div className="space-y-2 h-100">
+                <h3 className="text-xl font-bold text-gray-800 mb-2">
+                  {ref.title}
+                </h3>
+                <div className="text-sm text-gray-600 mb-3">
+                  <span className="font-medium capitalize">
+                    {ref.type.toLowerCase()}
+                  </span>
+                  {ref.year && (
+                    <span className="ml-2 text-gray-500">
+                      • {ref.year}
+                    </span>
+                  )}
+                </div>
+                <div className="space-y-1 text-sm text-gray-700">
                   {ref.authors && (
                     <div>
-                      <strong>Authors:</strong> {ref.authors.join(", ")}
+                      <span className="font-semibold">Autores:</span>{" "}
+                      {ref.authors.join(", ")}
                     </div>
                   )}
                   {ref.journalName && (
                     <div>
-                      <strong>Journal:</strong> {ref.journalName}
+                      <span className="font-semibold">Publicación:</span>{" "}
+                      {ref.journalName}
                     </div>
                   )}
                   {ref.pageStart && ref.pageEnd && (
                     <div>
-                      <strong>Pages:</strong> {ref.pageStart} - {ref.pageEnd}
+                      <span className="font-semibold">Páginas:</span>{" "}
+                      {ref.pageStart} - {ref.pageEnd}
                     </div>
                   )}
                   {ref.city && (
                     <div>
-                      <strong>City:</strong> {ref.city}
+                      <span className="font-semibold">Ciudad:</span>{" "}
+                      {ref.city}
                     </div>
                   )}
                   {ref.other && (
                     <div>
-                      <strong>Other:</strong> {ref.other}
+                      <span className="font-semibold">Información adicional:</span>{" "}
+                      {ref.other}
                     </div>
                   )}
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col
-            md={4}
-            className="d-flex justify-content-center align-items-center"
-          >
-            <Button variant="success" onClick={() => handleShowModal(index)}>
-              Agregar
-            </Button>
-          </Col>
-        </Row>
+                </div>
+              </div>
+            </Col>
+            <Col
+              md={3}
+              className="d-flex"
+            >
+              <Button
+                variant="success"
+                className="w-100 d-flex align-items-center justify-content-center border-0 rounded-0 hover:bg-green-700 transition-colors duration-300"
+                onClick={() => handleShowModal(index)}
+              >
+                <div className="text-center">
+                  <PlusCircle className="mx-auto mb-2" size={24} />
+                  <span className="d-block">Agregar</span>
+                </div>
+              </Button>
+            </Col>
+          </Row>
+        </Card>
       ))}
       {references.map((ref, index) => (
         <ModalReferences
@@ -207,5 +232,4 @@ const NewReferences: React.FC<NewReferencesProps> = ({
     </div>
   );
 };
-
 export default NewReferences;
