@@ -1,5 +1,20 @@
 import React, { useState } from "react";
-import { Form, Row, Col, Button } from "react-bootstrap";
+import { 
+  Form, 
+  Row, 
+  Col, 
+  Button, 
+  InputGroup 
+} from 'react-bootstrap';
+import { 
+  TagIcon, 
+  ListIcon, 
+  FolderIcon, 
+  FileTextIcon, 
+  PackageIcon,
+  TypeIcon,
+  PlusIcon
+} from 'lucide-react';
 import { Group } from "./getters/useGroups";
 import { Type } from "./getters/useTypes";
 import {
@@ -237,183 +252,211 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
   };
 
   return (
-    <Form>
-      <Row>
+    <Form className="p-4 bg-light rounded shadow-sm">
+      {/* First Row: Code and Strain */}
+      <Row className="mb-3">
         <Col md={6}>
           <Form.Group controlId="code">
-            <Form.Label column sm={2}>
-              <RequiredFieldLabel
-                label={t("DetailFood.code")}
-                tooltipMessage={t("DetailFood.required")}
+            <Form.Label>
+              <RequiredFieldLabel 
+                label={t("DetailFood.code")} 
+                tooltipMessage={t("DetailFood.required")} 
               />
             </Form.Label>
-            <Form.Control
-              type="text"
-              name="code"
-              value={formData.code}
-              onChange={handleInputChange}
-            />
+            <InputGroup>
+              <InputGroup.Text><TagIcon size={18} /></InputGroup.Text>
+              <Form.Control
+                type="text"
+                name="code"
+                value={formData.code || ''}
+                onChange={handleInputChange}
+                placeholder={t("DetailFood.code")}
+              />
+            </InputGroup>
           </Form.Group>
         </Col>
         <Col md={6}>
           <Form.Group controlId="strain">
             <Form.Label>{t("NewGeneralData.strain")}</Form.Label>
-            <Form.Control
-              type="text"
-              name="strain"
-              value={formData.strain || ""}
-              onChange={handleInputChange}
-            />
+            <InputGroup>
+              <InputGroup.Text><ListIcon size={18} /></InputGroup.Text>
+              <Form.Control
+                type="text"
+                name="strain"
+                value={formData.strain || ""}
+                onChange={handleInputChange}
+                placeholder={t("NewGeneralData.strain")}
+              />
+            </InputGroup>
           </Form.Group>
         </Col>
       </Row>
-      <Row>
+
+      {/* Second Row: Brand and Observation */}
+      <Row className="mb-3">
         <Col md={6}>
           <Form.Group controlId="brand">
             <Form.Label>{t("NewGeneralData.brand")}</Form.Label>
-            <Form.Control
-              type="text"
-              name="brand"
-              value={formData.brand || ""}
-              onChange={handleInputChange}
-            />
+            <InputGroup>
+              <InputGroup.Text><PackageIcon size={18} /></InputGroup.Text>
+              <Form.Control
+                type="text"
+                name="brand"
+                value={formData.brand || ""}
+                onChange={handleInputChange}
+                placeholder={t("NewGeneralData.brand")}
+              />
+            </InputGroup>
           </Form.Group>
         </Col>
         <Col md={6}>
           <Form.Group controlId="observation">
             <Form.Label>{t("NewGeneralData.Observation")}</Form.Label>
-            <Form.Control
-              as="textarea"
-              name="observation"
-              value={formData.observation || ""}
-              onChange={handleInputChange}
-            />
+            <InputGroup>
+              <InputGroup.Text><FileTextIcon size={18} /></InputGroup.Text>
+              <Form.Control
+                as="textarea"
+                name="observation"
+                value={formData.observation || ""}
+                onChange={handleInputChange}
+                placeholder={t("NewGeneralData.Observation")}
+                rows={3}
+              />
+            </InputGroup>
           </Form.Group>
         </Col>
       </Row>
 
-      <Row xs={1} md={2} className="g-3">
-        {/* Sección Grupo */}
-        <Row className="d-flex justify-content-between align-items-stretch g-3">
-          <Row>
+      {/* Group Section */}
+      <Row className="mb-3">
+        <Col>
           <Form.Label>
-              <RequiredFieldLabel
-                label={t("DetailFood.label_group")}
-                tooltipMessage={t("DetailFood.required")}
-              />
-            </Form.Label>
-          </Row>
-          <Col md={4} className="d-flex flex-column">
-            {groups && (
-              <SelectorWithInput
-                options={groups.map((group) => ({
-                  id: group.id,
-                  name: group.name,
-                }))}
-                selectedValue={searchGroupNameById(formData.groupId, groups)}
-                placeholder={t("NewGeneralData.select_G")}
-                onSelect={(id, name) => {
-                  if (id !== undefined) {
-                    const updatedFormData = {
-                      ...formData,
-                      groupId: id,
-                    };
-                    setGroupCode("");
-                    setFormData(updatedFormData);
-                    onUpdate(updatedFormData);
-                  } else if (name) {
-                    setNewGroup(name);
-                  }
-                }}
-              />
-            )}
-          </Col>
-          <Col md={4} className="d-flex align-items-stretch">
-            <Form.Control
-              type="text"
-              placeholder={t("NewGeneralData.Group")}
-              value={groupCode}
-              onChange={(e) => setGroupCode(e.target.value)}
-              className="h-100"
+            <RequiredFieldLabel
+              label={t("DetailFood.label_group")}
+              tooltipMessage={t("DetailFood.required")}
             />
-          </Col>
-          <Col md={4} className="d-flex align-items-stretch">
-            <Button
-              variant="success"
-              onClick={handleCreateGroup}
-              disabled={!newGroup || !groupCode}
-              className="w-100"
-            >
-              {t("NewGeneralData.create_group")}
-            </Button>
-          </Col>
-        </Row>
-
-        {/* Sección Tipo */}
-        <Row className="d-flex justify-content-between align-items-stretch g-3">
+          </Form.Label>
           <Row>
-            <Form.Label>
-              <RequiredFieldLabel
-                label={t("DetailFood.label_type")}
-                tooltipMessage={t("DetailFood.required")}
-              />
-            </Form.Label>
+            <Col md={4}>
+              {groups && (
+                <SelectorWithInput
+                  options={groups.map((group) => ({
+                    id: group.id,
+                    name: group.name,
+                  }))}
+                  selectedValue={searchGroupNameById(formData.groupId, groups)}
+                  placeholder={t("NewGeneralData.select_G")}
+                  onSelect={(id, name) => {
+                    if (id !== undefined) {
+                      const updatedFormData = {
+                        ...formData,
+                        groupId: id,
+                      };
+                      setGroupCode("");
+                      setFormData(updatedFormData);
+                      onUpdate(updatedFormData);
+                    } else if (name) {
+                      setNewGroup(name);
+                    }
+                  }}
+                />
+              )}
+            </Col>
+            <Col md={4}>
+              <InputGroup className="w-100 h-100">
+                <InputGroup.Text><FolderIcon size={18} /></InputGroup.Text>
+                <Form.Control
+                  className="h-100"
+                  type="text"
+                  placeholder={t("NewGeneralData.Group")}
+                  value={groupCode}
+                  onChange={(e) => setGroupCode(e.target.value)}
+                />
+              </InputGroup>
+            </Col>
+            <Col md={4}>
+              <Button
+                variant="outline-success"
+                onClick={handleCreateGroup}
+                disabled={!newGroup || !groupCode}
+                className="w-100 h-100"
+              >
+                <PlusIcon size={18} className="me-2" />
+                {t("NewGeneralData.create_group")}
+              </Button>
+            </Col>
           </Row>
-          <Col md={4} className="d-flex flex-column">
-            {types && (
-              <SelectorWithInput
-                options={types.map((type) => ({
-                  id: type.id,
-                  name: type.name,
-                }))}
-                selectedValue={searchTypeNameById(formData.typeId, types)}
-                placeholder={t("NewGeneralData.select_A")}
-                onSelect={(id, name) => {
-                  if (id !== undefined) {
-                    const updatedFormData = {
-                      ...formData,
-                      typeId: id,
-                    };
-                    setTypeCode("");
-                    setFormData(updatedFormData);
-                    onUpdate(updatedFormData);
-                  } else if (name) {
-                    setNewType(name);
-                  }
-                }}
-              />
-            )}
-          </Col>
-          <Col md={4} className="d-flex align-items-stretch">
-            <Form.Control
-              type="text"
-              placeholder={t("NewGeneralData.Type")}
-              value={typeCode}
-              onChange={(e) => setTypeCode(e.target.value)}
-              className="h-100"
-            />
-          </Col>
-          <Col md={4} className="d-flex align-items-stretch">
-            <Button
-            variant="success"
-              onClick={handleCreateType}
-              disabled={!newType || !typeCode}
-              className="w-100"
-            >
-              {t("NewGeneralData.Create")}
-            </Button>
-          </Col>
-        </Row>
+        </Col>
       </Row>
-      <Row xs={1} md={2}>
-        {/* Sección Nombre Científico */}
 
-        <Row className="d-flex justify-content-between align-items-stretch g-3">
+      {/* Type Section */}
+      <Row className="mb-3">
+        <Col>
+          <Form.Label>
+            <RequiredFieldLabel
+              label={t("DetailFood.label_type")}
+              tooltipMessage={t("DetailFood.required")}
+            />
+          </Form.Label>
           <Row>
-            <Form.Label>{t("NewGeneralData.name_scientist")}</Form.Label>
+            <Col md={4}>
+              {types && (
+                <SelectorWithInput
+                  options={types.map((type) => ({
+                    id: type.id,
+                    name: type.name,
+                  }))}
+                  selectedValue={searchTypeNameById(formData.typeId, types)}
+                  placeholder={t("NewGeneralData.select_A")}
+                  onSelect={(id, name) => {
+                    if (id !== undefined) {
+                      const updatedFormData = {
+                        ...formData,
+                        typeId: id,
+                      };
+                      setTypeCode("");
+                      setFormData(updatedFormData);
+                      onUpdate(updatedFormData);
+                    } else if (name) {
+                      setNewType(name);
+                    }
+                  }}
+                />
+              )}
+            </Col>
+            <Col md={4}>
+              <InputGroup className="w-100 h-100">
+                <InputGroup.Text><TypeIcon size={18} /></InputGroup.Text>
+                <Form.Control
+                  type="text"
+                  placeholder={t("NewGeneralData.Type")}
+                  value={typeCode}
+                  onChange={(e) => setTypeCode(e.target.value)}
+                  className="h-100"
+                />
+              </InputGroup>
+            </Col>
+            <Col md={4}>
+              <Button
+                variant="outline-success"
+                onClick={handleCreateType}
+                disabled={!newType || !typeCode}
+                className="w-100 h-100"
+              >
+                <PlusIcon size={18} className="me-2" />
+                {t("NewGeneralData.Create")}
+              </Button>
+            </Col>
           </Row>
-          <Col md={6} className="d-flex flex-column">
-            <Form.Group controlId="scientificName">
+        </Col>
+      </Row>
+
+      {/* Scientific Name Section */}
+      <Row className="mb-3">
+        <Col>
+          <Form.Label>{t("NewGeneralData.name_scientist")}</Form.Label>
+          <Row>
+            <Col md={6}>
               {scientificNames && (
                 <SelectorWithInput
                   options={scientificNames.map((sname) => ({
@@ -439,27 +482,28 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
                   }}
                 />
               )}
-            </Form.Group>
-          </Col>
-          <Col className="d-flex align-items-stretch">
-            <Button
-            variant="success"
-              onClick={handleCreateScientificName}
-              disabled={!newScientificName}
-              className="w-100"
-            >
-              {t("NewGeneralData.Create_Scientific")}
-            </Button>
-          </Col>
-        </Row>
-
-        {/* Sección Subespecie */}
-        <Row className="d-flex justify-content-between align-items-stretch g-3">
-          <Row>
-            <Form.Label>{t("NewGeneralData.Subspecies")}</Form.Label>
+            </Col>
+            <Col>
+              <Button
+                variant="outline-success"
+                onClick={handleCreateScientificName}
+                disabled={!newScientificName}
+                className="w-100 h-100"
+              >
+                 <PlusIcon size={18} className="me-2" />
+                {t("NewGeneralData.Create_Scientific")}
+              </Button>
+            </Col>
           </Row>
-          <Col md={6} className="d-flex flex-column">
-            <Form.Group controlId="subspecies">
+        </Col>
+      </Row>
+
+      {/* Subspecies Section */}
+      <Row className="mb-3">
+        <Col>
+          <Form.Label>{t("NewGeneralData.Subspecies")}</Form.Label>
+          <Row>
+            <Col md={6}>
               {subspecies && (
                 <SelectorWithInput
                   options={subspecies.map((sname) => ({
@@ -485,22 +529,24 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
                   }}
                 />
               )}
-            </Form.Group>
-          </Col>
-          <Col className="d-flex align-items-stretch">
-            <Button
-            variant="success"
-              onClick={handleCreateSubspecies}
-              disabled={!newSubspecies}
-              className="w-100"
-            >
-              {t("NewGeneralData.Create_subspecies")}
-            </Button>
-          </Col>
-        </Row>
+            </Col>
+            <Col>
+              <Button
+                variant="outline-success"
+                onClick={handleCreateSubspecies}
+                disabled={!newSubspecies}
+                className="w-100 h-100"
+              >
+                 <PlusIcon size={18} className="me-2" />
+                {t("NewGeneralData.Create_subspecies")}
+              </Button>
+            </Col>
+          </Row>
+        </Col>
       </Row>
 
-      <Row>
+      {/* Common Names Section */}
+      <Row className="mb-3">
         <Col md={12}>
           <Form.Group controlId="commonName">
             <Form.Label>
@@ -511,7 +557,6 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
                 )}`}
               />
             </Form.Label>
-
             {languages?.map((lang) => (
               <Form.Control
                 key={lang.code}
@@ -534,7 +579,9 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
           </Form.Group>
         </Col>
       </Row>
-      <Row>
+
+      {/* Ingredients Section */}
+      <Row className="mb-3">
         <Col md={12}>
           <Form.Group controlId="ingredients">
             <Form.Label>{t("NewGeneralData.Ingredients")}</Form.Label>

@@ -91,7 +91,7 @@ const NewAuthors: React.FC<NewAuthorsProps> = ({
   };
 
   return (
-    <Container>
+    <Container> 
       <Row className="row">
         {selectors.map((_, index) => (
           <Col key={index} md={12} className="mb-2">
