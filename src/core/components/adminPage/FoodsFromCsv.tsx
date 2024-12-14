@@ -1,8 +1,11 @@
+import { Readable } from "node:stream";
 import React, { useState } from "react";
-import FoodTableAdmin from "./FoodTableAdmin";
 import { useTranslation } from "react-i18next";
+import XLSX from "xlsx";
 import { useAuth } from "../../context/AuthContext";
 import makeRequest from "../../utils/makeRequest";
+import FoodTableAdmin from "./FoodTableAdmin";
+
 type CSVValue<T> = {
   parsed: T | null;
   raw: string;
@@ -50,7 +53,7 @@ export type CSVFood = {
   measurements: CSVMeasurement[];
 };
 
-const FoodsFromCsv = () => {
+export default function FoodsFromCsv() {
   const { t } = useTranslation("global");
   const { state } = useAuth();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -61,18 +64,41 @@ const FoodsFromCsv = () => {
       setSelectedFile(e.target.files[0]);
     }
   };
-  const processData = () => {
+
+  const processData = async () => {
     if (!selectedFile) {
       alert(t("AdminPage.noFileSelected"));
       return;
     }
+
+    const data = await selectedFile.arrayBuffer();
+    const wb = XLSX.read(data, {
+      cellFormula: false,
+      cellHTML: false,
+    });
+
+    const csv = await Promise.all(Object.values(wb.Sheets).map(ws =>
+      XLSX.utils.sheet_to_csv(ws, {
+        blankrows: false,
+        strip: true,
+      })
+    ));
+
+    const payload = {
+      foods: csv[0],
+      references: csv[1],
+    };
+
+    console.log(payload);
+
     makeRequest(
       "post",
       "/csv",
-      selectedFile,
+      payload,
       state.token,
       (response) => {
         setData(response.data);
+        console.log(response.data);
       },
       (error) => {
         console.error(error);
@@ -108,10 +134,9 @@ const FoodsFromCsv = () => {
       )}
       {data && data.length > 0 && (
         <div>
-          <FoodTableAdmin data={data} />
+          <FoodTableAdmin data={data}/>
         </div>
       )}
     </div>
   );
 };
-export default FoodsFromCsv;
