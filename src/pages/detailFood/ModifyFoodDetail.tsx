@@ -6,6 +6,8 @@ import NutrientAccordionModify from "../../core/components/detailFood/NutrientAc
 import SelectorWithInput from "../../core/components/detailFood/SelectorWithInput";
 import Footer from "../../core/components/Footer";
 import useFetch, { FetchStatus } from "../../core/hooks/useFetch";
+import { useToast } from "../../core/context/ToastContext";
+import ToastComponent from "../../core/components/ToastComponent";
 import {
   SingleFoodResult,
   NutrientsValue,
@@ -32,6 +34,7 @@ export default function ModifyFoodDetail() {
   const data = result.status === FetchStatus.Success ? result.data : null;
   const groupsResult = useGroups();
   const typesResult = useTypes();
+  const { addToast } = useToast();
 
   const { state } = useAuth();
   const token = state.token;
@@ -456,6 +459,16 @@ export default function ModifyFoodDetail() {
           },
         }
       );
+      console.log("Antes de addToast");
+      addToast({
+        type: "Success",
+        message:
+          response.data.message ||
+          "Los cambios fueron realizados exitosamente",
+        title: "Éxito",
+        duration: 5000,
+      });
+      console.log("Después de addToast");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if ((error.response?.status || -1) < 400) {
@@ -465,6 +478,12 @@ export default function ModifyFoodDetail() {
           "Error en la solicitud:",
           error.response?.data || error.message
         );
+        addToast({
+          type: 'Danger',
+          message: error.response?.data || error.message || 'A ocurrido un error',
+          title: 'Error',
+          duration: 5000
+        });
       } else {
         console.error("Error desconocido:", error);
       }
