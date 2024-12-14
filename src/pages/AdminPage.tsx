@@ -10,6 +10,8 @@ import NewNutrients from "../core/components/adminPage/NewNutrients";
 import NewGeneralData from "../core/components/adminPage/NewGeneralData";
 import Origins from "../core/components/adminPage/Origins";
 import PreviewDataForm from "../core/components/adminPage/PreviewDataForm";
+import FoodsFromCsv from "../core/components/adminPage/FoodsFromCsv";
+
 import { FetchStatus } from "../core/hooks/useFetch";
 
 import { Origin } from "../core/types/SingleFoodResult";
@@ -67,22 +69,6 @@ const mapMacroNutrientWithoutComponentsToForm = (
   nutrientId: macronutrient.id,
   referenceCodes: [],
 });
-
-// ----------------TESTEANDO---------------
-//Esto es la base para ver la tabla con cosas temporales, debe linkearse a lo que llega del CSV...
-const adminData = [
-  { id: "1", name: "Manzana", code: "apple" },
-  { id: "2", name: "Banana", code: "banana" },
-  { id: "3", name: "Pera", code: "pear" },
-  { id: "4", name: "Pera", code: "pear" },
-  { id: "5", name: "Pera", code: "pear" },
-  { id: "6", name: "Pera", code: "pear" },
-  { id: "7", name: "Pera", code: "pear" },
-  { id: "8", name: "Pera", code: "pear" },
-  { id: "9", name: "Pera", code: "pear" },
-  { id: "10", name: "Pera", code: "pear" },
-];
-// -----------------------------------------
 
 const mapMacroNutrientWithComponentsToForm = (
   macronutrient: MacroNutrient
@@ -181,11 +167,6 @@ export default function AdminPage() {
     }));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    if (e.target.files && e.target.files.length > 0) {
-      setSelectedFile(e.target.files[0]);
-    }
-  };
   const { regions, provinces, communes, locations } = useOrigins();
   const [origins, setOrigins] = useState<Origin[] | undefined>([]);
 
@@ -671,32 +652,7 @@ export default function AdminPage() {
         )}
 
         {view === "file" && (
-          <div className="right-container">
-            <h3 className="subtitle">{t("AdminPage.import")}</h3>
-            <input
-              id="fileInput"
-              className="file-input"
-              type="file"
-              accept=".xlsx, .xls, .csv"
-              onChange={(e) => handleFileChange(e)}
-            />
-            <label htmlFor="fileInput" className="file-input-label">
-              Seleccionar archivo
-            </label>
-            {selectedFile && <p className="file-name">{selectedFile.name}</p>}
-            <p className="helper-text">
-              {t("AdminPage.upload")} <strong>Excel</strong> {t("AdminPage.or")}{" "}
-              <strong>CSV</strong> {t("AdminPage.point")}
-            </p>
-            {selectedFile && (
-              <div className="button-container">
-                <button className="button">{t("AdminPage.process")}</button>
-              </div>
-            )}
-            <div>
-              <FoodTableAdmin data={adminData} />
-            </div>
-          </div>
+          <FoodsFromCsv />
         )}
       </div>
     </div>

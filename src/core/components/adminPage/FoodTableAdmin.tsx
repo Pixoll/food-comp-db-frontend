@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import PaginationAdmin from "./PaginationAdmin"; // Asegúrate de tener este componente disponible
+import Pagination from "../search/Pagination";
 import { useAuth } from "../../context/AuthContext";
 import { useTranslation } from "react-i18next";
+import { CSVFood } from "./FoodsFromCsv";
 
 interface FoodResultsListProps {
-  data: { id: string; name: string; code: string }[]; // Asegúrate de que los datos tengan esta estructura
+  data: CSVFood[]; 
 }
 
-const FoodTable: React.FC<FoodResultsListProps> = ({ data }) => {
+const FoodTableAdmin: React.FC<FoodResultsListProps> = ({ data }) => {
   const navigate = useNavigate();
-  const { state } = useAuth(); // Mantener autenticación para "modificar"
+  const { state } = useAuth(); 
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 7;
   const [filteredData, setFilteredData] = useState(data);
   const { t } = useTranslation("global");
 
-  // Calcular los datos para la página actual
-  const npage = Math.ceil(filteredData.length / recordsPerPage); // Número total de páginas
+  const npage = Math.ceil(filteredData.length / recordsPerPage); 
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
   const records = filteredData.slice(firstIndex, lastIndex);
@@ -33,8 +33,8 @@ const FoodTable: React.FC<FoodResultsListProps> = ({ data }) => {
     }
   };
 
-  const [view, setView] = useState("list"); // Inicialmente muestra la lista
-const [selectedFood, setSelectedFood] = useState(null); // Para almacenar el alimento seleccionado
+  const [view, setView] = useState("list"); 
+const [selectedFood, setSelectedFood] = useState(null);
 
 return (
   <div className="food-list">
@@ -54,12 +54,11 @@ return (
                 </tr>
               </thead>
               <tbody>
-                {records.map((item) => (
-                  <tr key={item.id}>
-                    <td>{item.id}</td>
-                    <td>{item.name}</td>
+                {records.map((item, index) => (
+                  <tr key={index}>
+
                     <td>
-                      <button onClick={() => { setView("verificar"); {/*setSelectedFood(item); LA IDEA ES ACCEDER AL ITEM...*/} }}>
+                      <button onClick={() => { setView("verificar");}}>
                         Verificar
                       </button>
                     </td>
@@ -68,7 +67,7 @@ return (
               </tbody>
             </table>
             {npage > 1 && (
-              <PaginationAdmin currentPage={currentPage} npage={npage} onPageChange={changePage} />
+              <Pagination currentPage={currentPage} npage={npage} onPageChange={changePage} />
             )}
           </>
         )}
@@ -80,7 +79,6 @@ return (
         <h2>{t("FoodTableAdmin.Check")}o</h2>
         {selectedFood && (
           <div className="food-details">
-            {/* Agrega más detalles o acciones relacionadas con el alimento */}
           </div>
         )}
         <button className="button" onClick={() => setView("list")}>{t("FoodTableAdmin.Back")}</button>
@@ -90,4 +88,4 @@ return (
 );
 };
 
-export default FoodTable;
+export default FoodTableAdmin;

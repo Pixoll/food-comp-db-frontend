@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Row, Col, Table, Badge} from "react-bootstrap";
+import { Card, Row, Col, Table, Badge } from "react-bootstrap";
 import { Info, Leaf, Database, Zap, CodeIcon } from "lucide-react";
 import { FoodForm } from "../../../pages/AdminPage";
 import { Group } from "./getters/useGroups";
@@ -7,7 +7,12 @@ import { LangualCode } from "./getters/useLangualCodes";
 import { ScientificName } from "./getters/useScientificNames";
 import { Subspecies } from "./getters/useSubspecies";
 import { Type } from "./getters/useTypes";
-import { searchScientificNameById, searchGroupNameById, searchSubspeciesNameById, searchTypeNameById } from "./NewGeneralData";
+import {
+  searchScientificNameById,
+  searchGroupNameById,
+  searchSubspeciesNameById,
+  searchTypeNameById,
+} from "./NewGeneralData";
 import makeRequest from "../../utils/makeRequest";
 import {
   NutrientSummary,
@@ -16,12 +21,14 @@ import {
   NutrientMeasurementWithComponentsForm,
 } from "../../../pages/AdminPage";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../../context/AuthContext";
+import { useToast } from "../../context/ToastContext";
 import "../../../assets/css/_PreviewDataForm.css";
 
 const searchLangualCodeById = (id: number, langualCodes: LangualCode[]) => {
-   const langualCode = langualCodes.find((langualCode) => langualCode.id===id)
-   return langualCode
-}
+  const langualCode = langualCodes.find((langualCode) => langualCode.id === id);
+  return langualCode;
+};
 type NewFood = {
   commonName: Record<"es", string> &
     Partial<Record<"en" | "pt", string | null>>;
@@ -67,11 +74,12 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
   groups,
   langualCodes,
   subspecies,
-  types
+  types,
 }) => {
   const { generalData, nutrientsValueForm } = data;
   const { t } = useTranslation("global");
-
+  const { state } = useAuth();
+  const { addToast } = useToast();
   const hasValidData = <T extends NutrientMeasurementForm>(
     nutrient: T
     // @ts-expect-error
@@ -94,7 +102,7 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
       subspeciesId: data.generalData.subspeciesId,
       groupId: data.generalData.groupId || -1,
       typeId: data.generalData.typeId || -1,
-      langualCodes: [],
+      langualCodes: data.generalData.langualCodes,
       nutrientMeasurements: [
         ...data.nutrientsValueForm.energy
           .filter(hasValidData)
@@ -177,14 +185,27 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
       originIds: data.generalData.origins,
       strain: data.generalData.strain || undefined,
     };
-    console.log(payload)
-    // makeRequest(
-    //   "post",
-    //   `/foods/${code}`,
-    //   payload,
-    //   (response) =>{},
-    //   error=>{}
-    // )
+    console.log(payload);
+    makeRequest(
+      "post",
+      `/foods/${generalData.code}`,
+      payload,
+      state.token,
+      (response) => {
+        addToast({
+          message: "Se creo exitosamente",
+          title: "Éxito",
+          type: "Success",
+        });
+      },
+      (error) => {
+        addToast({
+          message: error.response?.data?.message ?? error.message ?? "Error",
+          title: "Fallo",
+          type: "Success",
+        });
+      }
+    );
   };
 
   const renderNutrientTable = (
@@ -401,7 +422,7 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
                       </td>
                       <td className="text-center">
                         <Badge>{nutrient.deviation?.toString()}</Badge>
-                      </td> 
+                      </td>
                       <td className="text-center">
                         <Badge>{nutrient.min?.toString()}</Badge>
                       </td>
@@ -445,19 +466,26 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
             <Col md={3}>
               <strong>{t("PreviewDataFrom.Scientific")}</strong>
             </Col>
-            <Col md={3}>{searchScientificNameById(generalData.scientificNameId, scientificNames)}</Col>
+            <Col md={3}>
+              {searchScientificNameById(
+                generalData.scientificNameId,
+                scientificNames
+              )}
+            </Col>
             <Col md={3}>
               <strong>{"Tipo de alimento"}</strong>
             </Col>
-            <Col md={3}>{searchTypeNameById(generalData.typeId,types)}</Col>
+            <Col md={3}>{searchTypeNameById(generalData.typeId, types)}</Col>
             <Col md={3}>
               <strong>{"Grupo alimentario"}</strong>
             </Col>
-            <Col md={3}>{searchGroupNameById(generalData.groupId,groups)}</Col>
+            <Col md={3}>{searchGroupNameById(generalData.groupId, groups)}</Col>
             <Col md={3}>
               <strong>{"Subespecie"}</strong>
             </Col>
-            <Col md={3}>{searchSubspeciesNameById(generalData.subspeciesId, subspecies)}</Col>
+            <Col md={3}>
+              {searchSubspeciesNameById(generalData.subspeciesId, subspecies)}
+            </Col>
             <Col md={3}>
               <strong>{"Observación"}</strong>
             </Col>
@@ -469,7 +497,7 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
             <Col md={3}>
               <strong>{"Variante"}</strong>
             </Col>
-            <Col md={3}>{generalData.strain }</Col>
+            <Col md={3}>{generalData.strain}</Col>
           </Row>
 
           {/* Ingredients and Common Names Section */}
@@ -587,35 +615,46 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
           </Card.Body>
         </Card>
       )}
-      {data.generalData.langualCodes && data.generalData.langualCodes.length > 0 && (
-        <Card className="mb-4">
-          <Card.Header className="d-flex align-items-center">
-            <div style={{ color: "#17a2b8", marginRight: "10px" }}>
-              <CodeIcon size={24} />
-            </div>
-            <h5 className="mb-0">Codigos languales</h5>
-          </Card.Header>
-          <Card.Body>
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th style={{ width: "10%" }}>Codigo</th>
-                  <th style={{ width: "90%" }}>Descriptor</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.generalData.langualCodes.map((langualCodeID, index) => (
-                  <tr key={index}>
-                    <td>{searchLangualCodeById(langualCodeID, langualCodes)?.code}</td>
-                    <td>{searchLangualCodeById(langualCodeID, langualCodes)?.descriptor}</td>
+      {data.generalData.langualCodes &&
+        data.generalData.langualCodes.length > 0 && (
+          <Card className="mb-4">
+            <Card.Header className="d-flex align-items-center">
+              <div style={{ color: "#17a2b8", marginRight: "10px" }}>
+                <CodeIcon size={24} />
+              </div>
+              <h5 className="mb-0">Codigos languales</h5>
+            </Card.Header>
+            <Card.Body>
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                    <th style={{ width: "10%" }}>Codigo</th>
+                    <th style={{ width: "90%" }}>Descriptor</th>
                   </tr>
-                ))}
-              </tbody>
-            </Table>
-          </Card.Body>
-        </Card>
-      )}
-      <button className="button-form-of-food">Validar y enviar</button>
+                </thead>
+                <tbody>
+                  {data.generalData.langualCodes.map((langualCodeID, index) => (
+                    <tr key={index}>
+                      <td>
+                        {
+                          searchLangualCodeById(langualCodeID, langualCodes)
+                            ?.code
+                        }
+                      </td>
+                      <td>
+                        {
+                          searchLangualCodeById(langualCodeID, langualCodes)
+                            ?.descriptor
+                        }
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </Card.Body>
+          </Card>
+        )}
+      <button onClick={handleSubmit} className="button-form-of-food">Validar y enviar</button>
     </div>
   );
 };
