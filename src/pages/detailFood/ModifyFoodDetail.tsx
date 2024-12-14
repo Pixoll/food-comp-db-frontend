@@ -7,14 +7,14 @@ import SelectorWithInput from "../../core/components/detailFood/SelectorWithInpu
 import Footer from "../../core/components/Footer";
 import useFetch, { FetchStatus } from "../../core/hooks/useFetch";
 import { useToast } from "../../core/context/ToastContext";
-import ToastComponent from "../../core/components/ToastComponent";
+import axios from "axios";
+import makeRequest from "../../core/utils/makeRequest";
 import {
   SingleFoodResult,
   NutrientsValue,
   Origin,
   LangualCode,
 } from "../../core/types/SingleFoodResult";
-import axios from "axios";
 import ReferencesList from "../../core/components/detailFood/ReferencesList";
 import LengualCodeComponent from "../../core/components/detailFood/LengualCodeComponent";
 import RequiredFieldLabel from "../../core/components/detailFood/RequiredFieldLabel";
@@ -26,7 +26,6 @@ import useScientificNames from "../../core/components/adminPage/getters/useScien
 import useSubspecies from "../../core/components/adminPage/getters/useSubspecies";
 import useOrigins from "../../core/components/adminPage/getters/useOrigins";
 import { useAuth } from "../../core/context/AuthContext";
-import makeRequest from "../../core/utils/makeRequest";
 
 export default function ModifyFoodDetail() {
   const { code } = useParams();
@@ -34,6 +33,7 @@ export default function ModifyFoodDetail() {
   const data = result.status === FetchStatus.Success ? result.data : null;
   const groupsResult = useGroups();
   const typesResult = useTypes();
+
   const { addToast } = useToast();
 
   const { state } = useAuth();
@@ -449,7 +449,49 @@ export default function ModifyFoodDetail() {
       ],
       langualCodes: getUniqueLangualCodeIds(),
     };
-    try {
+    console.log(payload)
+    makeRequest(
+      "patch",
+      `/foods/${code}`,
+      payload,
+      token,
+      (response) => {
+        console.log("Antes de addToast");
+      addToast({
+        type: "Success",
+        message:
+          response.data.message ||
+          "Los cambios fueron realizados exitosamente",
+        title: "Éxito",
+        position: 'middle-center',
+        duration: 3000,
+      });
+      console.log("Después de addToast");
+      },
+      error =>{
+        if (axios.isAxiosError(error)) {
+          
+          if ((error.response?.status || -1) >= 400) {
+            addToast({
+              type: 'Danger',
+              message: error.response?.data?.message || error.message || 'A ocurrido un error',
+              title: 'Error',
+              position: 'middle-center',
+              duration: 5000
+            });
+            return;
+          }
+          console.error(
+            "Error en la solicitud:",
+            error.response?.data || error.message
+          );
+          
+        } else {
+          console.error("Error desconocido:", error);
+        }
+      }
+    )
+    /*try {
       const response = await axios.patch(
         `http://localhost:3000/api/v1/foods/${code}`,
         payload,
@@ -466,28 +508,32 @@ export default function ModifyFoodDetail() {
           response.data.message ||
           "Los cambios fueron realizados exitosamente",
         title: "Éxito",
-        duration: 5000,
+        position: 'middle-center',
+        duration: 3000,
       });
       console.log("Después de addToast");
     } catch (error) {
       if (axios.isAxiosError(error)) {
+
         if ((error.response?.status || -1) < 400) {
+          addToast({
+            type: 'Danger',
+            message: error.response?.data || error.message || 'A ocurrido un error',
+            title: 'Error',
+            position: 'middle-center',
+            duration: 5000
+          });
           return;
         }
         console.error(
           "Error en la solicitud:",
           error.response?.data || error.message
         );
-        addToast({
-          type: 'Danger',
-          message: error.response?.data || error.message || 'A ocurrido un error',
-          title: 'Error',
-          duration: 5000
-        });
+        
       } else {
         console.error("Error desconocido:", error);
       }
-    }
+    }*/
   };
 
   const renderLanguageFields = (field: "commonName" | "ingredients") =>

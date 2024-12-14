@@ -177,6 +177,14 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
       originIds: data.generalData.origins,
       strain: data.generalData.strain || undefined,
     };
+    console.log(payload)
+    // makeRequest(
+    //   "post",
+    //   `/foods/${code}`,
+    //   payload,
+    //   (response) =>{},
+    //   error=>{}
+    // )
   };
 
   const renderNutrientTable = (

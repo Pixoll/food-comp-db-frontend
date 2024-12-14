@@ -1,6 +1,5 @@
-import { Routes, Route } from "react-router-dom";
-import { Suspense } from "react";
-import { AuthProvider } from "../context/AuthContext";
+import { Routes, Route, useLocation } from "react-router-dom";
+import { Suspense, useEffect } from "react";
 import AppNavbar from "../components/Navbar";
 import PrivateRoute from "./PrivateRoute";
 import { FaSpinner } from "react-icons/fa";
@@ -10,10 +9,37 @@ import DetailPage from "../../pages/detailFood/DetailPage";
 import SearchPage from "../../pages/search/SearchPage";
 import ModifyFoodDetail from "../../pages/detailFood/ModifyFoodDetail";
 import AdminPage from "../../pages/AdminPage";
+import { useAuth } from "../context/AuthContext";
+import makeRequest from "../utils/makeRequest";
 
 export const AppRouter = () => {
+  const { state, logout } = useAuth();
+  const location = useLocation()
+  const { isAuthenticated, username, token } = state;
+
+  useEffect(() => {
+    console.log("before token state check");
+
+    if (!isAuthenticated) return;
+
+    console.log("starting token state check");
+
+    makeRequest(
+      "get",
+      `/admins/${username}/session`,
+      token,
+      (response) => {
+        console.log("still valid");
+      },
+      (error) => {
+        console.log("logout");
+        logout();
+      }
+    );
+  }, [location, isAuthenticated, username, token]);
+
   return (
-    <AuthProvider>
+    <>
       <AppNavbar />
       <Suspense fallback={<FaSpinner />}>
         <Routes>
@@ -40,6 +66,6 @@ export const AppRouter = () => {
           />
         </Routes>
       </Suspense>
-    </AuthProvider>
+    </>
   );
 };

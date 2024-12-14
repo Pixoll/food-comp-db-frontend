@@ -4,18 +4,36 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import loginIcon from "../../assets/images/enter.png";
 import { useAuth } from "../context/AuthContext";
 import { useTranslation } from "react-i18next";
+import { useToast } from "../context/ToastContext";
+import makeRequest from "../utils/makeRequest";
 
 const AppNavbar = () => {
   const { t, i18n } = useTranslation("global");
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
   };
+  const { addToast } = useToast();
   const { state, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout();
-    navigate("/login");
+    makeRequest(
+      "delete",
+      `/admins/${state.username}/session`,
+      state.token,
+      (response) => {
+        if (response.data < 400) {
+          logout();
+          navigate("/");
+        }
+      },
+      (error) => {
+        addToast({
+          duration:5000,
+          message: error.response?.data?.message || error.message || "Error",
+        })
+      }
+    );
   };
   return (
     <Navbar className="custom-navbar" expand="lg">
@@ -42,7 +60,7 @@ const AppNavbar = () => {
             {state.isAuthenticated ? (
               <>
                 <Nav.Link as={Link} to="/panel-admin">
-                {t("navbar.panel")}
+                  {t("navbar.panel")}
                 </Nav.Link>
                 <Nav.Link onClick={handleLogout}>{t("navbar.close")}</Nav.Link>
               </>

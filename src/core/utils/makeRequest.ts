@@ -5,15 +5,48 @@ export default function makeRequest(
   endpoint: `/${string}`,
   payload: object,
   token: string | null,
-  successCallback: (response: AxiosResponse) => void | Promise<void>,
-  errorCallback: (error: any) => void | Promise<void>
-): void {
-  axios[method]("http://localhost:3000/api/v1" + endpoint, payload, {
-    headers: {
-      Authorization: `Bearer ${token}`,  
-    },
+  successCallback: SuccessCallback,
+  errorCallback: ErrorCallback
+): void;
 
-  })
-    .then(successCallback)
-    .catch(errorCallback);
+export default function makeRequest(
+  method: "get" | "delete",
+  endpoint: `/${string}`,
+  token: string | null,
+  successCallback: SuccessCallback,
+  errorCallback: ErrorCallback
+): void;
+
+export default function makeRequest(
+  method: "get" | "post" | "put" | "patch" | "delete",
+  endpoint: `/${string}`,
+  payload: object | string | null,
+  token: string | null | SuccessCallback,
+  successCallback: SuccessCallback | ErrorCallback,
+  errorCallback?: ErrorCallback
+): void {
+  if (typeof payload === "object" && payload) {
+    axios[method]("http://localhost:3000/api/v1" + endpoint, payload, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(successCallback)
+      .catch(errorCallback);
+  } else {
+    errorCallback = successCallback;
+    successCallback = token as SuccessCallback;
+    token = payload;
+
+    axios[method]("http://localhost:3000/api/v1" + endpoint, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(successCallback)
+      .catch(errorCallback);
+  }
 }
+
+type SuccessCallback = (response: AxiosResponse) => void | Promise<void>;
+type ErrorCallback = (error: any) => void | Promise<void>;

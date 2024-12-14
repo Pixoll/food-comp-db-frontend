@@ -39,11 +39,13 @@ const LoginPage = () => {
             },
             null,
             (response) => {
-
                 const { token } = response.data;
                 dispatch({
                     type: 'LOGIN',
-                    payload: { token }
+                    payload: {
+                        token,
+                        username: formState.username,
+                    }
                 });
     
                 onResetForm();

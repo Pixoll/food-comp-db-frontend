@@ -38,14 +38,22 @@ export default function useFetch<T>(url: string): FetchResult<T> {
 
         fetch("http://localhost:3000/api/v1" + url, { signal: abortController.signal })
             .then(async (response) => {
-                const json = await response.json();
+                const contentType = response.headers.get("content-type");
+                let jsonOrText: object | string;
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                    jsonOrText = await response.json();
+                } else {
+                    jsonOrText = await  response.text();
+                }
+
                 if (response.status >= 400) {
-                    setError(json.message);
+                    // @ts-expect-error
+                    setError(jsonOrText?.message ?? `${jsonOrText}`);
                     setStatus(FetchStatus.Failed);
                     return;
                 }
 
-                setData(json as T);
+                setData(jsonOrText as T);
                 setStatus(FetchStatus.Success);
             })
             .catch((error) => {
