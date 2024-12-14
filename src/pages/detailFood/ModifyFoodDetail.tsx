@@ -30,8 +30,6 @@ export default function ModifyFoodDetail() {
   const { code } = useParams();
   const result = useFetch<SingleFoodResult>(`/foods/${code}`);
   const data = result.status === FetchStatus.Success ? result.data : null;
-  console.log(data?.scientificName)
-  console.log(data?.subspecies)
   const groupsResult = useGroups();
   const typesResult = useTypes();
 
@@ -126,14 +124,12 @@ export default function ModifyFoodDetail() {
   
     if (!payload.scientificNameId && payload.scientificName) {
       const name = payload.scientificName;
-      console.log(name)
       makeRequest(
         "post",
         "/scientific_names",
         { name },
         state.token,
         (response) => {
-          console.log("Actualización exitosa:", response.data);
           if (scientificNamesResult.status !== FetchStatus.Loading) {
             scientificNamesResult.forceReload();
             setScientificNameAndSubspecies({
@@ -174,7 +170,7 @@ export default function ModifyFoodDetail() {
         { name },
         state.token,
         (response) => {
-          console.log("Actualización exitosa:", response.data);
+          
           if (subspeciesResult.status !== FetchStatus.Loading) {
             subspeciesResult.forceReload();
             setScientificNameAndSubspecies({
@@ -451,7 +447,6 @@ export default function ModifyFoodDetail() {
       langualCodes: getUniqueLangualCodeIds(),
     };
     try {
-      console.log(payload.subspeciesId, payload.scientificNameId);
       const response = await axios.patch(
         `http://localhost:3000/api/v1/foods/${code}`,
         payload,
@@ -461,7 +456,6 @@ export default function ModifyFoodDetail() {
           },
         }
       );
-      console.log("Datos actualizados exitosamente:", response.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if ((error.response?.status || -1) < 400) {

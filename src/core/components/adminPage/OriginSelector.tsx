@@ -26,11 +26,9 @@ const OriginSelector: React.FC<OriginsSelectorProps> = ({
   const handleSelectOption = (option: { id: number; name: string }) => {
     setIsActive(false); 
     if (selectedValue === option.name) {
-      console.log(option.id, option.name)
       onSelect(null, ""); 
     } else {
       onSelect(option.id, option.name); 
-      console.log(option)
     }
   };
 

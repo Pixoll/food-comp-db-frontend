@@ -1,7 +1,13 @@
 import React from "react";
-import { Card, Row, Col, Table, Badge, Button } from "react-bootstrap";
-import { Info, Leaf, Database, Zap } from "lucide-react";
+import { Card, Row, Col, Table, Badge} from "react-bootstrap";
+import { Info, Leaf, Database, Zap, CodeIcon } from "lucide-react";
 import { FoodForm } from "../../../pages/AdminPage";
+import { Group } from "./getters/useGroups";
+import { LangualCode } from "./getters/useLangualCodes";
+import { ScientificName } from "./getters/useScientificNames";
+import { Subspecies } from "./getters/useSubspecies";
+import { Type } from "./getters/useTypes";
+import { searchScientificNameById, searchGroupNameById, searchSubspeciesNameById, searchTypeNameById } from "./NewGeneralData";
 import makeRequest from "../../utils/makeRequest";
 import {
   NutrientSummary,
@@ -12,6 +18,10 @@ import {
 import { useTranslation } from "react-i18next";
 import "../../../assets/css/_PreviewDataForm.css";
 
+const searchLangualCodeById = (id: number, langualCodes: LangualCode[]) => {
+   const langualCode = langualCodes.find((langualCode) => langualCode.id===id)
+   return langualCode
+}
 type NewFood = {
   commonName: Record<"es", string> &
     Partial<Record<"en" | "pt", string | null>>;
@@ -41,6 +51,11 @@ type NewNutrientMeasurement = {
 type PreviewDataFormProps = {
   data: FoodForm;
   nameAndIdNutrients: NutrientSummary[];
+  types: Type[];
+  groups: Group[];
+  scientificNames: ScientificName[];
+  langualCodes: LangualCode[];
+  subspecies: Subspecies[];
   origins: string[];
 };
 
@@ -48,6 +63,11 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
   data,
   nameAndIdNutrients,
   origins,
+  scientificNames,
+  groups,
+  langualCodes,
+  subspecies,
+  types
 }) => {
   const { generalData, nutrientsValueForm } = data;
   const { t } = useTranslation("global");
@@ -424,7 +444,31 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
             <Col md={3}>
               <strong>{t("PreviewDataFrom.Scientific")}</strong>
             </Col>
-            <Col md={3}>{generalData.scientificNameId || "N/A"}</Col>
+            <Col md={3}>{searchScientificNameById(generalData.scientificNameId, scientificNames)}</Col>
+            <Col md={3}>
+              <strong>{"Tipo de alimento"}</strong>
+            </Col>
+            <Col md={3}>{searchTypeNameById(generalData.typeId,types)}</Col>
+            <Col md={3}>
+              <strong>{"Grupo alimentario"}</strong>
+            </Col>
+            <Col md={3}>{searchGroupNameById(generalData.groupId,groups)}</Col>
+            <Col md={3}>
+              <strong>{"Subespecie"}</strong>
+            </Col>
+            <Col md={3}>{searchSubspeciesNameById(generalData.subspeciesId, subspecies)}</Col>
+            <Col md={3}>
+              <strong>{"Observación"}</strong>
+            </Col>
+            <Col md={3}>{generalData.observation}</Col>
+            <Col md={3}>
+              <strong>{"Marca"}</strong>
+            </Col>
+            <Col md={3}>{generalData.brand}</Col>
+            <Col md={3}>
+              <strong>{"Variante"}</strong>
+            </Col>
+            <Col md={3}>{generalData.strain }</Col>
           </Row>
 
           {/* Ingredients and Common Names Section */}
@@ -535,6 +579,34 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
                   <tr key={index}>
                     <td>{index + 1}</td>
                     <td>{origin}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </Card.Body>
+        </Card>
+      )}
+      {data.generalData.langualCodes && data.generalData.langualCodes.length > 0 && (
+        <Card className="mb-4">
+          <Card.Header className="d-flex align-items-center">
+            <div style={{ color: "#17a2b8", marginRight: "10px" }}>
+              <CodeIcon size={24} />
+            </div>
+            <h5 className="mb-0">Codigos languales</h5>
+          </Card.Header>
+          <Card.Body>
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  <th style={{ width: "10%" }}>Codigo</th>
+                  <th style={{ width: "90%" }}>Descriptor</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.generalData.langualCodes.map((langualCodeID, index) => (
+                  <tr key={index}>
+                    <td>{searchLangualCodeById(langualCodeID, langualCodes)?.code}</td>
+                    <td>{searchLangualCodeById(langualCodeID, langualCodes)?.descriptor}</td>
                   </tr>
                 ))}
               </tbody>

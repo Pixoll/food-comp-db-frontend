@@ -33,7 +33,6 @@ const convert = (
       if (name) list.push({ id: -1, name });
     });
   }
-  console.log(list)
   return list;
 };
 

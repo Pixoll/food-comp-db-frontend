@@ -60,7 +60,6 @@ const OriginRow: React.FC<OriginRowProps> = ({
       updatedSelectedRegion ??
       null;
     onIdChange(selectedId, index);
-    console.log("Desde notify: ", selectedId);
   };
 
   const provincesOptions =
@@ -271,7 +270,6 @@ const OriginRow: React.FC<OriginRowProps> = ({
           updatedSelectedRegion ??
           null;
       
-        console.log("Desde handle:", selectedId, address);
         onAddressChange(address);
         notifyIdsChange(
           updatedSelectedLocation,

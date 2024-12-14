@@ -39,7 +39,7 @@ const LoginPage = () => {
             },
             null,
             (response) => {
-                console.log(t('loginPage.state.Response'), response.data);
+
                 const { token } = response.data;
                 dispatch({
                     type: 'LOGIN',

@@ -1,5 +1,5 @@
 import useFetch from "../../../hooks/useFetch"
-type Language ={
+export type Language ={
     id: number,
     code: "es" | "en" | "pt",
     name: string,

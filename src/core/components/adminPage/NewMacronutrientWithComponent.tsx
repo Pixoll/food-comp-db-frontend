@@ -63,7 +63,7 @@ const NewMacronutrientWithComponent: React.FC<
     if (formData) {
       setFormData({ ...formData, [field]: value });
     }
-    console.log("formData");
+    
     console.log(formData);
   };
 
@@ -224,8 +224,8 @@ const NewMacronutrientWithComponent: React.FC<
                               nameAndIdNutrients
                             )}
                           </td>
-                          <td>{component.deviation || "---"}</td>
                           <td>{component.average || "---"}</td>
+                          <td>{component.deviation || "---"}</td>
                           <td>{component.min || "---"}</td>
                           <td>{component.max || "---"}</td>
                           <td>{component.sampleSize || "---"}</td>
@@ -335,8 +335,8 @@ const NewMacronutrientWithComponent: React.FC<
                             )}
                           </strong>
                         </td>
-                        <td>{nutrient.deviation || "---"}</td>
                         <td>{nutrient.average || "---"}</td>
+                        <td>{nutrient.deviation || "---"}</td>
                         <td>{nutrient.min || "---"}</td>
                         <td>{nutrient.max || "---"}</td>
                         <td>{nutrient.sampleSize || "---"}</td>

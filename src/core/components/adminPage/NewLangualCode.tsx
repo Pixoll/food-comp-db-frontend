@@ -1,21 +1,16 @@
 import React, { useState } from "react";
 import { Card, Row, Col, Button, Form } from "react-bootstrap";
 import { PlusCircle , Trash2  } from "lucide-react";
-import useLangualCodes from "./getters/useLangualCodes";
-import { FetchStatus } from "../../hooks/useFetch";
+import {LangualCode}from "./getters/useLangualCodes";
 import Pagination from "../search/Pagination";
 
 const ITEMS_PER_PAGE = 5;
 type NewLangualCodesProps = {
+    langualCodes:LangualCode[];
     selectedLangualCodes: number[];
   onLangualCodesChange: (id: number) => void;
 }
-const NewLangualCodes: React.FC<NewLangualCodesProps> = ({selectedLangualCodes, onLangualCodesChange}) => {
-  const langualCodesResult = useLangualCodes();
-  const langualCodes =
-    langualCodesResult.status === FetchStatus.Success
-      ? langualCodesResult.data
-      : [];
+const NewLangualCodes: React.FC<NewLangualCodesProps> = ({langualCodes, selectedLangualCodes, onLangualCodesChange}) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredLangualCodes = langualCodes.filter((langualCode) =>

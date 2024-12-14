@@ -23,6 +23,7 @@ export type AnyNutrient = {
 
 export const useNutrients = () => {
   return useFetch<GroupedNutrients>("/nutrients");
+  
 };
 
 export default useNutrients;

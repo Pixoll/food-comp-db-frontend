@@ -1,20 +1,19 @@
 import React, { useState } from "react";
 import { Form, Row, Col, Button } from "react-bootstrap";
-import useGroups, { Group } from "./getters/useGroups";
-import useTypes, { Type } from "./getters/useTypes";
-import useScientificNames, {
+import { Group } from "./getters/useGroups";
+import { Type } from "./getters/useTypes";
+import {
   ScientificName,
 } from "./getters/useScientificNames";
-import useSubspecies, { Subspecies } from "./getters/useSubspecies";
-import { FetchStatus } from "../../hooks/useFetch";
-import useLanguages from "./getters/useLanguages";
+import { Subspecies } from "./getters/useSubspecies";
+import {Language} from "./getters/useLanguages";
 import SelectorWithInput from "../detailFood/SelectorWithInput";
 import { useTranslation } from "react-i18next";
 import RequiredFieldLabel from "../detailFood/RequiredFieldLabel";
 import makeRequest from "../../utils/makeRequest";
 import { useAuth } from "../../context/AuthContext";
 
-const searchScientificNameById = (
+export const searchScientificNameById = (
   id: number | undefined,
   scientificName: ScientificName[]
 ) => {
@@ -22,7 +21,7 @@ const searchScientificNameById = (
   return sname?.name;
 };
 
-const searchSubspeciesNameById = (
+export const searchSubspeciesNameById = (
   id: number | undefined,
   subspecies: Subspecies[]
 ) => {
@@ -30,12 +29,12 @@ const searchSubspeciesNameById = (
   return subspecie?.name;
 };
 
-const searchGroupNameById = (id: number | undefined, groups: Group[]) => {
+export const searchGroupNameById = (id: number | undefined, groups: Group[]) => {
   const group = groups.find((group) => group.id === id);
   return group?.name;
 };
 
-const searchTypeNameById = (id: number | undefined, types: Type[]) => {
+export const searchTypeNameById = (id: number | undefined, types: Type[]) => {
   const type = types.find((type) => type.id === id);
   return type?.name;
 };
@@ -57,14 +56,15 @@ type GeneralData = {
 type NewGeneralDataProps = {
   data: GeneralData;
   onUpdate: (updatedData: Partial<GeneralData>) => void;
+    types: Type[];
+    groups: Group[];
+    languages: Language[]
+    scientificNames: ScientificName[];
+    subspecies: Subspecies[];
 };
 
-const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
-  const groupsResult = useGroups();
-  const typesResult = useTypes();
-  const scientificNamesResult = useScientificNames();
-  const subspeciesResult = useSubspecies();
-  const languagesResult = useLanguages();
+const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups , types, languages, scientificNames, subspecies}) => {
+
   const { state } = useAuth();
   const token = state.token;
   const [actualIdSubspecies, setActualIdSubspecies] = useState<
@@ -84,21 +84,6 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
 
   const [formData, setFormData] = useState<GeneralData>(data);
 
-  const groups =
-    groupsResult.status === FetchStatus.Success ? groupsResult.data : [];
-  const types =
-    typesResult.status === FetchStatus.Success ? typesResult.data : [];
-  const languages =
-    languagesResult.status === FetchStatus.Success ? languagesResult.data : [];
-
-  const scientificNames =
-    scientificNamesResult.status === FetchStatus.Success
-      ? scientificNamesResult.data
-      : [];
-  const subspecies =
-    subspeciesResult.status === FetchStatus.Success
-      ? subspeciesResult.data
-      : [];
   const { t } = useTranslation("global");
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -145,7 +130,6 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
       }
     );
   };
-  console.log(formData);
 
   const handleCreateType = () => {
     if (!token) {
@@ -210,8 +194,6 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate }) => {
         };
         setFormData(updatedFormData);
         onUpdate(updatedFormData);
-
-        // Limpiar el campo después de crear
         setNewScientificName(undefined);
       },
       (error) => {

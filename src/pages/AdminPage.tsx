@@ -11,10 +11,7 @@ import NewGeneralData from "../core/components/adminPage/NewGeneralData";
 import Origins from "../core/components/adminPage/Origins";
 import PreviewDataForm from "../core/components/adminPage/PreviewDataForm";
 import { FetchStatus } from "../core/hooks/useFetch";
-import useOrigins from "../core/components/adminPage/getters/useOrigins";
-import useReferences, {
-  Author,
-} from "../core/components/adminPage/getters/UseReferences";
+
 import { Origin } from "../core/types/SingleFoodResult";
 import NewLangualCodes from "../core/components/adminPage/NewLangualCode";
 import NewReferences from "../core/components/adminPage/NewReferences";
@@ -29,6 +26,16 @@ import {
   NewArticle,
 } from "../core/components/adminPage/NewReference";
 import PreviewNewReference from "../core/components/adminPage/PreviewNewReference";
+import useLanguages from "../core/components/adminPage/getters/useLanguages";
+import useGroups from "../core/components/adminPage/getters/useGroups";
+import useScientificNames from "../core/components/adminPage/getters/useScientificNames";
+import useSubspecies from "../core/components/adminPage/getters/useSubspecies";
+import useTypes from "../core/components/adminPage/getters/useTypes";
+import useOrigins from "../core/components/adminPage/getters/useOrigins";
+import useReferences, {
+  Author,
+} from "../core/components/adminPage/getters/UseReferences";
+import useLangualCodes from "../core/components/adminPage/getters/useLangualCodes";
 
 export type NutrientSummary = {
   id: number;
@@ -216,8 +223,33 @@ export default function AdminPage() {
       ? nutrientsResult.data
       : null;
 
+  const groupsResult = useGroups();
+  const typesResult = useTypes();
+  const scientificNamesResult = useScientificNames();
+  const subspeciesResult = useSubspecies();
+  const languagesResult = useLanguages();
+  const langualCodesResult = useLangualCodes();
+  const groups =
+    groupsResult.status === FetchStatus.Success ? groupsResult.data : [];
+  const types =
+    typesResult.status === FetchStatus.Success ? typesResult.data : [];
+  const languages =
+    languagesResult.status === FetchStatus.Success ? languagesResult.data : [];
+
+  const scientificNames =
+    scientificNamesResult.status === FetchStatus.Success
+      ? scientificNamesResult.data
+      : [];
+  const subspecies =
+    subspeciesResult.status === FetchStatus.Success
+      ? subspeciesResult.data
+      : [];
   const nameAndIdNutrients: NutrientSummary[] = [];
 
+  const langualCodes =
+    langualCodesResult.status === FetchStatus.Success
+      ? langualCodesResult.data
+      : [];
   nutrients?.macronutrients.forEach((macronutrient) => {
     nameAndIdNutrients.push({
       id: macronutrient.id,
@@ -395,7 +427,15 @@ export default function AdminPage() {
     switch (activeSection) {
       case 1:
         return (
-          <NewGeneralData data={formData.generalData} onUpdate={handleUpdate} />
+          <NewGeneralData
+            data={formData.generalData}
+            onUpdate={handleUpdate}
+            groups={groups}
+            languages={languages}
+            scientificNames={scientificNames}
+            subspecies={subspecies}
+            types={types}
+          />
         );
 
       case 2:
@@ -462,6 +502,7 @@ export default function AdminPage() {
       case 9:
         return (
           <NewLangualCodes
+            langualCodes={langualCodes}
             onLangualCodesChange={handleLangualCodes}
             selectedLangualCodes={formData.generalData.langualCodes}
           />
@@ -472,6 +513,11 @@ export default function AdminPage() {
             data={formData}
             nameAndIdNutrients={nameAndIdNutrients}
             origins={origins?.map((o) => o.name) || []}
+            types={types}
+            groups={groups}
+            langualCodes={langualCodes}
+            scientificNames={scientificNames}
+            subspecies={subspecies}
           />
         );
       default:
