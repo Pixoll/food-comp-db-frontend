@@ -18,40 +18,35 @@ export const AppRouter = () => {
   const { isAuthenticated, username, token } = state;
 
   useEffect(() => {
-    console.log("before token state check");
-
     if (!isAuthenticated) return;
-
-    console.log("starting token state check");
 
     makeRequest(
       "get",
       `/admins/${username}/session`,
       token,
-      (response) => {
-        console.log("still valid");
+      () => {
       },
-      (error) => {
-        console.log("logout");
+      () => {
         logout();
       }
     );
+    // eslint-disable-next-line
   }, [location, isAuthenticated, username, token]);
 
   return (
     <>
-      <AppNavbar />
-      <Suspense fallback={<FaSpinner />}>
+      <AppNavbar/>
+      <Suspense fallback={<FaSpinner/>}>
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="login" element={<LoginPage />} />
-          <Route path="search" element={<SearchPage />} />
-          <Route path="search/details/:code" element={<DetailPage />} />
+          <Route path="/" element={<HomePage/>}/>
+          <Route path="login" element={<LoginPage/>}/>
+          <Route path="search" element={<SearchPage/>}/>
+          <Route path="search/details/:code" element={<DetailPage/>}/>
           <Route
             path="panel-admin"
             element={
               <PrivateRoute>
-                <AdminPage />
+                <AdminPage/>
               </PrivateRoute>
             }
           />
@@ -60,7 +55,7 @@ export const AppRouter = () => {
             path="search/modify-details-food/:code"
             element={
               <PrivateRoute>
-                <ModifyFoodDetail />
+                <ModifyFoodDetail/>
               </PrivateRoute>
             }
           />
