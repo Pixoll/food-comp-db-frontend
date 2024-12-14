@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Card, Form} from "react-bootstrap";
+import { Card, Form, Row, Col } from "react-bootstrap";
+import { 
+  Book, 
+  FileText, 
+  Globe, 
+  MapPin, 
+  Calendar, 
+  Info 
+} from "lucide-react";
 import { City } from "./getters/UseReferences";
 import SelectorWithInput from "../detailFood/SelectorWithInput";
 import RequiredFieldLabel from "../detailFood/RequiredFieldLabel";
@@ -86,89 +94,127 @@ const NewReference: React.FC<NewReferenceProps> = ({
     onFormUpdate(updatedForm);
   };
 
+  const getReferenceTypeIcon = () => {
+    switch (type) {
+      case "book": return <Book className="me-2" />;
+      case "article": return <FileText className="me-2" />;
+      case "website": return <Globe className="me-2" />;
+      case "report": return <Info className="me-2" />;
+      case "thesis": return <FileText className="me-2" />;
+      default: return null;
+    }
+  };
+
   return (
-    <Card className="mt-4">
+    <Card className="mt-4 shadow-sm">
+      <Card.Header className="d-flex align-items-center bg-primary text-white">
+        {getReferenceTypeIcon()}
+        <Card.Title className="mb-0">Agregar Nueva Referencia</Card.Title>
+      </Card.Header>
       <Card.Body>
-        <Card.Title>Agregar Nueva Referencia</Card.Title>
         <Form>
-          <Form.Group controlId="formReferenceTitle">
-            <Form.Label>
-              Título
-              <RequiredFieldLabel tooltipMessage={"Es obligatorio"} />
-            </Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Ingrese el título"
-              value={referenceForm.title}
-              onChange={(e) => handleInputChange("title", e.target.value)}
-            />
-          </Form.Group>
+          <Row>
+            <Col md={6}>
+              <Form.Group controlId="formReferenceTitle" className="mb-3">
+                <Form.Label className="d-flex align-items-center">
+                  <FileText className="me-2" />
+                  Título
+                  <RequiredFieldLabel tooltipMessage={"Es obligatorio"} />
+                </Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Ingrese el título"
+                  value={referenceForm.title}
+                  onChange={(e) => handleInputChange("title", e.target.value)}
+                />
+              </Form.Group>
+            </Col>
 
-          <Form.Group controlId="formReferenceType">
-            <Form.Label>
-              Tipo
-              <RequiredFieldLabel tooltipMessage={"Es obligatorio"} />
-            </Form.Label>
-            <Form.Select
-              value={referenceForm.type}
-              onChange={(e) => handleInputChange("type", e.target.value)}
-            >
-              <option value="report">Reporte</option>
-              <option value="thesis">Tesis</option>
-              <option value="article">Artículo</option>
-              <option value="website">Sitio web</option>
-              <option value="book">Libro</option>
-            </Form.Select>
-          </Form.Group>
+            <Col md={6}>
+              <Form.Group controlId="formReferenceType" className="mb-3">
+                <Form.Label className="d-flex align-items-center">
+                  <Book className="me-2" />
+                  Tipo
+                  <RequiredFieldLabel tooltipMessage={"Es obligatorio"} />
+                </Form.Label>
+                <Form.Select
+                  value={referenceForm.type}
+                  onChange={(e) => handleInputChange("type", e.target.value)}
+                >
+                  <option value="report">Reporte</option>
+                  <option value="thesis">Tesis</option>
+                  <option value="article">Artículo</option>
+                  <option value="website">Sitio web</option>
+                  <option value="book">Libro</option>
+                </Form.Select>
+              </Form.Group>
+            </Col>
+          </Row>
 
-          <Form.Group controlId="formReferenceCity">
-            <Form.Label>Ciudad</Form.Label>
-            <SelectorWithInput
-              options={cities}
-              placeholder="Seleccione una ciudad"
-              selectedValue={
-                searchCityNameByID(referenceForm.cityId, cities) || newCity
-              }
-              onSelect={(id, name) => {
-                if (id) {
-                  handleInputChange("cityId", id);
-                } else {
-                  handleInputChange("newCity", name);
-                }
-              }}
-            />
-          </Form.Group>
+          <Row>
+            <Col md={6}>
+              <Form.Group controlId="formReferenceCity" className="mb-3">
+                <Form.Label className="d-flex align-items-center">
+                  <MapPin className="me-2" />
+                  Ciudad
+                </Form.Label>
+                <SelectorWithInput
+                  options={cities}
+                  placeholder="Seleccione una ciudad"
+                  selectedValue={
+                    searchCityNameByID(referenceForm.cityId, cities) || newCity
+                  }
+                  onSelect={(id, name) => {
+                    if (id) {
+                      handleInputChange("cityId", id);
+                    } else {
+                      handleInputChange("newCity", name);
+                    }
+                  }}
+                />
+              </Form.Group>
+            </Col>
 
-          <Form.Group controlId="formReferenceYear">
-            <Form.Label>
-              Año
-              {type !== "article" && type !== "website" && (
-                <RequiredFieldLabel tooltipMessage={"Es obligatorio"} />
-              )}
-            </Form.Label>
-            <Form.Control
-              type="number"
-              placeholder="Ingrese el año"
-              value={referenceForm.year || ""}
-              onChange={(e) =>
-                handleInputChange("year", Number(e.target.value))
-              }
-            />
-          </Form.Group>
-          <Form.Group controlId="formReferenceOther">
-            <Form.Label>
-              Otro
-              {(type === "website" || type === "book") && (
-                <RequiredFieldLabel tooltipMessage={"Es obligatorio"} />
-              )}
-            </Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Otro"
-              value={referenceForm.other || ""}
-              onChange={(e) => handleInputChange("other", e.target.value)}
-            />
-          </Form.Group>
+            <Col md={6}>
+              <Form.Group controlId="formReferenceYear" className="mb-3">
+                <Form.Label className="d-flex align-items-center">
+                  <Calendar className="me-2" />
+                  Año
+                  {type !== "article" && type !== "website" && (
+                    <RequiredFieldLabel tooltipMessage={"Es obligatorio"} />
+                  )}
+                </Form.Label>
+                <Form.Control
+                  type="number"
+                  placeholder="Ingrese el año"
+                  value={referenceForm.year || ""}
+                  onChange={(e) =>
+                    handleInputChange("year", Number(e.target.value))
+                  }
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col>
+              <Form.Group controlId="formReferenceOther" className="mb-3">
+                <Form.Label className="d-flex align-items-center">
+                  <Info className="me-2" />
+                  Otro
+                  {(type === "website" || type === "book") && (
+                    <RequiredFieldLabel tooltipMessage={"Es obligatorio"} />
+                  )}
+                </Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Información adicional"
+                  value={referenceForm.other || ""}
+                  onChange={(e) => handleInputChange("other", e.target.value)}
+                />
+              </Form.Group>
+            </Col>
+          </Row>
         </Form>
       </Card.Body>
     </Card>

@@ -1,8 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import { NewArticle, NewVolume } from "./NewReference";
 import { Journal, JournalVolume, Article } from "./getters/UseReferences";
 import OriginSelector from "./OriginSelector";
-import { Button, Row, Col, Container, Form } from "react-bootstrap";
+import { 
+  Container, 
+  Row, 
+  Col, 
+  Form, 
+  Button,
+  Card 
+} from 'react-bootstrap';
+import { 
+  BookOpen, 
+  PlusCircle, 
+  XCircle, 
+  Layers, 
+  FileText 
+} from 'lucide-react';
+
 import "../../../assets/css/_NewVolumByReference.css";
 
 const searchJournalNameById = (id: number | undefined, journals: Journal[]) => {
@@ -188,173 +203,207 @@ const NewArticleByReference: React.FC<NewArticleByReferenceProps> = ({
   };
 
   return (
-    <Container>
-      <Row className="mb-4">
-        <h4>Seleccionar una revista</h4>
-        {newJournal ? (
-          <Row>
-            <Col md={8}>
-              <Form.Control
-                type="text"
-                placeholder="Agregar nueva revista"
-                value={newJournalName || ""}
-                onChange={(e) => {
-                  setNewJournalName(e.target.value);
-                  setSelectedIdVolume(undefined);
-                  setSelectedVolume(undefined);
-                  setSelectedArticle(undefined);
-                  setActiveSection(e.target.value ? 2 : 1);
-                }}
-              />
-            </Col>
-            <Col md={4}>
-              <Button onClick={handleAddJournal} variant="primary">
-                Cancelar nueva revista
-              </Button>
-            </Col>
-          </Row>
-        ) : (
-          <Row>
-            <Col md={8}>
-              <OriginSelector
-                options={journals}
-                placeholder="Selecciona una revista existente"
-                selectedValue={
-                  searchJournalNameById(selectedIdJournal, journals) || ""
-                }
-                onSelect={(id, name) => {
-                  setSelectedIdJournal(id || undefined);
-                  setNewJournalName(undefined);
-                  setSelectedIdVolume(undefined);
-                  setSelectedVolume(undefined);
-                  setSelectedArticle(undefined);
-                  setActiveSection(id ? 2 : 1);
-                }}
-              />
-            </Col>
-            <Col md={4}>
-              <Button onClick={handleAddJournal} variant="secondary">
-                Agregar nueva revista
-              </Button>
-            </Col>
-          </Row>
-        )}
-      </Row>
-
-      {activeSection >= 2 && (
-        <Row className="mb-3">
-          <h4>Seleccionar un volumen</h4>
-          {!newVolume ? (
+    <Container className="p-4">
+      <Card className="mb-4">
+        <Card.Header className="d-flex align-items-center">
+          <BookOpen className="me-2" />
+          <Card.Title>Seleccionar una revista</Card.Title>
+        </Card.Header>
+        <Card.Body>
+          {newJournal ? (
             <Row>
               <Col md={8}>
-                <OriginSelector
-                  options={journalVolumes
-                    .filter((v) => v.journalId === selectedIdJournal)
-                    .map((v) => ({
-                      id: v.id,
-                      name: `Volumen: ${v.volume}, Número: (${v.issue}), Año: ${v.year}`,
-                    }))}
-                  placeholder="Selecciona un volumen existente"
-                  selectedValue={
-                    searchVolumeNameById(selectedIdVolume, journalVolumes) || ""
-                  }
-                  onSelect={(id) => {
-                    handleSelectVolume(id || undefined);
+                <Form.Control
+                  type="text"
+                  placeholder="Agregar nueva revista"
+                  value={newJournalName || ""}
+                  className="mb-2"
+                  onChange={(e) => {
+                    setNewJournalName(e.target.value);
+                    setSelectedIdVolume(undefined);
+                    setSelectedVolume(undefined);
                     setSelectedArticle(undefined);
-                    setActiveSection(id ? 3 : 2);
+                    setActiveSection(e.target.value ? 2 : 1);
                   }}
                 />
               </Col>
               <Col md={4}>
-                <Button onClick={handleAddVolume} variant="secondary">
-                  Agregar nuevo volumen
+                <Button 
+                  onClick={handleAddJournal} 
+                  variant="outline-secondary" 
+                  className="w-100 d-flex align-items-center justify-content-center"
+                >
+                  <XCircle className="me-2" />
+                  Cancelar
                 </Button>
               </Col>
             </Row>
           ) : (
             <Row>
-              <Col md={2}>
-                <Form.Control
-                  type="number"
-                  placeholder="Volumen"
-                  value={selectedVolume?.volume || ""}
-                  onChange={(e) =>
-                    handleUpdateVolume("volume", parseInt(e.target.value, 10))
-                  }
-                />
+              <Col md={8}>
+                <Form.Select
+                  value={selectedIdJournal || ''}
+                  onChange={(e) => {
+                    const id = +e.target.value;
+                    setSelectedIdJournal(id);
+                    setNewJournalName(undefined);
+                    setSelectedIdVolume(undefined);
+                    setSelectedVolume(undefined);
+                    setSelectedArticle(undefined);
+                    setActiveSection(id ? 2 : 1);
+                  }}
+                >
+                  <option value="">Selecciona una revista existente</option>
+                  {journals.map((journal) => (
+                    <option key={journal.id} value={journal.id}>
+                      {journal.name}
+                    </option>
+                  ))}
+                </Form.Select>
               </Col>
-              <Col md={2}>
-                <Form.Control
-                  type="number"
-                  placeholder="Número (Issue)"
-                  value={selectedVolume?.issue || ""}
-                  onChange={(e) =>
-                    handleUpdateVolume("issue", parseInt(e.target.value, 10))
-                  }
-                />
-              </Col>
-              <Col md={2}>
-                <Form.Control
-                  type="number"
-                  placeholder="Año"
-                  value={selectedVolume?.year || ""}
-                  onChange={(e) =>
-                    handleUpdateVolume("year", parseInt(e.target.value, 10))
-                  }
-                />
-              </Col>
-              <Col>
-                <Button onClick={handleAddVolume} variant="secondary">
-                  Agregar volumen existente
+              <Col md={4}>
+                <Button 
+                  onClick={handleAddJournal} 
+                  variant="outline-primary" 
+                  className="w-100 d-flex align-items-center justify-content-center"
+                >
+                  <PlusCircle className="me-2" />
+                  Nueva revista
                 </Button>
               </Col>
             </Row>
           )}
-        </Row>
+        </Card.Body>
+      </Card>
+
+      {activeSection >= 2 && (
+        <Card className="mb-4">
+          <Card.Header className="d-flex align-items-center">
+            <Layers className="me-2" />
+            <Card.Title>Seleccionar un volumen</Card.Title>
+          </Card.Header>
+          <Card.Body>
+            {!newVolume ? (
+              <Row>
+                <Col md={8}>
+                  <Form.Select
+                    value={selectedIdVolume || ''}
+                    onChange={(e) => {
+                      const id = +e.target.value;
+                      handleSelectVolume(id);
+                      setSelectedArticle(undefined);
+                      setActiveSection(id ? 3 : 2);
+                    }}
+                  >
+                    <option value="">Selecciona un volumen existente</option>
+                    {journalVolumes
+                      .filter((v) => v.journalId === selectedIdJournal)
+                      .map((v) => (
+                        <option key={v.id} value={v.id}>
+                          {`Volumen: ${v.volume}, Número: (${v.issue}), Año: ${v.year}`}
+                        </option>
+                      ))}
+                  </Form.Select>
+                </Col>
+                <Col md={4}>
+                  <Button 
+                    onClick={handleAddVolume} 
+                    variant="outline-primary" 
+                    className="w-100 d-flex align-items-center justify-content-center"
+                  >
+                    <PlusCircle className="me-2" />
+                    Nuevo volumen
+                  </Button>
+                </Col>
+              </Row>
+            ) : (
+              <Row>
+                <Col md={4}>
+                  <Form.Control
+                    type="number"
+                    placeholder="Volumen"
+                    value={selectedVolume?.volume || ""}
+                    onChange={(e) =>
+                      handleUpdateVolume("volume", parseInt(e.target.value, 10))
+                    }
+                    className="mb-2"
+                  />
+                </Col>
+                <Col md={4}>
+                  <Form.Control
+                    type="number"
+                    placeholder="Número (Issue)"
+                    value={selectedVolume?.issue || ""}
+                    onChange={(e) =>
+                      handleUpdateVolume("issue", parseInt(e.target.value, 10))
+                    }
+                    className="mb-2"
+                  />
+                </Col>
+                <Col md={4}>
+                  <Form.Control
+                    type="number"
+                    placeholder="Año"
+                    value={selectedVolume?.year || ""}
+                    onChange={(e) =>
+                      handleUpdateVolume("year", parseInt(e.target.value, 10))
+                    }
+                    className="mb-2"
+                  />
+                </Col>
+              </Row>
+            )}
+          </Card.Body>
+        </Card>
       )}
 
       {activeSection >= 3 && (
-        <Row className="mb-3">
-          <h4>Seleccionar un Artículo</h4>
-          <Col md={2}>
-            <Form.Control
-              type="number"
-              placeholder="Página de inicio"
-              value={selectedArticle?.pageStart || ""}
-              onChange={(e) =>
-                handleUpdateArticle("pageStart", parseInt(e.target.value, 10))
-              }
-            />
-          </Col>
-          <Col md={2}>
-            <Form.Control
-              type="number"
-              placeholder="Página final"
-              value={selectedArticle?.pageEnd || ""}
-              onChange={(e) =>
-                handleUpdateArticle("pageEnd", parseInt(e.target.value, 10))
-              }
-            />
-          </Col>
-          <Col md={2}></Col>
-        </Row>
+        <Card>
+          <Card.Header className="d-flex align-items-center">
+            <FileText className="me-2" />
+            <Card.Title>Seleccionar un Artículo</Card.Title>
+          </Card.Header>
+          <Card.Body>
+            <Row>
+              <Col md={4}>
+                <Form.Control
+                  type="number"
+                  placeholder="Página de inicio"
+                  value={selectedArticle?.pageStart || ""}
+                  onChange={(e) =>
+                    handleUpdateArticle("pageStart", parseInt(e.target.value, 10))
+                  }
+                  className="mb-2"
+                />
+              </Col>
+              <Col md={4}>
+                <Form.Control
+                  type="number"
+                  placeholder="Página final"
+                  value={selectedArticle?.pageEnd || ""}
+                  onChange={(e) =>
+                    handleUpdateArticle("pageEnd", parseInt(e.target.value, 10))
+                  }
+                  className="mb-2"
+                />
+              </Col>
+            </Row>
+          </Card.Body>
+        </Card>
       )}
 
-      <Row className="mt-3">
-        <Col>
-          <pre>
-            {JSON.stringify(
-              {
-                selectedArticle,
-              },
-              null,
-              2
-            )}
-          </pre>
-        </Col>
-      </Row>
+      <div className="mt-4">
+        <pre className="bg-light p-3 rounded">
+          {JSON.stringify(
+            {
+              selectedArticle,
+            },
+            null,
+            2
+          )}
+        </pre>
+      </div>
     </Container>
   );
-};
-
+}
 export default NewArticleByReference;

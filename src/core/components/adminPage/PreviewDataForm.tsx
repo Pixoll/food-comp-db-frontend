@@ -186,13 +186,6 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
     const validNutrients = nutrients.filter(hasValidData);
     if (validNutrients.length === 0) return null;
 
-    const getVariantForValue = (value: number | null) => {
-      if (value === null) return "secondary";
-      if (value > 50) return "success";
-      if (value > 20) return "warning";
-      return "danger";
-    };
-
     return (
       <div className="mb-4">
         <div className="d-flex align-items-center mb-3">
