@@ -65,7 +65,7 @@ const Origins: React.FC<OriginsProps> = ({
       setAddresses((prevAddresses) => prevAddresses.slice(0, -1));
       setOriginIds((prevOriginIds) => prevOriginIds.slice(0, -1));
     } else {
-      alert("El mínimo de orígenes es 1");
+      alert(t("Origins.minimum"));
     }
   };
 
@@ -113,7 +113,7 @@ const Origins: React.FC<OriginsProps> = ({
       </Table>
 
       <Button onClick={handleAddRow} className="mt-3">
-        Añadir un origen
+      {t("Origins.Add")}
       </Button>
 
       <Button
@@ -121,7 +121,7 @@ const Origins: React.FC<OriginsProps> = ({
         className="mt-3 ml-3"
         variant="danger"
       >
-        Eliminar un origen
+        {t("Origins.Delete")}
       </Button>
 
       <div className="mt-4">

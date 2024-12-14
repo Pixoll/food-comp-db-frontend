@@ -540,7 +540,7 @@ export default function ModifyFoodDetail() {
                     <div style={{ flex: 1, marginRight: "10px" }}>
                       <SelectorWithInput
                         options={scientificNames}
-                        placeholder="Nada seleccionado"
+                        placeholder={t("DetailFood.selected")}
                         selectedValue={
                           scientificNameAndSubspecies?.scientificName
                         }
@@ -556,7 +556,7 @@ export default function ModifyFoodDetail() {
                       style={{ alignSelf: "stretch" }}
                       onClick={handleScientificName}
                     >
-                      Aplicar cambios
+                      {t("DetailFood.Apply")}
                     </Button>
                   </div>
                 </Col>
@@ -571,7 +571,7 @@ export default function ModifyFoodDetail() {
                       <SelectorWithInput
                         options={subspecies}
                         selectedValue={scientificNameAndSubspecies?.subspecies}
-                        placeholder="Nada seleccionado"
+                        placeholder={t("DetailFood.selected")}
                         onSelect={(id, name) => {
                           setScientificNameAndSubspecies((prevState) => ({
                             ...prevState,
@@ -584,7 +584,7 @@ export default function ModifyFoodDetail() {
                       style={{ alignSelf: "stretch" }}
                       onClick={handleSubspecies}
                     >
-                      Aplicar cambios
+                      {t("DetailFood.Apply")}
                     </Button>
                   </div>
                 </Col>

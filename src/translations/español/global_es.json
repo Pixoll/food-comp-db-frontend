@@ -141,7 +141,13 @@
     "enter": "Ingresa el código",
     "save": "Guardar Cambios",
     "label_type": "Tipo",
-    "label_group": "Grupo"
+    "label_group": "Grupo",
+    "graphics":{
+      "title_L":"Composición",
+      "title_R":"Contenido energetico"
+    },
+    "selected":"Nada seleccionado",
+    "Apply":"Aplicar cambios"
   },
   "components_home": {
     "title": "Buscar Composición"
@@ -168,12 +174,16 @@
     "close": "Cerrar",
     "references": "Referencias",
     "yes": "Sí",
-    "type":"Tipo de dato"
+    "type":"Tipo de dato",
+    "size":"Tamaño de muestra"
   },
   "LangualCode": {
     "description_main": "Descripción Principal",
     "code": "Código",
-    "description": "Descripción"
+    "description": "Descripción",
+    "Search":"Buscar por código Langual",
+    "Eliminate":"Eliminar",
+    "Add":"Agregar"
   },
   "References": {
     "type": "Tipo:",
@@ -183,7 +193,11 @@
     "magazine": "Revista:",
     "Volume ": "Volumen:",
     "pages": "Páginas:",
-    "additional": "Otra información:"
+    "additional": "Otra información:",
+    "Add":"Agregar",
+    "Additional":"Información adicional:",
+    "Publication":"Publicación:"
+
   },
   "Origins": {
     "title": "Origines",
@@ -196,7 +210,10 @@
     "action":"Acciones",
     "add":"Agregar origen",
     "selected":"Direcciones seleccionadas:",
-    "no_direction":"Sin dirección seleccionada"
+    "no_direction":"Sin dirección seleccionada",
+    "minimum":"El mínimo de orígenes es uno",
+    "Add":"Añadir un origen",
+    "Delete":"Eliminar un origen"
   },
   "Case_1": {
     "name": "Nombre",
@@ -294,7 +311,27 @@
     "process": "Procesar Datos",
     "upload": "Suba un archivo en formato",
     "or": "o",
-    "point": "."
+    "point": ".",
+    "sectionNames":{
+      "data":"Datos generales",
+      "value":"Valor energetico",
+      "compound":"Macronutrientes compuestos",
+      "non_compounded":"Macronutrientes no compuestos",
+      "vitamins":"Vitaminas",
+      "minerals":"Minerales",
+      "origins":"Origines del alimento",
+      "references":"Referencias",
+      "codes":"Codigos languales",
+      "view":"Vista de información actual"
+    },
+    "Enter_New_R":"Ingresar una nueva referencia",
+    "New_R":"Nueva referencia",
+    "sectionNamesByNewReference":{
+     "Data":"Datos generales",
+     "Authors":"Autores",
+     "Article":"Artículo",
+     "Preview":"Previsualización"
+    }
   },
   "NewGeneralData":{
     "code":"Código del alimento",
@@ -310,8 +347,36 @@
     "name_common":"Nombres comunes",
     "name_com":"Nombre común",
     "Ingredients":"Ingredientes",
-    "Ingredient":"Ingrediente"
+    "Ingredient":"Ingrediente",
+
+    "alert":{
+      "authentication":"No hay token de autenticación disponible",
+      "group":"Por favor, ingrese tanto el nombre como el código del grupo",
+      "Failed_group":"Fallo al crear el grupo",
+      "type":"Por favor, ingrese tanto el nombre como el código del tipo",
+      "Failed_type":"Fallo al crear el tipo",
+      "scientific":"Por favor, ingrese un nombre científico",
+      "Failed_scientific":"Fallo al crear el nombre científico",
+      "subspecies":"Por favor, ingrese una subespecie",
+      "Failed_subspecies":"Fallo al crear la subespecie"
+    },
+    "error":{
+      "group":"Error al crear el grupo:",
+      "type":"Error al crear el tipo:",
+      "scientific":"Error al crear el nombre científico:",
+      "subspecies":"Error al crear la subespecie:"
+    },
+    "Group":"Código del grupo",
+    "create_group":"Crear Grupo",
+    "Type":"Código del tipo",
+    "Create":"Crear Tipo",
+    "Select_scientific":"Selecciona un nombre científico",
+    "Create_Scientific":"Crear Nombre Científico",
+    "Select_subspecies":"Selecciona una subespecie",
+    "Create_subspecies":"Crear Subespecie"
+
   },
+
   "NewMacronutrient":{
     "name":"Nombre nutriente",
     "mean":"Promedio",
@@ -354,8 +419,60 @@
     "Vitamins":"Vitaminas",
     "Main":"Nutrientes Principales",
     "Minerals":"Minerales"
+  },
+  "SelectorWithInput":{
+    "button": "Buscar",
+    "Other":"Otro valor",
+    "Enter":"Escriba otro valor"
+  },
+  "PreviewNewReference":{
+    "Authors":"Autores:",
+    "New_A":"Nuevos Autores:",
+    "New":"Artículo Nuevo:",
+    "City":"Ciudad:",
+    "Other":"Otro:",
+    "button":"Validar y enviar"  
+  },
+  "NewAuthors":{
+    "author":"Selecciona o agregar un autor",
+    "Eliminate":"Eliminar",
+    "Select":"Selecciona y agrega autores",
+    "Add":"Agregar autor",
+    "No_selected":"No se ha seleccionado un autor"
+  },
+  "FoodTableAdmin":{
+    "List":"Lista de Alimentos Ingresados",
+    "available":"No hay alimentos disponibles",
+    "Name":"Nombre",
+    "Actions":"Acciones",
+    "Verify":"Verificar",
+    "Check":"Verificar Alimento",
+    "Back":"Volver a la lista"
+  },
+  "ModalReferences":{
+    "Select":"Seleccionar nutrientes",
+    "Close":"Cerrar",
+    "Save":"Guardar cambios"
+  },
+  "NewReference":{
+    "Add":"Agregar Nueva Referencia",
+    "Title":"Título",
+    "Enter_t":"Ingrese el título",
+    "Type":"Tipo",
+    "required":"Es obligatorio",
+    "Report":"Reporte",
+    "Thesis":"Tesis",
+    "Article":"Artículo",
+    "Website":"Sitio web",
+    "Book":"Libro",
+    "City":"Ciudad",
+    "Select":"Seleccione una ciudad",
+    "Year":"Año",
+    "Enter_y":"Ingrese el año",
+    "Other":"Otro",
+    "Additional":"Información adicional"
   }
-  
+
 }
 
 

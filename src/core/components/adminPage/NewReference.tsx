@@ -11,6 +11,8 @@ import {
 import { City } from "./getters/UseReferences";
 import SelectorWithInput from "../detailFood/SelectorWithInput";
 import RequiredFieldLabel from "../detailFood/RequiredFieldLabel";
+import { useTranslation } from "react-i18next";
+
 export type ReferenceForm = {
   type: "report" | "thesis" | "article" | "website" | "book";
   title: string;
@@ -104,12 +106,12 @@ const NewReference: React.FC<NewReferenceProps> = ({
       default: return null;
     }
   };
-
+  const { t, i18n } = useTranslation("global");
   return (
     <Card className="mt-4 shadow-sm">
       <Card.Header className="d-flex align-items-center bg-primary text-white">
         {getReferenceTypeIcon()}
-        <Card.Title className="mb-0">Agregar Nueva Referencia</Card.Title>
+        <Card.Title className="mb-0">{t("NewReference.Add")}</Card.Title>
       </Card.Header>
       <Card.Body>
         <Form>
@@ -118,12 +120,12 @@ const NewReference: React.FC<NewReferenceProps> = ({
               <Form.Group controlId="formReferenceTitle" className="mb-3">
                 <Form.Label className="d-flex align-items-center">
                   <FileText className="me-2" />
-                  Título
-                  <RequiredFieldLabel tooltipMessage={"Es obligatorio"} />
+                  {t("NewReference.Title")}
+                  <RequiredFieldLabel tooltipMessage={t("NewReference.required")} />
                 </Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Ingrese el título"
+                  placeholder={t("NewReference.Enter_t")}
                   value={referenceForm.title}
                   onChange={(e) => handleInputChange("title", e.target.value)}
                 />
@@ -134,18 +136,18 @@ const NewReference: React.FC<NewReferenceProps> = ({
               <Form.Group controlId="formReferenceType" className="mb-3">
                 <Form.Label className="d-flex align-items-center">
                   <Book className="me-2" />
-                  Tipo
-                  <RequiredFieldLabel tooltipMessage={"Es obligatorio"} />
+                  {t("NewReference.Type")}
+                  <RequiredFieldLabel tooltipMessage={t("NewReference.required")} />
                 </Form.Label>
                 <Form.Select
                   value={referenceForm.type}
                   onChange={(e) => handleInputChange("type", e.target.value)}
                 >
-                  <option value="report">Reporte</option>
-                  <option value="thesis">Tesis</option>
-                  <option value="article">Artículo</option>
-                  <option value="website">Sitio web</option>
-                  <option value="book">Libro</option>
+                  <option value="report">{t("NewReference.Report")}</option>
+                  <option value="thesis">{t("NewReference.Thesis")}</option>
+                  <option value="article">{t("NewReference.Article")}</option>
+                  <option value="website">{t("NewReference.Website")}</option>
+                  <option value="book">{t("NewReference.Book")}</option>
                 </Form.Select>
               </Form.Group>
             </Col>
@@ -156,11 +158,11 @@ const NewReference: React.FC<NewReferenceProps> = ({
               <Form.Group controlId="formReferenceCity" className="mb-3">
                 <Form.Label className="d-flex align-items-center">
                   <MapPin className="me-2" />
-                  Ciudad
+                  {t("NewReference.City")}
                 </Form.Label>
                 <SelectorWithInput
                   options={cities}
-                  placeholder="Seleccione una ciudad"
+                  placeholder={t("NewReference.Select")}
                   selectedValue={
                     searchCityNameByID(referenceForm.cityId, cities) || newCity
                   }
@@ -179,18 +181,22 @@ const NewReference: React.FC<NewReferenceProps> = ({
               <Form.Group controlId="formReferenceYear" className="mb-3">
                 <Form.Label className="d-flex align-items-center">
                   <Calendar className="me-2" />
-                  Año
+                  {t("NewReference.Year")}
                   {type !== "article" && type !== "website" && (
-                    <RequiredFieldLabel tooltipMessage={"Es obligatorio"} />
+                    <RequiredFieldLabel tooltipMessage={t("NewReference.required")} />
                   )}
                 </Form.Label>
                 <Form.Control
                   type="number"
-                  placeholder="Ingrese el año"
+                  placeholder={t("NewReference.Enter_y")}
                   value={referenceForm.year || ""}
-                  onChange={(e) =>
-                    handleInputChange("year", Number(e.target.value))
-                  }
+                  onChange={(e) =>{                    
+                    if (Number(e.target.value).toString().length <= 4) {
+                      handleInputChange("year", Number(e.target.value));
+                    }
+                  }}
+                  min="1000" 
+                  max="9999" 
                 />
               </Form.Group>
             </Col>
@@ -201,14 +207,14 @@ const NewReference: React.FC<NewReferenceProps> = ({
               <Form.Group controlId="formReferenceOther" className="mb-3">
                 <Form.Label className="d-flex align-items-center">
                   <Info className="me-2" />
-                  Otro
+                  {t("NewReference.Other")}
                   {(type === "website" || type === "book") && (
-                    <RequiredFieldLabel tooltipMessage={"Es obligatorio"} />
+                    <RequiredFieldLabel tooltipMessage={t("NewReference.required")} />
                   )}
                 </Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Información adicional"
+                  placeholder={t("NewReference.Additional")}
                   value={referenceForm.other || ""}
                   onChange={(e) => handleInputChange("other", e.target.value)}
                 />

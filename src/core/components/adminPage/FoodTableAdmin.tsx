@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import PaginationAdmin from "./PaginationAdmin"; // Asegúrate de tener este componente disponible
 import { useAuth } from "../../context/AuthContext";
+import { useTranslation } from "react-i18next";
 
 interface FoodResultsListProps {
   data: { id: string; name: string; code: string }[]; // Asegúrate de que los datos tengan esta estructura
@@ -13,6 +14,7 @@ const FoodTable: React.FC<FoodResultsListProps> = ({ data }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 7;
   const [filteredData, setFilteredData] = useState(data);
+  const { t } = useTranslation("global");
 
   // Calcular los datos para la página actual
   const npage = Math.ceil(filteredData.length / recordsPerPage); // Número total de páginas
@@ -38,17 +40,17 @@ return (
   <div className="food-list">
     {view === "list" && (
       <>
-        <h2>Lista de Alimentos Ingresados</h2>
+        <h2>{t("FoodTableAdmin.List")}</h2>
         {filteredData.length === 0 ? (
-          <p>No hay alimentos disponibles</p>
+          <p>{t("FoodTableAdmin.available")}s</p>
         ) : (
           <>
             <table className="content-table-foods">
               <thead>
                 <tr>
                   <th>ID</th>
-                  <th>Nombre</th>
-                  <th>Acciones</th>
+                  <th>{t("FoodTableAdmin.Name")}</th>
+                  <th>{t("FoodTableAdmin.Actions")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -75,13 +77,13 @@ return (
 
     {view === "verificar" && (
       <div className="verification-view">
-        <h2>Verificar Alimento</h2>
+        <h2>{t("FoodTableAdmin.Check")}o</h2>
         {selectedFood && (
           <div className="food-details">
             {/* Agrega más detalles o acciones relacionadas con el alimento */}
           </div>
         )}
-        <button className="button" onClick={() => setView("list")}>Volver a la lista</button>
+        <button className="button" onClick={() => setView("list")}>{t("FoodTableAdmin.Back")}</button>
       </div>
     )}
   </div>

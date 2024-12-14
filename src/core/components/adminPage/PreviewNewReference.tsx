@@ -6,6 +6,7 @@ import { NewArticle } from "./NewReference";
 import { useAuth } from "../../context/AuthContext";
 import makeRequest from "../../utils/makeRequest";
 import "../../../assets/css/_PreviewNewReference.css";
+import { useTranslation } from "react-i18next";
 type PreviewNewReferenceProps = {
   data: ReferenceForm;
   cities: City[];
@@ -55,6 +56,7 @@ const PreviewNewReference: React.FC<PreviewNewReferenceProps> = ({
 }) => {
   const { state } = useAuth();
   const token = state.token;
+  const { t, i18n } = useTranslation("global");
   const formatNewArticle = (newArticle: NewArticle): string => {
     const { pageStart, pageEnd, volumeId, newVolume } = newArticle;
 
@@ -116,28 +118,28 @@ const PreviewNewReference: React.FC<PreviewNewReferenceProps> = ({
             <Card.Text>
               {authorNames.length > 0 && (
                 <div>
-                  <strong>Autores:</strong> {authorNames.join(", ")}
+                  <strong>{t("PreviewNewReference.Authors")}</strong> {authorNames.join(", ")}
                 </div>
               )}
               {data.newAuthors && data.newAuthors.length > 0 && (
                 <div>
-                  <strong>Nuevos Autores:</strong> {data.newAuthors.join(", ")}
+                  <strong>{t("PreviewNewReference.New_A")}</strong> {data.newAuthors.join(", ")}
                 </div>
               )}
               {data.newArticle && (
                 <div>
-                  <strong>Artículo Nuevo:</strong>{" "}
+                  <strong>{t("PreviewNewReference.New")}</strong>{" "}
                   {formatNewArticle(data.newArticle)}
                 </div>
               )}
               {cityName && (
                 <div>
-                  <strong>Ciudad:</strong> {cityName}
+                  <strong>{t("PreviewNewReference.City")}</strong> {cityName}
                 </div>
               )}
               {data.other && (
                 <div>
-                  <strong>Otro:</strong> {data.other}
+                  <strong>{t("PreviewNewReference.Other")}</strong> {data.other}
                 </div>
               )}
             </Card.Text>
@@ -146,7 +148,7 @@ const PreviewNewReference: React.FC<PreviewNewReferenceProps> = ({
       </Row>
       <Row>
         <button className="button-form-of-reference" onClick={handleSubmit}>
-          Validar y enviar
+        {t("PreviewNewReference.button")}
         </button>
       </Row>
     </Col>

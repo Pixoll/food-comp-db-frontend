@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, ListGroup } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 type NutrientConvert = {
   id: number;
@@ -23,7 +24,7 @@ const ModalReferences: React.FC<ModalReferencesProps> = ({
   selectedReference,
 }) => {
   const [selectedNutrientIds, setSelectedNutrientIds] = useState<number[]>([]);
-
+  const { t } = useTranslation("global");
   useEffect(() => {
     if (show) {
       const initialSelectedIds = nutrients
@@ -51,7 +52,7 @@ const ModalReferences: React.FC<ModalReferencesProps> = ({
   return (
     <Modal show={show} onHide={onHide} centered scrollable>
       <Modal.Header closeButton>
-        <Modal.Title>Seleccionar nutrientes</Modal.Title>
+        <Modal.Title>{t("ModalReferences.Select")}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <ListGroup>
@@ -69,14 +70,14 @@ const ModalReferences: React.FC<ModalReferencesProps> = ({
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onHide}>
-          Cerrar
+        {t("ModalReferences.Close")}
         </Button>
         <Button
           variant="primary"
           onClick={handleAddReference}
           disabled={selectedReference === null}
         >
-          Guardar cambios
+          {t("ModalReferences.Save")}
         </Button>
       </Modal.Footer>
     </Modal>

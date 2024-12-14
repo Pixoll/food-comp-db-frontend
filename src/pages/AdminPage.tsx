@@ -529,32 +529,31 @@ export default function AdminPage() {
   const { t } = useTranslation("global");
 
   const sectionNames = [
-    "Datos generales",
-    "Valor energetico",
-    "Macronutrientes compuestos",
-    "Macronutrientes no compuestos",
-    "Vitaminas",
-    "Minerales",
-    "Origines del alimento",
-    "Referencias",
-    "Codigos languales",
-    "Vista de información actual",
+    t("AdminPage.sectionNames.data"),
+    t("AdminPage.sectionNames.value"),
+    t("AdminPage.sectionNames.compound"),
+    t("AdminPage.sectionNames.non_compounded"),
+    t("AdminPage.sectionNames.vitamins"),
+    t("AdminPage.sectionNames.minerals"),
+    t("AdminPage.sectionNames.origins"),
+    t("AdminPage.sectionNames.references"),
+    t("AdminPage.sectionNames.codes"),
+    t("AdminPage.sectionNames.view"),
   ];
-
   let sectionNamesByNewReference: Section[] = [];
 
   if (referenceForm.type === "article") {
     sectionNamesByNewReference = [
-      { id: "general", name: "Datos generales" },
-      { id: "authors", name: "Autores" },
-      { id: "article", name: "Artículo" },
-      { id: "preview", name: "Previsualización" },
+      { id: "general", name: t("AdminPage.sectionNamesByNewReference.Data")},
+      { id: "authors", name: t("AdminPage.sectionNamesByNewReference.Authors") },
+      { id: "article", name: t("AdminPage.sectionNamesByNewReference.Article") },
+      { id: "preview", name: t("AdminPage.sectionNamesByNewReference.Preview")},
     ];
   } else {
     sectionNamesByNewReference = [
-      { id: "general", name: "Datos generales" },
-      { id: "authors", name: "Autores" },
-      { id: "preview", name: "Previsualización" },
+      { id: "general", name: t("AdminPage.sectionNamesByNewReference.Data") },
+      { id: "authors", name: t("AdminPage.sectionNamesByNewReference.Authors") },
+      { id: "preview", name: t("AdminPage.sectionNamesByNewReference.Preview") },
     ];
   }
   const renderSectionByNewReference = () => {
@@ -615,7 +614,7 @@ export default function AdminPage() {
       <div className="row first-row">
         <div className="tabs-container">
           <button className="tab" onClick={() => setView("post-reference")}>
-            {"Ingresar una nueva referencia"}
+          {t("AdminPage.Enter_New_R")}
           </button>
           <button className="tab" onClick={() => setView("manual")}>
             {t("AdminPage.manual")}
@@ -643,7 +642,7 @@ export default function AdminPage() {
               ))}
             </div>
             <div className="content-container">
-              <h2 className="title">{"Nueva referencia"}</h2>
+              <h2 className="title">{t("AdminPage.New_R")}</h2>
               {renderSectionByNewReference()}
             </div>
           </>

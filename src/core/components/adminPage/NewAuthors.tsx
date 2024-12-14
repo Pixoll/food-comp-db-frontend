@@ -3,6 +3,7 @@ import { Button, ListGroup, Row, Col, Container } from "react-bootstrap";
 import { Author } from "./getters/UseReferences";
 import SelectorWithInput from "../detailFood/SelectorWithInput";
 import "../../../assets/css/_NewAuthors.css";
+import { useTranslation } from "react-i18next";
 
 
 type NewAuthorsProps = {
@@ -42,6 +43,7 @@ const NewAuthors: React.FC<NewAuthorsProps> = ({
   data,
   updateAuthors,
 }) => {
+  const { t } = useTranslation("global");
   const [selectedAuthors, setSelectedAuthors] = useState<Author[]>(
     convert(authorIds, newAuthors, data)
   );
@@ -97,7 +99,7 @@ const NewAuthors: React.FC<NewAuthorsProps> = ({
               <Col>
                 <SelectorWithInput
                   options={data}
-                  placeholder={"Selecciona o agregar un autor"}
+                  placeholder={t("NewAuthors.author")}
                   selectedValue={selectedAuthors[index]?.name || ""}
                   onSelect={(id, name) => handleSelectAuthor(index, id, name)}
                 />
@@ -107,23 +109,23 @@ const NewAuthors: React.FC<NewAuthorsProps> = ({
                   variant="outline-danger"
                   onClick={() => handleRemoveRow(index)}
                 >
-                  Eliminar
+                  {t("NewAuthors.Eliminate")}
                 </Button>
               </Col>
             </Row>
           </Col>
         ))}
       </Row>
-      <h4>Selecciona y agrega autores</h4>
+      <h4>{t("NewAuthors.Select")}</h4>
       <ListGroup>
         {selectedAuthors.map((author, index) => (
           <ListGroup.Item key={author.id || index}>
-            {author.name || "No se ha seleccionado un autor"}
+            {author.name || t("NewAuthors.No_selected")}
           </ListGroup.Item>
         ))}
       </ListGroup>
       <Button className="button" variant="primary" onClick={handleAddSelector}>
-        Agregar autor
+      {t("NewAuthors.Add")}
       </Button>
     </Container>
   );

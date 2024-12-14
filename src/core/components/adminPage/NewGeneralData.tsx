@@ -96,12 +96,12 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
 
   const handleCreateGroup = () => {
     if (!token) {
-      alert("No authentication token available");
+      alert(t("NewGeneralData.alert.authentication"));
       return;
     }
 
     if (!newGroup || !groupCode) {
-      alert("Por favor, ingrese tanto el nombre como el código del grupo");
+      alert(t("NewGeneralData.alert.group"));
       return;
     }
 
@@ -125,21 +125,21 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
         setGroupCode("");
       },
       (error) => {
-        console.error("Error creating group:", error);
-        alert("Fallo al crear el grupo");
+        console.error(t("NewGeneralData.error.group"), error);
+        alert(t("NewGeneralData.alert.Failed_group"));
       }
     );
   };
 
   const handleCreateType = () => {
     if (!token) {
-      alert("No authentication token available");
+      alert(t("NewGeneralData.alert.authentication"));
       return;
     }
 
     // Verificar que tanto el nombre como el código estén presentes
     if (!newType || !typeCode) {
-      alert("Por favor, ingrese tanto el nombre como el código del tipo");
+      alert(t("NewGeneralData.alert.type"));
       return;
     }
 
@@ -164,20 +164,20 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
         setTypeCode("");
       },
       (error) => {
-        console.error("Error creating type:", error);
-        alert("Fallo al crear el tipo");
+        console.error(t("NewGeneralData.error.type"), error);
+        alert(t("NewGeneralData.alert.Failed_type"));
       }
     );
   };
 
   const handleCreateScientificName = () => {
     if (!token) {
-      alert("No authentication token available");
+      alert(t("NewGeneralData.alert.authentication"));
       return;
     }
 
     if (!newScientificName) {
-      alert("Por favor, ingrese un nombre científico");
+      alert(t("NewGeneralData.alert.scientific"));
       return;
     }
 
@@ -197,20 +197,20 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
         setNewScientificName(undefined);
       },
       (error) => {
-        console.error("Error creating scientific name:", error);
-        alert("Fallo al crear el nombre científico");
+        console.error(t("NewGeneralData.error.scientific"), error);
+        alert(t("NewGeneralData.alert.Failed_scientific"));
       }
     );
   };
 
   const handleCreateSubspecies = () => {
     if (!token) {
-      alert("No authentication token available");
+      alert(t("NewGeneralData.alert.authentication"));
       return;
     }
 
     if (!newSubspecies) {
-      alert("Por favor, ingrese una subespecie");
+      alert(t("NewGeneralData.alert.subspecies"));
       return;
     }
 
@@ -230,8 +230,8 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
         setNewSubspecies(undefined);
       },
       (error) => {
-        console.error("Error creating subspecies:", error);
-        alert("Fallo al crear la subespecie");
+        console.error(t("NewGeneralData.error.subspecies"), error);
+        alert(t("NewGeneralData.alert.Failed_subspecies"));
       }
     );
   };
@@ -331,7 +331,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
           <Col md={4} className="d-flex align-items-stretch">
             <Form.Control
               type="text"
-              placeholder="Código del grupo"
+              placeholder={t("NewGeneralData.Group")}
               value={groupCode}
               onChange={(e) => setGroupCode(e.target.value)}
               className="h-100"
@@ -344,7 +344,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
               disabled={!newGroup || !groupCode}
               className="w-100"
             >
-              Crear Grupo
+              {t("NewGeneralData.create_group")}
             </Button>
           </Col>
         </Row>
@@ -387,7 +387,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
           <Col md={4} className="d-flex align-items-stretch">
             <Form.Control
               type="text"
-              placeholder="Código del tipo"
+              placeholder={t("NewGeneralData.Type")}
               value={typeCode}
               onChange={(e) => setTypeCode(e.target.value)}
               className="h-100"
@@ -400,7 +400,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
               disabled={!newType || !typeCode}
               className="w-100"
             >
-              Crear Tipo
+              {t("NewGeneralData.Create")}
             </Button>
           </Col>
         </Row>
@@ -424,7 +424,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
                     formData.scientificNameId,
                     scientificNames
                   )}
-                  placeholder={"Selecciona un nombre científico"}
+                  placeholder={t("NewGeneralData.Select_scientific")}
                   onSelect={(id, name) => {
                     if (id !== undefined) {
                       const updatedFormData = {
@@ -448,7 +448,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
               disabled={!newScientificName}
               className="w-100"
             >
-              Crear Nombre Científico
+              {t("NewGeneralData.Create_Scientific")}
             </Button>
           </Col>
         </Row>
@@ -470,7 +470,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
                     formData.subspeciesId,
                     subspecies
                   )}
-                  placeholder={"Selecciona una subespecie"}
+                  placeholder={t("NewGeneralData.Select_subspecies")}
                   onSelect={(id, name) => {
                     if (id !== undefined) {
                       const updatedFormData = {
@@ -494,7 +494,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
               disabled={!newSubspecies}
               className="w-100"
             >
-              Crear Subespecie
+              {t("NewGeneralData.Create_subspecies")}
             </Button>
           </Col>
         </Row>

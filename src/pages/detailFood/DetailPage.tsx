@@ -193,13 +193,13 @@ export default function DetailPage() {
             <div className="transparent-container">
               <Row>
                 <Col md={6}>
-                  <Graphic key={grams} data={graphicData} title="Composición" />
+                  <Graphic key={grams} data={graphicData} title={t("DetailFood.graphics.title_L")} />
                 </Col>
                 <Col md={6}>
                   <Graphic
                     key={grams}
                     data={graphicDataPorcent}
-                    title="Contenido energetico"
+                    title={t("DetailFood.graphics.title_R")}
                   />
                 </Col>
               </Row>

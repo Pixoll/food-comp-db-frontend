@@ -141,7 +141,13 @@
     "enter": "Enter the code",
     "save": "Save Changes",
     "label_type": "Type",
-    "label_group": "Group"
+    "label_group": "Group",
+    "graphics":{
+      "title_L":"Composition",
+      "title_R":"Energy content"
+    },
+    "selected":"Nothing selected",
+    "Apply":"Apply changes"
   },
   "components_home": {
     "title": "Search Composition"
@@ -168,12 +174,16 @@
     "close": "Close",
     "references": "References",
     "yes": "Yes",
-    "type":"Data type"
+    "type":"Data type",
+    "size":"Sample size"
   },
   "LangualCode": {
     "description_main": "Main Description",
     "code": "Code",
-    "description": "Description"
+    "description": "Description",
+    "Search":"Search by Langual code",
+    "Eliminate":"Eliminate",
+    "Add":"Add"
   },
   "References": {
     "type": "Type:",
@@ -183,7 +193,10 @@
     "magazine": "Magazine:",
     "Volume ": "Volume:",
     "pages": "Pages:",
-    "additional": "Other information:"
+    "additional": "Other information:",
+    "Add":"Add",
+    "Additional":"Additional information:",
+    "Publication":"Publication:"
   },
   "Origins": {
     "title": "Origins",
@@ -196,7 +209,10 @@
     "action":"Actions",
     "add":"Add source",
     "selected":"Selected addresses:",
-    "no_direction":"No direction selected"
+    "no_direction":"No direction selected",
+    "minimum":"The minimum number of origins is one",
+    "Add":"Add a source",
+    "Delete":"Delete a source"
   },
   "Case_1": {
     "name": "Name",
@@ -294,7 +310,27 @@
     "process": "Process Data",
     "upload": "Upload a file in",
     "or": "or",
-    "point": "format."
+    "point": "format.",
+    "sectionNames":{
+      "data":"General data",
+      "value":"Energy value",
+      "compound":"Compound macronutrients",
+      "non_compounded":"Non-compounded macronutrients",
+      "vitamins":"Vitamins",
+      "minerals":"Minerals",
+      "origins":"Origins of food",
+      "references":"References",
+      "codes":"Language codes",
+      "view":"Current information view"
+    },
+    "Enter_New_R": "Enter a new reference",
+    "New_R":"New reference",
+    "sectionNamesByNewReference":{
+      "Data": "General Data",
+      "Authors": "Authors",
+      "Article": "Article",
+      "Preview": "Preview" 
+     }
   },
   "NewGeneralData":{
     "code":"Food code",
@@ -310,8 +346,36 @@
     "name_common":"Common names",
     "name_com":"Common name",
     "Ingredients":"Ingredients",
-    "Ingredient":"Ingredient"
+    "Ingredient":"Ingredient",
+
+    "alert":{
+      "authentication":"No authentication token available",
+      "group":"Please enter both the group name and code",
+      "Failed_group":"Failed to create group",
+      "type":"Please enter both the type name and code",
+      "Failed_type":"Failed to create type",
+      "scientific":"Please enter a scientific name",
+      "Failed_scientific":"Failed to create scientific name",
+      "subspecies":"Please enter a subspecies",
+      "Failed_subspecies":"Failed to create subspecies"
+    },
+    "error":{
+      "group":"Error creating group:",
+      "type":"Error creating type:",
+      "scientific":"Error creating scientific name:",
+      "subspecies":"Error creating subspecies:"
+    },
+    "Group":"Group code",
+    "create_group":"Create Group",
+    "Type":"Type code",
+    "Create":"Create Type",
+    "Select_scientific":"Select a scientific name",
+    "Create_Scientific":"Create Scientific Name",
+    "Select_subspecies":"Select a subspecies",
+    "Create_subspecies":"Create Subspecies"
+
   },
+
   "NewMacronutrient":{
     "name":"Nutrient name",
     "mean":"Average",
@@ -354,6 +418,61 @@
     "Vitamins":"Vitamins",
     "Main":"Main Nutrients",
     "Minerals":"Minerals"
+  },
+  "SelectorWithInput":{
+    "button": "Search",
+    "Other":"Other value",
+    "Enter":"Enter another value"  
+  },
+  "PreviewNewReference":{
+    "Authors":"Authors:",
+    "New_A":"New Authors:",
+    "New":"New Item:",
+    "City":"City:",
+    "Other":"Other:",
+    "button":"Validate and submit"   
+  },
+  "NewAuthors":{
+    "author":"Select or add an author",
+    "Eliminate":"Eliminate",
+    "Select":"Select and add authors",
+    "Add":"Add author",
+    "No_selected":"No author has been selected"
+  },
+  "FoodTableAdmin":{
+    "List":"List of Foods Entered",
+    "available":"No food available",
+    "Name":"Name",
+    "Actions":"Actions",
+    "Verify":"Verify",
+    "Check":"Check Food",
+    "Back":"Back to list"
+  },
+  "ModalReferences":{
+    "Select":"Select nutrients",
+    "Close":"Close",
+    "Save":"Save changes" 
+  },
+  "NewReference":{
+    "Add":"Add New Reference",
+    "Title":"Title",
+    "Enter_t":"Enter the title",
+    "Type":"Type",
+    "required":"This field is required",
+    "Report":"Report",
+    "Thesis":"Thesis",
+    "Article":"Article",
+    "Website":"Website",
+    "Book":"Book",
+    "City":"City",
+    "Select":"Select a city",
+    "Year":"Year",
+    "Enter_y":"Enter the year",
+    "Other":"Other",
+    "Additional":"Additional Information"
   }
+
+
 }
+
 

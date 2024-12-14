@@ -3,6 +3,7 @@ import { Card, Row, Col, Button, Form } from "react-bootstrap";
 import { PlusCircle , Trash2  } from "lucide-react";
 import {LangualCode}from "./getters/useLangualCodes";
 import Pagination from "../search/Pagination";
+import { useTranslation } from "react-i18next";
 
 const ITEMS_PER_PAGE = 5;
 type NewLangualCodesProps = {
@@ -36,12 +37,13 @@ const NewLangualCodes: React.FC<NewLangualCodesProps> = ({langualCodes, selected
     setCurrentPage(1); 
   };
 
+  const { t } = useTranslation("global");
   return (
     <div className="langual-codes-container space-y-4 py-4">
       <Form className="mb-4">
         <Form.Control
           type="text"
-          placeholder="Buscar por código Langual"
+          placeholder={t("LangualCode.Search")}
           value={searchTerm}
           onChange={handleSearch}
         />
@@ -78,12 +80,12 @@ const NewLangualCodes: React.FC<NewLangualCodesProps> = ({langualCodes, selected
                     {isSelected ? (
                       <>
                         <Trash2 className="mx-auto mb-2" size={24} />
-                        <span className="d-block">Eliminar</span>
+                        <span className="d-block">{t("LangualCode.Eliminate")}</span>
                       </>
                     ) : (
                       <>
                         <PlusCircle className="mx-auto mb-2" size={24} />
-                        <span className="d-block">Agregar</span>
+                        <span className="d-block">{t("LangualCode.Add")}</span>
                       </>
                     )}
                   </div>
