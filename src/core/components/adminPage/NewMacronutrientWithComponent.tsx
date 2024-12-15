@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { Button, Card, Collapse, Form, Table } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import {Ellipsis} from "lucide-react"
 import {
   getNutrientNameById,
   NutrientMeasurementForm,
   NutrientMeasurementWithComponentsForm,
   NutrientSummary,
 } from "../../../pages/AdminPage";
+
 
 type NewMacronutrientWithComponentProps = {
   macronutrientsWithComponents: NutrientMeasurementWithComponentsForm[];
@@ -222,16 +224,16 @@ export default function NewMacronutrientWithComponent({
                             nameAndIdNutrients
                           )}
                         </td>
-                        <td>{component.average || "---"}</td>
-                        <td>{component.deviation || "---"}</td>
-                        <td>{component.min || "---"}</td>
-                        <td>{component.max || "---"}</td>
-                        <td>{component.sampleSize || "---"}</td>
+                        <td>{component.average || <Ellipsis size={35}></Ellipsis>}</td>
+                        <td>{component.deviation || <Ellipsis size={35}></Ellipsis>}</td>
+                        <td>{component.min || <Ellipsis size={35}></Ellipsis>}</td>
+                        <td>{component.max || <Ellipsis size={35}></Ellipsis>}</td>
+                        <td>{component.sampleSize || <Ellipsis size={35}></Ellipsis>}</td>
                         <td>
                           {component.dataType
                             ? component.dataType.charAt(0).toUpperCase() +
                             component.dataType.slice(1)
-                            : "---"}
+                            : <Ellipsis size={35}></Ellipsis>}
                         </td>
                         <td>
                           <Button
@@ -333,16 +335,16 @@ export default function NewMacronutrientWithComponent({
                           )}
                         </strong>
                       </td>
-                      <td>{nutrient.average || "---"}</td>
-                      <td>{nutrient.deviation || "---"}</td>
-                      <td>{nutrient.min || "---"}</td>
-                      <td>{nutrient.max || "---"}</td>
-                      <td>{nutrient.sampleSize || "---"}</td>
+                      <td>{nutrient.average || <Ellipsis size={35}></Ellipsis>}</td>
+                      <td>{nutrient.deviation || <Ellipsis size={35}></Ellipsis>}</td>
+                      <td>{nutrient.min || <Ellipsis size={35}></Ellipsis>}</td>
+                      <td>{nutrient.max || <Ellipsis size={35}></Ellipsis>}</td>
+                      <td>{nutrient.sampleSize || <Ellipsis size={35}></Ellipsis>}</td>
                       <td>
                         {nutrient.dataType
                           ? nutrient.dataType.charAt(0).toUpperCase() +
                           nutrient.dataType.slice(1)
-                          : "---"}
+                          : <Ellipsis size={35}></Ellipsis>}
                       </td>
                       <td>
                         <Button

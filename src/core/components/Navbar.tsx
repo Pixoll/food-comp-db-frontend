@@ -6,7 +6,7 @@ import { useAuth } from "../context/AuthContext";
 import { useTranslation } from "react-i18next";
 import { useToast } from "../context/ToastContext";
 import makeRequest from "../utils/makeRequest";
-import { MonitorCog, LogOut , Languages} from "lucide-react";
+import { MonitorCog, LogOut , Languages, Search} from "lucide-react";
 const AppNavbar = () => {
   const { t, i18n } = useTranslation();
   const changeLanguage = (lng: string) => {
@@ -45,12 +45,12 @@ const AppNavbar = () => {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link as={Link} to="/search">
-              {t("navbar.search")}
+              <Search style={{marginLeft:20}} size={40}></Search>
             </Nav.Link>
           </Nav>
-          <Nav className="ms-auto">
+          <Nav style={{marginLeft:20, marginRight:20}} className="ms-auto">
           
-            <NavDropdown title={<Languages size={40}></Languages>} id="nav-dropdown">
+            <NavDropdown title={<Languages style={{marginLeft:20, marginRight:20}} size={40}></Languages>} id="nav-dropdown">
 
               <NavDropdown.Item onClick={() => changeLanguage("es")}>
                 {t("navbar.spanish")}
@@ -62,7 +62,7 @@ const AppNavbar = () => {
             {state.isAuthenticated ? (
               <>
                 <Nav.Link as={Link} to="/panel-admin">
-                  <MonitorCog size={40}></MonitorCog>
+                  <MonitorCog style={{marginLeft:20, marginRight:20}}size={40}></MonitorCog>
                 </Nav.Link>
                 <Nav.Link onClick={handleLogout}>
                   {t("navbar.close")}

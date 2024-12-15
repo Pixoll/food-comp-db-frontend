@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button, Form, Table } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { getNutrientNameById, NutrientMeasurementForm, NutrientSummary } from "../../../pages/AdminPage";
+import {Ellipsis} from "lucide-react"
 import "../../../assets/css/_NewNutrient.css";
 
 type NewNutrientsProps = {
@@ -127,12 +128,12 @@ export default function NewNutrients({ nutrients, onNutrientUpdate, nameAndIdNut
             ) : (
               <>
                 <td>{getNutrientNameById(nutrient.nutrientId, nameAndIdNutrients)}</td>
-                <td>{nutrient.average || "---"}</td>
-                <td>{nutrient.deviation || "---"}</td>
-                <td>{nutrient.min || "---"}</td>
-                <td>{nutrient.max || "---"}</td>
-                <td>{nutrient.sampleSize || "---"}</td>
-                <td>{nutrient.dataType ? nutrient.dataType.charAt(0).toUpperCase() + nutrient.dataType.slice(1) : "---"}</td>
+                <td>{nutrient.average || <Ellipsis size={35}></Ellipsis>}</td>
+                <td>{nutrient.deviation || <Ellipsis size={35}></Ellipsis>}</td>
+                <td>{nutrient.min || <Ellipsis size={35}></Ellipsis>}</td>
+                <td>{nutrient.max || <Ellipsis size={35}></Ellipsis>}</td>
+                <td>{nutrient.sampleSize || <Ellipsis size={35}></Ellipsis>}</td>
+                <td>{nutrient.dataType ? nutrient.dataType.charAt(0).toUpperCase() + nutrient.dataType.slice(1) : <Ellipsis size={35}></Ellipsis>}</td>
                 <td>
                   <Button className="btn-edit" onClick={() => startEditing(nutrient)}>
                     {t("NewMacronutrient.Edit")}
