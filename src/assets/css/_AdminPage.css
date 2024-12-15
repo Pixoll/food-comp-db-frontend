@@ -219,3 +219,49 @@
 .file-input-label:active {
   background-color: #1A7862;
 }
+
+
+@media screen and (max-width: 768px) {
+  .data-uploader {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .left-column {
+    flex: 1;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .second-row {
+    flex-direction: column;
+  }
+
+  .content-container {
+    flex: 1;
+    width: 100%;
+  }
+
+  .right-container {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .data-uploader {
+    padding: 10px;
+  }
+
+  .left-column, .content-container, .right-container {
+    padding: 15px;
+  }
+
+  .tabs-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .tab {
+    width: 100%;
+  }
+}
