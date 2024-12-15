@@ -129,7 +129,7 @@ const Origins: React.FC<OriginsProps> = ({
         <ListGroup>
           {addresses.map((address, index) => (
             <ListGroup.Item key={index}>
-              {address || t("Origins.NoDirection")}
+              {address || t("Origins.no_direction")}
             </ListGroup.Item>
           ))}
         </ListGroup>

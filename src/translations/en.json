@@ -47,7 +47,7 @@
       "response": "Error response:",
       "state": "State code:",
       "received": "No response received:",
-      "unknown ": "Unknown error:"
+      "unknown": "Unknown error:"
     }
   },
   "Filter": {
@@ -142,12 +142,12 @@
     "save": "Save Changes",
     "label_type": "Type",
     "label_group": "Group",
-    "graphics":{
-      "title_L":"Composition",
-      "title_R":"Energy content"
+    "graphics": {
+      "title_L": "Composition",
+      "title_R": "Energy content"
     },
-    "selected":"Nothing selected",
-    "Apply":"Apply changes"
+    "selected": "Nothing selected",
+    "Apply": "Apply changes"
   },
   "components_home": {
     "title": "Search Composition"
@@ -174,16 +174,16 @@
     "close": "Close",
     "references": "References",
     "yes": "Yes",
-    "type":"Data type",
-    "size":"Sample size"
+    "type": "Data type",
+    "size": "Sample size"
   },
   "LangualCode": {
     "description_main": "Main Description",
     "code": "Code",
     "description": "Description",
-    "Search":"Search by Langual code",
-    "Eliminate":"Eliminate",
-    "Add":"Add"
+    "Search": "Search by Langual code",
+    "Eliminate": "Eliminate",
+    "Add": "Add"
   },
   "References": {
     "type": "Type:",
@@ -191,12 +191,12 @@
     "year": "Year:",
     "city": "City:",
     "magazine": "Magazine:",
-    "Volume ": "Volume:",
+    "Volume": "Volume:",
     "pages": "Pages:",
     "additional": "Other information:",
-    "Add":"Add",
-    "Additional":"Additional information:",
-    "Publication":"Publication:"
+    "Add": "Add",
+    "Additional": "Additional information:",
+    "Publication": "Publication:"
   },
   "Origins": {
     "title": "Origins",
@@ -206,13 +206,13 @@
     "Location": "Location",
     "select_region": "Select a region",
     "select": "Select one",
-    "action":"Actions",
-    "add":"Add source",
-    "selected":"Selected addresses:",
-    "no_direction":"No direction selected",
-    "minimum":"The minimum number of origins is one",
-    "Add":"Add a source",
-    "Delete":"Delete a source"
+    "action": "Actions",
+    "add": "Add source",
+    "selected": "Selected addresses:",
+    "no_direction": "No direction selected",
+    "minimum": "The minimum number of origins is one",
+    "Add": "Add a source",
+    "Delete": "Delete a source"
   },
   "Case_1": {
     "name": "Name",
@@ -309,170 +309,165 @@
     "import": "Import Template",
     "process": "Process Data",
     "upload": "Upload a file in",
+    "uploadError": "An error occurred while uploading the file",
+    "noFileSelected": "No file has been selected",
     "or": "or",
     "point": "format.",
-    "sectionNames":{
-      "data":"General data",
-      "value":"Energy value",
-      "compound":"Compound macronutrients",
-      "non_compounded":"Non-compounded macronutrients",
-      "vitamins":"Vitamins",
-      "minerals":"Minerals",
-      "origins":"Origins of food",
-      "references":"References",
-      "codes":"Language codes",
-      "view":"Current information view"
+    "sectionNames": {
+      "data": "General data",
+      "value": "Energy value",
+      "compound": "Compound macronutrients",
+      "non_compounded": "Non-compounded macronutrients",
+      "vitamins": "Vitamins",
+      "minerals": "Minerals",
+      "origins": "Origins of food",
+      "references": "References",
+      "codes": "Language codes",
+      "view": "Current information view"
     },
     "Enter_New_R": "Enter a new reference",
-    "New_R":"New reference",
-    "sectionNamesByNewReference":{
+    "New_R": "New reference",
+    "sectionNamesByNewReference": {
       "Data": "General Data",
       "Authors": "Authors",
       "Article": "Article",
-      "Preview": "Preview" 
-     }
+      "Preview": "Preview"
+    }
   },
-  "NewGeneralData":{
-    "code":"Food code",
-    "strain":"Strain",
-    "brand":"Brand",
-    "Observation":"Observation",
-    "group":"Food group",
-    "select_G":"Select a food group",
-    "type":"Type of food",
-    "select_A":"Select a type of food",
-    "name_scientist":"Scientist name",
-    "Subspecies":"Subspecies",
-    "name_common":"Common names",
-    "name_com":"Common name",
-    "Ingredients":"Ingredients",
-    "Ingredient":"Ingredient",
-
-    "alert":{
-      "authentication":"No authentication token available",
-      "group":"Please enter both the group name and code",
-      "Failed_group":"Failed to create group",
-      "type":"Please enter both the type name and code",
-      "Failed_type":"Failed to create type",
-      "scientific":"Please enter a scientific name",
-      "Failed_scientific":"Failed to create scientific name",
-      "subspecies":"Please enter a subspecies",
-      "Failed_subspecies":"Failed to create subspecies"
+  "NewGeneralData": {
+    "code": "Food code",
+    "strain": "Strain",
+    "brand": "Brand",
+    "Observation": "Observation",
+    "group": "Food group",
+    "select_G": "Select a food group",
+    "type": "Type of food",
+    "select_A": "Select a type of food",
+    "name_scientist": "Scientist name",
+    "Subspecies": "Subspecies",
+    "name_common": "Common names",
+    "name_com": "Common name",
+    "Ingredients": "Ingredients",
+    "Ingredient": "Ingredient",
+    "alert": {
+      "authentication": "No authentication token available",
+      "group": "Please enter both the group name and code",
+      "Failed_group": "Failed to create group",
+      "type": "Please enter both the type name and code",
+      "Failed_type": "Failed to create type",
+      "scientific": "Please enter a scientific name",
+      "Failed_scientific": "Failed to create scientific name",
+      "subspecies": "Please enter a subspecies",
+      "Failed_subspecies": "Failed to create subspecies"
     },
-    "error":{
-      "group":"Error creating group:",
-      "type":"Error creating type:",
-      "scientific":"Error creating scientific name:",
-      "subspecies":"Error creating subspecies:"
+    "error": {
+      "group": "Error creating group:",
+      "type": "Error creating type:",
+      "scientific": "Error creating scientific name:",
+      "subspecies": "Error creating subspecies:"
     },
-    "Group":"Group code",
-    "create_group":"Create Group",
-    "Type":"Type code",
-    "Create":"Create Type",
-    "Select_scientific":"Select a scientific name",
-    "Create_Scientific":"Create Scientific Name",
-    "Select_subspecies":"Select a subspecies",
-    "Create_subspecies":"Create Subspecies"
-
+    "Group": "Group code",
+    "create_group": "Create Group",
+    "Type": "Type code",
+    "Create": "Create Type",
+    "Select_scientific": "Select a scientific name",
+    "Create_Scientific": "Create Scientific Name",
+    "Select_subspecies": "Select a subspecies",
+    "Create_subspecies": "Create Subspecies"
   },
-
-  "NewMacronutrient":{
-    "name":"Nutrient name",
-    "mean":"Average",
-    "Deviation":"Deviation",
-    "min":"Minimum",
-    "max":"Maximum",
-    "Size":"Sample size",
-    "type":"Data type",
-    "Action":"Action",
-    "Analytical":"Analytical",
-    "Calculated":"Calculated",
-    "Taken":"Assumed",
-    "Borrowed":"Borrowed",
-    "Edit":"Edit",
-    "parent":"Parent Nutrient:",
-    "save":"Save",
-    "cancel":"Cancel"
+  "NewMacronutrient": {
+    "name": "Nutrient name",
+    "mean": "Average",
+    "Deviation": "Deviation",
+    "min": "Minimum",
+    "max": "Maximum",
+    "Size": "Sample size",
+    "type": "Data type",
+    "Action": "Action",
+    "Analytical": "Analytical",
+    "Calculated": "Calculated",
+    "Taken": "Assumed",
+    "Borrowed": "Borrowed",
+    "Edit": "Edit",
+    "parent": "Parent Nutrient:",
+    "save": "Save",
+    "cancel": "Cancel"
   },
-  "OriginRow":{
-    "selected":"Nothing selected",
-    "remove":"Delete"
+  "OriginRow": {
+    "selected": "Nothing selected",
+    "remove": "Delete"
   },
-  "PreviewDataFrom":{
-    "General":"General Data",
-    "Code":"Code:",
-    "Scientific":"Scientific Name:",
-    "Group":"Group:",
-    "Type":"Type:",
-    "Subspecies":"Subspecies:",
-    "Strain":"Strain:",
-    "Brand":"Brand:",
-    "Observation":"Observation:",
-    "Common":"Common Name ",
-    "Nutritional":"Nutritional Data",
-    "Energy":"Energy",
-    "Nutrient":"Nutrient ID:",
-    "Average":"Average:",
-    "Components":"Components:",
-    "Micronutrients":"Micronutrients",
-    "Vitamins":"Vitamins",
-    "Main":"Main Nutrients",
-    "Minerals":"Minerals"
+  "PreviewDataFrom": {
+    "General": "General Data",
+    "Code": "Code:",
+    "Scientific": "Scientific Name:",
+    "Group": "Group:",
+    "Type": "Type:",
+    "Subspecies": "Subspecies:",
+    "Strain": "Strain:",
+    "Brand": "Brand:",
+    "Observation": "Observation:",
+    "Common": "Common Name ",
+    "Nutritional": "Nutritional Data",
+    "Energy": "Energy",
+    "Nutrient": "Nutrient ID:",
+    "Average": "Average:",
+    "Components": "Components:",
+    "Micronutrients": "Micronutrients",
+    "Vitamins": "Vitamins",
+    "Main": "Main Nutrients",
+    "Minerals": "Minerals"
   },
-  "SelectorWithInput":{
+  "SelectorWithInput": {
     "button": "Search",
-    "Other":"Other value",
-    "Enter":"Enter another value"  
+    "Other": "Other value",
+    "Enter": "Enter another value"
   },
-  "PreviewNewReference":{
-    "Authors":"Authors:",
-    "New_A":"New Authors:",
-    "New":"New Item:",
-    "City":"City:",
-    "Other":"Other:",
-    "button":"Validate and submit"   
+  "PreviewNewReference": {
+    "Authors": "Authors:",
+    "New_A": "New Authors:",
+    "New": "New Item:",
+    "City": "City:",
+    "Other": "Other:",
+    "button": "Validate and submit"
   },
-  "NewAuthors":{
-    "author":"Select or add an author",
-    "Eliminate":"Eliminate",
-    "Select":"Select and add authors",
-    "Add":"Add author",
-    "No_selected":"No author has been selected"
+  "NewAuthors": {
+    "author": "Select or add an author",
+    "Eliminate": "Eliminate",
+    "Select": "Select and add authors",
+    "Add": "Add author",
+    "No_selected": "No author has been selected"
   },
-  "FoodTableAdmin":{
-    "List":"List of Foods Entered",
-    "available":"No food available",
-    "Name":"Name",
-    "Actions":"Actions",
-    "Verify":"Verify",
-    "Check":"Check Food",
-    "Back":"Back to list"
+  "FoodTableAdmin": {
+    "List": "List of Foods Entered",
+    "available": "No food available",
+    "Name": "Name",
+    "Actions": "Actions",
+    "Verify": "Verify",
+    "Check": "Check Food",
+    "Back": "Back to list"
   },
-  "ModalReferences":{
-    "Select":"Select nutrients",
-    "Close":"Close",
-    "Save":"Save changes" 
+  "ModalReferences": {
+    "Select": "Select nutrients",
+    "Close": "Close",
+    "Save": "Save changes"
   },
-  "NewReference":{
-    "Add":"Add New Reference",
-    "Title":"Title",
-    "Enter_t":"Enter the title",
-    "Type":"Type",
-    "required":"This field is required",
-    "Report":"Report",
-    "Thesis":"Thesis",
-    "Article":"Article",
-    "Website":"Website",
-    "Book":"Book",
-    "City":"City",
-    "Select":"Select a city",
-    "Year":"Year",
-    "Enter_y":"Enter the year",
-    "Other":"Other",
-    "Additional":"Additional Information"
+  "NewReference": {
+    "Add": "Add New Reference",
+    "Title": "Title",
+    "Enter_t": "Enter the title",
+    "Type": "Type",
+    "required": "This field is required",
+    "Report": "Report",
+    "Thesis": "Thesis",
+    "Article": "Article",
+    "Website": "Website",
+    "Book": "Book",
+    "City": "City",
+    "Select": "Select a city",
+    "Year": "Year",
+    "Enter_y": "Enter the year",
+    "Other": "Other",
+    "Additional": "Additional Information"
   }
-
-
 }
-
-
