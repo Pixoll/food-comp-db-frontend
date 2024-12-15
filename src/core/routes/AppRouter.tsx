@@ -1,20 +1,20 @@
-import { Routes, Route, useLocation } from "react-router-dom";
 import { Suspense, useEffect } from "react";
-import AppNavbar from "../components/Navbar";
-import PrivateRoute from "./PrivateRoute";
 import { FaSpinner } from "react-icons/fa";
+import { Route, Routes, useLocation } from "react-router-dom";
+import AdminPage from "../../pages/AdminPage";
+import DetailPage from "../../pages/detailFood/DetailPage";
+import ModifyFoodDetail from "../../pages/detailFood/ModifyFoodDetail";
 import HomePage from "../../pages/home/HomePage";
 import LoginPage from "../../pages/LoginPage";
-import DetailPage from "../../pages/detailFood/DetailPage";
 import SearchPage from "../../pages/search/SearchPage";
-import ModifyFoodDetail from "../../pages/detailFood/ModifyFoodDetail";
-import AdminPage from "../../pages/AdminPage";
+import AppNavbar from "../components/Navbar";
 import { useAuth } from "../context/AuthContext";
 import makeRequest from "../utils/makeRequest";
+import PrivateRoute from "./PrivateRoute";
 
 export const AppRouter = () => {
   const { state, logout } = useAuth();
-  const location = useLocation()
+  const location = useLocation();
   const { isAuthenticated, username, token } = state;
 
   useEffect(() => {

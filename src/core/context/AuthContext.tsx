@@ -94,7 +94,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             type: "LOGIN",
             payload: { token, username },
           });
-        } else {
+        } else if (storedToken || storedUsername) {
           setStoredToken("");
           setStoredUsername("");
           localStorage.removeItem("token");
