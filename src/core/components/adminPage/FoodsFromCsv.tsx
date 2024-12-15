@@ -5,15 +5,15 @@ import { useAuth } from "../../context/AuthContext";
 import makeRequest from "../../utils/makeRequest";
 import FoodTableAdmin from "./FoodTableAdmin";
 
-type CSVValue<T> = {
+export type CSVValue<T> = {
   parsed: T | null;
   raw: string;
   flags: number;
   old?: T | null;
 };
-type CSVStringTranslation = Record<"es" | "en" | "pt", CSVValue<string> | null>;
+export type CSVStringTranslation = Record<"es" | "en" | "pt", CSVValue<string> | null>;
 
-type CSVMeasurement = {
+export type CSVMeasurement = {
   flags: number;
   nutrientId: number;
   average: CSVValue<number>;
@@ -24,7 +24,7 @@ type CSVMeasurement = {
   referenceCodes?: Array<CSVValue<number>>;
   dataType: CSVValue<Measurement["data_type"]>;
 };
-type Measurement = {
+export type Measurement = {
   id: `${number}`;
   min: number | null;
   max: number | null;
@@ -96,7 +96,7 @@ export default function FoodsFromCsv() {
       payload,
       state.token,
       (response) => {
-        setData(response.data);
+        setData(response.data.foods);
         console.log(response.data);
       },
       (error) => {
