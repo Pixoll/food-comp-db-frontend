@@ -228,7 +228,7 @@
   }
 
   .left-column {
-    flex: 1;
+    flex: 1 auto none;
     width: 100%;
     max-width: 100%;
   }
