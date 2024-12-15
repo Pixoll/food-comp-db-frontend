@@ -45,7 +45,7 @@ const OriginRow: React.FC<OriginRowProps> = ({
 
   const regionOptions = Array.from(regions.values());
   
-  const { t } = useTranslation("global");
+  const { t } = useTranslation();
 
   const notifyIdsChange = (
     updatedSelectedLocation: number | null,

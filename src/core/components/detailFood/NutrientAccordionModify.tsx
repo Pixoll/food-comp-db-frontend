@@ -19,7 +19,7 @@ const NutrientAccordionModify: React.FC<NutrientAccordionProps> = ({
   data,
   onUpdate
 }) => {
-  const {t} = useTranslation("global");
+  const {t} = useTranslation();
   const [selectedNutrient, setSelectedNutrient] =
     useState<NutrientMeasurement | null>(null);
   const [showModal, setShowModal] = useState(false);

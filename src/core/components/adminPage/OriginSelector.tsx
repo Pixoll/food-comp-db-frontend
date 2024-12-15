@@ -15,7 +15,7 @@ const OriginSelector: React.FC<OriginsSelectorProps> = ({
   selectedValue,
   onSelect,
 }) => {
-  const { t } = useTranslation("global");
+  const { t } = useTranslation();
   const [isActive, setIsActive] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 

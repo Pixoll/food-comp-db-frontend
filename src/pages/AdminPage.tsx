@@ -507,7 +507,7 @@ export default function AdminPage() {
   };
 
   const [view, setView] = useState<string>("manual");
-  const { t } = useTranslation("global");
+  const { t } = useTranslation();
 
   const sectionNames = [
     t("AdminPage.sectionNames.data"),

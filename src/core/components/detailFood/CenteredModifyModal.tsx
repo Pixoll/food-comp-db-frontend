@@ -36,7 +36,7 @@ const CenteredModifyModal: React.FC<ModalProps> = ({
     onSave(formData); 
     onHide();
   };
-  const {t} = useTranslation("global");
+  const {t} = useTranslation();
 
   return (
     <Modal

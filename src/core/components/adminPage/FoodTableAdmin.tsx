@@ -12,7 +12,7 @@ const FoodTableAdmin: React.FC<FoodResultsListProps> = ({ data }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 7;
   const [filteredData, setFilteredData] = useState(data);
-  const { t } = useTranslation("global");
+  const { t } = useTranslation();
   const npage = Math.ceil(filteredData.length / recordsPerPage);
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;

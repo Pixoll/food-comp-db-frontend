@@ -7,7 +7,7 @@ interface ReferencesListProps {
 }
 
 const ReferencesList: React.FC<ReferencesListProps> = ({ references }) => {
-  const {t} = useTranslation("global");
+  const {t} = useTranslation();
   return (
     <ListGroup>
       {references.map((reference, index) => (

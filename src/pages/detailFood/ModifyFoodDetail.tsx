@@ -57,7 +57,7 @@ export default function ModifyFoodDetail() {
       ? subspeciesResult.data
       : [];
 
-  const { t } = useTranslation("global");
+  const { t } = useTranslation();
 
   const searchGroupByCode = (code: string): number | undefined => {
     const group = groups.find((group) => group.code === code);

@@ -53,7 +53,7 @@ export type CSVFood = {
 };
 
 export default function FoodsFromCsv() {
-  const { t } = useTranslation("global");
+  const { t } = useTranslation();
   const { state } = useAuth();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [data, setData] = useState<CSVFood[] | null>(null);

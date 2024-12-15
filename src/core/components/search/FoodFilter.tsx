@@ -85,7 +85,7 @@ const FoodFilter = () => {
   const FoodResults = useFetch<FoodResult[]>(`/foods?${queryString}`);
   const foods = FoodResults.status === FetchStatus.Success ? FoodResults.data : [];
   console.log(`/foods?${queryString}`);
-  const { t } = useTranslation("global");
+  const { t } = useTranslation();
 
   return (
     <div className="search-container">

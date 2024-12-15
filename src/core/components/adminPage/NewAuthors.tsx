@@ -43,7 +43,7 @@ const NewAuthors: React.FC<NewAuthorsProps> = ({
   data,
   updateAuthors,
 }) => {
-  const { t } = useTranslation("global");
+  const { t } = useTranslation();
   const [selectedAuthors, setSelectedAuthors] = useState<Author[]>(
     convert(authorIds, newAuthors, data)
   );

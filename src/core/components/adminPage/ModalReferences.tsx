@@ -24,7 +24,7 @@ const ModalReferences: React.FC<ModalReferencesProps> = ({
   selectedReference,
 }) => {
   const [selectedNutrientIds, setSelectedNutrientIds] = useState<number[]>([]);
-  const { t } = useTranslation("global");
+  const { t } = useTranslation();
   useEffect(() => {
     if (show) {
       const initialSelectedIds = nutrients

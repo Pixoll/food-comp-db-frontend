@@ -12,7 +12,7 @@ import LengualCodeComponent from "../../core/components/detailFood/LengualCodeCo
 import { useTranslation } from "react-i18next";
 
 export default function DetailPage() {
-  const { t } = useTranslation("global");
+  const { t } = useTranslation();
   const [key, setKey] = useState<string>("first");
 
   const handleReferenceClick = (code: string) => {

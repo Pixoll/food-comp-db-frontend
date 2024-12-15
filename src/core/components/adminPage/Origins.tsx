@@ -24,7 +24,7 @@ const Origins: React.FC<OriginsProps> = ({
   updateOrigins,
   originsForm,
 }) => {
-  const { t } = useTranslation("global");
+  const { t } = useTranslation();
 
   const [rows, setRows] = useState<number[]>(
     originsForm.length > 0 ? originsForm.map((_, i) => i) : [0]

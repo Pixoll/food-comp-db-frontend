@@ -33,7 +33,7 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({
     setShowModal(false);
     setSelectedNutrient(null);
   };
-  const { t } = useTranslation("global");
+  const { t } = useTranslation();
   return (
     <>
       <Accordion className="mi-accordion" defaultActiveKey={["0", "1", "2"]}>

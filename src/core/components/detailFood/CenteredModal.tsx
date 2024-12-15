@@ -11,7 +11,7 @@ interface ModalProps {
 }
 
 const CenteredModal: React.FC<ModalProps> = ({ data, onHide, onReferenceClick }) => {
-  const {t} = useTranslation("global");
+  const {t} = useTranslation();
   const referenceLinks =
     data.referenceCodes?.length ? (
       data.referenceCodes.map((code, index) => (

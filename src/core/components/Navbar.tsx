@@ -8,7 +8,7 @@ import { useToast } from "../context/ToastContext";
 import makeRequest from "../utils/makeRequest";
 
 const AppNavbar = () => {
-  const { t, i18n } = useTranslation("global");
+  const { t, i18n } = useTranslation();
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
   };

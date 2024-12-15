@@ -32,7 +32,7 @@ const NewMacronutrientWithComponent: React.FC<
   const [formData, setFormData] = useState<NutrientMeasurementForm | null>(
     null
   );
-  const { t } = useTranslation("global");
+  const { t } = useTranslation();
 
   const toggleCollapse = (id: string) => {
     setOpen((prev) => {

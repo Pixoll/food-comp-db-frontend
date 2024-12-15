@@ -56,7 +56,7 @@ const PreviewNewReference: React.FC<PreviewNewReferenceProps> = ({
 }) => {
   const { state } = useAuth();
   const token = state.token;
-  const { t, i18n } = useTranslation("global");
+  const { t, i18n } = useTranslation();
   const formatNewArticle = (newArticle: NewArticle): string => {
     const { pageStart, pageEnd, volumeId, newVolume } = newArticle;
 

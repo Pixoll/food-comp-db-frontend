@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import background from "../../../src/assets/images/main_page_bg.jpg";
 
 export default function MainSectionHome() {
-  const { t } = useTranslation("global");
+  const { t } = useTranslation();
 
   return (
     <div

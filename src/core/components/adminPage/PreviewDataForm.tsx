@@ -77,7 +77,7 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
   types,
 }) => {
   const { generalData, nutrientsValueForm } = data;
-  const { t } = useTranslation("global");
+  const { t } = useTranslation();
   const { state } = useAuth();
   const { addToast } = useToast();
   const hasValidData = <T extends NutrientMeasurementForm>(

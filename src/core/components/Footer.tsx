@@ -3,7 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { useTranslation } from "react-i18next";
 
 const Footer = () => {
-  const {t} = useTranslation("global");
+  const {t} = useTranslation();
   return (
     <footer style={{ backgroundColor: '#343a40', color: 'white', padding: '20px', marginTop: '0' }}>
       <Container>

@@ -99,7 +99,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
 
   const [formData, setFormData] = useState<GeneralData>(data);
 
-  const { t } = useTranslation("global");
+  const { t } = useTranslation();
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {

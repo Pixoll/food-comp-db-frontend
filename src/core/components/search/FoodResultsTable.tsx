@@ -31,7 +31,7 @@ const FoodResultsTable: React.FC<FoodResultsListProps> = ({
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
   const records = Array.isArray(sortedData) ? sortedData.slice(firstIndex, lastIndex) : [];
-  const { t } = useTranslation("global");
+  const { t } = useTranslation();
 
   const toFoodDetail = (code: string) => {
     navigate(`/search/details/${code}`);

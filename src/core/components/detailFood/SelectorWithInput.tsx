@@ -15,7 +15,7 @@ const SelectorWithInput: React.FC<SelectorWithInputProps> = ({
   selectedValue,
   onSelect,
 }) => {
-  const { t } = useTranslation("global");
+  const { t } = useTranslation();
   const [isActive, setIsActive] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [customOption, setCustomOption] = useState(""); 

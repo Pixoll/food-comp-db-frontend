@@ -7,7 +7,7 @@ interface LengualCodeComponentProps {
 }
 
 const LengualCodeComponent: React.FC<LengualCodeComponentProps> = ({ data }) => {
-  const {t} = useTranslation("global");
+  const {t} = useTranslation();
   return (
     <Table responsive="sm" bordered hover striped className="mt-3">
       <thead className="table-primary">

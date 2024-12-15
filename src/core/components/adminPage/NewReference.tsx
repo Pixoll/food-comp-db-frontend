@@ -106,7 +106,7 @@ const NewReference: React.FC<NewReferenceProps> = ({
       default: return null;
     }
   };
-  const { t, i18n } = useTranslation("global");
+  const { t, i18n } = useTranslation();
   return (
     <Card className="mt-4 shadow-sm">
       <Card.Header className="d-flex align-items-center bg-primary text-white">

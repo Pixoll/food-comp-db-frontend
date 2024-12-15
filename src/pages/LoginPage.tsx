@@ -22,7 +22,7 @@ const LoginPage = () => {
     });
     const navigate = useNavigate();
     const { dispatch } = useAuth();
-    const {t} = useTranslation("global");
+    const {t} = useTranslation();
     const onLogin = (e: React.FormEvent) => {
         e.preventDefault();
 

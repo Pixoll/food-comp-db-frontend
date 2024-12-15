@@ -37,7 +37,7 @@ const NewLangualCodes: React.FC<NewLangualCodesProps> = ({langualCodes, selected
     setCurrentPage(1); 
   };
 
-  const { t } = useTranslation("global");
+  const { t } = useTranslation();
   return (
     <div className="langual-codes-container space-y-4 py-4">
       <Form className="mb-4">
