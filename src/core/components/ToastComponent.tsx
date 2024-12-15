@@ -17,6 +17,7 @@ type ColorVariant =
   | "Info"
   | "Light"
   | "Dark";
+
 type position =
   | "top-start"
   | "top-center"
@@ -27,6 +28,7 @@ type position =
   | "bottom-start"
   | "bottom-center"
   | "bottom-end";
+
 const ToastTypeConfig = {
   Success: {
     icon: CheckCircleIcon,
@@ -75,7 +77,7 @@ export type ToastComponentProps = {
   message: string;
   title?: string;
   duration?: number;
-  position?:position
+  position?: position;
 };
 
 export const ToastComponent: React.FC<ToastComponentProps> = ({
@@ -86,14 +88,22 @@ export const ToastComponent: React.FC<ToastComponentProps> = ({
   position = "middle-center",
 }) => {
   const [show, setShow] = useState(true);
-
   const config = ToastTypeConfig[type];
   const Icon = config.icon;
-  const customStyle: React.CSSProperties =
-    position === "middle-center"
-      ? { position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }
-      : {};
-      
+
+  const customStyle: React.CSSProperties = {
+    position: "fixed",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    minHeight: "800px",
+    maxHeight: "900px",
+    minWidth: "700px", 
+    maxWidth: "600px", 
+    width: "90%", 
+    zIndex: 9999, 
+  };
+
   return (
     <ToastContainer position={position} style={customStyle} className="p-3">
       <Toast
@@ -101,22 +111,33 @@ export const ToastComponent: React.FC<ToastComponentProps> = ({
         show={show}
         delay={duration}
         autohide
-        className={`larger-toast border-0 shadow-lg`}
+        className={`border-0 shadow-lg rounded-lg overflow-hidden`}
       >
         <Toast.Header
           closeButton={false}
-          className={`bg-${config.color} text-white d-flex align-items-center`}
+          className={`bg-${config.color} text-white d-flex align-items-center py-3`}
         >
           <Icon
-            size={32} 
-            className="me-3"
+            size={48} // Increased icon size
+            className="me-4"
             color={config.iconColor}
             strokeWidth={2.5}
           />
-          <strong className="me-auto fs-5 fw-bold">{title || type}</strong>
-          <small className="text-white-50 ms-2 fs-6">just now</small>
+          <div className="d-flex flex-column">
+            <strong className="fs-4 fw-bold mb-1">{title || type}</strong>
+            <small className="text-white-50 fs-6">just now</small>
+          </div>
+          <button 
+            type="button" 
+            className="btn-close btn-close-white ms-auto" 
+            aria-label="Close"
+            onClick={() => setShow(false)}
+          />
         </Toast.Header>
-        <Toast.Body className={`larger-toast-body bg-${config.color} bg-opacity-10 text-dark`}>
+        <Toast.Body 
+          className={`p-4 fs-5 text-dark bg-${config.color} bg-opacity-10`}
+          style={{ lineHeight: 1.5 }}
+        >
           {message}
         </Toast.Body>
       </Toast>
@@ -125,3 +146,9 @@ export const ToastComponent: React.FC<ToastComponentProps> = ({
 };
 
 export default ToastComponent;
+
+const styles = `
+.toast {
+  font-size: 1.1rem !important;
+}
+`;

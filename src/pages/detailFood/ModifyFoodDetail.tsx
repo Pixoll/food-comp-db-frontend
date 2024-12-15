@@ -1,7 +1,11 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+
+import { useState, useEffect } from "react";
 import "../../assets/css/_ModifyDetailFood.css";
-import { Button, Col, Container, Form, Nav, Row, Tab } from "react-bootstrap";
+import Footer from "../../core/components/Footer";
+import useFetch, { FetchStatus } from "../../core/hooks/useFetch";
+import axios from "axios";
+import "../../assets/css/_ModifyDetailFood.css";
+import { Button, Col, Container, Form, Nav, Row, Tab, Card } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import {
@@ -19,10 +23,8 @@ import {
   RequiredFieldLabel,
   SelectorWithInput,
 } from "../../core/components/detailFood";
-import Footer from "../../core/components/Footer";
 import { useAuth } from "../../core/context/AuthContext";
 import { useToast } from "../../core/context/ToastContext";
-import useFetch, { FetchStatus } from "../../core/hooks/useFetch";
 import { LangualCode, NutrientsValue, Origin, SingleFoodResult, } from "../../core/types/SingleFoodResult";
 import makeRequest from "../../core/utils/makeRequest";
 
@@ -101,7 +103,9 @@ export default function ModifyFoodDetail() {
     return value?.trim() || undefined;
   };
   const handleScientificName = () => {
-    const scientificNameId = searchScientificNameByName(scientificNameAndSubspecies.scientificName);
+    const scientificNameId = searchScientificNameByName(
+      scientificNameAndSubspecies.scientificName
+    );
 
     const payload = {
       scientificNameId: scientificNameId,
@@ -122,7 +126,8 @@ export default function ModifyFoodDetail() {
             scientificNamesResult.forceReload();
             setScientificNameAndSubspecies({
               ...scientificNameAndSubspecies,
-              scientificName: name[0].toUpperCase() + name.slice(1).toLowerCase(),
+              scientificName:
+                name[0].toUpperCase() + name.slice(1).toLowerCase(),
             });
           }
         },
@@ -133,7 +138,7 @@ export default function ModifyFoodDetail() {
     } else if (payload.scientificNameId && payload.scientificName) {
       setScientificNameAndSubspecies({
         ...scientificNameAndSubspecies,
-        scientificName: searchScientificNameById(payload.scientificNameId)
+        scientificName: searchScientificNameById(payload.scientificNameId),
       });
     }
   };
@@ -157,7 +162,7 @@ export default function ModifyFoodDetail() {
         "/subspecies",
         { name },
         state.token,
-        () => {
+        (response) => {
           if (subspeciesResult.status !== FetchStatus.Loading) {
             subspeciesResult.forceReload();
             setScientificNameAndSubspecies({
@@ -348,8 +353,12 @@ export default function ModifyFoodDetail() {
     const payload = {
       commonName: namesAndIngredients.commonName,
       ingredients: namesAndIngredients.ingredients,
-      scientificNameId: searchScientificNameByName(scientificNameAndSubspecies.scientificName),
-      subspeciesId: searchSubspeciesByName(scientificNameAndSubspecies.subspecies),
+      scientificNameId: searchScientificNameByName(
+        scientificNameAndSubspecies.scientificName
+      ),
+      subspeciesId: searchSubspeciesByName(
+        scientificNameAndSubspecies.subspecies
+      ),
       groupId: groupAndTypeData.groupId,
       typeId: groupAndTypeData.typeId,
       strain: generalData.strain,
@@ -444,21 +453,23 @@ export default function ModifyFoodDetail() {
             response.data.message ||
             "Los cambios fueron realizados exitosamente",
           title: "Éxito",
-          position: 'middle-center',
+          position: "middle-center",
           duration: 3000,
         });
         console.log("Después de addToast");
       },
-      error => {
+      (error) => {
         if (axios.isAxiosError(error)) {
-
           if ((error.response?.status || -1) >= 400) {
             addToast({
-              type: 'Danger',
-              message: error.response?.data?.message || error.message || 'A ocurrido un error',
-              title: 'Error',
-              position: 'middle-center',
-              duration: 5000
+              type: "Danger",
+              message:
+                error.response?.data?.message ||
+                error.message ||
+                "A ocurrido un error",
+              title: "Error",
+              position: "middle-center",
+              duration: 5000,
             });
             return;
           }
@@ -466,68 +477,22 @@ export default function ModifyFoodDetail() {
             "Error en la solicitud:",
             error.response?.data || error.message
           );
-
         } else {
           console.error("Error desconocido:", error);
         }
       }
     );
-    /*try {
-     const response = await axios.patch(
-     `http://localhost:3000/api/v1/foods/${code}`,
-     payload,
-     {
-     headers: {
-     Authorization: `Bearer ${token}`,
-     },
-     }
-     );
-     console.log("Antes de addToast");
-     addToast({
-     type: "Success",
-     message:
-     response.data.message ||
-     "Los cambios fueron realizados exitosamente",
-     title: "Éxito",
-     position: 'middle-center',
-     duration: 3000,
-     });
-     console.log("Después de addToast");
-     } catch (error) {
-     if (axios.isAxiosError(error)) {
-
-     if ((error.response?.status || -1) < 400) {
-     addToast({
-     type: 'Danger',
-     message: error.response?.data || error.message || 'A ocurrido un error',
-     title: 'Error',
-     position: 'middle-center',
-     duration: 5000
-     });
-     return;
-     }
-     console.error(
-     "Error en la solicitud:",
-     error.response?.data || error.message
-     );
-
-     } else {
-     console.error("Error desconocido:", error);
-     }
-     }*/
   };
 
   const renderLanguageFields = (field: "commonName" | "ingredients") =>
     ["es", "en", "pt"].map((lang) => (
       <Form.Group as={Row} className="mb-3" key={`${field}.${lang}`}>
-        <Form.Label column sm={2}>
+        <Form.Label column sm={2} className="text-sm-right">
           {field === "commonName" && lang === "es" ? (
-            <>
-              <RequiredFieldLabel
-                label={`${t("DetailFood.name.title")} (${lang.toUpperCase()})`}
-                tooltipMessage={t("DetailFood.required")}
-              />
-            </>
+            <RequiredFieldLabel
+              label={`${t("DetailFood.name.title")} (${lang.toUpperCase()})`}
+              tooltipMessage={t("DetailFood.required")}
+            />
           ) : (
             `${
               field === "commonName"
@@ -542,6 +507,8 @@ export default function ModifyFoodDetail() {
             name={`${field}.${lang}`}
             value={namesAndIngredients[field][lang as "es" | "en" | "pt"]}
             onChange={handleInputChange}
+            placeholder={`Enter ${field} in ${lang.toUpperCase()}`}
+            className="form-control-md"
           />
         </Col>
       </Form.Group>
@@ -553,179 +520,216 @@ export default function ModifyFoodDetail() {
         <Form onSubmit={handleSubmit}>
           <Col md={12}>
             <div className="transparent-container">
-              <h2>{t("DetailFood.modify")}</h2>
-              <Form.Group as={Row} className="mb-3" controlId="formCode">
-                <Form.Label column sm={2}>
-                  <RequiredFieldLabel
-                    label={t("DetailFood.code")}
-                    tooltipMessage={t("DetailFood.required")}
-                  />
-                </Form.Label>
-                <Col sm={10}>
-                  <Form.Control
-                    type="text"
-                    name="code"
-                    value={generalData.code}
-                    placeholder={t("DetailFood.enter")}
-                    onChange={handleInputChange}
-                  />
-                </Col>
-              </Form.Group>
-              {renderLanguageFields("commonName")}
-              {renderLanguageFields("ingredients")}
-              <Form.Group
-                as={Row}
-                className="mb-3"
-                controlId="formScientificName"
-              >
-                <Form.Label column sm={2}>
-                  {t("DetailFood.name.scientific")}
-                </Form.Label>
-                <Col sm={10}>
-                  <div className="d-flex justify-content-between align-items-stretch">
-                    <div style={{ flex: 1, marginRight: "10px" }}>
-                      <SelectorWithInput
-                        options={scientificNames}
-                        placeholder={t("DetailFood.selected")}
-                        selectedValue={
-                          scientificNameAndSubspecies?.scientificName
-                        }
-                        onSelect={(id, name) => {
-                          setScientificNameAndSubspecies((prevState) => ({
-                            ...prevState,
-                            scientificName: name || undefined,
-                          }));
-                        }}
-                      />
-                    </div>
-                    <Button
-                      style={{ alignSelf: "stretch" }}
-                      onClick={handleScientificName}
+              <Card className="mb-4">
+                <Card.Header>
+                  <h2 className="mb-0">{t("DetailFood.modify")}</h2>
+                </Card.Header>
+                <Card.Body>
+                  <Form>
+                    {/* Code Field */}
+                    <Form.Group as={Row} className="mb-3" controlId="formCode">
+                      <Form.Label column sm={2}>
+                        <RequiredFieldLabel
+                          label={t("DetailFood.code")}
+                          tooltipMessage={t("DetailFood.required")}
+                        />
+                      </Form.Label>
+                      <Col sm={10}>
+                        <Form.Control
+                          type="text"
+                          name="code"
+                          value={generalData.code}
+                          placeholder={t("DetailFood.enter")}
+                          onChange={handleInputChange}
+                          disabled
+                        />
+                      </Col>
+                    </Form.Group>
+
+                    <Card className="mb-4">
+                      <Card.Header>
+                        Nombres comunes e ingredientes
+                      </Card.Header>
+                      <Card.Body>
+                        {renderLanguageFields("commonName")}
+                        {renderLanguageFields("ingredients")}
+                      </Card.Body>
+                    </Card>
+
+                    {/* Scientific Name */}
+                    <Form.Group
+                      as={Row}
+                      className="mb-3"
+                      controlId="formScientificName"
                     >
-                      {t("DetailFood.Apply")}
-                    </Button>
-                  </div>
-                </Col>
-              </Form.Group>
-              <Form.Group as={Row} className="mb-3" controlId="formSubspecies">
-                <Form.Label column sm={2}>
-                  {t("DetailFood.subspecies")}
-                </Form.Label>
-                <Col sm={10}>
-                  <div className="d-flex justify-content-between align-items-center">
-                    <div style={{ flex: 1, marginRight: "10px" }}>
-                      <SelectorWithInput
-                        options={subspecies}
-                        selectedValue={scientificNameAndSubspecies?.subspecies}
-                        placeholder={t("DetailFood.selected")}
-                        onSelect={(id, name) => {
-                          setScientificNameAndSubspecies((prevState) => ({
-                            ...prevState,
-                            subspecies: name || undefined,
-                          }));
-                        }}
-                      />
-                    </div>
-                    <Button
-                      style={{ alignSelf: "stretch" }}
-                      onClick={handleSubspecies}
+                      <Form.Label column sm={2}>
+                        {t("DetailFood.name.scientific")}
+                      </Form.Label>
+                      <Col sm={10}>
+                        <div className="d-flex align-items-center">
+                          <div className="flex-grow-1 me-2">
+                            <SelectorWithInput
+                              options={scientificNames}
+                              placeholder={t("DetailFood.selected")}
+                              selectedValue={
+                                scientificNameAndSubspecies?.scientificName
+                              }
+                              onSelect={(id, name) => {
+                                setScientificNameAndSubspecies((prevState) => ({
+                                  ...prevState,
+                                  scientificName: name || undefined,
+                                }));
+                              }}
+                            />
+                          </div>
+                          <Button
+                            variant="primary"
+                            onClick={handleScientificName}
+                          >
+                            {t("DetailFood.Apply")}
+                          </Button>
+                        </div>
+                      </Col>
+                    </Form.Group>
+                    <Form.Group
+                      as={Row}
+                      className="mb-3"
+                      controlId="formSubspecies"
                     >
-                      {t("DetailFood.Apply")}
-                    </Button>
-                  </div>
-                </Col>
-              </Form.Group>
-              <Form.Group as={Row} className="mb-3" controlId="fromStrain">
-                <Form.Label column sm={2}>
-                  {"Variante: "}
-                </Form.Label>
-                <Col sm={10}>
-                  <Form.Control
-                    type="text"
-                    name="strain"
-                    value={generalData.strain}
-                    onChange={handleInputChange}
-                  />
-                </Col>
-              </Form.Group>
-              <Form.Group as={Row} className="mb-3" controlId="formGroup">
-                <Form.Label column sm={2}>
-                  <RequiredFieldLabel
-                    label={t("DetailFood.label_group")}
-                    tooltipMessage={t("DetailFood.required")}
-                  />
-                </Form.Label>
-                <Col sm={10}>
-                  <OriginSelector
-                    selectedValue={searchNameGroupByID(
-                      groupAndTypeData.groupId
-                    )}
-                    options={groups.map((group) => ({
-                      id: group.id,
-                      name: group.name,
-                    }))}
-                    placeholder={"Nada seleccionado"}
-                    onSelect={(id) => {
-                      setGroupAndTypeData((prevState) => ({
-                        ...prevState,
-                        groupId: id || 0,
-                      }));
-                    }}
-                  />
-                </Col>
-              </Form.Group>
-              <Form.Group as={Row} className="mb-3" controlId="formType">
-                <Form.Label column sm={2}>
-                  <RequiredFieldLabel
-                    label={t("DetailFood.label_type")}
-                    tooltipMessage={t("DetailFood.required")}
-                  />
-                </Form.Label>
-                <Col sm={10}>
-                  <OriginSelector
-                    selectedValue={searchNameTypeByID(
-                      groupAndTypeData.typeId || -1
-                    )}
-                    options={types.map((type) => ({
-                      id: type.id,
-                      name: type.name,
-                    }))}
-                    placeholder={"Nada seleccionado"}
-                    onSelect={(id) => {
-                      setGroupAndTypeData((prevState) => ({
-                        ...prevState,
-                        typeId: id || 0,
-                      }));
-                    }}
-                  />
-                </Col>
-              </Form.Group>
-              <Form.Group as={Row} className="mb-3" controlId="formBrand">
-                <Form.Label column sm={2}>
-                  {"Marca: "}
-                </Form.Label>
-                <Col sm={10}>
-                  <Form.Control
-                    type="text"
-                    name="brand"
-                    value={generalData.brand}
-                    onChange={handleInputChange}
-                  />
-                </Col>
-              </Form.Group>
-              <Form.Group as={Row} className="mb-3" controlId="formObservation">
-                <Form.Label column sm={2}>
-                  {"Observación: "}
-                </Form.Label>
-                <Col sm={10}>
-                  <Form.Control
-                    type="text"
-                    name="observation"
-                    value={generalData.observation}
-                    onChange={handleInputChange}
-                  />
-                </Col>
-              </Form.Group>
+                      <Form.Label column sm={2}>
+                        {t("DetailFood.subspecies")}
+                      </Form.Label>
+                      <Col sm={10}>
+                        <div className="d-flex align-items-center">
+                          <div className="flex-grow-1 me-2">
+                            <SelectorWithInput
+                              options={subspecies}
+                              selectedValue={
+                                scientificNameAndSubspecies?.subspecies
+                              }
+                              placeholder={t("DetailFood.selected")}
+                              onSelect={(id, name) => {
+                                setScientificNameAndSubspecies((prevState) => ({
+                                  ...prevState,
+                                  subspecies: name || undefined,
+                                }));
+                              }}
+                            />
+                          </div>
+                          <Button variant="primary" onClick={handleSubspecies}>
+                            {t("DetailFood.Apply")}
+                          </Button>
+                        </div>
+                      </Col>
+                    </Form.Group>
+                    <Form.Group
+                      as={Row}
+                      className="mb-3"
+                      controlId="formStrain"
+                    >
+                      <Form.Label column sm={2}>
+                        Variante
+                      </Form.Label>
+                      <Col sm={10}>
+                        <Form.Control
+                          type="text"
+                          name="strain"
+                          value={generalData.strain}
+                          onChange={handleInputChange}
+                          placeholder={"Escribe la variante"}
+                        />
+                      </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} className="mb-3" controlId="formGroup">
+                      <Form.Label column sm={2}>
+                        <RequiredFieldLabel
+                          label={t("DetailFood.label_group")}
+                          tooltipMessage={t("DetailFood.required")}
+                        />
+                      </Form.Label>
+                      <Col sm={10}>
+                        <OriginSelector
+                          selectedValue={searchNameGroupByID(
+                            groupAndTypeData.groupId
+                          )}
+                          options={groups.map((group) => ({
+                            id: group.id,
+                            name: group.name,
+                          }))}
+                          placeholder={t("DetailFood.nothingSelected")}
+                          onSelect={(id) => {
+                            setGroupAndTypeData((prevState) => ({
+                              ...prevState,
+                              groupId: id || 0,
+                            }));
+                          }}
+                        />
+                      </Col>
+                    </Form.Group>
+
+                    <Form.Group as={Row} className="mb-3" controlId="formType">
+                      <Form.Label column sm={2}>
+                        <RequiredFieldLabel
+                          label={t("DetailFood.label_type")}
+                          tooltipMessage={t("DetailFood.required")}
+                        />
+                      </Form.Label>
+                      <Col sm={10}>
+                        <OriginSelector
+                          selectedValue={searchNameTypeByID(
+                            groupAndTypeData.typeId || -1
+                          )}
+                          options={types.map((type) => ({
+                            id: type.id,
+                            name: type.name,
+                          }))}
+                          placeholder={t("DetailFood.nothingSelected")}
+                          onSelect={(id) => {
+                            setGroupAndTypeData((prevState) => ({
+                              ...prevState,
+                              typeId: id || 0,
+                            }));
+                          }}
+                        />
+                      </Col>
+                    </Form.Group>
+
+                    <Form.Group as={Row} className="mb-3" controlId="formBrand">
+                      <Form.Label column sm={2}>
+                        {t("DetailFood.brand")}
+                      </Form.Label>
+                      <Col sm={10}>
+                        <Form.Control
+                          type="text"
+                          name="brand"
+                          value={generalData.brand}
+                          onChange={handleInputChange}
+                          placeholder="Escriba la marca"
+                        />
+                      </Col>
+                    </Form.Group>
+
+                    <Form.Group
+                      as={Row}
+                      className="mb-3"
+                      controlId="formObservation"
+                    >
+                      <Form.Label column sm={2}>
+                        {t("DetailFood.observation")}
+                      </Form.Label>
+                      <Col sm={10}>
+                        <Form.Control
+                          type="text"
+                          name="observation"
+                          value={generalData.observation}
+                          onChange={handleInputChange}
+                          placeholder={"Escriba la observación"}
+                        />
+                      </Col>
+                    </Form.Group>
+                  </Form>
+                </Card.Body>
+              </Card>
             </div>
           </Col>
 
