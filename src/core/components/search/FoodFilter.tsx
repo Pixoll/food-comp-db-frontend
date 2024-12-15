@@ -113,9 +113,7 @@ export default function FoodFilter() {
 
         {/* Measurement Section */}
         <Container className="mb-3 custom-container">
-          <h3 className="measurent-title">
-            <i className="bi bi-funnel-fill"></i> {t('Measurement.title')}
-          </h3>
+          <h3 className="measurement-title">{t('Measurement.title')}</h3>
           <Row className="align-items-start flex-column">
             <Col className="mb-3">
               <div className="filter-group">
