@@ -4,10 +4,10 @@ import Modal from "react-bootstrap/Modal";
 import { useTranslation } from "react-i18next";
 import { NutrientMeasurement } from "../../types/SingleFoodResult";
 
-interface ModalProps {
+type ModalProps = {
   data: NutrientMeasurement;
   onHide: () => void;
-  onReferenceClick: (code: string) => void;  // Agregar la funcion para cambiar la pestaña(no está termianada)
+  onReferenceClick: (code: string) => void; 
 }
 
 export default function CenteredModal({ data, onHide, onReferenceClick }: ModalProps) {

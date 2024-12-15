@@ -1,6 +1,14 @@
 import { useState } from "react";
 import "../../assets/css/_DetailPage.css";
-import { Col, Container, Nav, Row, Tab , ListGroup, Card} from "react-bootstrap";
+import {
+  Col,
+  Container,
+  Nav,
+  Row,
+  Tab,
+  ListGroup,
+  Card,
+} from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import {
@@ -100,145 +108,153 @@ export default function DetailPage() {
         fluid="xxl"
       >
         <Col>
-        <Col>
-      <Card className="shadow-sm mb-4">
-        <Card.Body>
-          <Card.Title className="text-dark mb-4">
-            {t("DetailFood.title")}
-          </Card.Title>
+          <Col>
+            <Card className="shadow-sm mb-4">
+              <Card.Body>
+                <Card.Title className="text-dark mb-4">
+                  {t("DetailFood.title")}
+                </Card.Title>
 
-          <Row className="mb-3">
-            <Col md={6}>
-              <ListGroup variant="flush">
-                <ListGroup.Item>
-                  <strong>{t("DetailFood.code")}: </strong>
-                  {data.code}
-                </ListGroup.Item>
+                <Row className="mb-3">
+                  <Col md={6}>
+                    <ListGroup variant="flush">
+                      <ListGroup.Item>
+                        <strong>{t("DetailFood.code")}: </strong>
+                        {data.code}
+                      </ListGroup.Item>
 
-                {data.commonName?.es && (
-                  <ListGroup.Item>
-                    <strong>{t("DetailFood.name.Spanish")} </strong>
-                    {data.commonName.es}
-                  </ListGroup.Item>
-                )}
+                      {data.commonName?.es && (
+                        <ListGroup.Item>
+                          <strong>{t("DetailFood.name.Spanish")} </strong>
+                          {data.commonName.es}
+                        </ListGroup.Item>
+                      )}
 
-                {data.commonName?.pt && (
-                  <ListGroup.Item>
-                    <strong>{t("DetailFood.name.Portuguese")}: </strong>
-                    {data.commonName.pt}
-                  </ListGroup.Item>
-                )}
+                      {data.commonName?.pt && (
+                        <ListGroup.Item>
+                          <strong>{t("DetailFood.name.Portuguese")}: </strong>
+                          {data.commonName.pt}
+                        </ListGroup.Item>
+                      )}
 
-                {data.commonName?.en && (
-                  <ListGroup.Item>
-                    <strong>{t("DetailFood.name.English")} </strong>
-                    {data.commonName.en}
-                  </ListGroup.Item>
-                )}
+                      {data.commonName?.en && (
+                        <ListGroup.Item>
+                          <strong>{t("DetailFood.name.English")} </strong>
+                          {data.commonName.en}
+                        </ListGroup.Item>
+                      )}
 
-                {data.scientificName && (
-                  <ListGroup.Item>
-                    <strong>{t("DetailFood.name.scientific")} </strong>
-                    {data.scientificName}
-                  </ListGroup.Item>
-                )}
+                      {data.scientificName && (
+                        <ListGroup.Item>
+                          <strong>{t("DetailFood.name.scientific")} </strong>
+                          {data.scientificName}
+                        </ListGroup.Item>
+                      )}
 
-                {data.subspecies && (
-                  <ListGroup.Item>
-                    <strong>{t("DetailFood.subspecies")} </strong>
-                    {data.subspecies}
-                  </ListGroup.Item>
-                )}
-              </ListGroup>
-            </Col>
+                      {data.subspecies && (
+                        <ListGroup.Item>
+                          <strong>{t("DetailFood.subspecies")} </strong>
+                          {data.subspecies}
+                        </ListGroup.Item>
+                      )}
+                    </ListGroup>
+                  </Col>
 
-            <Col md={6}>
-              <ListGroup variant="flush">
-                {data.strain && (
-                  <ListGroup.Item>
-                    <strong>{t("DetailFood.strain")}</strong>
-                    {data.strain}
-                  </ListGroup.Item>
-                )}
+                  <Col md={6}>
+                    <ListGroup variant="flush">
+                      {data.strain && (
+                        <ListGroup.Item>
+                          <strong>{t("DetailFood.strain")}</strong>
+                          {data.strain}
+                        </ListGroup.Item>
+                      )}
 
-                {data.brand && (
-                  <ListGroup.Item>
-                    <strong>{t("DetailFood.brand")} </strong>
-                    {data.brand}
-                  </ListGroup.Item>
-                )}
+                      {data.brand && (
+                        <ListGroup.Item>
+                          <strong>{t("DetailFood.brand")} </strong>
+                          {data.brand}
+                        </ListGroup.Item>
+                      )}
 
-                {data.observation && (
-                  <ListGroup.Item>
-                    <strong>{t("DetailFood.observation")} </strong>
-                    {data.observation}
-                  </ListGroup.Item>
-                )}
+                      {data.observation && (
+                        <ListGroup.Item>
+                          <strong>{t("DetailFood.observation")} </strong>
+                          {data.observation}
+                        </ListGroup.Item>
+                      )}
 
-                <ListGroup.Item>
-                  <strong>{t("DetailFood.group")} </strong>
-                  {data.group.name}
-                </ListGroup.Item>
+                      <ListGroup.Item>
+                        <strong>{t("DetailFood.group")} </strong>
+                        {data.group.name}
+                      </ListGroup.Item>
 
-                <ListGroup.Item>
-                  <strong>{t("DetailFood.type")} </strong>
-                  {data.type.name}
-                </ListGroup.Item>
-              </ListGroup>
-            </Col>
-          </Row>
+                      <ListGroup.Item>
+                        <strong>{t("DetailFood.type")} </strong>
+                        {data.type.name}
+                      </ListGroup.Item>
+                    </ListGroup>
+                  </Col>
+                </Row>
 
-          <Row className="mb-3">
-            <Col>
-              {data.origins && data.origins.length > 0 && (
-                <Card className="mb-3">
-                  <Card.Body>
-                    <Card.Subtitle className="mb-3 text-muted">
-                      {t("Origines")}
-                    </Card.Subtitle>
-                    {data.origins.map((origin, index) => (
-                      <p key={index}>
-                        <strong>{"Origen"} {index + 1}: </strong>
-                        {origin.name}
-                      </p>
-                    ))}
-                  </Card.Body>
-                </Card>
-              )}
+                <Row className="mb-3">
+                  <Col>
+                    {data.origins && data.origins.length > 0 && (
+                      <Card className="mb-3">
+                        <Card.Body>
+                          <Card.Subtitle className="mb-3 text-muted">
+                            {t("Origines")}
+                          </Card.Subtitle>
+                          {data.origins.map((origin, index) => (
+                            <p key={index}>
+                              <strong>
+                                {"Origen"} {index + 1}:{" "}
+                              </strong>
+                              {origin.name}
+                            </p>
+                          ))}
+                        </Card.Body>
+                      </Card>
+                    )}
 
-              <Card>
-                <Card.Body>
-                  <Card.Subtitle className="mb-3 text-muted">
-                    {"Ingredientes"}
-                  </Card.Subtitle>
+                    <Card>
+                      <Card.Body>
+                        <Card.Subtitle className="mb-3 text-muted">
+                          {"Ingredientes"}
+                        </Card.Subtitle>
 
-                  {data.ingredients?.es && (
-                    <p>
-                      <strong>{t("DetailFood.ingredients.Spanish")} </strong>
-                      {data.ingredients.es}
-                    </p>
-                  )}
+                        {data.ingredients?.es && (
+                          <p>
+                            <strong>
+                              {t("DetailFood.ingredients.Spanish")}{" "}
+                            </strong>
+                            {data.ingredients.es}
+                          </p>
+                        )}
 
-                  {data.ingredients?.pt && (
-                    <p>
-                      <strong>{t("DetailFood.ingredients.Portuguese")} </strong>
-                      {data.ingredients.pt}
-                    </p>
-                  )}
+                        {data.ingredients?.pt && (
+                          <p>
+                            <strong>
+                              {t("DetailFood.ingredients.Portuguese")}{" "}
+                            </strong>
+                            {data.ingredients.pt}
+                          </p>
+                        )}
 
-                  {data.ingredients?.en && (
-                    <p>
-                      <strong>{t("DetailFood.ingredients.English")} </strong>
-                      {data.ingredients.en}
-                    </p>
-                  )}
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-        </Card.Body>
-      </Card>
-    </Col>
+                        {data.ingredients?.en && (
+                          <p>
+                            <strong>
+                              {t("DetailFood.ingredients.English")}{" "}
+                            </strong>
+                            {data.ingredients.en}
+                          </p>
+                        )}
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                </Row>
+              </Card.Body>
+            </Card>
+          </Col>
           <Col>
             <div className="transparent-container">
               <Row>
