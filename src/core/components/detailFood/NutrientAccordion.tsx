@@ -6,6 +6,7 @@ import { BsQuestionCircle } from "react-icons/bs";
 import { NutrientMeasurement, NutrientsValue, } from "../../types/SingleFoodResult";
 import CenteredModal from "./CenteredModal";
 
+
 interface NutrientAccordionProps {
   data: NutrientsValue;
   onReferenceClick: (code: string) => void;
@@ -47,7 +48,7 @@ export default function NutrientAccordion({ data, onReferenceClick, actualGrams 
                 <tr key={index}>
                   <td>{energy.name}</td>
                   <td>{energy.measurementUnit}</td>
-                  <td>{energy.average}</td>
+                  <td>{energy.average * (actualGrams/100)}</td>
                   <td>
                     <Button
                       variant="link"
@@ -88,7 +89,7 @@ export default function NutrientAccordion({ data, onReferenceClick, actualGrams 
                       {actualGrams}
                       {nutrient.measurementUnit}
                     </td>
-                    <td>{nutrient.average}</td>
+                    <td>{nutrient.average *(actualGrams/100) }</td>
                     <td>
                       <Button
                         variant="link"
@@ -133,7 +134,7 @@ export default function NutrientAccordion({ data, onReferenceClick, actualGrams 
                               {actualGrams}
                               {subComponent.measurementUnit}
                             </td>
-                            <td>{subComponent.average}</td>
+                            <td>{subComponent.average * (actualGrams/100)}</td>
                             <td>
                               <Button
                                 variant="link"
