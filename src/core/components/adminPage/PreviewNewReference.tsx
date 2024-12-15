@@ -2,9 +2,9 @@ import { Card, Col, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
+import { Author, City, Journal, JournalVolume } from "../../hooks";
 import makeRequest from "../../utils/makeRequest";
 import "../../../assets/css/_PreviewNewReference.css";
-import { Author, City, Journal, JournalVolume } from "./getters";
 import { NewArticle, ReferenceForm } from "./NewReference";
 
 type PreviewNewReferenceProps = {

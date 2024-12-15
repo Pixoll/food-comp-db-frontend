@@ -32,4 +32,4 @@ export default function LangualCodeComponent({ data }: LangualCodeComponentProps
       </tbody>
     </Table>
   );
-};
+}

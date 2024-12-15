@@ -10,8 +10,8 @@ import {
 } from "../../../pages/AdminPage";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
+import { Group, LangualCode, ScientificName, Subspecies, Type } from "../../hooks";
 import makeRequest from "../../utils/makeRequest";
-import { Group, LangualCode, ScientificName, Subspecies, Type } from "./getters";
 import {
   searchGroupNameById,
   searchScientificNameById,

@@ -1,4 +1,4 @@
-import useFetch, { FetchStatus } from "../../../hooks/useFetch";
+import { FetchStatus, useFetch } from "./useFetch";
 
 export type Reference = {
   code: number;
@@ -46,7 +46,7 @@ export type Article = {
   pageEnd: number;
 };
 
-export default function useReferences() {
+export function useReferences() {
   const referencesResult = useFetch<Reference[]>("/references");
   const authorsResult = useFetch<Author[]>("/references/authors");
   const citiesResult = useFetch<City[]>("/references/cities");

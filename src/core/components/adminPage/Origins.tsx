@@ -3,9 +3,9 @@ import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";
 import Table from "react-bootstrap/Table";
 import { useTranslation } from "react-i18next";
+import { Commune, Location, Province, Region } from "../../hooks";
 import { Origin } from "../../types/SingleFoodResult";
 import { Collection } from "../../utils/collection";
-import { Commune, Location, Province, Region } from "./getters";
 import OriginRow from "./OriginRow";
 
 type OriginsProps = {

@@ -86,4 +86,4 @@ export default function SelectorWithInput({ options, placeholder, selectedValue,
       )}
     </div>
   );
-};
+}

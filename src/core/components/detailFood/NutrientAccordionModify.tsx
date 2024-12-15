@@ -252,4 +252,4 @@ export default function NutrientAccordionModify({ data, onUpdate }: NutrientAcco
       )}
     </Container>
   );
-};
+}

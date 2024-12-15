@@ -1,8 +1,7 @@
-import  { useState, ChangeEvent } from "react";
-import { Button, Modal, Form, Row, Col, Container } from "react-bootstrap";
-import { NutrientMeasurement } from "../../types/SingleFoodResult";
+import { ChangeEvent, useState } from "react";
+import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-
+import { NutrientMeasurement } from "../../types/SingleFoodResult";
 
 type ModalProps = {
   data: NutrientMeasurement;
@@ -10,11 +9,7 @@ type ModalProps = {
   onSave: (updatedData: NutrientMeasurement) => void;
 }
 
-const CenteredModifyModal: React.FC<ModalProps> = ({
-  data,
-  onHide,
-  onSave,
-}) => {
+export default function CenteredModifyModal({ data, onHide, onSave }: ModalProps) {
   const [formData, setFormData] = useState<NutrientMeasurement>(data);
   const { t } = useTranslation();
 
@@ -73,7 +68,7 @@ const CenteredModifyModal: React.FC<ModalProps> = ({
                     name="average"
                     value={formData.average || ""}
                     onChange={handleChange}
-                    placeholder= "Escribe el promedio"
+                    placeholder="Escribe el promedio"
                   />
                 </Form.Group>
               </Col>
@@ -87,7 +82,7 @@ const CenteredModifyModal: React.FC<ModalProps> = ({
                     name="deviation"
                     value={formData.deviation || ""}
                     onChange={handleChange}
-                    placeholder = "Escribe la desviación"
+                    placeholder="Escribe la desviación"
                   />
                 </Form.Group>
               </Col>
@@ -113,7 +108,7 @@ const CenteredModifyModal: React.FC<ModalProps> = ({
                     name="min"
                     value={formData.min || ""}
                     onChange={handleChange}
-                    placeholder = "Escribe el mínimo"
+                    placeholder="Escribe el mínimo"
                   />
                 </Form.Group>
               </Col>
@@ -125,7 +120,7 @@ const CenteredModifyModal: React.FC<ModalProps> = ({
                     name="max"
                     value={formData.max || ""}
                     onChange={handleChange}
-                    placeholder = "Escribe el máximo"
+                    placeholder="Escribe el máximo"
 
                   />
                 </Form.Group>
@@ -135,15 +130,15 @@ const CenteredModifyModal: React.FC<ModalProps> = ({
         </Container>
       </Modal.Body>
       <Modal.Footer className="justify-content-between">
-        <Button 
-          variant="secondary" 
+        <Button
+          variant="secondary"
           onClick={onHide}
           className="px-4"
         >
           Cerrar
         </Button>
-        <Button 
-          variant="primary" 
+        <Button
+          variant="primary"
           onClick={handleSave}
           className="px-4"
         >
@@ -152,6 +147,4 @@ const CenteredModifyModal: React.FC<ModalProps> = ({
       </Modal.Footer>
     </Modal>
   );
-};
-
-export default CenteredModifyModal;
+}

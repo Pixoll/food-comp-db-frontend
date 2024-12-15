@@ -8,8 +8,8 @@ import {
   NutrientSummary,
   NutrientsValueForm,
 } from "../../../pages/AdminPage";
+import { Reference } from "../../hooks";
 import Pagination from "../search/Pagination";
-import { Reference } from "./getters";
 import ModalReferences from "./ModalReferences";
 
 type NewReferencesProps = {

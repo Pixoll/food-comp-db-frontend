@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "../../../assets/css/_searchBox.css";
 import { Collection } from "../../utils/collection";
 

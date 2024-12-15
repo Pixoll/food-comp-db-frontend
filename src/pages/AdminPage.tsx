@@ -2,10 +2,7 @@ import { useEffect, useState } from "react";
 import "../assets/css/_AdminPage.css";
 import { useTranslation } from "react-i18next";
 import {
-  AnyNutrient,
-  Author,
   FoodsFromCsv,
-  MacroNutrient,
   NewArticle,
   NewArticleByReference,
   NewAuthors,
@@ -20,6 +17,11 @@ import {
   PreviewNewReference,
   RecursivePartial,
   ReferenceForm,
+} from "../core/components/adminPage";
+import {
+  AnyNutrient,
+  Author,
+  MacroNutrient,
   useGroups,
   useLanguages,
   useLangualCodes,
@@ -29,8 +31,7 @@ import {
   useScientificNames,
   useSubspecies,
   useTypes,
-} from "../core/components/adminPage";
-import { FetchStatus } from "../core/hooks/useFetch";
+} from "../core/hooks";
 import { Origin } from "../core/types/SingleFoodResult";
 
 export type NutrientSummary = {
@@ -203,67 +204,16 @@ export default function AdminPage() {
     });
   };
 
-  const nutrientsResult = useNutrients();
-  const nutrients =
-    nutrientsResult.status === FetchStatus.Success
-      ? nutrientsResult.data
-      : null;
+  const { nutrients, energy, macronutrients, vitamins, minerals } = useNutrients();
+  const groups = useGroups();
+  const types = useTypes();
+  const scientificNames = useScientificNames();
+  const subspecies = useSubspecies();
+  const languages = useLanguages();
+  const langualCodes = useLangualCodes();
 
-  const groupsResult = useGroups();
-  const typesResult = useTypes();
-  const scientificNamesResult = useScientificNames();
-  const subspeciesResult = useSubspecies();
-  const languagesResult = useLanguages();
-  const langualCodesResult = useLangualCodes();
-  const groups =
-    groupsResult.status === FetchStatus.Success ? groupsResult.data : [];
-  const types =
-    typesResult.status === FetchStatus.Success ? typesResult.data : [];
-  const languages =
-    languagesResult.status === FetchStatus.Success ? languagesResult.data : [];
+  const nameAndIdNutrients = nutrients.map<NutrientSummary>(n => n);
 
-  const scientificNames =
-    scientificNamesResult.status === FetchStatus.Success
-      ? scientificNamesResult.data
-      : [];
-  const subspecies =
-    subspeciesResult.status === FetchStatus.Success
-      ? subspeciesResult.data
-      : [];
-  const nameAndIdNutrients: NutrientSummary[] = [];
-
-  const langualCodes =
-    langualCodesResult.status === FetchStatus.Success
-      ? langualCodesResult.data
-      : [];
-  nutrients?.macronutrients.forEach((macronutrient) => {
-    nameAndIdNutrients.push({
-      id: macronutrient.id,
-      name: macronutrient.name,
-      measurementUnit: macronutrient.measurementUnit,
-    });
-    macronutrient.components?.forEach((component) => {
-      nameAndIdNutrients.push({
-        id: component.id,
-        name: component.name,
-        measurementUnit: component.measurementUnit,
-      });
-    });
-  });
-  nutrients?.micronutrients.minerals.forEach((mineral) => {
-    nameAndIdNutrients.push({
-      id: mineral.id,
-      name: mineral.name,
-      measurementUnit: mineral.measurementUnit,
-    });
-  });
-  nutrients?.micronutrients.vitamins.forEach((vitamin) => {
-    nameAndIdNutrients.push({
-      id: vitamin.id,
-      name: vitamin.name,
-      measurementUnit: vitamin.measurementUnit,
-    });
-  });
   const handleReferences = (updatedData: Partial<NutrientsValueForm>) => {
     setFormData((prev) => ({
       ...prev,
@@ -293,7 +243,7 @@ export default function AdminPage() {
   };
 
   useEffect(() => {
-    if (nutrients) {
+    if (energy.size > 0 && macronutrients.size > 0 && vitamins.size > 0 && minerals.size > 0) {
       const initialFormData: FoodForm = {
         generalData: {
           code: "",
@@ -309,48 +259,38 @@ export default function AdminPage() {
           langualCodes: [],
         },
         nutrientsValueForm: {
-          energy:
-            nutrients.macronutrients
-              ?.filter((macronutrient: MacroNutrient) => macronutrient.isEnergy)
-              .map((macronutrient: MacroNutrient) => ({
-                nutrientId: macronutrient.id,
-                referenceCodes: [],
-              })) || [],
-
-          mainNutrients:
-            nutrients.macronutrients
-              ?.filter((m) => !m.isEnergy)
-              .map((m) =>
-                (m.components?.length ?? 0) > 0
-                  ? mapMacroNutrientWithComponentsToForm(m)
-                  : {
-                    ...mapMacroNutrientWithoutComponentsToForm(m),
-                    components: [],
-                  }
-              ) || [],
-
+          energy: energy.map((macronutrient: MacroNutrient) => ({
+            nutrientId: macronutrient.id,
+            referenceCodes: [],
+          })),
+          mainNutrients: macronutrients.map((m) =>
+            (m.components?.length ?? 0) > 0
+              ? mapMacroNutrientWithComponentsToForm(m)
+              : {
+                ...mapMacroNutrientWithoutComponentsToForm(m),
+                components: [],
+              }
+          ),
           micronutrients: {
-            vitamins:
-              nutrients.micronutrients?.vitamins?.map(
-                (vitamin: AnyNutrient) => ({
-                  nutrientId: vitamin.id,
-                  referenceCodes: [],
-                })
-              ) || [],
-            minerals:
-              nutrients.micronutrients?.minerals?.map(
-                (mineral: AnyNutrient) => ({
-                  nutrientId: mineral.id,
-                  referenceCodes: [],
-                })
-              ) || [],
+            vitamins: vitamins.map(
+              (vitamin: AnyNutrient) => ({
+                nutrientId: vitamin.id,
+                referenceCodes: [],
+              })
+            ),
+            minerals: minerals.map(
+              (mineral: AnyNutrient) => ({
+                nutrientId: mineral.id,
+                referenceCodes: [],
+              })
+            ),
           },
         },
       };
 
       setFormData(initialFormData);
     }
-  }, [nutrients, nutrients?.macronutrients, nutrients?.micronutrients]);
+  }, [energy, macronutrients, vitamins, minerals]);
 
   const handleUpdate = (updatedData: Partial<GeneralData>) => {
     setFormData((prev) => ({
@@ -416,11 +356,11 @@ export default function AdminPage() {
           <NewGeneralData
             data={formData.generalData}
             onUpdate={handleUpdate}
-            groups={groups}
-            languages={languages}
-            scientificNames={scientificNames}
-            subspecies={subspecies}
-            types={types}
+            groups={groups.idToObject.map(o => o)}
+            languages={languages.map(o => o)}
+            scientificNames={scientificNames.idToObject.map(o => o)}
+            subspecies={subspecies.idToObject.map(o => o)}
+            types={types.idToObject.map(o => o)}
           />
         );
 
@@ -488,7 +428,7 @@ export default function AdminPage() {
       case 9:
         return (
           <NewLangualCode
-            langualCodes={langualCodes}
+            langualCodes={langualCodes.map(v => v)}
             onLangualCodesChange={handleLangualCodes}
             selectedLangualCodes={formData.generalData.langualCodes}
           />
@@ -499,11 +439,11 @@ export default function AdminPage() {
             data={formData}
             nameAndIdNutrients={nameAndIdNutrients}
             origins={origins?.map((o) => o.name) || []}
-            types={types}
-            groups={groups}
-            langualCodes={langualCodes}
-            scientificNames={scientificNames}
-            subspecies={subspecies}
+            types={types.idToObject.map(o => o)}
+            groups={groups.idToObject.map(o => o)}
+            langualCodes={langualCodes.map(v => v)}
+            scientificNames={scientificNames.idToObject.map(o => o)}
+            subspecies={subspecies.idToObject.map(o => o)}
           />
         );
       default:

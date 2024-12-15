@@ -1,11 +1,10 @@
 import { BookOpen, FileText, Layers, PlusCircle, XCircle } from "lucide-react";
 import { useState } from "react";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
-import { Article, Journal, JournalVolume } from "./getters";
+import { Article, Journal, JournalVolume } from "../../hooks";
 import { NewArticle, NewVolume } from "./NewReference";
 import "../../../assets/css/_NewVolumByReference.css";
 import "../../../assets/css/_newReference.css";
-
 
 type NewArticleByReferenceProps = {
   data: {
@@ -163,7 +162,7 @@ export default function NewArticleByReference({ data, dataForm, updateNewArticle
                 <Button
                   onClick={handleAddJournal}
                   variant="outline-secondary"
-                  className="w-100 d-flex align-items-center justify-content-center"
+                  className="largeButton"
                 >
                   <XCircle className="me-2"/>
                   Cancelar

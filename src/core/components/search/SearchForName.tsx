@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 export default function SearchForName() {
   const [searchTerm, setSearchTerm] = useState<string>("");

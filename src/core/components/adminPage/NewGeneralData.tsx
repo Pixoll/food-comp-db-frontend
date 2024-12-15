@@ -3,10 +3,10 @@ import { ChangeEvent, useState } from "react";
 import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../context/AuthContext";
+import { Group, Language, ScientificName, Subspecies, Type } from "../../hooks";
 import makeRequest from "../../utils/makeRequest";
 import RequiredFieldLabel from "../detailFood/RequiredFieldLabel";
 import SelectorWithInput from "../detailFood/SelectorWithInput";
-import { Group, Language, ScientificName, Subspecies, Type } from "./getters";
 
 export const searchScientificNameById = (
   id: number | undefined,

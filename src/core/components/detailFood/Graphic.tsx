@@ -1,5 +1,5 @@
-import { Legend, Pie, PieChart, ResponsiveContainer, Tooltip} from "recharts";
 import { Card } from 'react-bootstrap';
+import { Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
 type DataItem = {
   name: string;
@@ -37,10 +37,10 @@ export default function Graphic({ data, title }: GraphicProps) {
             >
 
             </Pie>
-            <Tooltip 
+            <Tooltip
               formatter={(value, name) => [value, name]}
-              contentStyle={{ 
-                backgroundColor: '#f8f9fa', 
+              contentStyle={{
+                backgroundColor: '#f8f9fa',
                 border: '1px solid #dee2e6',
                 borderRadius: '8px'
               }}

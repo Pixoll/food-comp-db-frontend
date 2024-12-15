@@ -2,8 +2,8 @@ import { PlusCircle, Trash2 } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import { LangualCode } from "../../hooks";
 import Pagination from "../search/Pagination";
-import { LangualCode } from "./getters";
 
 type NewLangualCodesProps = {
   langualCodes: LangualCode[];

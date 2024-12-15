@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Collection } from "../../utils/collection";
 import CheckboxFilter from "./CheckboxFilter";
 import SingleOptionFilter from "./SingleOptionFilter";

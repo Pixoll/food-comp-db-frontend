@@ -10,7 +10,7 @@ import {
   ReferencesList,
 } from "../../core/components/detailFood";
 import Footer from "../../core/components/Footer";
-import useFetch, { FetchStatus } from "../../core/hooks/useFetch";
+import { FetchStatus, useFetch } from "../../core/hooks";
 import { SingleFoodResult } from "../../core/types/SingleFoodResult";
 
 export default function DetailPage() {

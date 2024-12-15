@@ -1,6 +1,5 @@
 // noinspection JSUnusedGlobalSymbols
 
-export * from "./getters";
 export * from "./CSVFoodDisplay";
 export { default as CSVFoodDisplay } from "./CSVFoodDisplay";
 export * from "./CSVReferenceDisplay";

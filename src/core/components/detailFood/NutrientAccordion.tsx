@@ -230,4 +230,4 @@ export default function NutrientAccordion({ data, onReferenceClick, actualGrams 
       )}
     </>
   );
-};
+}

@@ -1,6 +1,5 @@
 // noinspection JSUnusedGlobalSymbols
 
-export * from "./gets";
 export * from "./CheckboxFilter";
 export { default as CheckboxFilter } from "./CheckboxFilter";
 export * from "./FoodFilter";

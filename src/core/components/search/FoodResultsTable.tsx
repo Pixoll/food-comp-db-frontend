@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -47,7 +47,7 @@ export default function FoodResultsTable({ data, searchForName, setSearchForName
     }
   };
 
-  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleLanguageChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelectedLanguage(e.target.value as "en" | "es" | "pt");
   };
 

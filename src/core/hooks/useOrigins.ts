@@ -1,5 +1,5 @@
-import useFetch, { FetchStatus } from "../../../hooks/useFetch";
-import { Collection } from "../../../utils/collection";
+import { Collection } from "../utils/collection";
+import { FetchStatus, useFetch } from "./useFetch";
 
 type Origin = CommonOrigin & ({
   type: "region";
@@ -40,7 +40,7 @@ export type Location = CommonOrigin & {
   type: "city" | "town";
 };
 
-export default function useOrigins() {
+export function useOrigins() {
   const result = useFetch<Origin[]>("/origins");
   const origins = result.status === FetchStatus.Success ? result.data : [];
 

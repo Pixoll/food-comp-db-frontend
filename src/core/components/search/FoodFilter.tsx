@@ -2,12 +2,10 @@ import qs from "qs";
 import { useState } from "react";
 import { Col, Container, Form, InputGroup, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import useFetch, { FetchStatus } from "../../hooks/useFetch";
+import { FetchStatus, useFetch, useGroups, useNutrients, useOrigins, useTypes } from "../../hooks";
 import { FoodResult } from "../../types/option";
 import { Collection } from "../../utils/collection";
-import useOrigins from "../adminPage/getters/useOrigins";
 import FoodResultsTable from "./FoodResultsTable";
-import { useGroups, useLanguages, useNutrients, useTypes } from "./gets";
 import SearchBox from "./SearchBox";
 import "../../../assets/css/_foodFilter.css";
 
@@ -16,22 +14,20 @@ export default function FoodFilter() {
     foodTypeFilter: new Set<string>(),
     regionsFilter: new Set<string>(),
     groupsFilter: new Set<string>(),
-    languagesFilter: new Set<string>(),
     nutrientFilter: new Set<string>(),
     operator: "=",
     value: 0,
   });
   const [searchForName, setSearchForName] = useState<string>("");
 
-  const { collectionGroups: groups } = useGroups();
+  const groups = useGroups();
   const { regions } = useOrigins();
 
   const regionOptions = new Collection<string, string>(
     Array.from(regions.values()).map((region) => [region.id.toString(), region.name])
   );
-  const { collectionTypes: types } = useTypes();
-  const { collectionLanguages: languages } = useLanguages();
-  const { collectionNutrients: nutrients } = useNutrients();
+  const types = useTypes();
+  const { nutrients } = useNutrients();
 
   const handleFilterChange = (
     filterKey: keyof typeof selectedFilters,
@@ -48,7 +44,6 @@ export default function FoodFilter() {
     type: Array.from(selectedFilters.foodTypeFilter),
     region: Array.from(selectedFilters.regionsFilter),
     group: Array.from(selectedFilters.groupsFilter),
-    language: Array.from(selectedFilters.languagesFilter),
     ...(selectedFilters.nutrientFilter.size > 0 &&
       selectedFilters.operator &&
       selectedFilters.value && {
@@ -68,7 +63,6 @@ export default function FoodFilter() {
       foodTypeFilter: new Set<string>(),
       regionsFilter: new Set<string>(),
       groupsFilter: new Set<string>(),
-      languagesFilter: new Set<string>(),
       nutrientFilter: new Set<string>(),
       operator: "=",
       value: 0,
@@ -90,7 +84,7 @@ export default function FoodFilter() {
         <div className="filter-group">
           <label htmlFor="other">{t('Filter.type')}</label>
           <SearchBox
-            filterOptions={types}
+            filterOptions={types.idToName as Collection<string, string>}
             onChange={(values) => handleFilterChange("foodTypeFilter", values)}
             single={false}
             selectedOptions={Array.from(selectedFilters.foodTypeFilter)}
@@ -110,20 +104,10 @@ export default function FoodFilter() {
         <div className="filter-group">
           <label htmlFor="other">{t('Filter.group')}</label>
           <SearchBox
-            filterOptions={groups}
+            filterOptions={groups.idToName as Collection<string, string>}
             onChange={(values) => handleFilterChange("groupsFilter", values)}
             single={false}
             selectedOptions={Array.from(selectedFilters.groupsFilter)}
-          />
-        </div>
-
-        <div className="filter-group">
-          <label htmlFor="other">{t('Filter.Languages')}</label>
-          <SearchBox
-            filterOptions={languages}
-            onChange={(values) => handleFilterChange("languagesFilter", values)}
-            single={false}
-            selectedOptions={Array.from(selectedFilters.languagesFilter)}
           />
         </div>
 
@@ -136,7 +120,7 @@ export default function FoodFilter() {
             <Col className="mb-3">
               <div className="filter-group">
                 <SearchBox
-                  filterOptions={nutrients}
+                  filterOptions={nutrients.mapValues(nutrient => `${nutrient.name} (${nutrient.measurementUnit})`)}
                   onChange={(values) =>
                     handleFilterChange("nutrientFilter", values)
                   }

@@ -36,4 +36,4 @@ export default function RequiredFieldLabel({ label, tooltipMessage }: RequiredFi
       </OverlayTrigger>
     </div>
   );
-};
+}

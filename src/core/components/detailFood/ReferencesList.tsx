@@ -33,4 +33,4 @@ export default function ReferencesList({ references }: ReferencesListProps) {
       ))}
     </ListGroup>
   );
-};
+}

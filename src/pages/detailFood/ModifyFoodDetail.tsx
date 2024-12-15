@@ -4,14 +4,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Button, Card, Col, Container, Form, Nav, Row, Tab } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import {
-  OriginSelector,
-  useGroups,
-  useOrigins,
-  useScientificNames,
-  useSubspecies,
-  useTypes,
-} from "../../core/components/adminPage";
+import { OriginSelector } from "../../core/components/adminPage";
 import {
   LangualCodeComponent,
   NutrientAccordionModify,
@@ -22,57 +15,33 @@ import {
 import Footer from "../../core/components/Footer";
 import { useAuth } from "../../core/context/AuthContext";
 import { useToast } from "../../core/context/ToastContext";
-import useFetch, { FetchStatus } from "../../core/hooks/useFetch";
-import { LangualCode, NutrientsValue, Origin, SingleFoodResult, } from "../../core/types/SingleFoodResult";
+import {
+  FetchStatus,
+  useFetch,
+  useGroups,
+  useOrigins,
+  useScientificNames,
+  useSubspecies,
+  useTypes
+} from "../../core/hooks";
+import { LangualCode, NutrientsValue, Origin, SingleFoodResult } from "../../core/types/SingleFoodResult";
 import makeRequest from "../../core/utils/makeRequest";
 
 export default function ModifyFoodDetail() {
   const { code } = useParams();
-  const result = useFetch<SingleFoodResult>(`/foods/${code}`);
-  const data = result.status === FetchStatus.Success ? result.data : null;
-  const groupsResult = useGroups();
-  const typesResult = useTypes();
-
-  const { addToast } = useToast();
-
+  const { t } = useTranslation();
   const { state } = useAuth();
   const token = state.token;
-  const scientificNamesResult = useScientificNames();
-  const subspeciesResult = useSubspecies();
 
+  const result = useFetch<SingleFoodResult>(`/foods/${code}`);
+  const data = result.status === FetchStatus.Success ? result.data : null;
+  const groups = useGroups();
+  const types = useTypes();
+  const scientificNames = useScientificNames();
+  const subspecies = useSubspecies();
   const { regions } = useOrigins();
 
-  const groups = groupsResult.status === FetchStatus.Success ? groupsResult.data : [];
-  const types = typesResult.status === FetchStatus.Success ? typesResult.data : [];
-
-  const scientificNames = scientificNamesResult.status === FetchStatus.Success
-    ? scientificNamesResult.data
-    : [];
-  const subspecies = subspeciesResult.status === FetchStatus.Success
-    ? subspeciesResult.data
-    : [];
-
-  const { t } = useTranslation();
-
-  const searchGroupByCode = (code: string): number | undefined => {
-    const group = groups.find((group) => group.code === code);
-    return group?.id;
-  };
-
-  const searchTypeByCode = (code: string): number | undefined => {
-    const type = types.find((type) => type.code === code);
-    return type?.id;
-  };
-
-  const searchNameGroupByID = (id: number | undefined): string => {
-    const group = groups.find((group) => group.id === id);
-    return group?.name || "";
-  };
-
-  const searchNameTypeByID = (id: number): string => {
-    const type = types.find((type) => type.id === id);
-    return type?.name || "";
-  };
+  const { addToast } = useToast();
 
   const [scientificNameAndSubspecies, setScientificNameAndSubspecies] = useState<{
     scientificName?: string;
@@ -82,28 +51,13 @@ export default function ModifyFoodDetail() {
     subspecies: data?.subspecies,
   });
 
-  const searchScientificNameByName = (name: string | undefined): number | undefined => {
-    const scientificName = scientificNames.find((sn) => sn.name === name);
-    return scientificName?.id;
-  };
-
-  const searchSubspeciesByName = (name: string | undefined): number | undefined => {
-    const result = subspecies.find((sp) => sp.name === name);
-    return result?.id;
-  };
-
-  const searchScientificNameById = (id: number | undefined): string | undefined => {
-    const scientificName = scientificNames.find((sn) => sn.id === id);
-    return scientificName?.name;
-  };
-
   const normalizeValue = (value: string | undefined) => {
     return value?.trim() || undefined;
   };
+
   const handleScientificName = () => {
-    const scientificNameId = searchScientificNameByName(
-      scientificNameAndSubspecies.scientificName
-    );
+    const scientificNameId = scientificNames.nameToId
+      .get(scientificNameAndSubspecies.scientificName ?? "");
 
     const payload = {
       scientificNameId: scientificNameId,
@@ -120,14 +74,12 @@ export default function ModifyFoodDetail() {
         { name },
         state.token,
         () => {
-          if (scientificNamesResult.status !== FetchStatus.Loading) {
-            scientificNamesResult.forceReload();
-            setScientificNameAndSubspecies({
-              ...scientificNameAndSubspecies,
-              scientificName:
-                name[0].toUpperCase() + name.slice(1).toLowerCase(),
-            });
-          }
+          scientificNames.forceReload();
+          setScientificNameAndSubspecies({
+            ...scientificNameAndSubspecies,
+            scientificName:
+              name[0].toUpperCase() + name.slice(1).toLowerCase(),
+          });
         },
         (error) => {
           console.error("Error al actualizar:", error.response?.data ?? error);
@@ -136,15 +88,13 @@ export default function ModifyFoodDetail() {
     } else if (payload.scientificNameId && payload.scientificName) {
       setScientificNameAndSubspecies({
         ...scientificNameAndSubspecies,
-        scientificName: searchScientificNameById(payload.scientificNameId),
+        scientificName: scientificNames.idToName.get(payload.scientificNameId),
       });
     }
   };
 
   const handleSubspecies = () => {
-    const subspeciesId = searchSubspeciesByName(
-      scientificNameAndSubspecies.subspecies
-    );
+    const subspeciesId = subspecies.nameToId.get(scientificNameAndSubspecies.subspecies ?? "");
 
     const payload = {
       subspeciesId: subspeciesId,
@@ -161,13 +111,11 @@ export default function ModifyFoodDetail() {
         { name },
         state.token,
         () => {
-          if (subspeciesResult.status !== FetchStatus.Loading) {
-            subspeciesResult.forceReload();
-            setScientificNameAndSubspecies({
-              ...scientificNameAndSubspecies,
-              subspecies: name[0].toUpperCase() + name.slice(1).toLowerCase(),
-            });
-          }
+          subspecies.forceReload();
+          setScientificNameAndSubspecies({
+            ...scientificNameAndSubspecies,
+            subspecies: name[0].toUpperCase() + name.slice(1).toLowerCase(),
+          });
         },
         (error) => {
           console.error("Error al actualizar:", error.response?.data ?? error);
@@ -212,8 +160,8 @@ export default function ModifyFoodDetail() {
     groupId: number | undefined;
     typeId: number | undefined;
   }>({
-    groupId: searchGroupByCode(data?.group.code || ""),
-    typeId: searchTypeByCode(data?.type.code || ""),
+    groupId: groups.codeToId.get(data?.group.code || ""),
+    typeId: types.codeToId.get(data?.type.code || ""),
   });
 
   const [nutrientValue, setNutrientValue] = useState<NutrientsValue>({
@@ -253,8 +201,8 @@ export default function ModifyFoodDetail() {
       };
 
       const groupAndTypeDataForm = {
-        groupId: searchGroupByCode(data.group.code),
-        typeId: searchTypeByCode(data.type.code),
+        groupId: groups.codeToId.get(data.group.code),
+        typeId: types.codeToId.get(data.type.code),
       };
       const initialNutrientData = {
         energy: data.nutrientMeasurements.energy || [],
@@ -351,12 +299,8 @@ export default function ModifyFoodDetail() {
     const payload = {
       commonName: namesAndIngredients.commonName,
       ingredients: namesAndIngredients.ingredients,
-      scientificNameId: searchScientificNameByName(
-        scientificNameAndSubspecies.scientificName
-      ),
-      subspeciesId: searchSubspeciesByName(
-        scientificNameAndSubspecies.subspecies
-      ),
+      scientificNameId: scientificNames.nameToId.get(scientificNameAndSubspecies.scientificName ?? ""),
+      subspeciesId: subspecies.nameToId.get(scientificNameAndSubspecies.subspecies ?? ""),
       groupId: groupAndTypeData.groupId,
       typeId: groupAndTypeData.typeId,
       strain: generalData.strain,
@@ -567,7 +511,7 @@ export default function ModifyFoodDetail() {
                         <div className="d-flex align-items-center">
                           <div className="flex-grow-1 me-2">
                             <SelectorWithInput
-                              options={scientificNames}
+                              options={scientificNames.nameToId.map((id, name) => ({ id, name }))}
                               placeholder={t("DetailFood.selected")}
                               selectedValue={
                                 scientificNameAndSubspecies?.scientificName
@@ -601,7 +545,7 @@ export default function ModifyFoodDetail() {
                         <div className="d-flex align-items-center">
                           <div className="flex-grow-1 me-2">
                             <SelectorWithInput
-                              options={subspecies}
+                              options={subspecies.nameToId.map((id, name) => ({ id, name }))}
                               selectedValue={
                                 scientificNameAndSubspecies?.subspecies
                               }
@@ -647,13 +591,8 @@ export default function ModifyFoodDetail() {
                       </Form.Label>
                       <Col sm={10}>
                         <OriginSelector
-                          selectedValue={searchNameGroupByID(
-                            groupAndTypeData.groupId
-                          )}
-                          options={groups.map((group) => ({
-                            id: group.id,
-                            name: group.name,
-                          }))}
+                          selectedValue={groups.idToName.get(groupAndTypeData.groupId ?? 0) ?? ""}
+                          options={groups.codeToId.map((id, name) => ({ id, name }))}
                           placeholder={t("DetailFood.nothingSelected")}
                           onSelect={(id) => {
                             setGroupAndTypeData((prevState) => ({
@@ -674,13 +613,8 @@ export default function ModifyFoodDetail() {
                       </Form.Label>
                       <Col sm={10}>
                         <OriginSelector
-                          selectedValue={searchNameTypeByID(
-                            groupAndTypeData.typeId || -1
-                          )}
-                          options={types.map((type) => ({
-                            id: type.id,
-                            name: type.name,
-                          }))}
+                          selectedValue={types.idToName.get(groupAndTypeData.typeId ?? 0) ?? ""}
+                          options={types.codeToId.map((id, name) => ({ id, name }))}
                           placeholder={t("DetailFood.nothingSelected")}
                           onSelect={(id) => {
                             setGroupAndTypeData((prevState) => ({
