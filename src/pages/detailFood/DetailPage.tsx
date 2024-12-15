@@ -3,7 +3,12 @@ import "../../assets/css/_DetailPage.css";
 import { Col, Container, Nav, Row, Tab } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import { Graphic, LangualCodeComponent, NutrientAccordion, ReferencesList } from "../../core/components/detailFood";
+import {
+  Graphic,
+  LangualCodeComponent,
+  NutrientAccordion,
+  ReferencesList,
+} from "../../core/components/detailFood";
 import Footer from "../../core/components/Footer";
 import useFetch, { FetchStatus } from "../../core/hooks/useFetch";
 import { SingleFoodResult } from "../../core/types/SingleFoodResult";
@@ -92,14 +97,15 @@ export default function DetailPage() {
     <div className="detail-background">
       <Container
         className="custom-container-of-detail-page mt-1 mb-1 ml-1 mr-1"
-        fluid="xxl  "
+        fluid="xxl"
       >
-        <Row>
-          <Col md={6}>
+        <Col>
+          <Col>
             <div className="transparent-container">
-              <h2>{t("DetailFood.title")}</h2>
-              <p>
-                <strong>{t("DetailFood.code")}:</strong> {data.code}
+              <h2 className="mb-4 text-dark">{t("DetailFood.title")}</h2>
+              <p className="mb-2">
+                <strong className="me-2">{t("DetailFood.code")}:</strong>
+                <span className="text-dark">{data.code}</span>
               </p>
 
               {data.commonName?.es && (
@@ -146,8 +152,10 @@ export default function DetailPage() {
               {data.origins &&
                 data.origins.map((origin, index) => (
                   <div key={index}>
-
-                    <p><strong>Origen {index + 1}: </strong>{origin.name}</p>
+                    <p>
+                      <strong>Origen {index + 1}: </strong>
+                      {origin.name}
+                    </p>
                   </div>
                 ))}
               {data.observation && (
@@ -186,11 +194,15 @@ export default function DetailPage() {
               )}
             </div>
           </Col>
-          <Col md={6}>
+          <Col>
             <div className="transparent-container">
               <Row>
                 <Col md={6}>
-                  <Graphic key={grams} data={graphicData} title={t("DetailFood.graphics.title_L")}/>
+                  <Graphic
+                    key={grams}
+                    data={graphicData}
+                    title={t("DetailFood.graphics.title_L")}
+                  />
                 </Col>
                 <Col md={6}>
                   <Graphic
@@ -236,7 +248,7 @@ export default function DetailPage() {
               </Row>
             </div>
           </Col>
-        </Row>
+        </Col>
 
         <Row className="mt-4">
           <Col>
@@ -301,11 +313,11 @@ export default function DetailPage() {
                   </Tab.Pane>
                   <Tab.Pane eventKey="second">
                     <h4>{t("DetailFood.references.nutrients")}</h4>
-                    <ReferencesList references={references}/>
+                    <ReferencesList references={references} />
                   </Tab.Pane>
                   <Tab.Pane eventKey="third">
                     <h4>{t("DetailFood.codes")}</h4>
-                    <LangualCodeComponent data={data.langualCodes}/>
+                    <LangualCodeComponent data={data.langualCodes} />
                   </Tab.Pane>
                 </Tab.Content>
               </Tab.Container>
@@ -313,7 +325,7 @@ export default function DetailPage() {
           </Col>
         </Row>
       </Container>
-      <Footer/>
+      <Footer />
     </div>
   );
 }
