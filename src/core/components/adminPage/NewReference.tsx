@@ -5,6 +5,8 @@ import { useTranslation } from "react-i18next";
 import RequiredFieldLabel from "../detailFood/RequiredFieldLabel";
 import SelectorWithInput from "../detailFood/SelectorWithInput";
 import { City } from "./getters";
+import "../../../assets/css/_newReference.css";
+
 
 export type ReferenceForm = {
   code: number;
@@ -117,7 +119,7 @@ export default function NewReference({
 
   return (
     <Card className="mt-4 shadow-sm">
-      <Card.Header className="d-flex align-items-center bg-primary text-white">
+      <Card.Header className="d-flex align-items-center bg-primary text-white card-header">
         {getReferenceTypeIcon()}
         <Card.Title className="mb-0">{t("NewReference.Add")}</Card.Title>
       </Card.Header>

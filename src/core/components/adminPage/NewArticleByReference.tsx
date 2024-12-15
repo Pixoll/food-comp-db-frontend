@@ -137,7 +137,7 @@ export default function NewArticleByReference({ data, dataForm, updateNewArticle
       <Card className="mb-4">
         <Card.Header className="d-flex align-items-center">
           <BookOpen className="me-2"/>
-          <Card.Title>Seleccionar una revista</Card.Title>
+          <Card.Title className="card-title">Seleccionar una revista</Card.Title>
         </Card.Header>
         <Card.Body>
           {newJournal ? (
