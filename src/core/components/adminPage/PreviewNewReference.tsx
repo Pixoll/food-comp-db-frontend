@@ -1,79 +1,83 @@
 import React from "react";
 import { Card, Col, Row } from "react-bootstrap";
-import { ReferenceForm } from "./NewReference";
-import { City, Author, Journal, JournalVolume } from "./getters/UseReferences";
-import { NewArticle } from "./NewReference";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../../context/AuthContext";
+import { useToast } from "../../context/ToastContext";
 import makeRequest from "../../utils/makeRequest";
 import "../../../assets/css/_PreviewNewReference.css";
-import { useTranslation } from "react-i18next";
+import { Author, City, Journal, JournalVolume } from "./getters/UseReferences";
+import { NewArticle, ReferenceForm } from "./NewReference";
+
 type PreviewNewReferenceProps = {
   data: ReferenceForm;
   cities: City[];
   authors: Author[];
   journals: Journal[];
   journalVolumes: JournalVolume[];
+  forceReload: () => void;
+  handleResetReferenceForm: (nextCode: number) => void;
 };
 
-const searchCityNameByID = (
-  id: number | undefined,
-  cities: City[]
-): string | undefined => {
+const searchCityNameByID = (id: number | undefined, cities: City[]): string | undefined => {
   if (!id) return;
   return cities.find((city) => city.id === id)?.name;
 };
 
-const searchAuthorNameByID = (
-  id: number | undefined,
-  authors: Author[]
-): string | undefined => {
+const searchAuthorNameByID = (id: number | undefined, authors: Author[]): string | undefined => {
   if (!id) return;
   return authors.find((author) => author.id === id)?.name;
 };
 const searchVolumeInfoById = (
   id: number | undefined,
   journalVolumes: JournalVolume[],
-  journals: Journal[]
+  journals: Journal[],
+  pageStart?: number,
+  pageEnd?: number
 ): string => {
   if (!id) return "Sin información de volumen";
 
-  const volumeJ = journalVolumes.find((jvolume) => jvolume.id === id);
-  if (volumeJ) {
-    const journal = journals.find((j) => j.id === volumeJ.journalId);
+  const volume = journalVolumes.find((volume) => volume.id === id);
+  if (volume) {
+    const journal = journals.find((j) => j.id === volume.journalId);
     return journal
-      ? `${journal.name}, Volumen: ${volumeJ.volume}, Número: ${volumeJ.issue}, Año: ${volumeJ.year}`
-      : `Volumen: ${volumeJ.volume}, Número: ${volumeJ.issue}, Año: ${volumeJ.year}`;
+      ? `${journal.name}, Vol. ${volume.volume}(${volume.issue}), ${pageStart}-${pageEnd} - Año: ${volume.year}`
+      : `Vol. ${volume.volume}(${volume.issue}), ${pageStart}-${pageEnd} - Año: ${volume.year}`;
   }
+
   return "Volumen no encontrado";
 };
 
-const PreviewNewReference: React.FC<PreviewNewReferenceProps> = ({
+export default function PreviewNewReference({
   data,
   cities,
   authors,
   journals,
   journalVolumes,
-}) => {
+  forceReload,
+  handleResetReferenceForm,
+}: PreviewNewReferenceProps) {
   const { state } = useAuth();
-  const token = state.token;
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const { addToast } = useToast();
   const formatNewArticle = (newArticle: NewArticle): string => {
     const { pageStart, pageEnd, volumeId, newVolume } = newArticle;
 
-    let articleInfo = `Páginas: ${pageStart}-${pageEnd}`;
+    let articleInfo = "";
 
     if (newVolume) {
-      const { volume, issue, year, journalId, newJournal } = newVolume;
-      articleInfo += `, Volumen: ${volume}, Número: ${issue}, Año: ${year}`;
+      const { volume, issue, year, newJournal } = newVolume;
       if (newJournal) {
-        articleInfo += `, Revista: ${newJournal}`;
+        articleInfo += newJournal;
       }
+      articleInfo += `Vol. ${volume}(${issue}), ${pageStart}-${pageEnd} - Año: ${year}`;
     } else if (volumeId) {
-      articleInfo += `, ${searchVolumeInfoById(
+      articleInfo += searchVolumeInfoById(
         volumeId,
         journalVolumes,
-        journals
-      )}`;
+        journals,
+        pageStart,
+        pageEnd,
+      );
     }
 
     return articleInfo;
@@ -85,25 +89,34 @@ const PreviewNewReference: React.FC<PreviewNewReferenceProps> = ({
 
   const authorNames = data.authorIds
     ? data.authorIds
-        .map((id) => searchAuthorNameByID(id, authors))
-        .filter((name) => name)
+      .map((id) => searchAuthorNameByID(id, authors))
+      .filter((name) => name)
     : [];
-    
+
   const handleSubmit = () => {
     makeRequest(
       "post",
-      "/references",
+      `/references/${data.code}`,
       data,
       state.token,
-      (response) => {
-        console.log("Request successful:", response);
+      () => {
+        addToast({
+          message: "Se creo exitosamente",
+          title: "Éxito",
+          type: "Success",
+        });
+        forceReload();
+        handleResetReferenceForm(data.code + 1);
       },
       (error) => {
-        console.error("Request failed:", error);
+        addToast({
+          message: error.response?.data?.message ?? error.message ?? "Error",
+          title: "Fallo",
+          type: "Success",
+        });
       }
     );
   };
-
 
   return (
     <Col>
@@ -112,18 +125,23 @@ const PreviewNewReference: React.FC<PreviewNewReferenceProps> = ({
           <Card.Body>
             <Card.Title className="text-primary">{data.title}</Card.Title>
             <Card.Subtitle className="mb-2 text-muted">
-              {data.type.charAt(0).toUpperCase() + data.type.slice(1)} -{" "}
-              {data.year}
+              {data.type.charAt(0).toUpperCase() + data.type.slice(1)}
+              {data.year && <>
+                {" "}- Año: {data.year}
+              </>}
             </Card.Subtitle>
             <Card.Text>
+              <div>
+                <strong>{t("PreviewNewReference.Code")}</strong> {data.code}
+              </div>
               {authorNames.length > 0 && (
                 <div>
-                  <strong>{t("PreviewNewReference.Authors")}</strong> {authorNames.join(", ")}
+                  <strong>{t("PreviewNewReference.Authors")}</strong> {authorNames.join(" - ")}
                 </div>
               )}
               {data.newAuthors && data.newAuthors.length > 0 && (
                 <div>
-                  <strong>{t("PreviewNewReference.New_A")}</strong> {data.newAuthors.join(", ")}
+                  <strong>{t("PreviewNewReference.New_A")}</strong> {data.newAuthors.join(" - ")}
                 </div>
               )}
               {data.newArticle && (
@@ -148,11 +166,9 @@ const PreviewNewReference: React.FC<PreviewNewReferenceProps> = ({
       </Row>
       <Row>
         <button className="button-form-of-reference" onClick={handleSubmit}>
-        {t("PreviewNewReference.button")}
+          {t("PreviewNewReference.button")}
         </button>
       </Row>
     </Col>
   );
 };
-
-export default PreviewNewReference;

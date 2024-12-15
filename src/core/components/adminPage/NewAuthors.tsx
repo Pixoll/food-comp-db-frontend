@@ -1,10 +1,9 @@
-import React, { useState, useCallback } from "react";
-import { Button, ListGroup, Row, Col, Container } from "react-bootstrap";
-import { Author } from "./getters/UseReferences";
+import React, { useCallback, useState } from "react";
+import { Button, Col, Container, ListGroup, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import SelectorWithInput from "../detailFood/SelectorWithInput";
 import "../../../assets/css/_NewAuthors.css";
-import { useTranslation } from "react-i18next";
-
+import { Author } from "./getters/UseReferences";
 
 type NewAuthorsProps = {
   authorIds?: number[];
@@ -13,55 +12,35 @@ type NewAuthorsProps = {
   updateAuthors: (authors: Author[]) => void;
 };
 
-const convert = (
-  authorIds?: number[],
-  newAuthors?: string[],
-  authors?: Author[]
-): Author[] => {
+const convert = (authorIds?: number[], newAuthors?: string[], authors?: Author[]): Author[] => {
   const list: Author[] = [];
 
-  if (authorIds) {
-    authorIds.forEach((authorId) => {
-      const existingAuthor = authors?.find((author) => author.id === authorId);
-      if (existingAuthor){
-        list.push({id:existingAuthor.id, name:existingAuthor.name})
-      };
-    });
-  }
+  authorIds?.forEach((authorId) => {
+    const existingAuthor = authors?.find((author) => author.id === authorId);
+    if (existingAuthor) {
+      list.push({ ...existingAuthor })
+    }
+  });
 
-  if (newAuthors) {
-    newAuthors.forEach((name, index) => {
-      if (name) list.push({ id: -1, name });
-    });
-  }
+  newAuthors?.forEach((name) => {
+    if (name) list.push({ id: -1, name });
+  });
+
   return list;
 };
 
-const NewAuthors: React.FC<NewAuthorsProps> = ({
-  authorIds,
-  newAuthors,
-  data,
-  updateAuthors,
-}) => {
+export default function NewAuthors({ authorIds, newAuthors, data, updateAuthors }: NewAuthorsProps) {
   const { t } = useTranslation();
-  const [selectedAuthors, setSelectedAuthors] = useState<Author[]>(
-    convert(authorIds, newAuthors, data)
-  );
+  const [selectedAuthors, setSelectedAuthors] = useState<Author[]>(convert(authorIds, newAuthors, data));
   const [selectors, setSelectors] = useState<number[]>(
-    Array(selectedAuthors.length || 1).fill(0).map((_, i) => i)
+    Array.from({ length: selectedAuthors.length }, (_, i) => i)
   );
 
   const updateParent = useCallback(() => {
-
-      updateAuthors(selectedAuthors);
-    
+    updateAuthors(selectedAuthors);
   }, [selectedAuthors, updateAuthors]);
 
-  const handleSelectAuthor = (
-    index: number,
-    id: number | undefined,
-    name: string
-  ) => {
+  const handleSelectAuthor = (index: number, id: number | undefined, name: string) => {
     const updatedAuthors = [...selectedAuthors];
     if (id) {
       const selectedAuthor = data.find((author) => author.id === id);
@@ -69,13 +48,11 @@ const NewAuthors: React.FC<NewAuthorsProps> = ({
         updatedAuthors[index] = selectedAuthor;
       }
     } else if (name) {
-      const newAuthor: Author = { id: -1, name };
-      updatedAuthors[index] = newAuthor;
+      updatedAuthors[index] = { id: -1, name };
     }
     setSelectedAuthors(updatedAuthors);
-    updateAuthors(updatedAuthors); 
+    updateAuthors(updatedAuthors);
   };
-  
 
   const handleRemoveRow = (index: number) => {
     const updatedAuthors = selectedAuthors.filter((_, i) => i !== index);
@@ -91,7 +68,7 @@ const NewAuthors: React.FC<NewAuthorsProps> = ({
   };
 
   return (
-    <Container> 
+    <Container>
       <Row className="row">
         {selectors.map((_, index) => (
           <Col key={index} md={12} className="mb-2">
@@ -125,10 +102,8 @@ const NewAuthors: React.FC<NewAuthorsProps> = ({
         ))}
       </ListGroup>
       <Button className="button" variant="primary" onClick={handleAddSelector}>
-      {t("NewAuthors.Add")}
+        {t("NewAuthors.Add")}
       </Button>
     </Container>
   );
 };
-
-export default NewAuthors;

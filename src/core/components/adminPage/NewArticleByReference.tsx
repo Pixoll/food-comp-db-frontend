@@ -1,47 +1,10 @@
-import React, { useState} from "react";
+import { BookOpen, FileText, Layers, PlusCircle, XCircle } from 'lucide-react';
+import React, { useState } from "react";
+import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
+import { Article, Journal, JournalVolume } from "./getters/UseReferences";
 import { NewArticle, NewVolume } from "./NewReference";
-import { Journal, JournalVolume, Article } from "./getters/UseReferences";
-import OriginSelector from "./OriginSelector";
-import { 
-  Container, 
-  Row, 
-  Col, 
-  Form, 
-  Button,
-  Card 
-} from 'react-bootstrap';
-import { 
-  BookOpen, 
-  PlusCircle, 
-  XCircle, 
-  Layers, 
-  FileText 
-} from 'lucide-react';
-
 import "../../../assets/css/_NewVolumByReference.css";
 
-const searchJournalNameById = (id: number | undefined, journals: Journal[]) => {
-  const journal = journals.find((journal) => journal.id === id);
-  return journal?.name;
-};
-
-const searchVolumeNameById = (
-  id: number | undefined,
-  volumes: JournalVolume[]
-) => {
-  const volume = volumes.find((volume) => volume.id === id);
-  return volume
-    ? `Volumen: ${volume.volume}, Número: (${volume.issue}), Año: ${volume.year}`
-    : "";
-};
-
-const searchIdJournalByIdVolume = (
-  id: number | undefined,
-  volumes: JournalVolume[]
-) => {
-  const volume = volumes.find((volume) => volume.id === id);
-  return volume?.journalId;
-};
 type NewArticleByReferenceProps = {
   data: {
     journals: Journal[];
@@ -58,47 +21,45 @@ export type RecursivePartial<T> = {
   [K in keyof T]?: NonNullable<T[K]> extends Array<infer U>
     ? Array<RecursivePartial<U>>
     : NonNullable<T[K]> extends ReadonlyArray<infer U>
-    ? ReadonlyArray<RecursivePartial<U>>
-    : NonNullable<T[K]> extends object
-    ? RecursivePartial<NonNullable<T[K]>>
-    : T[K];
+      ? ReadonlyArray<RecursivePartial<U>>
+      : NonNullable<T[K]> extends object
+        ? RecursivePartial<NonNullable<T[K]>>
+        : T[K];
 };
 
-const NewArticleByReference: React.FC<NewArticleByReferenceProps> = ({
-  data,
-  dataForm,
-  updateNewArticle,
-}) => {
-  const [activeSection, setActiveSection] = useState<number>(1);
+const searchIdJournalByIdVolume = (id: number | undefined, volumes: JournalVolume[]) => {
+  const volume = volumes.find((volume) => volume.id === id);
+  return volume?.journalId;
+};
 
+export default function NewArticleByReference({ data, dataForm, updateNewArticle }: NewArticleByReferenceProps) {
   const { journals, journalVolumes } = data;
 
-  const [selectedIdJournal, setSelectedIdJournal] = useState<
-    number | undefined
-  >(
-    searchIdJournalByIdVolume(dataForm.newArticle?.volumeId, journalVolumes) ||
-      dataForm.newArticle?.newVolume?.journalId
+  const [selectedIdJournal, setSelectedIdJournal] = useState<number | undefined>(
+    searchIdJournalByIdVolume(dataForm.newArticle?.volumeId, journalVolumes)
+    ?? dataForm.newArticle?.newVolume?.journalId
   );
-  const [newJournalName, setNewJournalName] = useState<string | undefined>(
-    dataForm.newArticle?.newVolume?.newJournal
-  );
-  const [newJournal, setNewJournal] = useState<boolean>(!!newJournalName);
+  const [newJournalName, setNewJournalName] = useState(dataForm.newArticle?.newVolume?.newJournal);
+  const [newJournal, setNewJournal] = useState(!!newJournalName);
+
+  const doesJournalHaveValue = !!(selectedIdJournal ?? newJournalName);
 
   const [selectedIdVolume, setSelectedIdVolume] = useState<number | undefined>(
-    dataForm.newArticle?.volumeId
+    doesJournalHaveValue ? dataForm.newArticle?.volumeId : undefined
   );
-  const [selectedVolume, setSelectedVolume] = useState<
-    Partial<NewVolume> | undefined
-  >(
-    dataForm.newArticle?.newVolume
+  const [selectedVolume, setSelectedVolume] = useState<Partial<NewVolume> | undefined>(
+    doesJournalHaveValue && dataForm.newArticle?.newVolume
       ? { ...dataForm.newArticle.newVolume }
       : undefined
   );
   const [newVolume, setNewVolume] = useState(!!selectedVolume);
 
-  const [selectedArticle, setSelectedArticle] = useState<
-    RecursivePartial<NewArticle> | undefined
-  >(dataForm.newArticle);
+  const doesVolumeHaveValue = doesJournalHaveValue
+    && !!(selectedIdVolume ?? (selectedVolume?.volume && selectedVolume.issue && selectedVolume.year));
+
+  const [selectedArticle, setSelectedArticle] = useState<RecursivePartial<NewArticle> | undefined>(
+    doesVolumeHaveValue ? dataForm.newArticle : undefined
+  );
 
   const handleSelectVolume = (id: number | undefined) => {
     if (id !== undefined) {
@@ -112,10 +73,7 @@ const NewArticleByReference: React.FC<NewArticleByReferenceProps> = ({
     setSelectedIdVolume(undefined);
   };
 
-  const handleUpdateVolume = <K extends keyof NewVolume>(
-    field: K,
-    value: NewVolume[K]
-  ) => {
+  const handleUpdateVolume = <K extends keyof NewVolume>(field: K, value: NewVolume[K]) => {
     setSelectedIdVolume(undefined);
     setSelectedVolume((prev) => ({
       ...prev,
@@ -124,17 +82,11 @@ const NewArticleByReference: React.FC<NewArticleByReferenceProps> = ({
     setSelectedArticle(undefined);
     if (selectedVolume) {
       selectedVolume[field] = value;
-      setActiveSection(
-        selectedVolume.volume && selectedVolume.issue && selectedVolume.year
-          ? 3
-          : 2
-      );
     }
   };
 
   const handleAddJournal = () => {
     setNewJournal(!newJournal);
-    setActiveSection(1);
     if (selectedIdJournal) {
       setSelectedIdJournal(undefined);
       setSelectedVolume((prev) => ({
@@ -149,6 +101,7 @@ const NewArticleByReference: React.FC<NewArticleByReferenceProps> = ({
 
   const handleAddVolume = () => {
     setNewVolume(!newVolume);
+    setSelectedArticle(undefined);
 
     if (newVolume) {
       setSelectedVolume({
@@ -161,16 +114,9 @@ const NewArticleByReference: React.FC<NewArticleByReferenceProps> = ({
     } else {
       setSelectedIdVolume(undefined);
     }
-
-    setActiveSection(2);
   };
 
-  type a = RecursivePartial<NewArticle>;
-
-  const handleUpdateArticle = <K extends keyof NewArticle>(
-    field: K,
-    value: NewArticle[K]
-  ) => {
+  const handleUpdateArticle = <K extends keyof NewArticle>(field: K, value: NewArticle[K]) => {
     const updatedArticle: RecursivePartial<NewArticle> = {
       ...selectedArticle,
       [field]: value,
@@ -186,27 +132,11 @@ const NewArticleByReference: React.FC<NewArticleByReferenceProps> = ({
     updateNewArticle(updatedArticle);
   };
 
-  const handleAddArticle = () => {
-    if (
-      selectedArticle &&
-      selectedArticle.pageStart !== undefined &&
-      selectedArticle.pageEnd !== undefined
-    ) {
-      const newArticle: RecursivePartial<NewArticle> = {
-        ...selectedArticle,
-        volumeId: selectedIdVolume,
-      };
-      updateNewArticle(newArticle);
-    } else {
-      console.error("Los valores de 'pageStart' y 'pageEnd' son obligatorios.");
-    }
-  };
-
   return (
     <Container className="p-4">
       <Card className="mb-4">
         <Card.Header className="d-flex align-items-center">
-          <BookOpen className="me-2" />
+          <BookOpen className="me-2"/>
           <Card.Title>Seleccionar una revista</Card.Title>
         </Card.Header>
         <Card.Body>
@@ -220,20 +150,20 @@ const NewArticleByReference: React.FC<NewArticleByReferenceProps> = ({
                   className="mb-2"
                   onChange={(e) => {
                     setNewJournalName(e.target.value);
+                    setSelectedIdJournal(undefined);
                     setSelectedIdVolume(undefined);
                     setSelectedVolume(undefined);
                     setSelectedArticle(undefined);
-                    setActiveSection(e.target.value ? 2 : 1);
                   }}
                 />
               </Col>
               <Col md={4}>
-                <Button 
-                  onClick={handleAddJournal} 
-                  variant="outline-secondary" 
+                <Button
+                  onClick={handleAddJournal}
+                  variant="outline-secondary"
                   className="w-100 d-flex align-items-center justify-content-center"
                 >
-                  <XCircle className="me-2" />
+                  <XCircle className="me-2"/>
                   Cancelar
                 </Button>
               </Col>
@@ -250,7 +180,6 @@ const NewArticleByReference: React.FC<NewArticleByReferenceProps> = ({
                     setSelectedIdVolume(undefined);
                     setSelectedVolume(undefined);
                     setSelectedArticle(undefined);
-                    setActiveSection(id ? 2 : 1);
                   }}
                 >
                   <option value="">Selecciona una revista existente</option>
@@ -262,12 +191,12 @@ const NewArticleByReference: React.FC<NewArticleByReferenceProps> = ({
                 </Form.Select>
               </Col>
               <Col md={4}>
-                <Button 
-                  onClick={handleAddJournal} 
-                  variant="outline-primary" 
+                <Button
+                  onClick={handleAddJournal}
+                  variant="outline-primary"
                   className="w-100 d-flex align-items-center justify-content-center"
                 >
-                  <PlusCircle className="me-2" />
+                  <PlusCircle className="me-2"/>
                   Nueva revista
                 </Button>
               </Col>
@@ -276,10 +205,10 @@ const NewArticleByReference: React.FC<NewArticleByReferenceProps> = ({
         </Card.Body>
       </Card>
 
-      {activeSection >= 2 && (
+      {doesJournalHaveValue && (
         <Card className="mb-4">
           <Card.Header className="d-flex align-items-center">
-            <Layers className="me-2" />
+            <Layers className="me-2"/>
             <Card.Title>Seleccionar un volumen</Card.Title>
           </Card.Header>
           <Card.Body>
@@ -292,7 +221,6 @@ const NewArticleByReference: React.FC<NewArticleByReferenceProps> = ({
                       const id = +e.target.value;
                       handleSelectVolume(id);
                       setSelectedArticle(undefined);
-                      setActiveSection(id ? 3 : 2);
                     }}
                   >
                     <option value="">Selecciona un volumen existente</option>
@@ -306,19 +234,19 @@ const NewArticleByReference: React.FC<NewArticleByReferenceProps> = ({
                   </Form.Select>
                 </Col>
                 <Col md={4}>
-                  <Button 
-                    onClick={handleAddVolume} 
-                    variant="outline-primary" 
+                  <Button
+                    onClick={handleAddVolume}
+                    variant="outline-primary"
                     className="w-100 d-flex align-items-center justify-content-center"
                   >
-                    <PlusCircle className="me-2" />
+                    <PlusCircle className="me-2"/>
                     Nuevo volumen
                   </Button>
                 </Col>
               </Row>
             ) : (
               <Row>
-                <Col md={4}>
+                <Col md={3}>
                   <Form.Control
                     type="number"
                     placeholder="Volumen"
@@ -329,7 +257,7 @@ const NewArticleByReference: React.FC<NewArticleByReferenceProps> = ({
                     className="mb-2"
                   />
                 </Col>
-                <Col md={4}>
+                <Col md={3}>
                   <Form.Control
                     type="number"
                     placeholder="Número (Issue)"
@@ -340,7 +268,7 @@ const NewArticleByReference: React.FC<NewArticleByReferenceProps> = ({
                     className="mb-2"
                   />
                 </Col>
-                <Col md={4}>
+                <Col md={3}>
                   <Form.Control
                     type="number"
                     placeholder="Año"
@@ -351,16 +279,26 @@ const NewArticleByReference: React.FC<NewArticleByReferenceProps> = ({
                     className="mb-2"
                   />
                 </Col>
+                <Col md={3}>
+                  <Button
+                    onClick={handleAddVolume}
+                    variant="outline-secondary"
+                    className="w-100 d-flex align-items-center justify-content-center"
+                  >
+                    <PlusCircle className="me-2"/>
+                    Cancelar
+                  </Button>
+                </Col>
               </Row>
             )}
           </Card.Body>
         </Card>
       )}
 
-      {activeSection >= 3 && (
+      {doesVolumeHaveValue && (
         <Card>
           <Card.Header className="d-flex align-items-center">
-            <FileText className="me-2" />
+            <FileText className="me-2"/>
             <Card.Title>Seleccionar un Artículo</Card.Title>
           </Card.Header>
           <Card.Body>
@@ -391,19 +329,6 @@ const NewArticleByReference: React.FC<NewArticleByReferenceProps> = ({
           </Card.Body>
         </Card>
       )}
-
-      <div className="mt-4">
-        <pre className="bg-light p-3 rounded">
-          {JSON.stringify(
-            {
-              selectedArticle,
-            },
-            null,
-            2
-          )}
-        </pre>
-      </div>
     </Container>
   );
-}
-export default NewArticleByReference;
+};

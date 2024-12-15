@@ -424,6 +424,7 @@
     "Enter": "Enter another value"
   },
   "PreviewNewReference": {
+    "Code": "Code:",
     "Authors": "Authors:",
     "New_A": "New Authors:",
     "New": "New Item:",
@@ -454,6 +455,7 @@
   },
   "NewReference": {
     "Add": "Add New Reference",
+    "Code": "Code",
     "Title": "Title",
     "Enter_t": "Enter the title",
     "Type": "Type",

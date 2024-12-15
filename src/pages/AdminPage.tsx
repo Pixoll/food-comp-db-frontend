@@ -1,42 +1,29 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import "../assets/css/_AdminPage.css";
 import { useTranslation } from "react-i18next";
-import useNutrients, {
-  MacroNutrient,
-  AnyNutrient,
-} from "../core/components/adminPage/getters/useNutrients";
-import NewMacronutrientWithComponent from "../core/components/adminPage/NewMacronutrientWithComponent";
-import NewNutrients from "../core/components/adminPage/NewNutrients";
-import NewGeneralData from "../core/components/adminPage/NewGeneralData";
-import Origins from "../core/components/adminPage/Origins";
-import PreviewDataForm from "../core/components/adminPage/PreviewDataForm";
 import FoodsFromCsv from "../core/components/adminPage/FoodsFromCsv";
-
-import { FetchStatus } from "../core/hooks/useFetch";
-
-import { Origin } from "../core/types/SingleFoodResult";
-import NewLangualCodes from "../core/components/adminPage/NewLangualCode";
-import NewReferences from "../core/components/adminPage/NewReferences";
-import NewReference from "../core/components/adminPage/NewReference";
-import NewAuthors from "../core/components/adminPage/NewAuthors";
-import NewArticleByReference, {
-  RecursivePartial,
-} from "../core/components/adminPage/NewArticleByReference";
-import {
-  ReferenceForm,
-  NewArticle,
-} from "../core/components/adminPage/NewReference";
-import PreviewNewReference from "../core/components/adminPage/PreviewNewReference";
-import useLanguages from "../core/components/adminPage/getters/useLanguages";
 import useGroups from "../core/components/adminPage/getters/useGroups";
+import useLanguages from "../core/components/adminPage/getters/useLanguages";
+import useLangualCodes from "../core/components/adminPage/getters/useLangualCodes";
+import useNutrients, { AnyNutrient, MacroNutrient } from "../core/components/adminPage/getters/useNutrients";
+import useOrigins from "../core/components/adminPage/getters/useOrigins";
+import useReferences, { Author } from "../core/components/adminPage/getters/UseReferences";
 import useScientificNames from "../core/components/adminPage/getters/useScientificNames";
 import useSubspecies from "../core/components/adminPage/getters/useSubspecies";
 import useTypes from "../core/components/adminPage/getters/useTypes";
-import useOrigins from "../core/components/adminPage/getters/useOrigins";
-import useReferences, {
-  Author,
-} from "../core/components/adminPage/getters/UseReferences";
-import useLangualCodes from "../core/components/adminPage/getters/useLangualCodes";
+import NewArticleByReference, { RecursivePartial } from "../core/components/adminPage/NewArticleByReference";
+import NewAuthors from "../core/components/adminPage/NewAuthors";
+import NewGeneralData from "../core/components/adminPage/NewGeneralData";
+import NewLangualCodes from "../core/components/adminPage/NewLangualCode";
+import NewMacronutrientWithComponent from "../core/components/adminPage/NewMacronutrientWithComponent";
+import NewNutrients from "../core/components/adminPage/NewNutrients";
+import NewReference, { NewArticle, ReferenceForm } from "../core/components/adminPage/NewReference";
+import NewReferences from "../core/components/adminPage/NewReferences";
+import Origins from "../core/components/adminPage/Origins";
+import PreviewDataForm from "../core/components/adminPage/PreviewDataForm";
+import PreviewNewReference from "../core/components/adminPage/PreviewNewReference";
+import { FetchStatus } from "../core/hooks/useFetch";
+import { Origin } from "../core/types/SingleFoodResult";
 
 export type NutrientSummary = {
   id: number;
@@ -50,11 +37,6 @@ export const getNutrientNameById = (
 ): string => {
   const nutrient = nameAndIdNutrients.find((nutrient) => nutrient.id === id);
   return `${nutrient?.name} (${nutrient?.measurementUnit})`;
-};
-
-export type OriginsByForm = {
-  ids: (number | null)[];
-  origins: string[];
 };
 
 type Section = {
@@ -125,19 +107,6 @@ export type FoodForm = {
 };
 
 export default function AdminPage() {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [referenceForm, setReferenceForm] = useState<ReferenceForm>({
-    type: "article", //Listo <NewReference>
-    title: "", //Listo <NewReference>
-    authorIds: undefined, //Listo <NewAuthor>
-    newAuthors: undefined, //Listo<NewAuthor>
-    year: undefined, //Listo <NewReference>
-    newArticle: undefined, //No listo <Para otro componente>
-    cityId: undefined, //Listo <NewReference>
-    newCity: undefined, //Listo <NewReference>
-    other: undefined, //Listo <NewReference>
-  });
-
   const handleDataFormReference = (updatedFields: Partial<ReferenceForm>) => {
     setReferenceForm((prev) => ({ ...prev, ...updatedFields }));
   };
@@ -194,8 +163,37 @@ export default function AdminPage() {
       },
     },
   });
-  const { references, authors, cities, journals, journalVolumes, articles } =
-    useReferences();
+  const { references, authors, cities, journals, journalVolumes, articles, forceReload } = useReferences();
+
+  const [referenceForm, setReferenceForm] = useState<ReferenceForm>({
+    code: 0,
+    type: "article", //Listo <NewReference>
+    title: "", //Listo <NewReference>
+    authorIds: undefined, //Listo <NewAuthor>
+    newAuthors: undefined, //Listo<NewAuthor>
+    year: undefined, //Listo <NewReference>
+    newArticle: undefined, //No listo <Para otro componente>
+    cityId: undefined, //Listo <NewReference>
+    newCity: undefined, //Listo <NewReference>
+    other: undefined, //Listo <NewReference>
+  });
+
+  if (!referenceForm.code && references) {
+    const newCode = Math.max(...(references?.map(r => r.code) ?? [])) + 1;
+    setReferenceForm(previous => ({
+      ...previous,
+      code: newCode,
+    }));
+    referenceForm.code = newCode;
+  }
+
+  const handleResetReferenceForm = (nextCode: number) => {
+    setReferenceForm({
+      code: nextCode,
+      type: "article",
+      title: "",
+    })
+  };
 
   const nutrientsResult = useNutrients();
   const nutrients =
@@ -278,8 +276,8 @@ export default function AdminPage() {
           ...prev.generalData,
           langualCodes: alreadySelected
             ? prev.generalData.langualCodes.filter(
-                (id) => id !== updatedLangualCodeId
-              )
+              (id) => id !== updatedLangualCodeId
+            )
             : [...prev.generalData.langualCodes, updatedLangualCodeId],
         },
       };
@@ -318,9 +316,9 @@ export default function AdminPage() {
                 (m.components?.length ?? 0) > 0
                   ? mapMacroNutrientWithComponentsToForm(m)
                   : {
-                      ...mapMacroNutrientWithoutComponentsToForm(m),
-                      components: [],
-                    }
+                    ...mapMacroNutrientWithoutComponentsToForm(m),
+                    components: [],
+                  }
               ) || [],
 
           micronutrients: {
@@ -520,14 +518,14 @@ export default function AdminPage() {
     t("AdminPage.sectionNames.codes"),
     t("AdminPage.sectionNames.view"),
   ];
-  let sectionNamesByNewReference: Section[] = [];
+  let sectionNamesByNewReference: Section[];
 
   if (referenceForm.type === "article") {
     sectionNamesByNewReference = [
-      { id: "general", name: t("AdminPage.sectionNamesByNewReference.Data")},
+      { id: "general", name: t("AdminPage.sectionNamesByNewReference.Data") },
       { id: "authors", name: t("AdminPage.sectionNamesByNewReference.Authors") },
       { id: "article", name: t("AdminPage.sectionNamesByNewReference.Article") },
-      { id: "preview", name: t("AdminPage.sectionNamesByNewReference.Preview")},
+      { id: "preview", name: t("AdminPage.sectionNamesByNewReference.Preview") },
     ];
   } else {
     sectionNamesByNewReference = [
@@ -541,6 +539,7 @@ export default function AdminPage() {
       case "general":
         return (
           <NewReference
+            code={referenceForm.code}
             type={referenceForm.type}
             title={referenceForm.title}
             year={referenceForm.year}
@@ -582,6 +581,8 @@ export default function AdminPage() {
             cities={cities || []}
             journals={journals || []}
             journalVolumes={journalVolumes || []}
+            forceReload={forceReload}
+            handleResetReferenceForm={handleResetReferenceForm}
           />
         );
       default:
@@ -594,7 +595,7 @@ export default function AdminPage() {
       <div className="row first-row">
         <div className="tabs-container">
           <button className="tab" onClick={() => setView("post-reference")}>
-          {t("AdminPage.Enter_New_R")}
+            {t("AdminPage.Enter_New_R")}
           </button>
           <button className="tab" onClick={() => setView("manual")}>
             {t("AdminPage.manual")}
@@ -651,7 +652,7 @@ export default function AdminPage() {
         )}
 
         {view === "file" && (
-          <FoodsFromCsv />
+          <FoodsFromCsv/>
         )}
       </div>
     </div>
