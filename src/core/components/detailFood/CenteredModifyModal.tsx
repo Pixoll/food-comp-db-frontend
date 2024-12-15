@@ -94,7 +94,7 @@ export default function CenteredModifyModal({ data, onHide, onSave }: ModalProps
                     name="dataType"
                     value={formData.dataType || ""}
                     onChange={handleChange}
-                    placeholder={t('Centered.type ')}
+                    placeholder={t('Centered.type')}
                   />
                 </Form.Group>
               </Col>

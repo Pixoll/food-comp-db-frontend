@@ -42,7 +42,7 @@ export default function ReferenceValidated({ data }: ReferenceValidatedProps) {
           <Card.Body>
             {filteredData.length === 0 ? (
               <Alert variant="info">
-                {t("ReferenceTableAdmin.NoAvailable")}
+                Referncia no disponibles
               </Alert>
             ) : (
               <>
@@ -50,10 +50,10 @@ export default function ReferenceValidated({ data }: ReferenceValidatedProps) {
                   <thead className="thead-light">
                   <tr>
                     <th>#</th>
-                    <th>{t("ReferenceTableAdmin.Title")}</th>
-                    <th>{t("ReferenceTableAdmin.Year")}</th>
-                    <th>{t("ReferenceTableAdmin.Type")}</th>
-                    <th>{t("ReferenceTableAdmin.Actions")}</th>
+                    <th>Titulo</th>
+                    <th>Año</th>
+                    <th>Tipo de referenecia</th>
+                    <th>Acciones</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -72,7 +72,7 @@ export default function ReferenceValidated({ data }: ReferenceValidatedProps) {
                             setView("verificar");
                           }}
                         >
-                          {t("ReferenceTableAdmin.Check")}
+                          Check
                         </Button>
                       </td>
                     </tr>
@@ -97,7 +97,7 @@ export default function ReferenceValidated({ data }: ReferenceValidatedProps) {
       {view === "verificar" && (
         <Card>
           <Card.Header as="h2" className="bg-secondary text-white">
-            {t("ReferenceTableAdmin.Check")}
+            Check
           </Card.Header>
           <Card.Body>
             {selectedReference && (

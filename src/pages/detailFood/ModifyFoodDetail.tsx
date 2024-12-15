@@ -593,7 +593,7 @@ export default function ModifyFoodDetail() {
                         <OriginSelector
                           selectedValue={groups.idToName.get(groupAndTypeData.groupId?.toString() ?? "") ?? ""}
                           options={groups.codeToId.map((id, name) => ({ id, name }))}
-                          placeholder={t("DetailFood.nothingSelected")}
+                          placeholder={"Nada seleccionado"}
                           onSelect={(id) => {
                             setGroupAndTypeData((prevState) => ({
                               ...prevState,
@@ -615,7 +615,7 @@ export default function ModifyFoodDetail() {
                         <OriginSelector
                           selectedValue={types.idToName.get(groupAndTypeData.typeId?.toString() ?? "") ?? ""}
                           options={types.codeToId.map((id, name) => ({ id, name }))}
-                          placeholder={t("DetailFood.nothingSelected")}
+                          placeholder={"Nada seleccionado"}
                           onSelect={(id) => {
                             setGroupAndTypeData((prevState) => ({
                               ...prevState,

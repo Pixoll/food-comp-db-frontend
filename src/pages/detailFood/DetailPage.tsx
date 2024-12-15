@@ -202,7 +202,7 @@ export default function DetailPage() {
                       <Card className="mb-3">
                         <Card.Body>
                           <Card.Subtitle className="mb-3 text-muted">
-                            {t("Origines")}
+                            {"Origenes"}
                           </Card.Subtitle>
                           {data.origins.map((origin, index) => (
                             <p key={index}>
