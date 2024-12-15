@@ -21,3 +21,101 @@
     border: none;
     color: white;
 }
+
+/* Estilo general de la tabla */
+.custom-table {
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 1em;
+    width: 100%;
+    border-radius: 8px 8px 0 0;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: 'Poppins', serif;
+}
+
+/* Estilo para el encabezado */
+.custom-table thead tr {
+    background-color: #4e9f6f; /* Verde oscuro */
+    color: #ffffff;
+    text-align: left;
+    font-weight: bold;
+}
+
+.custom-table th,
+.custom-table td {
+    padding: 14px 18px;
+    text-align: left;
+}
+
+/* Estilo para las filas alternadas usando clases */
+.custom-table .even-row {
+    background-color: #d1e7dd; /* Verde claro */
+}
+
+.custom-table .odd-row {
+    background-color: #f5f5f5; /* Gris claro */
+}
+
+/* Hover en las filas */
+.custom-table tbody tr:hover {
+    background-color: #bee5eb; /* Azul claro */
+}
+
+/* Estilo del botón en las acciones */
+.custom-table .button-check {
+    background-color: #4e9f6f; /* Verde oscuro */
+    border-radius: 30px;
+    color: white;
+    cursor: pointer;
+    font-family: 'Poppins', serif;
+    padding: 8px 16px;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: none;
+    font-size: 14px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
+}
+
+.custom-table .button-check:hover {
+    background-color: #007f67; /* Verde más oscuro */
+    transform: translateY(-2px);
+}
+
+/* Tabla responsiva para pantallas pequeñas */
+@media screen and (max-width: 768px) {
+    .custom-table,
+    .custom-table thead,
+    .custom-table tbody,
+    .custom-table th,
+    .custom-table td,
+    .custom-table tr {
+        display: block;
+    }
+
+    .custom-table thead tr {
+        display: none;
+    }
+
+    .custom-table td {
+        padding: 14px 18px;
+        position: relative;
+        padding-left: 50%;
+        text-align: left;
+    }
+
+    .custom-table td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        width: 45%;
+        padding-left: 18px;
+        font-weight: bold;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    .custom-table tr {
+        margin-bottom: 12px;
+    }
+}

@@ -6,7 +6,6 @@ import CSVReferenceDisplay from "./CSVReferenceDisplay";
 import { CSVReference } from "./FoodsFromCsv";
 import "../../../assets/css/_ReferenceValidated.css";
 
-
 type ReferenceValidatedProps = {
   data: CSVReference[];
 }
@@ -48,8 +47,8 @@ export default function ReferenceValidated({ data }: ReferenceValidatedProps) {
               </Alert>
             ) : (
               <>
-                <Table striped bordered hover responsive>
-                  <thead className="thead-light">
+                <Table className="custom-table" bordered hover responsive>
+                  <thead>
                   <tr>
                     <th>#</th>
                     <th>Titulo</th>
@@ -61,6 +60,7 @@ export default function ReferenceValidated({ data }: ReferenceValidatedProps) {
                   <tbody>
                   {records.map((item, index) => (
                     <tr key={index}>
+              
                       <td>{firstIndex + index + 1}</td>
                       <td>{item.title?.parsed || item.title?.raw || "N/A"}</td>
                       <td>{item.year?.parsed || item.year?.raw || "N/A"}</td>
