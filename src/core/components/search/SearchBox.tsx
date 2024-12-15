@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { Collection } from "../../utils/collection";
 import CheckboxFilter from "./CheckboxFilter";
 import SingleOptionFilter from "./SingleOptionFilter";
-import { Collection } from "../../utils/collection";
 
 interface SearchBoxProps {
   filterOptions: Collection<string, string>;
   onChange: (selectedOptions: string[]) => void;
   single: boolean;
-  selectedOptions: string[]; 
+  selectedOptions: string[];
 }
 
-const SearchBox: React.FC<SearchBoxProps> = ({ filterOptions, onChange, single, selectedOptions, }) => {
+export default function SearchBox({ filterOptions, onChange, single, selectedOptions }: SearchBoxProps) {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({ filterOptions, onChange, single, 
 
   const handleSingleSelectionChange = (newSelection: string | null) => {
     setSelectedOption(newSelection);
-    onChange(newSelection ? [newSelection] : []); 
+    onChange(newSelection ? [newSelection] : []);
   };
 
   return (
@@ -48,6 +48,4 @@ const SearchBox: React.FC<SearchBoxProps> = ({ filterOptions, onChange, single, 
       )}
     </div>
   );
-};
-
-export default SearchBox;
+}

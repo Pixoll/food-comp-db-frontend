@@ -4,15 +4,11 @@ import { Collection } from "../../utils/collection";
 
 interface SingleOptionFilterProps {
   options: Collection<string, string>;
-  selectedOption: string | null; 
-  setSelectedOption: (option: string | null) => void; 
+  selectedOption: string | null;
+  setSelectedOption: (option: string | null) => void;
 }
 
-const SingleOptionFilter: React.FC<SingleOptionFilterProps> = ({
-  options,
-  selectedOption,
-  setSelectedOption,
-}) => {
+export default function SingleOptionFilter({ options, selectedOption, setSelectedOption }: SingleOptionFilterProps) {
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
 
   const handleOptionChange = (optionValue: string) => {
@@ -44,10 +40,10 @@ const SingleOptionFilter: React.FC<SingleOptionFilterProps> = ({
           {filteredOptions.map((label, option) => (
             <label key={option}>
               <input
-                type="checkbox" 
+                type="checkbox"
                 value={option}
-                checked={selectedOption === option} 
-                onChange={() => handleOptionChange(option)} 
+                checked={selectedOption === option}
+                onChange={() => handleOptionChange(option)}
               />
               {label}
               {selectedOption === option && (
@@ -59,6 +55,4 @@ const SingleOptionFilter: React.FC<SingleOptionFilterProps> = ({
       )}
     </div>
   );
-};
-
-export default SingleOptionFilter;
+}

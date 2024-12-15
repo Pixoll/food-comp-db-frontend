@@ -1,21 +1,17 @@
+import qs from "qs";
 import { useState } from "react";
+import { Col, Container, Form, InputGroup, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
+import useFetch, { FetchStatus } from "../../hooks/useFetch";
+import { FoodResult } from "../../types/option";
+import { Collection } from "../../utils/collection";
+import useOrigins from "../adminPage/getters/useOrigins";
+import FoodResultsTable from "./FoodResultsTable";
+import { useGroups, useLanguages, useNutrients, useTypes } from "./gets";
 import SearchBox from "./SearchBox";
 import "../../../assets/css/_foodFilter.css";
-import FoodResultsTable from "./FoodResultsTable";
-import GetGroups from "./gets/GetGroups";
-import GetLanguages from "./gets/GetLanguages";
-import useOrigins from "../adminPage/getters/useOrigins";
-import GetTypes from "./gets/getTypes";
-import GetNutrients from "./gets/GetNutrients";
-import { FoodResult } from "../../types/option";
-import useFetch from "../../hooks/useFetch";
-import qs from "qs";
-import { Container, Row, Col, Form, InputGroup } from "react-bootstrap";
-import { useTranslation } from "react-i18next";
-import { FetchStatus } from "../../hooks/useFetch";
-import { Collection } from "../../utils/collection";
 
-const FoodFilter = () => {
+export default function FoodFilter() {
   const [selectedFilters, setSelectedFilters] = useState({
     foodTypeFilter: new Set<string>(),
     regionsFilter: new Set<string>(),
@@ -27,15 +23,15 @@ const FoodFilter = () => {
   });
   const [searchForName, setSearchForName] = useState<string>("");
 
-  const { collectionGroups: groups } = GetGroups();
+  const { collectionGroups: groups } = useGroups();
   const { regions } = useOrigins();
 
   const regionOptions = new Collection<string, string>(
     Array.from(regions.values()).map((region) => [region.id.toString(), region.name])
   );
-  const { collectionTypes: types } = GetTypes();
-  const { collectionLanguages: languages } = GetLanguages();
-  const { collectionNutrients: nutrients } = GetNutrients();
+  const { collectionTypes: types } = useTypes();
+  const { collectionLanguages: languages } = useLanguages();
+  const { collectionNutrients: nutrients } = useNutrients();
 
   const handleFilterChange = (
     filterKey: keyof typeof selectedFilters,
@@ -61,8 +57,6 @@ const FoodFilter = () => {
         value: selectedFilters.value,
       }),
   };
-  
-  
 
   const queryString = qs.stringify(filters, {
     arrayFormat: "repeat",
@@ -208,6 +202,4 @@ const FoodFilter = () => {
       />
     </div>
   );
-};
-
-export default FoodFilter;
+}

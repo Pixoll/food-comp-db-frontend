@@ -1,7 +1,8 @@
 import useFetch, { FetchStatus } from '../../../hooks/useFetch';
 import { Group } from '../../../types/option';
 import { Collection } from '../../../utils/collection';
-const GetGroups = () => {
+
+export default function useGroups() {
   const result = useFetch<Group[]>("/groups");
 
   const collectionGroups = new Collection<string, string>();
@@ -11,6 +12,4 @@ const GetGroups = () => {
     });
   }
   return { collectionGroups };
-};
-
-export default GetGroups;
+}

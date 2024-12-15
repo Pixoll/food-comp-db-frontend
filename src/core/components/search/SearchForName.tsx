@@ -1,18 +1,16 @@
 import React, { useState } from "react";
 
-const SearchForName = () => {
-    const [searchTerm, setSearchTerm] = useState<string>('');
+export default function SearchForName() {
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
-    return (
-        <div className="search-for-name">
-            <input 
-                className="input-for-name"
-                type="text"
-                placeholder="Enter name"
-                onChange={(e) => setSearchTerm(e.target.value)}
-            />
-        </div>
-    );
-};
-
-export default SearchForName;
+  return (
+    <div className="search-for-name">
+      <input
+        className="input-for-name"
+        type="text"
+        placeholder="Enter name"
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+    </div>
+  );
+}

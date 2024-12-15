@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import Pagination from "./Pagination";
-import "../../../assets/css/_foodResultsTable.css";
 import { useAuth } from "../../context/AuthContext";
 import { FoodResult } from "../../types/option";
-import { useTranslation } from "react-i18next";
+import Pagination from "./Pagination";
+import "../../../assets/css/_foodResultsTable.css";
 
 interface FoodResultsListProps {
   data: FoodResult[];
@@ -12,11 +12,7 @@ interface FoodResultsListProps {
   setSearchForName: (value: string) => void;
 }
 
-const FoodResultsTable: React.FC<FoodResultsListProps> = ({
-  data,
-  searchForName,
-  setSearchForName,
-}) => {
+export default function FoodResultsTable({ data, searchForName, setSearchForName }: FoodResultsListProps) {
   const navigate = useNavigate();
   const { state } = useAuth();
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
@@ -118,33 +114,33 @@ const FoodResultsTable: React.FC<FoodResultsListProps> = ({
         <>
           <table className="content-table-foods">
             <thead>
-              <tr>
-                <th style={{ fontSize: 22 }}>{t('Table_FoodResults.id')}</th>
-                <th style={{ fontSize: 22 }}>{t('Table_FoodResults.name')}</th>
-                <th style={{ fontSize: 22 }}>{t('Table_FoodResults.scientific_name')}</th>
-                <th style={{ fontSize: 22 }}>{t('Table_FoodResults.action')}</th>
-              </tr>
+            <tr>
+              <th style={{ fontSize: 22 }}>{t('Table_FoodResults.id')}</th>
+              <th style={{ fontSize: 22 }}>{t('Table_FoodResults.name')}</th>
+              <th style={{ fontSize: 22 }}>{t('Table_FoodResults.scientific_name')}</th>
+              <th style={{ fontSize: 22 }}>{t('Table_FoodResults.action')}</th>
+            </tr>
             </thead>
             <tbody>
-              {records.map((item) => (
-                <tr key={item.id}>
-                  <td data-label="ID">{item.id}</td>
-                  <td data-label="Nombre">
-                    {item.commonName[selectedLanguage] || "N/A"}
-                  </td>
-                  <td data-label="Nombre científico">{item.scientificName}</td>
-                  <td>
-                    <button onClick={() => toFoodDetail(item.code)}>
-                      {t('Table_FoodResults.details')}
+            {records.map((item) => (
+              <tr key={item.id}>
+                <td data-label="ID">{item.id}</td>
+                <td data-label="Nombre">
+                  {item.commonName[selectedLanguage] || "N/A"}
+                </td>
+                <td data-label="Nombre científico">{item.scientificName}</td>
+                <td>
+                  <button onClick={() => toFoodDetail(item.code)}>
+                    {t('Table_FoodResults.details')}
+                  </button>
+                  {state.isAuthenticated && (
+                    <button onClick={() => toModfyFoodDetail(item.code)}>
+                      {t('Table_FoodResults.modify')}
                     </button>
-                    {state.isAuthenticated && (
-                      <button onClick={() => toModfyFoodDetail(item.code)}>
-                        {t('Table_FoodResults.modify')}
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
+                  )}
+                </td>
+              </tr>
+            ))}
             </tbody>
           </table>
           {npage > 1 && (
@@ -158,6 +154,4 @@ const FoodResultsTable: React.FC<FoodResultsListProps> = ({
       )}
     </div>
   );
-};
-
-export default FoodResultsTable;
+}

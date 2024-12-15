@@ -8,18 +8,14 @@ interface CheckboxFilterProps {
   setSelectedOptions: (options: Set<string>) => void;
 }
 
-const CheckboxFilter: React.FC<CheckboxFilterProps> = ({
-  options,
-  selectedOptions,
-  setSelectedOptions,
-}) => {
+export default function CheckboxFilter({ options, selectedOptions, setSelectedOptions }: CheckboxFilterProps) {
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
 
   const handleCheckboxChange = (optionValue: string) => {
     if (selectedOptions.has(optionValue)) {
-      selectedOptions.delete(optionValue)
+      selectedOptions.delete(optionValue);
     } else {
-      selectedOptions.add(optionValue)
+      selectedOptions.add(optionValue);
     }
     setSelectedOptions(new Set(selectedOptions));
   };
@@ -42,7 +38,7 @@ const CheckboxFilter: React.FC<CheckboxFilterProps> = ({
     } else if (selectedOptions.size > 0 && selectedOptions.size < 3) {
       return [...selectedOptions
         .values()]
-        .reduce((text, opt) => text ? text + ", " + options.get(opt) : options.get(opt)!, "")
+        .reduce((text, opt) => text ? text + ", " + options.get(opt) : options.get(opt)!, "");
     } else {
       return `${selectedOptions.size} Items`;
     }
@@ -59,18 +55,18 @@ const CheckboxFilter: React.FC<CheckboxFilterProps> = ({
       </div>
       {dropdownOpen && (
         <div className="dropdown-options">
-            <label className="select-all-label">
-              <input
-                type="checkbox"
-                checked={selectedOptions.size === options.size}
-                readOnly
-                onChange={handleSelectAll}
-              />
-              Seleccionar todos
-              {selectedOptions.size === options.size && (
-                <span className="checked">✔</span>
-              )}
-            </label>
+          <label className="select-all-label">
+            <input
+              type="checkbox"
+              checked={selectedOptions.size === options.size}
+              readOnly
+              onChange={handleSelectAll}
+            />
+            Seleccionar todos
+            {selectedOptions.size === options.size && (
+              <span className="checked">✔</span>
+            )}
+          </label>
 
           {filteredOptions.map((label, option) => (
             <label key={option}>
@@ -90,5 +86,4 @@ const CheckboxFilter: React.FC<CheckboxFilterProps> = ({
       )}
     </div>
   );
-};
-export default CheckboxFilter;
+}
