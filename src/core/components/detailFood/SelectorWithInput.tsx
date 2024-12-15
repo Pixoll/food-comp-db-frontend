@@ -5,21 +5,16 @@ import { useTranslation } from "react-i18next";
 type SelectorWithInputProps = {
   options: Array<{ id: number; name: string }>;
   placeholder: string;
-  selectedValue: string | undefined; 
+  selectedValue: string | undefined;
   onSelect: (id: number | undefined, name: string) => void;
 };
 
-const SelectorWithInput: React.FC<SelectorWithInputProps> = ({
-  options,
-  placeholder,
-  selectedValue,
-  onSelect,
-}) => {
+export default function SelectorWithInput({ options, placeholder, selectedValue, onSelect }: SelectorWithInputProps) {
   const { t } = useTranslation();
   const [isActive, setIsActive] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [customOption, setCustomOption] = useState(""); 
-  const [isCustomOptionActive, setIsCustomOptionActive] = useState(false); 
+  const [customOption, setCustomOption] = useState("");
+  const [isCustomOptionActive, setIsCustomOptionActive] = useState(false);
 
   const filteredOptions = options.filter((option) =>
     option.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -28,21 +23,20 @@ const SelectorWithInput: React.FC<SelectorWithInputProps> = ({
   const handleSelectOption = (option: { id: number; name: string }) => {
     setIsActive(false);
     setIsCustomOptionActive(false);
-    setCustomOption(""); 
-    onSelect(option.id, option.name); 
+    setCustomOption("");
+    onSelect(option.id, option.name);
   };
 
   const handleCustomOption = () => {
-    setIsCustomOptionActive(true); 
+    setIsCustomOptionActive(true);
     setIsActive(false);
-    onSelect(undefined, ""); 
+    onSelect(undefined, "");
   };
-  
+
   const handleCustomOptionSubmit = () => {
     setIsActive(false);
-    onSelect(undefined, customOption); 
+    onSelect(undefined, customOption);
   };
-  
 
   return (
     <div className={`select-box-for ${isActive ? "active" : ""}`}>
@@ -50,7 +44,7 @@ const SelectorWithInput: React.FC<SelectorWithInputProps> = ({
         <input
           type="text"
           placeholder={placeholder}
-          value={isCustomOptionActive ? customOption : selectedValue} 
+          value={isCustomOptionActive ? customOption : selectedValue}
           readOnly
         />
       </div>
@@ -71,7 +65,7 @@ const SelectorWithInput: React.FC<SelectorWithInputProps> = ({
               </li>
             ))}
             <li
-              onClick={handleCustomOption} 
+              onClick={handleCustomOption}
               style={{ fontStyle: "italic", color: "#555" }}
             >
               {"Otro valor"}
@@ -86,12 +80,10 @@ const SelectorWithInput: React.FC<SelectorWithInputProps> = ({
             placeholder={"Escriba otro valor"}
             value={customOption}
             onChange={(e) => setCustomOption(e.target.value)}
-            onBlur={handleCustomOptionSubmit} 
+            onBlur={handleCustomOptionSubmit}
           />
         </div>
       )}
     </div>
   );
 };
-
-export default SelectorWithInput;

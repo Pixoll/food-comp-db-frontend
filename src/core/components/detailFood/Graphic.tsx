@@ -1,4 +1,4 @@
-import { PieChart, Pie, Legend, ResponsiveContainer } from "recharts";
+import { Legend, Pie, PieChart, ResponsiveContainer } from "recharts";
 
 interface DataItem {
   name: string;
@@ -8,14 +8,14 @@ interface DataItem {
 
 interface GraphicProps {
   data: DataItem[];
-  title: string;  
+  title: string;
 }
 
-const Graphic: React.FC<GraphicProps> = ({ data, title }) => {
+export default function Graphic({ data, title }: GraphicProps) {
   return (
     <div style={{ textAlign: "center", marginBottom: "30px" }}>
       <h3 style={{ fontSize: "24px", color: "#05260d", fontWeight: "bold", marginBottom: "20px" }}>
-        {title}  
+        {title}
       </h3>
 
       <div style={{ backgroundColor: "#f8f9fa", padding: "20px", borderRadius: "15px", border: "#000" }}>
@@ -30,18 +30,18 @@ const Graphic: React.FC<GraphicProps> = ({ data, title }) => {
               outerRadius="50%"
               innerRadius="10%"
               label
-              startAngle={90} 
+              startAngle={90}
               endAngle={-270}
             >
 
             </Pie>
             <Legend
-              verticalAlign="bottom"    
-              align="left"         
-              layout="horizontal"    
+              verticalAlign="bottom"
+              align="left"
+              layout="horizontal"
               wrapperStyle={{
-                paddingTop: "20px",  
-                marginTop: "20px", 
+                paddingTop: "20px",
+                marginTop: "20px",
               }}
             />
           </PieChart>
@@ -50,5 +50,3 @@ const Graphic: React.FC<GraphicProps> = ({ data, title }) => {
     </div>
   );
 };
-
-export default Graphic;

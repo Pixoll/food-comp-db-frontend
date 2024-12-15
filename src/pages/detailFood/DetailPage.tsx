@@ -1,21 +1,18 @@
-import { Col, Container, Nav, Row, Tab } from "react-bootstrap";
-import { useParams } from "react-router-dom";
 import { useState } from "react";
 import "../../assets/css/_DetailPage.css";
-import NutrientAccordion from "../../core/components/detailFood/NutrientAccordion";
+import { Col, Container, Nav, Row, Tab } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
+import { useParams } from "react-router-dom";
+import { Graphic, LangualCodeComponent, NutrientAccordion, ReferencesList } from "../../core/components/detailFood";
 import Footer from "../../core/components/Footer";
 import useFetch, { FetchStatus } from "../../core/hooks/useFetch";
 import { SingleFoodResult } from "../../core/types/SingleFoodResult";
-import Graphic from "../../core/components/detailFood/Graphic";
-import ReferencesList from "../../core/components/detailFood/ReferencesList";
-import LengualCodeComponent from "../../core/components/detailFood/LengualCodeComponent";
-import { useTranslation } from "react-i18next";
 
 export default function DetailPage() {
   const { t } = useTranslation();
   const [key, setKey] = useState<string>("first");
 
-  const handleReferenceClick = (code: string) => {
+  const handleReferenceClick = () => {
     setKey("second");
   };
 
@@ -193,7 +190,7 @@ export default function DetailPage() {
             <div className="transparent-container">
               <Row>
                 <Col md={6}>
-                  <Graphic key={grams} data={graphicData} title={t("DetailFood.graphics.title_L")} />
+                  <Graphic key={grams} data={graphicData} title={t("DetailFood.graphics.title_L")}/>
                 </Col>
                 <Col md={6}>
                   <Graphic
@@ -304,11 +301,11 @@ export default function DetailPage() {
                   </Tab.Pane>
                   <Tab.Pane eventKey="second">
                     <h4>{t("DetailFood.references.nutrients")}</h4>
-                    <ReferencesList references={references} />
+                    <ReferencesList references={references}/>
                   </Tab.Pane>
                   <Tab.Pane eventKey="third">
                     <h4>{t("DetailFood.codes")}</h4>
-                    <LengualCodeComponent data={data.langualCodes} />
+                    <LangualCodeComponent data={data.langualCodes}/>
                   </Tab.Pane>
                 </Tab.Content>
               </Tab.Container>
@@ -316,7 +313,7 @@ export default function DetailPage() {
           </Col>
         </Row>
       </Container>
-      <Footer />
+      <Footer/>
     </div>
   );
 }

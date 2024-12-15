@@ -1,31 +1,30 @@
-import { Button, Col, Container, Form, Nav, Row, Tab } from "react-bootstrap";
-import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
-import "../../assets/css/_ModifyDetailFood.css";
-import NutrientAccordionModify from "../../core/components/detailFood/NutrientAccordionModify";
-import SelectorWithInput from "../../core/components/detailFood/SelectorWithInput";
-import Footer from "../../core/components/Footer";
-import useFetch, { FetchStatus } from "../../core/hooks/useFetch";
-import { useToast } from "../../core/context/ToastContext";
 import axios from "axios";
-import makeRequest from "../../core/utils/makeRequest";
-import {
-  SingleFoodResult,
-  NutrientsValue,
-  Origin,
-  LangualCode,
-} from "../../core/types/SingleFoodResult";
-import ReferencesList from "../../core/components/detailFood/ReferencesList";
-import LengualCodeComponent from "../../core/components/detailFood/LengualCodeComponent";
-import RequiredFieldLabel from "../../core/components/detailFood/RequiredFieldLabel";
+import { useEffect, useState } from "react";
+import "../../assets/css/_ModifyDetailFood.css";
+import { Button, Col, Container, Form, Nav, Row, Tab } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import OriginSelector from "../../core/components/adminPage/OriginSelector";
-import useGroups from "../../core/components/adminPage/getters/useGroups";
-import useTypes from "../../core/components/adminPage/getters/useTypes";
-import useScientificNames from "../../core/components/adminPage/getters/useScientificNames";
-import useSubspecies from "../../core/components/adminPage/getters/useSubspecies";
-import useOrigins from "../../core/components/adminPage/getters/useOrigins";
+import { useParams } from "react-router-dom";
+import {
+  OriginSelector,
+  useGroups,
+  useOrigins,
+  useScientificNames,
+  useSubspecies,
+  useTypes,
+} from "../../core/components/adminPage";
+import {
+  LangualCodeComponent,
+  NutrientAccordionModify,
+  ReferencesList,
+  RequiredFieldLabel,
+  SelectorWithInput,
+} from "../../core/components/detailFood";
+import Footer from "../../core/components/Footer";
 import { useAuth } from "../../core/context/AuthContext";
+import { useToast } from "../../core/context/ToastContext";
+import useFetch, { FetchStatus } from "../../core/hooks/useFetch";
+import { LangualCode, NutrientsValue, Origin, SingleFoodResult, } from "../../core/types/SingleFoodResult";
+import makeRequest from "../../core/utils/makeRequest";
 
 export default function ModifyFoodDetail() {
   const { code } = useParams();
@@ -43,19 +42,15 @@ export default function ModifyFoodDetail() {
 
   const { regions } = useOrigins();
 
-  const groups =
-    groupsResult.status === FetchStatus.Success ? groupsResult.data : [];
-  const types =
-    typesResult.status === FetchStatus.Success ? typesResult.data : [];
+  const groups = groupsResult.status === FetchStatus.Success ? groupsResult.data : [];
+  const types = typesResult.status === FetchStatus.Success ? typesResult.data : [];
 
-  const scientificNames =
-    scientificNamesResult.status === FetchStatus.Success
-      ? scientificNamesResult.data
-      : [];
-  const subspecies =
-    subspeciesResult.status === FetchStatus.Success
-      ? subspeciesResult.data
-      : [];
+  const scientificNames = scientificNamesResult.status === FetchStatus.Success
+    ? scientificNamesResult.data
+    : [];
+  const subspecies = subspeciesResult.status === FetchStatus.Success
+    ? subspeciesResult.data
+    : [];
 
   const { t } = useTranslation();
 
@@ -63,6 +58,7 @@ export default function ModifyFoodDetail() {
     const group = groups.find((group) => group.code === code);
     return group?.id;
   };
+
   const searchTypeByCode = (code: string): number | undefined => {
     const type = types.find((type) => type.code === code);
     return type?.id;
@@ -72,59 +68,48 @@ export default function ModifyFoodDetail() {
     const group = groups.find((group) => group.id === id);
     return group?.name || "";
   };
+
   const searchNameTypeByID = (id: number): string => {
     const type = types.find((type) => type.id === id);
     return type?.name || "";
   };
-  const [scientificNameAndSubspecies, setScientificNameAndSubspecies] =
-    useState<{
-      scientificName?: string;
-      subspecies?: string;
-    }>({
-      scientificName: data?.scientificName,
-      subspecies: data?.subspecies,
-    });
 
-  const searchScientificNameByName = (
-    name: string | undefined
-  ): number | undefined => {
+  const [scientificNameAndSubspecies, setScientificNameAndSubspecies] = useState<{
+    scientificName?: string;
+    subspecies?: string;
+  }>({
+    scientificName: data?.scientificName,
+    subspecies: data?.subspecies,
+  });
+
+  const searchScientificNameByName = (name: string | undefined): number | undefined => {
     const scientificName = scientificNames.find((sn) => sn.name === name);
     return scientificName?.id;
   };
-  const searchSubspeciesByName = (
-    name: string | undefined
-  ): number | undefined => {
+
+  const searchSubspeciesByName = (name: string | undefined): number | undefined => {
     const result = subspecies.find((sp) => sp.name === name);
     return result?.id;
   };
 
-  const searchScientificNameById = (
-    id: number | undefined
-  ): string | undefined => {
+  const searchScientificNameById = (id: number | undefined): string | undefined => {
     const scientificName = scientificNames.find((sn) => sn.id === id);
     return scientificName?.name;
   };
-  const searchSubspeciesNameById = (
-    id: number | undefined
-  ): string | undefined => {
-    const result = subspecies.find((sp) => sp.id === id);
-    return result?.name;
-  };
+
   const normalizeValue = (value: string | undefined) => {
     return value?.trim() || undefined;
   };
   const handleScientificName = () => {
-    const scientificNameId = searchScientificNameByName(
-      scientificNameAndSubspecies.scientificName
-    );
-  
+    const scientificNameId = searchScientificNameByName(scientificNameAndSubspecies.scientificName);
+
     const payload = {
       scientificNameId: scientificNameId,
       scientificName: !scientificNameId
         ? normalizeValue(scientificNameAndSubspecies.scientificName)
         : undefined,
     };
-  
+
     if (!payload.scientificNameId && payload.scientificName) {
       const name = payload.scientificName;
       makeRequest(
@@ -132,7 +117,7 @@ export default function ModifyFoodDetail() {
         "/scientific_names",
         { name },
         state.token,
-        (response) => {
+        () => {
           if (scientificNamesResult.status !== FetchStatus.Loading) {
             scientificNamesResult.forceReload();
             setScientificNameAndSubspecies({
@@ -145,11 +130,11 @@ export default function ModifyFoodDetail() {
           console.error("Error al actualizar:", error.response?.data ?? error);
         }
       );
-    }else if(payload.scientificNameId && payload.scientificName){
+    } else if (payload.scientificNameId && payload.scientificName) {
       setScientificNameAndSubspecies({
         ...scientificNameAndSubspecies,
         scientificName: searchScientificNameById(payload.scientificNameId)
-      })
+      });
     }
   };
 
@@ -157,14 +142,14 @@ export default function ModifyFoodDetail() {
     const subspeciesId = searchSubspeciesByName(
       scientificNameAndSubspecies.subspecies
     );
-    
+
     const payload = {
       subspeciesId: subspeciesId,
       subspecies: !subspeciesId
         ? normalizeValue(scientificNameAndSubspecies.subspecies)
         : undefined,
     };
-    
+
     if (!payload.subspeciesId && payload.subspecies) {
       const name = payload.subspecies;
       makeRequest(
@@ -172,8 +157,7 @@ export default function ModifyFoodDetail() {
         "/subspecies",
         { name },
         state.token,
-        (response) => {
-          
+        () => {
           if (subspeciesResult.status !== FetchStatus.Loading) {
             subspeciesResult.forceReload();
             setScientificNameAndSubspecies({
@@ -188,7 +172,7 @@ export default function ModifyFoodDetail() {
       );
     }
   };
-  
+
   const [generalData, setGeneralData] = useState<{
     code: string;
     strain?: string;
@@ -237,6 +221,7 @@ export default function ModifyFoodDetail() {
       minerals: data?.nutrientMeasurements.micronutrients?.minerals || [],
     },
   });
+
   useEffect(() => {
     if (data) {
       const initialGeneralData = {
@@ -287,6 +272,7 @@ export default function ModifyFoodDetail() {
   if (!data) {
     return <h2>{t("DetailFood.loading")}</h2>;
   }
+
   const handleUpdateNutrients = (updatedData: NutrientsValue) => {
     setNutrientValue(updatedData);
   };
@@ -314,17 +300,15 @@ export default function ModifyFoodDetail() {
     }
   };
 
-  const stringToNumberOrUndefined = (
-    number: string | undefined
-  ): number | undefined => {
+  const stringToNumberOrUndefined = (number: string | undefined): number | undefined => {
     if (!number?.trim()) {
-      return undefined;
+      return;
     }
 
     const parsedNumber = +number.replace(",", ".");
 
     if (isNaN(parsedNumber)) {
-      return undefined;
+      return;
     }
 
     return parsedNumber;
@@ -336,21 +320,20 @@ export default function ModifyFoodDetail() {
     if (!generalData.origins) {
       return undefined;
     }
-    const uniqueRegionIds = [
+
+    return [
       ...new Set(
         generalData.origins.flatMap((origin) =>
           origin.id !== 0 ? origin.id : allRegionIds
         )
       ),
     ];
-
-    return uniqueRegionIds;
   };
 
   const getUniqueLangualCodeIds = (): number[] | undefined => {
     if (!generalData.langualCodes) return undefined;
 
-    const uniqueLangualCodeIds = [
+    return [
       ...new Set(
         generalData.langualCodes.flatMap((langualCode) => [
           langualCode.id,
@@ -358,8 +341,6 @@ export default function ModifyFoodDetail() {
         ])
       ),
     ];
-
-    return uniqueLangualCodeIds;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -405,21 +386,21 @@ export default function ModifyFoodDetail() {
           },
           ...(mainNutrient.components
             ? mainNutrient.components.map((component) => ({
-                nutrientId: component.nutrientId,
-                average: stringToNumberOrUndefined(
-                  component.average.toString()
-                ),
-                deviation: stringToNumberOrUndefined(
-                  component.deviation?.toString()
-                ),
-                min: stringToNumberOrUndefined(component.min?.toString()),
-                max: stringToNumberOrUndefined(component.max?.toString()),
-                sampleSize:
-                  stringToNumberOrUndefined(component.sampleSize?.toString()) ||
-                  undefined,
-                dataType: component.dataType,
-                referencesCodes: component.referenceCodes,
-              }))
+              nutrientId: component.nutrientId,
+              average: stringToNumberOrUndefined(
+                component.average.toString()
+              ),
+              deviation: stringToNumberOrUndefined(
+                component.deviation?.toString()
+              ),
+              min: stringToNumberOrUndefined(component.min?.toString()),
+              max: stringToNumberOrUndefined(component.max?.toString()),
+              sampleSize:
+                stringToNumberOrUndefined(component.sampleSize?.toString()) ||
+                undefined,
+              dataType: component.dataType,
+              referencesCodes: component.referenceCodes,
+            }))
             : []),
         ]),
         ...nutrientValue.micronutrients.minerals.map((mineral) => ({
@@ -449,7 +430,7 @@ export default function ModifyFoodDetail() {
       ],
       langualCodes: getUniqueLangualCodeIds(),
     };
-    console.log(payload)
+    console.log(payload);
     makeRequest(
       "patch",
       `/foods/${code}`,
@@ -457,20 +438,20 @@ export default function ModifyFoodDetail() {
       token,
       (response) => {
         console.log("Antes de addToast");
-      addToast({
-        type: "Success",
-        message:
-          response.data.message ||
-          "Los cambios fueron realizados exitosamente",
-        title: "Éxito",
-        position: 'middle-center',
-        duration: 3000,
-      });
-      console.log("Después de addToast");
+        addToast({
+          type: "Success",
+          message:
+            response.data.message ||
+            "Los cambios fueron realizados exitosamente",
+          title: "Éxito",
+          position: 'middle-center',
+          duration: 3000,
+        });
+        console.log("Después de addToast");
       },
-      error =>{
+      error => {
         if (axios.isAxiosError(error)) {
-          
+
           if ((error.response?.status || -1) >= 400) {
             addToast({
               type: 'Danger',
@@ -485,55 +466,55 @@ export default function ModifyFoodDetail() {
             "Error en la solicitud:",
             error.response?.data || error.message
           );
-          
+
         } else {
           console.error("Error desconocido:", error);
         }
       }
-    )
+    );
     /*try {
-      const response = await axios.patch(
-        `http://localhost:3000/api/v1/foods/${code}`,
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log("Antes de addToast");
-      addToast({
-        type: "Success",
-        message:
-          response.data.message ||
-          "Los cambios fueron realizados exitosamente",
-        title: "Éxito",
-        position: 'middle-center',
-        duration: 3000,
-      });
-      console.log("Después de addToast");
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
+     const response = await axios.patch(
+     `http://localhost:3000/api/v1/foods/${code}`,
+     payload,
+     {
+     headers: {
+     Authorization: `Bearer ${token}`,
+     },
+     }
+     );
+     console.log("Antes de addToast");
+     addToast({
+     type: "Success",
+     message:
+     response.data.message ||
+     "Los cambios fueron realizados exitosamente",
+     title: "Éxito",
+     position: 'middle-center',
+     duration: 3000,
+     });
+     console.log("Después de addToast");
+     } catch (error) {
+     if (axios.isAxiosError(error)) {
 
-        if ((error.response?.status || -1) < 400) {
-          addToast({
-            type: 'Danger',
-            message: error.response?.data || error.message || 'A ocurrido un error',
-            title: 'Error',
-            position: 'middle-center',
-            duration: 5000
-          });
-          return;
-        }
-        console.error(
-          "Error en la solicitud:",
-          error.response?.data || error.message
-        );
-        
-      } else {
-        console.error("Error desconocido:", error);
-      }
-    }*/
+     if ((error.response?.status || -1) < 400) {
+     addToast({
+     type: 'Danger',
+     message: error.response?.data || error.message || 'A ocurrido un error',
+     title: 'Error',
+     position: 'middle-center',
+     duration: 5000
+     });
+     return;
+     }
+     console.error(
+     "Error en la solicitud:",
+     error.response?.data || error.message
+     );
+
+     } else {
+     console.error("Error desconocido:", error);
+     }
+     }*/
   };
 
   const renderLanguageFields = (field: "commonName" | "ingredients") =>
@@ -803,11 +784,11 @@ export default function ModifyFoodDetail() {
                     </Tab.Pane>
                     <Tab.Pane eventKey="second">
                       <h4>{t("DetailFood.references.nutrients")}</h4>
-                      <ReferencesList references={data.references} />
+                      <ReferencesList references={data.references}/>
                     </Tab.Pane>
                     <Tab.Pane eventKey="third">
                       <h4>{t("DetailFood.codes")}</h4>
-                      <LengualCodeComponent data={data.langualCodes} />
+                      <LangualCodeComponent data={data.langualCodes}/>
                     </Tab.Pane>
                   </Tab.Content>
                 </Tab.Container>
@@ -826,7 +807,7 @@ export default function ModifyFoodDetail() {
         </Form>
       </Container>
 
-      <Footer />
+      <Footer/>
     </div>
   );
 }

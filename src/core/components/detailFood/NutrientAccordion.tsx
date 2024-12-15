@@ -1,13 +1,10 @@
-import { Accordion, Table, Button } from "react-bootstrap";
 import { useState } from "react";
 import "../../../assets/css/_nutrientAccordion.css";
-import {
-  NutrientsValue,
-  NutrientMeasurement,
-} from "../../types/SingleFoodResult";
-import { BsQuestionCircle } from "react-icons/bs";
-import CenteredModal from "./CenteredModal";
+import { Accordion, Button, Table } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import { BsQuestionCircle } from "react-icons/bs";
+import { NutrientMeasurement, NutrientsValue, } from "../../types/SingleFoodResult";
+import CenteredModal from "./CenteredModal";
 
 interface NutrientAccordionProps {
   data: NutrientsValue;
@@ -15,11 +12,7 @@ interface NutrientAccordionProps {
   actualGrams: number;
 }
 
-const NutrientAccordion: React.FC<NutrientAccordionProps> = ({
-  data,
-  onReferenceClick,
-  actualGrams,
-}) => {
+export default function NutrientAccordion({ data, onReferenceClick, actualGrams }: NutrientAccordionProps) {
   const [selectedNutrient, setSelectedNutrient] =
     useState<NutrientMeasurement | null>(null);
   const [showModal, setShowModal] = useState(false);
@@ -42,29 +35,29 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({
           <Accordion.Body>
             <Table responsive="sm">
               <thead>
-                <tr>
-                  <th>{t("nutrientAccordion.name")}</th>
-                  <th>{t("nutrientAccordion.unit")}</th>
-                  <th>{t("nutrientAccordion.mean")}</th>
-                  <th>{t("nutrientAccordion.details")}</th>
-                </tr>
+              <tr>
+                <th>{t("nutrientAccordion.name")}</th>
+                <th>{t("nutrientAccordion.unit")}</th>
+                <th>{t("nutrientAccordion.mean")}</th>
+                <th>{t("nutrientAccordion.details")}</th>
+              </tr>
               </thead>
               <tbody>
-                {data.energy.map((energy, index) => (
-                  <tr key={index}>
-                    <td>{energy.name}</td>
-                    <td>{energy.measurementUnit}</td>
-                    <td>{energy.average}</td>
-                    <td>
-                      <Button
-                        variant="link"
-                        onClick={() => handleOpenModal(energy)}
-                      >
-                        <BsQuestionCircle size={30} color="green" />
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
+              {data.energy.map((energy, index) => (
+                <tr key={index}>
+                  <td>{energy.name}</td>
+                  <td>{energy.measurementUnit}</td>
+                  <td>{energy.average}</td>
+                  <td>
+                    <Button
+                      variant="link"
+                      onClick={() => handleOpenModal(energy)}
+                    >
+                      <BsQuestionCircle size={30} color="green"/>
+                    </Button>
+                  </td>
+                </tr>
+              ))}
               </tbody>
             </Table>
           </Accordion.Body>
@@ -75,37 +68,37 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({
           <Accordion.Body>
             <Table responsive="sm">
               <thead>
-                <tr>
-                  <th>{t("nutrientAccordion.name")}</th>
-                  <th> {t("nutrientAccordion.unit")} </th>
-                  <th>{t("nutrientAccordion.mean")}</th>
-                  <th>{t("nutrientAccordion.details")}</th>
-                </tr>
+              <tr>
+                <th>{t("nutrientAccordion.name")}</th>
+                <th> {t("nutrientAccordion.unit")} </th>
+                <th>{t("nutrientAccordion.mean")}</th>
+                <th>{t("nutrientAccordion.details")}</th>
+              </tr>
               </thead>
               <tbody>
-                {data.mainNutrients
-                  .filter(
-                    (nutrient) =>
-                      !nutrient.components || nutrient.components.length === 0
-                  )
-                  .map((nutrient, index) => (
-                    <tr key={index}>
-                      <td>{nutrient.name}</td>
-                      <td>
-                        {actualGrams}
-                        {nutrient.measurementUnit}
-                      </td>
-                      <td>{nutrient.average}</td>
-                      <td>
-                        <Button
-                          variant="link"
-                          onClick={() => handleOpenModal(nutrient)}
-                        >
-                          <BsQuestionCircle size={30} color="green" />
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
+              {data.mainNutrients
+                .filter(
+                  (nutrient) =>
+                    !nutrient.components || nutrient.components.length === 0
+                )
+                .map((nutrient, index) => (
+                  <tr key={index}>
+                    <td>{nutrient.name}</td>
+                    <td>
+                      {actualGrams}
+                      {nutrient.measurementUnit}
+                    </td>
+                    <td>{nutrient.average}</td>
+                    <td>
+                      <Button
+                        variant="link"
+                        onClick={() => handleOpenModal(nutrient)}
+                      >
+                        <BsQuestionCircle size={30} color="green"/>
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </Table>
             {data.mainNutrients
@@ -124,51 +117,51 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({
                     <Accordion.Body>
                       <Table responsive="sm">
                         <thead>
-                          <tr>
-                            <th>{t("nutrientAccordion.name")}</th>
-                            <th>{t("nutrientAccordion.unit")}</th>
-                            <th>{t("nutrientAccordion.mean")}</th>
-                            <th>{t("nutrientAccordion.details")}</th>
-                          </tr>
+                        <tr>
+                          <th>{t("nutrientAccordion.name")}</th>
+                          <th>{t("nutrientAccordion.unit")}</th>
+                          <th>{t("nutrientAccordion.mean")}</th>
+                          <th>{t("nutrientAccordion.details")}</th>
+                        </tr>
                         </thead>
                         <tbody>
-                          {/* Iterar sobre los subcomponentes */}
-                          {nutrient.components.map((subComponent, subIndex) => (
-                            <tr key={subIndex}>
-                              <td>{subComponent.name}</td>
-                              <td>
-                                {actualGrams}
-                                {subComponent.measurementUnit}
-                              </td>
-                              <td>{subComponent.average}</td>
-                              <td>
-                                <Button
-                                  variant="link"
-                                  onClick={() => handleOpenModal(subComponent)}
-                                >
-                                  <BsQuestionCircle size={30} color="green" />
-                                </Button>
-                              </td>
-                            </tr>
-                          ))}
-                          <tr>
-                            <td>
-                              <strong>{nutrient.name}(Total)</strong>
-                            </td>
+                        {/* Iterar sobre los subcomponentes */}
+                        {nutrient.components.map((subComponent, subIndex) => (
+                          <tr key={subIndex}>
+                            <td>{subComponent.name}</td>
                             <td>
                               {actualGrams}
-                              {nutrient.measurementUnit}
+                              {subComponent.measurementUnit}
                             </td>
-                            <td>{nutrient.average}</td>
+                            <td>{subComponent.average}</td>
                             <td>
                               <Button
                                 variant="link"
-                                onClick={() => handleOpenModal(nutrient)}
+                                onClick={() => handleOpenModal(subComponent)}
                               >
-                                <BsQuestionCircle size={30} color="green" />
+                                <BsQuestionCircle size={30} color="green"/>
                               </Button>
                             </td>
                           </tr>
+                        ))}
+                        <tr>
+                          <td>
+                            <strong>{nutrient.name}(Total)</strong>
+                          </td>
+                          <td>
+                            {actualGrams}
+                            {nutrient.measurementUnit}
+                          </td>
+                          <td>{nutrient.average}</td>
+                          <td>
+                            <Button
+                              variant="link"
+                              onClick={() => handleOpenModal(nutrient)}
+                            >
+                              <BsQuestionCircle size={30} color="green"/>
+                            </Button>
+                          </td>
+                        </tr>
                         </tbody>
                       </Table>
                     </Accordion.Body>
@@ -185,44 +178,44 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({
           <Accordion.Body>
             <Table responsive="sm">
               <thead>
-                <tr>
-                  <th>{t("nutrientAccordion.name")}</th>
-                  <th>{t("nutrientAccordion.unit")}</th>
-                  <th>{t("nutrientAccordion.mean")}</th>
-                  <th>{t("nutrientAccordion.details")}</th>
-                </tr>
+              <tr>
+                <th>{t("nutrientAccordion.name")}</th>
+                <th>{t("nutrientAccordion.unit")}</th>
+                <th>{t("nutrientAccordion.mean")}</th>
+                <th>{t("nutrientAccordion.details")}</th>
+              </tr>
               </thead>
               <tbody>
-                {data.micronutrients.minerals.map((micronutrient, index) => (
-                  <tr key={index}>
-                    <td>{micronutrient.name}</td>
-                    <td>{micronutrient.measurementUnit}</td>
-                    <td>{micronutrient.average}</td>
-                    <td>
-                      <Button
-                        variant="link"
-                        onClick={() => handleOpenModal(micronutrient)}
-                      >
-                        <BsQuestionCircle size={30} color="green" />
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-                {data.micronutrients.vitamins.map((micronutrient, index) => (
-                  <tr key={index}>
-                    <td>{micronutrient.name}</td>
-                    <td>{micronutrient.measurementUnit}</td>
-                    <td>{micronutrient.average}</td>
-                    <td>
-                      <Button
-                        variant="link"
-                        onClick={() => handleOpenModal(micronutrient)}
-                      >
-                        <BsQuestionCircle size={30} color="green" />
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
+              {data.micronutrients.minerals.map((micronutrient, index) => (
+                <tr key={index}>
+                  <td>{micronutrient.name}</td>
+                  <td>{micronutrient.measurementUnit}</td>
+                  <td>{micronutrient.average}</td>
+                  <td>
+                    <Button
+                      variant="link"
+                      onClick={() => handleOpenModal(micronutrient)}
+                    >
+                      <BsQuestionCircle size={30} color="green"/>
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+              {data.micronutrients.vitamins.map((micronutrient, index) => (
+                <tr key={index}>
+                  <td>{micronutrient.name}</td>
+                  <td>{micronutrient.measurementUnit}</td>
+                  <td>{micronutrient.average}</td>
+                  <td>
+                    <Button
+                      variant="link"
+                      onClick={() => handleOpenModal(micronutrient)}
+                    >
+                      <BsQuestionCircle size={30} color="green"/>
+                    </Button>
+                  </td>
+                </tr>
+              ))}
               </tbody>
             </Table>
           </Accordion.Body>
@@ -238,5 +231,3 @@ const NutrientAccordion: React.FC<NutrientAccordionProps> = ({
     </>
   );
 };
-
-export default NutrientAccordion;

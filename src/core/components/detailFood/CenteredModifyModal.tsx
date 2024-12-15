@@ -1,28 +1,22 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-import { NutrientMeasurement } from "../../types/SingleFoodResult";
+import Modal from "react-bootstrap/Modal";
 import { useTranslation } from "react-i18next";
+import { NutrientMeasurement } from "../../types/SingleFoodResult";
 
 interface ModalProps {
   data: NutrientMeasurement;
   onHide: () => void;
-  onSave: (updatedData: NutrientMeasurement) => void; 
-
+  onSave: (updatedData: NutrientMeasurement) => void;
 }
 
-const CenteredModifyModal: React.FC<ModalProps> = ({
-  data,
-  onHide,
-  onSave,
-
-}) => {
+export default function CenteredModifyModal({ data, onHide, onSave }: ModalProps) {
   const [formData, setFormData] = useState<NutrientMeasurement>(data);
   const processValue = (value: string) => value.trim() === "" ? undefined : value;
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -33,10 +27,10 @@ const CenteredModifyModal: React.FC<ModalProps> = ({
 
   const handleSave = () => {
 
-    onSave(formData); 
+    onSave(formData);
     onHide();
   };
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   return (
     <Modal
@@ -48,12 +42,12 @@ const CenteredModifyModal: React.FC<ModalProps> = ({
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-        {t('Centered.details')}
+          {t('Centered.details')}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
-        <Form.Group>
+          <Form.Group>
             <Form.Label>{"Tamaño de muestra"}</Form.Label>
             <Form.Control
               type="number"
@@ -62,7 +56,7 @@ const CenteredModifyModal: React.FC<ModalProps> = ({
               onChange={handleChange}
             />
           </Form.Group>
-        <Form.Group>
+          <Form.Group>
             <Form.Label>{t('Centered.mean')}</Form.Label>
             <Form.Control
               type="number"
@@ -112,11 +106,9 @@ const CenteredModifyModal: React.FC<ModalProps> = ({
       <Modal.Footer>
         <Button onClick={handleSave}>{t('Centered.save')}</Button>
         <Button variant="secondary" onClick={onHide}>
-        {t('Centered.close')}
+          {t('Centered.close')}
         </Button>
       </Modal.Footer>
     </Modal>
   );
 };
-
-export default CenteredModifyModal;

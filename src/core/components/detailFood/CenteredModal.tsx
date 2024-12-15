@@ -1,8 +1,8 @@
+import { Table } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { Table } from "react-bootstrap";
-import { NutrientMeasurement } from "../../types/SingleFoodResult";
 import { useTranslation } from "react-i18next";
+import { NutrientMeasurement } from "../../types/SingleFoodResult";
 
 interface ModalProps {
   data: NutrientMeasurement;
@@ -10,8 +10,8 @@ interface ModalProps {
   onReferenceClick: (code: string) => void;  // Agregar la funcion para cambiar la pestaña(no está termianada)
 }
 
-const CenteredModal: React.FC<ModalProps> = ({ data, onHide, onReferenceClick }) => {
-  const {t} = useTranslation();
+export default function CenteredModal({ data, onHide, onReferenceClick }: ModalProps) {
+  const { t } = useTranslation();
   const referenceLinks =
     data.referenceCodes?.length ? (
       data.referenceCodes.map((code, index) => (
@@ -19,8 +19,8 @@ const CenteredModal: React.FC<ModalProps> = ({ data, onHide, onReferenceClick })
           <a
             href="#"
             onClick={(e) => {
-              e.preventDefault(); 
-              onReferenceClick(code.toString());  
+              e.preventDefault();
+              onReferenceClick(code.toString());
             }}
             style={{ textDecoration: "underline", color: "#0d6efd" }}
           >
@@ -43,32 +43,32 @@ const CenteredModal: React.FC<ModalProps> = ({ data, onHide, onReferenceClick })
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-        {t('Centered.details')}
+          {t('Centered.details')}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Table responsive="lg">
           <thead>
-            <tr>
-              <th>Tamaño de muestra</th>
-              <th>{t('Centered.deviation')}</th>
-              <th>{t('Centered.min')}</th>
-              <th>{t('Centered.max')}</th>
-              <th>{t('Centered.note')}</th>
-              <th>{t('Centered.standardized')}</th>
-              <th>{t('Centered.references')}</th>
-            </tr>
+          <tr>
+            <th>Tamaño de muestra</th>
+            <th>{t('Centered.deviation')}</th>
+            <th>{t('Centered.min')}</th>
+            <th>{t('Centered.max')}</th>
+            <th>{t('Centered.note')}</th>
+            <th>{t('Centered.standardized')}</th>
+            <th>{t('Centered.references')}</th>
+          </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>{data.sampleSize || "N/A"}</td>
-              <td>{data.deviation || "N/A"}</td>
-              <td>{data.min || "N/A"}</td>
-              <td>{data.max || "N/A"}</td>
-              <td>{data.note || "N/A"}</td>
-              <td>{data.standardized ? "Sí" : "No"}</td>
-              <td>{referenceLinks}</td>
-            </tr>
+          <tr>
+            <td>{data.sampleSize || "N/A"}</td>
+            <td>{data.deviation || "N/A"}</td>
+            <td>{data.min || "N/A"}</td>
+            <td>{data.max || "N/A"}</td>
+            <td>{data.note || "N/A"}</td>
+            <td>{data.standardized ? "Sí" : "No"}</td>
+            <td>{referenceLinks}</td>
+          </tr>
           </tbody>
         </Table>
       </Modal.Body>
@@ -77,6 +77,4 @@ const CenteredModal: React.FC<ModalProps> = ({ data, onHide, onReferenceClick })
       </Modal.Footer>
     </Modal>
   );
-};
-
-export default CenteredModal;
+}
