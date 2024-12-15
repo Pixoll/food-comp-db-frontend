@@ -150,7 +150,7 @@ export default function FoodResultsTable({
                       {t("Table_FoodResults.details")}
                     </button>
                     {state.isAuthenticated && (
-                      <button onClick={() => toModfyFoodDetail(item.code)}>
+                      <button onClick={() => toModfyFoodDetail(item.code)} style={{ backgroundColor: '#3b7791', color: '#fff' }}>
                         {t("Table_FoodResults.modify")}
                       </button>
                     )}
