@@ -73,6 +73,7 @@ export default function PreviewDataForm({
   types,
 }: PreviewDataFormProps) {
   const { generalData, nutrientsValueForm } = data;
+  console.log(data)
   const { t } = useTranslation();
   const { state } = useAuth();
   const { addToast } = useToast();

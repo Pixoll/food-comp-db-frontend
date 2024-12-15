@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "../assets/css/_AdminPage.css";
 import { useTranslation } from "react-i18next";
+import {isEqual} from "lodash"
 import {
   FoodsFromCsv,
   NewArticle,
@@ -243,7 +244,7 @@ export default function AdminPage() {
   };
 
   useEffect(() => {
-    if (energy.size > 0 && macronutrients.size > 0 && vitamins.size > 0 && minerals.size > 0) {
+    if (origins && nutrients && energy && macronutrients && vitamins && minerals ) {
       const initialFormData: FoodForm = {
         generalData: {
           code: "",
@@ -288,9 +289,11 @@ export default function AdminPage() {
         },
       };
 
-      setFormData(initialFormData);
+      if (!isEqual(formData, initialFormData)) {
+        setFormData(initialFormData);
+      }
     }
-  }, [energy, macronutrients, vitamins, minerals]);
+  }, [nutrients]);
 
   const handleUpdate = (updatedData: Partial<GeneralData>) => {
     setFormData((prev) => ({

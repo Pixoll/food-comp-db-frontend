@@ -26,11 +26,11 @@ export default function NewMacronutrientWithComponent({
   const [open, setOpen] = useState<Set<string>>(
     new Set(macronutrientsWithComponents.map((n) => n.nutrientId.toString()))
   );
-  const [editingComponentId, setEditingComponentId] = useState<number | null>(
-    null
+  const [editingComponentId, setEditingComponentId] = useState<number | undefined>(
+    undefined
   );
-  const [formData, setFormData] = useState<NutrientMeasurementForm | null>(
-    null
+  const [formData, setFormData] = useState<NutrientMeasurementForm | undefined>(
+    undefined
   );
   const { t } = useTranslation();
 
@@ -68,7 +68,7 @@ export default function NewMacronutrientWithComponent({
   };
 
   const saveChanges = () => {
-    if (formData && editingComponentId !== null) {
+    if (formData && editingComponentId !== undefined) {
       const updatedNutrients = macronutrientsWithComponents.map((nutrient) => {
         if (nutrient.nutrientId === editingComponentId) {
           return { ...nutrient, ...formData };
@@ -94,14 +94,14 @@ export default function NewMacronutrientWithComponent({
         onMacronutrientUpdate(updatedNutrient);
       }
 
-      setEditingComponentId(null);
-      setFormData(null);
+      setEditingComponentId(undefined);
+      setFormData(undefined);
     }
   };
 
   const cancelEditing = () => {
-    setEditingComponentId(null);
-    setFormData(null);
+    setEditingComponentId(undefined);
+    setFormData(undefined);
   };
 
   return (
@@ -196,11 +196,11 @@ export default function NewMacronutrientWithComponent({
                         </td>
                         <td>
                           <Form.Select
-                            value={formData?.dataType || "analytic"}
+                            value={formData?.dataType || ""}
                             onChange={(e) =>
                               handleInputChange("dataType", e.target.value)
                             }
-                          >
+                          > <option value="" disabled></option>
                             <option value="analytic">{t("NewMacronutrient.Analytical")}</option>
                             <option value="calculated">{t("NewMacronutrient.Calculated")}</option>
                             <option value="assumed">{t("NewMacronutrient.Taken")}</option>
@@ -310,10 +310,11 @@ export default function NewMacronutrientWithComponent({
                             handleInputChange("dataType", e.target.value)
                           }
                         >
-                          <option value="analytic">{t("NewMacronutrient.Analytical")}</option>
-                          <option value="calculated">{t("NewMacronutrient.Calculated")}</option>
-                          <option value="assumed">{t("NewMacronutrient.Taken")}</option>
-                          <option value="borrowed">{t("NewMacronutrient.Borrowed")}</option>
+                          <option value="" disabled></option>
+                            <option value="analytic">{t("NewMacronutrient.Analytical")}</option>
+                            <option value="calculated">{t("NewMacronutrient.Calculated")}</option>
+                            <option value="assumed">{t("NewMacronutrient.Taken")}</option>
+                            <option value="borrowed">{t("NewMacronutrient.Borrowed")}</option>
                         </Form.Select>
                       </td>
                       <td>
@@ -335,11 +336,11 @@ export default function NewMacronutrientWithComponent({
                           )}
                         </strong>
                       </td>
-                      <td>{nutrient.average || <Ellipsis size={35}></Ellipsis>}</td>
-                      <td>{nutrient.deviation || <Ellipsis size={35}></Ellipsis>}</td>
-                      <td>{nutrient.min || <Ellipsis size={35}></Ellipsis>}</td>
-                      <td>{nutrient.max || <Ellipsis size={35}></Ellipsis>}</td>
-                      <td>{nutrient.sampleSize || <Ellipsis size={35}></Ellipsis>}</td>
+                      <td>{nutrient.average ?? <Ellipsis size={35}></Ellipsis>}</td>
+                      <td>{nutrient.deviation ?? <Ellipsis size={35}></Ellipsis>}</td>
+                      <td>{nutrient.min ?? <Ellipsis size={35}></Ellipsis>}</td>
+                      <td>{nutrient.max ?? <Ellipsis size={35}></Ellipsis>}</td>
+                      <td>{nutrient.sampleSize ?? <Ellipsis size={35}></Ellipsis>}</td>
                       <td>
                         {nutrient.dataType
                           ? nutrient.dataType.charAt(0).toUpperCase() +

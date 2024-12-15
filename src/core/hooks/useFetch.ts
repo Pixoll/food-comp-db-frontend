@@ -45,7 +45,6 @@ export function useFetch<T>(url: string): FetchResult<T> {
         } else {
           jsonOrText = await response.text();
         }
-
         if (response.status >= 400) {
           // @ts-expect-error
           setError(jsonOrText?.message ?? `${jsonOrText}`);

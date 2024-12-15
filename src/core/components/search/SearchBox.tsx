@@ -20,7 +20,6 @@ export default function SearchBox({ filterOptions, onChange, single, selectedOpt
       setSelectedOption(null);
     }
   }, [selectedOptions, single]);
-
   const handleMultiSelectionChange = (newSelection: Set<string>) => {
     const newSelectionsArray = Array.from(newSelection);
     onChange(newSelectionsArray);
