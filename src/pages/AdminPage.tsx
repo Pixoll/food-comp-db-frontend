@@ -22,7 +22,7 @@ import NewAuthors from "../core/components/adminPage/NewAuthors";
 import NewArticleByReference, {
   RecursivePartial,
 } from "../core/components/adminPage/NewArticleByReference";
-import FoodTableAdmin from "../core/components/adminPage/FoodTableAdmin";
+import FoodTableAdmin from "../core/components/adminPage/FoodValidateData";
 import {
   ReferenceForm,
   NewArticle,

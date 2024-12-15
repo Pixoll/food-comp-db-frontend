@@ -3,8 +3,34 @@ import { useTranslation } from "react-i18next";
 import XLSX from "xlsx";
 import { useAuth } from "../../context/AuthContext";
 import makeRequest from "../../utils/makeRequest";
-import FoodTableAdmin from "./FoodTableAdmin";
+import ReferenceValidated from "./ReferenceValidated";
+import FoodValidateData from "./FoodValidateData";
+export type CSVReference = {
+    flags: number;
+    code: CSVValue<number>;
+    authors: Array<CSVValue<number>>;
+    title: CSVValue<string>;
+    type: CSVValue<Reference["type"]>;
+    journal?: CSVValue<number>;
+    volume?: CSVValue<number>;
+    issue?: CSVValue<number>;
+    volumeYear?: CSVValue<number>;
+    pageStart?: CSVValue<number>;
+    pageEnd?: CSVValue<number>;
+    city?: CSVValue<number>;
+    year?: CSVValue<number>;
+    other?: CSVValue<string>;
+};
 
+export type Reference = {
+    year: number | null;
+    type: "report" | "thesis" | "article" | "website" | "book";
+    title: string;
+    other: string | null;
+    code: number;
+    ref_article_id: number | null;
+    ref_city_id: number | null;
+}
 export type CSVValue<T> = {
   parsed: T | null;
   raw: string;
@@ -56,8 +82,8 @@ export default function FoodsFromCsv() {
   const { t } = useTranslation();
   const { state } = useAuth();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [data, setData] = useState<CSVFood[] | null>(null);
-
+  const [foodData, setFoodData] = useState<CSVFood[] | null>(null);
+  const [referencesData, setReferencesData] = useState<CSVReference[] | null>(null);
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFile(e.target.files[0]);
@@ -96,7 +122,8 @@ export default function FoodsFromCsv() {
       payload,
       state.token,
       (response) => {
-        setData(response.data.foods);
+        setFoodData(response.data.foods);
+        setReferencesData(response.data.references)
         console.log(response.data);
       },
       (error) => {
@@ -131,10 +158,14 @@ export default function FoodsFromCsv() {
           </button>
         </div>
       )}
-      {data && data.length > 0 && (
+      {foodData && foodData.length > 0 && (
         <div>
-          <FoodTableAdmin data={data}/>
+          <FoodValidateData data={foodData}/>
         </div>
+      )}
+
+      {referencesData && referencesData.length > 0 &&(
+        <ReferenceValidated data={referencesData}/>
       )}
     </div>
   );

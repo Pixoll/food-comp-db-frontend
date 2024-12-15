@@ -4,11 +4,11 @@ import Pagination from "../search/Pagination";
 import CSVFoodDisplay from "./CSVFoodDisplay";
 import { CSVFood } from "./FoodsFromCsv";
 
-type FoodResultsListProps = {
+type FoodValidateDataProps = {
   data: CSVFood[];
 }
 
-const FoodTableAdmin: React.FC<FoodResultsListProps> = ({ data }) => {
+const FoodValidateData: React.FC<FoodValidateDataProps> = ({ data }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 7;
   const [filteredData, setFilteredData] = useState(data);
@@ -103,4 +103,4 @@ const FoodTableAdmin: React.FC<FoodResultsListProps> = ({ data }) => {
   );
 };
 
-export default FoodTableAdmin;
+export default FoodValidateData;
