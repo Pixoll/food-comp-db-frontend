@@ -7,9 +7,20 @@ import {
   OverlayTrigger,
   Tooltip,
   Col,
-  Row
+  Row,
 } from "react-bootstrap";
-import { Info, Globe, Tag, Leaf, ShoppingBag, MapPin } from "lucide-react";
+import {
+  Info,
+  Globe,
+  Tag,
+  Leaf,
+  ShoppingBag,
+  MapPin,
+  CheckCircle,
+  PlusCircle,
+  RefreshCw,
+  BadgeX
+} from "lucide-react";
 import {
   CSVValue,
   CSVStringTranslation,
@@ -18,28 +29,39 @@ import {
 } from "./FoodsFromCsv";
 
 enum Flag {
+  INVALID = 0, 
   VALID = 1,
   IS_NEW = 1 << 1,
   UPDATED = 1 << 2,
 }
 
-const getFlagColor = (flags: number): string => {
-  if (flags & Flag.IS_NEW) return "success";
-  if (flags & Flag.UPDATED) return "warning";
-  if (flags & Flag.VALID) return "primary";
-  return "secondary";
+const getFlagNames = (flags: number): string[] => {
+  const names: string[] = [];
+  if (flags === Flag.INVALID) return ["Invalid"];  
+  if (flags & Flag.VALID) names.push("Valid");
+  if (flags & Flag.IS_NEW) names.push("New");
+  if (flags & Flag.UPDATED) names.push("Updated");
+  return names;
+}
+
+const getIconForFlags = (flags: number) => {
+  if (flags === Flag.INVALID) return BadgeX;  
+  if (flags & Flag.IS_NEW) return PlusCircle;
+  if (flags & Flag.UPDATED) return RefreshCw;
+  if (flags & Flag.VALID) return CheckCircle;
+  return null;
 };
 
 const renderCSVValueWithFlags = <T,>(value: CSVValue<T> | null | undefined) => {
   if (!value) return <span className="text-muted">N/A</span>;
 
   const displayValue = value.parsed !== null ? String(value.parsed) : value.raw;
-  const flagColor = getFlagColor(value.flags);
+  const IconComponent = getIconForFlags(value.flags);
 
   return (
     <div className="d-flex align-items-center gap-2">
-      <span className={`text-${flagColor} fw-semibold`}>{displayValue}</span>
-      {value.flags > 0 && (
+      <span>{displayValue}</span>
+      {(value.flags === Flag.INVALID || value.flags > 0) && IconComponent && (
         <OverlayTrigger
           placement="top"
           overlay={
@@ -51,20 +73,12 @@ const renderCSVValueWithFlags = <T,>(value: CSVValue<T> | null | undefined) => {
           }
         >
           <span>
-            <Info className={`text-${flagColor}`} size={16} />
+            <IconComponent size={16} />
           </span>
         </OverlayTrigger>
       )}
     </div>
   );
-};
-
-const getFlagNames = (flags: number): string[] => {
-  const names: string[] = [];
-  if (flags & Flag.VALID) names.push("Valid");
-  if (flags & Flag.IS_NEW) names.push("New");
-  if (flags & Flag.UPDATED) names.push("Updated");
-  return names;
 };
 
 const NutritionalMeasurements: React.FC<{ measurements: CSVMeasurement[] }> = ({
@@ -81,11 +95,11 @@ const NutritionalMeasurements: React.FC<{ measurements: CSVMeasurement[] }> = ({
       <Table striped bordered hover responsive size="sm">
         <thead className="table-light">
           <tr>
-            <th>Nutrient ID</th>
-            <th>Average</th>
-            <th>Min</th>
-            <th>Max</th>
-            <th>Data Type</th>
+            <th>Nutriente</th>
+            <th>Promedio</th>
+            <th>Mínimo</th>
+            <th>Máximo</th>
+            <th>Tipo de dato</th>
           </tr>
         </thead>
         <tbody>
@@ -140,7 +154,8 @@ const CSVFoodDisplay: React.FC<{ food: CSVFood }> = ({ food }) => {
               {food.strain && (
                 <div className="d-flex align-items-center gap-2">
                   <Leaf size={20} className="text-success" />
-                  <strong>Strain:</strong> {renderCSVValueWithFlags(food.strain)}
+                  <strong>Strain:</strong>{" "}
+                  {renderCSVValueWithFlags(food.strain)}
                 </div>
               )}
               {food.brand && (
@@ -164,7 +179,8 @@ const CSVFoodDisplay: React.FC<{ food: CSVFood }> = ({ food }) => {
               {food.origin && (
                 <div className="d-flex align-items-center gap-2">
                   <MapPin size={20} className="text-danger" />
-                  <strong>Origin:</strong> {renderCSVValueWithFlags(food.origin)}
+                  <strong>Origin:</strong>{" "}
+                  {renderCSVValueWithFlags(food.origin)}
                 </div>
               )}
             </div>
