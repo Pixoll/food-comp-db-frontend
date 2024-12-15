@@ -138,16 +138,15 @@ export default function FoodFilter() {
                   onChange={(e) =>
                     setSelectedFilters((prevFilters) => ({
                       ...prevFilters,
-                      operator: e.target.value || "=",
+                      operator: e.target.value,
                     }))
                   }
                 >
-                  <option value="">{t('Measurement.operator.title')}</option>
-                  <option value="<">{t('Measurement.operator.type.less')}(&lt;)</option>
-                  <option value="<=">{t('Measurement.operator.type.less_equal')} (&le;)</option>
-                  <option value="=">{t('Measurement.operator.type.equal')}(=)</option>
-                  <option value=">=">{t('Measurement.operator.type.greater_equal')} (&ge;)</option>
-                  <option value=">">{t('Measurement.operator.type.greater')}(&gt;)</option>
+                  <option value="<">{t('Measurement.operator.less')} (&lt;)</option>
+                  <option value="<=">{t('Measurement.operator.less_equal')} (&le;)</option>
+                  <option value="=">{t('Measurement.operator.equal')} (=)</option>
+                  <option value=">=">{t('Measurement.operator.greater_equal')} (&ge;)</option>
+                  <option value=">">{t('Measurement.operator.greater')} (&gt;)</option>
                 </Form.Select>
               </Form.Group>
             </Col>
@@ -161,6 +160,7 @@ export default function FoodFilter() {
                     placeholder={t('Measurement.content.value')}
                     aria-label="Content value"
                     value={selectedFilters.value || 0}
+                    min={0}
                     onChange={(e) =>
                       setSelectedFilters((prevFilters) => ({
                         ...prevFilters,

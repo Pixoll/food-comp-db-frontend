@@ -61,14 +61,11 @@
   "Measurement": {
     "title": "Medición de nutrientes",
     "operator": {
-      "title": "Operador",
-      "type": {
-        "less": "Menor que",
-        "less_equal": "Menor o igual",
-        "equal": "Igual a",
-        "greater_equal": "Mayor o igual",
-        "greater": "Mayor que"
-      }
+      "less": "Menor que",
+      "less_equal": "Menor o igual a",
+      "equal": "Igual a",
+      "greater_equal": "Mayor o igual a",
+      "greater": "Mayor que"
     },
     "content": {
       "title": "Contenido",
