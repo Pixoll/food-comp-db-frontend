@@ -1,35 +1,10 @@
-import React, { useState } from "react";
-import {
-  Card,
-  Accordion,
-  Table,
-  Button,
-  OverlayTrigger,
-  Tooltip,
-  Col,
-  Row,
-} from "react-bootstrap";
-import {
-  Info,
-  Globe,
-  Tag,
-  Leaf,
-  ShoppingBag,
-  MapPin,
-  CheckCircle,
-  PlusCircle,
-  RefreshCw,
-  BadgeX
-} from "lucide-react";
-import {
-  CSVValue,
-  CSVStringTranslation,
-  CSVFood,
-  CSVMeasurement,
-} from "./FoodsFromCsv";
+import { BadgeX, CheckCircle, Globe, Leaf, MapPin, PlusCircle, RefreshCw, ShoppingBag, Tag } from "lucide-react";
+import { useState } from "react";
+import { Accordion, Button, Card, Col, OverlayTrigger, Row, Table, Tooltip, } from "react-bootstrap";
+import { CSVFood, CSVMeasurement, CSVStringTranslation, CSVValue, } from "./FoodsFromCsv";
 
 enum Flag {
-  INVALID = 0, 
+  INVALID = 0,
   VALID = 1,
   IS_NEW = 1 << 1,
   UPDATED = 1 << 2,
@@ -37,22 +12,22 @@ enum Flag {
 
 const getFlagNames = (flags: number): string[] => {
   const names: string[] = [];
-  if (flags === Flag.INVALID) return ["Invalid"];  
+  if (flags === Flag.INVALID) return ["Invalid"];
   if (flags & Flag.VALID) names.push("Valid");
   if (flags & Flag.IS_NEW) names.push("New");
   if (flags & Flag.UPDATED) names.push("Updated");
   return names;
-}
+};
 
 const getIconForFlags = (flags: number) => {
-  if (flags === Flag.INVALID) return BadgeX;  
+  if (flags === Flag.INVALID) return BadgeX;
   if (flags & Flag.IS_NEW) return PlusCircle;
   if (flags & Flag.UPDATED) return RefreshCw;
   if (flags & Flag.VALID) return CheckCircle;
   return null;
 };
 
-const renderCSVValueWithFlags = <T,>(value: CSVValue<T> | null | undefined) => {
+const renderCSVValueWithFlags = <T, >(value: CSVValue<T> | null | undefined) => {
   if (!value) return <span className="text-muted">N/A</span>;
 
   const displayValue = value.parsed !== null ? String(value.parsed) : value.raw;
@@ -73,7 +48,7 @@ const renderCSVValueWithFlags = <T,>(value: CSVValue<T> | null | undefined) => {
           }
         >
           <span>
-            <IconComponent size={16} />
+            <IconComponent size={16}/>
           </span>
         </OverlayTrigger>
       )}
@@ -81,19 +56,18 @@ const renderCSVValueWithFlags = <T,>(value: CSVValue<T> | null | undefined) => {
   );
 };
 
-const NutritionalMeasurements: React.FC<{ measurements: CSVMeasurement[] }> = ({
-  measurements,
-}) => (
-  <Accordion.Item eventKey="0">
-    <Accordion.Header>
-      <div className="d-flex align-items-center gap-2">
-        <Leaf size={20} className="text-success" />
-        Nutritional Measurements ({measurements.length})
-      </div>
-    </Accordion.Header>
-    <Accordion.Body>
-      <Table striped bordered hover responsive size="sm">
-        <thead className="table-light">
+function NutritionalMeasurements({ measurements, }: { measurements: CSVMeasurement[] }) {
+  return (
+    <Accordion.Item eventKey="0">
+      <Accordion.Header>
+        <div className="d-flex align-items-center gap-2">
+          <Leaf size={20} className="text-success"/>
+          Nutritional Measurements ({measurements.length})
+        </div>
+      </Accordion.Header>
+      <Accordion.Body>
+        <Table striped bordered hover responsive size="sm">
+          <thead className="table-light">
           <tr>
             <th>Nutriente</th>
             <th>Promedio</th>
@@ -101,8 +75,8 @@ const NutritionalMeasurements: React.FC<{ measurements: CSVMeasurement[] }> = ({
             <th>Máximo</th>
             <th>Tipo de dato</th>
           </tr>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
           {measurements.map((measurement, idx) => (
             <tr key={idx}>
               <td>{measurement.nutrientId}</td>
@@ -112,13 +86,14 @@ const NutritionalMeasurements: React.FC<{ measurements: CSVMeasurement[] }> = ({
               <td>{renderCSVValueWithFlags(measurement.dataType)}</td>
             </tr>
           ))}
-        </tbody>
-      </Table>
-    </Accordion.Body>
-  </Accordion.Item>
-);
+          </tbody>
+        </Table>
+      </Accordion.Body>
+    </Accordion.Item>
+  );
+}
 
-const CSVFoodDisplay: React.FC<{ food: CSVFood }> = ({ food }) => {
+export default function CSVFoodDisplay({ food }: { food: CSVFood }) {
   const [activeLanguage, setActiveLanguage] =
     useState<keyof CSVStringTranslation>("en");
 
@@ -126,7 +101,7 @@ const CSVFoodDisplay: React.FC<{ food: CSVFood }> = ({ food }) => {
     <Card className="shadow-sm">
       <Card.Header className="bg-primary text-white d-flex justify-content-between align-items-center">
         <Card.Title className="mb-0 d-flex align-items-center gap-2">
-          <Globe size={24} />
+          <Globe size={24}/>
           {renderCSVValueWithFlags(food.commonName[activeLanguage])}
         </Card.Title>
         <div className="d-flex gap-2">
@@ -148,19 +123,19 @@ const CSVFoodDisplay: React.FC<{ food: CSVFood }> = ({ food }) => {
           <Col md={6}>
             <div className="d-flex flex-column gap-2">
               <div className="d-flex align-items-center gap-2">
-                <Tag size={20} className="text-secondary" />
+                <Tag size={20} className="text-secondary"/>
                 <strong>Code:</strong> {renderCSVValueWithFlags(food.code)}
               </div>
               {food.strain && (
                 <div className="d-flex align-items-center gap-2">
-                  <Leaf size={20} className="text-success" />
+                  <Leaf size={20} className="text-success"/>
                   <strong>Strain:</strong>{" "}
                   {renderCSVValueWithFlags(food.strain)}
                 </div>
               )}
               {food.brand && (
                 <div className="d-flex align-items-center gap-2">
-                  <ShoppingBag size={20} className="text-primary" />
+                  <ShoppingBag size={20} className="text-primary"/>
                   <strong>Brand:</strong> {renderCSVValueWithFlags(food.brand)}
                 </div>
               )}
@@ -169,16 +144,16 @@ const CSVFoodDisplay: React.FC<{ food: CSVFood }> = ({ food }) => {
           <Col md={6}>
             <div className="d-flex flex-column gap-2">
               <div className="d-flex align-items-center gap-2">
-                <Leaf size={20} className="text-success" />
+                <Leaf size={20} className="text-success"/>
                 <strong>Group:</strong> {renderCSVValueWithFlags(food.group)}
               </div>
               <div className="d-flex align-items-center gap-2">
-                <Tag size={20} className="text-secondary" />
+                <Tag size={20} className="text-secondary"/>
                 <strong>Type:</strong> {renderCSVValueWithFlags(food.type)}
               </div>
               {food.origin && (
                 <div className="d-flex align-items-center gap-2">
-                  <MapPin size={20} className="text-danger" />
+                  <MapPin size={20} className="text-danger"/>
                   <strong>Origin:</strong>{" "}
                   {renderCSVValueWithFlags(food.origin)}
                 </div>
@@ -189,7 +164,7 @@ const CSVFoodDisplay: React.FC<{ food: CSVFood }> = ({ food }) => {
 
         <Card className="mb-3 border-light">
           <Card.Header className="bg-light d-flex align-items-center gap-2">
-            <Tag size={20} className="text-secondary" />
+            <Tag size={20} className="text-secondary"/>
             <strong>Ingredients ({activeLanguage.toUpperCase()})</strong>
           </Card.Header>
           <Card.Body>
@@ -198,11 +173,9 @@ const CSVFoodDisplay: React.FC<{ food: CSVFood }> = ({ food }) => {
         </Card>
 
         <Accordion defaultActiveKey="0">
-          <NutritionalMeasurements measurements={food.measurements} />
+          <NutritionalMeasurements measurements={food.measurements}/>
         </Accordion>
       </Card.Body>
     </Card>
   );
 };
-
-export default CSVFoodDisplay;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Pagination from "../search/Pagination";
 import CSVFoodDisplay from "./CSVFoodDisplay";
@@ -8,7 +8,7 @@ type FoodValidateDataProps = {
   data: CSVFood[];
 }
 
-const FoodValidateData: React.FC<FoodValidateDataProps> = ({ data }) => {
+export default function FoodValidateData({ data }: FoodValidateDataProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 7;
   const [filteredData, setFilteredData] = useState(data);
@@ -42,38 +42,38 @@ const FoodValidateData: React.FC<FoodValidateDataProps> = ({ data }) => {
             <>
               <table className="content-table-foods">
                 <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>{t("FoodTableAdmin.Name")}</th>
-                    <th>{t("FoodTableAdmin.Actions")}</th>
-                  </tr>
+                <tr>
+                  <th>ID</th>
+                  <th>{t("FoodTableAdmin.Name")}</th>
+                  <th>{t("FoodTableAdmin.Actions")}</th>
+                </tr>
                 </thead>
                 <tbody>
-                  {records.map((item, index) => (
-                    <tr key={index}>
-                      <td>{index + 1}</td>
-                      <td>
-                        {item.commonName.en?.parsed || item.commonName.en?.raw || 'N/A'}
-                      </td>
-                      <td>
-                        <button 
-                          onClick={() => {
-                            setSelectedFood(item);
-                            setView("verificar");
-                          }}
-                        >
-                          {t("FoodTableAdmin.Check")}
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                {records.map((item, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>
+                      {item.commonName.en?.parsed || item.commonName.en?.raw || "N/A"}
+                    </td>
+                    <td>
+                      <button
+                        onClick={() => {
+                          setSelectedFood(item);
+                          setView("verificar");
+                        }}
+                      >
+                        {t("FoodTableAdmin.Check")}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
                 </tbody>
               </table>
               {npage > 1 && (
-                <Pagination 
-                  currentPage={currentPage} 
-                  npage={npage} 
-                  onPageChange={changePage} 
+                <Pagination
+                  currentPage={currentPage}
+                  npage={npage}
+                  onPageChange={changePage}
                 />
               )}
             </>
@@ -85,11 +85,11 @@ const FoodValidateData: React.FC<FoodValidateDataProps> = ({ data }) => {
           <h2>{t("FoodTableAdmin.Check")}</h2>
           {selectedFood && (
             <div className="food-details">
-              <CSVFoodDisplay food={selectedFood} />
+              <CSVFoodDisplay food={selectedFood}/>
             </div>
           )}
-          <button 
-            className="button" 
+          <button
+            className="button"
             onClick={() => {
               setView("list");
               setSelectedFood(null);
@@ -102,5 +102,3 @@ const FoodValidateData: React.FC<FoodValidateDataProps> = ({ data }) => {
     </div>
   );
 };
-
-export default FoodValidateData;

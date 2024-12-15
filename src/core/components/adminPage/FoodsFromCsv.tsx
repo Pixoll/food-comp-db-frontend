@@ -1,42 +1,45 @@
-import React, { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import XLSX from "xlsx";
 import { useAuth } from "../../context/AuthContext";
 import makeRequest from "../../utils/makeRequest";
-import ReferenceValidated from "./ReferenceValidated";
 import FoodValidateData from "./FoodValidateData";
+import ReferenceValidated from "./ReferenceValidated";
+
 export type CSVReference = {
-    flags: number;
-    code: CSVValue<number>;
-    authors: Array<CSVValue<number>>;
-    title: CSVValue<string>;
-    type: CSVValue<Reference["type"]>;
-    journal?: CSVValue<number>;
-    volume?: CSVValue<number>;
-    issue?: CSVValue<number>;
-    volumeYear?: CSVValue<number>;
-    pageStart?: CSVValue<number>;
-    pageEnd?: CSVValue<number>;
-    city?: CSVValue<number>;
-    year?: CSVValue<number>;
-    other?: CSVValue<string>;
+  flags: number;
+  code: CSVValue<number>;
+  authors: Array<CSVValue<number>>;
+  title: CSVValue<string>;
+  type: CSVValue<Reference["type"]>;
+  journal?: CSVValue<number>;
+  volume?: CSVValue<number>;
+  issue?: CSVValue<number>;
+  volumeYear?: CSVValue<number>;
+  pageStart?: CSVValue<number>;
+  pageEnd?: CSVValue<number>;
+  city?: CSVValue<number>;
+  year?: CSVValue<number>;
+  other?: CSVValue<string>;
 };
 
 export type Reference = {
-    year: number | null;
-    type: "report" | "thesis" | "article" | "website" | "book";
-    title: string;
-    other: string | null;
-    code: number;
-    ref_article_id: number | null;
-    ref_city_id: number | null;
+  year: number | null;
+  type: "report" | "thesis" | "article" | "website" | "book";
+  title: string;
+  other: string | null;
+  code: number;
+  ref_article_id: number | null;
+  ref_city_id: number | null;
 }
+
 export type CSVValue<T> = {
   parsed: T | null;
   raw: string;
   flags: number;
   old?: T | null;
 };
+
 export type CSVStringTranslation = Record<"es" | "en" | "pt", CSVValue<string> | null>;
 
 export type CSVMeasurement = {
@@ -50,6 +53,7 @@ export type CSVMeasurement = {
   referenceCodes?: Array<CSVValue<number>>;
   dataType: CSVValue<Measurement["data_type"]>;
 };
+
 export type Measurement = {
   id: `${number}`;
   min: number | null;
@@ -61,6 +65,7 @@ export type Measurement = {
   sample_size: number | null;
   data_type: "analytic" | "calculated" | "assumed" | "borrowed";
 };
+
 export type CSVFood = {
   flags: number;
   code: CSVValue<string>;
@@ -84,7 +89,7 @@ export default function FoodsFromCsv() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [foodData, setFoodData] = useState<CSVFood[] | null>(null);
   const [referencesData, setReferencesData] = useState<CSVReference[] | null>(null);
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFile(e.target.files[0]);
     }
@@ -123,7 +128,7 @@ export default function FoodsFromCsv() {
       state.token,
       (response) => {
         setFoodData(response.data.foods);
-        setReferencesData(response.data.references)
+        setReferencesData(response.data.references);
         console.log(response.data);
       },
       (error) => {
@@ -164,7 +169,7 @@ export default function FoodsFromCsv() {
         </div>
       )}
 
-      {referencesData && referencesData.length > 0 &&(
+      {referencesData && referencesData.length > 0 && (
         <ReferenceValidated data={referencesData}/>
       )}
     </div>

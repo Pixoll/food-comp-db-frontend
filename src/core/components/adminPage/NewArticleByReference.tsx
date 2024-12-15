@@ -1,7 +1,7 @@
-import { BookOpen, FileText, Layers, PlusCircle, XCircle } from 'lucide-react';
-import React, { useState } from "react";
-import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
-import { Article, Journal, JournalVolume } from "./getters/UseReferences";
+import { BookOpen, FileText, Layers, PlusCircle, XCircle } from "lucide-react";
+import { useState } from "react";
+import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
+import { Article, Journal, JournalVolume } from "./getters";
 import { NewArticle, NewVolume } from "./NewReference";
 import "../../../assets/css/_NewVolumByReference.css";
 
@@ -172,7 +172,7 @@ export default function NewArticleByReference({ data, dataForm, updateNewArticle
             <Row>
               <Col md={8}>
                 <Form.Select
-                  value={selectedIdJournal || ''}
+                  value={selectedIdJournal || ""}
                   onChange={(e) => {
                     const id = +e.target.value;
                     setSelectedIdJournal(id);
@@ -216,7 +216,7 @@ export default function NewArticleByReference({ data, dataForm, updateNewArticle
               <Row>
                 <Col md={8}>
                   <Form.Select
-                    value={selectedIdVolume || ''}
+                    value={selectedIdVolume || ""}
                     onChange={(e) => {
                       const id = +e.target.value;
                       handleSelectVolume(id);

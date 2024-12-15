@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Alert, Button, Card, Container, Table } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { Container, Row, Col, Table, Button, Card, Alert } from 'react-bootstrap';
 import Pagination from "../search/Pagination";
 import CSVReferenceDisplay from "./CSVReferenceDisplay";
 import { CSVReference } from "./FoodsFromCsv";
@@ -9,7 +9,7 @@ type ReferenceValidatedProps = {
   data: CSVReference[];
 }
 
-const ReferenceValidated: React.FC<ReferenceValidatedProps> = ({ data }) => {
+export default function ReferenceValidated({ data }: ReferenceValidatedProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 7;
   const [filteredData, setFilteredData] = useState(data);
@@ -36,7 +36,7 @@ const ReferenceValidated: React.FC<ReferenceValidatedProps> = ({ data }) => {
     <Container fluid className="py-4">
       {view === "list" && (
         <Card>
-          <Card.Header as="h2" className=" text-black" >
+          <Card.Header as="h2" className=" text-black">
             {"Lista de referencias"}
           </Card.Header>
           <Card.Body>
@@ -48,35 +48,35 @@ const ReferenceValidated: React.FC<ReferenceValidatedProps> = ({ data }) => {
               <>
                 <Table striped bordered hover responsive>
                   <thead className="thead-light">
-                    <tr>
-                      <th>#</th>
-                      <th>{t("ReferenceTableAdmin.Title")}</th>
-                      <th>{t("ReferenceTableAdmin.Year")}</th>
-                      <th>{t("ReferenceTableAdmin.Type")}</th>
-                      <th>{t("ReferenceTableAdmin.Actions")}</th>
-                    </tr>
+                  <tr>
+                    <th>#</th>
+                    <th>{t("ReferenceTableAdmin.Title")}</th>
+                    <th>{t("ReferenceTableAdmin.Year")}</th>
+                    <th>{t("ReferenceTableAdmin.Type")}</th>
+                    <th>{t("ReferenceTableAdmin.Actions")}</th>
+                  </tr>
                   </thead>
                   <tbody>
-                    {records.map((item, index) => (
-                      <tr key={index}>
-                        <td>{firstIndex + index + 1}</td>
-                        <td>{item.title?.parsed || item.title?.raw || 'N/A'}</td>
-                        <td>{item.year?.parsed || item.year?.raw || 'N/A'}</td>
-                        <td>{item.type?.parsed || item.type?.raw || 'N/A'}</td>
-                        <td>
-                          <Button 
-                            variant="primary" 
-                            size="sm" 
-                            onClick={() => {
-                              setSelectedReference(item);
-                              setView("verificar");
-                            }}
-                          >
-                            {t("ReferenceTableAdmin.Check")}
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
+                  {records.map((item, index) => (
+                    <tr key={index}>
+                      <td>{firstIndex + index + 1}</td>
+                      <td>{item.title?.parsed || item.title?.raw || "N/A"}</td>
+                      <td>{item.year?.parsed || item.year?.raw || "N/A"}</td>
+                      <td>{item.type?.parsed || item.type?.raw || "N/A"}</td>
+                      <td>
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          onClick={() => {
+                            setSelectedReference(item);
+                            setView("verificar");
+                          }}
+                        >
+                          {t("ReferenceTableAdmin.Check")}
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
                   </tbody>
                 </Table>
                 {npage > 1 && (
@@ -102,11 +102,11 @@ const ReferenceValidated: React.FC<ReferenceValidatedProps> = ({ data }) => {
           <Card.Body>
             {selectedReference && (
               <div className="mb-4">
-                <CSVReferenceDisplay reference={selectedReference} />
+                <CSVReferenceDisplay reference={selectedReference}/>
               </div>
             )}
-            <Button 
-              variant="succes" 
+            <Button
+              variant="succes"
               onClick={() => {
                 setView("list");
                 setSelectedReference(null);
@@ -120,5 +120,3 @@ const ReferenceValidated: React.FC<ReferenceValidatedProps> = ({ data }) => {
     </Container>
   );
 };
-
-export default ReferenceValidated;

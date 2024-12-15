@@ -1,10 +1,10 @@
 import { Book, Calendar, FileText, Globe, Info, MapPin, TagIcon } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Card, Col, Form, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import RequiredFieldLabel from "../detailFood/RequiredFieldLabel";
 import SelectorWithInput from "../detailFood/SelectorWithInput";
-import { City } from "./getters/UseReferences";
+import { City } from "./getters";
 
 export type ReferenceForm = {
   code: number;

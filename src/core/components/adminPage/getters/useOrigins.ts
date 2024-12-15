@@ -40,8 +40,8 @@ export type Location = CommonOrigin & {
   type: "city" | "town";
 };
 
-const useOrigins = () => {
-  const result = useFetch<Origin[]>(`/origins`);
+export default function useOrigins() {
+  const result = useFetch<Origin[]>("/origins");
   const origins = result.status === FetchStatus.Success ? result.data : [];
 
   const regions = new Collection<number, Region>();
@@ -102,5 +102,3 @@ const useOrigins = () => {
 
   return { regions, provinces, communes, locations };
 };
-
-export default useOrigins;

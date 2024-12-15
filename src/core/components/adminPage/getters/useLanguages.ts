@@ -1,12 +1,11 @@
-import useFetch from "../../../hooks/useFetch"
-export type Language ={
-    id: number,
-    code: "es" | "en" | "pt",
-    name: string,
-}
+import useFetch from "../../../hooks/useFetch";
 
-const useLanguages = ()=>{
- return useFetch<Language[]>("/languages")
-}
+export type Language = {
+  id: number;
+  code: "es" | "en" | "pt";
+  name: string;
+};
 
-export default useLanguages;
+export default function useLanguages() {
+  return useFetch<Language[]>("/languages");
+}

@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { Table, Card, Collapse, Button, Form } from "react-bootstrap";
-import {
-  NutrientMeasurementWithComponentsForm,
-  NutrientMeasurementForm,
-  NutrientSummary,
-  getNutrientNameById,
-} from "../../../pages/AdminPage";
+import { useState } from "react";
+import { Button, Card, Collapse, Form, Table } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import {
+  getNutrientNameById,
+  NutrientMeasurementForm,
+  NutrientMeasurementWithComponentsForm,
+  NutrientSummary,
+} from "../../../pages/AdminPage";
 
 type NewMacronutrientWithComponentProps = {
   macronutrientsWithComponents: NutrientMeasurementWithComponentsForm[];
@@ -16,13 +16,11 @@ type NewMacronutrientWithComponentProps = {
   nameAndIdNutrients: NutrientSummary[];
 };
 
-const NewMacronutrientWithComponent: React.FC<
-  NewMacronutrientWithComponentProps
-> = ({
+export default function NewMacronutrientWithComponent({
   macronutrientsWithComponents,
   onMacronutrientUpdate,
   nameAndIdNutrients,
-}) => {
+}: NewMacronutrientWithComponentProps) {
   const [open, setOpen] = useState<Set<string>>(
     new Set(macronutrientsWithComponents.map((n) => n.nutrientId.toString()))
   );
@@ -63,7 +61,7 @@ const NewMacronutrientWithComponent: React.FC<
     if (formData) {
       setFormData({ ...formData, [field]: value });
     }
-    
+
     console.log(formData);
   };
 
@@ -107,7 +105,7 @@ const NewMacronutrientWithComponent: React.FC<
   return (
     <div>
       {macronutrientsWithComponents.map((nutrient) => (
-        <Card key={nutrient.nutrientId} className="card-of-new-nutrient" >
+        <Card key={nutrient.nutrientId} className="card-of-new-nutrient">
           <Card.Header className="card-of-new-nutrient-header">
             <Button
               onClick={() => toggleCollapse(nutrient.nutrientId.toString())}
@@ -126,135 +124,26 @@ const NewMacronutrientWithComponent: React.FC<
             <Card.Body className="card-of-new-nutrient-collapse">
               <Table striped bordered hover responsive>
                 <thead>
-                  <tr>
-                    <th>{t("NewMacronutrient.name")}</th>
-                    <th>{t("NewMacronutrient.mean")}</th>
-                    <th>{t("NewMacronutrient.Deviation")}</th>
-                    <th>{t("NewMacronutrient.min")}</th>
-                    <th>{t("NewMacronutrient.max")}</th>
-                    <th>{t("NewMacronutrient.Size")}</th>
-                    <th>{t("NewMacronutrient.type")}</th>
-                    <th>{t("NewMacronutrient.Action")}</th>
-                  </tr>
+                <tr>
+                  <th>{t("NewMacronutrient.name")}</th>
+                  <th>{t("NewMacronutrient.mean")}</th>
+                  <th>{t("NewMacronutrient.Deviation")}</th>
+                  <th>{t("NewMacronutrient.min")}</th>
+                  <th>{t("NewMacronutrient.max")}</th>
+                  <th>{t("NewMacronutrient.Size")}</th>
+                  <th>{t("NewMacronutrient.type")}</th>
+                  <th>{t("NewMacronutrient.Action")}</th>
+                </tr>
                 </thead>
                 <tbody>
-                  {/* Renderizado de los componentes hijos */}
-                  {nutrient.components?.map((component) => (
-                    <tr key={component.nutrientId}>
-                      {editingComponentId === component.nutrientId ? (
-                        <>
-                          <td>
-                            {getNutrientNameById(
-                              component.nutrientId,
-                              nameAndIdNutrients
-                            )}
-                          </td>
-                          <td>
-                            <Form.Control
-                              type="number"
-                              value={formData?.average || ""}
-                              onChange={(e) =>
-                                handleInputChange("average", +e.target.value)
-                              }
-                            />
-                          </td>
-                          <td>
-                            <Form.Control
-                              type="number"
-                              value={formData?.deviation || ""}
-                              onChange={(e) =>
-                                handleInputChange("deviation", +e.target.value)
-                              }
-                            />
-                          </td>
-                          <td>
-                            <Form.Control
-                              type="number"
-                              value={formData?.min || ""}
-                              onChange={(e) =>
-                                handleInputChange("min", +e.target.value)
-                              }
-                            />
-                          </td>
-                          <td>
-                            <Form.Control
-                              type="number"
-                              value={formData?.max || ""}
-                              onChange={(e) =>
-                                handleInputChange("max", +e.target.value)
-                              }
-                            />
-                          </td>
-                          <td>
-                            <Form.Control
-                              type="number"
-                              value={formData?.sampleSize || ""}
-                              onChange={(e) =>
-                                handleInputChange("sampleSize", +e.target.value)
-                              }
-                            />
-                          </td>
-                          <td>
-                            <Form.Select
-                              value={formData?.dataType || "analytic"}
-                              onChange={(e) =>
-                                handleInputChange("dataType", e.target.value)
-                              }
-                            >
-                              <option value="analytic">{t("NewMacronutrient.Analytical")}</option>
-                              <option value="calculated">{t("NewMacronutrient.Calculated")}</option>
-                              <option value="assumed">{t("NewMacronutrient.Taken")}</option>
-                              <option value="borrowed">{t("NewMacronutrient.Borrowed")}</option>
-                            </Form.Select>
-                          </td>
-                          <td>
-                            <Button className="btn-save" onClick={saveChanges}>
-                            {t("NewMacronutrient.save")}
-                            </Button>{" "}
-                            <Button className="btn-cancel" onClick={cancelEditing}>
-                            {t("NewMacronutrient.cancel")}
-                            </Button>
-                          </td>
-                        </>
-                      ) : (
-                        <>
-                          <td>
-                            {getNutrientNameById(
-                              component.nutrientId,
-                              nameAndIdNutrients
-                            )}
-                          </td>
-                          <td>{component.average || "---"}</td>
-                          <td>{component.deviation || "---"}</td>
-                          <td>{component.min || "---"}</td>
-                          <td>{component.max || "---"}</td>
-                          <td>{component.sampleSize || "---"}</td>
-                          <td>
-                            {component.dataType
-                              ? component.dataType.charAt(0).toUpperCase() +
-                                component.dataType.slice(1)
-                              : "---"}
-                          </td>
-                          <td>
-                            <Button
-                              className="btn-edit"
-                              onClick={() => startEditing(component)}
-                            >
-                              {t("NewMacronutrient.Edit")}
-                            </Button>{" "}
-                          </td>
-                        </>
-                      )}
-                    </tr>
-                  ))}
-
-                  {/* Renderizar la fila del nutriente padre */}
-                  <tr>
-                    {editingComponentId === nutrient.nutrientId ? (
+                {/* Renderizado de los componentes hijos */}
+                {nutrient.components?.map((component) => (
+                  <tr key={component.nutrientId}>
+                    {editingComponentId === component.nutrientId ? (
                       <>
                         <td>
                           {getNutrientNameById(
-                            nutrient.nutrientId,
+                            component.nutrientId,
                             nameAndIdNutrients
                           )}
                         </td>
@@ -318,49 +207,158 @@ const NewMacronutrientWithComponent: React.FC<
                         </td>
                         <td>
                           <Button className="btn-save" onClick={saveChanges}>
-                          {t("NewMacronutrient.save")}
+                            {t("NewMacronutrient.save")}
                           </Button>{" "}
                           <Button className="btn-cancel" onClick={cancelEditing}>
-                          {t("NewMacronutrient.cancel")}
+                            {t("NewMacronutrient.cancel")}
                           </Button>
                         </td>
                       </>
                     ) : (
                       <>
                         <td>
-                          <strong>
-                            {getNutrientNameById(
-                              nutrient.nutrientId,
-                              nameAndIdNutrients
-                            )}
-                          </strong>
+                          {getNutrientNameById(
+                            component.nutrientId,
+                            nameAndIdNutrients
+                          )}
                         </td>
-                        <td>{nutrient.average || "---"}</td>
-                        <td>{nutrient.deviation || "---"}</td>
-                        <td>{nutrient.min || "---"}</td>
-                        <td>{nutrient.max || "---"}</td>
-                        <td>{nutrient.sampleSize || "---"}</td>
+                        <td>{component.average || "---"}</td>
+                        <td>{component.deviation || "---"}</td>
+                        <td>{component.min || "---"}</td>
+                        <td>{component.max || "---"}</td>
+                        <td>{component.sampleSize || "---"}</td>
                         <td>
-                          {nutrient.dataType
-                            ? nutrient.dataType.charAt(0).toUpperCase() +
-                              nutrient.dataType.slice(1)
+                          {component.dataType
+                            ? component.dataType.charAt(0).toUpperCase() +
+                            component.dataType.slice(1)
                             : "---"}
                         </td>
                         <td>
                           <Button
                             className="btn-edit"
-                            onClick={() =>
-                              startEditing({
-                                ...nutrient,
-                              })
-                            }
+                            onClick={() => startEditing(component)}
                           >
                             {t("NewMacronutrient.Edit")}
-                          </Button>
+                          </Button>{" "}
                         </td>
                       </>
                     )}
                   </tr>
+                ))}
+
+                {/* Renderizar la fila del nutriente padre */}
+                <tr>
+                  {editingComponentId === nutrient.nutrientId ? (
+                    <>
+                      <td>
+                        {getNutrientNameById(
+                          nutrient.nutrientId,
+                          nameAndIdNutrients
+                        )}
+                      </td>
+                      <td>
+                        <Form.Control
+                          type="number"
+                          value={formData?.average || ""}
+                          onChange={(e) =>
+                            handleInputChange("average", +e.target.value)
+                          }
+                        />
+                      </td>
+                      <td>
+                        <Form.Control
+                          type="number"
+                          value={formData?.deviation || ""}
+                          onChange={(e) =>
+                            handleInputChange("deviation", +e.target.value)
+                          }
+                        />
+                      </td>
+                      <td>
+                        <Form.Control
+                          type="number"
+                          value={formData?.min || ""}
+                          onChange={(e) =>
+                            handleInputChange("min", +e.target.value)
+                          }
+                        />
+                      </td>
+                      <td>
+                        <Form.Control
+                          type="number"
+                          value={formData?.max || ""}
+                          onChange={(e) =>
+                            handleInputChange("max", +e.target.value)
+                          }
+                        />
+                      </td>
+                      <td>
+                        <Form.Control
+                          type="number"
+                          value={formData?.sampleSize || ""}
+                          onChange={(e) =>
+                            handleInputChange("sampleSize", +e.target.value)
+                          }
+                        />
+                      </td>
+                      <td>
+                        <Form.Select
+                          value={formData?.dataType || "analytic"}
+                          onChange={(e) =>
+                            handleInputChange("dataType", e.target.value)
+                          }
+                        >
+                          <option value="analytic">{t("NewMacronutrient.Analytical")}</option>
+                          <option value="calculated">{t("NewMacronutrient.Calculated")}</option>
+                          <option value="assumed">{t("NewMacronutrient.Taken")}</option>
+                          <option value="borrowed">{t("NewMacronutrient.Borrowed")}</option>
+                        </Form.Select>
+                      </td>
+                      <td>
+                        <Button className="btn-save" onClick={saveChanges}>
+                          {t("NewMacronutrient.save")}
+                        </Button>{" "}
+                        <Button className="btn-cancel" onClick={cancelEditing}>
+                          {t("NewMacronutrient.cancel")}
+                        </Button>
+                      </td>
+                    </>
+                  ) : (
+                    <>
+                      <td>
+                        <strong>
+                          {getNutrientNameById(
+                            nutrient.nutrientId,
+                            nameAndIdNutrients
+                          )}
+                        </strong>
+                      </td>
+                      <td>{nutrient.average || "---"}</td>
+                      <td>{nutrient.deviation || "---"}</td>
+                      <td>{nutrient.min || "---"}</td>
+                      <td>{nutrient.max || "---"}</td>
+                      <td>{nutrient.sampleSize || "---"}</td>
+                      <td>
+                        {nutrient.dataType
+                          ? nutrient.dataType.charAt(0).toUpperCase() +
+                          nutrient.dataType.slice(1)
+                          : "---"}
+                      </td>
+                      <td>
+                        <Button
+                          className="btn-edit"
+                          onClick={() =>
+                            startEditing({
+                              ...nutrient,
+                            })
+                          }
+                        >
+                          {t("NewMacronutrient.Edit")}
+                        </Button>
+                      </td>
+                    </>
+                  )}
+                </tr>
                 </tbody>
               </Table>
             </Card.Body>
@@ -370,5 +368,3 @@ const NewMacronutrientWithComponent: React.FC<
     </div>
   );
 };
-
-export default NewMacronutrientWithComponent;

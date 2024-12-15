@@ -1,13 +1,11 @@
-import useFetch from "../../../hooks/useFetch"
+import useFetch from "../../../hooks/useFetch";
 
-export type Group ={
-    id: number,
-    code: string,
-    name: string,
+export type Group = {
+  id: number;
+  code: string;
+  name: string;
+};
+
+export default function useGroups() {
+  return useFetch<Group[]>("/groups");
 }
-
-const useGroups = ()=>{
- return useFetch<Group[]>("/groups")
-}
-
-export default useGroups;

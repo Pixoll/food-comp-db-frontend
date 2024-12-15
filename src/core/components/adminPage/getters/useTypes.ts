@@ -1,12 +1,11 @@
-import useFetch from "../../../hooks/useFetch"
-export type Type ={
-    id: number,
-    code: string,
-    name: string,
-}
+import useFetch from "../../../hooks/useFetch";
 
-const useTypes = ()=>{
- return useFetch<Type[]>("/types")
-}
+export type Type = {
+  id: number;
+  code: string;
+  name: string;
+};
 
-export default useTypes;
+export default function useTypes() {
+  return useFetch<Type[]>("/types");
+}

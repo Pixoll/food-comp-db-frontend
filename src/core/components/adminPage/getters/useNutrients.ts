@@ -1,4 +1,4 @@
-import useFetch from "../../../hooks/useFetch"
+import useFetch from "../../../hooks/useFetch";
 
 export type GroupedNutrients = {
   macronutrients: MacroNutrient[];
@@ -21,9 +21,6 @@ export type AnyNutrient = {
   note?: string;
 };
 
-export const useNutrients = () => {
+export default function useNutrients() {
   return useFetch<GroupedNutrients>("/nutrients");
-  
 };
-
-export default useNutrients;

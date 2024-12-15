@@ -1,17 +1,23 @@
-import React, { useState } from "react";
-import { Card, Row, Col, Button, Form } from "react-bootstrap";
-import { PlusCircle , Trash2  } from "lucide-react";
-import {LangualCode}from "./getters/useLangualCodes";
-import Pagination from "../search/Pagination";
+import { PlusCircle, Trash2 } from "lucide-react";
+import { ChangeEvent, useState } from "react";
+import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import Pagination from "../search/Pagination";
+import { LangualCode } from "./getters";
 
-const ITEMS_PER_PAGE = 5;
 type NewLangualCodesProps = {
-    langualCodes:LangualCode[];
-    selectedLangualCodes: number[];
+  langualCodes: LangualCode[];
+  selectedLangualCodes: number[];
   onLangualCodesChange: (id: number) => void;
 }
-const NewLangualCodes: React.FC<NewLangualCodesProps> = ({langualCodes, selectedLangualCodes, onLangualCodesChange}) => {
+
+const ITEMS_PER_PAGE = 5;
+
+export default function NewLangualCodes({
+  langualCodes,
+  selectedLangualCodes,
+  onLangualCodesChange
+}: NewLangualCodesProps) {
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredLangualCodes = langualCodes.filter((langualCode) =>
@@ -32,9 +38,9 @@ const NewLangualCodes: React.FC<NewLangualCodesProps> = ({langualCodes, selected
     }
   };
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
-    setCurrentPage(1); 
+    setCurrentPage(1);
   };
 
   const { t } = useTranslation();
@@ -79,12 +85,12 @@ const NewLangualCodes: React.FC<NewLangualCodesProps> = ({langualCodes, selected
                   <div className="text-center">
                     {isSelected ? (
                       <>
-                        <Trash2 className="mx-auto mb-2" size={24} />
+                        <Trash2 className="mx-auto mb-2" size={24}/>
                         <span className="d-block">{t("LangualCode.Eliminate")}</span>
                       </>
                     ) : (
                       <>
-                        <PlusCircle className="mx-auto mb-2" size={24} />
+                        <PlusCircle className="mx-auto mb-2" size={24}/>
                         <span className="d-block">{t("LangualCode.Add")}</span>
                       </>
                     )}
@@ -104,5 +110,3 @@ const NewLangualCodes: React.FC<NewLangualCodesProps> = ({langualCodes, selected
     </div>
   );
 };
-
-export default NewLangualCodes;

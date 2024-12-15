@@ -1,27 +1,35 @@
 import { useEffect, useState } from "react";
 import "../assets/css/_AdminPage.css";
 import { useTranslation } from "react-i18next";
-import FoodsFromCsv from "../core/components/adminPage/FoodsFromCsv";
-import useGroups from "../core/components/adminPage/getters/useGroups";
-import useLanguages from "../core/components/adminPage/getters/useLanguages";
-import useLangualCodes from "../core/components/adminPage/getters/useLangualCodes";
-import useNutrients, { AnyNutrient, MacroNutrient } from "../core/components/adminPage/getters/useNutrients";
-import useOrigins from "../core/components/adminPage/getters/useOrigins";
-import useReferences, { Author } from "../core/components/adminPage/getters/UseReferences";
-import useScientificNames from "../core/components/adminPage/getters/useScientificNames";
-import useSubspecies from "../core/components/adminPage/getters/useSubspecies";
-import useTypes from "../core/components/adminPage/getters/useTypes";
-import NewArticleByReference, { RecursivePartial } from "../core/components/adminPage/NewArticleByReference";
-import NewAuthors from "../core/components/adminPage/NewAuthors";
-import NewGeneralData from "../core/components/adminPage/NewGeneralData";
-import NewLangualCodes from "../core/components/adminPage/NewLangualCode";
-import NewMacronutrientWithComponent from "../core/components/adminPage/NewMacronutrientWithComponent";
-import NewNutrients from "../core/components/adminPage/NewNutrients";
-import NewReference, { NewArticle, ReferenceForm } from "../core/components/adminPage/NewReference";
-import NewReferences from "../core/components/adminPage/NewReferences";
-import Origins from "../core/components/adminPage/Origins";
-import PreviewDataForm from "../core/components/adminPage/PreviewDataForm";
-import PreviewNewReference from "../core/components/adminPage/PreviewNewReference";
+import {
+  AnyNutrient,
+  Author,
+  FoodsFromCsv,
+  MacroNutrient,
+  NewArticle,
+  NewArticleByReference,
+  NewAuthors,
+  NewGeneralData,
+  NewLangualCode,
+  NewMacronutrientWithComponent,
+  NewNutrients,
+  NewReference,
+  NewReferences,
+  Origins,
+  PreviewDataForm,
+  PreviewNewReference,
+  RecursivePartial,
+  ReferenceForm,
+  useGroups,
+  useLanguages,
+  useLangualCodes,
+  useNutrients,
+  useOrigins,
+  useReferences,
+  useScientificNames,
+  useSubspecies,
+  useTypes,
+} from "../core/components/adminPage";
 import { FetchStatus } from "../core/hooks/useFetch";
 import { Origin } from "../core/types/SingleFoodResult";
 
@@ -192,7 +200,7 @@ export default function AdminPage() {
       code: nextCode,
       type: "article",
       title: "",
-    })
+    });
   };
 
   const nutrientsResult = useNutrients();
@@ -479,7 +487,7 @@ export default function AdminPage() {
         );
       case 9:
         return (
-          <NewLangualCodes
+          <NewLangualCode
             langualCodes={langualCodes}
             onLangualCodesChange={handleLangualCodes}
             selectedLangualCodes={formData.generalData.langualCodes}

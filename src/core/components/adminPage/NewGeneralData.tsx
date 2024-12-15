@@ -1,32 +1,12 @@
-import React, { useState } from "react";
-import { 
-  Form, 
-  Row, 
-  Col, 
-  Button, 
-  InputGroup 
-} from 'react-bootstrap';
-import { 
-  TagIcon, 
-  ListIcon, 
-  FolderIcon, 
-  FileTextIcon, 
-  PackageIcon,
-  TypeIcon,
-  PlusIcon
-} from 'lucide-react';
-import { Group } from "./getters/useGroups";
-import { Type } from "./getters/useTypes";
-import {
-  ScientificName,
-} from "./getters/useScientificNames";
-import { Subspecies } from "./getters/useSubspecies";
-import {Language} from "./getters/useLanguages";
-import SelectorWithInput from "../detailFood/SelectorWithInput";
+import { FileTextIcon, FolderIcon, ListIcon, PackageIcon, PlusIcon, TagIcon, TypeIcon } from "lucide-react";
+import { ChangeEvent, useState } from "react";
+import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import RequiredFieldLabel from "../detailFood/RequiredFieldLabel";
-import makeRequest from "../../utils/makeRequest";
 import { useAuth } from "../../context/AuthContext";
+import makeRequest from "../../utils/makeRequest";
+import RequiredFieldLabel from "../detailFood/RequiredFieldLabel";
+import SelectorWithInput from "../detailFood/SelectorWithInput";
+import { Group, Language, ScientificName, Subspecies, Type } from "./getters";
 
 export const searchScientificNameById = (
   id: number | undefined,
@@ -71,20 +51,24 @@ type GeneralData = {
 type NewGeneralDataProps = {
   data: GeneralData;
   onUpdate: (updatedData: Partial<GeneralData>) => void;
-    types: Type[];
-    groups: Group[];
-    languages: Language[]
-    scientificNames: ScientificName[];
-    subspecies: Subspecies[];
+  types: Type[];
+  groups: Group[];
+  languages: Language[]
+  scientificNames: ScientificName[];
+  subspecies: Subspecies[];
 };
 
-const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups , types, languages, scientificNames, subspecies}) => {
-
+export default function NewGeneralData({
+  data,
+  onUpdate,
+  groups,
+  types,
+  languages,
+  scientificNames,
+  subspecies
+}: NewGeneralDataProps) {
   const { state } = useAuth();
   const token = state.token;
-  const [actualIdSubspecies, setActualIdSubspecies] = useState<
-    number | undefined
-  >(undefined);
   const [newGroup, setNewGroup] = useState<string | undefined>(undefined);
   const [newType, setNewType] = useState<string | undefined>(undefined);
   const [newScientificName, setNewScientificName] = useState<
@@ -101,7 +85,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
 
   const { t } = useTranslation();
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     const updatedFormData = { ...formData, [name]: value };
@@ -258,17 +242,17 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
         <Col md={6}>
           <Form.Group controlId="code">
             <Form.Label>
-              <RequiredFieldLabel 
-                label={t("DetailFood.code")} 
-                tooltipMessage={t("DetailFood.required")} 
+              <RequiredFieldLabel
+                label={t("DetailFood.code")}
+                tooltipMessage={t("DetailFood.required")}
               />
             </Form.Label>
             <InputGroup>
-              <InputGroup.Text><TagIcon size={18} /></InputGroup.Text>
+              <InputGroup.Text><TagIcon size={18}/></InputGroup.Text>
               <Form.Control
                 type="text"
                 name="code"
-                value={formData.code || ''}
+                value={formData.code || ""}
                 onChange={handleInputChange}
                 placeholder={t("DetailFood.code")}
               />
@@ -279,7 +263,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
           <Form.Group controlId="strain">
             <Form.Label>{t("NewGeneralData.strain")}</Form.Label>
             <InputGroup>
-              <InputGroup.Text><ListIcon size={18} /></InputGroup.Text>
+              <InputGroup.Text><ListIcon size={18}/></InputGroup.Text>
               <Form.Control
                 type="text"
                 name="strain"
@@ -298,7 +282,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
           <Form.Group controlId="brand">
             <Form.Label>{t("NewGeneralData.brand")}</Form.Label>
             <InputGroup>
-              <InputGroup.Text><PackageIcon size={18} /></InputGroup.Text>
+              <InputGroup.Text><PackageIcon size={18}/></InputGroup.Text>
               <Form.Control
                 type="text"
                 name="brand"
@@ -313,7 +297,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
           <Form.Group controlId="observation">
             <Form.Label>{t("NewGeneralData.Observation")}</Form.Label>
             <InputGroup>
-              <InputGroup.Text><FileTextIcon size={18} /></InputGroup.Text>
+              <InputGroup.Text><FileTextIcon size={18}/></InputGroup.Text>
               <Form.Control
                 as="textarea"
                 name="observation"
@@ -364,7 +348,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
             </Col>
             <Col md={4}>
               <InputGroup className="w-100 h-100">
-                <InputGroup.Text><FolderIcon size={18} /></InputGroup.Text>
+                <InputGroup.Text><FolderIcon size={18}/></InputGroup.Text>
                 <Form.Control
                   className="h-100"
                   type="text"
@@ -381,7 +365,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
                 disabled={!newGroup || !groupCode}
                 className="w-100 h-100"
               >
-                <PlusIcon size={18} className="me-2" />
+                <PlusIcon size={18} className="me-2"/>
                 {t("NewGeneralData.create_group")}
               </Button>
             </Col>
@@ -426,7 +410,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
             </Col>
             <Col md={4}>
               <InputGroup className="w-100 h-100">
-                <InputGroup.Text><TypeIcon size={18} /></InputGroup.Text>
+                <InputGroup.Text><TypeIcon size={18}/></InputGroup.Text>
                 <Form.Control
                   type="text"
                   placeholder={t("NewGeneralData.Type")}
@@ -443,7 +427,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
                 disabled={!newType || !typeCode}
                 className="w-100 h-100"
               >
-                <PlusIcon size={18} className="me-2" />
+                <PlusIcon size={18} className="me-2"/>
                 {t("NewGeneralData.Create")}
               </Button>
             </Col>
@@ -490,7 +474,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
                 disabled={!newScientificName}
                 className="w-100 h-100"
               >
-                 <PlusIcon size={18} className="me-2" />
+                <PlusIcon size={18} className="me-2"/>
                 {t("NewGeneralData.Create_Scientific")}
               </Button>
             </Col>
@@ -537,7 +521,7 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
                 disabled={!newSubspecies}
                 className="w-100 h-100"
               >
-                 <PlusIcon size={18} className="me-2" />
+                <PlusIcon size={18} className="me-2"/>
                 {t("NewGeneralData.Create_subspecies")}
               </Button>
             </Col>
@@ -610,5 +594,3 @@ const NewGeneralData: React.FC<NewGeneralDataProps> = ({ data, onUpdate, groups 
     </Form>
   );
 };
-
-export default NewGeneralData;

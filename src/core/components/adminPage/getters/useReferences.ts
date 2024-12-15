@@ -1,4 +1,4 @@
-import useFetch, { FetchStatus } from "../../../hooks/useFetch"
+import useFetch, { FetchStatus } from "../../../hooks/useFetch";
 
 export type Reference = {
   code: number;
@@ -15,26 +15,30 @@ export type Reference = {
   city?: string;
   other?: string;
 };
+
 export type Author = {
   id: number;
   name: string;
-}
+};
+
 export type City = {
   id: number;
   name: string;
-}
-//articulo depende del
+};
+
 export type Journal = {
   id: number;
   name: string;
-}
+};
+
 export type JournalVolume = {
   id: number;
   journalId: number;
   volume: number;
   issue: number;
   year: number;
-}
+};
+
 export type Article = {
   id: number;
   volumeId: number;

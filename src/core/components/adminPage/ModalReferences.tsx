@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Modal, Button, ListGroup } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Button, ListGroup, Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 
 type NutrientConvert = {
@@ -16,13 +16,13 @@ type ModalReferencesProps = {
   selectedReference: number | null;
 };
 
-const ModalReferences: React.FC<ModalReferencesProps> = ({
+export default function ModalReferences({
   nutrients,
   show,
   onHide,
   onSelectReferenceForNutrients,
   selectedReference,
-}) => {
+}: ModalReferencesProps) {
   const [selectedNutrientIds, setSelectedNutrientIds] = useState<number[]>([]);
   const { t } = useTranslation();
   useEffect(() => {
@@ -36,8 +36,8 @@ const ModalReferences: React.FC<ModalReferencesProps> = ({
 
   const handleSelect = (id: number) => {
     setSelectedNutrientIds((prev) =>
-      prev.includes(id) 
-        ? prev.filter((nid) => nid !== id) 
+      prev.includes(id)
+        ? prev.filter((nid) => nid !== id)
         : [...prev, id]
     );
   };
@@ -70,7 +70,7 @@ const ModalReferences: React.FC<ModalReferencesProps> = ({
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onHide}>
-        {t("ModalReferences.Close")}
+          {t("ModalReferences.Close")}
         </Button>
         <Button
           variant="primary"
@@ -83,5 +83,3 @@ const ModalReferences: React.FC<ModalReferencesProps> = ({
     </Modal>
   );
 };
-
-export default ModalReferences;

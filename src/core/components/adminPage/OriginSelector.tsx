@@ -6,15 +6,15 @@ type OriginsSelectorProps = {
   options: Array<{ id: number; name: string }>;
   placeholder: string;
   selectedValue: string;
-  onSelect: (id: number | null, name: string) => void; 
+  onSelect: (id: number | null, name: string) => void;
 };
 
-const OriginSelector: React.FC<OriginsSelectorProps> = ({
+export default function OriginSelector({
   options,
   placeholder,
   selectedValue,
   onSelect,
-}) => {
+}: OriginsSelectorProps) {
   const { t } = useTranslation();
   const [isActive, setIsActive] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -24,11 +24,11 @@ const OriginSelector: React.FC<OriginsSelectorProps> = ({
   );
 
   const handleSelectOption = (option: { id: number; name: string }) => {
-    setIsActive(false); 
+    setIsActive(false);
     if (selectedValue === option.name) {
-      onSelect(null, ""); 
+      onSelect(null, "");
     } else {
-      onSelect(option.id, option.name); 
+      onSelect(option.id, option.name);
     }
   };
 
@@ -38,7 +38,7 @@ const OriginSelector: React.FC<OriginsSelectorProps> = ({
         <input
           type="text"
           placeholder={placeholder}
-          value={selectedValue} 
+          value={selectedValue}
           readOnly
         />
       </div>
@@ -64,5 +64,3 @@ const OriginSelector: React.FC<OriginsSelectorProps> = ({
     </div>
   );
 };
-
-export default OriginSelector;

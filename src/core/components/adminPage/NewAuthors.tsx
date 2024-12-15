@@ -1,9 +1,9 @@
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { Button, Col, Container, ListGroup, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import SelectorWithInput from "../detailFood/SelectorWithInput";
 import "../../../assets/css/_NewAuthors.css";
-import { Author } from "./getters/UseReferences";
+import { Author } from "./getters";
 
 type NewAuthorsProps = {
   authorIds?: number[];
@@ -18,7 +18,7 @@ const convert = (authorIds?: number[], newAuthors?: string[], authors?: Author[]
   authorIds?.forEach((authorId) => {
     const existingAuthor = authors?.find((author) => author.id === authorId);
     if (existingAuthor) {
-      list.push({ ...existingAuthor })
+      list.push({ ...existingAuthor });
     }
   });
 

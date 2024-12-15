@@ -1,34 +1,29 @@
-import React from "react";
-import { Card, Row, Col, Table, Badge } from "react-bootstrap";
-import { Info, Leaf, Database, Zap, CodeIcon } from "lucide-react";
-import { FoodForm } from "../../../pages/AdminPage";
-import { Group } from "./getters/useGroups";
-import { LangualCode } from "./getters/useLangualCodes";
-import { ScientificName } from "./getters/useScientificNames";
-import { Subspecies } from "./getters/useSubspecies";
-import { Type } from "./getters/useTypes";
+import { CodeIcon, Database, Info, Leaf, Zap } from "lucide-react";
+import { Badge, Card, Col, Row, Table } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import {
-  searchScientificNameById,
-  searchGroupNameById,
-  searchSubspeciesNameById,
-  searchTypeNameById,
-} from "./NewGeneralData";
-import makeRequest from "../../utils/makeRequest";
-import {
-  NutrientSummary,
+  FoodForm,
   getNutrientNameById,
   NutrientMeasurementForm,
   NutrientMeasurementWithComponentsForm,
+  NutrientSummary
 } from "../../../pages/AdminPage";
-import { useTranslation } from "react-i18next";
 import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
+import makeRequest from "../../utils/makeRequest";
+import { Group, LangualCode, ScientificName, Subspecies, Type } from "./getters";
+import {
+  searchGroupNameById,
+  searchScientificNameById,
+  searchSubspeciesNameById,
+  searchTypeNameById,
+} from "./NewGeneralData";
 import "../../../assets/css/_PreviewDataForm.css";
 
 const searchLangualCodeById = (id: number, langualCodes: LangualCode[]) => {
-  const langualCode = langualCodes.find((langualCode) => langualCode.id === id);
-  return langualCode;
+  return langualCodes.find((langualCode) => langualCode.id === id);
 };
+
 type NewFood = {
   commonName: Record<"es", string> &
     Partial<Record<"en" | "pt", string | null>>;
@@ -55,6 +50,7 @@ type NewNutrientMeasurement = {
   dataType: "analytic" | "calculated" | "assumed" | "borrowed";
   referenceCodes?: number[];
 };
+
 type PreviewDataFormProps = {
   data: FoodForm;
   nameAndIdNutrients: NutrientSummary[];
@@ -66,7 +62,7 @@ type PreviewDataFormProps = {
   origins: string[];
 };
 
-const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
+export default function PreviewDataForm({
   data,
   nameAndIdNutrients,
   origins,
@@ -75,7 +71,7 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
   langualCodes,
   subspecies,
   types,
-}) => {
+}: PreviewDataFormProps) {
   const { generalData, nutrientsValueForm } = data;
   const { t } = useTranslation();
   const { state } = useAuth();
@@ -191,7 +187,7 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
       `/foods/${generalData.code}`,
       payload,
       state.token,
-      (response) => {
+      () => {
         addToast({
           message: "Se creo exitosamente",
           title: "Éxito",
@@ -218,51 +214,51 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
     return (
       <div className="mb-4">
         <div className="d-flex align-items-center mb-3">
-          <Zap className="mr-2 text-primary" size={24} />
+          <Zap className="mr-2 text-primary" size={24}/>
           <h5 className="mb-0">{title}</h5>
         </div>
         <Table bordered hover responsive size="sm">
           <thead className="thead-light">
-            <tr>
-              <th className="text-left">Nombre del nutriente</th>
-              <th className="text-center">Promedio</th>
-              <th className="text-center">Desviación</th>
-              <th className="text-center">Mínimo</th>
-              <th className="text-center">Máximo</th>
-              <th className="text-center">Tamaño de muestra</th>
-              <th className="text-center">Tipo de dato</th>
-              <th className="text-center">Códigos de referencias</th>
-            </tr>
+          <tr>
+            <th className="text-left">Nombre del nutriente</th>
+            <th className="text-center">Promedio</th>
+            <th className="text-center">Desviación</th>
+            <th className="text-center">Mínimo</th>
+            <th className="text-center">Máximo</th>
+            <th className="text-center">Tamaño de muestra</th>
+            <th className="text-center">Tipo de dato</th>
+            <th className="text-center">Códigos de referencias</th>
+          </tr>
           </thead>
           <tbody>
-            {validNutrients.map((nutrient, index) => (
-              <tr key={index} className="align-middle">
-                <td className="font-weight-bold">
-                  {getNutrientNameById(nutrient.nutrientId, nameAndIdNutrients)}
-                </td>
-                <td className="text-center">
-                  <Badge>{nutrient.average.toString()}</Badge>
-                </td>
-                <td className="text-center">
-                  <Badge>{nutrient.deviation?.toString()}</Badge>
-                </td>
-                <td className="text-center">
-                  <Badge>{nutrient.min?.toString()}</Badge>
-                </td>
-                <td className="text-center">
-                  <Badge>{nutrient.max?.toString()}</Badge>
-                </td>
-                <td className="text-center">
-                  <Badge>{nutrient.sampleSize?.toString()}</Badge>
-                </td>
-                <td className="text-center">
-                  <Badge>{nutrient.dataType}</Badge>
-                </td>
-                <td className="text-center text-muted small">
-                  <Badge>{nutrient.referenceCodes}</Badge>
-                </td>
-              </tr>
-            ))}
+          {validNutrients.map((nutrient, index) => (
+            <tr key={index} className="align-middle">
+              <td className="font-weight-bold">
+                {getNutrientNameById(nutrient.nutrientId, nameAndIdNutrients)}
+              </td>
+              <td className="text-center">
+                <Badge>{nutrient.average.toString()}</Badge>
+              </td>
+              <td className="text-center">
+                <Badge>{nutrient.deviation?.toString()}</Badge>
+              </td>
+              <td className="text-center">
+                <Badge>{nutrient.min?.toString()}</Badge>
+              </td>
+              <td className="text-center">
+                <Badge>{nutrient.max?.toString()}</Badge>
+              </td>
+              <td className="text-center">
+                <Badge>{nutrient.sampleSize?.toString()}</Badge>
+              </td>
+              <td className="text-center">
+                <Badge>{nutrient.dataType}</Badge>
+              </td>
+              <td className="text-center text-muted small">
+                <Badge>{nutrient.referenceCodes}</Badge>
+              </td>
+            </tr>
+          ))}
           </tbody>
         </Table>
       </div>
@@ -288,13 +284,13 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
         {nutrientsWithComponents.length > 0 && (
           <>
             <div className="d-flex align-items-center mb-3">
-              <Leaf className="mr-2 text-success" size={24} />
+              <Leaf className="mr-2 text-success" size={24}/>
               <h5 className="mb-0">Nutrientes con componentes</h5>
             </div>
             {nutrientsWithComponents.map((mainNutrient, index) => (
               <div key={index} className="mb-4">
                 <h6 className="d-flex align-items-center">
-                  <Database className="mr-2 text-primary" size={18} />
+                  <Database className="mr-2 text-primary" size={18}/>
                   {getNutrientNameById(
                     mainNutrient.nutrientId,
                     nameAndIdNutrients
@@ -303,83 +299,83 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
                 </h6>
                 <Table bordered hover responsive size="sm">
                   <thead className="thead-light">
-                    <tr>
-                      <th>Nombre del componente</th>
-                      <th className="text-center">Promedio</th>
-                      <th className="text-center">Desviación</th>
-                      <th className="text-center">Mínimo</th>
-                      <th className="text-center">Máximo</th>
-                      <th className="text-center">Tamaño de muestra</th>
-                      <th className="text-center">Tipo de dato</th>
-                      <th className="text-center">Códigos de referencias</th>
-                    </tr>
+                  <tr>
+                    <th>Nombre del componente</th>
+                    <th className="text-center">Promedio</th>
+                    <th className="text-center">Desviación</th>
+                    <th className="text-center">Mínimo</th>
+                    <th className="text-center">Máximo</th>
+                    <th className="text-center">Tamaño de muestra</th>
+                    <th className="text-center">Tipo de dato</th>
+                    <th className="text-center">Códigos de referencias</th>
+                  </tr>
                   </thead>
                   <tbody>
-                    {mainNutrient.components
-                      ?.filter(hasValidData)
-                      .map((component, compIndex) => (
-                        <tr key={compIndex} className="align-middle">
-                          <td className="font-weight-bold">
-                            {getNutrientNameById(
-                              component.nutrientId,
-                              nameAndIdNutrients
-                            )}
-                          </td>
-                          <td className="text-center">
-                            <Badge>{component.average?.toString()}</Badge>
-                          </td>
-                          <td className="text-center">
-                            <Badge>
-                              {component.deviation?.toString() ?? "N/A"}
-                            </Badge>
-                          </td>
-                          <td className="text-center">
-                            <Badge>{component.min?.toString()}</Badge>
-                          </td>
-                          <td className="text-center">
-                            <Badge>{component.max?.toString()}</Badge>
-                          </td>
-                          <td className="text-center">
-                            <Badge>{component.sampleSize?.toString()}</Badge>
-                          </td>
-                          <td className="text-center">
-                            <Badge>{component.dataType}</Badge>
-                          </td>
-                          <td className="text-center text-muted small">
-                            {component.referenceCodes}
-                          </td>
-                        </tr>
-                      ))}
-                    <tr className="table-active">
-                      <td className="font-weight-bold">
-                        {getNutrientNameById(
-                          mainNutrient.nutrientId,
-                          nameAndIdNutrients
-                        )}{" "}
-                        (Total)
-                      </td>
-                      <td className="text-center">
-                        <Badge>{mainNutrient.average?.toString()}</Badge>
-                      </td>
-                      <td className="text-center">
-                        <Badge>{mainNutrient.deviation?.toString()}</Badge>
-                      </td>
-                      <td className="text-center">
-                        <Badge>{mainNutrient.min?.toString()}</Badge>
-                      </td>
-                      <td className="text-center">
-                        <Badge>{mainNutrient.max?.toString()}</Badge>
-                      </td>
-                      <td className="text-center">
-                        <Badge>{mainNutrient.sampleSize?.toString()}</Badge>
-                      </td>
-                      <td className="text-center">
-                        <Badge>{mainNutrient.dataType}</Badge>
-                      </td>
-                      <td className="text-center text-muted small">
-                        {mainNutrient.referenceCodes}
-                      </td>
-                    </tr>
+                  {mainNutrient.components
+                    ?.filter(hasValidData)
+                    .map((component, compIndex) => (
+                      <tr key={compIndex} className="align-middle">
+                        <td className="font-weight-bold">
+                          {getNutrientNameById(
+                            component.nutrientId,
+                            nameAndIdNutrients
+                          )}
+                        </td>
+                        <td className="text-center">
+                          <Badge>{component.average?.toString()}</Badge>
+                        </td>
+                        <td className="text-center">
+                          <Badge>
+                            {component.deviation?.toString() ?? "N/A"}
+                          </Badge>
+                        </td>
+                        <td className="text-center">
+                          <Badge>{component.min?.toString()}</Badge>
+                        </td>
+                        <td className="text-center">
+                          <Badge>{component.max?.toString()}</Badge>
+                        </td>
+                        <td className="text-center">
+                          <Badge>{component.sampleSize?.toString()}</Badge>
+                        </td>
+                        <td className="text-center">
+                          <Badge>{component.dataType}</Badge>
+                        </td>
+                        <td className="text-center text-muted small">
+                          {component.referenceCodes}
+                        </td>
+                      </tr>
+                    ))}
+                  <tr className="table-active">
+                    <td className="font-weight-bold">
+                      {getNutrientNameById(
+                        mainNutrient.nutrientId,
+                        nameAndIdNutrients
+                      )}{" "}
+                      (Total)
+                    </td>
+                    <td className="text-center">
+                      <Badge>{mainNutrient.average?.toString()}</Badge>
+                    </td>
+                    <td className="text-center">
+                      <Badge>{mainNutrient.deviation?.toString()}</Badge>
+                    </td>
+                    <td className="text-center">
+                      <Badge>{mainNutrient.min?.toString()}</Badge>
+                    </td>
+                    <td className="text-center">
+                      <Badge>{mainNutrient.max?.toString()}</Badge>
+                    </td>
+                    <td className="text-center">
+                      <Badge>{mainNutrient.sampleSize?.toString()}</Badge>
+                    </td>
+                    <td className="text-center">
+                      <Badge>{mainNutrient.dataType}</Badge>
+                    </td>
+                    <td className="text-center text-muted small">
+                      {mainNutrient.referenceCodes}
+                    </td>
+                  </tr>
                   </tbody>
                 </Table>
               </div>
@@ -390,56 +386,56 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
         {nutrientsWithoutComponents.length > 0 && (
           <>
             <div className="d-flex align-items-center mb-3">
-              <Database className="mr-2 text-secondary" size={24} />
+              <Database className="mr-2 text-secondary" size={24}/>
               <h5 className="mb-0">Nutrientes sin componentes</h5>
             </div>
             <Table bordered hover responsive size="sm">
               <thead className="thead-light">
-                <tr>
-                  <th>Nombre del nutriente</th>
-                  <th className="text-center">Promedio</th>
-                  <th className="text-center">Desviación</th>
-                  <th className="text-center">Mínimo</th>
-                  <th className="text-center">Máximo</th>
-                  <th className="text-center">Tamaño de muestra</th>
-                  <th className="text-center">Tipo de dato</th>
-                  <th className="text-center">Referencias</th>
-                </tr>
+              <tr>
+                <th>Nombre del nutriente</th>
+                <th className="text-center">Promedio</th>
+                <th className="text-center">Desviación</th>
+                <th className="text-center">Mínimo</th>
+                <th className="text-center">Máximo</th>
+                <th className="text-center">Tamaño de muestra</th>
+                <th className="text-center">Tipo de dato</th>
+                <th className="text-center">Referencias</th>
+              </tr>
               </thead>
               <tbody>
-                {nutrientsWithoutComponents
-                  ?.filter(hasValidData)
-                  .map((nutrient, index) => (
-                    <tr key={index} className="align-middle">
-                      <td className="font-weight-bold">
-                        {getNutrientNameById(
-                          nutrient.nutrientId,
-                          nameAndIdNutrients
-                        )}
-                      </td>
-                      <td className="text-center">
-                        <Badge>{nutrient.average.toString()}</Badge>
-                      </td>
-                      <td className="text-center">
-                        <Badge>{nutrient.deviation?.toString()}</Badge>
-                      </td>
-                      <td className="text-center">
-                        <Badge>{nutrient.min?.toString()}</Badge>
-                      </td>
-                      <td className="text-center">
-                        <Badge>{nutrient.max?.toString()}</Badge>
-                      </td>
-                      <td className="text-center">
-                        <Badge>{nutrient.sampleSize?.toString()}</Badge>
-                      </td>
-                      <td className="text-center">
-                        <Badge>{nutrient.dataType}</Badge>
-                      </td>
-                      <td className="text-center text-muted small">
-                        <Badge>{nutrient.referenceCodes}</Badge>
-                      </td>
-                    </tr>
-                  ))}
+              {nutrientsWithoutComponents
+                ?.filter(hasValidData)
+                .map((nutrient, index) => (
+                  <tr key={index} className="align-middle">
+                    <td className="font-weight-bold">
+                      {getNutrientNameById(
+                        nutrient.nutrientId,
+                        nameAndIdNutrients
+                      )}
+                    </td>
+                    <td className="text-center">
+                      <Badge>{nutrient.average.toString()}</Badge>
+                    </td>
+                    <td className="text-center">
+                      <Badge>{nutrient.deviation?.toString()}</Badge>
+                    </td>
+                    <td className="text-center">
+                      <Badge>{nutrient.min?.toString()}</Badge>
+                    </td>
+                    <td className="text-center">
+                      <Badge>{nutrient.max?.toString()}</Badge>
+                    </td>
+                    <td className="text-center">
+                      <Badge>{nutrient.sampleSize?.toString()}</Badge>
+                    </td>
+                    <td className="text-center">
+                      <Badge>{nutrient.dataType}</Badge>
+                    </td>
+                    <td className="text-center text-muted small">
+                      <Badge>{nutrient.referenceCodes}</Badge>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </Table>
           </>
@@ -453,7 +449,7 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
       <Card className="mb-4">
         <Card.Header className="d-flex align-items-center">
           <div style={{ color: "#007bff", marginRight: "10px" }}>
-            <Info size={24} />
+            <Info size={24}/>
           </div>
           <h4 className="mb-0">{t("PreviewDataFrom.General")}</h4>
         </Card.Header>
@@ -564,7 +560,7 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
       <Card>
         <Card.Body>
           <h4 className="d-flex align-items-center mb-4">
-            <Leaf className="mr-2 text-success" size={28} />
+            <Leaf className="mr-2 text-success" size={28}/>
             {t("PreviewDataFrom.Nutritional")}
           </h4>
 
@@ -591,25 +587,25 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
         <Card className="mb-4">
           <Card.Header className="d-flex align-items-center">
             <div style={{ color: "#17a2b8", marginRight: "10px" }}>
-              <Database size={24} />
+              <Database size={24}/>
             </div>
             <h5 className="mb-0">Orígenes</h5>
           </Card.Header>
           <Card.Body>
             <Table striped bordered hover>
               <thead>
-                <tr>
-                  <th style={{ width: "10%" }}>Número</th>
-                  <th style={{ width: "90%" }}>Descripción</th>
-                </tr>
+              <tr>
+                <th style={{ width: "10%" }}>Número</th>
+                <th style={{ width: "90%" }}>Descripción</th>
+              </tr>
               </thead>
               <tbody>
-                {origins.map((origin, index) => (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>{origin}</td>
-                  </tr>
-                ))}
+              {origins.map((origin, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{origin}</td>
+                </tr>
+              ))}
               </tbody>
             </Table>
           </Card.Body>
@@ -620,35 +616,35 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
           <Card className="mb-4">
             <Card.Header className="d-flex align-items-center">
               <div style={{ color: "#17a2b8", marginRight: "10px" }}>
-                <CodeIcon size={24} />
+                <CodeIcon size={24}/>
               </div>
               <h5 className="mb-0">Codigos languales</h5>
             </Card.Header>
             <Card.Body>
               <Table striped bordered hover>
                 <thead>
-                  <tr>
-                    <th style={{ width: "10%" }}>Codigo</th>
-                    <th style={{ width: "90%" }}>Descriptor</th>
-                  </tr>
+                <tr>
+                  <th style={{ width: "10%" }}>Codigo</th>
+                  <th style={{ width: "90%" }}>Descriptor</th>
+                </tr>
                 </thead>
                 <tbody>
-                  {data.generalData.langualCodes.map((langualCodeID, index) => (
-                    <tr key={index}>
-                      <td>
-                        {
-                          searchLangualCodeById(langualCodeID, langualCodes)
-                            ?.code
-                        }
-                      </td>
-                      <td>
-                        {
-                          searchLangualCodeById(langualCodeID, langualCodes)
-                            ?.descriptor
-                        }
-                      </td>
-                    </tr>
-                  ))}
+                {data.generalData.langualCodes.map((langualCodeID, index) => (
+                  <tr key={index}>
+                    <td>
+                      {
+                        searchLangualCodeById(langualCodeID, langualCodes)
+                          ?.code
+                      }
+                    </td>
+                    <td>
+                      {
+                        searchLangualCodeById(langualCodeID, langualCodes)
+                          ?.descriptor
+                      }
+                    </td>
+                  </tr>
+                ))}
                 </tbody>
               </Table>
             </Card.Body>
@@ -658,5 +654,3 @@ const PreviewDataForm: React.FC<PreviewDataFormProps> = ({
     </div>
   );
 };
-
-export default PreviewDataForm;

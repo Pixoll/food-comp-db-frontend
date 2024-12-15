@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import { Card, Row, Col, Button } from "react-bootstrap";
+import { PlusCircle } from "lucide-react";
+import { useState } from "react";
+import { Button, Card, Col, Row } from "react-bootstrap";
 import {
-  NutrientsValueForm,
   getNutrientNameById,
-  NutrientSummary,
   NutrientMeasurementForm,
   NutrientMeasurementWithComponentsForm,
+  NutrientSummary,
+  NutrientsValueForm,
 } from "../../../pages/AdminPage";
-import { Reference } from "./getters/UseReferences";
-import { PlusCircle } from "lucide-react";
-import ModalReferences from "./ModalReferences";
 import Pagination from "../search/Pagination";
+import { Reference } from "./getters";
+import ModalReferences from "./ModalReferences";
 
 type NewReferencesProps = {
   references: Reference[];
@@ -18,6 +18,13 @@ type NewReferencesProps = {
   nameAndIdNutrients: NutrientSummary[];
   onSelectReferenceForNutrients: (updatedForm: NutrientsValueForm) => void;
 };
+
+type NutrientConvert = {
+  id: number;
+  name: string;
+  selected: boolean;
+};
+
 const ITEMS_PER_PAGE = 5;
 
 const hasValidData = <T extends NutrientMeasurementForm>(
@@ -30,12 +37,13 @@ const hasValidData = <T extends NutrientMeasurementForm>(
     typeof nutrient.dataType !== "undefined"
   );
 };
-const NewReferences: React.FC<NewReferencesProps> = ({
+
+export default function NewReferences({
   references,
   nutrientValueForm,
   nameAndIdNutrients,
   onSelectReferenceForNutrients,
-}) => {
+}: NewReferencesProps) {
   const [currentPage, setCurrentPage] = useState(1);
 
   const totalItems = references.length;
@@ -45,19 +53,8 @@ const NewReferences: React.FC<NewReferencesProps> = ({
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const currentReferences = references.slice(startIndex, endIndex);
 
-  const [modalsState, setModalsState] = useState<{ [key: number]: boolean }>(
-    {}
-  );
-  const [selectedNutrientIds, setSelectedNutrientIds] = useState<number[]>([]);
-  const [selectedReferenceIndex, setSelectedReferenceIndex] = useState<
-    number | null
-  >(null);
-
-  type NutrientConvert = {
-    id: number;
-    name: string;
-    selected: boolean;
-  };
+  const [modalsState, setModalsState] = useState<{ [key: number]: boolean }>({});
+  const [selectedReferenceIndex, setSelectedReferenceIndex] = useState<number | null>(null);
 
   const convert = (): NutrientConvert[] => {
     const nutrientsConvert: NutrientConvert[] = [];
@@ -120,7 +117,6 @@ const NewReferences: React.FC<NewReferencesProps> = ({
   const handleHideModal = (index: number) => {
     const globalIndex = startIndex + index; // Índice global
     setModalsState((prev) => ({ ...prev, [globalIndex]: false }));
-    setSelectedNutrientIds([]);
   };
 
   const handleAddReference = (ids: number[], reference: number) => {
@@ -132,7 +128,7 @@ const NewReferences: React.FC<NewReferencesProps> = ({
         nutrientsArray: (
           | NutrientMeasurementForm
           | NutrientMeasurementWithComponentsForm
-        )[]
+          )[]
       ) => {
         nutrientsArray.forEach((nutrient) => {
           if (ids.includes(nutrient.nutrientId)) {
@@ -150,7 +146,7 @@ const NewReferences: React.FC<NewReferencesProps> = ({
             const components = nutrient.components as (
               | NutrientMeasurementForm
               | NutrientMeasurementWithComponentsForm
-            )[];
+              )[];
             updateNutrientReferences(components);
           }
         });
@@ -234,7 +230,7 @@ const NewReferences: React.FC<NewReferencesProps> = ({
                 onClick={() => handleShowModal(index)}
               >
                 <div className="text-center">
-                  <PlusCircle className="mx-auto mb-2" size={24} />
+                  <PlusCircle className="mx-auto mb-2" size={24}/>
                   <span className="d-block">Agregar</span>
                 </div>
               </Button>
@@ -261,4 +257,3 @@ const NewReferences: React.FC<NewReferencesProps> = ({
     </div>
   );
 };
-export default NewReferences;

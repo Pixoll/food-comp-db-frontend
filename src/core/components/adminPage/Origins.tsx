@@ -1,12 +1,12 @@
-import React, { useState, useCallback, useEffect } from "react";
-import Table from "react-bootstrap/Table";
+import React, { useCallback, useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";
-import OriginRow from "./OriginRow";
+import Table from "react-bootstrap/Table";
 import { useTranslation } from "react-i18next";
-import { Region, Province, Commune, Location } from "./getters/useOrigins";
-import { Collection } from "../../utils/collection";
 import { Origin } from "../../types/SingleFoodResult";
+import { Collection } from "../../utils/collection";
+import { Commune, Location, Province, Region } from "./getters";
+import OriginRow from "./OriginRow";
 
 type OriginsProps = {
   originsForm: Origin[];
@@ -19,11 +19,11 @@ type OriginsProps = {
   updateOrigins: (origins: Origin[] | undefined) => void;
 };
 
-const Origins: React.FC<OriginsProps> = ({
+export default function Origins({
   data,
   updateOrigins,
   originsForm,
-}) => {
+}: OriginsProps) {
   const { t } = useTranslation();
 
   const [rows, setRows] = useState<number[]>(
@@ -89,31 +89,31 @@ const Origins: React.FC<OriginsProps> = ({
     <div>
       <Table striped bordered hover>
         <thead>
-          <tr>
-            <th>{t("Origins.Region")}</th>
-            <th>{t("Origins.Province")}</th>
-            <th>{t("Origins.Commune")}</th>
-            <th>{t("Origins.Location")}</th>
-          </tr>
+        <tr>
+          <th>{t("Origins.Region")}</th>
+          <th>{t("Origins.Province")}</th>
+          <th>{t("Origins.Commune")}</th>
+          <th>{t("Origins.Location")}</th>
+        </tr>
         </thead>
         <tbody>
-          {rows.map((row, index) => (
-            <OriginRow
-              data={data}
-              key={row}
-              onAddressChange={(address: string) =>
-                handleAddressChange(index, address)
-              }
-              onIdChange={(id: number | null) => handleIdsChange(id, index)}
-              index={index}
-              initialId={originIds[index] ?? -1}
-            />
-          ))}
+        {rows.map((row, index) => (
+          <OriginRow
+            data={data}
+            key={row}
+            onAddressChange={(address: string) =>
+              handleAddressChange(index, address)
+            }
+            onIdChange={(id: number | null) => handleIdsChange(id, index)}
+            index={index}
+            initialId={originIds[index] ?? -1}
+          />
+        ))}
         </tbody>
       </Table>
 
       <Button onClick={handleAddRow} className="mt-3">
-      {t("Origins.Add")}
+        {t("Origins.Add")}
       </Button>
 
       <Button
@@ -137,5 +137,3 @@ const Origins: React.FC<OriginsProps> = ({
     </div>
   );
 };
-
-export default Origins;
