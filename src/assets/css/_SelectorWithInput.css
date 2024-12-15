@@ -96,7 +96,7 @@
     width: 100%; /* Asegura que el input ocupe todo el ancho disponible */
     font-size: 15px;
     padding: 8px;
-    border: 1px solid #ccc;
+    border: 1px solid #dcdcdc;
     border-radius: 5px;
     line-height: 21px !important;
     box-sizing: border-box; /* Asegura que el padding no afecte el ancho */
