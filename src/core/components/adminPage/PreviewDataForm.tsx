@@ -400,7 +400,7 @@ export default function PreviewDataForm({
                 <th className="text-center">Máximo</th>
                 <th className="text-center">Tamaño de muestra</th>
                 <th className="text-center">Tipo de dato</th>
-                <th className="text-center">Referencias</th>
+                <th className="text-center">Códigos de referencias</th>
               </tr>
               </thead>
               <tbody>
@@ -470,29 +470,29 @@ export default function PreviewDataForm({
               )}
             </Col>
             <Col md={3}>
-              <strong>{"Tipo de alimento"}</strong>
+              <strong>Tipo de alimento:</strong>
             </Col>
             <Col md={3}>{searchTypeNameById(generalData.typeId, types)}</Col>
             <Col md={3}>
-              <strong>{"Grupo alimentario"}</strong>
+              <strong>Grupo alimentario:</strong>
             </Col>
             <Col md={3}>{searchGroupNameById(generalData.groupId, groups)}</Col>
             <Col md={3}>
-              <strong>{"Subespecie"}</strong>
+              <strong>Subespecie:</strong>
             </Col>
             <Col md={3}>
               {searchSubspeciesNameById(generalData.subspeciesId, subspecies)}
             </Col>
             <Col md={3}>
-              <strong>{"Observación"}</strong>
+              <strong>Observación: </strong>
             </Col>
             <Col md={3}>{generalData.observation}</Col>
             <Col md={3}>
-              <strong>{"Marca"}</strong>
+              <strong>Marca:</strong>
             </Col>
             <Col md={3}>{generalData.brand}</Col>
             <Col md={3}>
-              <strong>{"Variante"}</strong>
+              <strong>Variante:</strong>
             </Col>
             <Col md={3}>{generalData.strain}</Col>
           </Row>

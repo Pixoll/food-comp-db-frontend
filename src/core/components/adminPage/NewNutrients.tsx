@@ -137,7 +137,7 @@ export default function NewNutrients({
                   </td>
                   <td>
                     <Form.Select
-                      value={formData?.dataType || "analytic"}
+                      value={formData?.dataType || ""}
                       onChange={(e) =>
                         handleInputChange("dataType", e.target.value)
                       }

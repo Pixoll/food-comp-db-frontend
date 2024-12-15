@@ -305,12 +305,12 @@ export default function NewMacronutrientWithComponent({
                       </td>
                       <td>
                         <Form.Select
-                          value={formData?.dataType || "analytic"}
+                          value={formData?.dataType || ""}
                           onChange={(e) =>
                             handleInputChange("dataType", e.target.value)
                           }
                         >
-                          <option value="" disabled></option>
+                            <option value="" disabled></option>
                             <option value="analytic">{t("NewMacronutrient.Analytical")}</option>
                             <option value="calculated">{t("NewMacronutrient.Calculated")}</option>
                             <option value="assumed">{t("NewMacronutrient.Taken")}</option>
