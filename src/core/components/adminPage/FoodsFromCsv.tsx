@@ -148,7 +148,7 @@ export default function FoodsFromCsv() {
         accept=".xlsx, .xls, .csv"
         onChange={(e) => handleFileChange(e)}
       />
-      <label htmlFor="fileInput" className="file-input-label">
+      <label htmlFor="fileInput" className="file-input-label marginButtonRight">
         Seleccionar archivo
       </label>
       {selectedFile && <p className="file-name">{selectedFile.name}</p>}
@@ -158,7 +158,7 @@ export default function FoodsFromCsv() {
       </p>
       {selectedFile && (
         <div className="button-container">
-          <button className="button" onClick={processData}>
+          <button className="button marginButton" onClick={processData}>
             {t("AdminPage.process")}
           </button>
         </div>

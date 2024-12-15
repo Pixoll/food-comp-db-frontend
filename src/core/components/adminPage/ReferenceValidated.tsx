@@ -4,6 +4,8 @@ import { useTranslation } from "react-i18next";
 import Pagination from "../search/Pagination";
 import CSVReferenceDisplay from "./CSVReferenceDisplay";
 import { CSVReference } from "./FoodsFromCsv";
+import "../../../assets/css/_ReferenceValidated.css";
+
 
 type ReferenceValidatedProps = {
   data: CSVReference[];
@@ -36,13 +38,13 @@ export default function ReferenceValidated({ data }: ReferenceValidatedProps) {
     <Container fluid className="py-4">
       {view === "list" && (
         <Card>
-          <Card.Header as="h2" className=" text-black">
+          <Card.Header as="h2" className="titleStyle">
             {"Lista de referencias"}
           </Card.Header>
           <Card.Body>
             {filteredData.length === 0 ? (
               <Alert variant="info">
-                Referncia no disponibles
+                Referencia no disponibles
               </Alert>
             ) : (
               <>
@@ -52,7 +54,7 @@ export default function ReferenceValidated({ data }: ReferenceValidatedProps) {
                     <th>#</th>
                     <th>Titulo</th>
                     <th>Año</th>
-                    <th>Tipo de referenecia</th>
+                    <th>Tipo de referencia</th>
                     <th>Acciones</th>
                   </tr>
                   </thead>
@@ -65,6 +67,7 @@ export default function ReferenceValidated({ data }: ReferenceValidatedProps) {
                       <td>{item.type?.parsed || item.type?.raw || "N/A"}</td>
                       <td>
                         <Button
+                          className = "button-check" 
                           variant="primary"
                           size="sm"
                           onClick={() => {
@@ -106,6 +109,7 @@ export default function ReferenceValidated({ data }: ReferenceValidatedProps) {
               </div>
             )}
             <Button
+              className = "button-check"
               variant="succes"
               onClick={() => {
                 setView("list");

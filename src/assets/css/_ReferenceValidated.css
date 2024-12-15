@@ -1,0 +1,23 @@
+.titleStyle {
+    color: white;
+}
+
+.button-check {
+    padding: 12px 20px;
+    background-color: #4e9f6f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 1em;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+
+}
+
+.button-check:hover {
+    background-color: #1A7862;
+    border: none;
+    color: white;
+}

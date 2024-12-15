@@ -150,6 +150,14 @@
   transition: all 0.3s ease;
 }
 
+.marginButton{
+  margin-bottom: 2%;
+}
+
+.marginButtonRight{
+  margin-right: 0.5%;
+}
+
 .button:hover {
   background-color: #4e9f6f;
   transform: translateY(-3px);

@@ -2,6 +2,7 @@ import { BadgeX, BookOpen, Calendar, CheckCircle, FileText, PlusCircle, RefreshC
 import { Badge, Card, Col, Row, } from "react-bootstrap";
 import { CSVReference, CSVValue } from "./FoodsFromCsv";
 
+
 enum Flag {
   INVALID = 0,
   VALID = 1,
@@ -52,11 +53,11 @@ const renderCSVValueWithFlags = <T, >(value: CSVValue<T> | null | undefined) => 
   );
 };
 
-export default function CSVReferenceDisplay({ reference }: { reference: CSVReference }) {
+export default function CSVReferenceDisplay({ reference }: { reference: CSVReference }) { 
   return (
     <Card className="shadow-sm">
       <Card.Header className="bg-primary text-white d-flex align-items-center gap-2">
-        <BookOpen size={24}/>
+        <BookOpen size={24} />
         <Card.Title className="mb-0">
           {renderCSVValueWithFlags(reference.title)}
         </Card.Title>
