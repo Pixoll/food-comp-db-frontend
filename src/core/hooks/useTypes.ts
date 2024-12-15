@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { TypeFood } from "../types/option";
 import { Collection } from "../utils/collection";
 import { FetchStatus, useFetch } from "./useFetch";
@@ -10,21 +11,30 @@ export type Type = {
 
 export function useTypes() {
   const result = useFetch<TypeFood[]>("/types");
-  const idToObject = new Collection<number, Type>();
-  const idToName = new Collection<string, string>();
-  const codeToId = new Collection<string, number>();
+  const [idToObject, setIdToObject] = useState(new Collection<number, Type>());
+  const [idToName, setIdToName] = useState(new Collection<string, string>());
+  const [codeToId, setCodeToId] = useState(new Collection<string, number>());
 
-  if (result.status === FetchStatus.Success) {
+  if (result.status === FetchStatus.Success && idToObject.size === 0 && idToName.size === 0 && codeToId.size === 0) {
     result.data.forEach((type) => {
       idToObject.set(type.id, type);
       idToName.set(type.id.toString(), type.name);
       codeToId.set(type.code, type.id);
     });
+    setIdToObject(idToObject.clone());
+    setIdToName(idToName.clone());
+    setCodeToId(codeToId.clone());
   }
 
   const forceReload = () => {
     if (result.status !== FetchStatus.Loading) {
       result.forceReload();
+      idToObject.clear();
+      idToName.clear();
+      codeToId.clear();
+      setIdToObject(new Collection());
+      setIdToName(new Collection());
+      setCodeToId(new Collection());
     }
   };
 

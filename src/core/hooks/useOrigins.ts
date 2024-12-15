@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Collection } from "../utils/collection";
 import { FetchStatus, useFetch } from "./useFetch";
 
@@ -42,63 +43,73 @@ export type Location = CommonOrigin & {
 
 export function useOrigins() {
   const result = useFetch<Origin[]>("/origins");
-  const origins = result.status === FetchStatus.Success ? result.data : [];
+  const [regions, setRegions] = useState(new Collection<number, Region>());
+  const [provinces, setProvinces] = useState(new Collection<number, Province>());
+  const [communes, setCommunes] = useState(new Collection<number, Commune>());
+  const [locations, setLocations] = useState(new Collection<number, Location>());
 
-  const regions = new Collection<number, Region>();
-  const provinces = new Collection<number, Province>();
-  const communes = new Collection<number, Commune>();
-  const locations = new Collection<number, Location>();
+  if (result.status === FetchStatus.Success
+    && regions.size === 0
+    && provinces.size === 0
+    && communes.size === 0
+    && locations.size === 0
+  ) {
+    result.data.sort((a, b) => a.id - b.id).forEach((o) => {
+      const common = {
+        id: o.id,
+        name: o.name,
+      };
+      switch (o.type) {
+        case "region": {
+          regions.set(o.id, {
+            ...common,
+            number: o.regionNumber,
+            place: o.regionPlace,
+            provinces: new Collection(),
+          });
+          break;
+        }
+        case "province": {
+          const region = regions.get(o.parentId)!;
+          const province: Province = {
+            ...common,
+            parent: region,
+            communes: new Collection(),
+          };
+          region.provinces.set(o.id, province);
+          provinces.set(o.id, province);
+          break;
+        }
+        case "commune": {
+          const province = provinces.get(o.parentId)!;
+          const commune: Commune = {
+            ...common,
+            parent: province,
+            locations: new Collection(),
+          };
+          province.communes.set(o.id, commune);
+          communes.set(o.id, commune);
+          break;
+        }
+        case "location": {
+          const commune = communes.get(o.parentId)!;
+          const location: Location = {
+            ...common,
+            parent: commune,
+            type: o.locationType,
+          };
+          commune.locations.set(o.id, location);
+          locations.set(o.id, location);
+          break;
+        }
+      }
+    });
 
-  origins.sort((a, b) => a.id - b.id).forEach((o) => {
-    const common = {
-      id: o.id,
-      name: o.name,
-    };
-    switch (o.type) {
-      case "region": {
-        regions.set(o.id, {
-          ...common,
-          number: o.regionNumber,
-          place: o.regionPlace,
-          provinces: new Collection(),
-        });
-        break;
-      }
-      case "province": {
-        const region = regions.get(o.parentId)!;
-        const province: Province = {
-          ...common,
-          parent: region,
-          communes: new Collection(),
-        };
-        region.provinces.set(o.id, province);
-        provinces.set(o.id, province);
-        break;
-      }
-      case "commune": {
-        const province = provinces.get(o.parentId)!;
-        const commune: Commune = {
-          ...common,
-          parent: province,
-          locations: new Collection(),
-        };
-        province.communes.set(o.id, commune);
-        communes.set(o.id, commune);
-        break;
-      }
-      case "location": {
-        const commune = communes.get(o.parentId)!;
-        const location: Location = {
-          ...common,
-          parent: commune,
-          type: o.locationType,
-        };
-        commune.locations.set(o.id, location);
-        locations.set(o.id, location);
-        break;
-      }
-    }
-  });
+    setRegions(regions.clone());
+    setProvinces(provinces.clone());
+    setCommunes(communes.clone());
+    setLocations(locations.clone());
+  }
 
   return { regions, provinces, communes, locations };
 }

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Collection } from "../utils/collection";
 import { FetchStatus, useFetch } from "./useFetch";
 
@@ -24,14 +25,19 @@ export type AnyNutrient = {
 
 export function useNutrients() {
   const result = useFetch<GroupedNutrients>("/nutrients");
+  const [nutrients, setNutrients] = useState(new Collection<string, AnyNutrient>());
+  const [energy, setEnergy] = useState(new Collection<string, AnyNutrient>());
+  const [macronutrients, setMacronutrients] = useState(new Collection<string, MacroNutrient>());
+  const [vitamins, setVitamins] = useState(new Collection<string, AnyNutrient>());
+  const [minerals, setMinerals] = useState(new Collection<string, AnyNutrient>());
 
-  const nutrients = new Collection<string, AnyNutrient>();
-  const energy = new Collection<string, AnyNutrient>();
-  const macronutrients = new Collection<string, MacroNutrient>();
-  const vitamins = new Collection<string, AnyNutrient>();
-  const minerals = new Collection<string, AnyNutrient>();
-
-  if (result.status === FetchStatus.Success) {
+  if (result.status === FetchStatus.Success
+    && nutrients.size === 0
+    && energy.size === 0
+    && macronutrients.size === 0
+    && vitamins.size === 0
+    && minerals.size === 0
+  ) {
     result.data.macronutrients.forEach((macro) => {
       nutrients.set(macro.id.toString(), macro);
 
@@ -55,6 +61,12 @@ export function useNutrients() {
       minerals.set(mineral.id.toString(), mineral);
       nutrients.set(mineral.id.toString(), mineral);
     });
+
+    setNutrients(nutrients.clone());
+    setEnergy(energy.clone());
+    setMacronutrients(macronutrients.clone());
+    setVitamins(vitamins.clone());
+    setMinerals(minerals.clone());
   }
 
   return { nutrients, energy, macronutrients, vitamins, minerals };

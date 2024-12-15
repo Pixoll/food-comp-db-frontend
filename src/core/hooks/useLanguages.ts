@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Collection } from "../utils/collection";
 import { FetchStatus, useFetch } from "./useFetch";
 
@@ -9,12 +10,13 @@ export type Language = {
 
 export function useLanguages() {
   const result = useFetch<Language[]>("/languages");
-  const languages = new Collection<number, Language>();
+  const [languages, setLanguages] = useState(new Collection<number, Language>());
 
-  if (result.status === FetchStatus.Success) {
+  if (result.status === FetchStatus.Success && languages.size === 0) {
     result.data.forEach((language) => {
       languages.set(language.id, language);
     });
+    setLanguages(languages.clone());
   }
 
   return languages;
