@@ -58,6 +58,16 @@
   font-family: "Poppins", serif;
 }
 
+.measurement-row {
+  margin-bottom: 0 !important;
+}
+
+.measurement-separator {
+  display: block;
+  flex-grow: 1;
+  border-bottom: 1px solid #b0b0b0;
+}
+
 @media (max-width: 768px) {
   .search-container {
     flex-direction: column;

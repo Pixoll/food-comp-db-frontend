@@ -1,6 +1,7 @@
+import { PlusCircle, XCircle } from "lucide-react";
 import qs from "qs";
 import { useState } from "react";
-import { Col, Container, Form, InputGroup, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, InputGroup, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { FetchStatus, useFetch, useGroups, useNutrients, useOrigins, useTypes } from "../../hooks";
 import { FoodResult } from "../../types/option";
@@ -9,16 +10,31 @@ import FoodResultsTable from "./FoodResultsTable";
 import SearchBox from "./SearchBox";
 import "../../../assets/css/_foodFilter.css";
 
+type Filters = {
+  foodTypeFilter: Set<string>;
+  regionsFilter: Set<string>;
+  groupsFilter: Set<string>;
+  nutrientsFilter: NutrientFilter[];
+};
+
+type NutrientFilter = {
+  id: number;
+  op: string;
+  value: number;
+};
+
 export default function FoodFilter() {
-  const [selectedFilters, setSelectedFilters] = useState({
-    foodTypeFilter: new Set<string>(),
-    regionsFilter: new Set<string>(),
-    groupsFilter: new Set<string>(),
-    nutrientFilter: new Set<string>(),
-    operator: "=",
-    value: 0,
+  const [selectedFilters, setSelectedFilters] = useState<Filters>({
+    foodTypeFilter: new Set(),
+    regionsFilter: new Set(),
+    groupsFilter: new Set(),
+    nutrientsFilter: [{
+      id: 0,
+      op: "=",
+      value: 0,
+    }],
   });
-  const [searchForName, setSearchForName] = useState<string>("");
+  const [searchForName, setSearchForName] = useState("");
 
   const groups = useGroups();
   const { regions } = useOrigins();
@@ -44,13 +60,18 @@ export default function FoodFilter() {
     type: Array.from(selectedFilters.foodTypeFilter),
     region: Array.from(selectedFilters.regionsFilter),
     group: Array.from(selectedFilters.groupsFilter),
-    ...(selectedFilters.nutrientFilter.size > 0 &&
-      selectedFilters.operator &&
-      selectedFilters.value && {
-        nutrient: Array.from(selectedFilters.nutrientFilter),
-        operator: selectedFilters.operator,
-        value: selectedFilters.value,
-      }),
+    ...selectedFilters.nutrientsFilter.reduce((acc, n) => {
+      if (n.id > 0) {
+        acc.nutrient.push(n.id);
+        acc.operator.push(n.op);
+        acc.value.push(n.value);
+      }
+      return acc;
+    }, {
+      nutrient: [] as number[],
+      operator: [] as string[],
+      value: [] as number[],
+    }),
   };
 
   const queryString = qs.stringify(filters, {
@@ -60,29 +81,58 @@ export default function FoodFilter() {
 
   const resetFilters = () => {
     setSelectedFilters({
-      foodTypeFilter: new Set<string>(),
-      regionsFilter: new Set<string>(),
-      groupsFilter: new Set<string>(),
-      nutrientFilter: new Set<string>(),
-      operator: "=",
-      value: 0,
+      foodTypeFilter: new Set(),
+      regionsFilter: new Set(),
+      groupsFilter: new Set(),
+      nutrientsFilter: [{
+        id: 0,
+        op: "=",
+        value: 0,
+      }],
     });
     setSearchForName("");
   };
 
-  const FoodResults = useFetch<FoodResult[]>(`/foods?${queryString}`);
-  const foods = FoodResults.status === FetchStatus.Success ? FoodResults.data : [];
+  const foodsResult = useFetch<FoodResult[]>(`/foods?${queryString}`);
+  const foods = foodsResult.status === FetchStatus.Success ? foodsResult.data : [];
   console.log(`/foods?${queryString}`);
   const { t } = useTranslation();
+
+  const handleNutrientFilterChange = <K extends keyof NutrientFilter>(key: K, value: NutrientFilter[K], index: number) => {
+    setSelectedFilters((prevFilters) => ({
+      ...prevFilters,
+      nutrientsFilter: selectedFilters.nutrientsFilter.map((nutrient, i) =>
+        i === index ? { ...nutrient, [key]: value } : nutrient
+      ),
+    }));
+  };
+
+  const handleAddNutrientFilter = () => {
+    setSelectedFilters((prevFilters) => ({
+      ...prevFilters,
+      nutrientsFilter: [...prevFilters.nutrientsFilter, {
+        id: 0,
+        op: "=",
+        value: 0,
+      }],
+    }));
+  };
+
+  const handleRemoveLastNutrientFilter = () => {
+    setSelectedFilters((prevFilters) => ({
+      ...prevFilters,
+      nutrientsFilter: [...prevFilters.nutrientsFilter.slice(0, -1)],
+    }));
+  };
 
   return (
     <div className="search-container">
       <div className="food-filter">
-        <h2>{t('Filter.title')}</h2>
+        <h2>{t("Filter.title")}</h2>
 
         {/* Filter Sections */}
         <div className="filter-group">
-          <label htmlFor="other">{t('Filter.type')}</label>
+          <label htmlFor="other">{t("Filter.type")}</label>
           <SearchBox
             filterOptions={types.idToName}
             onChange={(values) => handleFilterChange("foodTypeFilter", values)}
@@ -92,7 +142,7 @@ export default function FoodFilter() {
         </div>
 
         <div className="filter-group">
-          <label htmlFor="other">{t('Filter.regions')}</label>
+          <label htmlFor="other">{t("Filter.regions")}</label>
           <SearchBox
             filterOptions={regionOptions}
             onChange={(values) => handleFilterChange("regionsFilter", values)}
@@ -102,7 +152,7 @@ export default function FoodFilter() {
         </div>
 
         <div className="filter-group">
-          <label htmlFor="other">{t('Filter.group')}</label>
+          <label htmlFor="other">{t("Filter.group")}</label>
           <SearchBox
             filterOptions={groups.idToName}
             onChange={(values) => handleFilterChange("groupsFilter", values)}
@@ -113,67 +163,94 @@ export default function FoodFilter() {
 
         {/* Measurement Section */}
         <Container className="mb-3 custom-container">
-          <h3 className="measurement-title">{t('Measurement.title')}</h3>
+          <h3 className="measurement-title">{t("Measurement.title")}</h3>
+          {selectedFilters.nutrientsFilter.map((nutrient, index) => (
+            <Row className="align-items-start flex-column measurement-row">
+              {selectedFilters.nutrientsFilter.length > 1 && index > 0 && (
+                <Col className={"mb-3"}>
+                  <span className={"measurement-separator"}/>
+                </Col>
+              )}
+
+              <Col className="mb-3">
+                <Form.Group controlId="nutrient-select">
+                  <Form.Select
+                    aria-label="Select nutrient"
+                    value={nutrient.id || ""}
+                    onChange={(e) => {
+                      const id = +e.target.value;
+                      if (Number.isSafeInteger(id)) {
+                        handleNutrientFilterChange("id", id, index);
+                      }
+                    }}
+                  >
+                    <option value={""}>Nada seleccionado</option>
+                    {nutrients.map(nutrient => (
+                      <option value={nutrient.id}>{`${nutrient.name} (${nutrient.measurementUnit})`}</option>
+                    ))}
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+
+              <Col className="mb-3">
+                <Form.Group controlId="operator-select">
+                  <Form.Select
+                    aria-label="Select operator"
+                    value={nutrient.op}
+                    onChange={(e) => handleNutrientFilterChange("op", e.target.value, index)}
+                  >
+                    <option value="<">{t("Measurement.operator.less")} (&lt;)</option>
+                    <option value="<=">{t("Measurement.operator.less_equal")} (&le;)</option>
+                    <option value="=">{t("Measurement.operator.equal")} (=)</option>
+                    <option value=">=">{t("Measurement.operator.greater_equal")} (&ge;)</option>
+                    <option value=">">{t("Measurement.operator.greater")} (&gt;)</option>
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+
+              <Col className="mb-3">
+                <Form.Group controlId="value-input">
+                  <InputGroup>
+                    <Form.Control
+                      type="number"
+                      aria-label="Nutrient value"
+                      value={nutrient.value}
+                      min={0}
+                      onChange={(e) => handleNutrientFilterChange("value", +e.target.value, index)}
+                    />
+                  </InputGroup>
+                </Form.Group>
+              </Col>
+            </Row>
+          ))}
           <Row className="align-items-start flex-column">
             <Col className="mb-3">
-              <div className="filter-group">
-                <SearchBox
-                  filterOptions={nutrients.mapValues(nutrient => `${nutrient.name} (${nutrient.measurementUnit})`)}
-                  onChange={(values) =>
-                    handleFilterChange("nutrientFilter", values)
-                  }
-                  single={true}
-                  selectedOptions={Array.from(selectedFilters.nutrientFilter)}
-                />
-              </div>
+              <Button
+                onClick={handleAddNutrientFilter}
+                variant="outline-primary"
+                className="largeButton"
+              >
+                <PlusCircle className="me-2"/>
+                Agregar
+              </Button>
             </Col>
-
-            <Col className="mb-3">
-              <Form.Group controlId="operator-select">
-                <Form.Select
-                  aria-label="Select operator"
-                  value={selectedFilters.operator}
-                  onChange={(e) =>
-                    setSelectedFilters((prevFilters) => ({
-                      ...prevFilters,
-                      operator: e.target.value,
-                    }))
-                  }
+            {selectedFilters.nutrientsFilter.length > 1 && (
+              <Col className="mb-3">
+                <Button
+                  onClick={handleRemoveLastNutrientFilter}
+                  variant="outline-secondary"
+                  className="largeButton"
                 >
-                  <option value="<">{t('Measurement.operator.less')} (&lt;)</option>
-                  <option value="<=">{t('Measurement.operator.less_equal')} (&le;)</option>
-                  <option value="=">{t('Measurement.operator.equal')} (=)</option>
-                  <option value=">=">{t('Measurement.operator.greater_equal')} (&ge;)</option>
-                  <option value=">">{t('Measurement.operator.greater')} (&gt;)</option>
-                </Form.Select>
-              </Form.Group>
-            </Col>
-
-            <Col>
-              <Form.Group controlId="content-input">
-                <Form.Label>{t('Measurement.content.title')}</Form.Label>
-                <InputGroup>
-                  <Form.Control
-                    type="number"
-                    placeholder={t('Measurement.content.value')}
-                    aria-label="Content value"
-                    value={selectedFilters.value || 0}
-                    min={0}
-                    onChange={(e) =>
-                      setSelectedFilters((prevFilters) => ({
-                        ...prevFilters,
-                        value: parseFloat(e.target.value) || 0,
-                      }))
-                    }
-                  />
-                </InputGroup>
-              </Form.Group>
-            </Col>
+                  <XCircle className="me-2"/>
+                  Eliminar último
+                </Button>
+              </Col>
+            )}
           </Row>
         </Container>
 
         <button onClick={resetFilters} className="reset-button">
-          {t('Filter.reset')}
+          {t("Filter.reset")}
         </button>
       </div>
 

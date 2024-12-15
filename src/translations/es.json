@@ -66,10 +66,6 @@
       "equal": "Igual a",
       "greater_equal": "Mayor o igual a",
       "greater": "Mayor que"
-    },
-    "content": {
-      "title": "Contenido",
-      "value": "Valor"
     }
   },
   "Table": {
