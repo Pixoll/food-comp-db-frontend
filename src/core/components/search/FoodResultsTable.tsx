@@ -77,7 +77,7 @@ export default function FoodResultsTable({
 
     setSortedData(sorted);
 
-    const maxPage = Math.ceil(sorted.length / recordsPerPage);
+    const maxPage = Math.max(Math.ceil(sorted.length / recordsPerPage), 1);
     if (currentPage > maxPage) {
       setCurrentPage(maxPage);
     }
