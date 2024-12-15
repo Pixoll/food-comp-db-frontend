@@ -1,11 +1,7 @@
-
-import { useState, useEffect } from "react";
-import "../../assets/css/_ModifyDetailFood.css";
-import Footer from "../../core/components/Footer";
-import useFetch, { FetchStatus } from "../../core/hooks/useFetch";
 import axios from "axios";
 import "../../assets/css/_ModifyDetailFood.css";
-import { Button, Col, Container, Form, Nav, Row, Tab, Card } from "react-bootstrap";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { Button, Card, Col, Container, Form, Nav, Row, Tab } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import {
@@ -23,8 +19,10 @@ import {
   RequiredFieldLabel,
   SelectorWithInput,
 } from "../../core/components/detailFood";
+import Footer from "../../core/components/Footer";
 import { useAuth } from "../../core/context/AuthContext";
 import { useToast } from "../../core/context/ToastContext";
+import useFetch, { FetchStatus } from "../../core/hooks/useFetch";
 import { LangualCode, NutrientsValue, Origin, SingleFoodResult, } from "../../core/types/SingleFoodResult";
 import makeRequest from "../../core/utils/makeRequest";
 
@@ -162,7 +160,7 @@ export default function ModifyFoodDetail() {
         "/subspecies",
         { name },
         state.token,
-        (response) => {
+        () => {
           if (subspeciesResult.status !== FetchStatus.Loading) {
             subspeciesResult.forceReload();
             setScientificNameAndSubspecies({
@@ -282,7 +280,7 @@ export default function ModifyFoodDetail() {
     setNutrientValue(updatedData);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
     const processValue = (value: string) =>
@@ -348,7 +346,7 @@ export default function ModifyFoodDetail() {
     ];
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const payload = {
       commonName: namesAndIngredients.commonName,
@@ -574,7 +572,7 @@ export default function ModifyFoodDetail() {
                               selectedValue={
                                 scientificNameAndSubspecies?.scientificName
                               }
-                              onSelect={(id, name) => {
+                              onSelect={(_, name) => {
                                 setScientificNameAndSubspecies((prevState) => ({
                                   ...prevState,
                                   scientificName: name || undefined,
@@ -608,7 +606,7 @@ export default function ModifyFoodDetail() {
                                 scientificNameAndSubspecies?.subspecies
                               }
                               placeholder={t("DetailFood.selected")}
-                              onSelect={(id, name) => {
+                              onSelect={(_, name) => {
                                 setScientificNameAndSubspecies((prevState) => ({
                                   ...prevState,
                                   subspecies: name || undefined,

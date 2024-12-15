@@ -1,21 +1,9 @@
-import {
-  Accordion,
-  Table,
-  Button,
-  Card,
-  Container,
-  Row,
-  Col,
-} from "react-bootstrap";
 import { Edit2 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import "../../../assets/css/_nutrientAccordion.css";
-import {
-  NutrientsValue,
-  NutrientMeasurement,
-  NutrientMeasurementWithComponents,
-} from "../../types/SingleFoodResult";
+import { Accordion, Button, Card, Col, Container, Row, Table, } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import { NutrientMeasurement, NutrientMeasurementWithComponents, NutrientsValue, } from "../../types/SingleFoodResult";
 import CenteredModifyModal from "./CenteredModifyModal";
 
 interface NutrientAccordionProps {
@@ -23,10 +11,7 @@ interface NutrientAccordionProps {
   onUpdate: (updatedData: NutrientsValue) => void;
 }
 
-const NutrientAccordionModify: React.FC<NutrientAccordionProps> = ({
-  data,
-  onUpdate,
-}) => {
+export default function NutrientAccordionModify({ data, onUpdate }: NutrientAccordionProps) {
   const { t } = useTranslation();
   const [selectedNutrient, setSelectedNutrient] =
     useState<NutrientMeasurement | null>(null);
@@ -91,31 +76,31 @@ const NutrientAccordionModify: React.FC<NutrientAccordionProps> = ({
   ) => (
     <Table responsive hover striped className="align-middle">
       <thead className="table-light">
-        <tr>
-          <th>{t("nutrientAccordion.name")}</th>
-          <th className="text-center">{t("nutrientAccordion.modify")}</th>
-        </tr>
+      <tr>
+        <th>{t("nutrientAccordion.name")}</th>
+        <th className="text-center">{t("nutrientAccordion.modify")}</th>
+      </tr>
       </thead>
       <tbody>
-        {nutrients.map((nutrient, index) => (
-          <tr key={index}>
-            <td>
-              {nutrient.name}
-              {nutrient.measurementUnit ? `(${nutrient.measurementUnit})` : ""}
-            </td>
-            <td className="text-center">
-              <Button
-                variant="outline-warning"
-                size="sm"
-                onClick={() => handleOpenModal(nutrient)}
-                className="d-flex align-items-center justify-content-center mx-auto"
-              >
-                <Edit2 size={18} className="me-1" />
-                Editar
-              </Button>
-            </td>
-          </tr>
-        ))}
+      {nutrients.map((nutrient, index) => (
+        <tr key={index}>
+          <td>
+            {nutrient.name}
+            {nutrient.measurementUnit ? `(${nutrient.measurementUnit})` : ""}
+          </td>
+          <td className="text-center">
+            <Button
+              variant="outline-warning"
+              size="sm"
+              onClick={() => handleOpenModal(nutrient)}
+              className="d-flex align-items-center justify-content-center mx-auto"
+            >
+              <Edit2 size={18} className="me-1"/>
+              Editar
+            </Button>
+          </td>
+        </tr>
+      ))}
       </tbody>
     </Table>
   );
@@ -167,50 +152,50 @@ const NutrientAccordionModify: React.FC<NutrientAccordionProps> = ({
                         <Accordion.Body>
                           <Table responsive hover striped>
                             <thead>
-                              <tr>
-                                <th>{t("nutrientAccordion.name")}</th>
-                                <th className="text-center">
-                                  {t("nutrientAccordion.modify")}
-                                </th>
-                              </tr>
+                            <tr>
+                              <th>{t("nutrientAccordion.name")}</th>
+                              <th className="text-center">
+                                {t("nutrientAccordion.modify")}
+                              </th>
+                            </tr>
                             </thead>
                             <tbody>
-                              {nutrient.components.map(
-                                (subComponent, subIndex) => (
-                                  <tr key={subIndex}>
-                                    <td>{subComponent.name}</td>
-                                    <td className="text-center">
-                                      <Button
-                                        variant="outline-warning"
-                                        size="sm"
-                                        onClick={() =>
-                                          handleOpenModal(subComponent)
-                                        }
-                                        className="d-flex align-items-center justify-content-center mx-auto"
-                                      >
-                                        <Edit2 size={18} className="me-1" />
-                                        Editar
-                                      </Button>
-                                    </td>
-                                  </tr>
-                                )
-                              )}
-                              <tr>
-                                <td>
-                                  <strong>{nutrient.name} (Total)</strong>
-                                </td>
-                                <td className="text-center">
-                                  <Button
-                                    variant="outline-warning"
-                                    size="sm"
-                                    onClick={() => handleOpenModal(nutrient)}
-                                    className="d-flex align-items-center justify-content-center mx-auto"
-                                  >
-                                    <Edit2 size={18} className="me-1" />
-                                    Editar
-                                  </Button>
-                                </td>
-                              </tr>
+                            {nutrient.components.map(
+                              (subComponent, subIndex) => (
+                                <tr key={subIndex}>
+                                  <td>{subComponent.name}</td>
+                                  <td className="text-center">
+                                    <Button
+                                      variant="outline-warning"
+                                      size="sm"
+                                      onClick={() =>
+                                        handleOpenModal(subComponent)
+                                      }
+                                      className="d-flex align-items-center justify-content-center mx-auto"
+                                    >
+                                      <Edit2 size={18} className="me-1"/>
+                                      Editar
+                                    </Button>
+                                  </td>
+                                </tr>
+                              )
+                            )}
+                            <tr>
+                              <td>
+                                <strong>{nutrient.name} (Total)</strong>
+                              </td>
+                              <td className="text-center">
+                                <Button
+                                  variant="outline-warning"
+                                  size="sm"
+                                  onClick={() => handleOpenModal(nutrient)}
+                                  className="d-flex align-items-center justify-content-center mx-auto"
+                                >
+                                  <Edit2 size={18} className="me-1"/>
+                                  Editar
+                                </Button>
+                              </td>
+                            </tr>
                             </tbody>
                           </Table>
                         </Accordion.Body>
