@@ -88,7 +88,7 @@ export default function ModifyFoodDetail() {
     } else if (payload.scientificNameId && payload.scientificName) {
       setScientificNameAndSubspecies({
         ...scientificNameAndSubspecies,
-        scientificName: scientificNames.idToName.get(payload.scientificNameId),
+        scientificName: scientificNames.idToName.get(payload.scientificNameId.toString()),
       });
     }
   };
@@ -591,7 +591,7 @@ export default function ModifyFoodDetail() {
                       </Form.Label>
                       <Col sm={10}>
                         <OriginSelector
-                          selectedValue={groups.idToName.get(groupAndTypeData.groupId ?? 0) ?? ""}
+                          selectedValue={groups.idToName.get(groupAndTypeData.groupId?.toString() ?? "") ?? ""}
                           options={groups.codeToId.map((id, name) => ({ id, name }))}
                           placeholder={t("DetailFood.nothingSelected")}
                           onSelect={(id) => {
@@ -613,7 +613,7 @@ export default function ModifyFoodDetail() {
                       </Form.Label>
                       <Col sm={10}>
                         <OriginSelector
-                          selectedValue={types.idToName.get(groupAndTypeData.typeId ?? 0) ?? ""}
+                          selectedValue={types.idToName.get(groupAndTypeData.typeId?.toString() ?? "") ?? ""}
                           options={types.codeToId.map((id, name) => ({ id, name }))}
                           placeholder={t("DetailFood.nothingSelected")}
                           onSelect={(id) => {

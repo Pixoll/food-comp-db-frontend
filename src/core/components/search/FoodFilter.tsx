@@ -84,7 +84,7 @@ export default function FoodFilter() {
         <div className="filter-group">
           <label htmlFor="other">{t('Filter.type')}</label>
           <SearchBox
-            filterOptions={types.idToName as Collection<string, string>}
+            filterOptions={types.idToName}
             onChange={(values) => handleFilterChange("foodTypeFilter", values)}
             single={false}
             selectedOptions={Array.from(selectedFilters.foodTypeFilter)}
@@ -104,7 +104,7 @@ export default function FoodFilter() {
         <div className="filter-group">
           <label htmlFor="other">{t('Filter.group')}</label>
           <SearchBox
-            filterOptions={groups.idToName as Collection<string, string>}
+            filterOptions={groups.idToName}
             onChange={(values) => handleFilterChange("groupsFilter", values)}
             single={false}
             selectedOptions={Array.from(selectedFilters.groupsFilter)}
