@@ -146,4 +146,4 @@ export default function NewNutrients({ nutrients, onNutrientUpdate, nameAndIdNut
       </Table>
     </div>
   );
-};
+}

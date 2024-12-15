@@ -593,4 +593,4 @@ export default function NewGeneralData({
       </Row>
     </Form>
   );
-};
+}

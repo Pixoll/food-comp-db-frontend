@@ -84,4 +84,4 @@ export default function useReferences() {
     articles: articlesResult.status === FetchStatus.Success ? articlesResult.data : null,
     forceReload,
   };
-};
+}

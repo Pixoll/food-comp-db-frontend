@@ -23,4 +23,4 @@ export type AnyNutrient = {
 
 export default function useNutrients() {
   return useFetch<GroupedNutrients>("/nutrients");
-};
+}

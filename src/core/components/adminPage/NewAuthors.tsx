@@ -106,4 +106,4 @@ export default function NewAuthors({ authorIds, newAuthors, data, updateAuthors 
       </Button>
     </Container>
   );
-};
+}

@@ -101,4 +101,4 @@ export default function FoodValidateData({ data }: FoodValidateDataProps) {
       )}
     </div>
   );
-};
+}

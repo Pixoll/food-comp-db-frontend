@@ -308,4 +308,4 @@ export default function OriginRow({
       </td>
     </tr>
   );
-};
+}
