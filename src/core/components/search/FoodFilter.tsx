@@ -95,7 +95,6 @@ export default function FoodFilter() {
 
   const foodsResult = useFetch<FoodResult[]>(`/foods?${queryString}`);
   const foods = foodsResult.status === FetchStatus.Success ? foodsResult.data : [];
-  console.log(`/foods?${queryString}`);
   const { t } = useTranslation();
 
   const handleNutrientFilterChange = <K extends keyof NutrientFilter>(key: K, value: NutrientFilter[K], index: number) => {
