@@ -42,7 +42,7 @@ export default function FoodResultsTable({
     navigate(`/search/details/${code}`);
   };
 
-  const toModfyFoodDetail = (code: string) => {
+  const toModifyFoodDetail = (code: string) => {
     if (state.isAuthenticated) {
       navigate(`/search/modify-details-food/${code}`);
     } else {
@@ -76,6 +76,11 @@ export default function FoodResultsTable({
     });
 
     setSortedData(sorted);
+
+    const maxPage = Math.ceil(sorted.length / recordsPerPage);
+    if (currentPage > maxPage) {
+      setCurrentPage(maxPage);
+    }
   }, [data, selectedLanguage, sortOrder, searchForName]);
 
   return (
@@ -126,37 +131,40 @@ export default function FoodResultsTable({
         <>
           <table className="content-table-foods">
             <thead>
-              <tr>
-                <th style={{ fontSize: 22 }}>{t("Table_FoodResults.id")}</th>
-                <th style={{ fontSize: 22 }}>{t("Table_FoodResults.name")}</th>
-                <th style={{ fontSize: 22 }}>
-                  {t("Table_FoodResults.scientific_name")}
-                </th>
-                <th style={{ fontSize: 22 }}>
-                  {t("Table_FoodResults.action")}
-                </th>
-              </tr>
+            <tr>
+              <th style={{ fontSize: 22 }}>{t("Table_FoodResults.id")}</th>
+              <th style={{ fontSize: 22 }}>{t("Table_FoodResults.name")}</th>
+              <th style={{ fontSize: 22 }}>
+                {t("Table_FoodResults.scientific_name")}
+              </th>
+              <th style={{ fontSize: 22 }}>
+                {t("Table_FoodResults.action")}
+              </th>
+            </tr>
             </thead>
             <tbody>
-              {records.map((item) => (
-                <tr key={item.id}>
-                  <td data-label="ID">{item.id}</td>
-                  <td data-label="Nombre">
-                    {item.commonName[selectedLanguage] || "N/A"}
-                  </td>
-                  <td data-label="Nombre científico">{item.scientificName}</td>
-                  <td>
-                    <button onClick={() => toFoodDetail(item.code)}>
-                      {t("Table_FoodResults.details")}
+            {records.map((item) => (
+              <tr key={item.id}>
+                <td data-label="ID">{item.id}</td>
+                <td data-label="Nombre">
+                  {item.commonName[selectedLanguage] || "N/A"}
+                </td>
+                <td data-label="Nombre científico">{item.scientificName}</td>
+                <td>
+                  <button onClick={() => toFoodDetail(item.code)}>
+                    {t("Table_FoodResults.details")}
+                  </button>
+                  {state.isAuthenticated && (
+                    <button
+                      onClick={() => toModifyFoodDetail(item.code)}
+                      style={{ backgroundColor: '#3b7791', color: '#fff' }}
+                    >
+                      {t("Table_FoodResults.modify")}
                     </button>
-                    {state.isAuthenticated && (
-                      <button onClick={() => toModfyFoodDetail(item.code)} style={{ backgroundColor: '#3b7791', color: '#fff' }}>
-                        {t("Table_FoodResults.modify")}
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
+                  )}
+                </td>
+              </tr>
+            ))}
             </tbody>
           </table>
           {npage > 1 && (
