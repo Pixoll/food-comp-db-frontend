@@ -4,6 +4,8 @@ import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { Article, Journal, JournalVolume } from "./getters";
 import { NewArticle, NewVolume } from "./NewReference";
 import "../../../assets/css/_NewVolumByReference.css";
+import "../../../assets/css/_newReference.css";
+
 
 type NewArticleByReferenceProps = {
   data: {
@@ -135,9 +137,9 @@ export default function NewArticleByReference({ data, dataForm, updateNewArticle
   return (
     <Container className="p-4">
       <Card className="mb-4">
-        <Card.Header className="d-flex align-items-center">
+        <Card.Header className="card-header">
           <BookOpen className="me-2"/>
-          <Card.Title className="card-title">Seleccionar una revista</Card.Title>
+          <Card.Title className="card-title-Article">Seleccionar una revista</Card.Title>
         </Card.Header>
         <Card.Body>
           {newJournal ? (
@@ -194,7 +196,7 @@ export default function NewArticleByReference({ data, dataForm, updateNewArticle
                 <Button
                   onClick={handleAddJournal}
                   variant="outline-primary"
-                  className="w-100 d-flex align-items-center justify-content-center"
+                  className="largeButton"
                 >
                   <PlusCircle className="me-2"/>
                   Nueva revista
@@ -207,9 +209,9 @@ export default function NewArticleByReference({ data, dataForm, updateNewArticle
 
       {doesJournalHaveValue && (
         <Card className="mb-4">
-          <Card.Header className="d-flex align-items-center">
+          <Card.Header className="card-header">
             <Layers className="me-2"/>
-            <Card.Title>Seleccionar un volumen</Card.Title>
+            <Card.Title className="card-title-Article">Seleccionar un volumen</Card.Title>
           </Card.Header>
           <Card.Body>
             {!newVolume ? (
@@ -237,7 +239,7 @@ export default function NewArticleByReference({ data, dataForm, updateNewArticle
                   <Button
                     onClick={handleAddVolume}
                     variant="outline-primary"
-                    className="w-100 d-flex align-items-center justify-content-center"
+                    className="largeButton"
                   >
                     <PlusCircle className="me-2"/>
                     Nuevo volumen
@@ -283,7 +285,7 @@ export default function NewArticleByReference({ data, dataForm, updateNewArticle
                   <Button
                     onClick={handleAddVolume}
                     variant="outline-secondary"
-                    className="w-100 d-flex align-items-center justify-content-center"
+                    className="largeButton"
                   >
                     <PlusCircle className="me-2"/>
                     Cancelar
@@ -297,9 +299,9 @@ export default function NewArticleByReference({ data, dataForm, updateNewArticle
 
       {doesVolumeHaveValue && (
         <Card>
-          <Card.Header className="d-flex align-items-center">
+          <Card.Header className="card-header">
             <FileText className="me-2"/>
-            <Card.Title>Seleccionar un Artículo</Card.Title>
+            <Card.Title className="card-title-Article">Seleccionar un Artículo</Card.Title>
           </Card.Header>
           <Card.Body>
             <Row>

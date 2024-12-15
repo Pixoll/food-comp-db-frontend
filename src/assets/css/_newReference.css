@@ -1,9 +1,38 @@
-.card-header{
+.card-header {
     background-color: #37a86a !important;
+    color: white;
+    display: flex;
+    align-items: center;
+    vertical-align: middle;
+
+}
+
+.card-title-Article {
     color: white;
 }
 
-.card-title{
-    margin-top: 1%;
-    color: white;
+.largeButton {
+
+    width: 100%;
+    /* Equivalente a w-100 */
+    display: flex;
+    /* Equivalente a d-flex */
+    align-items: center;
+    /* Equivalente a align-items-center */
+    justify-content: center;
+    /* Equivalente a justify-content-center */
+    border: 1px solid #37a86a;
+
+    /* Equivalente a outline-primary */
+    background-color: transparent;
+    /* Sin fondo */
+    color: #37a86a;
+    /* Color del texto */
+
+}
+
+.largeButton:hover {
+    background-color: rgba(10, 175, 79, 0.897);
+    border: none;
+    /* Efecto hover */
 }

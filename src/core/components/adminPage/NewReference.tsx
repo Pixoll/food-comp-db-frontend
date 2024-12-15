@@ -119,7 +119,7 @@ export default function NewReference({
 
   return (
     <Card className="mt-4 shadow-sm">
-      <Card.Header className="d-flex align-items-center bg-primary text-white card-header">
+      <Card.Header className="card-header">
         {getReferenceTypeIcon()}
         <Card.Title className="mb-0">{t("NewReference.Add")}</Card.Title>
       </Card.Header>
