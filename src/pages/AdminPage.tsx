@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import "../assets/css/_AdminPage.css";
 import { useTranslation } from "react-i18next";
-import {isEqual} from "lodash"
 import {
   FoodsFromCsv,
   NewArticle,
@@ -244,56 +243,52 @@ export default function AdminPage() {
   };
 
   useEffect(() => {
-    if (origins && nutrients && energy && macronutrients && vitamins && minerals ) {
-      const initialFormData: FoodForm = {
-        generalData: {
-          code: "",
-          commonName: {
-            es: "",
-          },
-          ingredients: {},
-          scientificNameId: undefined,
-          subspeciesId: undefined,
-          groupId: undefined,
-          typeId: undefined,
-          origins: [...new Set(origins?.map((o) => o.id))],
-          langualCodes: [],
+    const initialFormData: FoodForm = {
+      generalData: {
+        code: "",
+        commonName: {
+          es: "",
         },
-        nutrientsValueForm: {
-          energy: energy.map((macronutrient: MacroNutrient) => ({
-            nutrientId: macronutrient.id,
-            referenceCodes: [],
-          })),
-          mainNutrients: macronutrients.map((m) =>
-            (m.components?.length ?? 0) > 0
-              ? mapMacroNutrientWithComponentsToForm(m)
-              : {
-                ...mapMacroNutrientWithoutComponentsToForm(m),
-                components: [],
-              }
+        ingredients: {},
+        scientificNameId: undefined,
+        subspeciesId: undefined,
+        groupId: undefined,
+        typeId: undefined,
+        origins: [...new Set(origins?.map((o) => o.id))],
+        langualCodes: [],
+      },
+      nutrientsValueForm: {
+        energy: energy.map((macronutrient: MacroNutrient) => ({
+          nutrientId: macronutrient.id,
+          referenceCodes: [],
+        })),
+        mainNutrients: macronutrients.map((m) =>
+          (m.components?.length ?? 0) > 0
+            ? mapMacroNutrientWithComponentsToForm(m)
+            : {
+              ...mapMacroNutrientWithoutComponentsToForm(m),
+              components: [],
+            }
+        ),
+        micronutrients: {
+          vitamins: vitamins.map(
+            (vitamin: AnyNutrient) => ({
+              nutrientId: vitamin.id,
+              referenceCodes: [],
+            })
           ),
-          micronutrients: {
-            vitamins: vitamins.map(
-              (vitamin: AnyNutrient) => ({
-                nutrientId: vitamin.id,
-                referenceCodes: [],
-              })
-            ),
-            minerals: minerals.map(
-              (mineral: AnyNutrient) => ({
-                nutrientId: mineral.id,
-                referenceCodes: [],
-              })
-            ),
-          },
+          minerals: minerals.map(
+            (mineral: AnyNutrient) => ({
+              nutrientId: mineral.id,
+              referenceCodes: [],
+            })
+          ),
         },
-      };
+      },
+    };
 
-      if (!isEqual(formData, initialFormData)) {
-        setFormData(initialFormData);
-      }
-    }
-  }, [nutrients]);
+    setFormData(initialFormData);
+  }, [energy.size, macronutrients.size, vitamins.size, minerals.size]);
 
   const handleUpdate = (updatedData: Partial<GeneralData>) => {
     setFormData((prev) => ({
