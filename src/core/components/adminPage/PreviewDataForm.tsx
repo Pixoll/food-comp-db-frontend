@@ -91,10 +91,14 @@ export default function PreviewDataForm({
     const payload: NewFood = {
       commonName: {
         es: data.generalData.commonName.es,
-        en: data.generalData.commonName.en,
-        pt: data.generalData.commonName.pt,
+        en: data.generalData.commonName.en || undefined,
+        pt: data.generalData.commonName.pt || undefined,
       },
-      ingredients: data.generalData.ingredients,
+      ingredients: {
+        es: data.generalData.ingredients.es || undefined,
+        en: data.generalData.ingredients.en || undefined,
+        pt: data.generalData.ingredients.pt || undefined,
+      },
       scientificNameId: data.generalData.scientificNameId,
       subspeciesId: data.generalData.subspeciesId,
       groupId: data.generalData.groupId || -1,

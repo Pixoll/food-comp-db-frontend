@@ -106,8 +106,8 @@ export default function FoodResultsTable({
               onChange={handleLanguageChange}
               className="form-select language-selector"
             >
-              <option value="en">{t("Table.name.English")}</option>
               <option value="es">{t("Table.name.Spanish")}</option>
+              <option value="en">{t("Table.name.English")}</option>
               <option value="pt">{t("Table.name.Portuguese")}</option>
             </select>
           </Col>
