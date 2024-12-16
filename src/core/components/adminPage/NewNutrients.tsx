@@ -20,12 +20,42 @@ export default function NewNutrients({
   onNutrientUpdate,
   nameAndIdNutrients,
 }: NewNutrientsProps) {
-  const [editingNutrientId, setEditingNutrientId] = useState<number | undefined>(
-    undefined
-  );
+  const [editingNutrientId, setEditingNutrientId] = useState<
+    number | undefined
+  >(undefined);
   const [formData, setFormData] = useState<NutrientMeasurementForm | undefined>(
     undefined
   );
+  const [validationErrors, setValidationErrors] = useState<{
+    average?: string;
+    deviation?: string;
+    min?: string;
+    max?: string;
+    sampleSize?: string;
+  }>({});
+
+  const validateField = (field: string, value: number | undefined) => {
+    switch (field) {
+      case "average":
+      case "deviation":
+        return value !== undefined && value >= 0;
+      case "min":
+        return value !== undefined && value >= 0;
+      case "max":
+        const minValue = formData?.min;
+        return (
+          value !== undefined && 
+          value >= 0 && 
+          (minValue === undefined || value >= minValue)
+        );
+      case "sampleSize":
+        return value !== undefined && 
+               Number.isInteger(value) && 
+               value >= 0;
+      default:
+        return true;
+    }
+  };
   const { t } = useTranslation();
 
   const startEditing = (nutrient: NutrientMeasurementForm) => {
@@ -40,6 +70,7 @@ export default function NewNutrients({
       dataType: nutrient.dataType || undefined,
       referenceCodes: nutrient.referenceCodes || [],
     });
+    setValidationErrors({});
   };
 
   const handleInputChange = (
@@ -48,20 +79,70 @@ export default function NewNutrients({
   ) => {
     if (formData) {
       setFormData({ ...formData, [field]: value });
-    }
   };
-
+}
+const getErrorMessage = (field: string) => {
+  switch (field) {
+    case "average":
+      return "Promedio no puede ser negativo";
+    case "deviation":
+      return "Desviación no puede ser negativa";
+    case "min":
+      return "Mínimo invalido";
+    case "max":
+      return "Máximo invalido";
+    case "sampleSize":
+      return "Tamaño de muestra invalido";
+    default:
+      return "";
+  }
+};
+  const isFormValid = () => {
+    return Object.values(validationErrors).every(
+      (error) => error === undefined
+    );
+  };
   const saveChanges = () => {
-    if (formData && editingNutrientId !== null) {
+    const fieldsToValidate: (keyof NutrientMeasurementForm)[] = [
+      "average",
+      "deviation",
+      "min",
+      "max",
+      "sampleSize",
+    ];
+    
+    const errors: { [key: string]: string } = {};
+    
+    fieldsToValidate.forEach((field) => {
+      const value = formData?.[field];
+      if (!validateField(field, value as number)) {
+        errors[field] = getErrorMessage(field);
+      }
+    });
+
+    if (formData?.min && formData?.max && formData.min > formData.max) {
+      errors['min'] = 'Mínimo no puede ser mayor a Máximo';
+      errors['max'] = 'Máximo no puede ser mayor a Mínimo';
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      return;
+    }
+
+    // Proceed with update if validation passes
+    if (formData && editingNutrientId !== undefined) {
       onNutrientUpdate(formData);
       setEditingNutrientId(undefined);
       setFormData(undefined);
+      setValidationErrors({});
     }
   };
 
   const cancelEditing = () => {
     setEditingNutrientId(undefined);
     setFormData(undefined);
+    setValidationErrors({});
   };
 
   return (
@@ -93,47 +174,67 @@ export default function NewNutrients({
                   <td>
                     <Form.Control
                       type="number"
-                      value={formData?.average || ""}
+                      value={formData?.average ?? ""}
                       onChange={(e) =>
                         handleInputChange("average", +e.target.value)
                       }
+                      isInvalid={!!validationErrors.average}
                     />
+                    <Form.Control.Feedback type="invalid">
+                      {validationErrors.average}
+                    </Form.Control.Feedback>
                   </td>
                   <td>
                     <Form.Control
                       type="number"
-                      value={formData?.deviation || ""}
+                      value={formData?.deviation ?? ""}
                       onChange={(e) =>
                         handleInputChange("deviation", +e.target.value)
                       }
+                      isInvalid={!!validationErrors.deviation}
                     />
+                    <Form.Control.Feedback type="invalid">
+                      {validationErrors.deviation}
+                    </Form.Control.Feedback>
                   </td>
                   <td>
                     <Form.Control
                       type="number"
-                      value={formData?.min || ""}
+                      value={formData?.min ?? ""}
                       onChange={(e) =>
                         handleInputChange("min", +e.target.value)
                       }
+                      isInvalid={!!validationErrors.min}
                     />
+                    <Form.Control.Feedback type="invalid">
+                      {validationErrors.min}
+                    </Form.Control.Feedback>
                   </td>
                   <td>
                     <Form.Control
                       type="number"
-                      value={formData?.max || ""}
+                      value={formData?.max ?? ""}
                       onChange={(e) =>
                         handleInputChange("max", +e.target.value)
                       }
+                      isInvalid={!!validationErrors.max}
                     />
+                    <Form.Control.Feedback type="invalid">
+                      {validationErrors.max}
+                    </Form.Control.Feedback>
                   </td>
                   <td>
                     <Form.Control
                       type="number"
-                      value={formData?.sampleSize || ""}
+                      value={formData?.sampleSize ?? ""}
                       onChange={(e) =>
                         handleInputChange("sampleSize", +e.target.value)
                       }
+                      isInvalid={!!validationErrors.sampleSize}
                     />
+                    <Form.Control.Feedback type="invalid">
+                      {validationErrors.sampleSize}
+                    </Form.Control.Feedback>
                   </td>
                   <td>
                     <Form.Select
@@ -142,7 +243,7 @@ export default function NewNutrients({
                         handleInputChange("dataType", e.target.value)
                       }
                     >
-                      <option value="" disabled></option>
+                      <option value="">Ninguna</option>
                       <option value="analytic">
                         {t("NewMacronutrient.Analytical")}
                       </option>
