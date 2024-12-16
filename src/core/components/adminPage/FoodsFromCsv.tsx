@@ -9,6 +9,10 @@ import {
   Type,
   Subspecies,
   ScientificName,
+  City,
+  Journal,
+  Author,
+  Reference,
 } from "../../hooks";
 import { Collection } from "../../utils/collection";
 import makeRequest from "../../utils/makeRequest";
@@ -18,29 +22,22 @@ import { Row, Col, Button, Nav, Tab } from "react-bootstrap";
 export type CSVReference = {
   flags: number;
   code: CSVValue<number>;
-  authors: Array<CSVValue<number>>;
+  authors: Array<CSVValue<number>>; 
   title: CSVValue<string>;
-  type: CSVValue<Reference["type"]>;
-  journal?: CSVValue<number>;
-  volume?: CSVValue<number>;
+  type: CSVValue<TypesReferences["type"]>;
+  journal?: CSVValue<number>; // este requiere get
+  volume?: CSVValue<number>; // este requiere get
   issue?: CSVValue<number>;
   volumeYear?: CSVValue<number>;
   pageStart?: CSVValue<number>;
   pageEnd?: CSVValue<number>;
-  city?: CSVValue<number>;
+  city?: CSVValue<number>; // este requiere get
   year?: CSVValue<number>;
   other?: CSVValue<string>;
 };
-
-export type Reference = {
-  year: number | null;
-  type: "report" | "thesis" | "article" | "website" | "book";
-  title: string;
-  other: string | null;
-  code: number;
-  ref_article_id: number | null;
-  ref_city_id: number | null;
-};
+type TypesReferences = {
+  type:"report" | "thesis" | "article" | "website" | "book"
+}
 
 export type CSVValue<T> = {
   parsed: T | null;
@@ -101,6 +98,10 @@ type FoodsFromCsvProps = {
   subspeciesNamesInfo: Collection<number, Subspecies>;
   typesNamesInfo: Collection<number, Type>;
   groupsNamesInfo: Collection<number, Group>;
+  citiesInfo: City[];
+  authorsInfo: Author[];
+  journalsInfo: Journal[];
+  referencesInfo: Reference[];
 };
 export default function FoodsFromCsv({
   nutrientsInfo,
@@ -108,7 +109,11 @@ export default function FoodsFromCsv({
   scientificNamesInfo,
   subspeciesNamesInfo,
   typesNamesInfo,
-  groupsNamesInfo
+  groupsNamesInfo,
+  citiesInfo,
+  authorsInfo,
+  journalsInfo,
+  referencesInfo
 }: FoodsFromCsvProps) {
   const { t } = useTranslation();
   const { state } = useAuth();
@@ -171,7 +176,7 @@ export default function FoodsFromCsv({
       }
     );
   };
-
+  console.log(referencesData)
   const handleReset = () => {
     setSelectedFile(null);
     setFoodData(null);
@@ -240,7 +245,13 @@ export default function FoodsFromCsv({
             </Tab.Pane>
             <Tab.Pane eventKey="references">
               {activeTab === "references" && (
-                <ReferenceValidated data={referencesData} />
+                <ReferenceValidated 
+                data={referencesData}
+                authorsInfo={authorsInfo}
+                citiesInfo={citiesInfo}
+                journalsInfo={journalsInfo}
+                referencesInfo={referencesInfo}
+                 />
               )}
             </Tab.Pane>
           </Tab.Content>

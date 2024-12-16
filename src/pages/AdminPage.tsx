@@ -628,6 +628,10 @@ export default function AdminPage() {
             scientificNamesInfo={scientificNames.idToObject}
             subspeciesNamesInfo={subspecies.idToObject}
             typesNamesInfo={types.idToObject}
+            citiesInfo = {cities || []}
+            authorsInfo={authors || []}
+            journalsInfo={journals || []}
+            referencesInfo={references || []}
           />
         )}
       </div>
