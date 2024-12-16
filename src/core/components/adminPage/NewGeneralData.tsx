@@ -257,6 +257,7 @@ export default function NewGeneralData({
                 value={formData.code || ""}
                 onChange={handleInputChange}
                 placeholder={t("DetailFood.code")}
+                style={{ borderTopRightRadius: "6px", borderBottomRightRadius: "6px" }}
               />
               <Form.Control.Feedback type="invalid">
                 {!formData.code ? "Ingrese el código." : "Código debe ser de 8 caracteres alfanuméricos."}
