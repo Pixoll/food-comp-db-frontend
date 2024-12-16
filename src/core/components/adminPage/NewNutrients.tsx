@@ -15,7 +15,7 @@ type NewNutrientsProps = {
   nameAndIdNutrients: NutrientSummary[];
 };
 
-type NutrientMeasurementFormOnlyNumbers = {
+export type NutrientMeasurementFormOnlyNumbers = {
   [K in keyof NutrientMeasurementForm as NutrientMeasurementForm[K] extends number | undefined
     ? K
     : never]: NutrientMeasurementForm[K];
@@ -79,7 +79,6 @@ export default function NewNutrients({
 
     // Proceed with update if validation passes
     if (formData && editingNutrientId !== undefined) {
-      console.log(formData);
       onNutrientUpdate(formData);
       setEditingNutrientId(undefined);
       setFormData(undefined);
