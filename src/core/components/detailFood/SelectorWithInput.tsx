@@ -7,6 +7,7 @@ type SelectorWithInputProps = {
   placeholder: string;
   selectedValue: string | undefined;
   onSelect: (id: number | undefined, name: string) => void;
+  onCustomOpen?: () => void;
   newValueMaxLength?: number;
 };
 
@@ -15,6 +16,7 @@ export default function SelectorWithInput({
   placeholder,
   selectedValue,
   onSelect,
+  onCustomOpen,
   newValueMaxLength,
 }: SelectorWithInputProps) {
   const { t } = useTranslation();
@@ -38,6 +40,7 @@ export default function SelectorWithInput({
     setIsCustomOptionActive(true);
     setIsActive(false);
     onSelect(undefined, "");
+    onCustomOpen?.();
   };
 
   const handleCustomOptionSubmit = () => {

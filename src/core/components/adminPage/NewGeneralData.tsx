@@ -252,10 +252,15 @@ export default function NewGeneralData({
               <Form.Control
                 type="text"
                 name="code"
+                maxLength={8}
+                isInvalid={!formData.code || !/^[a-z0-9]{8}$/i.test(formData.code)}
                 value={formData.code || ""}
                 onChange={handleInputChange}
                 placeholder={t("DetailFood.code")}
               />
+              <Form.Control.Feedback type="invalid">
+                {!formData.code ? "Ingrese el código." : "Código debe ser de 8 caracteres alfanuméricos."}
+              </Form.Control.Feedback>
             </InputGroup>
           </Form.Group>
         </Col>
@@ -267,6 +272,7 @@ export default function NewGeneralData({
               <Form.Control
                 type="text"
                 name="strain"
+                maxLength={50}
                 value={formData.strain || ""}
                 onChange={handleInputChange}
                 placeholder={t("NewGeneralData.strain")}
@@ -286,6 +292,7 @@ export default function NewGeneralData({
               <Form.Control
                 type="text"
                 name="brand"
+                maxLength={8}
                 value={formData.brand || ""}
                 onChange={handleInputChange}
                 placeholder={t("NewGeneralData.brand")}
@@ -301,6 +308,7 @@ export default function NewGeneralData({
               <Form.Control
                 as="textarea"
                 name="observation"
+                maxLength={200}
                 value={formData.observation || ""}
                 onChange={handleInputChange}
                 placeholder={t("NewGeneralData.Observation")}
@@ -313,219 +321,237 @@ export default function NewGeneralData({
 
       {/* Group Section */}
       <Row className="mb-3">
-        <Col>
-          <Form.Label>
-            <RequiredFieldLabel
-              label={t("DetailFood.label_group")}
-              tooltipMessage={t("DetailFood.required")}
+        <Col md={4}>
+          {groups && (<>
+            <Form.Label>
+              <RequiredFieldLabel
+                label={t("DetailFood.label_group")}
+                tooltipMessage={t("DetailFood.required")}
+              />
+            </Form.Label>
+            <SelectorWithInput
+              options={groups.map((group) => ({
+                id: group.id,
+                name: group.name,
+              }))}
+              newValueMaxLength={128}
+              selectedValue={searchGroupNameById(formData.groupId, groups)}
+              placeholder={t("NewGeneralData.select_G")}
+              onSelect={(id, name) => {
+                if (id !== undefined) {
+                  const updatedFormData = {
+                    ...formData,
+                    groupId: id,
+                  };
+                  setGroupCode("");
+                  setFormData(updatedFormData);
+                  setNewGroup(undefined);
+                  onUpdate(updatedFormData);
+                } else if (name) {
+                  setNewGroup(name);
+                }
+              }}
+              onCustomOpen={() => setNewGroup("")}
             />
-          </Form.Label>
-          <Row>
-            <Col md={4}>
-              {groups && (
-                <SelectorWithInput
-                  options={groups.map((group) => ({
-                    id: group.id,
-                    name: group.name,
-                  }))}
-                  selectedValue={searchGroupNameById(formData.groupId, groups)}
-                  placeholder={t("NewGeneralData.select_G")}
-                  onSelect={(id, name) => {
-                    if (id !== undefined) {
-                      const updatedFormData = {
-                        ...formData,
-                        groupId: id,
-                      };
-                      setGroupCode("");
-                      setFormData(updatedFormData);
-                      onUpdate(updatedFormData);
-                    } else if (name) {
-                      setNewGroup(name);
-                    }
-                  }}
-                />
-              )}
-            </Col>
-            <Col md={4}>
-              <InputGroup className="w-100 h-100">
-                <InputGroup.Text><FolderIcon size={18}/></InputGroup.Text>
-                <Form.Control
-                  className="h-100"
-                  type="text"
-                  placeholder={t("NewGeneralData.Group")}
-                  value={groupCode}
-                  onChange={(e) => setGroupCode(e.target.value)}
-                />
-              </InputGroup>
-            </Col>
-            <Col md={4}>
-              <Button
-                variant="outline-success"
-                onClick={handleCreateGroup}
-                disabled={!newGroup || !groupCode}
-                className="w-100 h-100"
-              >
-                <PlusIcon size={18} className="me-2"/>
-                {t("NewGeneralData.create_group")}
-              </Button>
-            </Col>
-          </Row>
+          </>)}
         </Col>
+        {typeof newGroup !== "undefined" && (<>
+          <Col md={4}>
+            <Form.Label>
+              <RequiredFieldLabel
+                label={t("NewGeneralData.Group")}
+                tooltipMessage={t("DetailFood.required")}
+              />
+            </Form.Label>
+            <InputGroup>
+              <InputGroup.Text><FolderIcon size={18}/></InputGroup.Text>
+              <Form.Control
+                type="text"
+                placeholder={t("NewGeneralData.Group")}
+                value={groupCode}
+                maxLength={1}
+                isInvalid={!groupCode || !/[a-z]/i.test(groupCode)}
+                onChange={(e) => setGroupCode(e.target.value)}
+              />
+              <Form.Control.Feedback type="invalid">
+                {!groupCode ? "Ingrese el código del grupo." : "Código del grupo debe ser una letra."}
+              </Form.Control.Feedback>
+            </InputGroup>
+          </Col>
+          <Col md={4}>
+            <Form.Label>{"⠀"}</Form.Label>
+            <Button
+              variant="outline-success"
+              onClick={handleCreateGroup}
+              disabled={!newGroup || !groupCode}
+              className="w-100"
+            >
+              <PlusIcon size={18} className="me-2"/>
+              {t("NewGeneralData.create_group")}
+            </Button>
+          </Col>
+        </>)}
       </Row>
 
       {/* Type Section */}
       <Row className="mb-3">
-        <Col>
-          <Form.Label>
-            <RequiredFieldLabel
-              label={t("DetailFood.label_type")}
-              tooltipMessage={t("DetailFood.required")}
+        <Col md={4}>
+          {types && (<>
+            <Form.Label>
+              <RequiredFieldLabel
+                label={t("DetailFood.label_type")}
+                tooltipMessage={t("DetailFood.required")}
+              />
+            </Form.Label>
+            <SelectorWithInput
+              options={types.map((type) => ({
+                id: type.id,
+                name: type.name,
+              }))}
+              newValueMaxLength={64}
+              selectedValue={searchTypeNameById(formData.typeId, types)}
+              placeholder={t("NewGeneralData.select_A")}
+              onSelect={(id, name) => {
+                if (id !== undefined) {
+                  const updatedFormData = {
+                    ...formData,
+                    typeId: id,
+                  };
+                  setTypeCode("");
+                  setFormData(updatedFormData);
+                  setNewType(undefined);
+                  onUpdate(updatedFormData);
+                } else if (name) {
+                  setNewType(name);
+                }
+              }}
+              onCustomOpen={() => setNewType("")}
             />
-          </Form.Label>
-          <Row>
-            <Col md={4}>
-              {types && (
-                <SelectorWithInput
-                  options={types.map((type) => ({
-                    id: type.id,
-                    name: type.name,
-                  }))}
-                  selectedValue={searchTypeNameById(formData.typeId, types)}
-                  placeholder={t("NewGeneralData.select_A")}
-                  onSelect={(id, name) => {
-                    if (id !== undefined) {
-                      const updatedFormData = {
-                        ...formData,
-                        typeId: id,
-                      };
-                      setTypeCode("");
-                      setFormData(updatedFormData);
-                      onUpdate(updatedFormData);
-                    } else if (name) {
-                      setNewType(name);
-                    }
-                  }}
-                />
-              )}
-            </Col>
-            <Col md={4}>
-              <InputGroup className="w-100 h-100">
-                <InputGroup.Text><TypeIcon size={18}/></InputGroup.Text>
-                <Form.Control
-                  type="text"
-                  placeholder={t("NewGeneralData.Type")}
-                  value={typeCode}
-                  onChange={(e) => setTypeCode(e.target.value)}
-                  className="h-100"
-                />
-              </InputGroup>
-            </Col>
-            <Col md={4}>
-              <Button
-                variant="outline-success"
-                onClick={handleCreateType}
-                disabled={!newType || !typeCode}
-                className="w-100 h-100"
-              >
-                <PlusIcon size={18} className="me-2"/>
-                {t("NewGeneralData.Create")}
-              </Button>
-            </Col>
-          </Row>
+          </>)}
         </Col>
+        {typeof newType !== "undefined" && (<>
+          <Col md={4}>
+            <Form.Label>
+              <RequiredFieldLabel
+                label={t("NewGeneralData.Type")}
+                tooltipMessage={t("DetailFood.required")}
+              />
+            </Form.Label>
+            <InputGroup>
+              <InputGroup.Text><TypeIcon size={18}/></InputGroup.Text>
+              <Form.Control
+                type="text"
+                placeholder={t("NewGeneralData.Type")}
+                value={typeCode}
+                maxLength={1}
+                isInvalid={!typeCode || !/[a-z]/i.test(typeCode)}
+                onChange={(e) => setTypeCode(e.target.value)}
+              />
+              <Form.Control.Feedback type="invalid">
+                {!typeCode ? "Ingrese el código del tipo." : "Código del tipo debe ser una letra."}
+              </Form.Control.Feedback>
+            </InputGroup>
+          </Col>
+          <Col md={4}>
+            <Form.Label>{"⠀"}</Form.Label>
+            <Button
+              variant="outline-success"
+              onClick={handleCreateType}
+              disabled={!newType || !typeCode}
+              className="w-100"
+            >
+              <PlusIcon size={18} className="me-2"/>
+              {t("NewGeneralData.Create")}
+            </Button>
+          </Col>
+        </>)}
       </Row>
 
       {/* Scientific Name Section */}
       <Row className="mb-3">
-        <Col>
-          <Form.Label>{t("NewGeneralData.name_scientist")}</Form.Label>
-          <Row>
-            <Col md={6}>
-              {scientificNames && (
-                <SelectorWithInput
-                  options={scientificNames.map((sname) => ({
-                    id: sname.id,
-                    name: sname.name,
-                  }))}
-                  selectedValue={searchScientificNameById(
-                    formData.scientificNameId,
-                    scientificNames
-                  )}
-                  placeholder={t("NewGeneralData.Select_scientific")}
-                  onSelect={(id, name) => {
-                    if (id !== undefined) {
-                      const updatedFormData = {
-                        ...formData,
-                        scientificNameId: id,
-                      };
-                      setFormData(updatedFormData);
-                      onUpdate(updatedFormData);
-                    } else if (name) {
-                      setNewScientificName(name);
-                    }
-                  }}
-                />
+        <Col md={6}>
+          {scientificNames && (<>
+            <Form.Label>{t("NewGeneralData.name_scientist")}</Form.Label>
+            <SelectorWithInput
+              options={scientificNames.map((sname) => ({
+                id: sname.id,
+                name: sname.name,
+              }))}
+              selectedValue={searchScientificNameById(
+                formData.scientificNameId,
+                scientificNames
               )}
-            </Col>
-            <Col>
-              <Button
-                variant="outline-success"
-                onClick={handleCreateScientificName}
-                disabled={!newScientificName}
-                className="w-100 h-100"
-              >
-                <PlusIcon size={18} className="me-2"/>
-                {t("NewGeneralData.Create_Scientific")}
-              </Button>
-            </Col>
-          </Row>
+              placeholder={t("NewGeneralData.Select_scientific")}
+              onSelect={(id, name) => {
+                if (id !== undefined) {
+                  const updatedFormData = {
+                    ...formData,
+                    scientificNameId: id,
+                  };
+                  setFormData(updatedFormData);
+                  onUpdate(updatedFormData);
+                } else if (name) {
+                  setNewScientificName(name);
+                }
+              }}
+            />
+          </>)}
+        </Col>
+        <Col>
+          <Form.Label>{"⠀"}</Form.Label>
+          <Button
+            variant="outline-success"
+            onClick={handleCreateScientificName}
+            disabled={!newScientificName}
+            className="w-100"
+          >
+            <PlusIcon size={18} className="me-2"/>
+            {t("NewGeneralData.Create_Scientific")}
+          </Button>
         </Col>
       </Row>
 
       {/* Subspecies Section */}
       <Row className="mb-3">
-        <Col>
-          <Form.Label>{t("NewGeneralData.Subspecies")}</Form.Label>
-          <Row>
-            <Col md={6}>
-              {subspecies && (
-                <SelectorWithInput
-                  options={subspecies.map((sname) => ({
-                    id: sname.id,
-                    name: sname.name,
-                  }))}
-                  selectedValue={searchSubspeciesNameById(
-                    formData.subspeciesId,
-                    subspecies
-                  )}
-                  placeholder={t("NewGeneralData.Select_subspecies")}
-                  onSelect={(id, name) => {
-                    if (id !== undefined) {
-                      const updatedFormData = {
-                        ...formData,
-                        subspeciesId: id,
-                      };
-                      setFormData(updatedFormData);
-                      onUpdate(updatedFormData);
-                    } else if (name) {
-                      setNewSubspecies(name);
-                    }
-                  }}
-                />
+        <Col md={6}>
+          {subspecies && (<>
+            <Form.Label>{t("NewGeneralData.Subspecies")}</Form.Label>
+            <SelectorWithInput
+              options={subspecies.map((sname) => ({
+                id: sname.id,
+                name: sname.name,
+              }))}
+              selectedValue={searchSubspeciesNameById(
+                formData.subspeciesId,
+                subspecies
               )}
-            </Col>
-            <Col>
-              <Button
-                variant="outline-success"
-                onClick={handleCreateSubspecies}
-                disabled={!newSubspecies}
-                className="w-100 h-100"
-              >
-                <PlusIcon size={18} className="me-2"/>
-                {t("NewGeneralData.Create_subspecies")}
-              </Button>
-            </Col>
-          </Row>
+              placeholder={t("NewGeneralData.Select_subspecies")}
+              onSelect={(id, name) => {
+                if (id !== undefined) {
+                  const updatedFormData = {
+                    ...formData,
+                    subspeciesId: id,
+                  };
+                  setFormData(updatedFormData);
+                  onUpdate(updatedFormData);
+                } else if (name) {
+                  setNewSubspecies(name);
+                }
+              }}
+            />
+          </>)}
+        </Col>
+        <Col>
+          <Form.Label>{"⠀"}</Form.Label>
+          <Button
+            variant="outline-success"
+            onClick={handleCreateSubspecies}
+            disabled={!newSubspecies}
+            className="w-100"
+          >
+            <PlusIcon size={18} className="me-2"/>
+            {t("NewGeneralData.Create_subspecies")}
+          </Button>
         </Col>
       </Row>
 
@@ -541,12 +567,15 @@ export default function NewGeneralData({
                 )}`}
               />
             </Form.Label>
-            {languages?.map((lang) => (
+            {languages?.map((lang, index) => (<>
               <Form.Control
                 key={lang.code}
                 type="text"
+                maxLength={200}
                 placeholder={`${t("NewGeneralData.name_com")} (${lang.code})`}
                 value={formData.commonName[lang.code] || ""}
+                isInvalid={lang.code === "es" && !formData.commonName[lang.code]}
+                style={{ marginTop: index > 0 ? "10px" : "" }}
                 onChange={(e) => {
                   const updatedFormData = {
                     ...formData,
@@ -559,7 +588,12 @@ export default function NewGeneralData({
                   onUpdate(updatedFormData);
                 }}
               />
-            ))}
+              {lang.code === "es" && (
+                <Form.Control.Feedback type="invalid">
+                  Ingrese el nombre en español.
+                </Form.Control.Feedback>)
+              }
+            </>))}
           </Form.Group>
         </Col>
       </Row>
@@ -569,12 +603,14 @@ export default function NewGeneralData({
         <Col md={12}>
           <Form.Group controlId="ingredients">
             <Form.Label>{t("NewGeneralData.Ingredients")}</Form.Label>
-            {languages?.map((lang) => (
+            {languages?.map((lang, index) => (
               <Form.Control
                 key={lang.code}
                 type="text"
+                maxLength={400}
                 placeholder={`${t("NewGeneralData.Ingredient")} (${lang.code})`}
                 value={formData.ingredients[lang.code] || ""}
+                style={{ marginTop: index > 0 ? "10px" : "" }}
                 onChange={(e) => {
                   const updatedFormData = {
                     ...formData,
