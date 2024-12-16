@@ -601,7 +601,7 @@ export default function AdminPage() {
         )}
 
         {view === "file" && (
-          <FoodsFromCsv/>
+          <FoodsFromCsv nutrientsInfo={nutrients}/>
         )}
       </div>
     </div>

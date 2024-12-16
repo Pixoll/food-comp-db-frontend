@@ -40,7 +40,7 @@ export default function Pagination({ currentPage, npage, onPageChange }: Paginat
     <nav>
       <ul className="pagination-table">
         <li className="page-item-table">
-          <a href="#" className="page-link" onClick={() => onPageChange(currentPage - 1)}>
+          <a className="page-link" onClick={() => onPageChange(currentPage - 1)}>
             {"<"}
           </a>
         </li>
@@ -48,7 +48,7 @@ export default function Pagination({ currentPage, npage, onPageChange }: Paginat
         {getPageNumbers().map((n, i) => (
           <li className={`page-item-table ${currentPage === n ? "active" : ""}`} key={i}>
             {typeof n === "number" ? (
-              <a href="#" className="page-link" onClick={() => onPageChange(n)}>
+              <a className="page-link" onClick={() => onPageChange(n)}>
                 {n}
               </a>
             ) : (
@@ -58,7 +58,7 @@ export default function Pagination({ currentPage, npage, onPageChange }: Paginat
         ))}
 
         <li className="page-item-table">
-          <a href="#" className="page-link" onClick={() => onPageChange(currentPage + 1)}>
+          <a className="page-link" onClick={() => onPageChange(currentPage + 1)}>
             {">"}
           </a>
         </li>

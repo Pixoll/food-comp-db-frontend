@@ -2,16 +2,15 @@ import { ChangeEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import XLSX from "xlsx";
 import { useAuth } from "../../context/AuthContext";
+import { AnyNutrient } from "../../hooks";
+import { Collection } from "../../utils/collection";
 import makeRequest from "../../utils/makeRequest";
 import FoodValidateData from "./FoodValidateData";
 import ReferenceValidated from "./ReferenceValidated";
-import { 
-  Container, 
+import {
   Row, 
   Col, 
-  Form, 
-  Button, 
-  Alert, 
+  Button,  
   Nav, 
   Tab 
 } from 'react-bootstrap';
@@ -70,12 +69,12 @@ export type Measurement = {
   id: `${number}`;
   min: number | null;
   max: number | null;
-  food_id: `${number}`;
   nutrient_id: number;
   average: number;
   deviation: number | null;
   sample_size: number | null;
   data_type: "analytic" | "calculated" | "assumed" | "borrowed";
+  referenceCodes: number[];
 };
 
 export type CSVFood = {
@@ -94,8 +93,11 @@ export type CSVFood = {
   langualCodes: Array<CSVValue<number>>;
   measurements: CSVMeasurement[];
 };
+type FoodsFromCsvProps = {
+  nutrientsInfo: Collection<string, AnyNutrient>;
+};
+export default function FoodsFromCsv({ nutrientsInfo }: FoodsFromCsvProps) {
 
-export default function FoodsFromCsv() {
   const { t } = useTranslation();
   const { state } = useAuth();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -224,7 +226,7 @@ export default function FoodsFromCsv() {
           <Tab.Content>
             <Tab.Pane eventKey="foods">
               {activeTab === "foods" && (
-                <FoodValidateData data={foodData} />
+                <FoodValidateData data={foodData} nutrientsInfo={nutrientsInfo} />
               )}
             </Tab.Pane>
             <Tab.Pane eventKey="references">
