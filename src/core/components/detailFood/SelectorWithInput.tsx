@@ -7,9 +7,16 @@ type SelectorWithInputProps = {
   placeholder: string;
   selectedValue: string | undefined;
   onSelect: (id: number | undefined, name: string) => void;
+  newValueMaxLength?: number;
 };
 
-export default function SelectorWithInput({ options, placeholder, selectedValue, onSelect }: SelectorWithInputProps) {
+export default function SelectorWithInput({
+  options,
+  placeholder,
+  selectedValue,
+  onSelect,
+  newValueMaxLength,
+}: SelectorWithInputProps) {
   const { t } = useTranslation();
   const [isActive, setIsActive] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -77,6 +84,7 @@ export default function SelectorWithInput({ options, placeholder, selectedValue,
         <div className="custom-option-input">
           <input
             type="text"
+            maxLength={newValueMaxLength}
             placeholder={"Escriba otro valor"}
             value={customOption}
             onChange={(e) => setCustomOption(e.target.value)}

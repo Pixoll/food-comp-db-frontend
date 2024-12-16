@@ -76,6 +76,7 @@ export default function NewAuthors({ authorIds, newAuthors, data, updateAuthors 
               <Col>
                 <SelectorWithInput
                   options={data}
+                  newValueMaxLength={200}
                   placeholder={t("NewAuthors.author")}
                   selectedValue={selectedAuthors[index]?.name || ""}
                   onSelect={(id, name) => handleSelectAuthor(index, id, name)}

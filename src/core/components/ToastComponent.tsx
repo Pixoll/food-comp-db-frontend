@@ -146,9 +146,3 @@ export const ToastComponent: React.FC<ToastComponentProps> = ({
 };
 
 export default ToastComponent;
-
-const styles = `
-.toast {
-  font-size: 1.1rem !important;
-}
-`;

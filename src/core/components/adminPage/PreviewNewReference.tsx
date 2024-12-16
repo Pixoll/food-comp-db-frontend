@@ -104,6 +104,7 @@ export default function PreviewNewReference({
           message: "Se creo exitosamente",
           title: "Éxito",
           type: "Success",
+          position: "middle-center",
         });
         forceReload();
         handleResetReferenceForm(data.code + 1);
@@ -112,7 +113,8 @@ export default function PreviewNewReference({
         addToast({
           message: error.response?.data?.message ?? error.message ?? "Error",
           title: "Fallo",
-          type: "Success",
+          type: "Danger",
+          position: "middle-center",
         });
       }
     );

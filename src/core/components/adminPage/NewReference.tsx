@@ -1,5 +1,5 @@
 import { Book, Calendar, FileText, Globe, Info, MapPin, TagIcon } from "lucide-react";
-import { useState } from "react";
+import { FocusEvent, useState } from "react";
 import { Card, Col, Form, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { City } from "../../hooks";
@@ -116,6 +116,14 @@ export default function NewReference({
     }
   };
 
+  const isTypeNotArticleOrWebsite = type !== "article" && type !== "website";
+  const isYearDefined = typeof referenceForm.year !== "undefined";
+  const isYearBelow1 = (referenceForm.year ?? 0) < 1;
+  const isYearOverCurrent = (referenceForm.year ?? 0) > new Date().getUTCFullYear();
+  const isYearNotInteger = !Number.isSafeInteger(referenceForm.year ?? 0);
+
+  const isTypeWebsiteOrBook = type === "website" || type === "book";
+
   return (
     <Card className="mt-4 shadow-sm">
       <Card.Header className="card-header">
@@ -172,10 +180,15 @@ export default function NewReference({
                 </Form.Label>
                 <Form.Control
                   type="text"
+                  maxLength={300}
+                  isInvalid={referenceForm.title.length === 0}
                   placeholder={t("NewReference.Enter_t")}
                   value={referenceForm.title}
                   onChange={(e) => handleInputChange("title", e.target.value)}
                 />
+                <Form.Control.Feedback type="invalid">
+                  Ingrese el título.
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Row>
@@ -189,6 +202,7 @@ export default function NewReference({
                 </Form.Label>
                 <SelectorWithInput
                   options={cities}
+                  newValueMaxLength={100}
                   placeholder={t("NewReference.Select")}
                   selectedValue={
                     searchCityNameByID(referenceForm.cityId, cities) || newCity
@@ -209,22 +223,28 @@ export default function NewReference({
                 <Form.Label className="d-flex align-items-center">
                   <Calendar className="me-2"/>
                   {t("NewReference.Year")}
-                  {type !== "article" && type !== "website" && (
+                  {isTypeNotArticleOrWebsite && (
                     <RequiredFieldLabel tooltipMessage={t("NewReference.required")}/>
                   )}
                 </Form.Label>
                 <Form.Control
                   type="number"
+                  isInvalid={
+                    (isYearDefined || isTypeNotArticleOrWebsite)
+                    && (isYearBelow1 || isYearOverCurrent || isYearNotInteger)
+                  }
                   placeholder={t("NewReference.Enter_y")}
-                  value={referenceForm.year || ""}
-                  onChange={(e) => {
-                    if (e.target.value.length <= 4) {
-                      handleInputChange("year", +e.target.value);
-                    }
-                  }}
-                  min="1000"
-                  max="9999"
+                  value={referenceForm.year ?? ""}
+                  onChange={(e) =>
+                    handleInputChange("year", e.target.value.length > 0 ? +e.target.value : undefined)
+                  }
                 />
+                <Form.Control.Feedback type="invalid">
+                  {!isYearDefined ? "Ingrese el año."
+                      : isYearBelow1 ? "Año debe ser al menos 1."
+                        : isYearOverCurrent ? "Año debe ser menor o igual al actual."
+                          : "Año debe ser un entero."}
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Row>
@@ -235,16 +255,21 @@ export default function NewReference({
                 <Form.Label className="d-flex align-items-center">
                   <Info className="me-2"/>
                   {t("NewReference.Other")}
-                  {(type === "website" || type === "book") && (
+                  {isTypeWebsiteOrBook && (
                     <RequiredFieldLabel tooltipMessage={t("NewReference.required")}/>
                   )}
                 </Form.Label>
                 <Form.Control
                   type="text"
+                  maxLength={100}
+                  isInvalid={isTypeWebsiteOrBook && !referenceForm.other?.length}
                   placeholder={t("NewReference.Additional")}
                   value={referenceForm.other || ""}
                   onChange={(e) => handleInputChange("other", e.target.value)}
                 />
+                <Form.Control.Feedback type="invalid">
+                  Ingrese la información adicional.
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Row>

@@ -133,6 +133,28 @@ export default function NewArticleByReference({ data, dataForm, updateNewArticle
     updateNewArticle(updatedArticle);
   };
 
+  const isVolumeUndefined = typeof selectedVolume?.volume === "undefined";
+  const isVolumeBelow1 = (selectedVolume?.volume ?? 0) < 1;
+  const isVolumeNotInteger = !Number.isSafeInteger(selectedVolume?.volume ?? 0);
+
+  const isIssueUndefined = typeof selectedVolume?.issue === "undefined";
+  const isIssueBelow1 = (selectedVolume?.issue ?? 0) < 1;
+  const isIssueNotInteger = !Number.isSafeInteger(selectedVolume?.issue ?? 0);
+
+  const isYearUndefined = typeof selectedVolume?.year === "undefined";
+  const isYearBelow1 = (selectedVolume?.year ?? 0) < 1;
+  const isYearOverCurrent = (selectedVolume?.year ?? 0) > new Date().getUTCFullYear();
+  const isYearNotInteger = !Number.isSafeInteger(selectedVolume?.year ?? 0);
+
+  const isPageStartUndefined = typeof selectedArticle?.pageStart === "undefined";
+  const isPageStartBelow1 = (selectedArticle?.pageStart ?? 0) < 1;
+  const isPageStartNotInteger = !Number.isSafeInteger(selectedArticle?.pageStart ?? 0);
+
+  const isPageEndUndefined = typeof selectedArticle?.pageEnd === "undefined";
+  const isPageEndBelow1 = (selectedArticle?.pageEnd ?? 0) < 1;
+  const isPageEndBelowPageStart = (selectedArticle?.pageEnd ?? 1) <= (selectedArticle?.pageStart ?? 1);
+  const isPageEndNotInteger = !Number.isSafeInteger(selectedArticle?.pageEnd ?? 0);
+
   return (
     <Container className="p-4">
       <Card className="mb-4">
@@ -146,6 +168,8 @@ export default function NewArticleByReference({ data, dataForm, updateNewArticle
               <Col md={8}>
                 <Form.Control
                   type="text"
+                  maxLength={100}
+                  isInvalid={!newJournalName?.length}
                   placeholder="Agregar nueva revista"
                   value={newJournalName || ""}
                   className="mb-2"
@@ -157,6 +181,9 @@ export default function NewArticleByReference({ data, dataForm, updateNewArticle
                     setSelectedArticle(undefined);
                   }}
                 />
+                <Form.Control.Feedback type="invalid">
+                  Ingrese el nombre de la revista.
+                </Form.Control.Feedback>
               </Col>
               <Col md={4}>
                 <Button
@@ -250,35 +277,54 @@ export default function NewArticleByReference({ data, dataForm, updateNewArticle
                 <Col md={3}>
                   <Form.Control
                     type="number"
+                    isInvalid={isVolumeUndefined || isVolumeBelow1 || isVolumeNotInteger}
                     placeholder="Volumen"
-                    value={selectedVolume?.volume || ""}
+                    value={selectedVolume?.volume ?? ""}
                     onChange={(e) =>
-                      handleUpdateVolume("volume", parseInt(e.target.value, 10))
+                      handleUpdateVolume("volume", e.target.value.length > 0 ? +e.target.value : undefined)
                     }
                     className="mb-2"
                   />
+                  <Form.Control.Feedback type="invalid">
+                    {isVolumeUndefined ? "Ingrese el volúmen."
+                      : isVolumeBelow1 ? "Volúmen debe ser al menos 1."
+                        : "Volúmen debe ser un entero."}
+                  </Form.Control.Feedback>
                 </Col>
                 <Col md={3}>
                   <Form.Control
                     type="number"
+                    isInvalid={isIssueUndefined || isIssueBelow1 || isIssueNotInteger}
                     placeholder="Número (Issue)"
-                    value={selectedVolume?.issue || ""}
+                    value={selectedVolume?.issue ?? ""}
                     onChange={(e) =>
-                      handleUpdateVolume("issue", parseInt(e.target.value, 10))
+                      handleUpdateVolume("issue", e.target.value.length > 0 ? +e.target.value : undefined)
                     }
                     className="mb-2"
                   />
+                  <Form.Control.Feedback type="invalid">
+                    {isIssueUndefined ? "Ingrese el número."
+                      : isIssueBelow1 ? "Número debe ser al menos 1."
+                        : "Número debe ser un entero."}
+                  </Form.Control.Feedback>
                 </Col>
                 <Col md={3}>
                   <Form.Control
                     type="number"
+                    isInvalid={isYearUndefined || isYearBelow1 || isYearOverCurrent || isYearNotInteger}
                     placeholder="Año"
-                    value={selectedVolume?.year || ""}
+                    value={selectedVolume?.year ?? ""}
                     onChange={(e) =>
-                      handleUpdateVolume("year", parseInt(e.target.value, 10))
+                      handleUpdateVolume("year", e.target.value.length > 0 ? +e.target.value : undefined)
                     }
                     className="mb-2"
                   />
+                  <Form.Control.Feedback type="invalid">
+                    {isYearUndefined ? "Ingrese el año."
+                      : isYearBelow1 ? "Año debe ser al menos 1."
+                        : isYearOverCurrent ? "Año debe ser menor o igual al actual."
+                          : "Año debe ser un entero."}
+                  </Form.Control.Feedback>
                 </Col>
                 <Col md={3}>
                   <Button
@@ -307,24 +353,37 @@ export default function NewArticleByReference({ data, dataForm, updateNewArticle
               <Col md={4}>
                 <Form.Control
                   type="number"
+                  isInvalid={isPageStartUndefined || isPageStartBelow1 || isPageStartNotInteger}
                   placeholder="Página de inicio"
-                  value={selectedArticle?.pageStart || ""}
+                  value={selectedArticle?.pageStart ?? ""}
                   onChange={(e) =>
                     handleUpdateArticle("pageStart", parseInt(e.target.value, 10))
                   }
                   className="mb-2"
                 />
+                <Form.Control.Feedback type="invalid">
+                  {isPageStartUndefined ? "Ingrese la página de inicio."
+                    : isPageStartBelow1 ? "Página de inicio debe ser al menos 1."
+                      : "Página de inicio debe ser un entero."}
+                </Form.Control.Feedback>
               </Col>
               <Col md={4}>
                 <Form.Control
                   type="number"
+                  isInvalid={isPageEndUndefined || isPageEndBelow1 || isPageEndBelowPageStart || isPageEndNotInteger}
                   placeholder="Página final"
-                  value={selectedArticle?.pageEnd || ""}
+                  value={selectedArticle?.pageEnd ?? ""}
                   onChange={(e) =>
                     handleUpdateArticle("pageEnd", parseInt(e.target.value, 10))
                   }
                   className="mb-2"
                 />
+                <Form.Control.Feedback type="invalid">
+                  {isPageEndUndefined ? "Ingrese la página final."
+                    : isPageEndBelow1 ? "Página final debe ser al menos 1."
+                      : isPageEndBelowPageStart ? "Página final debe ser mayor a página de inicio."
+                        : "Página final debe ser un entero."}
+                </Form.Control.Feedback>
               </Col>
             </Row>
           </Card.Body>
