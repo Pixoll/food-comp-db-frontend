@@ -31,7 +31,7 @@ export type Reference = {
   code: number;
   ref_article_id: number | null;
   ref_city_id: number | null;
-}
+};
 
 export type CSVValue<T> = {
   parsed: T | null;
@@ -40,7 +40,10 @@ export type CSVValue<T> = {
   old?: T | null;
 };
 
-export type CSVStringTranslation = Record<"es" | "en" | "pt", CSVValue<string> | null>;
+export type CSVStringTranslation = Record<
+  "es" | "en" | "pt",
+  CSVValue<string> | null
+>;
 
 export type CSVMeasurement = {
   flags: number;
@@ -88,7 +91,12 @@ export default function FoodsFromCsv() {
   const { state } = useAuth();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [foodData, setFoodData] = useState<CSVFood[] | null>(null);
-  const [referencesData, setReferencesData] = useState<CSVReference[] | null>(null);
+  const [referencesData, setReferencesData] = useState<CSVReference[] | null>(
+    null
+  );
+  const [activeTab, setActiveTab] = useState<"foods" | "references">("foods");
+  const [uploadSuccess, setUploadSuccess] = useState(false);
+
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFile(e.target.files[0]);
@@ -107,12 +115,14 @@ export default function FoodsFromCsv() {
       cellHTML: false,
     });
 
-    const csv = await Promise.all(Object.values(wb.Sheets).map(ws =>
-      XLSX.utils.sheet_to_csv(ws, {
-        blankrows: false,
-        strip: true,
-      })
-    ));
+    const csv = await Promise.all(
+      Object.values(wb.Sheets).map((ws) =>
+        XLSX.utils.sheet_to_csv(ws, {
+          blankrows: false,
+          strip: true,
+        })
+      )
+    );
 
     const payload = {
       foods: csv[0],
@@ -129,6 +139,7 @@ export default function FoodsFromCsv() {
       (response) => {
         setFoodData(response.data.foods);
         setReferencesData(response.data.references);
+        setUploadSuccess(true);
         console.log(response.data);
       },
       (error) => {
@@ -136,6 +147,13 @@ export default function FoodsFromCsv() {
         alert(t("AdminPage.uploadError"));
       }
     );
+  };
+
+  const handleReset = () => {
+    setSelectedFile(null);
+    setFoodData(null);
+    setReferencesData(null);
+    setUploadSuccess(false);
   };
 
   return (
@@ -149,29 +167,76 @@ export default function FoodsFromCsv() {
         onChange={(e) => handleFileChange(e)}
       />
       <label htmlFor="fileInput" className="file-input-label marginButtonRight">
-        Seleccionar archivo
+        Añadir un archivo
       </label>
       {selectedFile && <p className="file-name">{selectedFile.name}</p>}
       <p className="helper-text">
         {t("AdminPage.upload")} <strong>Excel</strong> {t("AdminPage.or")}{" "}
         <strong>CSV</strong> {t("AdminPage.point")}
       </p>
+
       {selectedFile && (
         <div className="button-container">
-          <button className="button marginButton" onClick={processData}>
+          <button
+            className="button marginButton bg-green-500 text-white px-4 py-2 hover:bg-green-600"
+            onClick={processData}
+          >
             {t("AdminPage.process")}
           </button>
         </div>
       )}
-      {foodData && foodData.length > 0 && (
+      
+      {uploadSuccess && (
+        <div className="button-container">
+          <button
+            className="button bg-gray-500 text-white px-4 py-2 hover:bg-gray-600"
+            onClick={handleReset}
+          >
+            Subir otro archivo
+          </button>
+        </div>
+      )}
+      {foodData &&
+        foodData.length > 0 &&
+        referencesData &&
+        referencesData.length > 0 && (
+          <div className="tabs flex mb-4">
+            <button
+              className={`px-4 py-2 mr-2 ${
+                activeTab === "foods"
+                  ? "bg-blue-500 text-white hover:bg-blue-600"
+                  : "bg-gray-200 hover:bg-gray-300"
+              }`}
+              onClick={() => setActiveTab("foods")}
+            >
+              Alimentos
+            </button>
+            <button
+              className={`px-4 py-2 ${
+                activeTab === "references"
+                  ? "bg-blue-500 text-white hover:bg-blue-600"
+                  : "bg-gray-200 hover:bg-gray-300"
+              }`}
+              onClick={() => setActiveTab("references")}
+            >
+              Referencias
+            </button>
+          </div>
+        )}
+
+      {activeTab === "foods" && foodData && foodData.length > 0 && (
         <div>
-          <FoodValidateData data={foodData}/>
+          <FoodValidateData data={foodData} />
         </div>
       )}
 
-      {referencesData && referencesData.length > 0 && (
-        <ReferenceValidated data={referencesData}/>
-      )}
+      {activeTab === "references" &&
+        referencesData &&
+        referencesData.length > 0 && (
+          <div>
+            <ReferenceValidated data={referencesData} />
+          </div>
+        )}
     </div>
   );
 }
