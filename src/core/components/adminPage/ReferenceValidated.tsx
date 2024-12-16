@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Alert, Button, Card, Container, Table } from "react-bootstrap";
-import { useTranslation } from "react-i18next";
 import { City, Journal, Author, Reference } from "../../hooks";
 import Pagination from "../search/Pagination";
 import CSVReferenceDisplay from "./CSVReferenceDisplay";
@@ -13,6 +12,7 @@ type ReferenceValidatedProps = {
   authorsInfo: Author[];
   journalsInfo: Journal[];
   referencesInfo: Reference[];
+  handleView: (change:boolean) => void;
 };
 
 export default function ReferenceValidated({
@@ -21,11 +21,12 @@ export default function ReferenceValidated({
   authorsInfo,
   journalsInfo,
   referencesInfo,
+  handleView
 }: ReferenceValidatedProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 7;
   const [filteredData, setFilteredData] = useState(data);
-  const { t } = useTranslation();
+
   const npage = Math.ceil(filteredData.length / recordsPerPage);
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
@@ -40,7 +41,10 @@ export default function ReferenceValidated({
       setCurrentPage(page);
     }
   };
-
+  const handleReferences = () =>{
+    console.log("Se ha enviado las referencias") 
+    handleView(false)
+  }
   const [view, setView] = useState("list");
   const [selectedReference, setSelectedReference] =
     useState<CSVReference | null>(null);
@@ -138,6 +142,11 @@ export default function ReferenceValidated({
           </Card.Body>
         </Card>
       )}
+    <Container>
+      <button className="button-form-of-food" onClick={handleReferences}>
+        Enviar
+      </button>
+      </Container>
     </Container>
   );
 }

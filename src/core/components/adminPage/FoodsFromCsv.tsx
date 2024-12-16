@@ -122,8 +122,11 @@ export default function FoodsFromCsv({
   const [referencesData, setReferencesData] = useState<CSVReference[] | null>(
     null
   );
-  const [activeTab, setActiveTab] = useState<"foods" | "references">("foods");
+  const [activeTab, setActiveTab] = useState<"foods" | "references">("references");
   const [uploadSuccess, setUploadSuccess] = useState(false);
+
+  const [disableTabFood, setDisableTabFood] = useState(true)
+  const [disableTabReferences, setDisableTabReferences] = useState(false)
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files && e.target.files.length > 0) {
@@ -176,7 +179,7 @@ export default function FoodsFromCsv({
       }
     );
   };
-  console.log(referencesData)
+
   const handleReset = () => {
     setSelectedFile(null);
     setFoodData(null);
@@ -222,11 +225,11 @@ export default function FoodsFromCsv({
           onSelect={(k) => setActiveTab(k as "foods" | "references")}
         >
           <Nav variant="tabs" className="mb-3">
-            <Nav.Item>
-              <Nav.Link eventKey="foods">Alimentos</Nav.Link>
+          <Nav.Item >
+              <Nav.Link disabled = {disableTabReferences} eventKey="references">Referencias</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="references">Referencias</Nav.Link>
+              <Nav.Link disabled = {disableTabFood} eventKey="foods">Alimentos</Nav.Link>
             </Nav.Item>
           </Nav>
           <Tab.Content>
@@ -240,6 +243,7 @@ export default function FoodsFromCsv({
                   scientificNamesInfo={scientificNamesInfo}
                   subspeciesNamesInfo={subspeciesNamesInfo}
                   typesNamesInfo={typesNamesInfo}
+                  handleView={setDisableTabReferences}
                 />
               )}
             </Tab.Pane>
@@ -251,6 +255,7 @@ export default function FoodsFromCsv({
                 citiesInfo={citiesInfo}
                 journalsInfo={journalsInfo}
                 referencesInfo={referencesInfo}
+                handleView={setDisableTabFood}
                  />
               )}
             </Tab.Pane>

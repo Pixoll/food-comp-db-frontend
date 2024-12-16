@@ -12,6 +12,7 @@ import {
   Subspecies,
 } from "../../hooks";
 import { CSVFood } from "./FoodsFromCsv";
+import { Container } from "react-bootstrap";
 
 type FoodValidateDataProps = {
   data: CSVFood[];
@@ -21,6 +22,7 @@ type FoodValidateDataProps = {
   subspeciesNamesInfo: Collection<number, Subspecies>;
   typesNamesInfo: Collection<number, Type>;
   groupsNamesInfo: Collection<number, Group>;
+  handleView: (change:boolean) => void;
 };
 
 export default function FoodValidateData({
@@ -30,7 +32,8 @@ export default function FoodValidateData({
   scientificNamesInfo,
   subspeciesNamesInfo,
   typesNamesInfo,
-  groupsNamesInfo
+  groupsNamesInfo,
+  handleView
 }: FoodValidateDataProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 7;
@@ -50,10 +53,12 @@ export default function FoodValidateData({
       setCurrentPage(page);
     }
   };
-
   const [view, setView] = useState("list");
   const [selectedFood, setSelectedFood] = useState<CSVFood | null>(null);
-
+  const handleFoods = () =>{
+    console.log("Se ha enviado las referencias") 
+    handleView(false)
+  }
   return (
     <div className="food-list">
       {view === "list" && (
@@ -132,6 +137,11 @@ export default function FoodValidateData({
           </button>
         </div>
       )}
+      <Container>
+      <button className="button-form-of-food" onClick={handleFoods}>
+        Enviar
+      </button>
+      </Container>
     </div>
   );
 }
