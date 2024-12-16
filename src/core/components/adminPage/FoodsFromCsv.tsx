@@ -5,7 +5,16 @@ import { useAuth } from "../../context/AuthContext";
 import makeRequest from "../../utils/makeRequest";
 import FoodValidateData from "./FoodValidateData";
 import ReferenceValidated from "./ReferenceValidated";
-
+import { 
+  Container, 
+  Row, 
+  Col, 
+  Form, 
+  Button, 
+  Alert, 
+  Nav, 
+  Tab 
+} from 'react-bootstrap';
 export type CSVReference = {
   flags: number;
   code: CSVValue<number>;
@@ -148,9 +157,7 @@ export default function FoodsFromCsv() {
       }
     );
   };
-  const handlePostConfirm = () =>{
-    
-  }
+
   const handleReset = () => {
     setSelectedFile(null);
     setFoodData(null);
@@ -176,69 +183,58 @@ export default function FoodsFromCsv() {
         {t("AdminPage.upload")} <strong>Excel</strong> {t("AdminPage.or")}{" "}
         <strong>CSV</strong> {t("AdminPage.point")}
       </p>
-
-      {selectedFile && (
-        <div className="button-container">
-          <button
-            className="button marginButton bg-green-500 text-white px-4 py-2 hover:bg-green-600"
-            onClick={processData}
-          >
-            {t("AdminPage.process")}
-          </button>
-        </div>
-      )}
-      
-      {uploadSuccess && (
-        <div className="button-container">
-          <button
-            className="button bg-gray-500 text-white px-4 py-2 hover:bg-gray-600"
-            onClick={handleReset}
-          >
-            Subir otro archivo
-          </button>
-        </div>
-      )}
-      {foodData &&
-        foodData.length > 0 &&
-        referencesData &&
-        referencesData.length > 0 && (
-          <div className="tabs flex mb-4">
-            <button
-              className={`px-4 py-2 mr-2 ${
-                activeTab === "foods"
-                  ? "bg-blue-500 text-white hover:bg-blue-600"
-                  : "bg-gray-200 hover:bg-gray-300"
-              }`}
-              onClick={() => setActiveTab("foods")}
+      <Row className="mb-3">
+        <Col>
+          {selectedFile && !uploadSuccess && (
+            <Button
+              variant="success"
+              onClick={processData}
+              className="me-2"
             >
-              Alimentos
-            </button>
-            <button
-              className={`px-4 py-2 ${
-                activeTab === "references"
-                  ? "bg-blue-500 text-white hover:bg-blue-600"
-                  : "bg-gray-200 hover:bg-gray-300"
-              }`}
-              onClick={() => setActiveTab("references")}
+              {t("AdminPage.process")}
+            </Button>
+          )}
+          {uploadSuccess && (
+            <Button
+              variant="secondary"
+              onClick={handleReset}
             >
-              Referencias
-            </button>
-          </div>
-        )}
-
-      {activeTab === "foods" && foodData && foodData.length > 0 && (
-        <div>
-          <FoodValidateData data={foodData} />
-        </div>
+              Cargar uno nuevo
+            </Button>
+          )}
+        </Col>
+      </Row>
+      {uploadSuccess && foodData && referencesData && (
+        <Tab.Container
+          activeKey={activeTab}
+          onSelect={(k) => setActiveTab(k as "foods" | "references")}
+        >
+          <Nav variant="tabs" className="mb-3">
+            <Nav.Item>
+              <Nav.Link eventKey="foods">
+                Alimentos
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="references">
+                Referencias
+              </Nav.Link>
+            </Nav.Item>
+          </Nav>
+          <Tab.Content>
+            <Tab.Pane eventKey="foods">
+              {activeTab === "foods" && (
+                <FoodValidateData data={foodData} />
+              )}
+            </Tab.Pane>
+            <Tab.Pane eventKey="references">
+              {activeTab === "references" && (
+                <ReferenceValidated data={referencesData} />
+              )}
+            </Tab.Pane>
+          </Tab.Content>
+        </Tab.Container>
       )}
-
-      {activeTab === "references" &&
-        referencesData &&
-        referencesData.length > 0 && (
-          <div>
-            <ReferenceValidated data={referencesData} />
-          </div>
-        )}
     </div>
   );
 }
