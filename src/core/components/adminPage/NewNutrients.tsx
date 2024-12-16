@@ -48,7 +48,8 @@ export default function NewNutrients({
   };
 
   const isValueDefined = <K extends keyof NutrientMeasurementForm>(key: K) => {
-    return typeof formData?.[key] !== "undefined";
+    const value = formData?.[key];
+    return typeof value !== "undefined" && (typeof value === "string" ? value !== "" : true);
   };
   const isValueLessThan = <K extends keyof NutrientMeasurementFormOnlyNumbers>(key: K, comp: number) => {
     return (formData?.[key] ?? 0) < comp;
