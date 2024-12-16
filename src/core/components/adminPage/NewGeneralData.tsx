@@ -313,6 +313,7 @@ export default function NewGeneralData({
                 onChange={handleInputChange}
                 placeholder={t("NewGeneralData.Observation")}
                 rows={3}
+                style={{ maxHeight: "160px" }}
               />
             </InputGroup>
           </Form.Group>
