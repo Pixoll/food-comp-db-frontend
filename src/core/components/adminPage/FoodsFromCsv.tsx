@@ -148,7 +148,9 @@ export default function FoodsFromCsv() {
       }
     );
   };
-
+  const handlePostConfirm = () =>{
+    
+  }
   const handleReset = () => {
     setSelectedFile(null);
     setFoodData(null);

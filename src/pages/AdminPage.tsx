@@ -421,6 +421,9 @@ export default function AdminPage() {
             nutrientValueForm={formData.nutrientsValueForm}
             nameAndIdNutrients={nameAndIdNutrients}
             onSelectReferenceForNutrients={handleReferences}
+            cities={cities || []}
+            authors={authors || []}
+            journals={journals || []}
           />
         );
       case 9:

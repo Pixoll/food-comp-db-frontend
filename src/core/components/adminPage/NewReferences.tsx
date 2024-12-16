@@ -1,6 +1,11 @@
 import { PlusCircle } from "lucide-react";
 import { useState } from "react";
+import { useFetch ,FetchStatus } from "../../hooks";
+import { City, Author, Journal } from "../../hooks";
+import qs from "qs";
+import { SearchBox } from "../search";
 import { Button, Card, Col, Row } from "react-bootstrap";
+import { Collection } from "../../utils/collection";
 import {
   getNutrientNameById,
   NutrientMeasurementForm,
@@ -12,11 +17,15 @@ import { Reference } from "../../hooks";
 import Pagination from "../search/Pagination";
 import ModalReferences from "./ModalReferences";
 
+
 type NewReferencesProps = {
   references: Reference[];
   nutrientValueForm: NutrientsValueForm;
   nameAndIdNutrients: NutrientSummary[];
   onSelectReferenceForNutrients: (updatedForm: NutrientsValueForm) => void;
+  cities: City[];
+  authors: Author[];
+  journals: Journal[];
 };
 
 type NutrientConvert = {
@@ -37,24 +46,71 @@ const hasValidData = <T extends NutrientMeasurementForm>(
     typeof nutrient.dataType !== "undefined"
   );
 };
+type Filters = {
+  nameTittle: string;
+  citiesFilter: Set<string>;
+  authorsFilter: Set<string>;
+  journalsFilter: Set<string>;
+};
 
 export default function NewReferences({
   references,
   nutrientValueForm,
   nameAndIdNutrients,
   onSelectReferenceForNutrients,
+  cities,
+  authors,
+  journals,
 }: NewReferencesProps) {
+  const [selectedFilters, setSelectedFilters] = useState<Filters>({
+    nameTittle: "",
+    citiesFilter: new Set(),
+    authorsFilter: new Set(),
+    journalsFilter: new Set(),
+  });
+
+
+  const filters = {
+    title: selectedFilters.nameTittle,
+    author: Array.from(selectedFilters.authorsFilter),
+    journal: Array.from(selectedFilters.journalsFilter),
+    city: Array.from(selectedFilters.citiesFilter),
+  };
+
+  const queryString = qs.stringify(filters, {
+    arrayFormat: "repeat",
+    skipNulls: true,
+  });
+  
+  const referencesResult = useFetch<Reference[]>(`/references?${queryString}`);
+  const filteredReferences  = referencesResult.status === FetchStatus.Success ? referencesResult.data : [];
+
+  const handleFilterChange = (
+    filterKey: keyof typeof selectedFilters,
+    values: string[]
+  ) => {
+    setSelectedFilters((prevFilters) => ({
+      ...prevFilters,
+      [filterKey]: new Set(values),
+    }));
+    setCurrentPage(1)
+  };
+
   const [currentPage, setCurrentPage] = useState(1);
 
-  const totalItems = references.length;
+  const totalItems = filteredReferences.length;
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
 
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-  const currentReferences = references.slice(startIndex, endIndex);
+  const currentReferences = filteredReferences.slice(startIndex, endIndex);
 
-  const [modalsState, setModalsState] = useState<{ [key: number]: boolean }>({});
-  const [selectedReferenceIndex, setSelectedReferenceIndex] = useState<number | null>(null);
+  const [modalsState, setModalsState] = useState<{ [key: number]: boolean }>(
+    {}
+  );
+  const [selectedReferenceIndex, setSelectedReferenceIndex] = useState<
+    number | null
+  >(null);
 
   const convert = (): NutrientConvert[] => {
     const nutrientsConvert: NutrientConvert[] = [];
@@ -128,7 +184,7 @@ export default function NewReferences({
         nutrientsArray: (
           | NutrientMeasurementForm
           | NutrientMeasurementWithComponentsForm
-          )[]
+        )[]
       ) => {
         nutrientsArray.forEach((nutrient) => {
           if (ids.includes(nutrient.nutrientId)) {
@@ -146,7 +202,7 @@ export default function NewReferences({
             const components = nutrient.components as (
               | NutrientMeasurementForm
               | NutrientMeasurementWithComponentsForm
-              )[];
+            )[];
             updateNutrientReferences(components);
           }
         });
@@ -169,6 +225,70 @@ export default function NewReferences({
   };
   return (
     <div className="references-container space-y-4 py-4">
+      <Row className="g-3 align-items-center">
+        <Col md={3}>
+          <input
+            className="input-name"
+            type="text"
+            placeholder="Nombre de autor"
+            value={selectedFilters.nameTittle}
+            onChange={(e) =>
+              setSelectedFilters((prev) => ({
+                ...prev,
+                nameTittle: e.target.value,
+              }))
+            }
+          />
+        </Col>
+
+        <Col md={3}>
+          <SearchBox
+            filterOptions={
+              new Collection(
+                Array.from(cities.values()).map((city) => [
+                  city.id.toString(),
+                  city.name,
+                ])
+              )
+            }
+            onChange={(values) => handleFilterChange("citiesFilter", values)}
+            single={false}
+            selectedOptions={Array.from(selectedFilters.citiesFilter)}
+          />
+        </Col>
+
+        <Col md={3}>
+          <SearchBox
+            filterOptions={
+              new Collection(
+                Array.from(journals.values()).map((journal) => [
+                  journal.id.toString(),
+                  journal.name,
+                ])
+              )
+            }
+            onChange={(values) => handleFilterChange("journalsFilter", values)}
+            single={false}
+            selectedOptions={Array.from(selectedFilters.journalsFilter)}
+          />
+        </Col>
+
+        <Col md={3}>
+          <SearchBox
+            filterOptions={
+              new Collection(
+                Array.from(authors.values()).map((author) => [
+                  author.id.toString(),
+                  author.name,
+                ])
+              )
+            }
+            onChange={(values) => handleFilterChange("authorsFilter", values)}
+            single={false}
+            selectedOptions={Array.from(selectedFilters.authorsFilter)}
+          />
+        </Col>
+      </Row>
       {currentReferences.map((ref, index) => (
         <Card
           key={ref.code}
@@ -230,7 +350,7 @@ export default function NewReferences({
                 onClick={() => handleShowModal(index)}
               >
                 <div className="text-center">
-                  <PlusCircle className="mx-auto mb-2" size={24}/>
+                  <PlusCircle className="mx-auto mb-2" size={24} />
                   <span className="d-block">Agregar</span>
                 </div>
               </Button>
@@ -256,4 +376,4 @@ export default function NewReferences({
       />
     </div>
   );
-};
+}
