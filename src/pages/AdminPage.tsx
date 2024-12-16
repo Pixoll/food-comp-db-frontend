@@ -172,7 +172,15 @@ export default function AdminPage() {
       },
     },
   });
-  const { references, authors, cities, journals, journalVolumes, articles, forceReload } = useReferences();
+  const {
+    references,
+    authors,
+    cities,
+    journals,
+    journalVolumes,
+    articles,
+    forceReload,
+  } = useReferences();
 
   const [referenceForm, setReferenceForm] = useState<ReferenceForm>({
     code: 0,
@@ -188,8 +196,8 @@ export default function AdminPage() {
   });
 
   if (!referenceForm.code && references) {
-    const newCode = Math.max(...(references?.map(r => r.code) ?? [])) + 1;
-    setReferenceForm(previous => ({
+    const newCode = Math.max(...(references?.map((r) => r.code) ?? [])) + 1;
+    setReferenceForm((previous) => ({
       ...previous,
       code: newCode,
     }));
@@ -204,7 +212,8 @@ export default function AdminPage() {
     });
   };
 
-  const { nutrients, energy, macronutrients, vitamins, minerals } = useNutrients();
+  const { nutrients, energy, macronutrients, vitamins, minerals } =
+    useNutrients();
   const groups = useGroups();
   const types = useTypes();
   const scientificNames = useScientificNames();
@@ -212,7 +221,7 @@ export default function AdminPage() {
   const languages = useLanguages();
   const langualCodes = useLangualCodes();
 
-  const nameAndIdNutrients = nutrients.map<NutrientSummary>(n => n);
+  const nameAndIdNutrients = nutrients.map<NutrientSummary>((n) => n);
 
   const handleReferences = (updatedData: Partial<NutrientsValueForm>) => {
     setFormData((prev) => ({
@@ -234,8 +243,8 @@ export default function AdminPage() {
           ...prev.generalData,
           langualCodes: alreadySelected
             ? prev.generalData.langualCodes.filter(
-              (id) => id !== updatedLangualCodeId
-            )
+                (id) => id !== updatedLangualCodeId
+              )
             : [...prev.generalData.langualCodes, updatedLangualCodeId],
         },
       };
@@ -266,23 +275,19 @@ export default function AdminPage() {
           (m.components?.length ?? 0) > 0
             ? mapMacroNutrientWithComponentsToForm(m)
             : {
-              ...mapMacroNutrientWithoutComponentsToForm(m),
-              components: [],
-            }
+                ...mapMacroNutrientWithoutComponentsToForm(m),
+                components: [],
+              }
         ),
         micronutrients: {
-          vitamins: vitamins.map(
-            (vitamin: AnyNutrient) => ({
-              nutrientId: vitamin.id,
-              referenceCodes: [],
-            })
-          ),
-          minerals: minerals.map(
-            (mineral: AnyNutrient) => ({
-              nutrientId: mineral.id,
-              referenceCodes: [],
-            })
-          ),
+          vitamins: vitamins.map((vitamin: AnyNutrient) => ({
+            nutrientId: vitamin.id,
+            referenceCodes: [],
+          })),
+          minerals: minerals.map((mineral: AnyNutrient) => ({
+            nutrientId: mineral.id,
+            referenceCodes: [],
+          })),
         },
       },
     };
@@ -354,11 +359,11 @@ export default function AdminPage() {
           <NewGeneralData
             data={formData.generalData}
             onUpdate={handleUpdate}
-            groups={groups.idToObject.map(o => o)}
-            languages={languages.map(o => o)}
-            scientificNames={scientificNames.idToObject.map(o => o)}
-            subspecies={subspecies.idToObject.map(o => o)}
-            types={types.idToObject.map(o => o)}
+            groups={groups.idToObject.map((o) => o)}
+            languages={languages.map((o) => o)}
+            scientificNames={scientificNames.idToObject.map((o) => o)}
+            subspecies={subspecies.idToObject.map((o) => o)}
+            types={types.idToObject.map((o) => o)}
           />
         );
 
@@ -429,7 +434,7 @@ export default function AdminPage() {
       case 9:
         return (
           <NewLangualCode
-            langualCodes={langualCodes.map(v => v)}
+            langualCodes={langualCodes.map((v) => v)}
             onLangualCodesChange={handleLangualCodes}
             selectedLangualCodes={formData.generalData.langualCodes}
           />
@@ -440,11 +445,11 @@ export default function AdminPage() {
             data={formData}
             nameAndIdNutrients={nameAndIdNutrients}
             origins={origins?.map((o) => o.name) || []}
-            types={types.idToObject.map(o => o)}
-            groups={groups.idToObject.map(o => o)}
-            langualCodes={langualCodes.map(v => v)}
-            scientificNames={scientificNames.idToObject.map(o => o)}
-            subspecies={subspecies.idToObject.map(o => o)}
+            types={types.idToObject.map((o) => o)}
+            groups={groups.idToObject.map((o) => o)}
+            langualCodes={langualCodes.map((v) => v)}
+            scientificNames={scientificNames.idToObject.map((o) => o)}
+            subspecies={subspecies.idToObject.map((o) => o)}
           />
         );
       default:
@@ -472,15 +477,30 @@ export default function AdminPage() {
   if (referenceForm.type === "article") {
     sectionNamesByNewReference = [
       { id: "general", name: t("AdminPage.sectionNamesByNewReference.Data") },
-      { id: "authors", name: t("AdminPage.sectionNamesByNewReference.Authors") },
-      { id: "article", name: t("AdminPage.sectionNamesByNewReference.Article") },
-      { id: "preview", name: t("AdminPage.sectionNamesByNewReference.Preview") },
+      {
+        id: "authors",
+        name: t("AdminPage.sectionNamesByNewReference.Authors"),
+      },
+      {
+        id: "article",
+        name: t("AdminPage.sectionNamesByNewReference.Article"),
+      },
+      {
+        id: "preview",
+        name: t("AdminPage.sectionNamesByNewReference.Preview"),
+      },
     ];
   } else {
     sectionNamesByNewReference = [
       { id: "general", name: t("AdminPage.sectionNamesByNewReference.Data") },
-      { id: "authors", name: t("AdminPage.sectionNamesByNewReference.Authors") },
-      { id: "preview", name: t("AdminPage.sectionNamesByNewReference.Preview") },
+      {
+        id: "authors",
+        name: t("AdminPage.sectionNamesByNewReference.Authors"),
+      },
+      {
+        id: "preview",
+        name: t("AdminPage.sectionNamesByNewReference.Preview"),
+      },
     ];
   }
   const renderSectionByNewReference = () => {
@@ -601,7 +621,14 @@ export default function AdminPage() {
         )}
 
         {view === "file" && (
-          <FoodsFromCsv nutrientsInfo={nutrients} langualCodesInfo={langualCodes}/>
+          <FoodsFromCsv
+            nutrientsInfo={nutrients}
+            langualCodesInfo={langualCodes}
+            groupsNamesInfo={groups.idToObject}
+            scientificNamesInfo={scientificNames.idToObject}
+            subspeciesNamesInfo={subspecies.idToObject}
+            typesNamesInfo={types.idToObject}
+          />
         )}
       </div>
     </div>

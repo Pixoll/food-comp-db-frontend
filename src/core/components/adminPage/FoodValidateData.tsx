@@ -1,18 +1,37 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Pagination from "../search/Pagination";
-import CSVFoodDisplay from "./CSVFoodDisplay"
+import CSVFoodDisplay from "./CSVFoodDisplay";
 import { Collection } from "../../utils/collection";
-import { AnyNutrient , LangualCode} from "../../hooks";
+import {
+  AnyNutrient,
+  LangualCode,
+  Group,
+  Type,
+  ScientificName,
+  Subspecies,
+} from "../../hooks";
 import { CSVFood } from "./FoodsFromCsv";
 
 type FoodValidateDataProps = {
   data: CSVFood[];
   nutrientsInfo: Collection<string, AnyNutrient>;
   langualCodesInfo: Collection<string, LangualCode>;
-}
+  scientificNamesInfo: Collection<number, ScientificName>;
+  subspeciesNamesInfo: Collection<number, Subspecies>;
+  typesNamesInfo: Collection<number, Type>;
+  groupsNamesInfo: Collection<number, Group>;
+};
 
-export default function FoodValidateData({ data, nutrientsInfo, langualCodesInfo }: FoodValidateDataProps) {
+export default function FoodValidateData({
+  data,
+  nutrientsInfo,
+  langualCodesInfo,
+  scientificNamesInfo,
+  subspeciesNamesInfo,
+  typesNamesInfo,
+  groupsNamesInfo
+}: FoodValidateDataProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 7;
   const [filteredData, setFilteredData] = useState(data);
@@ -46,31 +65,33 @@ export default function FoodValidateData({ data, nutrientsInfo, langualCodesInfo
             <>
               <table className="content-table-foods">
                 <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>{t("FoodTableAdmin.Name")}</th>
-                  <th>{t("FoodTableAdmin.Actions")}</th>
-                </tr>
+                  <tr>
+                    <th>ID</th>
+                    <th>{t("FoodTableAdmin.Name")}</th>
+                    <th>{t("FoodTableAdmin.Actions")}</th>
+                  </tr>
                 </thead>
                 <tbody>
-                {records.map((item, index) => (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>
-                      {item.commonName.en?.parsed || item.commonName.en?.raw || "N/A"}
-                    </td>
-                    <td>
-                      <button
-                        onClick={() => {
-                          setSelectedFood(item);
-                          setView("verificar");
-                        }}
-                      >
-                        {t("FoodTableAdmin.Check")}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                  {records.map((item, index) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>
+                        {item.commonName.en?.parsed ||
+                          item.commonName.en?.raw ||
+                          "N/A"}
+                      </td>
+                      <td>
+                        <button
+                          onClick={() => {
+                            setSelectedFood(item);
+                            setView("verificar");
+                          }}
+                        >
+                          {t("FoodTableAdmin.Check")}
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
               {npage > 1 && (
@@ -89,7 +110,15 @@ export default function FoodValidateData({ data, nutrientsInfo, langualCodesInfo
           <h2>{t("FoodTableAdmin.Check")}</h2>
           {selectedFood && (
             <div className="food-details">
-              <CSVFoodDisplay food={selectedFood} nutrientsInfo={nutrientsInfo} langualCodesInfo={langualCodesInfo}/>
+              <CSVFoodDisplay
+                food={selectedFood}
+                nutrientsInfo={nutrientsInfo}
+                langualCodesInfo={langualCodesInfo}
+                groupsNamesInfo={groupsNamesInfo}
+                typesNamesInfo={typesNamesInfo}
+                scientificNamesInfo={scientificNamesInfo}
+                subspeciesNamesInfo={subspeciesNamesInfo}
+              />
             </div>
           )}
           <button

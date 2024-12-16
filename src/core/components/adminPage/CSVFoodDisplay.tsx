@@ -27,7 +27,14 @@ import {
   CSVValue,
 } from "./FoodsFromCsv";
 import { Collection } from "../../utils/collection";
-import { AnyNutrient, LangualCode } from "../../hooks";
+import {
+  AnyNutrient,
+  LangualCode,
+  Group,
+  Type,
+  ScientificName,
+  Subspecies,
+} from "../../hooks";
 enum Flag {
   INVALID = 0,
   VALID = 1,
@@ -227,11 +234,19 @@ type CSVFoodDisplayProps = {
   food: CSVFood;
   nutrientsInfo: Collection<string, AnyNutrient>;
   langualCodesInfo: Collection<string, LangualCode>;
+  scientificNamesInfo: Collection<number, ScientificName>;
+  subspeciesNamesInfo: Collection<number, Subspecies>;
+  typesNamesInfo: Collection<number, Type>;
+  groupsNamesInfo: Collection<number, Group>;
 };
 export default function CSVFoodDisplay({
   food,
   nutrientsInfo,
   langualCodesInfo,
+  scientificNamesInfo,
+  subspeciesNamesInfo,
+  typesNamesInfo,
+  groupsNamesInfo,
 }: CSVFoodDisplayProps) {
   const [activeLanguage, setActiveLanguage] =
     useState<keyof CSVStringTranslation>("en");
@@ -268,15 +283,21 @@ export default function CSVFoodDisplay({
               {food.strain && (
                 <div className="d-flex align-items-center gap-2">
                   <Leaf size={20} className="text-success" />
-                  <strong>Strain:</strong>{" "}
+                  <strong>Variante:</strong>{" "}
                   {renderCSVValueWithFlags(food.strain)}
                 </div>
               )}
               {food.brand && (
                 <div className="d-flex align-items-center gap-2">
                   <ShoppingBag size={20} className="text-primary" />
-                  <strong>Brand:</strong> {renderCSVValueWithFlags(food.brand)}
+                  <strong>Marca:</strong> {renderCSVValueWithFlags(food.brand)}
                 </div>
+              )}
+              {food.subspecies &&(
+                <div className="d-flex align-items-center gap-2">
+                <ShoppingBag size={20} className="text-primary" />
+                <strong>Subespecie: </strong>{subspeciesNamesInfo.get(food.subspecies.parsed ?? food.subspecies?.old ?? 0)?.name} {renderCSVValueWithFlags(food.brand)}
+              </div>
               )}
             </div>
           </Col>
@@ -284,12 +305,25 @@ export default function CSVFoodDisplay({
             <div className="d-flex flex-column gap-2">
               <div className="d-flex align-items-center gap-2">
                 <Leaf size={20} className="text-success" />
-                <strong>Group:</strong> {renderCSVValueWithFlags(food.group)}
+                <strong>Grupo alimentario: </strong>
+                {
+                  groupsNamesInfo.get(food.group.parsed ?? food.group?.old ?? 0)
+                    ?.name
+                }{" "}
+                {renderCSVValueWithFlags(food.group)}
               </div>
               <div className="d-flex align-items-center gap-2">
                 <Tag size={20} className="text-secondary" />
-                <strong>Type:</strong> {renderCSVValueWithFlags(food.type)}
+                <strong>Tipo de alimento:</strong>{" "}
+                {typesNamesInfo.get(food.type.parsed ?? food.type?.old ?? 0)?.name}
+                {renderCSVValueWithFlags(food.type)}
               </div>
+              {food.scientificName &&(
+                <div className="d-flex align-items-center gap-2">
+                <ShoppingBag size={20} className="text-primary" />
+                <strong>Nombre cientifico: </strong>{scientificNamesInfo.get(food.scientificName.parsed ?? food.scientificName?.old ?? 0)?.name} {renderCSVValueWithFlags(food.scientificName)}
+              </div>
+              )}
               {food.origin && (
                 <div className="d-flex align-items-center gap-2">
                   <MapPin size={20} className="text-danger" />
@@ -316,10 +350,10 @@ export default function CSVFoodDisplay({
             measurements={food.measurements}
             nutrientsInfo={nutrientsInfo}
           />
-          <LangualCodesDisplay 
-          referenceCodes={food.langualCodes} 
-          langualCodesInfo={langualCodesInfo} 
-        />
+          <LangualCodesDisplay
+            referenceCodes={food.langualCodes}
+            langualCodesInfo={langualCodesInfo}
+          />
         </Accordion>
       </Card.Body>
     </Card>

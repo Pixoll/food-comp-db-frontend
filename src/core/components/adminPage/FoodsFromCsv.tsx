@@ -2,18 +2,19 @@ import { ChangeEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import XLSX from "xlsx";
 import { useAuth } from "../../context/AuthContext";
-import { AnyNutrient, LangualCode } from "../../hooks";
+import {
+  AnyNutrient,
+  LangualCode,
+  Group,
+  Type,
+  Subspecies,
+  ScientificName,
+} from "../../hooks";
 import { Collection } from "../../utils/collection";
 import makeRequest from "../../utils/makeRequest";
 import FoodValidateData from "./FoodValidateData";
 import ReferenceValidated from "./ReferenceValidated";
-import {
-  Row, 
-  Col, 
-  Button,  
-  Nav, 
-  Tab 
-} from 'react-bootstrap';
+import { Row, Col, Button, Nav, Tab } from "react-bootstrap";
 export type CSVReference = {
   flags: number;
   code: CSVValue<number>;
@@ -96,9 +97,19 @@ export type CSVFood = {
 type FoodsFromCsvProps = {
   nutrientsInfo: Collection<string, AnyNutrient>;
   langualCodesInfo: Collection<string, LangualCode>;
+  scientificNamesInfo: Collection<number, ScientificName>;
+  subspeciesNamesInfo: Collection<number, Subspecies>;
+  typesNamesInfo: Collection<number, Type>;
+  groupsNamesInfo: Collection<number, Group>;
 };
-export default function FoodsFromCsv({ nutrientsInfo, langualCodesInfo }: FoodsFromCsvProps) {
-
+export default function FoodsFromCsv({
+  nutrientsInfo,
+  langualCodesInfo,
+  scientificNamesInfo,
+  subspeciesNamesInfo,
+  typesNamesInfo,
+  groupsNamesInfo
+}: FoodsFromCsvProps) {
   const { t } = useTranslation();
   const { state } = useAuth();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -189,19 +200,12 @@ export default function FoodsFromCsv({ nutrientsInfo, langualCodesInfo }: FoodsF
       <Row className="mb-3">
         <Col>
           {selectedFile && !uploadSuccess && (
-            <Button
-              variant="success"
-              onClick={processData}
-              className="me-2"
-            >
+            <Button variant="success" onClick={processData} className="me-2">
               {t("AdminPage.process")}
             </Button>
           )}
           {uploadSuccess && (
-            <Button
-              variant="secondary"
-              onClick={handleReset}
-            >
+            <Button variant="secondary" onClick={handleReset}>
               Cargar uno nuevo
             </Button>
           )}
@@ -214,20 +218,24 @@ export default function FoodsFromCsv({ nutrientsInfo, langualCodesInfo }: FoodsF
         >
           <Nav variant="tabs" className="mb-3">
             <Nav.Item>
-              <Nav.Link eventKey="foods">
-                Alimentos
-              </Nav.Link>
+              <Nav.Link eventKey="foods">Alimentos</Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link eventKey="references">
-                Referencias
-              </Nav.Link>
+              <Nav.Link eventKey="references">Referencias</Nav.Link>
             </Nav.Item>
           </Nav>
           <Tab.Content>
             <Tab.Pane eventKey="foods">
               {activeTab === "foods" && (
-                <FoodValidateData data={foodData} nutrientsInfo={nutrientsInfo} langualCodesInfo={langualCodesInfo} />
+                <FoodValidateData
+                  data={foodData}
+                  nutrientsInfo={nutrientsInfo}
+                  langualCodesInfo={langualCodesInfo}
+                  groupsNamesInfo={groupsNamesInfo}
+                  scientificNamesInfo={scientificNamesInfo}
+                  subspeciesNamesInfo={subspeciesNamesInfo}
+                  typesNamesInfo={typesNamesInfo}
+                />
               )}
             </Tab.Pane>
             <Tab.Pane eventKey="references">
