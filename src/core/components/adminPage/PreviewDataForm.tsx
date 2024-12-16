@@ -199,7 +199,7 @@ export default function PreviewDataForm({
         addToast({
           message: error.response?.data?.message ?? error.message ?? "Error",
           title: "Fallo",
-          type: "Success",
+          type: "Danger",
         });
       }
     );
