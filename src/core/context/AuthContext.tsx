@@ -1,41 +1,28 @@
-import React, {
-  createContext,
-  useReducer,
-  useEffect,
-  useCallback,
-  ReactNode,
-  Dispatch,
-  useContext,
-  useState,
-} from "react";
+import { createContext, ReactNode, useCallback, useContext, useEffect, useReducer, useState, } from "react";
 
-type AuthState =
-  | {
-      isAuthenticated: true;
-      token: string;
-      username: string;
-    }
-  | {
-      isAuthenticated: false;
-      token: null;
-      username: null;
-    };
+type AuthState = {
+  isAuthenticated: true;
+  token: string;
+  username: string;
+} | {
+  isAuthenticated: false;
+  token: null;
+  username: null;
+};
 
-type AuthAction =
-  | {
-      type: "LOGIN";
-      payload: {
-        token: string;
-        username: string;
-      };
-    }
-  | {
-      type: "LOGOUT";
-    };
+type AuthAction = {
+  type: "login";
+  payload: {
+    token: string;
+    username: string;
+  };
+} | {
+  type: "logout";
+};
 
 interface AuthContextType {
   state: AuthState;
-  dispatch: Dispatch<AuthAction>;
+  login: (token: string, username: string) => void;
   logout: () => void;
 }
 
@@ -47,15 +34,15 @@ const initialState: AuthState = {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const authReducer = (state: AuthState, action: AuthAction): AuthState => {
+function authReducer(state: AuthState, action: AuthAction): AuthState {
   switch (action.type) {
-    case "LOGIN":
+    case "login":
       return {
         ...state,
         isAuthenticated: true,
         ...action.payload,
       };
-    case "LOGOUT":
+    case "logout":
       return {
         ...state,
         isAuthenticated: false,
@@ -65,20 +52,44 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
     default:
       return state;
   }
-};
+}
 
 type AuthProviderProps = {
   children: ReactNode;
 };
 
-const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+export function AuthProvider({ children }: AuthProviderProps) {
   const [state, dispatch] = useReducer(authReducer, initialState);
-  const [storedToken, setStoredToken] = useState(() =>
-    localStorage.getItem("token")
-  );
-  const [storedUsername, setStoredUsername] = useState(() =>
-    localStorage.getItem("username")
-  );
+  const [storedToken, setStoredToken] = useState(() => localStorage.getItem("token"));
+  const [storedUsername, setStoredUsername] = useState(() => localStorage.getItem("username"));
+
+  const login = useCallback((token: string, username: string) => {
+    setStoredToken(token);
+    setStoredUsername(username);
+    localStorage.setItem("token", token);
+    localStorage.setItem("username", username);
+    dispatch({
+      type: "login",
+      payload: { token, username },
+    });
+  }, []);
+
+  const logout = useCallback(() => {
+    setStoredToken("");
+    setStoredUsername("");
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    dispatch({ type: "logout" });
+  }, []);
+
+  useEffect(() => {
+    if (storedToken && storedUsername) {
+      login(storedToken, storedUsername);
+    } else {
+      logout();
+    }
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -86,25 +97,15 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const username = localStorage.getItem("username");
       if (storedToken !== token || storedUsername !== username) {
         if (token && username) {
-          setStoredToken(token);
-          setStoredUsername(username);
-          localStorage.setItem("token", token ?? "");
-          localStorage.setItem("username", username ?? "");
-          dispatch({
-            type: "LOGIN",
-            payload: { token, username },
-          });
+          login(token, username);
         } else if (storedToken || storedUsername) {
-          setStoredToken("");
-          setStoredUsername("");
-          localStorage.removeItem("token");
-          localStorage.removeItem("username");
-          dispatch({ type: "LOGOUT" });
+          logout();
         }
       }
     }, 1000);
 
     return () => clearInterval(interval);
+    // eslint-disable-next-line
   }, [storedToken, storedUsername]);
 
   useEffect(() => {
@@ -121,28 +122,18 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }, [state.isAuthenticated, state.token, state.username]);
 
-  const logout = useCallback(() => {
-    setStoredToken("");
-    setStoredUsername("");
-    localStorage.removeItem("token");
-    localStorage.removeItem("username");
-    dispatch({ type: "LOGOUT" });
-  }, []);
-
   return (
-    <AuthContext.Provider value={{ state, dispatch, logout }}>
+    <AuthContext.Provider value={{ state, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
-};
+}
 
 // Custom hook for accessing AuthContext easily
-const useAuth = () => {
+export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
-};
-
-export { AuthProvider, useAuth };
+}

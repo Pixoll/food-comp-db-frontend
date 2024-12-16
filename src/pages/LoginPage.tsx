@@ -1,9 +1,10 @@
 import "../assets/css/_login.css";
-import { Container, Row } from 'react-bootstrap';
+import { FormEvent } from "react";
+import { Container, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { BiLogIn } from "react-icons/bi";
 import { FaLock, FaUserCircle } from "react-icons/fa";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../core/context/AuthContext";
 import { useForm } from "../core/hooks";
 import makeRequest from "../core/utils/makeRequest";
@@ -19,13 +20,13 @@ export default function LoginPage() {
     password: ""
   });
   const navigate = useNavigate();
-  const { dispatch } = useAuth();
+  const { login } = useAuth();
   const { t } = useTranslation();
-  const onLogin = (e: React.FormEvent) => {
+  const onLogin = (e: FormEvent) => {
     e.preventDefault();
 
-    console.log(t('loginPage.state.request'), `/admins/${formState.username}/session`);
-    console.log(t('loginPage.state.send'), {
+    console.log(t("loginPage.state.request"), `/admins/${formState.username}/session`);
+    console.log(t("loginPage.state.send"), {
       password: formState.password,
     });
 
@@ -37,38 +38,32 @@ export default function LoginPage() {
       },
       null,
       (response) => {
-        const { token } = response.data;
-        dispatch({
-          type: 'LOGIN',
-          payload: {
-            token,
-            username: formState.username,
-          }
-        });
+        const token = response.data.token as string;
+        login(token, formState.username);
 
         onResetForm();
-        navigate('/');
+        navigate("/");
       },
       (error) => {
-        console.error(t('loginPage.errors.login'), error);
+        console.error(t("loginPage.errors.login"), error);
 
         if (error.response) {
-          console.error(t('loginPage.errors.response'), error.response.data);
-          console.error(t('loginPage.errors.state'), error.response.status);
+          console.error(t("loginPage.errors.response"), error.response.data);
+          console.error(t("loginPage.errors.state"), error.response.status);
         } else if (error.request) {
-          console.error(t('loginPage.errors.received'), error.request);
+          console.error(t("loginPage.errors.received"), error.request);
         } else {
-          console.error(t('loginPage.errors.unknown'), error.message);
+          console.error(t("loginPage.errors.unknown"), error.message);
         }
       }
     );
   };
 
   return (
-    <Container className="login-background" fluid style={{ height: '100vh' }}>
+    <Container className="login-background" fluid style={{ height: "100vh" }}>
       <Row className="h-100 d-flex justify-content-center align-items-center">
-        <div className="login-div" style={{ width: '450px' }}>
-          <h1>{t('loginPage.title')}</h1>
+        <div className="login-div" style={{ width: "450px" }}>
+          <h1>{t("loginPage.title")}</h1>
           <form onSubmit={onLogin}>
             <div className="txt_field">
               <input
@@ -79,7 +74,7 @@ export default function LoginPage() {
                 required
               />
               <span></span>
-              <label><FaUserCircle/> {t('loginPage.username')}</label>
+              <label><FaUserCircle/> {t("loginPage.username")}</label>
             </div>
             <div className="txt_field">
               <input
@@ -90,16 +85,16 @@ export default function LoginPage() {
                 required
               />
               <span></span>
-              <label><FaLock/> {t('loginPage.password')}</label>
+              <label><FaLock/> {t("loginPage.password")}</label>
             </div>
             <div className="d-flex justify-content-end mb-3">
-              <a href="/forgot-password" style={{ fontSize: '14px', color: '#ffffff' }}>
-                {t('loginPage.recover')}
+              <a href="/forgot-password" style={{ fontSize: "14px", color: "#ffffff" }}>
+                {t("loginPage.recover")}
               </a>
             </div>
             <button type="submit" className="login-submit">
-              <BiLogIn style={{ marginRight: '8px' }}/>
-              {t('loginPage.title')}
+              <BiLogIn style={{ marginRight: "8px" }}/>
+              {t("loginPage.title")}
             </button>
           </form>
         </div>
