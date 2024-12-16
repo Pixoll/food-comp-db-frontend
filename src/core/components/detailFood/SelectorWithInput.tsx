@@ -30,10 +30,14 @@ export default function SelectorWithInput({
   );
 
   const handleSelectOption = (option: { id: number; name: string }) => {
+    if (selectedValue === option.name) {
+      onSelect(undefined, ""); 
+    } else {
+      onSelect(option.id, option.name);
+    }
     setIsActive(false);
-    setIsCustomOptionActive(false);
-    setCustomOption("");
-    onSelect(option.id, option.name);
+    setIsCustomOptionActive(false); 
+    setCustomOption(""); 
   };
 
   const handleCustomOption = () => {
@@ -44,17 +48,20 @@ export default function SelectorWithInput({
   };
 
   const handleCustomOptionSubmit = () => {
-    setIsActive(false);
-    onSelect(undefined, customOption);
+    setIsActive(false); 
+    onSelect(undefined, customOption); 
   };
 
   return (
     <div className={`select-box-for ${isActive ? "active" : ""}`}>
-      <div className="select-option-with-input" onClick={() => setIsActive(!isActive)}>
+      <div
+        className="select-option-with-input"
+        onClick={() => setIsActive((prev) => !prev)}
+      >
         <input
           type="text"
           placeholder={placeholder}
-          value={isCustomOptionActive ? customOption : selectedValue}
+          value={isCustomOptionActive ? customOption : selectedValue || ""}
           readOnly
         />
       </div>
@@ -70,7 +77,11 @@ export default function SelectorWithInput({
           </div>
           <ul className="options">
             {filteredOptions.map((option) => (
-              <li key={option.id} onClick={() => handleSelectOption(option)}>
+              <li
+                key={option.id}
+                className={selectedValue === option.name ? "selected" : ""}
+                onClick={() => handleSelectOption(option)}
+              >
                 {option.name}
               </li>
             ))}
