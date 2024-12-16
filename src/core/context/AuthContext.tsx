@@ -26,12 +26,6 @@ interface AuthContextType {
   logout: () => void;
 }
 
-const initialState: AuthState = {
-  isAuthenticated: false,
-  token: null,
-  username: null,
-};
-
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 function authReducer(state: AuthState, action: AuthAction): AuthState {
@@ -59,9 +53,13 @@ type AuthProviderProps = {
 };
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [state, dispatch] = useReducer(authReducer, initialState);
   const [storedToken, setStoredToken] = useState(() => localStorage.getItem("token"));
   const [storedUsername, setStoredUsername] = useState(() => localStorage.getItem("username"));
+  const [state, dispatch] = useReducer(authReducer, {
+    isAuthenticated: !!(storedToken && storedUsername),
+    token: storedToken,
+    username: storedUsername,
+  } as AuthState);
 
   const login = useCallback((token: string, username: string) => {
     setStoredToken(token);
@@ -80,15 +78,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
     dispatch({ type: "logout" });
-  }, []);
-
-  useEffect(() => {
-    if (storedToken && storedUsername) {
-      login(storedToken, storedUsername);
-    } else {
-      logout();
-    }
-    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {

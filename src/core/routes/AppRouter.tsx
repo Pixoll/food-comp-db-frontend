@@ -26,9 +26,7 @@ export const AppRouter = () => {
       token,
       () => {
       },
-      () => {
-        logout();
-      }
+      logout
     );
     // eslint-disable-next-line
   }, [location, isAuthenticated, username, token]);
