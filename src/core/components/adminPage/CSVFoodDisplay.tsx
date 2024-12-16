@@ -27,7 +27,7 @@ import {
   CSVValue,
 } from "./FoodsFromCsv";
 import { Collection } from "../../utils/collection";
-import { AnyNutrient } from "../../hooks";
+import { AnyNutrient, LangualCode } from "../../hooks";
 enum Flag {
   INVALID = 0,
   VALID = 1,
@@ -92,8 +92,65 @@ const renderCSVValueWithFlags = <T,>(
       </div>
     );
   }
-}    
+};
+type LangualCodesDisplayProps = {
+  referenceCodes: CSVValue<number>[] | null | undefined;
+  langualCodesInfo: Collection<string, LangualCode>;
+};
 
+function LangualCodesDisplay({
+  referenceCodes,
+  langualCodesInfo,
+}: LangualCodesDisplayProps) {
+  if (!referenceCodes || referenceCodes.length === 0) {
+    return null;
+  }
+
+  return (
+    <Card className="mb-3 border-light">
+      <Card.Header className="bg-light d-flex align-items-center gap-2">
+        <Tag size={20} className="text-secondary" />
+        <strong>Langual Codes</strong>
+      </Card.Header>
+      <Card.Body>
+        <Table
+          striped
+          bordered
+          hover
+          responsive
+          size="sm"
+          className="text-center table-layout-fixed"
+          style={{ textAlign: "center", verticalAlign: "middle" }}
+        >
+          <thead className="table-light">
+            <tr>
+              <th>Código</th>
+              <th>Descripción</th>
+            </tr>
+          </thead>
+          <tbody>
+            {referenceCodes.map((code, index) => {
+              const langualCode = langualCodesInfo.get(
+                code.parsed?.toString() || code.raw
+              );
+
+              return (
+                <tr key={index}>
+                  <td>{renderCSVValueWithFlags(code)}</td>
+                  <td>
+                    {langualCode
+                      ? langualCode.descriptor
+                      : "Langual Code not found"}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
+      </Card.Body>
+    </Card>
+  );
+}
 type NutritionalMeasurementsProps = {
   measurements: CSVMeasurement[];
   nutrientsInfo: Collection<string, AnyNutrient>;
@@ -169,10 +226,12 @@ function NutritionalMeasurements({
 type CSVFoodDisplayProps = {
   food: CSVFood;
   nutrientsInfo: Collection<string, AnyNutrient>;
+  langualCodesInfo: Collection<string, LangualCode>;
 };
 export default function CSVFoodDisplay({
   food,
   nutrientsInfo,
+  langualCodesInfo,
 }: CSVFoodDisplayProps) {
   const [activeLanguage, setActiveLanguage] =
     useState<keyof CSVStringTranslation>("en");
@@ -257,6 +316,10 @@ export default function CSVFoodDisplay({
             measurements={food.measurements}
             nutrientsInfo={nutrientsInfo}
           />
+          <LangualCodesDisplay 
+          referenceCodes={food.langualCodes} 
+          langualCodesInfo={langualCodesInfo} 
+        />
         </Accordion>
       </Card.Body>
     </Card>

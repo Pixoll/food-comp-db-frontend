@@ -3,15 +3,16 @@ import { useTranslation } from "react-i18next";
 import Pagination from "../search/Pagination";
 import CSVFoodDisplay from "./CSVFoodDisplay"
 import { Collection } from "../../utils/collection";
-import { AnyNutrient } from "../../hooks";
+import { AnyNutrient , LangualCode} from "../../hooks";
 import { CSVFood } from "./FoodsFromCsv";
 
 type FoodValidateDataProps = {
   data: CSVFood[];
   nutrientsInfo: Collection<string, AnyNutrient>;
+  langualCodesInfo: Collection<string, LangualCode>;
 }
 
-export default function FoodValidateData({ data, nutrientsInfo }: FoodValidateDataProps) {
+export default function FoodValidateData({ data, nutrientsInfo, langualCodesInfo }: FoodValidateDataProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 7;
   const [filteredData, setFilteredData] = useState(data);
@@ -88,7 +89,7 @@ export default function FoodValidateData({ data, nutrientsInfo }: FoodValidateDa
           <h2>{t("FoodTableAdmin.Check")}</h2>
           {selectedFood && (
             <div className="food-details">
-              <CSVFoodDisplay food={selectedFood} nutrientsInfo={nutrientsInfo}/>
+              <CSVFoodDisplay food={selectedFood} nutrientsInfo={nutrientsInfo} langualCodesInfo={langualCodesInfo}/>
             </div>
           )}
           <button

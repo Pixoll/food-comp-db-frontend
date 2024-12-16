@@ -2,7 +2,7 @@ import { ChangeEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import XLSX from "xlsx";
 import { useAuth } from "../../context/AuthContext";
-import { AnyNutrient } from "../../hooks";
+import { AnyNutrient, LangualCode } from "../../hooks";
 import { Collection } from "../../utils/collection";
 import makeRequest from "../../utils/makeRequest";
 import FoodValidateData from "./FoodValidateData";
@@ -95,8 +95,9 @@ export type CSVFood = {
 };
 type FoodsFromCsvProps = {
   nutrientsInfo: Collection<string, AnyNutrient>;
+  langualCodesInfo: Collection<string, LangualCode>;
 };
-export default function FoodsFromCsv({ nutrientsInfo }: FoodsFromCsvProps) {
+export default function FoodsFromCsv({ nutrientsInfo, langualCodesInfo }: FoodsFromCsvProps) {
 
   const { t } = useTranslation();
   const { state } = useAuth();
@@ -226,7 +227,7 @@ export default function FoodsFromCsv({ nutrientsInfo }: FoodsFromCsvProps) {
           <Tab.Content>
             <Tab.Pane eventKey="foods">
               {activeTab === "foods" && (
-                <FoodValidateData data={foodData} nutrientsInfo={nutrientsInfo} />
+                <FoodValidateData data={foodData} nutrientsInfo={nutrientsInfo} langualCodesInfo={langualCodesInfo} />
               )}
             </Tab.Pane>
             <Tab.Pane eventKey="references">
