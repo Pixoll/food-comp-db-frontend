@@ -82,7 +82,11 @@ export default function CSVReferenceDisplay({
   journalsInfo,
   referencesInfo,
 }: CSVReferenceDisplayProps) {
-  const referenceMath = journalsInfo.find((journal)=>(journal.id===reference.journal?.parsed !== null ? reference.journal?.parsed : reference.journal?.raw.toString()))
+  const referenceMath = journalsInfo.find((journal)=>
+    journal.id === reference.journal?.parsed && reference.journal?.parsed !== null
+      ? reference.journal?.parsed
+      : reference.journal?.raw.toString()
+  );
   return (
     <Card className="shadow-sm">
       <Card.Header className="bg-primary text-white d-flex align-items-center gap-2">

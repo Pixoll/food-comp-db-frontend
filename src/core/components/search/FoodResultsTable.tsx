@@ -81,6 +81,7 @@ export default function FoodResultsTable({
     if (currentPage > maxPage) {
       setCurrentPage(maxPage);
     }
+    // eslint-disable-next-line
   }, [data, selectedLanguage, sortOrder, searchForName]);
 
   return (

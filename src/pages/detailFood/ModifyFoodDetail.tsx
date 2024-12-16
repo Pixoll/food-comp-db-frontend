@@ -218,6 +218,7 @@ export default function ModifyFoodDetail() {
       setNamesAndIngredients(initialNamesAndIngredients);
       setGroupAndTypeData(groupAndTypeDataForm);
     }
+    // eslint-disable-next-line
   }, [data]);
 
   if (!data) {

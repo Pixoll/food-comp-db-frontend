@@ -16,16 +16,15 @@ export default function CenteredModal({ data, onHide, onReferenceClick }: ModalP
     data.referenceCodes?.length ? (
       data.referenceCodes.map((code, index) => (
         <span key={code}>
-          <a
-            href="#"
+          <span
             onClick={(e) => {
               e.preventDefault();
               onReferenceClick(code.toString());
             }}
-            style={{ textDecoration: "underline", color: "#0d6efd" }}
+            style={{ textDecoration: "underline", color: "#0d6efd", cursor: "pointer" }}
           >
             {code}
-          </a>
+          </span>
           {index < (data.referenceCodes?.length ?? 0) - 1 && ", "}
         </span>
       ))

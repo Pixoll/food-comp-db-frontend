@@ -293,6 +293,7 @@ export default function AdminPage() {
     };
 
     setFormData(initialFormData);
+    // eslint-disable-next-line
   }, [energy.size, macronutrients.size, vitamins.size, minerals.size]);
 
   const handleUpdate = (updatedData: Partial<GeneralData>) => {

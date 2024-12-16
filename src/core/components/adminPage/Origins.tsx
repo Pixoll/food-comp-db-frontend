@@ -51,6 +51,7 @@ export default function Origins({
     }
 
     updateOrigins(updatedOrigins);
+    // eslint-disable-next-line
   }, [addresses, originIds]);
 
   const handleAddRow = useCallback(() => {

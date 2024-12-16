@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 import ToastComponent, {
   ToastComponentProps,
 } from "../components/ToastComponent";
@@ -9,18 +9,16 @@ type ToastContextProps = {
 
 const ToastContext = createContext<ToastContextProps | undefined>(undefined);
 
-export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<ToastComponentProps[]>([]);
 
   const addToast = (toast: ToastComponentProps) => {
     setToasts((prev) => [...prev, toast]);
   };
 
-  const removeToast = (index: number) => {
-    setToasts((prev) => prev.filter((_, i) => i !== index));
-  };
+  // const removeToast = (index: number) => {
+  //   setToasts((prev) => prev.filter((_, i) => i !== index));
+  // };
 
   return (
     <ToastContext.Provider value={{ addToast }}>
@@ -35,12 +33,12 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
       ))}
     </ToastContext.Provider>
   );
-};
+}
 
-export const useToast = (): ToastContextProps => {
+export function useToast(): ToastContextProps {
   const context = useContext(ToastContext);
   if (!context) {
     throw new Error("useToast debe usarse dentro de un ToastProvider");
   }
   return context;
-};
+}

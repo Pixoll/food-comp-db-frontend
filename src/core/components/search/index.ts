@@ -10,7 +10,5 @@ export * from "./Pagination";
 export { default as Pagination } from "./Pagination";
 export * from "./SearchBox";
 export { default as SearchBox } from "./SearchBox";
-export * from "./SearchForName";
-export { default as SearchForName } from "./SearchForName";
 export * from "./SingleOptionFilter";
 export { default as SingleOptionFilter } from "./SingleOptionFilter";
