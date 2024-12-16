@@ -15,47 +15,22 @@ type NewNutrientsProps = {
   nameAndIdNutrients: NutrientSummary[];
 };
 
+type NutrientMeasurementFormOnlyNumbers = {
+  [K in keyof NutrientMeasurementForm as NutrientMeasurementForm[K] extends number | undefined
+    ? K
+    : never]: NutrientMeasurementForm[K];
+}
+
 export default function NewNutrients({
   nutrients,
   onNutrientUpdate,
   nameAndIdNutrients,
 }: NewNutrientsProps) {
-  const [editingNutrientId, setEditingNutrientId] = useState<
-    number | undefined
-  >(undefined);
+  const [editingNutrientId, setEditingNutrientId] = useState<number | undefined>(undefined);
   const [formData, setFormData] = useState<NutrientMeasurementForm | undefined>(
     undefined
   );
-  const [validationErrors, setValidationErrors] = useState<{
-    average?: string;
-    deviation?: string;
-    min?: string;
-    max?: string;
-    sampleSize?: string;
-  }>({});
 
-  const validateField = (field: string, value: number | undefined) => {
-    switch (field) {
-      case "average":
-      case "deviation":
-        return value !== undefined && value >= 0;
-      case "min":
-        return value !== undefined && value >= 0;
-      case "max":
-        const minValue = formData?.min;
-        return (
-          value !== undefined && 
-          value >= 0 && 
-          (minValue === undefined || value >= minValue)
-        );
-      case "sampleSize":
-        return value !== undefined && 
-               Number.isInteger(value) && 
-               value >= 0;
-      default:
-        return true;
-    }
-  };
   const { t } = useTranslation();
 
   const startEditing = (nutrient: NutrientMeasurementForm) => {
@@ -70,7 +45,6 @@ export default function NewNutrients({
       dataType: nutrient.dataType || undefined,
       referenceCodes: nutrient.referenceCodes || [],
     });
-    setValidationErrors({});
   };
 
   const handleInputChange = (
@@ -79,54 +53,36 @@ export default function NewNutrients({
   ) => {
     if (formData) {
       setFormData({ ...formData, [field]: value });
-  };
-}
-const getErrorMessage = (field: string) => {
-  switch (field) {
-    case "average":
-      return "Promedio no puede ser negativo";
-    case "deviation":
-      return "Desviación no puede ser negativa";
-    case "min":
-      return "Mínimo invalido";
-    case "max":
-      return "Máximo invalido";
-    case "sampleSize":
-      return "Tamaño de muestra invalido";
-    default:
-      return "";
-  }
-};
-  const isFormValid = () => {
-    return Object.values(validationErrors).every(
-      (error) => error === undefined
-    );
-  };
-  const saveChanges = () => {
-    const fieldsToValidate: (keyof NutrientMeasurementForm)[] = [
-      "average",
-      "deviation",
-      "min",
-      "max",
-      "sampleSize",
-    ];
-    
-    const errors: { [key: string]: string } = {};
-    
-    fieldsToValidate.forEach((field) => {
-      const value = formData?.[field];
-      if (!validateField(field, value as number)) {
-        errors[field] = getErrorMessage(field);
-      }
-    });
-
-    if (formData?.min && formData?.max && formData.min > formData.max) {
-      errors['min'] = 'Mínimo no puede ser mayor a Máximo';
-      errors['max'] = 'Máximo no puede ser mayor a Mínimo';
     }
+  };
 
-    if (Object.keys(errors).length > 0) {
-      setValidationErrors(errors);
+  const isValueDefined = <K extends keyof NutrientMeasurementForm>(key: K) => {
+    return typeof formData?.[key] !== "undefined";
+  };
+  const isValueLessThan = <K extends keyof NutrientMeasurementFormOnlyNumbers>(key: K, comp: number) => {
+    return (formData?.[key] ?? 0) < comp;
+  };
+  const isValueNotInteger = <K extends keyof NutrientMeasurementFormOnlyNumbers>(key: K) => {
+    return !Number.isSafeInteger(formData?.[key] ?? 0);
+  };
+
+  const isAverageInvalid = isValueDefined("dataType")
+    && (!isValueDefined("average") || isValueLessThan("average", 0));
+  const isDeviationInvalid = isValueDefined("deviation") && isValueLessThan("deviation", 0);
+  const isMinInvalid = isValueDefined("min") && isValueLessThan("min", 0);
+  const isMaxInvalid = isValueDefined("max") && isValueLessThan("max", formData?.min ?? 0);
+  const isSampleSizeInvalid = isValueDefined("sampleSize")
+    && (isValueLessThan("sampleSize", 1) || isValueNotInteger("sampleSize"));
+  const isDataTypeInvalid = isValueDefined("average") && !formData?.dataType;
+
+  const saveChanges = () => {
+    if (isAverageInvalid
+      || isDeviationInvalid
+      || isMinInvalid
+      || isMaxInvalid
+      || isSampleSizeInvalid
+      || isDataTypeInvalid
+    ) {
       return;
     }
 
@@ -135,175 +91,181 @@ const getErrorMessage = (field: string) => {
       onNutrientUpdate(formData);
       setEditingNutrientId(undefined);
       setFormData(undefined);
-      setValidationErrors({});
     }
   };
 
   const cancelEditing = () => {
     setEditingNutrientId(undefined);
     setFormData(undefined);
-    setValidationErrors({});
   };
 
   return (
     <div className="new-nutrients-container">
       <Table className="nutrients-table" bordered hover responsive>
         <thead>
-          <tr className="table-new-nutrients-header">
-            <th>{t("NewMacronutrient.name")}</th>
-            <th>{t("NewMacronutrient.mean")}</th>
-            <th>{t("NewMacronutrient.Deviation")}</th>
-            <th>{t("NewMacronutrient.min")}</th>
-            <th>{t("NewMacronutrient.max")}</th>
-            <th>{t("NewMacronutrient.Size")}</th>
-            <th>{t("NewMacronutrient.type")}</th>
-            <th>{t("NewMacronutrient.Action")}</th>
-          </tr>
+        <tr className="table-new-nutrients-header">
+          <th>{t("NewMacronutrient.name")}</th>
+          <th>{t("NewMacronutrient.mean")}</th>
+          <th>{t("NewMacronutrient.Deviation")}</th>
+          <th>{t("NewMacronutrient.min")}</th>
+          <th>{t("NewMacronutrient.max")}</th>
+          <th>{t("NewMacronutrient.Size")}</th>
+          <th>{t("NewMacronutrient.type")}</th>
+          <th>{t("NewMacronutrient.Action")}</th>
+        </tr>
         </thead>
         <tbody className="table-new-nutrients-body">
-          {nutrients.map((nutrient) => (
-            <tr key={nutrient.nutrientId} className="nutrient-row">
-              {editingNutrientId === nutrient.nutrientId ? (
-                <>
-                  <td>
-                    {getNutrientNameById(
-                      nutrient.nutrientId,
-                      nameAndIdNutrients
-                    )}
-                  </td>
-                  <td>
-                    <Form.Control
-                      type="number"
-                      value={formData?.average ?? ""}
-                      onChange={(e) =>
-                        handleInputChange("average", +e.target.value)
-                      }
-                      isInvalid={!!validationErrors.average}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {validationErrors.average}
-                    </Form.Control.Feedback>
-                  </td>
-                  <td>
-                    <Form.Control
-                      type="number"
-                      value={formData?.deviation ?? ""}
-                      onChange={(e) =>
-                        handleInputChange("deviation", +e.target.value)
-                      }
-                      isInvalid={!!validationErrors.deviation}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {validationErrors.deviation}
-                    </Form.Control.Feedback>
-                  </td>
-                  <td>
-                    <Form.Control
-                      type="number"
-                      value={formData?.min ?? ""}
-                      onChange={(e) =>
-                        handleInputChange("min", +e.target.value)
-                      }
-                      isInvalid={!!validationErrors.min}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {validationErrors.min}
-                    </Form.Control.Feedback>
-                  </td>
-                  <td>
-                    <Form.Control
-                      type="number"
-                      value={formData?.max ?? ""}
-                      onChange={(e) =>
-                        handleInputChange("max", +e.target.value)
-                      }
-                      isInvalid={!!validationErrors.max}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {validationErrors.max}
-                    </Form.Control.Feedback>
-                  </td>
-                  <td>
-                    <Form.Control
-                      type="number"
-                      value={formData?.sampleSize ?? ""}
-                      onChange={(e) =>
-                        handleInputChange("sampleSize", +e.target.value)
-                      }
-                      isInvalid={!!validationErrors.sampleSize}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {validationErrors.sampleSize}
-                    </Form.Control.Feedback>
-                  </td>
-                  <td>
-                    <Form.Select
-                      value={formData?.dataType || ""}
-                      onChange={(e) =>
-                        handleInputChange("dataType", e.target.value)
-                      }
-                    >
-                      <option value="">Ninguna</option>
-                      <option value="analytic">
-                        {t("NewMacronutrient.Analytical")}
-                      </option>
-                      <option value="calculated">
-                        {t("NewMacronutrient.Calculated")}
-                      </option>
-                      <option value="assumed">
-                        {t("NewMacronutrient.Taken")}
-                      </option>
-                      <option value="borrowed">
-                        {t("NewMacronutrient.Borrowed")}
-                      </option>
-                    </Form.Select>
-                  </td>
-                  <td>
-                    <Button className="btn-save" onClick={saveChanges}>
-                      {t("NewMacronutrient.save")}
-                    </Button>{" "}
-                    <Button className="btn-cancel" onClick={cancelEditing}>
-                      {t("NewMacronutrient.cancel")}
-                    </Button>
-                  </td>
-                </>
-              ) : (
-                <>
-                  <td>
-                    {getNutrientNameById(
-                      nutrient.nutrientId,
-                      nameAndIdNutrients
-                    )}
-                  </td>
-                  <td>{nutrient.average || <Ellipsis size={35}></Ellipsis>}</td>
-                  <td>
-                    {nutrient.deviation || <Ellipsis size={35}></Ellipsis>}
-                  </td>
-                  <td>{nutrient.min || <Ellipsis size={35}></Ellipsis>}</td>
-                  <td>{nutrient.max || <Ellipsis size={35}></Ellipsis>}</td>
-                  <td>
-                    {nutrient.sampleSize || <Ellipsis size={35}></Ellipsis>}
-                  </td>
-                  <td>
-                    {nutrient.dataType ? (
-                      nutrient.dataType.charAt(0).toUpperCase() +
-                      nutrient.dataType.slice(1)
-                    ) : (
-                      <Ellipsis size={35}></Ellipsis>
-                    )}
-                  </td>
-                  <td>
-                    <Button
-                      className="btn-edit"
-                      onClick={() => startEditing(nutrient)}
-                    >
-                      {t("NewMacronutrient.Edit")}
-                    </Button>
-                  </td>
-                </>
-              )}
-            </tr>
-          ))}
+        {nutrients.map((nutrient) => (
+          <tr key={nutrient.nutrientId} className="nutrient-row">
+            {editingNutrientId === nutrient.nutrientId ? (
+              <>
+                <td>
+                  {getNutrientNameById(
+                    nutrient.nutrientId,
+                    nameAndIdNutrients
+                  )}
+                </td>
+                <td>
+                  <Form.Control
+                    type="number"
+                    value={formData?.average ?? ""}
+                    isInvalid={isAverageInvalid}
+                    onChange={(e) =>
+                      handleInputChange("average", e.target.value.length > 0 ? +e.target.value : undefined)
+                    }
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {!isValueDefined("average") ? "Ingrese el promedio." : "Promedio debe ser al menos 0."}
+                  </Form.Control.Feedback>
+                </td>
+                <td>
+                  <Form.Control
+                    type="number"
+                    value={formData?.deviation ?? ""}
+                    isInvalid={isDeviationInvalid}
+                    onChange={(e) =>
+                      handleInputChange("deviation", e.target.value.length > 0 ? +e.target.value : undefined)
+                    }
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    Desviación debe ser al menos 0.
+                  </Form.Control.Feedback>
+                </td>
+                <td>
+                  <Form.Control
+                    type="number"
+                    value={formData?.min ?? ""}
+                    isInvalid={isMinInvalid}
+                    onChange={(e) =>
+                      handleInputChange("min", e.target.value.length > 0 ? +e.target.value : undefined)
+                    }
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    Mínimo debe ser al menos 0.
+                  </Form.Control.Feedback>
+                </td>
+                <td>
+                  <Form.Control
+                    type="number"
+                    value={formData?.max ?? ""}
+                    isInvalid={isMaxInvalid}
+                    onChange={(e) =>
+                      handleInputChange("max", e.target.value.length > 0 ? +e.target.value : undefined)
+                    }
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {isValueLessThan("max", 0)
+                      ? "Máximo debe ser al menos 0."
+                      : "Máximo debe ser mayor o igual al mínimo"}
+                  </Form.Control.Feedback>
+                </td>
+                <td>
+                  <Form.Control
+                    type="number"
+                    value={formData?.sampleSize ?? ""}
+                    isInvalid={isSampleSizeInvalid}
+                    onChange={(e) =>
+                      handleInputChange("sampleSize", e.target.value.length > 0 ? +e.target.value : undefined)
+                    }
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {isValueLessThan("sampleSize", 1)
+                      ? "Tamaño de muestra debe ser al menos 1."
+                      : "Tamaño de muestra debe ser un entero."}
+                  </Form.Control.Feedback>
+                </td>
+                <td>
+                  <Form.Select
+                    value={formData?.dataType || ""}
+                    isInvalid={isDataTypeInvalid}
+                    onChange={(e) =>
+                      handleInputChange("dataType", e.target.value)
+                    }
+                  >
+                    <option value="">Ninguna</option>
+                    <option value="analytic">
+                      {t("NewMacronutrient.Analytical")}
+                    </option>
+                    <option value="calculated">
+                      {t("NewMacronutrient.Calculated")}
+                    </option>
+                    <option value="assumed">
+                      {t("NewMacronutrient.Taken")}
+                    </option>
+                    <option value="borrowed">
+                      {t("NewMacronutrient.Borrowed")}
+                    </option>
+                  </Form.Select>
+                  <Form.Control.Feedback type="invalid">
+                    Ingrese el tipo de dato.
+                  </Form.Control.Feedback>
+                </td>
+                <td>
+                  <Button className="btn-save" onClick={saveChanges}>
+                    {t("NewMacronutrient.save")}
+                  </Button>{" "}
+                  <Button className="btn-cancel" onClick={cancelEditing}>
+                    {t("NewMacronutrient.cancel")}
+                  </Button>
+                </td>
+              </>
+            ) : (
+              <>
+                <td>
+                  {getNutrientNameById(
+                    nutrient.nutrientId,
+                    nameAndIdNutrients
+                  )}
+                </td>
+                <td>{nutrient.average || <Ellipsis size={35}></Ellipsis>}</td>
+                <td>
+                  {nutrient.deviation || <Ellipsis size={35}></Ellipsis>}
+                </td>
+                <td>{nutrient.min || <Ellipsis size={35}></Ellipsis>}</td>
+                <td>{nutrient.max || <Ellipsis size={35}></Ellipsis>}</td>
+                <td>
+                  {nutrient.sampleSize || <Ellipsis size={35}></Ellipsis>}
+                </td>
+                <td>
+                  {nutrient.dataType ? (
+                    nutrient.dataType.charAt(0).toUpperCase() +
+                    nutrient.dataType.slice(1)
+                  ) : (
+                    <Ellipsis size={35}></Ellipsis>
+                  )}
+                </td>
+                <td>
+                  <Button
+                    className="btn-edit"
+                    onClick={() => startEditing(nutrient)}
+                  >
+                    {t("NewMacronutrient.Edit")}
+                  </Button>
+                </td>
+              </>
+            )}
+          </tr>
+        ))}
         </tbody>
       </Table>
     </div>
