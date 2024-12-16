@@ -215,41 +215,44 @@ export default function DetailPage() {
                         </Card.Body>
                       </Card>
                     )}
+                    {(data.ingredients?.es ||
+                      data.ingredients?.en ||
+                      data.ingredients?.pt) && (
+                      <Card>
+                        <Card.Body>
+                          <Card.Subtitle className="mb-3 text-muted">
+                            {"Ingredientes"}
+                          </Card.Subtitle>
 
-                    <Card>
-                      <Card.Body>
-                        <Card.Subtitle className="mb-3 text-muted">
-                          {"Ingredientes"}
-                        </Card.Subtitle>
+                          {data.ingredients?.es && (
+                            <p>
+                              <strong>
+                                {t("DetailFood.ingredients.Spanish")}{" "}
+                              </strong>
+                              {data.ingredients.es}
+                            </p>
+                          )}
 
-                        {data.ingredients?.es && (
-                          <p>
-                            <strong>
-                              {t("DetailFood.ingredients.Spanish")}{" "}
-                            </strong>
-                            {data.ingredients.es}
-                          </p>
-                        )}
+                          {data.ingredients?.pt && (
+                            <p>
+                              <strong>
+                                {t("DetailFood.ingredients.Portuguese")}{" "}
+                              </strong>
+                              {data.ingredients.pt}
+                            </p>
+                          )}
 
-                        {data.ingredients?.pt && (
-                          <p>
-                            <strong>
-                              {t("DetailFood.ingredients.Portuguese")}{" "}
-                            </strong>
-                            {data.ingredients.pt}
-                          </p>
-                        )}
-
-                        {data.ingredients?.en && (
-                          <p>
-                            <strong>
-                              {t("DetailFood.ingredients.English")}{" "}
-                            </strong>
-                            {data.ingredients.en}
-                          </p>
-                        )}
-                      </Card.Body>
-                    </Card>
+                          {data.ingredients?.en && (
+                            <p>
+                              <strong>
+                                {t("DetailFood.ingredients.English")}{" "}
+                              </strong>
+                              {data.ingredients.en}
+                            </p>
+                          )}
+                        </Card.Body>
+                      </Card>
+                    )}
                   </Col>
                 </Row>
               </Card.Body>

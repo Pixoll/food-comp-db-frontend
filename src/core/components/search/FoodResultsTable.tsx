@@ -23,7 +23,7 @@ export default function FoodResultsTable({
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedLanguage, setSelectedLanguage] = useState<"en" | "es" | "pt">(
-    "en"
+    "es"
   );
   const [sortedData, setSortedData] = useState<FoodResult[]>([]);
 
