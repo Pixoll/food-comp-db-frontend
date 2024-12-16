@@ -35,16 +35,7 @@ export default function NewNutrients({
 
   const startEditing = (nutrient: NutrientMeasurementForm) => {
     setEditingNutrientId(nutrient.nutrientId);
-    setFormData({
-      ...nutrient,
-      average: nutrient.average || undefined,
-      deviation: nutrient.deviation || undefined,
-      min: nutrient.min || undefined,
-      max: nutrient.max || undefined,
-      sampleSize: nutrient.sampleSize || undefined,
-      dataType: nutrient.dataType || undefined,
-      referenceCodes: nutrient.referenceCodes || [],
-    });
+    setFormData({ ...nutrient });
   };
 
   const handleInputChange = (
@@ -66,14 +57,14 @@ export default function NewNutrients({
     return !Number.isSafeInteger(formData?.[key] ?? 0);
   };
 
-  const isAverageInvalid = isValueDefined("dataType")
+  const isAverageInvalid = (isValueDefined("average") || isValueDefined("dataType"))
     && (!isValueDefined("average") || isValueLessThan("average", 0));
   const isDeviationInvalid = isValueDefined("deviation") && isValueLessThan("deviation", 0);
   const isMinInvalid = isValueDefined("min") && isValueLessThan("min", 0);
   const isMaxInvalid = isValueDefined("max") && isValueLessThan("max", formData?.min ?? 0);
   const isSampleSizeInvalid = isValueDefined("sampleSize")
     && (isValueLessThan("sampleSize", 1) || isValueNotInteger("sampleSize"));
-  const isDataTypeInvalid = isValueDefined("average") && !formData?.dataType;
+  const isDataTypeInvalid = (isValueDefined("average") || isValueDefined("dataType")) && !formData?.dataType;
 
   const saveChanges = () => {
     if (isAverageInvalid
