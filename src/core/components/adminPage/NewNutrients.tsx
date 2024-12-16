@@ -88,6 +88,7 @@ export default function NewNutrients({
 
     // Proceed with update if validation passes
     if (formData && editingNutrientId !== undefined) {
+      console.log(formData);
       onNutrientUpdate(formData);
       setEditingNutrientId(undefined);
       setFormData(undefined);
@@ -237,14 +238,14 @@ export default function NewNutrients({
                     nameAndIdNutrients
                   )}
                 </td>
-                <td>{nutrient.average || <Ellipsis size={35}></Ellipsis>}</td>
+                <td>{nutrient.average ?? <Ellipsis size={35}></Ellipsis>}</td>
                 <td>
-                  {nutrient.deviation || <Ellipsis size={35}></Ellipsis>}
+                  {nutrient.deviation ?? <Ellipsis size={35}></Ellipsis>}
                 </td>
-                <td>{nutrient.min || <Ellipsis size={35}></Ellipsis>}</td>
-                <td>{nutrient.max || <Ellipsis size={35}></Ellipsis>}</td>
+                <td>{nutrient.min ?? <Ellipsis size={35}></Ellipsis>}</td>
+                <td>{nutrient.max ?? <Ellipsis size={35}></Ellipsis>}</td>
                 <td>
-                  {nutrient.sampleSize || <Ellipsis size={35}></Ellipsis>}
+                  {nutrient.sampleSize ?? <Ellipsis size={35}></Ellipsis>}
                 </td>
                 <td>
                   {nutrient.dataType ? (
