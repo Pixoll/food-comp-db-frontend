@@ -71,24 +71,12 @@
   "Table": {
     "title": "Lista de resultados",
     "search": "Buscar por nombre...",
-    "name": {
-      "title": "Nombre en:",
-      "Spanish": "Español",
-      "Portuguese": "Portugues",
-      "English": "Ingles"
-    },
-    "order": {
-      "title": "Orden del nombre:",
-      "ascending": "Ascendente",
-      "descending": "Descendente"
-    },
     "no_results": "No hay resultados que mostrar."
   },
   "Table_FoodResults": {
     "id": "ID",
     "name": "Nombre",
     "scientific_name": "Nombre cientifico",
-    "subspecies": "Subespecie",
     "action": "Acción",
     "details": "Detalles",
     "modify": "Modificar"

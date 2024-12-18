@@ -18,7 +18,6 @@ enum SortType {
   ID,
   NAME,
   SCIENTIFIC_NAME,
-  SUBSPECIES,
 }
 
 enum SortOrder {
@@ -87,13 +86,12 @@ export default function FoodResultsTable({
           break;
         }
         case SortType.SCIENTIFIC_NAME: {
-          stringA = a.scientificName?.toLowerCase() ?? "~";
-          stringB = b.scientificName?.toLowerCase() ?? "~";
-          break;
-        }
-        case SortType.SUBSPECIES: {
-          stringA = a.subspecies?.toLowerCase() ?? "~";
-          stringB = b.subspecies?.toLowerCase() ?? "~";
+          const scientificNameA = a.scientificName?.toLowerCase() ?? "";
+          const subspeciesA = a.subspecies?.toLowerCase() ?? "";
+          const scientificNameB = b.scientificName?.toLowerCase() ?? "";
+          const subspeciesB = b.subspecies?.toLowerCase() ?? "";
+          stringA = (subspeciesA ? `${scientificNameA} ${subspeciesA}` : scientificNameA) || "~";
+          stringB = (subspeciesB ? `${scientificNameB} ${subspeciesB}` : scientificNameB) || "~";
           break;
         }
       }
@@ -176,14 +174,6 @@ export default function FoodResultsTable({
                 </div>
               </th>
               <th>
-                <div onClick={() => handleSortClick(SortType.SUBSPECIES)}>
-                  {selectedSort === SortType.SUBSPECIES && (
-                    sortOrder === SortOrder.ASC ? <ArrowUp height={24}/> : <ArrowDown height={24}/>
-                  )}
-                  {t("Table_FoodResults.subspecies")}
-                </div>
-              </th>
-              <th>
                 {t("Table_FoodResults.action")}
               </th>
             </tr>
@@ -193,8 +183,11 @@ export default function FoodResultsTable({
               <tr key={item.id}>
                 <td data-label="ID">{item.id}</td>
                 <td data-label="Nombre">{item.commonName[selectedLanguage] || "N/A"}</td>
-                <td data-label="Nombre científico">{item.scientificName || "N/A"}</td>
-                <td data-label="Subespecie">{item.subspecies || "N/A"}</td>
+                <td data-label="Nombre científico">
+                  {(item.subspecies
+                    ? `${item.scientificName} ${item.subspecies.toLowerCase()}`
+                    : item.scientificName) || "N/A"}
+                </td>
                 <td>
                   <button
                     onClick={() => toFoodDetail(item.code)}
