@@ -55,12 +55,7 @@ export default function FoodResultsTable({
   };
 
   useEffect(() => {
-    const filteredData = data.filter((item) =>
-      item.commonName[selectedLanguage]
-        ?.toLowerCase()
-        .includes(searchForName.toLowerCase())
-    );
-    const sorted = [...filteredData].sort((a, b) => {
+    const sorted = [...data].sort((a, b) => {
       const nameA = a.commonName[selectedLanguage]?.toLowerCase() || "";
       const nameB = b.commonName[selectedLanguage]?.toLowerCase() || "";
 
