@@ -74,6 +74,7 @@
     color: #ffffff;
     text-align: left;
     font-weight: bold;
+    user-select: none;
 }
 
 .content-table-foods th {
