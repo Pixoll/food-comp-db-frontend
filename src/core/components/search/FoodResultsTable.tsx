@@ -1,3 +1,4 @@
+import { ArrowDown, ArrowUp } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +14,18 @@ interface FoodResultsListProps {
   setSearchForName: (value: string) => void;
 }
 
+enum SortType {
+  ID,
+  NAME,
+  SCIENTIFIC_NAME,
+  SUBSPECIES,
+}
+
+enum SortOrder {
+  ASC,
+  DESC,
+}
+
 export default function FoodResultsTable({
   data,
   searchForName,
@@ -21,7 +34,8 @@ export default function FoodResultsTable({
   const navigate = useNavigate();
   const { state } = useAuth();
   const { t, i18n } = useTranslation();
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [selectedSort, setSelectedSort] = useState(SortType.NAME);
+  const [sortOrder, setSortOrder] = useState(SortOrder.ASC);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortedData, setSortedData] = useState<FoodResult[]>([]);
   const selectedLanguage = i18n.language as "en" | "es" | "pt";
@@ -56,12 +70,43 @@ export default function FoodResultsTable({
 
   useEffect(() => {
     const sorted = [...data].sort((a, b) => {
-      const nameA = a.commonName[selectedLanguage]?.toLowerCase() || "";
-      const nameB = b.commonName[selectedLanguage]?.toLowerCase() || "";
+      let idA = BigInt(0);
+      let idB = BigInt(0);
+      let stringA = "~";
+      let stringB = "~";
 
-      return sortOrder === "asc"
-        ? nameA.localeCompare(nameB)
-        : nameB.localeCompare(nameA);
+      switch (selectedSort) {
+        case SortType.ID: {
+          idA = BigInt(a.id);
+          idB = BigInt(b.id);
+          break;
+        }
+        case SortType.NAME: {
+          stringA = a.commonName[selectedLanguage]?.toLowerCase() ?? "~";
+          stringB = b.commonName[selectedLanguage]?.toLowerCase() ?? "~";
+          break;
+        }
+        case SortType.SCIENTIFIC_NAME: {
+          stringA = a.scientificName?.toLowerCase() ?? "~";
+          stringB = b.scientificName?.toLowerCase() ?? "~";
+          break;
+        }
+        case SortType.SUBSPECIES: {
+          stringA = a.subspecies?.toLowerCase() ?? "~";
+          stringB = b.subspecies?.toLowerCase() ?? "~";
+          break;
+        }
+      }
+
+      if (idA > idB || stringA > stringB) {
+        return sortOrder === SortOrder.ASC ? 1 : -1;
+      }
+
+      if (idA < idB || stringA < stringB) {
+        return sortOrder === SortOrder.ASC ? -1 : 1;
+      }
+
+      return 0;
     });
 
     setSortedData(sorted);
@@ -71,7 +116,16 @@ export default function FoodResultsTable({
       setCurrentPage(maxPage);
     }
     // eslint-disable-next-line
-  }, [data, selectedLanguage, sortOrder, searchForName]);
+  }, [data, selectedLanguage, selectedSort, sortOrder, searchForName]);
+
+  const handleSortClick = (type: SortType) => {
+    if (selectedSort === type) {
+      setSortOrder(sortOrder === SortOrder.ASC ? SortOrder.DESC : SortOrder.ASC);
+    } else {
+      setSelectedSort(type);
+      setSortOrder(SortOrder.ASC);
+    }
+  };
 
   return (
     <div className="food-list">
@@ -87,18 +141,6 @@ export default function FoodResultsTable({
               className="form-control"
             />
           </Col>
-
-          <Col xs={18} sm={9} md={6} className="order-by-name">
-            <h5>{t("Table.order.title")}</h5>
-            <select
-              value={sortOrder}
-              onChange={(e) => setSortOrder(e.target.value as "asc" | "desc")}
-              className="form-select sort-order-selector"
-            >
-              <option value="asc">{t("Table.order.ascending")}</option>
-              <option value="desc">{t("Table.order.descending")}</option>
-            </select>
-          </Col>
         </Row>
       </div>
 
@@ -109,12 +151,39 @@ export default function FoodResultsTable({
           <table className="content-table-foods">
             <thead>
             <tr>
-              <th style={{ fontSize: 22 }}>{t("Table_FoodResults.id")}</th>
-              <th style={{ fontSize: 22 }}>{t("Table_FoodResults.name")}</th>
-              <th style={{ fontSize: 22 }}>
-                {t("Table_FoodResults.scientific_name")}
+              <th>
+                <div onClick={() => handleSortClick(SortType.ID)}>
+                  {selectedSort === SortType.ID && (
+                    sortOrder === SortOrder.ASC ? <ArrowUp height={24}/> : <ArrowDown height={24}/>
+                  )}
+                  {t("Table_FoodResults.id")}
+                </div>
               </th>
-              <th style={{ fontSize: 22 }}>
+              <th>
+                <div onClick={() => handleSortClick(SortType.NAME)}>
+                  {selectedSort === SortType.NAME && (
+                    sortOrder === SortOrder.ASC ? <ArrowUp height={24}/> : <ArrowDown height={24}/>
+                  )}
+                  {t("Table_FoodResults.name")}
+                </div>
+              </th>
+              <th>
+                <div onClick={() => handleSortClick(SortType.SCIENTIFIC_NAME)}>
+                  {selectedSort === SortType.SCIENTIFIC_NAME && (
+                    sortOrder === SortOrder.ASC ? <ArrowUp height={24}/> : <ArrowDown height={24}/>
+                  )}
+                  {t("Table_FoodResults.scientific_name")}
+                </div>
+              </th>
+              <th>
+                <div onClick={() => handleSortClick(SortType.SUBSPECIES)}>
+                  {selectedSort === SortType.SUBSPECIES && (
+                    sortOrder === SortOrder.ASC ? <ArrowUp height={24}/> : <ArrowDown height={24}/>
+                  )}
+                  {t("Table_FoodResults.subspecies")}
+                </div>
+              </th>
+              <th>
                 {t("Table_FoodResults.action")}
               </th>
             </tr>
@@ -123,18 +192,20 @@ export default function FoodResultsTable({
             {records.map((item) => (
               <tr key={item.id}>
                 <td data-label="ID">{item.id}</td>
-                <td data-label="Nombre">
-                  {item.commonName[selectedLanguage] || "N/A"}
-                </td>
-                <td data-label="Nombre científico">{item.scientificName}</td>
+                <td data-label="Nombre">{item.commonName[selectedLanguage] || "N/A"}</td>
+                <td data-label="Nombre científico">{item.scientificName || "N/A"}</td>
+                <td data-label="Subespecie">{item.subspecies || "N/A"}</td>
                 <td>
-                  <button onClick={() => toFoodDetail(item.code)}>
+                  <button
+                    onClick={() => toFoodDetail(item.code)}
+                    style={{ marginRight: state.isAuthenticated ? "10px" : "" }}
+                  >
                     {t("Table_FoodResults.details")}
                   </button>
                   {state.isAuthenticated && (
                     <button
                       onClick={() => toModifyFoodDetail(item.code)}
-                      style={{ backgroundColor: '#3b7791', color: '#fff' }}
+                      style={{ backgroundColor: '#3b7791' }}
                     >
                       {t("Table_FoodResults.modify")}
                     </button>

@@ -58,29 +58,9 @@
     margin-right: 12px;
 }
 
-.sort-order-selector {
-    width: auto;
-    padding: 10px 14px;
-    border-radius: 30px;
-    border: 2px solid #a8d8d2;
-    background-color: #ffffff;
-    color: #007f67;
-    font-size: 16px;
-    font-family: 'Poppins', serif;
-    cursor: pointer;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-.sort-order-selector:hover {
-    border-color: #007f67;
-    box-shadow: 0 4px 12px rgba(0, 127, 103, 0.2);
-}
-
 /* Tabla */
 .content-table-foods {
     border-collapse: collapse;
-    margin: 30px 0;
     font-size: 0.95em;
     width: 100%;
     border-radius: 8px 8px 0 0;
@@ -94,6 +74,22 @@
     color: #ffffff;
     text-align: left;
     font-weight: bold;
+}
+
+.content-table-foods th {
+    font-size: 22px;
+}
+
+.content-table-foods th > div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+    width: max-content;
+}
+
+.content-table-foods th > div > *:nth-child(1) {
+    margin-right: 5px;
 }
 
 .content-table-foods th,
@@ -175,9 +171,7 @@
         gap: 20px;
     }
 
-    .input-name input,
-    .language-selector,
-    .sort-order-selector {
+    .input-name input {
         width: 100%; 
     }
 }

@@ -88,6 +88,7 @@
     "id": "ID",
     "name": "Name",
     "scientific_name": "Scientific name",
+    "subspecies": "Subspecies",
     "action": "Action",
     "details": "Details",
     "modify": "Modify"
