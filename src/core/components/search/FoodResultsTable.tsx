@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -20,12 +20,11 @@ export default function FoodResultsTable({
 }: FoodResultsListProps) {
   const navigate = useNavigate();
   const { state } = useAuth();
+  const { t, i18n } = useTranslation();
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedLanguage, setSelectedLanguage] = useState<"en" | "es" | "pt">(
-    "es"
-  );
   const [sortedData, setSortedData] = useState<FoodResult[]>([]);
+  const selectedLanguage = i18n.language as "en" | "es" | "pt";
 
   const recordsPerPage = 7;
   const npage = Array.isArray(sortedData)
@@ -36,7 +35,6 @@ export default function FoodResultsTable({
   const records = Array.isArray(sortedData)
     ? sortedData.slice(firstIndex, lastIndex)
     : [];
-  const { t } = useTranslation();
 
   const toFoodDetail = (code: string) => {
     navigate(`/search/details/${code}`);
@@ -54,10 +52,6 @@ export default function FoodResultsTable({
     if (page >= 1 && page <= npage) {
       setCurrentPage(page);
     }
-  };
-
-  const handleLanguageChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setSelectedLanguage(e.target.value as "en" | "es" | "pt");
   };
 
   useEffect(() => {
@@ -99,25 +93,12 @@ export default function FoodResultsTable({
             />
           </Col>
 
-          <Col xs={12} sm={6} md={4} className="translation-name">
-            <h4>{t("Table.name.title")}</h4>
-            <select
-              value={selectedLanguage}
-              onChange={handleLanguageChange}
-              className="form-select language-selector"
-            >
-              <option value="es">{t("Table.name.Spanish")}</option>
-              <option value="en">{t("Table.name.English")}</option>
-              <option value="pt">{t("Table.name.Portuguese")}</option>
-            </select>
-          </Col>
-
-          <Col xs={12} sm={6} md={4} className="order-by-name">
-            <h4>{t("Table.order.title")}</h4>
+          <Col xs={18} sm={9} md={6} className="order-by-name">
+            <h5>{t("Table.order.title")}</h5>
             <select
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value as "asc" | "desc")}
-              className="form-select sortOrder-selector"
+              className="form-select sort-order-selector"
             >
               <option value="asc">{t("Table.order.ascending")}</option>
               <option value="desc">{t("Table.order.descending")}</option>
