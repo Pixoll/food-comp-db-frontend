@@ -66,7 +66,8 @@
       "equal": "Igual a",
       "greater_equal": "Mayor o igual a",
       "greater": "Mayor que"
-    }
+    },
+    "value": "Valor"
   },
   "Table": {
     "title": "Lista de resultados",

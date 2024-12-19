@@ -66,7 +66,8 @@
       "equal": "Equal to",
       "greater_equal": "Greater than or equal to",
       "greater": "Greater than"
-    }
+    },
+    "value": "Value"
   },
   "Table": {
     "title": "Results list",

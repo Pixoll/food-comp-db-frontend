@@ -30,7 +30,7 @@ type Filters = {
 type NutrientFilter = {
   id: number;
   op: string;
-  value: number;
+  value?: number;
 };
 
 export default function FoodFilter() {
@@ -41,7 +41,6 @@ export default function FoodFilter() {
     nutrientsFilter: [{
       id: 0,
       op: "=",
-      value: 0,
     }],
   });
   const [searchForName, setSearchForName] = useState("");
@@ -71,7 +70,7 @@ export default function FoodFilter() {
     region: Array.from(selectedFilters.regionsFilter),
     group: Array.from(selectedFilters.groupsFilter),
     ...selectedFilters.nutrientsFilter.reduce((acc, n) => {
-      if (n.id > 0) {
+      if (n.id > 0 && typeof n.value !== "undefined" && n.value >= 0) {
         acc.nutrient.push(n.id);
         acc.operator.push(n.op);
         acc.value.push(n.value);
@@ -97,7 +96,6 @@ export default function FoodFilter() {
       nutrientsFilter: [{
         id: 0,
         op: "=",
-        value: 0,
       }],
     });
     setSearchForName("");
@@ -122,7 +120,6 @@ export default function FoodFilter() {
       nutrientsFilter: [...prevFilters.nutrientsFilter, {
         id: 0,
         op: "=",
-        value: 0,
       }],
     }));
   };
@@ -226,10 +223,20 @@ export default function FoodFilter() {
                         <Form.Control
                           type="number"
                           aria-label="Nutrient value"
-                          value={nutrient.value}
-                          min={0}
-                          onChange={(e) => handleNutrientFilterChange("value", +e.target.value, index)}
+                          placeholder={t("Measurement.value")}
+                          value={nutrient.value ?? ""}
+                          isInvalid={typeof nutrient.value !== "undefined" && nutrient.value < 0}
+                          onChange={(e) =>
+                            handleNutrientFilterChange(
+                              "value",
+                              e.target.value.length > 0 ? +e.target.value : undefined,
+                              index
+                            )
+                          }
                         />
+                        <Form.Control.Feedback type="invalid">
+                          Valor no puede ser negativo.
+                        </Form.Control.Feedback>
                       </InputGroup>
                     </Form.Group>
                   </Col>
