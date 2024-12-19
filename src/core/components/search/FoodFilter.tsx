@@ -181,7 +181,7 @@ export default function FoodFilter() {
                     </Col>
                   )}
 
-                  <Col className="mb-3">
+                  <Col className="mb-3" xs={12}>
                     <Form.Group controlId="nutrient-select">
                       <Form.Select
                         aria-label="Select nutrient"
@@ -201,45 +201,48 @@ export default function FoodFilter() {
                     </Form.Group>
                   </Col>
 
-                  <Col className="mb-3">
-                    <Form.Group controlId="operator-select">
-                      <Form.Select
-                        aria-label="Select operator"
-                        value={nutrient.op}
-                        onChange={(e) => handleNutrientFilterChange("op", e.target.value, index)}
-                      >
-                        <option value="<">{t("Measurement.operator.less")} (&lt;)</option>
-                        <option value="<=">{t("Measurement.operator.less_equal")} (&le;)</option>
-                        <option value="=">{t("Measurement.operator.equal")} (=)</option>
-                        <option value=">=">{t("Measurement.operator.greater_equal")} (&ge;)</option>
-                        <option value=">">{t("Measurement.operator.greater")} (&gt;)</option>
-                      </Form.Select>
-                    </Form.Group>
-                  </Col>
+                  <Row style={{ padding: "0" }}>
+                    <Col xs={4}>
+                      <Form.Group controlId="operator-select">
+                        <Form.Select
+                          aria-label="Select operator"
+                          value={nutrient.op}
+                          onChange={(e) => handleNutrientFilterChange("op", e.target.value, index)}
+                        >
+                          <option value="<">&lt;</option>
+                          <option value="<=">&le;</option>
+                          <option value="=">=</option>
+                          <option value=">=">&ge;</option>
+                          <option value=">">&gt;</option>
+                        </Form.Select>
+                      </Form.Group>
+                    </Col>
 
-                  <Col className="mb-3">
-                    <Form.Group controlId="value-input">
-                      <InputGroup>
-                        <Form.Control
-                          type="number"
-                          aria-label="Nutrient value"
-                          placeholder={t("Measurement.value")}
-                          value={nutrient.value ?? ""}
-                          isInvalid={typeof nutrient.value !== "undefined" && nutrient.value < 0}
-                          onChange={(e) =>
-                            handleNutrientFilterChange(
-                              "value",
-                              e.target.value.length > 0 ? +e.target.value : undefined,
-                              index
-                            )
-                          }
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          Valor no puede ser negativo.
-                        </Form.Control.Feedback>
-                      </InputGroup>
-                    </Form.Group>
-                  </Col>
+                    <Col xs={8}>
+                      <Form.Group controlId="value-input">
+                        <InputGroup>
+                          <Form.Control
+                            type="number"
+                            aria-label="Nutrient value"
+                            placeholder={t("Measurement.value")}
+                            value={nutrient.value ?? ""}
+                            isInvalid={typeof nutrient.value !== "undefined" && nutrient.value < 0}
+                            style={{ borderRadius: "5px" }}
+                            onChange={(e) =>
+                              handleNutrientFilterChange(
+                                "value",
+                                e.target.value.length > 0 ? +e.target.value : undefined,
+                                index
+                              )
+                            }
+                          />
+                          <Form.Control.Feedback type="invalid">
+                            Valor no puede ser negativo.
+                          </Form.Control.Feedback>
+                        </InputGroup>
+                      </Form.Group>
+                    </Col>
+                  </Row>
                 </Row>
               ))}
               <Row className="align-items-start flex-column">
