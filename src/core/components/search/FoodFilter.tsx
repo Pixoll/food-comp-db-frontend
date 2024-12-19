@@ -246,7 +246,7 @@ export default function FoodFilter() {
                 </Row>
               ))}
               <Row className="align-items-start flex-column">
-                <Col className="mb-3">
+                <Col className={selectedFilters.nutrientsFilter.length > 1 ? "mb-3" : ""}>
                   <Button
                     onClick={handleAddNutrientFilter}
                     variant="outline-primary"
@@ -257,7 +257,7 @@ export default function FoodFilter() {
                   </Button>
                 </Col>
                 {selectedFilters.nutrientsFilter.length > 1 && (
-                  <Col className="mb-3">
+                  <Col>
                     <Button
                       onClick={handleRemoveLastNutrientFilter}
                       variant="outline-secondary"
