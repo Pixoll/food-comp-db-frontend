@@ -71,7 +71,13 @@
   "Table": {
     "title": "Lista de resultados",
     "search": "Buscar por nombre...",
-    "no_results": "No hay resultados que mostrar."
+    "no_results": "No hay resultados que mostrar.",
+    "sort": {
+      "by": "Ordenar por:",
+      "order": "Orden:",
+      "ascending": "Ascendente",
+      "descending": "Descendiente"
+    }
   },
   "Table_FoodResults": {
     "id": "ID",

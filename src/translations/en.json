@@ -71,7 +71,13 @@
   "Table": {
     "title": "Results list",
     "search": "Search by name...",
-    "no_results": "There are no results to show."
+    "no_results": "There are no results to show.",
+    "sort": {
+      "by": "Sort by:",
+      "order": "Sort order:",
+      "ascending": "Ascending",
+      "descending": "Descending"
+    }
   },
   "Table_FoodResults": {
     "id": "ID",

@@ -1,5 +1,5 @@
 import { ArrowDown, ArrowUp } from "lucide-react";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -138,6 +138,31 @@ export default function FoodResultsTable({
               onChange={(e) => setSearchForName(e.target.value)}
               className="form-control"
             />
+          </Col>
+
+          <Col xs={12} sm={6} md={4} className="sort-selector">
+            <h5>{t("Table.sort.by")}</h5>
+            <select
+              value={selectedSort}
+              onChange={(e) => setSelectedSort(+e.target.value)}
+              className="form-select"
+            >
+              <option value={SortType.ID}>{t("Table_FoodResults.id")}</option>
+              <option value={SortType.NAME}>{t("Table_FoodResults.name")}</option>
+              <option value={SortType.SCIENTIFIC_NAME}>{t("Table_FoodResults.scientific_name")}</option>
+            </select>
+          </Col>
+
+          <Col xs={12} sm={6} md={4} className="sort-selector">
+            <h5>{t("Table.sort.order")}</h5>
+            <select
+              value={sortOrder}
+              onChange={(e) => setSortOrder(+e.target.value)}
+              className="form-select"
+            >
+              <option value={SortOrder.ASC}>{t("Table.sort.ascending")}</option>
+              <option value={SortOrder.DESC}>{t("Table.sort.descending")}</option>
+            </select>
           </Col>
         </Row>
       </div>
