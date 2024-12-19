@@ -16,12 +16,20 @@
   position: relative;
 }
 
-.food-filter .accordion-header > button:focus {
-  box-shadow: none !important;
+.food-filter-static {
+  padding: 20px;
 }
 
-.food-filter h5 {
+.food-filter-accordion {
+  display: none;
+}
+
+.food-filter-accordion h5 {
   margin: 0;
+}
+
+.food-filter-accordion .accordion-header > button:focus {
+  box-shadow: none !important;
 }
 
 .nutrients-filter {
@@ -88,5 +96,13 @@
   .food-list {
     width: 100%;
     max-width: 600px;
+  }
+
+  .food-filter-accordion {
+    display: block;
+  }
+
+  .food-filter-static {
+    display: none;
   }
 }
