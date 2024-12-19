@@ -8,24 +8,31 @@
 
 .food-filter {
   width: 39%;
-  min-height: 300px;
   display: flex;
   flex-direction: column;
-  padding: 20px;
   background-color: #ffffff;
-  border: 2px solid #ddd;
-  border-radius: 10px;
+  border-radius: 10px !important;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  gap: 20px;
+  position: relative;
 }
 
-.custom-container {
+.food-filter > .accordion-header > button:focus {
+  box-shadow: none !important;
+}
+
+.food-filter h5 {
+  margin: 0;
+}
+
+.nutrients-filter {
   background-color: #cbe0d4;
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   position: relative;
   font-family: "Poppins", serif;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }
 
 .reset-button {
