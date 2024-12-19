@@ -189,7 +189,7 @@ export default function NewArticleByReference({ data, dataForm, updateNewArticle
                 <Button
                   onClick={handleAddJournal}
                   variant="outline-secondary"
-                  className="largeButton"
+                  className="large-button"
                 >
                   <XCircle className="me-2"/>
                   Cancelar
@@ -222,7 +222,7 @@ export default function NewArticleByReference({ data, dataForm, updateNewArticle
                 <Button
                   onClick={handleAddJournal}
                   variant="outline-primary"
-                  className="largeButton"
+                  className="large-button"
                 >
                   <PlusCircle className="me-2"/>
                   Nueva revista
@@ -265,7 +265,7 @@ export default function NewArticleByReference({ data, dataForm, updateNewArticle
                   <Button
                     onClick={handleAddVolume}
                     variant="outline-primary"
-                    className="largeButton"
+                    className="large-button"
                   >
                     <PlusCircle className="me-2"/>
                     Nuevo volumen
@@ -330,7 +330,7 @@ export default function NewArticleByReference({ data, dataForm, updateNewArticle
                   <Button
                     onClick={handleAddVolume}
                     variant="outline-secondary"
-                    className="largeButton"
+                    className="large-button"
                   >
                     <PlusCircle className="me-2"/>
                     Cancelar

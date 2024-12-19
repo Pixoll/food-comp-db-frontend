@@ -11,7 +11,7 @@
     color: white;
 }
 
-.largeButton {
+.large-button {
     width: 100%;
     display: flex;
     align-items: center;
@@ -22,7 +22,6 @@
 
 }
 
-.largeButton:hover {
+.large-button:hover {
     background-color: rgba(10, 175, 79, 0.897);
-    border: none;
 }

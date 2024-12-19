@@ -227,7 +227,7 @@ export default function FoodFilter() {
               <Button
                 onClick={handleAddNutrientFilter}
                 variant="outline-primary"
-                className="largeButton"
+                className="large-button"
               >
                 <PlusCircle className="me-2"/>
                 Agregar
@@ -238,7 +238,7 @@ export default function FoodFilter() {
                 <Button
                   onClick={handleRemoveLastNutrientFilter}
                   variant="outline-secondary"
-                  className="largeButton"
+                  className="large-button"
                 >
                   <XCircle className="me-2"/>
                   Eliminar último
