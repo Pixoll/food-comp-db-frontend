@@ -35,16 +35,16 @@ export default function FoodResultsTable({
   const { t, i18n } = useTranslation();
   const [selectedSort, setSelectedSort] = useState(SortType.NAME);
   const [sortOrder, setSortOrder] = useState(SortOrder.ASC);
+  const [resultsPerPage, setResultsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortedData, setSortedData] = useState<FoodResult[]>([]);
   const selectedLanguage = i18n.language as "en" | "es" | "pt";
 
-  const recordsPerPage = 7;
   const npage = Array.isArray(sortedData)
-    ? Math.ceil(sortedData.length / recordsPerPage)
+    ? Math.ceil(sortedData.length / resultsPerPage)
     : 0;
-  const lastIndex = currentPage * recordsPerPage;
-  const firstIndex = lastIndex - recordsPerPage;
+  const lastIndex = currentPage * resultsPerPage;
+  const firstIndex = lastIndex - resultsPerPage;
   const records = Array.isArray(sortedData)
     ? sortedData.slice(firstIndex, lastIndex)
     : [];
@@ -109,12 +109,12 @@ export default function FoodResultsTable({
 
     setSortedData(sorted);
 
-    const maxPage = Math.max(Math.ceil(sorted.length / recordsPerPage), 1);
+    const maxPage = Math.max(Math.ceil(sorted.length / resultsPerPage), 1);
     if (currentPage > maxPage) {
       setCurrentPage(maxPage);
     }
     // eslint-disable-next-line
-  }, [data, selectedLanguage, selectedSort, sortOrder, searchForName]);
+  }, [data, selectedLanguage, selectedSort, sortOrder, resultsPerPage, searchForName]);
 
   const handleSortClick = (type: SortType) => {
     if (selectedSort === type) {
@@ -140,7 +140,7 @@ export default function FoodResultsTable({
             />
           </Col>
 
-          <Col xs={12} sm={6} md={4} className="sort-selector">
+          <Col xs={12} sm={4} className="sort-selector">
             <h5>{t("Table.sort.by")}</h5>
             <select
               value={selectedSort}
@@ -153,7 +153,7 @@ export default function FoodResultsTable({
             </select>
           </Col>
 
-          <Col xs={12} sm={6} md={4} className="sort-selector">
+          <Col xs={12} sm={4} className="sort-selector">
             <h5>{t("Table.sort.order")}</h5>
             <select
               value={sortOrder}
@@ -162,6 +162,20 @@ export default function FoodResultsTable({
             >
               <option value={SortOrder.ASC}>{t("Table.sort.ascending")}</option>
               <option value={SortOrder.DESC}>{t("Table.sort.descending")}</option>
+            </select>
+          </Col>
+
+          <Col xs={12} sm={4}>
+            <h5>{t("Table.results_per_page")}</h5>
+            <select
+              value={resultsPerPage}
+              onChange={(e) => setResultsPerPage(+e.target.value)}
+              className="form-select"
+            >
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
             </select>
           </Col>
         </Row>

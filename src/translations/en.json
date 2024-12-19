@@ -78,7 +78,8 @@
       "order": "Sort order:",
       "ascending": "Ascending",
       "descending": "Descending"
-    }
+    },
+    "results_per_page": "Results per page:"
   },
   "Table_FoodResults": {
     "id": "ID",
