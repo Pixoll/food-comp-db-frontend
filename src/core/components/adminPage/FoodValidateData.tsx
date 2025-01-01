@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import Pagination from "../search/Pagination";
 import CSVFoodDisplay from "./CSVFoodDisplay";
@@ -22,7 +22,7 @@ type FoodValidateDataProps = {
   subspeciesNamesInfo: Collection<number, Subspecies>;
   typesNamesInfo: Collection<number, Type>;
   groupsNamesInfo: Collection<number, Group>;
-  handleView: (change:boolean) => void;
+  handleView: (change: boolean) => void;
 };
 
 export default function FoodValidateData({
@@ -33,7 +33,7 @@ export default function FoodValidateData({
   subspeciesNamesInfo,
   typesNamesInfo,
   groupsNamesInfo,
-  handleView
+  handleView,
 }: FoodValidateDataProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 7;
@@ -55,14 +55,70 @@ export default function FoodValidateData({
   };
   const [view, setView] = useState("list");
   const [selectedFood, setSelectedFood] = useState<CSVFood | null>(null);
-  const handleFoods = () =>{
-    console.log("Se ha enviado las referencias") 
-    handleView(false)
-  }
+  const handleFoods = () => {
+    console.log("Se ha enviado las referencias");
+    handleView(false);
+  };
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("Mostrar todos");
+  const dropdownRef = useRef(null);
+  const options = ["Mostrar todos", "Invalidos", "Actualizados", "Validos"];
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !(dropdownRef.current as HTMLElement).contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+  const handleReferences = () => {
+    console.log("Se ha enviado las referencias");
+    handleView(false);
+  };
+
+  const handleSelect = (option: string) => {
+    setSelectedOption(option);
+    setIsOpen(false);
+  };
+
   return (
     <div className="food-list">
       {view === "list" && (
-        <>
+        <Container>
+          <h4>Mostrar </h4>
+          <div className="dropdown-wrapper" ref={dropdownRef}>
+            <div className="dropdown-button" onClick={() => setIsOpen(!isOpen)}>
+              <span id="selected-option">{selectedOption}</span>
+              <span>
+                <i
+                  className={`fa-solid fa-caret-down ${
+                    isOpen ? "fa-rotate-180" : ""
+                  }`}
+                ></i>
+              </span>
+            </div>
+            <div className={`dropdown-menu ${isOpen ? "active" : ""}`}>
+              {options.map((option, index) => (
+                <div
+                  key={index}
+                  className={`order-item ${
+                    selectedOption === option ? "selected" : ""
+                  }`}
+                  onClick={() => handleSelect(option)}
+                >
+                  {option}
+                </div>
+              ))}
+            </div>
+          </div>
           <h2>{t("FoodTableAdmin.List")}</h2>
           {filteredData.length === 0 ? (
             <p>{t("FoodTableAdmin.available")}s</p>
@@ -108,7 +164,7 @@ export default function FoodValidateData({
               )}
             </>
           )}
-        </>
+        </Container>
       )}
       {view === "verificar" && (
         <div className="verification-view">
@@ -138,9 +194,9 @@ export default function FoodValidateData({
         </div>
       )}
       <Container>
-      <button className="button-form-of-food" onClick={handleFoods}>
-        Enviar
-      </button>
+        <button className="button-form-of-food" onClick={handleFoods}>
+          Enviar
+        </button>
       </Container>
     </div>
   );
