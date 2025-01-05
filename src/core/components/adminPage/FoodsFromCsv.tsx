@@ -19,6 +19,7 @@ import makeRequest from "../../utils/makeRequest";
 import FoodValidateData from "./FoodValidateData";
 import ReferenceValidated from "./ReferenceValidated";
 import { Row, Col, Button, Nav, Tab } from "react-bootstrap";
+
 export type CSVReference = {
   flags: number;
   code: CSVValue<number>;

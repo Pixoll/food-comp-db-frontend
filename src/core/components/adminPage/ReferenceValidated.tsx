@@ -4,7 +4,7 @@ import { City, Journal, Author, Reference } from "../../hooks";
 import { BadgeX, CheckCircle, PlusCircle, RefreshCw } from "lucide-react";
 import Pagination from "../search/Pagination";
 import CSVReferenceDisplay from "./CSVReferenceDisplay";
-import { CSVReference } from "./FoodsFromCsv";
+import { CSVReference , CSVValue} from "./FoodsFromCsv";
 import "../../../assets/css/_ReferenceValidated.css";
 
 type ReferenceValidatedProps = {
@@ -16,14 +16,13 @@ type ReferenceValidatedProps = {
   handleView: (change: boolean) => void;
 };
 enum Flag {
-  INVALID = 0,
   VALID = 1,
   IS_NEW = 1 << 1,
   UPDATED = 1 << 2,
 }
 
 const getIconForFlags = (flags: number) => {
-  if (flags === Flag.INVALID) {
+  if (!(flags & Flag.VALID)) {
     return <BadgeX color="red"></BadgeX>;
   }
   if (flags & Flag.IS_NEW) {
@@ -140,7 +139,8 @@ export default function ReferenceValidated({
                   <Table className="custom-table" bordered hover responsive>
                     <thead>
                       <tr>
-                        <th>#</th>
+                        <th>Código</th>
+                        <th>Estado</th>
                         <th>Titulo</th>
                         <th>Año</th>
                         <th>Tipo de referencia</th>
@@ -150,6 +150,7 @@ export default function ReferenceValidated({
                     <tbody>
                       {records.map((item, index) => (
                         <tr key={index}>
+                          <td>{item.code.parsed}</td>
                           <td>{getIconForFlags(item.flags)}</td>
                           <td>
                             {item.title?.parsed || item.title?.raw || "N/A"}

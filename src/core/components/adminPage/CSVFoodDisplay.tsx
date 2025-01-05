@@ -143,7 +143,7 @@ function LangualCodesDisplay({
 
               return (
                 <tr key={index}>
-                  <td>{renderCSVValueWithFlags(code)}</td>
+                  <td>{langualCode?.code}</td>
                   <td>
                     {langualCode
                       ? langualCode.descriptor
