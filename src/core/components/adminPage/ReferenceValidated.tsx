@@ -4,7 +4,7 @@ import { City, Journal, Author, Reference } from "../../hooks";
 import { BadgeX, CheckCircle, PlusCircle, RefreshCw } from "lucide-react";
 import Pagination from "../search/Pagination";
 import CSVReferenceDisplay from "./CSVReferenceDisplay";
-import { CSVReference , CSVValue} from "./FoodsFromCsv";
+import { CSVReference } from "./FoodsFromCsv";
 import "../../../assets/css/_ReferenceValidated.css";
 
 type ReferenceValidatedProps = {

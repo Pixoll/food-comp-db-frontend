@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import Pagination from "../search/Pagination";
+import { BadgeX, CheckCircle, PlusCircle, RefreshCw } from "lucide-react";
 import CSVFoodDisplay from "./CSVFoodDisplay";
 import { Collection } from "../../utils/collection";
 import {
@@ -13,7 +14,27 @@ import {
 } from "../../hooks";
 import { CSVFood } from "./FoodsFromCsv";
 import { Container } from "react-bootstrap";
+enum Flag {
+  VALID = 1,
+  IS_NEW = 1 << 1,
+  UPDATED = 1 << 2,
+}
 
+const getIconForFlags = (flags: number) => {
+  if (!(flags & Flag.VALID)) {
+    return <BadgeX color="red"></BadgeX>;
+  }
+  if (flags & Flag.IS_NEW) {
+    return <PlusCircle color="blue" />;
+  }
+  if (flags & Flag.UPDATED) {
+    return <RefreshCw color="orange" />;
+  }
+  if (flags & Flag.VALID) {
+    return <CheckCircle color="green" />;
+  }
+  return null;
+};
 type FoodValidateDataProps = {
   data: CSVFood[];
   nutrientsInfo: Collection<string, AnyNutrient>;
@@ -127,7 +148,7 @@ export default function FoodValidateData({
               <table className="content-table-foods">
                 <thead>
                   <tr>
-                    <th>ID</th>
+                    <th>Estado</th>
                     <th>{t("FoodTableAdmin.Name")}</th>
                     <th>{t("FoodTableAdmin.Actions")}</th>
                   </tr>
@@ -135,7 +156,7 @@ export default function FoodValidateData({
                 <tbody>
                   {records.map((item, index) => (
                     <tr key={index}>
-                      <td>{index + 1}</td>
+                      <td>{getIconForFlags(item.flags)}</td>
                       <td>
                         {item.commonName.en?.parsed ||
                           item.commonName.en?.raw ||

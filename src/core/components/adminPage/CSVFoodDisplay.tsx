@@ -117,7 +117,7 @@ function LangualCodesDisplay({
     <Card className="mb-3 border-light">
       <Card.Header className="bg-light d-flex align-items-center gap-2">
         <Tag size={20} className="text-secondary" />
-        <strong>Langual Codes</strong>
+        <strong>Códigos languales</strong>
       </Card.Header>
       <Card.Body>
         <Table
@@ -258,7 +258,7 @@ export default function CSVFoodDisplay({
           <Globe size={24} />
           {renderCSVValueWithFlags(food.commonName[activeLanguage])}
         </Card.Title>
-        <div className="d-flex gap-2">
+        <div className="d-flex gap-2 ms-3">
           {(["es", "en", "pt"] as const).map((lang) => (
             <Button
               key={lang}
@@ -278,7 +278,7 @@ export default function CSVFoodDisplay({
             <div className="d-flex flex-column gap-2">
               <div className="d-flex align-items-center gap-2">
                 <Tag size={20} className="text-secondary" />
-                <strong>Code:</strong> {renderCSVValueWithFlags(food.code)}
+                <strong>Código:</strong> {renderCSVValueWithFlags(food.code)}
               </div>
               {food.strain && (
                 <div className="d-flex align-items-center gap-2">
