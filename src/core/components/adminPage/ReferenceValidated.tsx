@@ -37,6 +37,22 @@ const getIconForFlags = (flags: number) => {
   return null;
 };
 
+const filterByFlag = (references: CSVReference[], filterOption: string): CSVReference[] => {
+
+  switch (filterOption) {
+    case "Invalidos":
+      return references.filter(ref => !(ref.flags & Flag.VALID))
+    case "Actualizados":
+      return references.filter(ref => (ref.flags & Flag.UPDATED) && (ref.flags & Flag.VALID));
+    case "Validos":
+      return references.filter(ref => ((ref.flags & Flag.VALID) && !(ref.flags & Flag.UPDATED)));
+    case "Nuevos":
+      return references.filter(ref => (ref.flags & Flag.IS_NEW))
+    default:
+      return references;
+  }
+};
+
 export default function ReferenceValidated({
   data,
   citiesInfo,
@@ -45,6 +61,7 @@ export default function ReferenceValidated({
   referencesInfo,
   handleView,
 }: ReferenceValidatedProps) {
+
   const [view, setView] = useState("list");
   const [selectedReference, setSelectedReference] =
     useState<CSVReference | null>(null);
@@ -52,25 +69,27 @@ export default function ReferenceValidated({
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 7;
   const [filteredData, setFilteredData] = useState(data);
+  const [selectedOption, setSelectedOption] = useState("Mostrar todos");
 
-  const npage = Math.ceil(filteredData.length / recordsPerPage);
-  const lastIndex = currentPage * recordsPerPage;
-  const firstIndex = lastIndex - recordsPerPage;
-  const records = filteredData.slice(firstIndex, lastIndex);
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const options = ["Mostrar todos", "Invalidos", "Actualizados", "Validos", "Nuevos"];
+
+   useEffect(() => {
+    setFilteredData(filterByFlag(data, selectedOption));
+    setCurrentPage(1); 
+  }, [data, selectedOption]);
+
   const changePage = (page: number) => {
     if (page >= 1 && page <= npage) {
       setCurrentPage(page);
     }
   };
 
-  useEffect(() => {
-    setFilteredData(data);
-  }, [data]);
-
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("Mostrar todos");
-  const dropdownRef = useRef(null);
-  const options = ["Mostrar todos", "Invalidos", "Actualizados", "Validos"];
+  const npage = Math.ceil(filteredData.length / recordsPerPage);
+  const lastIndex = currentPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+  const records = filteredData.slice(firstIndex, lastIndex);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -87,6 +106,7 @@ export default function ReferenceValidated({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
   const handleReferences = () => {
     console.log("Se ha enviado las referencias");
     handleView(false);

@@ -80,7 +80,7 @@ const renderCSVValueWithFlags = <T,>(
     return (
       <div className="d-flex justify-content-center align-items-center gap-2">
         <span>{displayValue}</span>
-        {(value.flags === Flag.INVALID || value.flags > 0) && IconComponent && (
+        {IconComponent && (
           <OverlayTrigger
             placement="top"
             overlay={

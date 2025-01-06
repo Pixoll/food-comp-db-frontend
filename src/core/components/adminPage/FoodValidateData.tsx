@@ -46,6 +46,21 @@ type FoodValidateDataProps = {
   handleView: (change: boolean) => void;
 };
 
+const filterByFlag = (references: CSVFood[], filterOption: string): CSVFood[] => {
+
+  switch (filterOption) {
+    case "Invalidos":
+      return references.filter(ref => !(ref.flags & Flag.VALID))
+    case "Actualizados":
+      return references.filter(ref => (ref.flags & Flag.UPDATED) && (ref.flags & Flag.VALID));
+    case "Validos":
+      return references.filter(ref => ((ref.flags & Flag.VALID) && !(ref.flags & Flag.UPDATED)));
+    case "Nuevos":
+      return references.filter(ref => (ref.flags & Flag.IS_NEW))
+    default:
+      return references;
+  }
+};
 export default function FoodValidateData({
   data,
   nutrientsInfo,
@@ -56,34 +71,41 @@ export default function FoodValidateData({
   groupsNamesInfo,
   handleView,
 }: FoodValidateDataProps) {
+  
+  const [view, setView] = useState("list");
+  const [selectedFood, setSelectedFood] = useState<CSVFood | null>(null);
+
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 7;
   const [filteredData, setFilteredData] = useState(data);
   const { t } = useTranslation();
-  const npage = Math.ceil(filteredData.length / recordsPerPage);
-  const lastIndex = currentPage * recordsPerPage;
-  const firstIndex = lastIndex - recordsPerPage;
-  const records = filteredData.slice(firstIndex, lastIndex);
+    
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("Mostrar todos");
+  const dropdownRef = useRef(null);
+
+  const options = ["Mostrar todos", "Invalidos", "Actualizados", "Validos", "Nuevos"];
 
   useEffect(() => {
-    setFilteredData(data);
-  }, [data]);
+      setFilteredData(filterByFlag(data, selectedOption));
+      setCurrentPage(1); 
+    }, [data, selectedOption]);
 
   const changePage = (page: number) => {
     if (page >= 1 && page <= npage) {
       setCurrentPage(page);
     }
   };
-  const [view, setView] = useState("list");
-  const [selectedFood, setSelectedFood] = useState<CSVFood | null>(null);
+
   const handleFoods = () => {
     console.log("Se ha enviado las referencias");
     handleView(false);
   };
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("Mostrar todos");
-  const dropdownRef = useRef(null);
-  const options = ["Mostrar todos", "Invalidos", "Actualizados", "Validos"];
+
+  const npage = Math.ceil(filteredData.length / recordsPerPage);
+  const lastIndex = currentPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+  const records = filteredData.slice(firstIndex, lastIndex);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -109,7 +131,6 @@ export default function FoodValidateData({
     setSelectedOption(option);
     setIsOpen(false);
   };
-
   return (
     <div className="food-list">
       {view === "list" && (
