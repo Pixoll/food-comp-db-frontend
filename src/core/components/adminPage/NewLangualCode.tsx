@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
-import { PlusCircle, Trash2, ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronRight, Trash2, PlusCircle } from 'lucide-react';
 import { useTranslation } from "react-i18next";
 import { LangualCode } from "../../hooks";
 import { Pagination } from "../search";
@@ -23,14 +23,44 @@ export default function NewLangualCode({
 
   const { t } = useTranslation();
 
+  const matchesSearchTerm = (text: string) => 
+    text.toLowerCase().includes(searchTerm.toLowerCase());
+
   const parentCodes = langualCodes.filter(code => code.parentId === null);
-  const getChildCodes = (parentId: number) => 
+
+  const getChildCodes = (parentId: number) =>
     langualCodes.filter(code => code.parentId === parentId);
 
-  const filteredParentCodes = parentCodes.filter(code =>
-    code.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    code.descriptor.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const getFilteredParentAndChildren = () => {
+    if (!searchTerm) return parentCodes;
+
+    return parentCodes.filter(parent => {
+      const parentMatches = 
+        matchesSearchTerm(parent.code)
+
+      const children = getChildCodes(parent.id);
+      const childrenMatch = children.some(child =>
+        matchesSearchTerm(child.code)
+      );
+
+      if ((parentMatches || childrenMatch) && !expandedParents.includes(parent.id)) {
+        setExpandedParents(prev => [...prev, parent.id]);
+      }
+
+      return parentMatches || childrenMatch;
+    });
+  };
+
+  const getFilteredChildCodes = (parentId: number) => {
+    const children = getChildCodes(parentId);
+    
+    if (!searchTerm) return children;
+
+    return children.filter(child =>
+      matchesSearchTerm(child.code) ||
+      matchesSearchTerm(child.descriptor)
+    );
+  };
 
   const toggleExpand = (parentId: number) => {
     setExpandedParents(prev =>
@@ -42,6 +72,7 @@ export default function NewLangualCode({
       setChildrenPages(prev => ({ ...prev, [parentId]: 1 }));
     }
   };
+
   const handleChildSelection = (childId: number) => {
     onLangualCodesChange(childId);
   };
@@ -53,7 +84,7 @@ export default function NewLangualCode({
   const ITEMS_PER_PAGE = 5;
 
   const getPaginatedChildren = (parentId: number) => {
-    const children = getChildCodes(parentId);
+    const children = getFilteredChildCodes(parentId);
     const currentPage = childrenPages[parentId] || 1;
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
@@ -64,7 +95,9 @@ export default function NewLangualCode({
     };
   };
 
-   return (
+  const filteredParentCodes = getFilteredParentAndChildren();
+
+  return (
     <div className="space-y-4 py-4">
       <Form className="mb-4">
         <Form.Control
@@ -72,57 +105,65 @@ export default function NewLangualCode({
           placeholder={t("LangualCode.Search")}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          className="border rounded-lg shadow-sm"
         />
       </Form>
-
+  
       {filteredParentCodes.map(parent => {
         const { children, totalPages, currentPage } = getPaginatedChildren(parent.id);
         
         return (
-          <Card key={parent.id} className="mb-4 shadow-sm border-0">
-            <Card.Header className="bg-gray-50 cursor-pointer" onClick={() => toggleExpand(parent.id)}>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
+          <Card key={parent.id} className="mb-4 shadow-sm">
+            <Card.Header 
+              className="bg-light cursor-pointer hover:bg-gray-200 transition-all"
+              onClick={() => toggleExpand(parent.id)}
+            >
+              <div className="d-flex align-items-center justify-content-between">
+                <div className="d-flex align-items-center gap-2">
                   {expandedParents.includes(parent.id) ? (
-                    <ChevronDown className="w-5 h-5" />
+                    <ChevronDown className="text-secondary" size={20} />
                   ) : (
-                    <ChevronRight className="w-5 h-5" />
+                    <ChevronRight className="text-secondary" size={20} />
                   )}
-                  <span className="font-semibold" color="white">
+                  <span className="fw-semibold text-dark">
                     {parent.code} - {parent.descriptor}
                   </span>
                 </div>
               </div>
             </Card.Header>
-
+  
             {expandedParents.includes(parent.id) && (
               <Card.Body className="p-0">
                 {children.map(child => {
                   const isSelected = selectedLangualCodes.includes(child.id);
+                  
                   return (
-                    <Row key={child.id} className="m-0 border-b last:border-b-0">
+                    <Row key={child.id} className="m-0 border-bottom">
                       <Col xs={9} className="p-3">
-                        <div className="text-sm">
-                          <div className="font-medium">{child.code}</div>
-                          <div className="text-gray-600">{child.descriptor}</div>
+                        <div>
+                          <div className="fw-medium mb-1">{child.code}</div>
+                          <div className="text-secondary small">{child.descriptor}</div>
                         </div>
                       </Col>
+                      
                       <Col xs={3} className="p-0">
                         <Button
                           variant={isSelected ? "danger" : "success"}
-                          className="w-full h-full rounded-none border-0"
+                          className={`w-100 h-100 border-0 rounded-0 d-flex flex-column align-items-center justify-content-center ${
+                            isSelected ? 'hover:bg-danger-dark' : 'hover:bg-success-dark'
+                          }`}
                           onClick={() => handleChildSelection(child.id)}
                         >
-                          <div className="flex flex-col items-center">
+                          <div className="d-flex flex-column align-items-center">
                             {isSelected ? (
                               <>
                                 <Trash2 size={20} className="mb-1" />
-                                <span className="text-sm">{t("LangualCode.Eliminate")}</span>
+                                <span className="small">{t("LangualCode.Eliminate")}</span>
                               </>
                             ) : (
                               <>
                                 <PlusCircle size={20} className="mb-1" />
-                                <span className="text-sm">{t("LangualCode.Add")}</span>
+                                <span className="small">{t("LangualCode.Add")}</span>
                               </>
                             )}
                           </div>
@@ -131,8 +172,9 @@ export default function NewLangualCode({
                     </Row>
                   );
                 })}
+                
                 {totalPages > 1 && (
-                  <div className="p-3 border-t">
+                  <div className="p-3 border-top">
                     <Pagination
                       currentPage={currentPage}
                       npage={totalPages}
