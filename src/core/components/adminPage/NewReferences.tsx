@@ -4,7 +4,7 @@ import { useFetch ,FetchStatus } from "../../hooks";
 import { City, Author, Journal } from "../../hooks";
 import qs from "qs";
 import { SearchBox } from "../search";
-import { Button, Card, Col, Row } from "react-bootstrap";
+import { Button, Card, Col, Row, FormGroup, FormLabel} from "react-bootstrap";
 import { Collection } from "../../utils/collection";
 import {
   getNutrientNameById,
@@ -227,10 +227,12 @@ export default function NewReferences({
     <div className="references-container space-y-4 py-4">
       <Row className="g-3 align-items-center">
         <Col md={3}>
+        <FormGroup>
+          <FormLabel className="fw-semibold mb-2">Titulo</FormLabel>
           <input
-            className="input-name"
+            className="form-control"
             type="text"
-            placeholder="Nombre de autor"
+            placeholder="Ingrese nombre..."
             value={selectedFilters.nameTittle}
             onChange={(e) =>
               setSelectedFilters((prev) => ({
@@ -239,9 +241,11 @@ export default function NewReferences({
               }))
             }
           />
+        </FormGroup>
         </Col>
 
         <Col md={3}>
+        <FormLabel className="fw-semibold mb-2">Ciudad</FormLabel>
           <SearchBox
             filterOptions={
               new Collection(
@@ -258,6 +262,7 @@ export default function NewReferences({
         </Col>
 
         <Col md={3}>
+          <FormLabel className="fw-semibold mb-2">Revista</FormLabel>
           <SearchBox
             filterOptions={
               new Collection(
@@ -274,6 +279,7 @@ export default function NewReferences({
         </Col>
 
         <Col md={3}>
+        <FormLabel className="fw-semibold mb-2">Autor</FormLabel>
           <SearchBox
             filterOptions={
               new Collection(
