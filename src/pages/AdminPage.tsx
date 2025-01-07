@@ -250,7 +250,7 @@ export default function AdminPage() {
       };
     });
   };
-
+  console.log(formData.generalData.langualCodes)
   useEffect(() => {
     const initialFormData: FoodForm = {
       generalData: {

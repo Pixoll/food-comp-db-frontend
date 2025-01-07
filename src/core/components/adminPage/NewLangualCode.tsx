@@ -1,112 +1,150 @@
-import { PlusCircle, Trash2 } from "lucide-react";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
+import { PlusCircle, Trash2, ChevronDown, ChevronRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { LangualCode } from "../../hooks";
-import Pagination from "../search/Pagination";
+import { Pagination } from "../search";
 
-type NewLangualCodesProps = {
+type NewLangualCodeProps = {
   langualCodes: LangualCode[];
   selectedLangualCodes: number[];
-  onLangualCodesChange: (id: number) => void;
-}
+  onLangualCodesChange: (updatedLangualCodeId: number) => void;
+};
 
-const ITEMS_PER_PAGE = 5;
-
-export default function NewLangualCodes({
+export default function NewLangualCode({
   langualCodes,
   selectedLangualCodes,
   onLangualCodesChange
-}: NewLangualCodesProps) {
+}: NewLangualCodeProps) {
+
   const [searchTerm, setSearchTerm] = useState("");
-
-  const filteredLangualCodes = langualCodes.filter((langualCode) =>
-    langualCode.code.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const totalItems = filteredLangualCodes.length;
-  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
-
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
-  const currentItems = filteredLangualCodes.slice(startIndex, endIndex);
-
-  const handlePageChange = (page: number) => {
-    if (page > 0 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
-
-  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-    setCurrentPage(1);
-  };
+  const [expandedParents, setExpandedParents] = useState<number[]>([]);
+  const [childrenPages, setChildrenPages] = useState<Record<number, number>>({});
 
   const { t } = useTranslation();
-  return (
-    <div className="langual-codes-container space-y-4 py-4">
+
+  const parentCodes = langualCodes.filter(code => code.parentId === null);
+  const getChildCodes = (parentId: number) => 
+    langualCodes.filter(code => code.parentId === parentId);
+
+  const filteredParentCodes = parentCodes.filter(code =>
+    code.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    code.descriptor.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const toggleExpand = (parentId: number) => {
+    setExpandedParents(prev =>
+      prev.includes(parentId)
+        ? prev.filter(id => id !== parentId)
+        : [...prev, parentId]
+    );
+    if (!childrenPages[parentId]) {
+      setChildrenPages(prev => ({ ...prev, [parentId]: 1 }));
+    }
+  };
+  const handleChildSelection = (childId: number) => {
+    onLangualCodesChange(childId);
+  };
+
+  const handleChildPageChange = (parentId: number, page: number) => {
+    setChildrenPages(prev => ({ ...prev, [parentId]: page }));
+  };
+
+  const ITEMS_PER_PAGE = 5;
+
+  const getPaginatedChildren = (parentId: number) => {
+    const children = getChildCodes(parentId);
+    const currentPage = childrenPages[parentId] || 1;
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    return {
+      children: children.slice(startIndex, endIndex),
+      totalPages: Math.ceil(children.length / ITEMS_PER_PAGE),
+      currentPage
+    };
+  };
+
+   return (
+    <div className="space-y-4 py-4">
       <Form className="mb-4">
         <Form.Control
           type="text"
           placeholder={t("LangualCode.Search")}
           value={searchTerm}
-          onChange={handleSearch}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
       </Form>
-      {currentItems.map((langualCode) => {
-        const isSelected = selectedLangualCodes.includes(langualCode.id);
 
+      {filteredParentCodes.map(parent => {
+        const { children, totalPages, currentPage } = getPaginatedChildren(parent.id);
+        
         return (
-          <Card
-            key={langualCode.id}
-            className="shadow-lg border-0 overflow-hidden mb-4 hover:scale-[1.01] transition-transform duration-300"
-          >
-            <Row className="g-0 h-100 align-items-stretch">
-              <Col md={9} className="p-4">
-                <div className="space-y-2 h-100">
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">
-                    Codigo Langual: {langualCode.code}
-                  </h3>
-                  <div className="space-y-1 text-sm text-gray-700">
-                    <div>
-                      <span className="font-semibold">Descriptor:</span>{" "}
-                      {langualCode.descriptor}
-                    </div>
-                  </div>
+          <Card key={parent.id} className="mb-4 shadow-sm border-0">
+            <Card.Header className="bg-gray-50 cursor-pointer" onClick={() => toggleExpand(parent.id)}>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  {expandedParents.includes(parent.id) ? (
+                    <ChevronDown className="w-5 h-5" />
+                  ) : (
+                    <ChevronRight className="w-5 h-5" />
+                  )}
+                  <span className="font-semibold" color="white">
+                    {parent.code} - {parent.descriptor}
+                  </span>
                 </div>
-              </Col>
-              <Col md={3} className="d-flex">
-                <Button
-                  variant={isSelected ? "danger" : "success"}
-                  className="w-100 d-flex align-items-center justify-content-center border-0 rounded-0 hover:scale-105 transition-transform duration-300"
-                  onClick={() => onLangualCodesChange(langualCode.id)}
-                >
-                  <div className="text-center">
-                    {isSelected ? (
-                      <>
-                        <Trash2 className="mx-auto mb-2" size={24}/>
-                        <span className="d-block">{t("LangualCode.Eliminate")}</span>
-                      </>
-                    ) : (
-                      <>
-                        <PlusCircle className="mx-auto mb-2" size={24}/>
-                        <span className="d-block">{t("LangualCode.Add")}</span>
-                      </>
-                    )}
+              </div>
+            </Card.Header>
+
+            {expandedParents.includes(parent.id) && (
+              <Card.Body className="p-0">
+                {children.map(child => {
+                  const isSelected = selectedLangualCodes.includes(child.id);
+                  return (
+                    <Row key={child.id} className="m-0 border-b last:border-b-0">
+                      <Col xs={9} className="p-3">
+                        <div className="text-sm">
+                          <div className="font-medium">{child.code}</div>
+                          <div className="text-gray-600">{child.descriptor}</div>
+                        </div>
+                      </Col>
+                      <Col xs={3} className="p-0">
+                        <Button
+                          variant={isSelected ? "danger" : "success"}
+                          className="w-full h-full rounded-none border-0"
+                          onClick={() => handleChildSelection(child.id)}
+                        >
+                          <div className="flex flex-col items-center">
+                            {isSelected ? (
+                              <>
+                                <Trash2 size={20} className="mb-1" />
+                                <span className="text-sm">{t("LangualCode.Eliminate")}</span>
+                              </>
+                            ) : (
+                              <>
+                                <PlusCircle size={20} className="mb-1" />
+                                <span className="text-sm">{t("LangualCode.Add")}</span>
+                              </>
+                            )}
+                          </div>
+                        </Button>
+                      </Col>
+                    </Row>
+                  );
+                })}
+                {totalPages > 1 && (
+                  <div className="p-3 border-t">
+                    <Pagination
+                      currentPage={currentPage}
+                      npage={totalPages}
+                      onPageChange={(page) => handleChildPageChange(parent.id, page)}
+                    />
                   </div>
-                </Button>
-              </Col>
-            </Row>
+                )}
+              </Card.Body>
+            )}
           </Card>
         );
       })}
-
-      <Pagination
-        currentPage={currentPage}
-        npage={totalPages}
-        onPageChange={handlePageChange}
-      />
     </div>
   );
 }
