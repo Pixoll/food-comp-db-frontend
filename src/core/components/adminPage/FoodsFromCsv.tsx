@@ -11,6 +11,7 @@ import {
   ScientificName,
   City,
   Journal,
+  JournalVolume,
   Author,
   Reference,
 } from "../../hooks";
@@ -102,6 +103,7 @@ type FoodsFromCsvProps = {
   citiesInfo: City[];
   authorsInfo: Author[];
   journalsInfo: Journal[];
+  journalVolumesInfo: JournalVolume[];
   referencesInfo: Reference[];
 };
 export default function FoodsFromCsv({
@@ -114,6 +116,7 @@ export default function FoodsFromCsv({
   citiesInfo,
   authorsInfo,
   journalsInfo,
+  journalVolumesInfo,
   referencesInfo
 }: FoodsFromCsvProps) {
   const { t } = useTranslation();
@@ -255,6 +258,7 @@ export default function FoodsFromCsv({
                 authorsInfo={authorsInfo}
                 citiesInfo={citiesInfo}
                 journalsInfo={journalsInfo}
+                journalVolumesInfo={journalVolumesInfo}
                 referencesInfo={referencesInfo}
                 handleView={setDisableTabFood}
                  />

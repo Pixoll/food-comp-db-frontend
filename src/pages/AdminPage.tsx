@@ -632,6 +632,7 @@ export default function AdminPage() {
             citiesInfo = {cities || []}
             authorsInfo={authors || []}
             journalsInfo={journals || []}
+            journalVolumesInfo={journalVolumes || []}
             referencesInfo={references || []}
           />
         )}

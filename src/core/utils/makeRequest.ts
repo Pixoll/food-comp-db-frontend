@@ -7,7 +7,7 @@ export default function makeRequest(
   token: string | null,
   successCallback: SuccessCallback,
   errorCallback: ErrorCallback
-): void;
+): Promise<void>;
 
 export default function makeRequest(
   method: "get" | "delete",
@@ -15,7 +15,7 @@ export default function makeRequest(
   token: string | null,
   successCallback: SuccessCallback,
   errorCallback: ErrorCallback
-): void;
+): Promise<void>;
 
 export default function makeRequest(
   method: "get" | "post" | "put" | "patch" | "delete",
@@ -24,28 +24,42 @@ export default function makeRequest(
   token: string | null | SuccessCallback,
   successCallback: SuccessCallback | ErrorCallback,
   errorCallback?: ErrorCallback
-): void {
-  if (typeof payload === "object" && payload) {
-    axios[method]("http://localhost:3000/api/v1" + endpoint, payload, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(successCallback)
-      .catch(errorCallback);
-  } else {
-    errorCallback = successCallback;
-    successCallback = token as SuccessCallback;
-    token = payload;
+): Promise<void> {
+  return new Promise<void>((resolve) => {
+    let request: Promise<AxiosResponse<any, any>>;
 
-    axios[method]("http://localhost:3000/api/v1" + endpoint, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(successCallback)
-      .catch(errorCallback);
-  }
+    if (typeof payload === "object" && payload) {
+      request = axios[method](
+        "http://localhost:3000/api/v1" + endpoint,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    } else {
+      errorCallback = successCallback;
+      successCallback = token as SuccessCallback;
+      token = payload;
+
+      request = axios[method]("http://localhost:3000/api/v1" + endpoint, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    }
+
+    request
+      .then((...args) => {
+        successCallback(...args);
+        resolve();
+      })
+      .catch((...args) => {
+        errorCallback!(...args);
+        resolve();
+      });
+  });
 }
 
 type SuccessCallback = (response: AxiosResponse) => void | Promise<void>;

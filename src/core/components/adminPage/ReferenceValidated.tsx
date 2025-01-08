@@ -1,9 +1,12 @@
 import { useEffect, useState, useRef } from "react";
 import { Alert, Button, Card, Container, Table } from "react-bootstrap";
-import { City, Journal, Author, Reference } from "../../hooks";
+import { City, Journal, Author, Reference, JournalVolume } from "../../hooks";
 import { BadgeX, CheckCircle, PlusCircle, RefreshCw } from "lucide-react";
 import Pagination from "../search/Pagination";
+import makeRequest from "../../utils/makeRequest";
 import CSVReferenceDisplay from "./CSVReferenceDisplay";
+import { useToast } from "../../context/ToastContext";
+import { useAuth } from "../../context/AuthContext";
 import { CSVReference } from "./FoodsFromCsv";
 import "../../../assets/css/_ReferenceValidated.css";
 
@@ -12,6 +15,7 @@ type ReferenceValidatedProps = {
   citiesInfo: City[];
   authorsInfo: Author[];
   journalsInfo: Journal[];
+  journalVolumesInfo: JournalVolume[];
   referencesInfo: Reference[];
   handleView: (change: boolean) => void;
 };
@@ -37,34 +41,64 @@ const getIconForFlags = (flags: number) => {
   return null;
 };
 
-const filterByFlag = (references: CSVReference[], filterOption: string): CSVReference[] => {
-
+const filterByFlag = (
+  references: CSVReference[],
+  filterOption: string
+): CSVReference[] => {
   switch (filterOption) {
     case "Invalidos":
-      return references.filter(ref => !(ref.flags & Flag.VALID))
+      return references.filter((ref) => !(ref.flags & Flag.VALID));
     case "Actualizados":
-      return references.filter(ref => (ref.flags & Flag.UPDATED) && (ref.flags & Flag.VALID));
+      return references.filter(
+        (ref) => ref.flags & Flag.UPDATED && ref.flags & Flag.VALID
+      );
     case "Validos":
-      return references.filter(ref => ((ref.flags & Flag.VALID) && !(ref.flags & Flag.UPDATED)));
+      return references.filter(
+        (ref) => ref.flags & Flag.VALID && !(ref.flags & Flag.UPDATED)
+      );
     case "Nuevos":
-      return references.filter(ref => (ref.flags & Flag.IS_NEW))
+      return references.filter((ref) => ref.flags & Flag.IS_NEW);
     default:
       return references;
   }
 };
+
+function separate(references: CSVReference[]) {
+  const updated: CSVReference[] = [];
+  const isNew: CSVReference[] = [];
+
+  for (const ref of references) {
+    if (!(ref.flags & Flag.VALID)) {
+      continue;
+    }
+
+    if (ref.flags & Flag.UPDATED) {
+      updated.push(ref);
+    }
+
+    if (ref.flags & Flag.IS_NEW) {
+      isNew.push(ref);
+    }
+  }
+
+  return { updated, isNew };
+}
 
 export default function ReferenceValidated({
   data,
   citiesInfo,
   authorsInfo,
   journalsInfo,
+  journalVolumesInfo,
   referencesInfo,
   handleView,
 }: ReferenceValidatedProps) {
-
   const [view, setView] = useState("list");
   const [selectedReference, setSelectedReference] =
     useState<CSVReference | null>(null);
+
+  const { addToast } = useToast();
+  const { state } = useAuth();
 
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 7;
@@ -73,11 +107,17 @@ export default function ReferenceValidated({
 
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const options = ["Mostrar todos", "Invalidos", "Actualizados", "Validos", "Nuevos"];
+  const options = [
+    "Mostrar todos",
+    "Invalidos",
+    "Actualizados",
+    "Validos",
+    "Nuevos",
+  ];
 
-   useEffect(() => {
+  useEffect(() => {
     setFilteredData(filterByFlag(data, selectedOption));
-    setCurrentPage(1); 
+    setCurrentPage(1);
   }, [data, selectedOption]);
 
   const changePage = (page: number) => {
@@ -107,9 +147,120 @@ export default function ReferenceValidated({
     };
   }, []);
 
-  const handleReferences = () => {
-    console.log("Se ha enviado las referencias");
-    handleView(false);
+  const submitReferences = async () => {
+    const { updated, isNew } = separate(filteredData);
+
+    const newReferences = isNew.map((ref) => {
+      const type = ref.type.parsed ?? ref.type.old ?? undefined;
+      const cityId = ref.city?.parsed ?? ref.city?.old ?? undefined;
+      const volumeNumber = ref.volume?.parsed ?? ref.volume?.old ?? undefined;
+      const issue = ref.issue?.parsed ?? ref.issue?.old ?? undefined;
+      const volumeYear =
+        ref.volumeYear?.parsed ?? ref.volumeYear?.old ?? undefined;
+      const journalId = ref.journal?.parsed ?? ref.volumeYear?.old ?? undefined;
+      const volumeId = journalVolumesInfo.find(
+        (v) =>
+          v.volume === volumeNumber &&
+          v.issue === issue &&
+          v.year === volumeYear &&
+          v.journalId === journalId
+      )?.id;
+
+      const authorIds: number[] = [];
+      const newAuthors: string[] = [];
+
+      for (const author of ref.authors) {
+        const id = author.parsed ?? author.old;
+        if (id) {
+          authorIds.push(id);
+        } else {
+          newAuthors.push(author.raw);
+        }
+      }
+
+      return {
+        code: ref.code.parsed ?? ref.code.old ?? undefined,
+        type,
+        title: ref.title.parsed ?? ref.title.old ?? undefined,
+        authorIds,
+        newAuthors,
+        ...(type === "article" && {
+          newArticle: {
+            pageStart: ref.pageStart?.parsed ?? ref.pageStart?.old ?? undefined,
+            pageEnd: ref.pageEnd?.parsed ?? ref.pageEnd?.old ?? undefined,
+            volumeId,
+            ...(!volumeId && {
+              volume: volumeNumber,
+              issue,
+              year: volumeYear,
+              journalId,
+              ...(!journalId && {
+                newJournal: ref.journal?.raw,
+              }),
+            }),
+          },
+        }),
+        year: ref.year?.parsed ?? ref.year?.old ?? undefined,
+        cityId,
+        ...(!cityId && {
+          newCity: ref.city?.raw,
+        }),
+        other: ref.other?.raw,
+      };
+    });
+
+    // const updatedReferences = updated.map(x => x);
+
+    if (newReferences.length > 0) {
+      makeRequest(
+        "post",
+        `/references`,
+        {
+          references: newReferences,
+        },
+        state.token,
+        () => {
+          addToast({
+            message: "Las referencias se han enviado correctamente",
+            title: "Éxito",
+            type: "Success",
+          });
+          // para habilitar la vista de los alimentos
+          handleView(false);
+        },
+        (error) => {
+          addToast({
+            message: error.response?.data?.message ?? error.message ?? "Error",
+            title: "Fallo",
+            type: "Danger",
+          });
+        }
+      );
+    } else {
+      addToast({
+        message: "No existen referencias nuevas para enviar",
+        type: "Light",
+      });
+
+      handleView(false);
+    }
+
+    // for (const ref of updatedReferences) {
+    //   await makeRequest(
+    //     "patch",
+    //     `/references/${ref.code}`,
+    //     ref,
+    //     state.token,
+    //     () => {},
+    //     (error) => {
+    //       addToast({
+    //         message: error.response?.data?.message ?? error.message ?? "Error",
+    //         title: "Fallo",
+    //         type: "Danger",
+    //       });
+    //     }
+    //   );
+    // }
   };
 
   const handleSelect = (option: string) => {
@@ -245,7 +396,7 @@ export default function ReferenceValidated({
         </Card>
       )}
       <Container>
-        <button className="button-form-of-food" onClick={handleReferences}>
+        <button className="button-form-of-food" onClick={submitReferences}>
           Enviar
         </button>
       </Container>
