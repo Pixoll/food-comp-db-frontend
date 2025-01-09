@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "../assets/css/_AdminPage.css";
 import { useTranslation } from "react-i18next";
 import {
-  FoodsFromCsv,
+  DataFromCsv,
   NewArticle,
   NewArticleByReference,
   NewAuthors,
@@ -622,7 +622,7 @@ export default function AdminPage() {
         )}
 
         {view === "file" && (
-          <FoodsFromCsv
+          <DataFromCsv
             nutrientsInfo={nutrients}
             langualCodesInfo={langualCodes}
             groupsNamesInfo={groups.idToObject}
@@ -634,6 +634,10 @@ export default function AdminPage() {
             journalsInfo={journals || []}
             journalVolumesInfo={journalVolumes || []}
             referencesInfo={references || []}
+            regionsInfo={regions}
+            provincesInfo={provinces}
+            communesInfo={communes}
+            locationsInfo={locations}
           />
         )}
       </div>

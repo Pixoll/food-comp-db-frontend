@@ -25,7 +25,7 @@ import {
   CSVMeasurement,
   CSVStringTranslation,
   CSVValue,
-} from "./FoodsFromCsv";
+} from "./DataFromCsv";
 import { Collection } from "../../utils/collection";
 import {
   AnyNutrient,

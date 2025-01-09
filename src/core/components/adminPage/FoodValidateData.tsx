@@ -3,6 +3,9 @@ import { useTranslation } from "react-i18next";
 import Pagination from "../search/Pagination";
 import { BadgeX, CheckCircle, PlusCircle, RefreshCw } from "lucide-react";
 import CSVFoodDisplay from "./CSVFoodDisplay";
+import makeRequest from "../../utils/makeRequest";
+import { useToast } from "../../context/ToastContext";
+import { useAuth } from "../../context/AuthContext";
 import { Collection } from "../../utils/collection";
 import {
   AnyNutrient,
@@ -11,8 +14,12 @@ import {
   Type,
   ScientificName,
   Subspecies,
+  Region,
+  Province,
+  Commune,
+  Location,
 } from "../../hooks";
-import { CSVFood } from "./FoodsFromCsv";
+import { CSVFood } from "./DataFromCsv";
 import { Container } from "react-bootstrap";
 enum Flag {
   VALID = 1,
@@ -43,24 +50,55 @@ type FoodValidateDataProps = {
   subspeciesNamesInfo: Collection<number, Subspecies>;
   typesNamesInfo: Collection<number, Type>;
   groupsNamesInfo: Collection<number, Group>;
+  regionsInfo: Collection<number, Region>;
+  provincesInfo: Collection<number, Province>;
+  communesInfo: Collection<number, Commune>;
+  locationsInfo: Collection<number, Location>;
   handleView: (change: boolean) => void;
 };
 
-const filterByFlag = (references: CSVFood[], filterOption: string): CSVFood[] => {
-
+const filterByFlag = (
+  references: CSVFood[],
+  filterOption: string
+): CSVFood[] => {
   switch (filterOption) {
     case "Invalidos":
-      return references.filter(ref => !(ref.flags & Flag.VALID))
+      return references.filter((ref) => !(ref.flags & Flag.VALID));
     case "Actualizados":
-      return references.filter(ref => (ref.flags & Flag.UPDATED) && (ref.flags & Flag.VALID));
+      return references.filter(
+        (ref) => ref.flags & Flag.UPDATED && ref.flags & Flag.VALID
+      );
     case "Validos":
-      return references.filter(ref => ((ref.flags & Flag.VALID) && !(ref.flags & Flag.UPDATED)));
+      return references.filter(
+        (ref) => ref.flags & Flag.VALID && !(ref.flags & Flag.UPDATED)
+      );
     case "Nuevos":
-      return references.filter(ref => (ref.flags & Flag.IS_NEW))
+      return references.filter((ref) => ref.flags & Flag.IS_NEW);
     default:
       return references;
   }
 };
+function separate(foods: CSVFood[]) {
+  const updated: CSVFood[] = [];
+  const isNew: CSVFood[] = [];
+
+  for (const food of foods) {
+    if (!(food.flags & Flag.VALID)) {
+      continue;
+    }
+
+    if (food.flags & Flag.UPDATED) {
+      updated.push(food);
+    }
+
+    if (food.flags & Flag.IS_NEW) {
+      isNew.push(food);
+    }
+  }
+
+  return { updated, isNew };
+}
+
 export default function FoodValidateData({
   data,
   nutrientsInfo,
@@ -69,43 +107,253 @@ export default function FoodValidateData({
   subspeciesNamesInfo,
   typesNamesInfo,
   groupsNamesInfo,
+  regionsInfo,
+  provincesInfo,
+  communesInfo,
+  locationsInfo,
   handleView,
 }: FoodValidateDataProps) {
-  
   const [view, setView] = useState("list");
   const [selectedFood, setSelectedFood] = useState<CSVFood | null>(null);
 
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 7;
   const [filteredData, setFilteredData] = useState(data);
+
   const { t } = useTranslation();
-    
+  const { state } = useAuth();
+  const { addToast } = useToast();
+
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("Mostrar todos");
   const dropdownRef = useRef(null);
 
-  const options = ["Mostrar todos", "Invalidos", "Actualizados", "Validos", "Nuevos"];
+  const options = [
+    "Mostrar todos",
+    "Invalidos",
+    "Actualizados",
+    "Validos",
+    "Nuevos",
+  ];
 
   useEffect(() => {
-      setFilteredData(filterByFlag(data, selectedOption));
-      setCurrentPage(1); 
-    }, [data, selectedOption]);
+    setFilteredData(filterByFlag(data, selectedOption));
+    setCurrentPage(1);
+  }, [data, selectedOption]);
 
-  const changePage = (page: number) => {
-    if (page >= 1 && page <= npage) {
-      setCurrentPage(page);
+  const submitFoods = async () => {
+    const { updated, isNew } = separate(filteredData);
+
+    const newFoods = isNew.map((food) => {
+      return {
+        commonName: {
+          es: food.commonName.es?.parsed ?? food.commonName.es?.old,
+          en:
+            food.commonName.en?.parsed ?? food.commonName.en?.old ?? undefined,
+          pt:
+            food.commonName.pt?.parsed ?? food.commonName.pt?.old ?? undefined,
+        },
+        ingredients: {
+          es: food.ingredients.es?.parsed ?? food.ingredients.es?.old,
+          en:
+            food.ingredients.en?.parsed ??
+            food.ingredients.en?.old ??
+            undefined,
+          pt:
+            food.ingredients.pt?.parsed ??
+            food.ingredients.pt?.old ??
+            undefined,
+        },
+        scientificNameId:
+          food.scientificName?.parsed ?? food.scientificName?.old ?? undefined,
+        subspeciesId:
+          food.subspecies?.parsed ?? food.subspecies?.old ?? undefined,
+        groupId: food.group.parsed ?? food.group.old,
+        typeId: food.type.parsed ?? food.type.old,
+        brand: food.brand?.parsed ?? food.brand?.old ?? undefined,
+        observation: food.observation?.raw,
+        originIds: food.origin,
+        nutrientMeasurements: food.measurements.map((measurement) => ({
+          nutrientId: measurement.nutrientId,
+          average:
+            measurement.average.parsed ?? measurement.average.old ?? undefined,
+          deviation:
+            measurement.deviation?.parsed ??
+            measurement.deviation?.old ??
+            undefined,
+          min: measurement.min?.parsed ?? measurement.min?.old ?? undefined,
+          max: measurement.max?.parsed ?? measurement.max?.old ?? undefined,
+          sampleSize:
+            measurement.sampleSize?.parsed ??
+            measurement.sampleSize?.old ??
+            undefined,
+          dataType:
+            measurement.dataType.parsed ??
+            measurement.dataType.old ??
+            undefined,
+          referenceCodes:
+            measurement.referenceCodes?.map(
+              (referenceCode) => referenceCode.parsed ?? referenceCode.old
+            ) ?? undefined,
+        })),
+        langualCodes: food.langualCodes.map(
+          (langualCode) => langualCode.parsed ?? langualCode.old
+        ),
+        code: food.code.parsed ?? food.code.old,
+      };
+    });
+
+    const updatedFoods = updated.map((food) => {
+      return {
+        commonName: {
+          es:
+            food.commonName.es?.parsed ?? food.commonName.es?.old ?? undefined,
+          en:
+            food.commonName.en?.parsed ?? food.commonName.en?.old ?? undefined,
+          pt:
+            food.commonName.pt?.parsed ?? food.commonName.pt?.old ?? undefined,
+        },
+        ingredients: {
+          es:
+            food.ingredients.es?.parsed ??
+            food.ingredients.es?.old ??
+            undefined,
+          en:
+            food.ingredients.en?.parsed ??
+            food.ingredients.en?.old ??
+            undefined,
+          pt:
+            food.ingredients.pt?.parsed ??
+            food.ingredients.pt?.old ??
+            undefined,
+        },
+        scientificNameId:
+          food.scientificName?.parsed ?? food.scientificName?.old ?? undefined,
+        subspeciesId:
+          food.subspecies?.parsed ?? food.subspecies?.old ?? undefined,
+        groupId: food.group.parsed ?? food.group.old ?? undefined,
+        typeId: food.type.parsed ?? food.type.old ?? undefined,
+        brand: food.brand?.parsed ?? food.brand?.old ?? undefined,
+        observation: food.observation?.raw,
+        originIds: food.origin,
+        nutrientMeasurements: food.measurements.map((measurement) => ({
+          nutrientId: measurement.nutrientId,
+          average:
+            measurement.average.parsed ?? measurement.average.old ?? undefined,
+          deviation:
+            measurement.deviation?.parsed ??
+            measurement.deviation?.old ??
+            undefined,
+          min: measurement.min?.parsed ?? measurement.min?.old ?? undefined,
+          max: measurement.max?.parsed ?? measurement.max?.old ?? undefined,
+          sampleSize:
+            measurement.sampleSize?.parsed ??
+            measurement.sampleSize?.old ??
+            undefined,
+          dataType:
+            measurement.dataType.parsed ??
+            measurement.dataType.old ??
+            undefined,
+          referenceCodes:
+            measurement.referenceCodes?.map(
+              (referenceCode) => referenceCode.parsed ?? referenceCode.old
+            ) ?? undefined,
+        })),
+        langualCodes: food.langualCodes.map(
+          (langualCode) => langualCode.parsed ?? langualCode.old ?? undefined
+        ),
+        code: food.code.parsed ?? food.code.old ?? undefined,
+      };
+    });
+
+    if (updatedFoods.length > 0) {
+      let successCount = 0;
+      let failureCount = 0;
+      for (const food of updatedFoods) {
+        await makeRequest(
+          "patch",
+          `/foods/${food.code}`,
+          food,
+          state.token,
+          () => {
+            successCount++;
+          },
+          (error) => {
+            console.log(
+              error.response?.data?.message ?? error.message ?? "Error"
+            );
+            failureCount++;
+          }
+        );
+
+        if (successCount > 0) {
+          addToast({
+            message: `Alimentos actualizados: ${successCount}`,
+            type: "Success",
+          });
+        } else {
+          addToast({
+            message: "No se han actualizado alimentos",
+            type: "Light",
+          });
+        }
+
+        if (failureCount > 0) {
+          addToast({
+            message: `Alimentos no actualizados: ${failureCount}`,
+            type: "Danger",
+          });
+        }
+      }
+    } else {
+      addToast({
+        message: "No existen alimentos actualizados",
+        type: "Light",
+      });
     }
-  };
 
-  const handleFoods = () => {
-    console.log("Se ha enviado las referencias");
-    handleView(false);
+    if (newFoods.length > 0) {
+      makeRequest(
+        "post",
+        `/foods`,
+        {
+          foods: newFoods,
+        },
+        state.token,
+        () => {
+          addToast({
+            message: "Los alimentos se han enviado correctamente",
+            title: "Éxito",
+            type: "Success",
+          });
+          handleView(false);
+        },
+        (error) => {
+          addToast({
+            message: error.response?.data?.message ?? error.message ?? "Error",
+            title: "Fallo",
+            type: "Danger",
+          });
+        }
+      );
+    } else {
+      addToast({
+        message: "No existen alimentos nuevos",
+        type: "Light",
+      });
+    }
   };
 
   const npage = Math.ceil(filteredData.length / recordsPerPage);
   const lastIndex = currentPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
   const records = filteredData.slice(firstIndex, lastIndex);
+
+  const changePage = (page: number) => {
+    if (page >= 1 && page <= npage) {
+      setCurrentPage(page);
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -122,15 +370,12 @@ export default function FoodValidateData({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  const handleReferences = () => {
-    console.log("Se ha enviado las referencias");
-    handleView(false);
-  };
 
   const handleSelect = (option: string) => {
     setSelectedOption(option);
     setIsOpen(false);
   };
+
   return (
     <div className="food-list">
       {view === "list" && (
@@ -236,7 +481,7 @@ export default function FoodValidateData({
         </div>
       )}
       <Container>
-        <button className="button-form-of-food" onClick={handleFoods}>
+        <button className="button-form-of-food" onClick={submitFoods}>
           Enviar
         </button>
       </Container>

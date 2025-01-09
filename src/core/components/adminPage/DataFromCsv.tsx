@@ -14,6 +14,10 @@ import {
   JournalVolume,
   Author,
   Reference,
+  Region,
+  Province,
+  Commune,
+  Location,
 } from "../../hooks";
 import { Collection } from "../../utils/collection";
 import makeRequest from "../../utils/makeRequest";
@@ -24,7 +28,7 @@ import { Row, Col, Button, Nav, Tab } from "react-bootstrap";
 export type CSVReference = {
   flags: number;
   code: CSVValue<number>;
-  authors: Array<CSVValue<number>>; 
+  authors: Array<CSVValue<number>>;
   title: CSVValue<string>;
   type: CSVValue<TypesReferences["type"]>;
   journal?: CSVValue<number>; // este requiere get
@@ -38,8 +42,8 @@ export type CSVReference = {
   other?: CSVValue<string>;
 };
 type TypesReferences = {
-  type:"report" | "thesis" | "article" | "website" | "book"
-}
+  type: "report" | "thesis" | "article" | "website" | "book";
+};
 
 export type CSVValue<T> = {
   parsed: T | null;
@@ -93,6 +97,7 @@ export type CSVFood = {
   langualCodes: Array<CSVValue<number>>;
   measurements: CSVMeasurement[];
 };
+
 type FoodsFromCsvProps = {
   nutrientsInfo: Collection<string, AnyNutrient>;
   langualCodesInfo: Collection<string, LangualCode>;
@@ -105,8 +110,13 @@ type FoodsFromCsvProps = {
   journalsInfo: Journal[];
   journalVolumesInfo: JournalVolume[];
   referencesInfo: Reference[];
+  regionsInfo: Collection<number, Region>;
+  provincesInfo: Collection<number, Province>;
+  communesInfo: Collection<number, Commune>;
+  locationsInfo: Collection<number, Location>;
 };
-export default function FoodsFromCsv({
+
+export default function DataFromCsv({
   nutrientsInfo,
   langualCodesInfo,
   scientificNamesInfo,
@@ -117,7 +127,11 @@ export default function FoodsFromCsv({
   authorsInfo,
   journalsInfo,
   journalVolumesInfo,
-  referencesInfo
+  referencesInfo,
+  regionsInfo,
+  provincesInfo,
+  communesInfo,
+  locationsInfo,
 }: FoodsFromCsvProps) {
   const { t } = useTranslation();
   const { state } = useAuth();
@@ -126,11 +140,13 @@ export default function FoodsFromCsv({
   const [referencesData, setReferencesData] = useState<CSVReference[] | null>(
     null
   );
-  const [activeTab, setActiveTab] = useState<"foods" | "references">("references");
+  const [activeTab, setActiveTab] = useState<"foods" | "references">(
+    "references"
+  );
   const [uploadSuccess, setUploadSuccess] = useState(false);
 
-  const [disableTabFood, setDisableTabFood] = useState(true)
-  const [disableTabReferences, setDisableTabReferences] = useState(false)
+  const [disableTabFood, setDisableTabFood] = useState(true);
+  const [disableTabReferences, setDisableTabReferences] = useState(false);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files && e.target.files.length > 0) {
@@ -229,11 +245,15 @@ export default function FoodsFromCsv({
           onSelect={(k) => setActiveTab(k as "foods" | "references")}
         >
           <Nav variant="tabs" className="mb-3">
-          <Nav.Item >
-              <Nav.Link disabled = {disableTabReferences} eventKey="references">Referencias</Nav.Link>
+            <Nav.Item>
+              <Nav.Link disabled={disableTabReferences} eventKey="references">
+                Referencias
+              </Nav.Link>
             </Nav.Item>
             <Nav.Item>
-              <Nav.Link disabled = {disableTabFood} eventKey="foods">Alimentos</Nav.Link>
+              <Nav.Link disabled={disableTabFood} eventKey="foods">
+                Alimentos
+              </Nav.Link>
             </Nav.Item>
           </Nav>
           <Tab.Content>
@@ -247,21 +267,25 @@ export default function FoodsFromCsv({
                   scientificNamesInfo={scientificNamesInfo}
                   subspeciesNamesInfo={subspeciesNamesInfo}
                   typesNamesInfo={typesNamesInfo}
+                  regionsInfo={regionsInfo}
+                  provincesInfo={provincesInfo}
+                  communesInfo={communesInfo}
+                  locationsInfo={locationsInfo}
                   handleView={setDisableTabReferences}
                 />
               )}
             </Tab.Pane>
             <Tab.Pane eventKey="references">
               {activeTab === "references" && (
-                <ReferenceValidated 
-                data={referencesData}
-                authorsInfo={authorsInfo}
-                citiesInfo={citiesInfo}
-                journalsInfo={journalsInfo}
-                journalVolumesInfo={journalVolumesInfo}
-                referencesInfo={referencesInfo}
-                handleView={setDisableTabFood}
-                 />
+                <ReferenceValidated
+                  data={referencesData}
+                  authorsInfo={authorsInfo}
+                  citiesInfo={citiesInfo}
+                  journalsInfo={journalsInfo}
+                  journalVolumesInfo={journalVolumesInfo}
+                  referencesInfo={referencesInfo}
+                  handleView={setDisableTabFood}
+                />
               )}
             </Tab.Pane>
           </Tab.Content>

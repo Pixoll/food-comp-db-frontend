@@ -10,7 +10,7 @@ import {
   Users,
 } from "lucide-react";
 import { Badge, Card, Col, Row } from "react-bootstrap";
-import { CSVReference, CSVValue } from "./FoodsFromCsv";
+import { CSVReference, CSVValue } from "./DataFromCsv";
 import { City, Journal, Author, Reference } from "../../hooks";
 
 enum Flag {

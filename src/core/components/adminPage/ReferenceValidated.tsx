@@ -7,7 +7,7 @@ import makeRequest from "../../utils/makeRequest";
 import CSVReferenceDisplay from "./CSVReferenceDisplay";
 import { useToast } from "../../context/ToastContext";
 import { useAuth } from "../../context/AuthContext";
-import { CSVReference } from "./FoodsFromCsv";
+import { CSVReference } from "./DataFromCsv";
 import "../../../assets/css/_ReferenceValidated.css";
 
 type ReferenceValidatedProps = {
@@ -242,7 +242,7 @@ export default function ReferenceValidated({
         type: "Light",
       });
 
-      handleView(false);
+      handleView(true);
     }
 
     // for (const ref of updatedReferences) {
