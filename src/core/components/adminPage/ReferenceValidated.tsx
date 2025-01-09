@@ -242,7 +242,7 @@ export default function ReferenceValidated({
         type: "Light",
       });
 
-      handleView(true);
+      handleView(false);
     }
 
     // for (const ref of updatedReferences) {
