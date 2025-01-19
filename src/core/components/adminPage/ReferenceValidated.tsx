@@ -1,12 +1,12 @@
-import { useEffect, useState, useRef } from "react";
-import { Alert, Button, Card, Container, Table } from "react-bootstrap";
-import { City, Journal, Author, Reference, JournalVolume } from "../../hooks";
 import { BadgeX, CheckCircle, PlusCircle, RefreshCw } from "lucide-react";
-import Pagination from "../search/Pagination";
-import makeRequest from "../../utils/makeRequest";
-import CSVReferenceDisplay from "./CSVReferenceDisplay";
-import { useToast } from "../../context/ToastContext";
+import { useEffect, useRef, useState } from "react";
+import { Alert, Button, Card, Container, Table } from "react-bootstrap";
 import { useAuth } from "../../context/AuthContext";
+import { useToast } from "../../context/ToastContext";
+import { Author, City, Journal, JournalVolume, Reference } from "../../hooks";
+import makeRequest from "../../utils/makeRequest";
+import Pagination from "../search/Pagination";
+import CSVReferenceDisplay from "./CSVReferenceDisplay";
 import { CSVReference } from "./DataFromCsv";
 import "../../../assets/css/_ReferenceValidated.css";
 
@@ -19,6 +19,7 @@ type ReferenceValidatedProps = {
   referencesInfo: Reference[];
   handleView: (change: boolean) => void;
 };
+
 enum Flag {
   VALID = 1,
   IS_NEW = 1 << 1,
@@ -30,13 +31,13 @@ const getIconForFlags = (flags: number) => {
     return <BadgeX color="red"></BadgeX>;
   }
   if (flags & Flag.IS_NEW) {
-    return <PlusCircle color="blue" />;
+    return <PlusCircle color="blue"/>;
   }
   if (flags & Flag.UPDATED) {
-    return <RefreshCw color="orange" />;
+    return <RefreshCw color="orange"/>;
   }
   if (flags & Flag.VALID) {
-    return <CheckCircle color="green" />;
+    return <CheckCircle color="green"/>;
   }
   return null;
 };
@@ -148,7 +149,7 @@ export default function ReferenceValidated({
   }, []);
 
   const submitReferences = async () => {
-    const { updated, isNew } = separate(filteredData);
+    const { isNew } = separate(filteredData);
 
     const newReferences = isNew.map((ref) => {
       const type = ref.type.parsed ?? ref.type.old ?? undefined;
@@ -212,14 +213,12 @@ export default function ReferenceValidated({
     // const updatedReferences = updated.map(x => x);
 
     if (newReferences.length > 0) {
-      makeRequest(
-        "post",
-        `/references`,
-        {
+      makeRequest("post", "/references", {
+        token: state.token,
+        payload: {
           references: newReferences,
         },
-        state.token,
-        () => {
+        successCallback: () => {
           addToast({
             message: "Las referencias se han enviado correctamente",
             title: "Éxito",
@@ -228,14 +227,14 @@ export default function ReferenceValidated({
           // para habilitar la vista de los alimentos
           handleView(false);
         },
-        (error) => {
+        errorCallback: (error) => {
           addToast({
             message: error.response?.data?.message ?? error.message ?? "Error",
             title: "Fallo",
             type: "Danger",
           });
         }
-      );
+      });
     } else {
       addToast({
         message: "No existen referencias nuevas para enviar",
@@ -309,44 +308,44 @@ export default function ReferenceValidated({
                 <>
                   <Table className="custom-table" bordered hover responsive>
                     <thead>
-                      <tr>
-                        <th>Código</th>
-                        <th>Estado</th>
-                        <th>Titulo</th>
-                        <th>Año</th>
-                        <th>Tipo de referencia</th>
-                        <th>Acciones</th>
-                      </tr>
+                    <tr>
+                      <th>Código</th>
+                      <th>Estado</th>
+                      <th>Titulo</th>
+                      <th>Año</th>
+                      <th>Tipo de referencia</th>
+                      <th>Acciones</th>
+                    </tr>
                     </thead>
                     <tbody>
-                      {records.map((item, index) => (
-                        <tr key={index}>
-                          <td>{item.code.parsed}</td>
-                          <td>{getIconForFlags(item.flags)}</td>
-                          <td>
-                            {item.title?.parsed || item.title?.raw || "N/A"}
-                          </td>
-                          <td>
-                            {item.year?.parsed || item.year?.raw || "N/A"}
-                          </td>
-                          <td>
-                            {item.type?.parsed || item.type?.raw || "N/A"}
-                          </td>
-                          <td>
-                            <Button
-                              className="button-check"
-                              variant="primary"
-                              size="sm"
-                              onClick={() => {
-                                setSelectedReference(item);
-                                setView("verificar");
-                              }}
-                            >
-                              Ver
-                            </Button>
-                          </td>
-                        </tr>
-                      ))}
+                    {records.map((item, index) => (
+                      <tr key={index}>
+                        <td>{item.code.parsed}</td>
+                        <td>{getIconForFlags(item.flags)}</td>
+                        <td>
+                          {item.title?.parsed || item.title?.raw || "N/A"}
+                        </td>
+                        <td>
+                          {item.year?.parsed || item.year?.raw || "N/A"}
+                        </td>
+                        <td>
+                          {item.type?.parsed || item.type?.raw || "N/A"}
+                        </td>
+                        <td>
+                          <Button
+                            className="button-check"
+                            variant="primary"
+                            size="sm"
+                            onClick={() => {
+                              setSelectedReference(item);
+                              setView("verificar");
+                            }}
+                          >
+                            Ver
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
                     </tbody>
                   </Table>
                   {npage > 1 && (

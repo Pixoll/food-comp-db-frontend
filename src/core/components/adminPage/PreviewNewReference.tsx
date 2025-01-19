@@ -94,12 +94,10 @@ export default function PreviewNewReference({
     : [];
 
   const handleSubmit = () => {
-    makeRequest(
-      "post",
-      `/references/${data.code}`,
-      data,
-      state.token,
-      () => {
+    makeRequest("post", `/references/${data.code}`, {
+      token: state.token,
+      payload: data,
+      successCallback: () => {
         addToast({
           message: "Se creo exitosamente",
           title: "Éxito",
@@ -109,15 +107,15 @@ export default function PreviewNewReference({
         forceReload();
         handleResetReferenceForm(data.code + 1);
       },
-      (error) => {
+      errorCallback: (error) => {
         addToast({
           message: error.response?.data?.message ?? error.message ?? "Error",
           title: "Fallo",
           type: "Danger",
           position: "middle-center",
         });
-      }
-    );
+      },
+    });
   };
 
   return (

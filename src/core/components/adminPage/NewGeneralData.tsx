@@ -104,15 +104,13 @@ export default function NewGeneralData({
       return;
     }
 
-    makeRequest(
-      "post",
-      "/groups",
-      {
-        groupName: newGroup,
-        code: groupCode,
-      },
+    makeRequest("post", "/groups", {
       token,
-      (response) => {
+      payload: {
+        code: groupCode,
+        name: newGroup,
+      },
+      successCallback: (response) => {
         const newGroupId = response.data.id;
         const updatedFormData = {
           ...formData,
@@ -123,11 +121,11 @@ export default function NewGeneralData({
         setNewGroup(undefined);
         setGroupCode("");
       },
-      (error) => {
+      errorCallback: (error) => {
         console.error(t("NewGeneralData.error.group"), error);
         alert(t("NewGeneralData.alert.Failed_group"));
       }
-    );
+    });
   };
 
   const handleCreateType = () => {
@@ -142,15 +140,13 @@ export default function NewGeneralData({
       return;
     }
 
-    makeRequest(
-      "post",
-      "/types",
-      {
-        name: newType,
-        code: typeCode,
-      },
+    makeRequest("post", "/types", {
       token,
-      (response) => {
+      payload: {
+        code: typeCode,
+        name: newType,
+      },
+      successCallback: (response) => {
         const newTypeId = response.data.id;
         const updatedFormData = {
           ...formData,
@@ -162,11 +158,11 @@ export default function NewGeneralData({
         setNewType(undefined);
         setTypeCode("");
       },
-      (error) => {
+      errorCallback: (error) => {
         console.error(t("NewGeneralData.error.type"), error);
         alert(t("NewGeneralData.alert.Failed_type"));
       }
-    );
+    });
   };
 
   const handleCreateScientificName = () => {
@@ -180,12 +176,12 @@ export default function NewGeneralData({
       return;
     }
 
-    makeRequest(
-      "post",
-      "/scientific_names",
-      { name: newScientificName },
+    makeRequest("post", "/scientific_names", {
       token,
-      (response) => {
+      payload: {
+        name: newScientificName,
+      },
+      successCallback: (response) => {
         const newScientificNameId = response.data.id;
         const updatedFormData = {
           ...formData,
@@ -195,11 +191,11 @@ export default function NewGeneralData({
         onUpdate(updatedFormData);
         setNewScientificName(undefined);
       },
-      (error) => {
+      errorCallback: (error) => {
         console.error(t("NewGeneralData.error.scientific"), error);
         alert(t("NewGeneralData.alert.Failed_scientific"));
       }
-    );
+    });
   };
 
   const handleCreateSubspecies = () => {
@@ -213,12 +209,12 @@ export default function NewGeneralData({
       return;
     }
 
-    makeRequest(
-      "post",
-      "/subspecies",
-      { name: newSubspecies },
+    makeRequest("post", "/subspecies", {
       token,
-      (response) => {
+      payload: {
+        name: newSubspecies,
+      },
+      successCallback: (response) => {
         const newSubspeciesId = response.data.id;
         const updatedFormData = {
           ...formData,
@@ -228,11 +224,11 @@ export default function NewGeneralData({
         onUpdate(updatedFormData);
         setNewSubspecies(undefined);
       },
-      (error) => {
+      errorCallback: (error) => {
         console.error(t("NewGeneralData.error.subspecies"), error);
         alert(t("NewGeneralData.alert.Failed_subspecies"));
       }
-    );
+    });
   };
 
   return (

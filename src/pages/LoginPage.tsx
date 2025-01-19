@@ -30,21 +30,18 @@ export default function LoginPage() {
       password: formState.password,
     });
 
-    makeRequest(
-      "post",
-      `/admins/${formState.username}/session`,
-      {
+    makeRequest("post", `/admins/${formState.username}/session`, {
+      payload: {
         password: formState.password,
       },
-      null,
-      (response) => {
+      successCallback: (response) => {
         const token = response.data.token as string;
         login(token, formState.username);
 
         onResetForm();
         navigate("/");
       },
-      (error) => {
+      errorCallback: (error) => {
         console.error(t("loginPage.errors.login"), error);
 
         if (error.response) {
@@ -55,8 +52,8 @@ export default function LoginPage() {
         } else {
           console.error(t("loginPage.errors.unknown"), error.message);
         }
-      }
-    );
+      },
+    });
   };
 
   return (

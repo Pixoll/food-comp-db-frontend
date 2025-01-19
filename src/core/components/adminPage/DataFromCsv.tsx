@@ -1,29 +1,29 @@
 import { ChangeEvent, useState } from "react";
+import { Button, Col, Nav, Row, Tab } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import XLSX from "xlsx";
 import { useAuth } from "../../context/AuthContext";
 import {
   AnyNutrient,
-  LangualCode,
-  Group,
-  Type,
-  Subspecies,
-  ScientificName,
+  Author,
   City,
+  Commune,
+  Group,
   Journal,
   JournalVolume,
-  Author,
+  LangualCode,
+  Location,
+  Province,
   Reference,
   Region,
-  Province,
-  Commune,
-  Location,
+  ScientificName,
+  Subspecies,
+  Type,
 } from "../../hooks";
 import { Collection } from "../../utils/collection";
 import makeRequest from "../../utils/makeRequest";
 import FoodValidateData from "./FoodValidateData";
 import ReferenceValidated from "./ReferenceValidated";
-import { Row, Col, Button, Nav, Tab } from "react-bootstrap";
 
 export type CSVReference = {
   flags: number;
@@ -180,24 +180,20 @@ export default function DataFromCsv({
       references: csv[1],
     };
 
-    console.log(payload);
-
-    makeRequest(
-      "post",
-      "/csv",
+    makeRequest("post", "/csv", {
+      token: state.token,
       payload,
-      state.token,
-      (response) => {
+      successCallback: (response) => {
         setFoodData(response.data.foods);
         setReferencesData(response.data.references);
         setUploadSuccess(true);
         console.log(response.data);
       },
-      (error) => {
+      errorCallback: (error) => {
         console.error(error);
         alert(t("AdminPage.uploadError"));
       }
-    );
+    });
   };
 
   const handleReset = () => {
@@ -214,7 +210,7 @@ export default function DataFromCsv({
         id="fileInput"
         className="file-input"
         type="file"
-        accept=".xlsx, .xls, .csv"
+        accept=".xlsx, .xls"
         onChange={(e) => handleFileChange(e)}
       />
       <label htmlFor="fileInput" className="file-input-label marginButtonRight">

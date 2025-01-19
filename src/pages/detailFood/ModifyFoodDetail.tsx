@@ -68,12 +68,10 @@ export default function ModifyFoodDetail() {
 
     if (!payload.scientificNameId && payload.scientificName) {
       const name = payload.scientificName;
-      makeRequest(
-        "post",
-        "/scientific_names",
-        { name },
-        state.token,
-        () => {
+      makeRequest("post", "/scientific_names", {
+        token: state.token,
+        payload: { name },
+        successCallback: () => {
           scientificNames.forceReload();
           setScientificNameAndSubspecies({
             ...scientificNameAndSubspecies,
@@ -81,10 +79,10 @@ export default function ModifyFoodDetail() {
               name[0].toUpperCase() + name.slice(1).toLowerCase(),
           });
         },
-        (error) => {
+        errorCallback: (error) => {
           console.error("Error al actualizar:", error.response?.data ?? error);
-        }
-      );
+        },
+      });
     } else if (payload.scientificNameId && payload.scientificName) {
       setScientificNameAndSubspecies({
         ...scientificNameAndSubspecies,
@@ -105,22 +103,20 @@ export default function ModifyFoodDetail() {
 
     if (!payload.subspeciesId && payload.subspecies) {
       const name = payload.subspecies;
-      makeRequest(
-        "post",
-        "/subspecies",
-        { name },
-        state.token,
-        () => {
+      makeRequest("post", "/subspecies", {
+        token: state.token,
+        payload: { name },
+        successCallback: () => {
           subspecies.forceReload();
           setScientificNameAndSubspecies({
             ...scientificNameAndSubspecies,
             subspecies: name[0].toUpperCase() + name.slice(1).toLowerCase(),
           });
         },
-        (error) => {
+        errorCallback: (error) => {
           console.error("Error al actualizar:", error.response?.data ?? error);
-        }
-      );
+        },
+      });
     }
   };
 
@@ -383,12 +379,10 @@ export default function ModifyFoodDetail() {
       langualCodes: getUniqueLangualCodeIds(),
     };
     console.log(payload);
-    makeRequest(
-      "patch",
-      `/foods/${code}`,
-      payload,
+    makeRequest("patch", `/foods/${code}`, {
       token,
-      (response) => {
+      payload,
+      successCallback: (response) => {
         console.log("Antes de addToast");
         addToast({
           type: "Success",
@@ -401,7 +395,7 @@ export default function ModifyFoodDetail() {
         });
         console.log("Después de addToast");
       },
-      (error) => {
+      errorCallback: (error) => {
         if (axios.isAxiosError(error)) {
           if ((error.response?.status || -1) >= 400) {
             addToast({
@@ -423,8 +417,8 @@ export default function ModifyFoodDetail() {
         } else {
           console.error("Error desconocido:", error);
         }
-      }
-    );
+      },
+    });
   };
 
   const renderLanguageFields = (field: "commonName" | "ingredients") =>

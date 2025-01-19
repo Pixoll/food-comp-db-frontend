@@ -1,26 +1,27 @@
-import { useEffect, useState, useRef } from "react";
-import { useTranslation } from "react-i18next";
-import Pagination from "../search/Pagination";
 import { BadgeX, CheckCircle, PlusCircle, RefreshCw } from "lucide-react";
-import CSVFoodDisplay from "./CSVFoodDisplay";
-import makeRequest from "../../utils/makeRequest";
-import { useToast } from "../../context/ToastContext";
+import { useEffect, useRef, useState } from "react";
+import { Container } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../../context/AuthContext";
-import { Collection } from "../../utils/collection";
+import { useToast } from "../../context/ToastContext";
 import {
   AnyNutrient,
-  LangualCode,
+  Commune,
   Group,
-  Type,
+  LangualCode,
+  Location,
+  Province,
+  Region,
   ScientificName,
   Subspecies,
-  Region,
-  Province,
-  Commune,
-  Location,
+  Type,
 } from "../../hooks";
+import { Collection } from "../../utils/collection";
+import makeRequest from "../../utils/makeRequest";
+import Pagination from "../search/Pagination";
+import CSVFoodDisplay from "./CSVFoodDisplay";
 import { CSVFood } from "./DataFromCsv";
-import { Container } from "react-bootstrap";
+
 enum Flag {
   VALID = 1,
   IS_NEW = 1 << 1,
@@ -32,13 +33,13 @@ const getIconForFlags = (flags: number) => {
     return <BadgeX color="red"></BadgeX>;
   }
   if (flags & Flag.IS_NEW) {
-    return <PlusCircle color="blue" />;
+    return <PlusCircle color="blue"/>;
   }
   if (flags & Flag.UPDATED) {
-    return <RefreshCw color="orange" />;
+    return <RefreshCw color="orange"/>;
   }
   if (flags & Flag.VALID) {
-    return <CheckCircle color="green" />;
+    return <CheckCircle color="green"/>;
   }
   return null;
 };
@@ -78,6 +79,7 @@ const filterByFlag = (
       return references;
   }
 };
+
 function separate(foods: CSVFood[]) {
   const updated: CSVFood[] = [];
   const isNew: CSVFood[] = [];
@@ -270,21 +272,19 @@ export default function FoodValidateData({
       let successCount = 0;
       let failureCount = 0;
       for (const food of updatedFoods) {
-        await makeRequest(
-          "patch",
-          `/foods/${food.code}`,
-          food,
-          state.token,
-          () => {
+        await makeRequest("patch", `/foods/${food.code}`, {
+          token: state.token,
+          payload: food,
+          successCallback: () => {
             successCount++;
           },
-          (error) => {
+          errorCallback: (error) => {
             console.log(
               error.response?.data?.message ?? error.message ?? "Error"
             );
             failureCount++;
           }
-        );
+        });
 
         if (successCount > 0) {
           addToast({
@@ -313,14 +313,12 @@ export default function FoodValidateData({
     }
 
     if (newFoods.length > 0) {
-      makeRequest(
-        "post",
-        `/foods`,
-        {
+      makeRequest("post", "/foods", {
+        token: state.token,
+        payload: {
           foods: newFoods,
         },
-        state.token,
-        () => {
+        successCallback: () => {
           addToast({
             message: "Los alimentos se han enviado correctamente",
             title: "Éxito",
@@ -328,14 +326,14 @@ export default function FoodValidateData({
           });
           handleView(false);
         },
-        (error) => {
+        errorCallback: (error) => {
           addToast({
             message: error.response?.data?.message ?? error.message ?? "Error",
             title: "Fallo",
             type: "Danger",
           });
         }
-      );
+      });
     } else {
       addToast({
         message: "No existen alimentos nuevos",
@@ -413,33 +411,33 @@ export default function FoodValidateData({
             <>
               <table className="content-table-foods">
                 <thead>
-                  <tr>
-                    <th>Estado</th>
-                    <th>{t("FoodTableAdmin.Name")}</th>
-                    <th>{t("FoodTableAdmin.Actions")}</th>
-                  </tr>
+                <tr>
+                  <th>Estado</th>
+                  <th>{t("FoodTableAdmin.Name")}</th>
+                  <th>{t("FoodTableAdmin.Actions")}</th>
+                </tr>
                 </thead>
                 <tbody>
-                  {records.map((item, index) => (
-                    <tr key={index}>
-                      <td>{getIconForFlags(item.flags)}</td>
-                      <td>
-                        {item.commonName.en?.parsed ||
-                          item.commonName.en?.raw ||
-                          "N/A"}
-                      </td>
-                      <td>
-                        <button
-                          onClick={() => {
-                            setSelectedFood(item);
-                            setView("verificar");
-                          }}
-                        >
-                          {t("FoodTableAdmin.Check")}
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                {records.map((item, index) => (
+                  <tr key={index}>
+                    <td>{getIconForFlags(item.flags)}</td>
+                    <td>
+                      {item.commonName.en?.parsed ||
+                        item.commonName.en?.raw ||
+                        "N/A"}
+                    </td>
+                    <td>
+                      <button
+                        onClick={() => {
+                          setSelectedFood(item);
+                          setView("verificar");
+                        }}
+                      >
+                        {t("FoodTableAdmin.Check")}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
                 </tbody>
               </table>
               {npage > 1 && (

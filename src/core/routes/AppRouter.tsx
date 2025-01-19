@@ -20,14 +20,10 @@ export const AppRouter = () => {
   useEffect(() => {
     if (!isAuthenticated) return;
 
-    makeRequest(
-      "get",
-      `/admins/${username}/session`,
+    makeRequest("get", `/admins/${username}/session`, {
       token,
-      () => {
-      },
-      logout
-    );
+      errorCallback: logout,
+    });
     // eslint-disable-next-line
   }, [location, isAuthenticated, username, token]);
 
