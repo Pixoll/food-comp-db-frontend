@@ -68,7 +68,7 @@ export default function ModifyFoodDetail() {
 
     if (!payload.scientificNameId && payload.scientificName) {
       const name = payload.scientificName;
-      makeRequest("post", "/scientific_names", {
+      makeRequest("post", "/scientific-names", {
         token: state.token,
         payload: { name },
         successCallback: () => {
@@ -121,14 +121,12 @@ export default function ModifyFoodDetail() {
   };
 
   const [generalData, setGeneralData] = useState<{
-    code: string;
     strain?: string;
     brand?: string;
     observation?: string;
     origins?: Origin[];
     langualCodes?: LangualCode[];
   }>({
-    code: data?.code || "",
     strain: data?.strain,
     brand: data?.brand,
     observation: data?.observation,
@@ -162,7 +160,7 @@ export default function ModifyFoodDetail() {
 
   const [nutrientValue, setNutrientValue] = useState<NutrientsValue>({
     energy: data?.nutrientMeasurements.energy || [],
-    mainNutrients: data?.nutrientMeasurements.mainNutrients || [],
+    macronutrients: data?.nutrientMeasurements.macronutrients || [],
     micronutrients: {
       vitamins: data?.nutrientMeasurements.micronutrients?.vitamins || [],
       minerals: data?.nutrientMeasurements.micronutrients?.minerals || [],
@@ -172,7 +170,6 @@ export default function ModifyFoodDetail() {
   useEffect(() => {
     if (data) {
       const initialGeneralData = {
-        code: data.code,
         strain: data.strain,
         brand: data.brand,
         observation: data.observation,
@@ -202,7 +199,7 @@ export default function ModifyFoodDetail() {
       };
       const initialNutrientData = {
         energy: data.nutrientMeasurements.energy || [],
-        mainNutrients: data.nutrientMeasurements.mainNutrients || [],
+        macronutrients: data.nutrientMeasurements.macronutrients || [],
         micronutrients: {
           vitamins: data.nutrientMeasurements.micronutrients?.vitamins || [],
           minerals: data.nutrientMeasurements.micronutrients?.minerals || [],
@@ -317,7 +314,7 @@ export default function ModifyFoodDetail() {
           dataType: energy.dataType,
           referencesCodes: energy.referenceCodes,
         })),
-        ...nutrientValue.mainNutrients.flatMap((mainNutrient) => [
+        ...nutrientValue.macronutrients.flatMap((mainNutrient) => [
           {
             nutrientId: mainNutrient.nutrientId,
             average: stringToNumberOrUndefined(mainNutrient.average.toString()),
@@ -383,7 +380,6 @@ export default function ModifyFoodDetail() {
       token,
       payload,
       successCallback: (response) => {
-        console.log("Antes de addToast");
         addToast({
           type: "Success",
           message:
@@ -393,7 +389,6 @@ export default function ModifyFoodDetail() {
           position: "middle-center",
           duration: 3000,
         });
-        console.log("Después de addToast");
       },
       errorCallback: (error) => {
         if (axios.isAxiosError(error)) {
@@ -475,7 +470,7 @@ export default function ModifyFoodDetail() {
                         <Form.Control
                           type="text"
                           name="code"
-                          value={generalData.code}
+                          value={code}
                           placeholder={t("DetailFood.enter")}
                           onChange={handleInputChange}
                           disabled

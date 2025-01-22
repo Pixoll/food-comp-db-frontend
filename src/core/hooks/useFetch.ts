@@ -36,7 +36,7 @@ export function useFetch<T>(url: string): FetchResult<T> {
     const abortController = new AbortController();
     setController(abortController);
 
-    fetch("http://localhost:3000/api/v1" + url, { signal: abortController.signal })
+    fetch("http://localhost:3000/api" + url, { signal: abortController.signal })
       .then(async (response) => {
         const contentType = response.headers.get("content-type");
         let jsonOrText: object | string;

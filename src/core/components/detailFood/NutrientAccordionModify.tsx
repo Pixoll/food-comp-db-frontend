@@ -44,7 +44,7 @@ export default function NutrientAccordionModify({ data, onUpdate }: NutrientAcco
       const updatedData = {
         ...prevData,
         energy: updateCategory(prevData.energy),
-        mainNutrients: prevData.mainNutrients.map((nutrient) => {
+        mainNutrients: prevData.macronutrients.map((nutrient) => {
           if (nutrient.nutrientId === updatedNutrient.nutrientId) {
             return { ...nutrient, ...updatedNutrient };
           }
@@ -133,14 +133,14 @@ export default function NutrientAccordionModify({ data, onUpdate }: NutrientAcco
                   </Card.Header>
                   <Card.Body>
                     {renderNutrientTable(
-                      data.mainNutrients.filter(
+                      data.macronutrients.filter(
                         (n) => !n.components || n.components.length === 0
                       ),
                       "Nutrientes principales"
                     )}
                   </Card.Body>
                 </Card>
-                {data.mainNutrients
+                {data.macronutrients
                   .filter(
                     (nutrient) =>
                       nutrient.components && nutrient.components.length > 0

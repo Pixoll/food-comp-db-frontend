@@ -25,11 +25,6 @@ export default function LoginPage() {
   const onLogin = (e: FormEvent) => {
     e.preventDefault();
 
-    console.log(t("loginPage.state.request"), `/admins/${formState.username}/session`);
-    console.log(t("loginPage.state.send"), {
-      password: formState.password,
-    });
-
     makeRequest("post", `/admins/${formState.username}/session`, {
       payload: {
         password: formState.password,

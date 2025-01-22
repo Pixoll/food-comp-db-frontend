@@ -26,7 +26,7 @@ export default function makeRequest(
       const { payload, contentType } = options;
 
       request = axios[method](
-        "http://localhost:3000/api/v1" + endpoint,
+        "http://localhost:3000/api" + endpoint,
         payload,
         {
           headers: {
@@ -36,7 +36,7 @@ export default function makeRequest(
         }
       );
     } else {
-      request = axios[method]("http://localhost:3000/api/v1" + endpoint, {
+      request = axios[method]("http://localhost:3000/api" + endpoint, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

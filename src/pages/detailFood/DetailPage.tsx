@@ -1,22 +1,9 @@
 import { useState } from "react";
 import "../../assets/css/_DetailPage.css";
-import {
-  Col,
-  Container,
-  Nav,
-  Row,
-  Tab,
-  ListGroup,
-  Card,
-} from "react-bootstrap";
+import { Card, Col, Container, ListGroup, Nav, Row, Tab, } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import {
-  Graphic,
-  LangualCodeComponent,
-  NutrientAccordion,
-  ReferencesList,
-} from "../../core/components/detailFood";
+import { Graphic, LangualCodeComponent, NutrientAccordion, ReferencesList, } from "../../core/components/detailFood";
 import Footer from "../../core/components/Footer";
 import { FetchStatus, useFetch } from "../../core/hooks";
 import { SingleFoodResult } from "../../core/types/SingleFoodResult";
@@ -73,8 +60,8 @@ export default function DetailPage() {
     "#17BECF",
   ];
 
-  const references = data?.references ?? [];
-  const mainNutrients = data?.nutrientMeasurements?.mainNutrients ?? [];
+  const references = data.references ?? [];
+  const mainNutrients = data.nutrientMeasurements?.macronutrients ?? [];
 
   const graphicData =
     mainNutrients
@@ -85,7 +72,7 @@ export default function DetailPage() {
         fill: colors[index % colors.length],
       })) || [];
 
-  const graphicDataPorcent =
+  const graphicDataPercent =
     mainNutrients
       .filter(
         (mainNutrient) =>
@@ -120,24 +107,24 @@ export default function DetailPage() {
                     <ListGroup variant="flush">
                       <ListGroup.Item>
                         <strong>{t("DetailFood.code")}: </strong>
-                        {data.code}
+                        {code}
                       </ListGroup.Item>
 
-                      {data.commonName?.es && (
+                      {data.commonName.es && (
                         <ListGroup.Item>
                           <strong>{t("DetailFood.name.Spanish")} </strong>
                           {data.commonName.es}
                         </ListGroup.Item>
                       )}
 
-                      {data.commonName?.pt && (
+                      {data.commonName.pt && (
                         <ListGroup.Item>
                           <strong>{t("DetailFood.name.Portuguese")}: </strong>
                           {data.commonName.pt}
                         </ListGroup.Item>
                       )}
 
-                      {data.commonName?.en && (
+                      {data.commonName.en && (
                         <ListGroup.Item>
                           <strong>{t("DetailFood.name.English")} </strong>
                           {data.commonName.en}
@@ -202,7 +189,7 @@ export default function DetailPage() {
                       <Card className="mb-3">
                         <Card.Body>
                           <Card.Subtitle className="mb-3 text-muted">
-                            {"Origenes"}
+                            {"Orígenes"}
                           </Card.Subtitle>
                           {data.origins.map((origin, index) => (
                             <p key={index}>
@@ -215,16 +202,16 @@ export default function DetailPage() {
                         </Card.Body>
                       </Card>
                     )}
-                    {(data.ingredients?.es ||
-                      data.ingredients?.en ||
-                      data.ingredients?.pt) && (
+                    {(data.ingredients.es ||
+                      data.ingredients.en ||
+                      data.ingredients.pt) && (
                       <Card>
                         <Card.Body>
                           <Card.Subtitle className="mb-3 text-muted">
                             {"Ingredientes"}
                           </Card.Subtitle>
 
-                          {data.ingredients?.es && (
+                          {data.ingredients.es && (
                             <p>
                               <strong>
                                 {t("DetailFood.ingredients.Spanish")}{" "}
@@ -233,7 +220,7 @@ export default function DetailPage() {
                             </p>
                           )}
 
-                          {data.ingredients?.pt && (
+                          {data.ingredients.pt && (
                             <p>
                               <strong>
                                 {t("DetailFood.ingredients.Portuguese")}{" "}
@@ -242,7 +229,7 @@ export default function DetailPage() {
                             </p>
                           )}
 
-                          {data.ingredients?.en && (
+                          {data.ingredients.en && (
                             <p>
                               <strong>
                                 {t("DetailFood.ingredients.English")}{" "}
@@ -271,7 +258,7 @@ export default function DetailPage() {
                 <Col md={6}>
                   <Graphic
                     key={grams}
-                    data={graphicDataPorcent}
+                    data={graphicDataPercent}
                     title={t("DetailFood.graphics.title_R")}
                   />
                 </Col>
@@ -367,7 +354,7 @@ export default function DetailPage() {
                       data={
                         data?.nutrientMeasurements ?? {
                           energy: [],
-                          mainNutrients: [],
+                          macronutrients: [],
                           micronutrients: { vitamins: [], minerals: [] },
                         }
                       }
@@ -377,11 +364,11 @@ export default function DetailPage() {
                   </Tab.Pane>
                   <Tab.Pane eventKey="second">
                     <h4>{t("DetailFood.references.nutrients")}</h4>
-                    <ReferencesList references={references} />
+                    <ReferencesList references={references}/>
                   </Tab.Pane>
                   <Tab.Pane eventKey="third">
                     <h4>{t("DetailFood.codes")}</h4>
-                    <LangualCodeComponent data={data.langualCodes} />
+                    <LangualCodeComponent data={data.langualCodes}/>
                   </Tab.Pane>
                 </Tab.Content>
               </Tab.Container>
@@ -389,7 +376,7 @@ export default function DetailPage() {
           </Col>
         </Row>
       </Container>
-      <Footer />
+      <Footer/>
     </div>
   );
 }

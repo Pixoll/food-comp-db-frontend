@@ -23,25 +23,25 @@ export default function FoodFilter() {
 
   const filters = {
     name: searchForName.trim(),
-    type: Array.from(selectedFilters.foodTypeFilter),
-    region: Array.from(selectedFilters.regionsFilter),
-    group: Array.from(selectedFilters.groupsFilter),
+    types: Array.from(selectedFilters.foodTypeFilter),
+    regions: Array.from(selectedFilters.regionsFilter),
+    groups: Array.from(selectedFilters.groupsFilter),
     ...selectedFilters.nutrientsFilter.reduce((acc, n) => {
       if (n.id > 0 && typeof n.value !== "undefined" && n.value >= 0) {
-        acc.nutrient.push(n.id);
-        acc.operator.push(n.op);
-        acc.value.push(n.value);
+        acc.nutrients.push(n.id);
+        acc.operators.push(n.op);
+        acc.values.push(n.value);
       }
       return acc;
     }, {
-      nutrient: [] as number[],
-      operator: [] as string[],
-      value: [] as number[],
+      nutrients: [] as number[],
+      operators: [] as string[],
+      values: [] as number[],
     }),
   };
 
   const queryString = qs.stringify(filters, {
-    arrayFormat: "repeat",
+    arrayFormat: "comma",
     skipNulls: true,
   });
 

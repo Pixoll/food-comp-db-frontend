@@ -51,7 +51,7 @@ export function useReferences() {
   const authorsResult = useFetch<Author[]>("/references/authors");
   const citiesResult = useFetch<City[]>("/references/cities");
   const journalsResult = useFetch<Journal[]>("/references/journals");
-  const journalsVolumesResult = useFetch<JournalVolume[]>("/references/journal_volumes");
+  const journalsVolumesResult = useFetch<JournalVolume[]>("/references/journal-volumes");
   const articlesResult = useFetch<Article[]>("/references/articles");
 
   const forceReload = () => {

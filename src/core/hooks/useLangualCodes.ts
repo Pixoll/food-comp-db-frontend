@@ -19,13 +19,13 @@ export class LangualCollection extends Collection<string, LangualCode> {
 
   override set(key: string, value: LangualCode): this {
     super.set(key, value);
-  
+
     if (value.parentId !== null) {
       const siblings = this.parentIndex.get(value.parentId) || [];
       siblings.push(value);
       this.parentIndex.set(value.parentId, siblings);
     }
-    
+
     return this;
   }
 
@@ -36,14 +36,14 @@ export class LangualCollection extends Collection<string, LangualCode> {
   override clone(): LangualCollection {
     const cloned = new LangualCollection();
     this.forEach((value, key) => {
-      cloned.set(key, {...value});
+      cloned.set(key, { ...value });
     });
     return cloned;
   }
 }
 
 export function useLangualCodes() {
-  const result = useFetch<LangualCode[]>("/langual_codes");
+  const result = useFetch<LangualCode[]>("/langual-codes");
   const [langualCodes, setLangualCodes] = useState(new LangualCollection());
 
   if (result.status === FetchStatus.Success && langualCodes.size === 0) {

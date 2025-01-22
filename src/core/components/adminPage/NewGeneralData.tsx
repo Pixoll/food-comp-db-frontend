@@ -176,7 +176,7 @@ export default function NewGeneralData({
       return;
     }
 
-    makeRequest("post", "/scientific_names", {
+    makeRequest("post", "/scientific-names", {
       token,
       payload: {
         name: newScientificName,

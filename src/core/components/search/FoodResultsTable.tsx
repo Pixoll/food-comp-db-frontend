@@ -1,10 +1,10 @@
 import { ArrowDown, ArrowUp } from "lucide-react";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { Col, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { FoodResult } from "../../types/option";
-import { Row, Col } from "react-bootstrap";
 import Pagination from "./Pagination";
 import "../../../assets/css/_foodResultsTable.css";
 
@@ -15,7 +15,7 @@ interface FoodResultsListProps {
 }
 
 enum SortType {
-  ID,
+  CODE,
   NAME,
   SCIENTIFIC_NAME,
 }
@@ -69,15 +69,13 @@ export default function FoodResultsTable({
 
   useEffect(() => {
     const sorted = [...data].sort((a, b) => {
-      let idA = BigInt(0);
-      let idB = BigInt(0);
-      let stringA = "~";
-      let stringB = "~";
+      let stringA: string;
+      let stringB: string;
 
       switch (selectedSort) {
-        case SortType.ID: {
-          idA = BigInt(a.id);
-          idB = BigInt(b.id);
+        case SortType.CODE: {
+          stringA = a.code;
+          stringB = b.code;
           break;
         }
         case SortType.NAME: {
@@ -96,11 +94,11 @@ export default function FoodResultsTable({
         }
       }
 
-      if (idA > idB || stringA > stringB) {
+      if (stringA > stringB) {
         return sortOrder === SortOrder.ASC ? 1 : -1;
       }
 
-      if (idA < idB || stringA < stringB) {
+      if (stringA < stringB) {
         return sortOrder === SortOrder.ASC ? -1 : 1;
       }
 
@@ -147,7 +145,7 @@ export default function FoodResultsTable({
               onChange={(e) => setSelectedSort(+e.target.value)}
               className="form-select"
             >
-              <option value={SortType.ID}>{t("Table_FoodResults.id")}</option>
+              <option value={SortType.CODE}>{t("Table_FoodResults.code")}</option>
               <option value={SortType.NAME}>{t("Table_FoodResults.name")}</option>
               <option value={SortType.SCIENTIFIC_NAME}>{t("Table_FoodResults.scientific_name")}</option>
             </select>
@@ -189,11 +187,11 @@ export default function FoodResultsTable({
             <thead>
             <tr>
               <th>
-                <div onClick={() => handleSortClick(SortType.ID)}>
-                  {selectedSort === SortType.ID && (
+                <div onClick={() => handleSortClick(SortType.CODE)}>
+                  {selectedSort === SortType.CODE && (
                     sortOrder === SortOrder.ASC ? <ArrowUp height={24}/> : <ArrowDown height={24}/>
                   )}
-                  {t("Table_FoodResults.id")}
+                  {t("Table_FoodResults.code")}
                 </div>
               </th>
               <th>
@@ -219,8 +217,8 @@ export default function FoodResultsTable({
             </thead>
             <tbody>
             {records.map((item) => (
-              <tr key={item.id}>
-                <td data-label="ID">{item.id}</td>
+              <tr key={item.code}>
+                <td data-label="Code">{item.code}</td>
                 <td data-label="Nombre">{item.commonName[selectedLanguage] || "N/A"}</td>
                 <td data-label="Nombre científico">
                   {(item.subspecies
@@ -237,7 +235,7 @@ export default function FoodResultsTable({
                   {state.isAuthenticated && (
                     <button
                       onClick={() => toModifyFoodDetail(item.code)}
-                      style={{ backgroundColor: '#3b7791' }}
+                      style={{ backgroundColor: "#3b7791" }}
                     >
                       {t("Table_FoodResults.modify")}
                     </button>

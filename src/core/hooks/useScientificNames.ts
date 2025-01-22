@@ -8,7 +8,7 @@ export type ScientificName = {
 };
 
 export function useScientificNames() {
-  const result = useFetch<ScientificName[]>("/scientific_names");
+  const result = useFetch<ScientificName[]>("/scientific-names");
   const [idToObject, setIdToObject] = useState(new Collection<number, ScientificName>());
   const [idToName, setIdToName] = useState(new Collection<string, string>());
   const [nameToId, setNameToId] = useState(new Collection<string, number>());

@@ -1,15 +1,7 @@
 import React, { useState } from "react";
-import { 
-  Accordion, 
-  Button, 
-  Table, 
-  Container, 
-  Row, 
-  Col, 
-  Badge 
-} from "react-bootstrap";
+import { Accordion, Badge, Button, Col, Container, Row, Table } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { BsQuestionCircle, BsInfoCircle } from "react-icons/bs";
+import { BsInfoCircle, BsQuestionCircle } from "react-icons/bs";
 import { NutrientMeasurement, NutrientsValue } from "../../types/SingleFoodResult";
 import CenteredModal from "./CenteredModal";
 
@@ -19,12 +11,12 @@ interface NutrientAccordionProps {
   actualGrams: number;
 }
 
-export default function NutrientAccordion({ 
-  data, 
-  onReferenceClick, 
-  actualGrams 
+export default function NutrientAccordion({
+  data,
+  onReferenceClick,
+  actualGrams
 }: NutrientAccordionProps) {
-  const [selectedNutrient, setSelectedNutrient] = 
+  const [selectedNutrient, setSelectedNutrient] =
     useState<NutrientMeasurement | null>(null);
   const [showModal, setShowModal] = useState(false);
 
@@ -41,42 +33,42 @@ export default function NutrientAccordion({
   };
 
   const renderNutrientTable = (
-    nutrients: NutrientMeasurement[], 
+    nutrients: NutrientMeasurement[],
     calculateValue: boolean = true
   ) => (
     <Table striped bordered hover responsive>
       <thead className="table-light">
-        <tr>
-          <th>{t("nutrientAccordion.name")}</th>
-          <th>{t("nutrientAccordion.unit")}</th>
-          <th>{t("nutrientAccordion.mean")}</th>
-          <th>{t("nutrientAccordion.details")}</th>
-        </tr>
+      <tr>
+        <th>{t("nutrientAccordion.name")}</th>
+        <th>{t("nutrientAccordion.unit")}</th>
+        <th>{t("nutrientAccordion.mean")}</th>
+        <th>{t("nutrientAccordion.details")}</th>
+      </tr>
       </thead>
       <tbody>
-        {nutrients.map((nutrient, index) => (
-          <tr key={index} className="align-middle">
-            <td>{nutrient.name}</td>
-            <td>{nutrient.measurementUnit}</td>
-            <td>
-              <Badge bg="secondary">
-                {calculateValue 
-                  ? (nutrient.average * (actualGrams/100)).toFixed(2) 
-                  : nutrient.average.toFixed(2)
-                }
-              </Badge>
-            </td>
-            <td className="text-center">
-              <Button 
-                variant="outline-info" 
-                size="sm" 
-                onClick={() => handleOpenModal(nutrient)}
-              >
-                <BsInfoCircle size={20} />
-              </Button>
-            </td>
-          </tr>
-        ))}
+      {nutrients.map((nutrient, index) => (
+        <tr key={index} className="align-middle">
+          <td>{nutrient.name}</td>
+          <td>{nutrient.measurementUnit}</td>
+          <td>
+            <Badge bg="secondary">
+              {calculateValue
+                ? (nutrient.average * (actualGrams / 100)).toFixed(2)
+                : nutrient.average.toFixed(2)
+              }
+            </Badge>
+          </td>
+          <td className="text-center">
+            <Button
+              variant="outline-info"
+              size="sm"
+              onClick={() => handleOpenModal(nutrient)}
+            >
+              <BsInfoCircle size={20}/>
+            </Button>
+          </td>
+        </tr>
+      ))}
       </tbody>
     </Table>
   );
@@ -86,7 +78,7 @@ export default function NutrientAccordion({
       <Accordion defaultActiveKey={["0", "1", "2"]} alwaysOpen>
         <Accordion.Item eventKey="0" className="mb-2">
           <Accordion.Header>
-            <BsQuestionCircle className="me-2" />
+            <BsQuestionCircle className="me-2"/>
             {t("nutrientAccordion.Energy")}
           </Accordion.Header>
           <Accordion.Body>
@@ -96,19 +88,19 @@ export default function NutrientAccordion({
 
         <Accordion.Item eventKey="1" className="mb-2">
           <Accordion.Header>
-            <BsQuestionCircle className="me-2" />
+            <BsQuestionCircle className="me-2"/>
             {t("nutrientAccordion.Main")}
           </Accordion.Header>
           <Accordion.Body>
             {/* Main Nutrients without Components */}
             {renderNutrientTable(
-              data.mainNutrients.filter(
+              data.macronutrients.filter(
                 (nutrient) => !nutrient.components || nutrient.components.length === 0
               )
             )}
 
             {/* Main Nutrients with Components */}
-            {data.mainNutrients
+            {data.macronutrients
               .filter((nutrient) => nutrient.components && nutrient.components.length > 0)
               .map((nutrient, index) => (
                 <Accordion key={`sub-${index}`} className="mb-2">
@@ -117,54 +109,54 @@ export default function NutrientAccordion({
                     <Accordion.Body>
                       <Table striped bordered hover responsive>
                         <thead className="table-light">
-                          <tr>
-                            <th>{t("nutrientAccordion.name")}</th>
-                            <th>{t("nutrientAccordion.unit")}</th>
-                            <th>{t("nutrientAccordion.mean")}</th>
-                            <th>{t("nutrientAccordion.details")}</th>
-                          </tr>
+                        <tr>
+                          <th>{t("nutrientAccordion.name")}</th>
+                          <th>{t("nutrientAccordion.unit")}</th>
+                          <th>{t("nutrientAccordion.mean")}</th>
+                          <th>{t("nutrientAccordion.details")}</th>
+                        </tr>
                         </thead>
                         <tbody>
-                          {/* Sub-components */}
-                          {nutrient.components?.map((subComponent, subIndex) => (
-                            <tr key={subIndex} className="align-middle">
-                              <td>{subComponent.name}</td>
-                              <td>{subComponent.measurementUnit}</td>
-                              <td>
-                                <Badge bg="secondary">
-                                  {(subComponent.average * (actualGrams/100)).toFixed(2)}
-                                </Badge>
-                              </td>
-                              <td className="text-center">
-                                <Button 
-                                  variant="outline-info" 
-                                  size="sm" 
-                                  onClick={() => handleOpenModal(subComponent)}
-                                >
-                                  <BsInfoCircle size={20} />
-                                </Button>
-                              </td>
-                            </tr>
-                          ))}
-                          {/* Total row */}
-                          <tr className="table-active">
-                            <td><strong>{nutrient.name} (Total)</strong></td>
-                            <td>{nutrient.measurementUnit}</td>
+                        {/* Sub-components */}
+                        {nutrient.components?.map((subComponent, subIndex) => (
+                          <tr key={subIndex} className="align-middle">
+                            <td>{subComponent.name}</td>
+                            <td>{subComponent.measurementUnit}</td>
                             <td>
-                              <Badge bg="primary">
-                                {nutrient.average.toFixed(2)}
+                              <Badge bg="secondary">
+                                {(subComponent.average * (actualGrams / 100)).toFixed(2)}
                               </Badge>
                             </td>
                             <td className="text-center">
-                              <Button 
-                                variant="outline-primary" 
-                                size="sm" 
-                                onClick={() => handleOpenModal(nutrient)}
+                              <Button
+                                variant="outline-info"
+                                size="sm"
+                                onClick={() => handleOpenModal(subComponent)}
                               >
-                                <BsInfoCircle size={20} />
+                                <BsInfoCircle size={20}/>
                               </Button>
                             </td>
                           </tr>
+                        ))}
+                        {/* Total row */}
+                        <tr className="table-active">
+                          <td><strong>{nutrient.name} (Total)</strong></td>
+                          <td>{nutrient.measurementUnit}</td>
+                          <td>
+                            <Badge bg="primary">
+                              {nutrient.average.toFixed(2)}
+                            </Badge>
+                          </td>
+                          <td className="text-center">
+                            <Button
+                              variant="outline-primary"
+                              size="sm"
+                              onClick={() => handleOpenModal(nutrient)}
+                            >
+                              <BsInfoCircle size={20}/>
+                            </Button>
+                          </td>
+                        </tr>
                         </tbody>
                       </Table>
                     </Accordion.Body>
@@ -176,7 +168,7 @@ export default function NutrientAccordion({
 
         <Accordion.Item eventKey="2">
           <Accordion.Header>
-            <BsQuestionCircle className="me-2" />
+            <BsQuestionCircle className="me-2"/>
             {t("nutrientAccordion.Micronutrients")}
           </Accordion.Header>
           <Accordion.Body>

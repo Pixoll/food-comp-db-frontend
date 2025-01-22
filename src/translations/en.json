@@ -82,7 +82,7 @@
     "results_per_page": "Results per page:"
   },
   "Table_FoodResults": {
-    "id": "ID",
+    "code": "Code",
     "name": "Name",
     "scientific_name": "Scientific name",
     "action": "Action",
