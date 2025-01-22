@@ -38,6 +38,11 @@ export default function FilterBody({
     Array.from(regions.values()).map((region) => [region.id.toString(), region.name])
   );
 
+  const getAvailableNutrients = (array: NutrientFilter[]): typeof nutrients => {
+    const values = new Set(array.map(n => n.id));
+    return nutrients.filter(n => !values.has(n.id));
+  };
+
   const handleFilterChange = (
     filterKey: keyof typeof selectedFilters,
     values: string[]
@@ -109,7 +114,7 @@ export default function FilterBody({
     {/* Measurement Section */}
     <div className="filter-group nutrients-filter">
       <h3 className="measurement-title">{t("Measurement.title")}</h3>
-      {selectedFilters.nutrientsFilter.map((nutrient, index) => (
+      {selectedFilters.nutrientsFilter.map((nutrient, index, array) => (
         <Row className="align-items-start flex-column measurement-row">
           {selectedFilters.nutrientsFilter.length > 1 && index > 0 && (
             <Col className={"mb-3"}>
@@ -130,7 +135,7 @@ export default function FilterBody({
                 }}
               >
                 <option value={""}>Nada seleccionado</option>
-                {nutrients.map(nutrient => (
+                {getAvailableNutrients(array.slice(0, index)).map(nutrient => (
                   <option value={nutrient.id}>{`${nutrient.name} (${nutrient.measurementUnit})`}</option>
                 ))}
               </Form.Select>
@@ -182,16 +187,18 @@ export default function FilterBody({
         </Row>
       ))}
       <Row className="align-items-start flex-column">
-        <Col className={selectedFilters.nutrientsFilter.length > 1 ? "mb-3" : ""}>
-          <Button
-            onClick={handleAddNutrientFilter}
-            variant="outline-primary"
-            className="large-button"
-          >
-            <PlusCircle className="me-2"/>
-            Agregar
-          </Button>
-        </Col>
+        {selectedFilters.nutrientsFilter.length < nutrients.size && (
+          <Col className={selectedFilters.nutrientsFilter.length > 1 ? "mb-3" : ""}>
+            <Button
+              onClick={handleAddNutrientFilter}
+              variant="outline-primary"
+              className="large-button"
+            >
+              <PlusCircle className="me-2"/>
+              Agregar
+            </Button>
+          </Col>
+        )}
         {selectedFilters.nutrientsFilter.length > 1 && (
           <Col>
             <Button
