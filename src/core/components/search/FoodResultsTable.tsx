@@ -4,6 +4,7 @@ import { Col, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useComparison } from "../../context/ComparisonContext";
 import { FoodResult } from "../../types/option";
 import Pagination from "./Pagination";
 import "../../../assets/css/_foodResultsTable.css";
@@ -32,6 +33,7 @@ export default function FoodResultsTable({
 }: FoodResultsListProps) {
   const navigate = useNavigate();
   const { state } = useAuth();
+  const { comparisonFoods, addToComparison, removeFromComparison } = useComparison();
   const { t, i18n } = useTranslation();
   const [selectedSort, setSelectedSort] = useState(SortType.NAME);
   const [sortOrder, setSortOrder] = useState(SortOrder.ASC);
