@@ -215,6 +215,9 @@ export default function FoodResultsTable({
               <th>
                 {t("Table_FoodResults.action")}
               </th>
+              <th>
+                Comparar
+              </th>
             </tr>
             </thead>
             <tbody>
@@ -243,6 +246,25 @@ export default function FoodResultsTable({
                     </button>
                   )}
                 </td>
+                <th>
+                  <button>
+                    {comparisonFoods.includes(item.code) ? (
+                      <button
+                        onClick={() => removeFromComparison(item.code)}
+                        className="btn btn-danger"
+                      >
+                        Eliminar 
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => addToComparison(item.code)}
+                        className="btn btn-primary"
+                      >
+                        Comparar
+                      </button>
+                    )}
+                  </button>
+                </th>
               </tr>
             ))}
             </tbody>
