@@ -1,28 +1,30 @@
 import { createContext, useState, useContext } from 'react';
-import { SingleFoodResult } from "../../core/types/SingleFoodResult";
-
+type foodTag = {
+  code: string;
+  name: string;
+}
 type ComparisonContextType = {
-    comparisonFoods: string[];
-    addToComparison: (item: string) => void;
+    comparisonFoods: foodTag[];
+    addToComparison: (food: foodTag) => void;
     removeFromComparison: (itemId: string) => void;
     clearComparison: () => void;
   }
 const ComparisonContext = createContext<ComparisonContextType | undefined>(undefined);
 
 export default function ComparisonProvider({children}: {children: React.ReactNode}) {
-    const [comparisonFoods, setComparisonFoods] = useState<string[]>([]); // codes of the foods to compare of moment
+    const [comparisonFoods, setComparisonFoods] = useState<foodTag[]>([]); // codes of the foods to compare of moment
 
-    const addToComparison = (item: string) => {
+    const addToComparison = (food: foodTag) => {
         setComparisonFoods(prev => {
-        if (prev.some(i => i === item)) {
+        if (prev.some(i => i.code === food.code)) {
             return prev;
         }
-        return [...prev, item];
+        return [...prev, food]; // Assuming the name is the same as the code for now
         });
         
       };
       const removeFromComparison = (code: string) => {
-        setComparisonFoods(prev => prev.filter(item => item !== code));
+        setComparisonFoods(prev => prev.filter(item => item.code !== code));
       };
 
       const clearComparison = () => {

@@ -248,7 +248,7 @@ export default function FoodResultsTable({
                 </td>
                 <th>
                   <button>
-                    {comparisonFoods.includes(item.code) ? (
+                    {comparisonFoods.map(f=>f.code).includes(item.code) ? (
                       <button
                         onClick={() => removeFromComparison(item.code)}
                         className="btn btn-danger"
@@ -257,7 +257,7 @@ export default function FoodResultsTable({
                       </button>
                     ) : (
                       <button
-                        onClick={() => addToComparison(item.code)}
+                        onClick={() => addToComparison({code: item.code,name: item.commonName[selectedLanguage] ?? ""})}
                         className="btn btn-primary"
                       >
                         Comparar
