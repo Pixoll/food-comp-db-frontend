@@ -2,10 +2,21 @@ import "../../assets/css/_ComparisonPage.css";
 import { useComparison } from "../../core/context/ComparisonContext";
 import { Container, Row, Col, Card, Button} from "react-bootstrap";
 import { Trash, ArrowRight } from "lucide-react";
+import { useFetch , FetchStatus} from "../../core/hooks";
+import { SingleFoodResult } from "../../core/types/SingleFoodResult";
+
+type SingleFoodWithCodeResult = SingleFoodResult & {
+    code: string
+}
 
 export default function ComparisonPage() {
   const { comparisonFoods, removeFromComparison } = useComparison();
+
+  const codes = comparisonFoods.map((food) => `${food.code}`).join(',');
   
+ const foodsResult = useFetch<SingleFoodWithCodeResult[]>(`/foods/compare?codes=${codes}`);
+ const data = foodsResult.status === FetchStatus.Success ?foodsResult.data : []
+
   return (
     <Container className="comparison-page py-4">
       <Row className="mb-4">
@@ -59,7 +70,7 @@ export default function ComparisonPage() {
           
           <Row className="justify-content-center">
             <Col xs={12} md={6} className="text-center">
-              <Button variant="success" size="lg" className="compare-btn">
+              <Button onClick={()=>console.log(data)}variant="success" size="lg" className="compare-btn">
                 Ver Comparación de Nutrientes <ArrowRight className="ms-2" />
               </Button>
             </Col>
