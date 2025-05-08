@@ -59,3 +59,7 @@ input[type="number"] {
 .custom-tab-link:hover {
   background-color: #7dddb0;
 }
+
+.custom-image{
+  margin-bottom: "200px"
+}

@@ -1,16 +1,22 @@
 import { useState } from "react";
 import "../../assets/css/_DetailPage.css";
-import { Card, Col, Container, ListGroup, Nav, Row, Tab, } from "react-bootstrap";
+import { Card, Col, Container, ListGroup, Nav, Row, Tab } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { Graphic, LangualCodeComponent, NutrientAccordion, ReferencesList, } from "../../core/components/detailFood";
 import Footer from "../../core/components/Footer";
 import { FetchStatus, useFetch } from "../../core/hooks";
 import { SingleFoodResult } from "../../core/types/SingleFoodResult";
+//import imagen from '../../assets/images/admin_login_bg.jpg';
+import ImageCarousel from '../../core/components/detailFood/ImageCarousel';
+import imagen1 from '../../assets/images/imagen1.jpg';
+import imagen2 from '../../assets/images/imagen2.jpg';
+import imagen3 from '../../assets/images/imagen3.jpg';
 
 export default function DetailPage() {
   const { t } = useTranslation();
   const [key, setKey] = useState<string>("first");
+  const [images] = useState([imagen1, imagen2, imagen3]);
 
   const handleReferenceClick = () => {
     setKey("second");
@@ -59,6 +65,10 @@ export default function DetailPage() {
     "#DBDB8D",
     "#17BECF",
   ];
+
+
+  
+  
 
   const references = data.references ?? [];
   const mainNutrients = data.nutrientMeasurements?.macronutrients ?? [];
@@ -144,12 +154,8 @@ export default function DetailPage() {
                           {data.subspecies}
                         </ListGroup.Item>
                       )}
-                    </ListGroup>
-                  </Col>
-
-                  <Col md={6}>
-                    <ListGroup variant="flush">
-                      {data.strain && (
+                    
+                    {data.strain && (
                         <ListGroup.Item>
                           <strong>{t("DetailFood.strain")}</strong>
                           {data.strain}
@@ -179,13 +185,12 @@ export default function DetailPage() {
                         <strong>{t("DetailFood.type")} </strong>
                         {data.type.name}
                       </ListGroup.Item>
-                    </ListGroup>
+                      </ListGroup>
                   </Col>
-                </Row>
 
-                <Row className="mb-3">
-                  <Col>
-                    {data.origins && data.origins.length > 0 && (
+                  <Col md={6}>
+                  <ImageCarousel images={images} />
+                  {data.origins && data.origins.length > 0 && (
                       <Card className="mb-3">
                         <Card.Body>
                           <Card.Subtitle className="mb-3 text-muted">
@@ -240,6 +245,12 @@ export default function DetailPage() {
                         </Card.Body>
                       </Card>
                     )}
+                  </Col>
+                </Row>
+
+                <Row className="mb-3">
+                  <Col>
+                    
                   </Col>
                 </Row>
               </Card.Body>
