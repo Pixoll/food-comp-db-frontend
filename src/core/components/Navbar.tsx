@@ -47,6 +47,9 @@ const AppNavbar = () => {
             <Nav.Link as={Link} to="/search">
               <Search style={{ marginLeft: 20 }} size={40}></Search>
             </Nav.Link>
+            <Nav.Link as={Link} to="/comparison">
+              Comparar
+            </Nav.Link>
           </Nav>
           <Nav style={{ marginLeft: 20, marginRight: 20 }} className="ms-auto">
             <NavDropdown

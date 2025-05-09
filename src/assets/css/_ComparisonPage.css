@@ -1,0 +1,97 @@
+.comparison-page {
+    /*background-image: url("../../assets/images/comparison-bg.png");*/
+    background-color: white;
+    min-height: 100vh;
+    padding-bottom: 2rem;
+  }
+  
+  .comparison-page h1 {
+    color: #103c22;
+    font-weight: 600;
+  }
+  
+  .comparison-items-container {
+    margin-top: 1rem;
+  }
+ 
+  .empty-state {
+    padding: 3rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    background-color: #d8d8d8;
+  }
+  
+  .empty-state .heading {
+    color: #495057;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+  
+  .comparison-item {
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: none;
+  }
+  
+  .comparison-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .comparison-item .card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+  }
+  
+  .comparison-item .card-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 0;
+  }
+  
+  .food-count-badge {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+  
+  .count-indicator {
+    background-color: #e9ecef;
+    color: #495057;
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 500;
+    display: inline-block;
+  }
+  
+  .food-code {
+    background-color: #1e5f37;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+  }
+  
+  .remove-btn {
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .compare-btn {
+    padding: 0.75rem 2rem;
+    font-weight: 500;
+    border-radius: 50px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .compare-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+  }

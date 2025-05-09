@@ -11,6 +11,7 @@ import AppNavbar from "../components/Navbar";
 import { useAuth } from "../context/AuthContext";
 import makeRequest from "../utils/makeRequest";
 import PrivateRoute from "./PrivateRoute";
+import ComparisonPage from "../../pages/comparison/ComparisonPage";
 
 export const AppRouter = () => {
   const { state, logout } = useAuth();
@@ -35,6 +36,7 @@ export const AppRouter = () => {
           <Route path="/" element={<HomePage/>}/>
           <Route path="login" element={<LoginPage/>}/>
           <Route path="search" element={<SearchPage/>}/>
+          <Route path="comparison" element={<ComparisonPage/>}/>
           <Route path="search/details/:code" element={<DetailPage/>}/>
           <Route
             path="panel-admin"

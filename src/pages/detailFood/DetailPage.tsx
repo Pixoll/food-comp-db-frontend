@@ -21,12 +21,14 @@ export default function DetailPage() {
   const [inputGrams, setInputGrams] = useState<number>(100);
 
   const result = useFetch<SingleFoodResult>(`/foods/${code?.toString()}`);
+
   if (result.status !== FetchStatus.Success) {
     return <h2>Cargando...</h2>;
   }
 
   const { data } = result;
-
+  console.log(data);
+  
   const colors = [
     "#0088FE",
     "#00C49F",

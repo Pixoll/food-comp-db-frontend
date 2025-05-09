@@ -1,0 +1,94 @@
+.nutrient-comparison-table {
+    margin-top: 20px;
+    overflow-x: auto;
+  }
+  
+  .table-header th {
+    position: sticky;
+    top: 0;
+    background-color: #f8f9fa;
+    z-index: 10;
+    vertical-align: middle;
+  }
+  
+  .nutrient-header {
+    min-width: 200px;
+  }
+  
+  .unit-header {
+    width: 80px;
+    text-align: center;
+  }
+  
+  .food-header {
+    min-width: 150px;
+    text-align: center;
+  }
+  
+  .section-header td {
+    background-color: #e9ecef;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 10px 16px;
+  }
+  
+  .subsection-header td {
+    background-color: #f1f3f5;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 8px 16px;
+    padding-left: 32px;
+  }
+  
+  .clickable {
+    cursor: pointer;
+  }
+  
+  .nutrient-name {
+    font-weight: normal;
+    padding-left: 16px;
+    vertical-align: middle;
+  }
+  
+  .nutrient-unit {
+    text-align: center;
+    vertical-align: middle;
+  }
+  
+  .nutrient-value {
+    text-align: center;
+    vertical-align: middle;
+  }
+  
+  .nutrient-component-row {
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+  
+  .data-type-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    font-size: 10px;
+    margin-left: 8px;
+    color: white;
+  }
+  
+  .data-type-badge.calculated {
+    background-color: #6c757d;
+  }
+  
+  .data-type-badge.measured {
+    background-color: #28a745;
+  }
+  
+  .data-type-badge.estimated {
+    background-color: #ffc107;
+  }
+  
+  .remove-food-btn {
+    padding: 0.1rem 0.3rem;
+    line-height: 1;
+  }
