@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useComparison } from "../../context/ComparisonContext";
 import { FoodResult } from "../../types/option";
+import axios from "axios";
 import Pagination from "./Pagination";
 import "../../../assets/css/_foodResultsTable.css";
 
@@ -33,6 +34,7 @@ export default function FoodResultsTable({
 }: FoodResultsListProps) {
   const navigate = useNavigate();
   const { state } = useAuth();
+  const { token } = state;
   const { comparisonFoods, addToComparison, removeFromComparison } = useComparison();
   const { t, i18n } = useTranslation();
   const [selectedSort, setSelectedSort] = useState(SortType.NAME);
@@ -68,7 +70,41 @@ export default function FoodResultsTable({
       setCurrentPage(page);
     }
   };
+  const exportData = async (codes: string[]) => {
+    try {
+      const response = await axios.get(`http://localhost:3000/api/xlsx?codes=${codes.join(",")}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        responseType: 'blob',
+      });
+      
+      const blob = new Blob([response.data], { 
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
+      });
+      const url = window.URL.createObjectURL(blob);
+      
+      let fileName = 'foods_data.xlsx';
+      const contentDisposition = response.headers['content-disposition'];
+      if (contentDisposition) {
+        const match = contentDisposition.match(/filename="(.+)"/);
+        if (match && match[1]) {
+          fileName = match[1];
+        }
+      }
+      
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error(error);
 
+    }
+  };
   useEffect(() => {
     const sorted = [...data].sort((a, b) => {
       let stringA: string;
@@ -164,7 +200,11 @@ export default function FoodResultsTable({
               <option value={SortOrder.DESC}>{t("Table.sort.descending")}</option>
             </select>
           </Col>
-
+          <Col xs={12} sm={4}>
+          <button onClick={()=>exportData(data.map(f=>f.code))}>
+            Exportar resultados
+          </button>
+          </Col>
           <Col xs={12} sm={4}>
             <h5>{t("Table.results_per_page")}</h5>
             <select
