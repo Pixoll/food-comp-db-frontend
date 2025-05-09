@@ -91,6 +91,8 @@ export default function ModifyFoodDetail() {
     }
   };
 
+  
+
   const handleSubspecies = () => {
     const subspeciesId = subspecies.nameToId.get(scientificNameAndSubspecies.subspecies ?? "");
 
@@ -220,6 +222,10 @@ export default function ModifyFoodDetail() {
 
   const handleUpdateNutrients = (updatedData: NutrientsValue) => {
     setNutrientValue(updatedData);
+  };
+
+  const handleUploadImage = () => {
+    
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -646,6 +652,23 @@ export default function ModifyFoodDetail() {
                           value={generalData.observation}
                           onChange={handleInputChange}
                           placeholder={"Escriba la observación"}
+                        />
+                      </Col>
+                    </Form.Group>
+                    <Form.Group
+                      as={Row}
+                      className="mb-3"
+                      controlId="formImage"
+                    >
+                      <Form.Label column sm={2}>
+                        Imagen:
+                      </Form.Label>
+                      <Col sm={10}>
+                        <Form.Control
+                          type="file" multiple
+                          name="image"
+                          onChange={handleUploadImage}
+                          accept="image/*"
                         />
                       </Col>
                     </Form.Group>
