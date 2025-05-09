@@ -1,5 +1,6 @@
 import qs from "qs";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Accordion, AccordionBody, AccordionHeader, AccordionItem } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { FetchStatus, useFetch } from "../../hooks";
@@ -7,9 +8,15 @@ import { FoodResult } from "../../types/option";
 import FilterBody, { Filters } from "./FilterBody";
 import FoodResultsTable from "./FoodResultsTable";
 import "../../../assets/css/_foodFilter.css";
+type FoodFilterProps = {
+  foodName: string 
+}
 
-export default function FoodFilter() {
+export default function FoodFilter({foodName = ""}:FoodFilterProps) {
   const { t } = useTranslation();
+  const [searchParams] = useSearchParams();
+  const paramFoodName = searchParams.get("name") || "";
+
   const [selectedFilters, setSelectedFilters] = useState<Filters>({
     foodTypeFilter: new Set(),
     regionsFilter: new Set(),
@@ -19,7 +26,12 @@ export default function FoodFilter() {
       op: "=",
     }],
   });
-  const [searchForName, setSearchForName] = useState("");
+  const [searchForName, setSearchForName] = useState(paramFoodName || foodName);
+  useEffect(() => {
+    if (paramFoodName || foodName) {
+      setSearchForName(paramFoodName || foodName);
+    }
+  }, [paramFoodName, foodName]);
 
   const filters = {
     name: searchForName.trim(),

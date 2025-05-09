@@ -57,7 +57,6 @@ export function useFetch<T>(url: string): FetchResult<T> {
       })
       .catch((error) => {
         if (error.name === "AbortError") {
-          console.log("Request cancelled");
           return;
         }
 

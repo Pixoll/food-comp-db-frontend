@@ -1,9 +1,26 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import background from "../../../src/assets/images/main_page_bg.jpg";
 
 export default function MainSectionHome() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  const [foodName, setFoodName] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (foodName.trim()) {
+      toSearchPage(foodName);
+    }
+  };
+
+  const toSearchPage = (foodName: string) => {
+    const trimmedName = foodName.trim();
+    navigate('/search', { state: { foodName: trimmedName } });
+  };
 
   return (
     <div
@@ -16,7 +33,7 @@ export default function MainSectionHome() {
         backgroundPosition: "center",
         height: "100vh",
         color: "white",
-        textAlign: "center"
+        textAlign: "center",
       }}
     >
       {/* Contenido superpuesto sobre la imagen */}
@@ -28,7 +45,7 @@ export default function MainSectionHome() {
                 fontWeight: "bold",
                 fontSize: "3rem",
                 textShadow: "2px 2px 8px rgba(0, 0, 0, 0.7)",
-                fontFamily: "Poppins, sans-serif"
+                fontFamily: "Poppins, sans-serif",
               }}
             >
               {t("homepage.title")}
@@ -38,18 +55,23 @@ export default function MainSectionHome() {
                 fontSize: "1.5rem",
                 marginBottom: "30px",
                 textShadow: "2px 2px 8px rgba(0, 0, 0, 0.7)",
-                fontFamily: "Poppins, sans-serif"
+                fontFamily: "Poppins, sans-serif",
               }}
             >
               {t("homepage.subtitle")}
             </p>
 
             {/* Barra de búsqueda */}
-            <Form>
-              <Form.Group className="d-flex" style={{ maxWidth: "600px", margin: "0 auto" }}>
+            <Form onSubmit={handleSubmit}>
+              <Form.Group
+                className="d-flex"
+                style={{ maxWidth: "600px", margin: "0 auto" }}
+              >
                 <Form.Control
                   type="text"
                   placeholder={t("search.placeholder")}
+                  value={foodName}
+                  onChange={(e) => setFoodName(e.target.value)}
                   style={{
                     padding: "15px",
                     fontSize: "1.2rem",
@@ -84,7 +106,7 @@ export default function MainSectionHome() {
                   borderRadius: "5px",
                   borderColor: "#28a745",
                 }}
-                onClick={() => window.location.href = "/search"}
+                onClick={() => navigate("/search")}
               >
                 {t("search.advancedSearch")}
               </Button>
@@ -94,4 +116,4 @@ export default function MainSectionHome() {
       </Container>
     </div>
   );
-};
+}
