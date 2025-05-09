@@ -174,3 +174,31 @@
     display: block;
   }
 }
+.export-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.export-button:hover {
+  background-color: #45a049;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transform: translateY(-1px);
+}
+
+.export-button:active {
+  background-color: #3e8e41;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  transform: translateY(1px);
+}

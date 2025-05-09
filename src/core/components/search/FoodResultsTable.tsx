@@ -201,7 +201,9 @@ export default function FoodResultsTable({
             </select>
           </Col>
           <Col xs={12} sm={4}>
-          <button onClick={()=>exportData(data.map(f=>f.code))}>
+          <button 
+            className="export-button"
+            onClick={()=>exportData(data.map(f=>f.code))}>
             Exportar resultados
           </button>
           </Col>
