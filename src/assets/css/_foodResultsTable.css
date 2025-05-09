@@ -202,3 +202,34 @@
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   transform: translateY(1px);
 }
+
+.comparison-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  
+  transition: all 0.2s ease;
+}
+
+.comparison-button.add {
+  background-color: #a8dbc1; 
+  color: #059669;
+}
+
+.comparison-button.add:hover {
+  background-color: #a7f3d0;
+}
+
+.comparison-button.remove {
+  background-color: #ecc1c1; 
+  color: #c31a3f;
+}
+
+.comparison-button.remove:hover {
+  background-color: #fecaca;
+}
