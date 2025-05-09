@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import { ChevronDown, ChevronRight, X } from 'lucide-react';
-import { NutrientsValue, NutrientMeasurement, NutrientMeasurementWithComponents } from '../../core/types/SingleFoodResult';
-import { GetFoodMeasurementsResult } from './ComparisonPage';
-import '../../assets/css/_NutrientComparisonTable.css';
+import { NutrientsValue, NutrientMeasurement, NutrientMeasurementWithComponents } from '../../types/SingleFoodResult';
+import { GetFoodMeasurementsResult } from '../../../pages/comparison/ComparisonPage';
+import '../../../assets/css/_NutrientComparisonTable.css';
 
 type NutrientComparisonTableProps = {
   foodsData: GetFoodMeasurementsResult[];
@@ -18,7 +18,7 @@ export default function NutrientComparisonTable({ foodsData, onRemoveFood }: Nut
     vitamins: false,
     minerals: false
   });
-  
+  console.log(foodsData)
   const [expandedNutrients, setExpandedNutrients] = useState<Record<string, boolean>>({});
   
   const toggleSection = (section: keyof typeof expandedSections) => {

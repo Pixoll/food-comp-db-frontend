@@ -8,7 +8,7 @@ import { useFetch, FetchStatus } from "../../core/hooks";
 import {
   SingleFoodResult
 } from "../../core/types/SingleFoodResult";
-import NutrientComparisonTable from "./NutrientComparisonTable";
+import NutrientComparisonTable from "../../core/components/comparePage/NutrientComparisonTable";
 
 export type GetFoodMeasurementsResult = Pick<SingleFoodResult, "commonName" | "nutrientMeasurements"> & {
   code: string;
