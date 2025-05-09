@@ -150,8 +150,8 @@ export default function NutrientComparisonTable({ foodsData, onRemoveFood }: Nut
       <Table striped bordered hover responsive>
         <thead>
           <tr className="table-header">
-            <th className="nutrient-header">Nutrients</th>
-            <th className="unit-header">Unit</th>
+            <th className="nutrient-header">Nutrientes</th>
+            <th className="unit-header">Unidad</th>
             
             {foodsData.map(food => (
               <th key={food.code} className="food-header">
