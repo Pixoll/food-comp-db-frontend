@@ -16,7 +16,7 @@ import imagen3 from '../../assets/images/imagen3.jpg';
 export default function DetailPage() {
   const { t } = useTranslation();
   const [key, setKey] = useState<string>("first");
-  const [images] = useState([imagen1, imagen2, imagen3]);
+  const [images] = useState([imagen1.src, imagen2.src, imagen3.src]);
 
   const handleReferenceClick = () => {
     setKey("second");

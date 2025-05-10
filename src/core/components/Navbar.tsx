@@ -76,7 +76,7 @@ const AppNavbar = () => {
             ) : (
               <Nav.Link as={Link} to="/login">
                 <img
-                  src={loginIcon}
+                  src={loginIcon.src}
                   alt="User Icon"
                   style={{ width: "28px", marginRight: "5px", fill: "#ffffff" }}
                 />

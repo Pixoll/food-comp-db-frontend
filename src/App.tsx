@@ -1,19 +1,46 @@
+import i18next from "i18next";
+import { StrictMode } from "react";
+import { I18nextProvider, initReactI18next } from "react-i18next";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./core/context/AuthContext";
 import ComparisonProvider from "./core/context/ComparisonContext";
 import "./assets/css/_App.css";
+import { ToastProvider } from "./core/context/ToastContext";
 import { AppRouter } from "./core/routes/AppRouter";
 import "bootstrap/dist/css/bootstrap.min.css";
+import english from "./translations/en.json";
+import spanish from "./translations/es.json";
+
+i18next.use(initReactI18next).init({
+  interpolation: {
+    escapeValue: false,
+  },
+  lng: "es",
+  resources: {
+    es: {
+      translation: spanish,
+    },
+    en: {
+      translation: english,
+    },
+  },
+});
 
 function App() {
   return (
-    <BrowserRouter>
-    <ComparisonProvider>
-      <AuthProvider>
-        <AppRouter/>
-      </AuthProvider>
-      </ComparisonProvider>
-    </BrowserRouter>
+    <StrictMode>
+      <I18nextProvider i18n={i18next}>
+        <ToastProvider>
+          <BrowserRouter>
+            <ComparisonProvider>
+              <AuthProvider>
+                <AppRouter/>
+              </AuthProvider>
+            </ComparisonProvider>
+          </BrowserRouter>
+        </ToastProvider>
+      </I18nextProvider>
+    </StrictMode>
   );
 }
 

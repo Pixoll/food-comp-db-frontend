@@ -1,34 +1,41 @@
 {
   "compilerOptions": {
     "target": "es6",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "jsx": "preserve",
     "lib": [
       "dom",
       "dom.iterable",
-      "esnext"
+      "esnext",
+    ],
+    "plugins": [
+      {
+        "name": "next",
+      },
     ],
     "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "strict": true,
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
+    "incremental": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
     "noErrorTruncation": true,
+    "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
-    "noImplicitThis": true
+    "noImplicitThis": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true
   },
   "include": [
-    "src"
+    "src",
+    "build/types/**/*.ts",
   ],
   "exclude": [
-    "node_modules"
-  ]
+    "node_modules",
+  ],
 }

@@ -27,7 +27,7 @@ export default function MainSectionHome() {
       style={{
         // bg image obtained from https://www.pexels.com/photo/assorted-vegetables-on-brown-surface-616404/
         // marked as free to use by the photographer
-        backgroundImage: `url(${background}), radial-gradient(rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 50%)`,
+        backgroundImage: `url(${background.src}), radial-gradient(rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 50%)`,
         backgroundBlendMode: "overlay",
         backgroundSize: "cover",
         backgroundPosition: "center",
