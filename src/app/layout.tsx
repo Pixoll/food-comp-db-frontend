@@ -1,7 +1,7 @@
 import { Metadata, Viewport } from "next";
 import { Montserrat } from "next/font/google";
 import { ReactNode } from "react";
-import "../assets/css/_index.css";
+import "./globals.css"
 
 type RootLayoutProps = {
   children: ReactNode;
