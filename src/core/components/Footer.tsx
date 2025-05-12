@@ -1,34 +1,35 @@
 import React from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
 import { useTranslation } from "react-i18next";
 
 const Footer = () => {
   const {t} = useTranslation();
   return (
-    <footer style={{ backgroundColor: '#343a40', color: 'white', padding: '20px', marginTop: '0' }}>
-      <Container>
-        <Row>
-          <Col md={4}>
+    <footer className="bg-[#343a40] text-white p-[20px] mt-0">
+      <div className="container mx-auto px-4">
+        <div className="flex flex-wrap items-left justify-between">
+          <div className="flex-grow">
             <h5> {t('footer.contact.title')}</h5>
             <p> {t('footer.contact.email')}</p>
-          </Col>
-          <Col md={4}>
+          </div>
+          <div className="flex-grow">
             <h5>{t('footer.address.title')}</h5>
             <p>{t('footer.address.details')}</p>
-          </Col>
-          <Col md={4}>
+          </div>
+          <div className="flex-grow">
             <h5>{t('footer.policies.title')}</h5>
-            <ul style={{ listStyleType: 'none', padding: 0 }}>
-              <li><a href="/politica-privacidad" style={{ color: 'white', textDecoration: 'none' }}>{t('footer.policies.privacy')}</a></li>
+            <ul className="list-none p-0">
+              <li><a href="/politica-privacidad" className="text-white no-underline">
+                {t('footer.policies.privacy')}</a>
+              </li>
             </ul>
-          </Col>
-        </Row>
-        <Row className="mt-3">
-          <Col md={12} className="text-center">
-            <p>{t('footer.copyright')}</p>
-          </Col>
-        </Row>
-      </Container>
+          </div>
+        </div>
+        <div className="mt-3">
+          <div className="text-center">
+          <p>{t('footer.copyright')}</p>
+          </div>
+        </div>
+      </div>
     </footer>
   );
 };
