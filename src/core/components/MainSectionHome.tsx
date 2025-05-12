@@ -2,8 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import background from "../../../src/assets/images/main_page_bg.jpg";
-
+import background from "../../../public/main_page_bg.jpg";
 export default function MainSectionHome() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -21,23 +20,24 @@ export default function MainSectionHome() {
     const trimmedName = foodName.trim();
     navigate('/search', { state: { foodName: trimmedName } });
   };
-
   return (
     <div
-      style={{
         // bg image obtained from https://www.pexels.com/photo/assorted-vegetables-on-brown-surface-616404/
-        // marked as free to use by the photographer
-        backgroundImage: `url(${background.src}), radial-gradient(rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 50%)`,
-        backgroundBlendMode: "overlay",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        height: "100vh",
-        color: "white",
-        textAlign: "center",
-      }}
+        // marked as free to use by the photographe
+        style={{
+            backgroundImage: `url(${background.src}), radial-gradient(rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 50%)`
+        }}
+        className={`
+        bg-blend-overlay
+        bg-cover
+        bg-center
+        h-screen
+        text-white
+        text-center
+        `}
     >
       {/* Contenido superpuesto sobre la imagen */}
-      <Container fluid style={{ height: "100%" }}>
+      <div className={"container mx-auto px-4 h-full"}>
         <Row className="h-100 d-flex justify-content-center align-items-center">
           <Col md={8}>
             <h1
@@ -113,7 +113,7 @@ export default function MainSectionHome() {
             </div>
           </Col>
         </Row>
-      </Container>
+      </div>
     </div>
   );
 }
