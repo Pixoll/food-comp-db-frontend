@@ -1,110 +1,79 @@
-.search-box, .checkbox-filter {
+/*.search-box, .checkbox-filter {
   position: relative;
   width: 100%;
   font-family: 'Poppins', serif;
-}
+}*/
 
-.selected-options-display, .filter-tag {
-  background-color: #4e9f6f; /* Verde más suave */
+/*.selected-options-display, .filter-tag {
+  background-color: #4e9f6f;
   color: white;
   padding: 12px;
-  border: 2px solid #388e60; /* Bordes más finos y elegantes */
+  border: 2px solid #388e60;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-radius: 8px; /* Bordes más redondeados */
-  transition: all 0.3s ease; /* Transición suave */
-}
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}*/
 
-.selected-options-display:hover, .filter-tag:hover {
-  background-color: #388e60; /* Cambio a un verde más oscuro */
-  border-color: #2c6b49; /* Bordes se oscurecen al hacer hover */
-}
+/*.selected-options-display:hover, .filter-tag:hover {
+  background-color: #388e60;
+  border-color: #2c6b49;
+}*/
 
-.dropdown-options {
+/*.dropdown-options {
   display: none;
   position: absolute;
   background-color: #ffffff;
-  border: 2px solid #d6f4e9; /* Bordes más suaves y claros */
+  border: 2px solid #d6f4e9;
   width: 100%;
   z-index: 10;
   max-height: 250px;
   overflow-y: auto;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Sombra más suave y difusa */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
   padding: 12px; 
   border-radius: 6px;
   transition: all 0.3s ease;
-}
+}*/
 
-.checkbox-filter.show .dropdown-options {
+/*.checkbox-filter.show .dropdown-options {
   display: block;
-}
+}*/
 
-.select-all-label, .dropdown-options label {
-  background-color: #f7f7f7; /* Fondo suave gris */
+/*.select-all-label, .dropdown-options label {
+  background-color: #f7f7f7;
   padding: 12px;
   display: block;
   cursor: pointer;
   margin-bottom: 10px;
   border-radius: 5px;
   transition: background-color 0.3s ease;
-}
+}*/
 
-.select-all-label:hover, .dropdown-options label:hover {
-  background-color: #e0e0e0; /* Suave cambio de color */
-}
+/*.select-all-label:hover, .dropdown-options label:hover {
+  background-color: #e0e0e0;
+}*/
 
-.dropdown-options > label > input[type=checkbox] {
+/*.dropdown-options > label > input[type=checkbox] {
   display: none;
-}
+}*/
 
-.checked {
+/*.checked {
   float: right;
-  color: #81c784; /* Verde brillante para indicar el estado checked */
+  color: #81c784;
   font-size: 1.2rem; 
-}
-
-.selected-options {
-  margin-top: 15px; 
-  padding: 12px;
-  background-color: #f9f9f9; /* Fondo gris claro */
-  border-radius: 6px;
-  border: 1px solid #e0e0e0;
-  display: flex;
-  flex-wrap: wrap;
-  font-family: 'Poppins', serif;
-}
-
-.filter-tag {
-  margin-right: 12px;
-  display: inline-block;
-  font-size: 1rem; 
-  padding: 8px 14px;
-  background-color: #81c784; /* Verde claro para las etiquetas */
-  color: white;
-  border-radius: 4px; 
-  margin-top: 5px;
-  font-family: 'Poppins', serif;
-}
-
+}*/
 @media (max-width: 768px) {
-  .selected-options-display, .filter-tag {
-    font-size: 1rem; 
-    padding: 12px; 
-  }
+  /*.selected-options-display, .filter-tag {
+    font-size: 1rem;
+  }*/
 
-  .select-all-label, .dropdown-options label {
-    font-size: 1rem; 
-    font-family: 'Poppins', serif;
-  }
+  /*.select-all-label, .dropdown-options label {
+    font-size: 1rem;
+  }*/
 
-  .dropdown-options {
+  /*.dropdown-options {
     max-height: 200px; 
-  }
-
-  .filter-tag {
-    font-size: 0.9rem;
-    padding: 6px 12px;
-  }
+  }*/
 }

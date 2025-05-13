@@ -47,7 +47,7 @@ export default function SingleOptionFilter({ options, selectedOption, setSelecte
               />
               {label}
               {selectedOption === option && (
-                <span className="checked">✔</span>
+                <span className="float-right text-[#81c784] text-xl">✔</span>
               )}
             </label>
           ))}
