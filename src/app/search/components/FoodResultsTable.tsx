@@ -1,8 +1,9 @@
+'use client'
 import { ArrowDown, ArrowUp, Plus, Minus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from 'next/navigation';
 import { useAuth } from "../../../core/context/AuthContext";
 import { useComparison } from "../../../core/context/ComparisonContext";
 import { FoodResult } from "../../../core/types/option";
@@ -32,7 +33,7 @@ export default function FoodResultsTable({
   searchForName,
   setSearchForName,
 }: FoodResultsListProps) {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { state } = useAuth();
   const { token } = state;
   const { comparisonFoods, addToComparison, removeFromComparison } =
@@ -55,14 +56,15 @@ export default function FoodResultsTable({
     : [];
 
   const toFoodDetail = (code: string) => {
-    navigate(`/search/details/${code}`);
+    router.push(`/search/details/${code}`);
   };
+
 
   const toModifyFoodDetail = (code: string) => {
     if (state.isAuthenticated) {
-      navigate(`/search/modify-details-food/${code}`);
+      router.push(`/search/modify-details-food/${code}`);
     } else {
-      navigate("/login");
+      router.push("/login");
     }
   };
 

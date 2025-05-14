@@ -8,9 +8,9 @@ const Footer = () => {
     <footer className="bg-[#343a40] text-white p-[20px] mt-0">
       <div className="container mx-auto px-4">
         <div className="flex flex-wrap items-left justify-between">
-          <div className="flex-grow">
-            <h5> {t('footer.contact.title')}</h5>
-            <p> {t('footer.contact.email')}</p>
+          <div className="flex-grow ">
+            <h5 className="text-white"> {t('footer.contact.email')}</h5>
+            <p className="text-white"> {t('footer.contact.email')}</p>
           </div>
           <div className="flex-grow">
             <h5>{t('footer.address.title')}</h5>

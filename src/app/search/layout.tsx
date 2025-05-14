@@ -6,11 +6,11 @@ type SearchPageLayoutProps = {
 
 export default function SearchPageLayout({children}: SearchPageLayoutProps) {
     return (
-        <div>
-            <main className="bg-white svg-background">
-                {children}
-            </main>
-            <Footer />
+        <>
+        <div className="bg-white svg-background">
+            {children}
         </div>
+        <Footer />
+        </>
     )
 }

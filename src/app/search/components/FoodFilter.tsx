@@ -76,8 +76,8 @@ export default function FoodFilter({foodName = ""}: FoodFilterProps) {
     const foods = foodsResult.status === FetchStatus.Success ? foodsResult.data : [];
 
     return (
-        <div /*className="w-full flex flex-col items-stretch justify-between gap-5 p-5 lg-custom:flex lg-custom:flex-row lg-custom:items-start">*/
-            className="search-container">
+        <div className="w-full flex flex-col items-stretch justify-between gap-5 p-5 lg-custom:flex lg-custom:flex-row lg-custom:items-start"
+             /*className="search-container"*/>
             <Accordion defaultActiveKey="0" className="food-filter food-filter-accordion">
                 <AccordionItem eventKey={"0"}>
                     <AccordionHeader>

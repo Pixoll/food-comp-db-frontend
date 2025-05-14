@@ -6,8 +6,6 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-import loginIcon from "../../assets/images/enter.png";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
 import makeRequest from "../utils/makeRequest";
@@ -98,12 +96,7 @@ const AppNavbar = () => {
                   </>
               ) : (
                   <NavLink href="/login">
-                    <Image
-                        alt="User Icon"
-                        width={28}
-                        height={28}
-                        style={{ marginRight: "5px" }}
-                    />
+                    User
                   </NavLink>
               )}
             </Nav>
