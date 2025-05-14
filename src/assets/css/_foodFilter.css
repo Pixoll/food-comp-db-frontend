@@ -1,11 +1,3 @@
-.search-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 20px;
-  padding: 20px;
-}
-
 .food-filter {
   width: 39%;
   display: flex;
@@ -68,13 +60,13 @@
   padding-right: 12px;
 }
 
-.filter-group {
+/*.filter-group {
   margin-bottom: 1rem;
-}
+}*/
 
-.filter-group label {
+/*.filter-group label { //No se puede con tailwind.
   font-family: "Poppins", serif;
-}
+}*/
 
 .measurement-row {
   margin-bottom: 0 !important;
@@ -87,10 +79,6 @@
 }
 
 @media (max-width: 992px) {
-  .search-container {
-    flex-direction: column;
-    align-items: center;
-  }
 
   .food-filter,
   .food-list {

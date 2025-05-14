@@ -1,10 +1,12 @@
 .search-container {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  width: 100%;
   gap: 20px;
+  padding: 20px;
 }
+
 
 .food-list {
   flex-basis: 100%;

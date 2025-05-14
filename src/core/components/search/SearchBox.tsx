@@ -31,7 +31,7 @@ export default function SearchBox({ filterOptions, onChange, single, selectedOpt
   };
 
   return (
-    <div className="w-full relative font-poppins" /*className="search-box"*/>
+    <div className="w-full relative" /*className="search-box"*/>
       {!single ? (
         <CheckboxFilter
           options={filterOptions}

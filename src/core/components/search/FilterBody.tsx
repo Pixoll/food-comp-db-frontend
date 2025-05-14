@@ -81,7 +81,7 @@ export default function FilterBody({
 
   return <>
     {/* Filter Sections */}
-    <div className="filter-group">
+    <div className="mb-4"/*className="filter-group"*/>
       <label htmlFor="other">{t("Filter.type")}</label>
       <SearchBox
         filterOptions={types}
