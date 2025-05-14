@@ -18,7 +18,7 @@ import {
 } from "../../hooks";
 import { Collection } from "../../utils/collection";
 import makeRequest from "../../utils/makeRequest";
-import Pagination from "../search/Pagination";
+import Pagination from "../../../app/search/components/Pagination";
 import CSVFoodDisplay from "./CSVFoodDisplay";
 import { CSVFood } from "./DataFromCsv";
 

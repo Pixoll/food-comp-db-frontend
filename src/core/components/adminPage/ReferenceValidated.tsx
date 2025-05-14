@@ -5,7 +5,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
 import { Author, City, Journal, JournalVolume, Reference } from "../../hooks";
 import makeRequest from "../../utils/makeRequest";
-import Pagination from "../search/Pagination";
+import Pagination from "../../../app/search/components/Pagination";
 import CSVReferenceDisplay from "./CSVReferenceDisplay";
 import { CSVReference } from "./DataFromCsv";
 import "../../../assets/css/_ReferenceValidated.css";

@@ -1,3 +1,4 @@
+'use client'
 import { ChangeEvent, useState } from "react";
 
 type FormState<T> = {

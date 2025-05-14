@@ -1,5 +1,6 @@
+'use client'
 import { useEffect, useState } from "react";
-import { Collection } from "../../utils/collection";
+import { Collection } from "../../../core/utils/collection";
 import CheckboxFilter from "./CheckboxFilter";
 import SingleOptionFilter from "./SingleOptionFilter";
 

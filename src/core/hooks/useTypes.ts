@@ -1,3 +1,4 @@
+'use client'
 import { useState } from "react";
 import { TypeFood } from "../types/option";
 import { Collection } from "../utils/collection";

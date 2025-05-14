@@ -1,3 +1,4 @@
+'use client'
 import { useState } from "react";
 import { Collection } from "../utils/collection";
 import { FetchStatus, useFetch } from "./useFetch";

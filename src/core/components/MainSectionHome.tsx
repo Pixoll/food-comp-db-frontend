@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {Container, Row, Col, Form, Button} from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import {useTranslation} from "react-i18next";
 import background from "../../../public/main_page_bg.jpg";
 

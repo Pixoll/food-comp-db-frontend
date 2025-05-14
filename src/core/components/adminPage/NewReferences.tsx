@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useFetch ,FetchStatus } from "../../hooks";
 import { City, Author, Journal } from "../../hooks";
 import qs from "qs";
-import { SearchBox } from "../search";
+import { SearchBox } from "../../../app/search/components";
 import { Button, Card, Col, Row, FormGroup, FormLabel} from "react-bootstrap";
 import { Collection } from "../../utils/collection";
 import {
@@ -14,7 +14,7 @@ import {
   NutrientsValueForm,
 } from "../../../pages/AdminPage";
 import { Reference } from "../../hooks";
-import Pagination from "../search/Pagination";
+import Pagination from "../../../app/search/components/Pagination";
 import ModalReferences from "./ModalReferences";
 
 

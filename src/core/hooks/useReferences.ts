@@ -1,3 +1,4 @@
+'use client'
 import { FetchStatus, useFetch } from "./useFetch";
 
 export type Reference = {
