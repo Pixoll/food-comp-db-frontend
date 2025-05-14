@@ -1,7 +1,7 @@
 'use client'
 import qs from "qs";
 import {useState, useEffect} from "react";
-import {useSearchParams} from "react-router-dom";
+import { useSearchParams } from 'next/navigation';
 import {Accordion, AccordionBody, AccordionHeader, AccordionItem} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
 import {FetchStatus, useFetch} from "../../../core/hooks";
@@ -16,8 +16,8 @@ type FoodFilterProps = {
 
 export default function FoodFilter({foodName = ""}: FoodFilterProps) {
     const {t} = useTranslation();
-    const [searchParams] = useSearchParams();
-    const paramFoodName = searchParams.get("name") || "";
+    const searchParams = useSearchParams();
+    const paramFoodName = searchParams.get('foodName') || "";
 
     const [selectedFilters, setSelectedFilters] = useState<Filters>({
         foodTypeFilter: new Set(),

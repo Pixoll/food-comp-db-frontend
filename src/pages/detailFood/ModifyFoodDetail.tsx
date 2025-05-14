@@ -12,7 +12,7 @@ import {
   RequiredFieldLabel,
   SelectorWithInput,
 } from "../../core/components/detailFood";
-import Footer from "../../core/components/Footer";
+import Footer from "../../app/components/Footer";
 import { useAuth } from "../../core/context/AuthContext";
 import { useToast } from "../../core/context/ToastContext";
 import {

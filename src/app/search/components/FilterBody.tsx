@@ -115,7 +115,7 @@ export default function FilterBody({
     <div className="filter-group nutrients-filter">
       <h3 className="measurement-title">{t("Measurement.title")}</h3>
       {selectedFilters.nutrientsFilter.map((nutrient, index, array) => (
-        <Row className="align-items-start flex-column measurement-row">
+        <Row key={index} className="align-items-start flex-column measurement-row">
           {selectedFilters.nutrientsFilter.length > 1 && index > 0 && (
             <Col className={"mb-3"}>
               <span className={"measurement-separator"}/>
@@ -136,7 +136,7 @@ export default function FilterBody({
               >
                 <option value={""}>Nada seleccionado</option>
                 {getAvailableNutrients(array.slice(0, index)).map(nutrient => (
-                  <option value={nutrient.id}>{`${nutrient.name} (${nutrient.measurementUnit})`}</option>
+                  <option key={nutrient.id} value={nutrient.id}>{`${nutrient.name} (${nutrient.measurementUnit})`}</option>
                 ))}
               </Form.Select>
             </Form.Group>

@@ -35,7 +35,7 @@ export const AppRouter = () => {
         <Routes>
           <Route path="/" element={<HomePage/>}/>
           <Route path="login" element={<LoginPage/>}/>
-          <Route path="search" element={<SearchPage/>}/>
+            {/*<Route path="search" element={<SearchPage/>}/>*/}
           <Route path="comparison" element={<ComparisonPage/>}/>
           <Route path="search/details/:code" element={<DetailPage/>}/>
           <Route

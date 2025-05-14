@@ -4,7 +4,7 @@ import { Card, Col, Container, ListGroup, Nav, Row, Tab } from "react-bootstrap"
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { Graphic, LangualCodeComponent, NutrientAccordion, ReferencesList, } from "../../core/components/detailFood";
-import Footer from "../../core/components/Footer";
+import Footer from "../../app/components/Footer";
 import { FetchStatus, useFetch } from "../../core/hooks";
 import { SingleFoodResult } from "../../core/types/SingleFoodResult";
 //import imagen from '../../assets/images/admin_login_bg.jpg';

@@ -1,5 +1,5 @@
 import MainSectionHome from '../../core/components/MainSectionHome'
-import Footer from '../../core/components/Footer';
+import Footer from '../../app/components/Footer';
 
 const HomePage = () => {
     return (
