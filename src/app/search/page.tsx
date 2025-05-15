@@ -74,10 +74,10 @@ export default function SearchPage() {
 
     return (
         <div className={styles["search-container"]}>
-            <Accordion defaultActiveKey="0" className="food-filter food-filter-accordion">
+            <Accordion defaultActiveKey="0" className="w-[39%] flex-col bg-[white] !rounded-[10px] relative shadow-md hidden">
                 <AccordionItem eventKey={"0"}>
-                    <AccordionHeader>
-                        <h5>{t("Filter.title")}</h5>
+                    <AccordionHeader className="focus:!shadow-none">
+                        <h5 className="m-0">{t("Filter.title")}</h5>
                     </AccordionHeader>
                     <AccordionBody>
                         <FilterBody
