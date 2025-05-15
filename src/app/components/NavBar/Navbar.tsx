@@ -37,6 +37,7 @@ const NavBar2 = () => {
     makeRequest("delete", `/admins/${state.username}/session`, {
       token: state.token,
       successCallback: (response) => {
+        console.log(response.data)
         if (response.data < 400) {
           logout();
           router.push("/");
@@ -96,7 +97,7 @@ const NavBar2 = () => {
             {state.isAuthenticated ? (
                 <>
                   <Link href="/panel-admin" aria-label="Admin panel">
-                    <MonitorCog size={24}/>
+                    <MonitorCog color={"#FFFFFF"} size={24}/>
                   </Link>
                   <button onClick={handleLogout} aria-label="Log out" className="logout-btn">
                     <span className="logout-text">{t("navbar.close")}</span>
