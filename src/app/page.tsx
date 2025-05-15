@@ -1,7 +1,6 @@
 'use client'
 import {useState} from "react";
 import {useRouter} from "next/navigation";
-import {Form} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
 import background from "../../public/main_page_bg.jpg";
 import Footer from "./components/Footer";
@@ -33,7 +32,7 @@ export default function HomePage() {
         bg-cover
         bg-center
         h-screen
-        text-white
+        text-[white]
         text-center
         `}
             >
@@ -61,39 +60,49 @@ export default function HomePage() {
                                 {t("homepage.subtitle")}
                             </p>
 
-                            <Form onSubmit={handleSubmit}>
-                                <Form.Group
-                                    className="d-flex"
-                                    style={{maxWidth: "600px", margin: "0 auto"}}
-                                >
-                                    <Form.Control
+                            <form onSubmit={handleSubmit} className="w-full flex flex-col items-center">
+                                <div className="flex w-full h-[46px] max-w-xl mx-auto mb-4">
+                                    <input
                                         type="text"
                                         placeholder={t("search.placeholder")}
                                         value={foodName}
                                         onChange={(e) => setFoodName(e.target.value)}
-                                        style={{
-                                            padding: "15px",
-                                            fontSize: "1.2rem",
-                                            borderRadius: "30px 0 0 30px",
-                                            border: "none",
-                                        }}
+                                        className="
+                                          w-full
+                                          py-3
+                                          px-6
+                                          text-lg
+                                          border-2
+                                          border-gray-200
+                                          rounded-l-full
+                                          focus:outline-none
+                                          focus:border-green-500
+                                          shadow-sm
+                                        "
+                                        aria-label="Buscar alimentos"
                                     />
                                     <button
                                         type="submit"
                                         className="
-                                    py-[15px]
-                                    px-[30px]
-                                    text-xl
-                                    bg-[#28a740]
-                                    border-[#28a745]
-                                    rounded-r-[30px]
-                                    "
+                                          py-3
+                                          px-8
+                                          text-lg
+                                          text-black
+                                          font-medium
+                                          bg-[#28a745]
+                                          hover:bg-[#19732f]
+                                          border-none
+                                          cursor-pointer
+                                          rounded-r-full
+                                          transition-colors
+                                          duration-200
+                                          shadow-sm
+                                        "
                                     >
                                         {t("search.button")}
                                     </button>
-                                </Form.Group>
-                            </Form>
-
+                                </div>
+                            </form>
                             <div className="text-center mt-[20px]">
                                 <button
                                     className="
@@ -101,10 +110,11 @@ export default function HomePage() {
                                 px-[20px]
                                 text-xl
                                 bg-[#28a745]
-                                text-white
+                                text-[white]
                                 border-none
                                 rounded-[5px]
                                 border-[#28a745]
+                                cursor-pointer
                                 "
                                     onClick={() => router.push("/search")}
                                 >

@@ -1,9 +1,10 @@
 import {Metadata, Viewport} from "next";
+import {ReactNode} from "react";
 import {Montserrat} from "next/font/google";
 import Providers from "./Providers";
-import {ReactNode} from "react";
-import "./globals.css"
 import NavBar from "./components/Navbar";
+import "./globals.css"
+
 
 type RootLayoutProps = {
     children: ReactNode;

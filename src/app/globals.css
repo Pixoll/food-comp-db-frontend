@@ -8,12 +8,6 @@
 
   }
 }
-/*@layer components{
-  .svg-background{
-    background-image: url("DATA");
-
-  }
-}*/
 
 body {
   margin: 0;
@@ -29,6 +23,3 @@ code {
     monospace;
 }
 
-.row {
-  margin-left: 0 !important;
-}
