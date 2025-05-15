@@ -3,9 +3,7 @@ import {Montserrat} from "next/font/google";
 import Providers from "./Providers";
 import {ReactNode} from "react";
 import "./globals.css"
-import i18next from "i18next";
-import spanish from "../translations/es.json";
-import english from "../translations/en.json";
+import AppNavbar from "./components/Navbar";
 
 type RootLayoutProps = {
     children: ReactNode;
@@ -31,7 +29,10 @@ export default function RootLayout({children}: RootLayoutProps) {
         <html lang="en" className={montserrat.className} suppressHydrationWarning>
         <body>
         <Providers>
-            <div id="root">{children}</div>
+            <div id="root">
+                <AppNavbar />
+                {children}
+            </div>
         </Providers>
         </body>
         </html>

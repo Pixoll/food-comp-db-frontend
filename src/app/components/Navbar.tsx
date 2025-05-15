@@ -6,9 +6,9 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useAuth } from "../context/AuthContext";
-import { useToast } from "../context/ToastContext";
-import makeRequest from "../utils/makeRequest";
+import { useAuth } from "../../core/context/AuthContext";
+import { useToast } from "../../core/context/ToastContext";
+import makeRequest from "../../core/utils/makeRequest";
 
 const AppNavbar = () => {
   const { t, i18n } = useTranslation();

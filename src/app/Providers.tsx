@@ -2,9 +2,11 @@
 import {AuthProvider} from "../core/context/AuthContext";
 import {I18nextProvider, initReactI18next} from "react-i18next";
 import ComparisonProvider from "../core/context/ComparisonContext";
+import {ToastProvider} from "../core/context/ToastContext";
 import i18next from "i18next";
 import spanish from "../translations/es.json";
 import english from "../translations/en.json";
+
 i18next.use(initReactI18next).init({
     interpolation: {
         escapeValue: false,
@@ -19,14 +21,16 @@ i18next.use(initReactI18next).init({
         },
     },
 });
-export default function Providers ({children}: {children:React.ReactNode}) {
-    return(
+export default function Providers({children}: { children: React.ReactNode }) {
+    return (
         <I18nextProvider i18n={i18next}>
-            <ComparisonProvider>
-                <AuthProvider>
-                    {children}
-                </AuthProvider>
-            </ComparisonProvider>
+            <ToastProvider>
+                <ComparisonProvider>
+                    <AuthProvider>
+                        {children}
+                    </AuthProvider>
+                </ComparisonProvider>
+            </ToastProvider>
         </I18nextProvider>
     )
 }

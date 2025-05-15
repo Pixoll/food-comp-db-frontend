@@ -54,8 +54,8 @@ type AuthProviderProps = {
 };
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [storedToken, setStoredToken] = useState(() => localStorage.getItem("token"));
-  const [storedUsername, setStoredUsername] = useState(() => localStorage.getItem("username"));
+  const [storedToken, setStoredToken] = useState<string | null>(() => localStorage.getItem("token"));
+  const [storedUsername, setStoredUsername] = useState<string | null>(() => localStorage.getItem("username"));
 
   const [state, dispatch] = useReducer(authReducer, {
     isAuthenticated: !!(storedToken && storedUsername),
