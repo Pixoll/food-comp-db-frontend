@@ -28,14 +28,13 @@ export default function HomePage() {
                     backgroundImage: `url(${background.src}), radial-gradient(rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 50%)`
                 }}
                 className={`
-        bg-blend-overlay
-        bg-cover
-        bg-center
-        h-screen
-        text-[white]
-        text-center
-        `}
-            >
+                    bg-blend-overlay
+                    bg-cover
+                    bg-center
+                    h-screen
+                    text-[white]
+                    text-center
+                    `}>
                 <div className="container mx-auto px-4 h-full">
                     <div className="h-full flex justify-center items-center">
                         <div>

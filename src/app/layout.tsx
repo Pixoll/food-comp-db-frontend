@@ -2,7 +2,7 @@ import {Metadata, Viewport} from "next";
 import {ReactNode} from "react";
 import {Montserrat} from "next/font/google";
 import Providers from "./Providers";
-import NavBar from "./components/Navbar";
+import NavBar from "./components/NavBar/Navbar";
 import "./globals.css"
 
 

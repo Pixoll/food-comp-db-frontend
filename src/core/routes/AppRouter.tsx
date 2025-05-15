@@ -7,7 +7,7 @@ import ModifyFoodDetail from "../../pages/detailFood/ModifyFoodDetail";
 import HomePage from "../../pages/home/HomePage";
 import LoginPage from "../../pages/LoginPage";
 import SearchPage from "../../pages/search/SearchPage";
-import NavBar from "../../app/components/Navbar";
+import NavBar from "../../app/components/NavBar/Navbar";
 import { useAuth } from "../context/AuthContext";
 import makeRequest from "../utils/makeRequest";
 import PrivateRoute from "./PrivateRoute";
