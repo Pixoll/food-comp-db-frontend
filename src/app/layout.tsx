@@ -3,7 +3,7 @@ import {Montserrat} from "next/font/google";
 import Providers from "./Providers";
 import {ReactNode} from "react";
 import "./globals.css"
-import AppNavbar from "./components/Navbar";
+import NavBar from "./components/Navbar";
 
 type RootLayoutProps = {
     children: ReactNode;
@@ -30,7 +30,7 @@ export default function RootLayout({children}: RootLayoutProps) {
         <body>
         <Providers>
             <div id="root">
-                <AppNavbar />
+                <NavBar />
                 {children}
             </div>
         </Providers>

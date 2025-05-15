@@ -7,7 +7,7 @@ import ModifyFoodDetail from "../../pages/detailFood/ModifyFoodDetail";
 import HomePage from "../../pages/home/HomePage";
 import LoginPage from "../../pages/LoginPage";
 import SearchPage from "../../pages/search/SearchPage";
-import AppNavbar from "../../app/components/Navbar";
+import NavBar from "../../app/components/Navbar";
 import { useAuth } from "../context/AuthContext";
 import makeRequest from "../utils/makeRequest";
 import PrivateRoute from "./PrivateRoute";
@@ -30,10 +30,10 @@ export const AppRouter = () => {
 
   return (
     <>
-      <AppNavbar/>
+      <NavBar/>
       <Suspense fallback={<FaSpinner/>}>
         <Routes>
-          <Route path="/" element={<HomePage/>}/>
+            {/* <Route path="/" element={<HomePage/>}/>*/}
           <Route path="login" element={<LoginPage/>}/>
             {/*<Route path="search" element={<SearchPage/>}/>*/}
           <Route path="comparison" element={<ComparisonPage/>}/>

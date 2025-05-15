@@ -10,7 +10,7 @@ import { useAuth } from "../../core/context/AuthContext";
 import { useToast } from "../../core/context/ToastContext";
 import makeRequest from "../../core/utils/makeRequest";
 
-const AppNavbar = () => {
+const NavBar = () => {
   const { t, i18n } = useTranslation();
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -106,4 +106,4 @@ const AppNavbar = () => {
   );
 };
 
-export default AppNavbar;
+export default NavBar;
