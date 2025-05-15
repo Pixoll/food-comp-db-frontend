@@ -1,9 +1,11 @@
 import {Metadata, Viewport} from "next";
 import {Montserrat} from "next/font/google";
-import {AuthProvider} from "../core/context/AuthContext";
-import ComparisonProvider from "../core/context/ComparisonContext";
+import Providers from "./Providers";
 import {ReactNode} from "react";
 import "./globals.css"
+import i18next from "i18next";
+import spanish from "../translations/es.json";
+import english from "../translations/en.json";
 
 type RootLayoutProps = {
     children: ReactNode;
@@ -28,11 +30,9 @@ export default function RootLayout({children}: RootLayoutProps) {
     return (
         <html lang="en" className={montserrat.className} suppressHydrationWarning>
         <body>
-        <ComparisonProvider>
-            <AuthProvider>
-                <div id="root">{children}</div>
-            </AuthProvider>
-        </ComparisonProvider>
+        <Providers>
+            <div id="root">{children}</div>
+        </Providers>
         </body>
         </html>
     );
