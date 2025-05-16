@@ -91,7 +91,7 @@ export default function FilterBody({
       />
     </div>
 
-    <div className="filter-group">
+    <div className="mb-4">
       <label htmlFor="other">{t("Filter.regions")}</label>
       <SearchBox
         filterOptions={regionOptions}
@@ -101,7 +101,7 @@ export default function FilterBody({
       />
     </div>
 
-    <div className="filter-group">
+    <div className="mb-4">
       <label htmlFor="other">{t("Filter.group")}</label>
       <SearchBox
         filterOptions={groups}
@@ -112,13 +112,13 @@ export default function FilterBody({
     </div>
 
     {/* Measurement Section */}
-    <div className="filter-group nutrients-filter">
-      <h3 className="measurement-title">{t("Measurement.title")}</h3>
+    <div className="mb-[16px] bg-[#cbe0d4] rounded-[12px] shadow-[0_4px_12px_rgba(0,0,0,0.15)] p-[20px] relative !my-[0]">
+      <h3 className="flex items-center justify-center py-[12px] text-center gap-[10px] text-[#01190f] font-[500] text-[24px]">{t("Measurement.title")}</h3>
       {selectedFilters.nutrientsFilter.map((nutrient, index, array) => (
-        <Row key={index} className="align-items-start flex-column measurement-row">
+        <div key={index} className="align-items-start flex-column measurement-row mb-[0px]">
           {selectedFilters.nutrientsFilter.length > 1 && index > 0 && (
-            <Col className={"mb-3"}>
-              <span className={"measurement-separator"}/>
+            <Col className="mb-3">
+              <span className="block flex-grow border-b border-[#b0b0b0]"/>
             </Col>
           )}
 
@@ -184,9 +184,9 @@ export default function FilterBody({
               </Form.Group>
             </Col>
           </Row>
-        </Row>
+        </div>
       ))}
-      <Row className="align-items-start flex-column">
+      <div className="align-items-start flex-column">
         {selectedFilters.nutrientsFilter.length < nutrients.size && (
           <Col className={selectedFilters.nutrientsFilter.length > 1 ? "mb-3" : ""}>
             <Button
@@ -206,15 +206,15 @@ export default function FilterBody({
               variant="outline-secondary"
               className="large-button"
             >
-              <XCircle className="me-2"/>
+              <XCircle className="me-[8px]"/>
               Eliminar último
             </Button>
           </Col>
         )}
-      </Row>
+      </div>
     </div>
 
-    <button onClick={resetFilters} className="reset-button">
+    <button onClick={resetFilters} className="bg-[#1D6735FF] text-[white] p-[10px] border-none w-full rounded-[5px]">
       {t("Filter.reset")}
     </button>
   </>;

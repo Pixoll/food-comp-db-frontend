@@ -24,18 +24,8 @@
   box-shadow: none !important;
 }
 
-.nutrients-filter {
-  background-color: #cbe0d4;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  position: relative;
-  font-family: "Poppins", serif;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-}
 
-.reset-button {
+/*.reset-button {
   background-color: rgb(29, 103, 53);
   color: white;
   padding: 10px;
@@ -43,9 +33,9 @@
   border: none;
   border-radius: 5px;
   font-family: "Poppins", serif;
-}
-
-.measurement-title {
+}*/
+/*.
+measurement-title {
   font-family: "Poppins", serif;
   font-size: 24px;
   font-weight: 500;
@@ -59,6 +49,7 @@
   padding-left: 12px;
   padding-right: 12px;
 }
+*/
 
 /*.filter-group {
   margin-bottom: 1rem;
@@ -68,15 +59,11 @@
   font-family: "Poppins", serif;
 }*/
 
-.measurement-row {
-  margin-bottom: 0 !important;
-}
-
-.measurement-separator {
+/*.measurement-separator {
   display: block;
   flex-grow: 1;
   border-bottom: 1px solid #b0b0b0;
-}
+}*/
 
 @media (max-width: 992px) {
 
