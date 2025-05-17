@@ -1,4 +1,4 @@
-.food-list h2 {
+.food-list h2 { /*Listo*/
   font-size: 26px;
   font-family: "Poppins", serif;
   color: black;
@@ -10,7 +10,7 @@
   transition: color 0.3s ease;
 }
 
-.food-list h2:hover {
+.food-list h2:hover {  /*Listo*/
   color: #388e60;
 }
 
@@ -127,7 +127,7 @@
 }
 
 @media screen and (max-width: 768px) {
-  .content-table-foods,
+  .content-table-foods,  /*Listo*/
   .content-table-foods thead,
   .content-table-foods tbody,
   .content-table-foods th,
@@ -136,17 +136,17 @@
     display: block;
   }
 
-  .content-table-foods thead tr {
+  .content-table-foods thead tr {  /*Listo*/
     display: none;
   }
 
-  .content-table-foods td {
+  .content-table-foods td {  /*Listo*/
     position: relative;
     padding: 14px 18px 14px 50%;
     text-align: left;
   }
 
-  .content-table-foods td::before {
+  .content-table-foods td::before {  /*Listo*/
     content: attr(data-label);
     position: absolute;
     left: 0;
@@ -157,7 +157,7 @@
     white-space: nowrap;
   }
 
-  .content-table-foods tr {
+  .content-table-foods tr {  /*Listo*/
     margin-bottom: 12px;
   }
 
@@ -212,7 +212,6 @@
   border-radius: 50%;
   border: none;
   cursor: pointer;
-  
   transition: all 0.2s ease;
 }
 

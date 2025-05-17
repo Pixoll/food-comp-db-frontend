@@ -81,7 +81,7 @@ export default function FilterBody({
 
   return <>
     {/* Filter Sections */}
-    <div className="mb-4"/*className="filter-group"*/>
+    <div className="mb-[16px]"/*className="filter-group"*/>
       <label htmlFor="other">{t("Filter.type")}</label>
       <SearchBox
         filterOptions={types}
@@ -91,7 +91,7 @@ export default function FilterBody({
       />
     </div>
 
-    <div className="mb-4">
+    <div className="mb-[16px]">
       <label htmlFor="other">{t("Filter.regions")}</label>
       <SearchBox
         filterOptions={regionOptions}
@@ -101,7 +101,7 @@ export default function FilterBody({
       />
     </div>
 
-    <div className="mb-4">
+    <div className="mb-[16px]">
       <label htmlFor="other">{t("Filter.group")}</label>
       <SearchBox
         filterOptions={groups}

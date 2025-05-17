@@ -1,0 +1,35 @@
+@media screen and (max-width: 768px) {
+    .content-table-foods,
+    .content-table-foods thead,
+    .content-table-foods tbody,
+    .content-table-foods th,
+    .content-table-foods td,
+    .content-table-foods tr {
+        display: block;
+    }
+
+    .content-table-foods thead tr {
+        display: none;
+    }
+
+    .content-table-foods td {
+        position: relative;
+        padding: 14px 18px 14px 50%;
+        text-align: left;
+    }
+
+    .content-table-foods td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        width: 45%;
+        padding-left: 18px;
+        font-weight: bold;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    .content-table-foods tr {
+        margin-bottom: 12px;
+    }
+}

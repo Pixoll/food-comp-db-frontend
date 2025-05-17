@@ -6,7 +6,7 @@ import {FetchStatus, useFetch} from "../../core/hooks";
 import {useTranslation} from "react-i18next";
 import { useSearchParams } from 'next/navigation';
 import FilterBody, {Filters} from "./components/FilterBody";
-import FoodResultsTable from "./components/FoodResultsTable";
+import FoodResultsTable from "./components/nutrient-table/FoodResultsTable";
 import {FoodResult} from "../../core/types/option";
 import "../../assets/css/_searchPage.css"
 import styles from "./search.module.css"

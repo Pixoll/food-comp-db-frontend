@@ -32,7 +32,7 @@ export default function SearchBox({ filterOptions, onChange, single, selectedOpt
   };
 
   return (
-    <div className="relative my-[16px]" /*className="search-box"*/>
+    <div className="relative" /*className="search-box"*/>
       {!single ? (
         <CheckboxFilter
           options={filterOptions}

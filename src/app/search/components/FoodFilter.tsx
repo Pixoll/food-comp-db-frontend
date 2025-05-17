@@ -7,7 +7,7 @@ import {useTranslation} from "react-i18next";
 import {FetchStatus, useFetch} from "../../../core/hooks";
 import {FoodResult} from "../../../core/types/option";
 import FilterBody, {Filters} from "./FilterBody";
-import FoodResultsTable from "./FoodResultsTable";
+import FoodResultsTable from "./nutrient-table/FoodResultsTable";
 import "../../../assets/css/_foodFilter.css";
 
 type FoodFilterProps = {

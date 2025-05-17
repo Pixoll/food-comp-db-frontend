@@ -4,12 +4,12 @@ import {useEffect, useState} from "react";
 import {Col, Row} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
 import {useRouter} from 'next/navigation';
-import {useAuth} from "../../../core/context/AuthContext";
-import {useComparison} from "../../../core/context/ComparisonContext";
-import {FoodResult} from "../../../core/types/option";
+import {useAuth} from "../../../../core/context/AuthContext";
+import {useComparison} from "../../../../core/context/ComparisonContext";
+import {FoodResult} from "../../../../core/types/option";
 import axios from "axios";
-import Pagination from "./Pagination";
-import "../../../assets/css/_foodResultsTable.css";
+import Pagination from "../Pagination";
+import "./nutrient-table.css"
 
 interface FoodResultsListProps {
     data: FoodResult[];
@@ -183,7 +183,7 @@ export default function FoodResultsTable({
 
     return (
         <div className="food-list">
-            <h2>{t("Table.title")}</h2>
+            <h2 className="text-2xl font-poppins text-black text-left mb-[18px] border-b-2 border-[#a8d8d2] pb-[8px] tracking-wider transition-colors duration-300 ease-in-out hover:text-[#388e60]">{t("Table.title")}</h2>
             <div className="filter-name">
                 <Row className="g-3">
                     <Col xs={12} className="input-name">
@@ -256,17 +256,16 @@ export default function FoodResultsTable({
                 <p>{t("Table.no_results")}</p>
             ) : (
                 <>
-                    <table className="
+                    <table className="content-table-foods
                             border-collapse
                             font-[0.95em]
                             w-full
                             rounded-t-[8px]
                             overflow-hidden
                             shadow-[0_6px_18px_rgba(0, 0, 0, 0.1)]
-
                         "
                         /*className="content-table-foods"*/>
-                        <thead className="visible md:hidden">
+                        <thead>
                         <tr className="bg-[#4e9f6f] text-[white] text-left font-[700] select-none">
                             <th className="text-[22px] font-[500] py-[14px] px-[18px] text-left">
                                 <div className="flex flex-row items-center cursor-pointer w-[max-content]"
@@ -378,11 +377,13 @@ export default function FoodResultsTable({
                                         </button>
                                     )}
                                 </td>
-                                <th className="items-center">
+                                <th className="flex items-center justify-center h-[55px] md:h-auto">
                                     {comparisonFoods.map((f) => f.code).includes(item.code) ? (
                                         <button
                                             onClick={() => removeFromComparison(item.code)}
-                                            className="comparison-button remove"
+                                            className="flex items-center justify-center w-full h-[45px] rounded-[6px] md:rounded-[50%] border-none
+                                                cursor-pointer transition-all duration-200 ease-in-out bg-[#ecc1c1] text-[#c31a3f]
+                                                hover:bg-[#fecaca] md:w-[45px] md:h-[45px]"
                                             aria-label="Eliminar"
                                         >
                                             <Minus size={16}/>
@@ -395,7 +396,9 @@ export default function FoodResultsTable({
                                                     name: item.commonName[selectedLanguage] ?? "",
                                                 })
                                             }
-                                            className="comparison-button add"
+                                            className="flex items-center justify-center w-full h-[45px] rounded-md md:rounded-full border-none
+                                                cursor-pointer transition-all duration-200 ease-in-out bg-[#a8dbc1] text-[#059669]
+                                                hover:bg-[#a7f3d0] md:w-[45px] md:h-[45px]"
                                             aria-label="Comparar"
                                         >
                                             <Plus size={16}/>
