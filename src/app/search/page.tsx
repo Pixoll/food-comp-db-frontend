@@ -74,8 +74,8 @@ export default function SearchPage() {
 
     return (
         <div className={styles["search-container"]}>
-            <Accordion defaultActiveKey="0" className="flex-col bg-[white] !rounded-[10px] relative shadow-[0_4px_8px_rgba(0,0,0,0.1)] block max-w-[600px] w-full lg-custom:hidden"
-            /*className="food-filter food-filter-accordion"*/>
+            {/*<Accordion defaultActiveKey="0" className="w-full flex-col bg-[white] !rounded-[10px] relative shadow-[0_4px_8px_rgba(0,0,0,0.1)] block max-w-[600px] w-full lg-custom:hidden"
+            className="food-filter food-filter-accordion">
                 <AccordionItem eventKey={"0"}>
                     <AccordionHeader className="focus:!shadow-none">
                         <h5 className="m-0">{t("Filter.title")}</h5>
@@ -88,9 +88,9 @@ export default function SearchPage() {
                         />
                     </AccordionBody>
                 </AccordionItem>
-            </Accordion>
+            </Accordion>*/}
 
-            <div className="w-[39%] p-5 flex flex-col bg-white rounded-[10px] relative shadow-md hidden lg-custom:flex"/*className="food-filter food-filter-static"*/>
+            <div className="p-[20px] flex flex-col bg-[white] rounded-[10px] relative shadow-md lg-custom:w-[39%]"/*className="food-filter food-filter-static"*/>
                 <h4>{t("Filter.title")}</h4>
                 <FilterBody
                     selectedFilters={selectedFilters}

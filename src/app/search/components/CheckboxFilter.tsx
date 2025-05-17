@@ -45,117 +45,65 @@ export default function CheckboxFilter({options, selectedOptions, setSelectedOpt
         }
     };
 
-    return (
-        <div className={`w-full relative font-poppins ${dropdownOpen ? "block" : ""}`}>
+    return (<>
             <div
-                className="
-                flex
-                justify-between
-                items-center
-                rounded-[8px]
-                bg-[#4e9f6f]
-                text-white
-                p-3
-                border-2
-                border-solid
-                border-[#388e60]
-                cursor-pointer
-                transition-all
-                duration-300
-                ease-in-out
-                hover:bg-[#388e60]
-                hover:border-[#2c6b49]
-                md:text-base
-                "
+                className="flex justify-between items-center rounded-[8px] bg-[#4e9f6f] text-[white] p-[12px]
+                border-2 border-solid border-[#388e60] cursor-pointer transition-all duration-300 ease-in-out
+                hover:bg-[#388e60] hover:border-[#2c6b49] md:text-base"
                 //className="selected-options-display"
                 onClick={() => setDropdownOpen(!dropdownOpen)}
             >
                 {getSelectedLabel()}
-                <span>▼</span>
+                <span className="text-sm">{dropdownOpen ? "▲" : "▼"}</span>
             </div>
+
             {dropdownOpen && (
-                <div
-                    className="
-                    absolute
-                    w-full
-                    block
-                    max-w-64
-                    overflow-y-auto
-                    shadow-lg
-                    bg-white
-                    border-2
-                    border-solid
-                    border-[#d6f4e9]
-                    z-10
-                    p-3
-                    rounded-md
-                    transition-colors
-                    duration-300
-                    ease-in-out
-                    md:w-max-[250px]
-                    "
+                <div className="absolute p-[12px] left-0 right-0 max-h-[250px] overflow-y-auto shadow-[6px_12px_rgba(0,0,0,0.1) bg-[white]
+                    border-[px] border-solid border-[#d6f4e9] z-[20] rounded-[6px] transition-all
+                    duration-300 ease-in-out md:max-w-[250px] mt-[4px]"
                     //className="dropdown-options"
                 >
-                    <label
-                        className="
-                        block
-                        p-3
-                        bg-[#f7f7f7]
-                        cursor-pointer
-                        mb-2.5
-                        rounded-[5px]
-                        transition-colors
-                        duration-300
-                        ease-in-out
-                        hover:bg-[#e0e0e0]
-                        md:text-base
-                        [&>input[type=checkbox]]:hidden
-                        "
+
+                    <label className="block p-[12px] bg-[#f7f7f7] cursor-pointer mb-[10px] rounded-[10xp]
+                        transition-colors duration-300 ease-in-out hover:bg-[#e0e0e0] md:text-base"
                         //className="select-all-label"
                     >
-                        <input
-                            type="checkbox"
-                            checked={selectedOptions.size === options.size}
-                            readOnly
-                            onChange={handleSelectAll}
-                        />
-                        Seleccionar todos
-                        {selectedOptions.size === options.size && (
-                            <span className="float-right text-[#81c784] text-xl" /*className="checked"*/>✔</span>
-                        )}
+                        <div className="flex justify-between items-center">
+                            <span>Seleccionar todos</span>
+                            <input
+                                type="checkbox"
+                                checked={selectedOptions.size === options.size}
+                                onChange={handleSelectAll}
+                                className="hidden"
+                            />
+                            {selectedOptions.size === options.size && (
+                                <span className="text-[#81c784] text-[20px]">✔</span>
+                            )}
+                        </div>
                     </label>
 
                     {filteredOptions.map((label, option) => (
                         <label
-                            className="
-                            block
-                            p-3
-                            bg-[#f7f7f7]
-                            cursor-pointer
-                            mb-2.5
-                            rounded-[5px]
-                            transition-colors
-                            duration-300
-                            ease-in-out
-                            hover:bg-[#e0e0e0]
-                            md:text-base
-                            [&>input[type=checkbox]]:hidden
-                            "
+                            className="block p-[12px] bg-[#f7f7f7] cursor-pointer mb-[10px] rounded-[6px]
+                                transition-colors duration-300 ease-in-out hover:bg-[#e0e0e0] md:text-base"
                             key={option}>
-                            <input
-                                type="checkbox"
-                                value={option}
-                                checked={selectedOptions.has(option)}
-                                onChange={() => handleCheckboxChange(option)}
-                            />
-                            {label}
-                            {selectedOptions.has(option) && (
-                                <span className="float-right text-[#81c784] text-xl" /*className="checked"*/>✔</span>
-                            )}
+                            <div className="flex justify-between items-center">
+                                <span>{label}</span>
+                                <input
+                                    type="checkbox"
+                                    value={option}
+                                    checked={selectedOptions.has(option)}
+                                    onChange={() => handleCheckboxChange(option)}
+                                    className="hidden"
+                                />
+                                {selectedOptions.has(option) && (
+                                    <span className="text-[#81c784] text-[20px]">✔</span>
+                                )}
+                            </div>
                         </label>
                     ))}
                 </div>
             )}
-        </div>
+        </>
     );
 }

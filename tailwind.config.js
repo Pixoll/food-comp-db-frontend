@@ -11,7 +11,7 @@ module.exports = {
         serif: ['"Poppins"', 'serif'],
       },
       screens: {
-        'lg-custom': {'max': '992px'},
+        'lg-custom': {'min': '992px'},
       },
     },
   },
