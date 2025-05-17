@@ -53,7 +53,7 @@
 }
 
 /* Tabla */
-.content-table-foods {
+.content-table-foods { /*listo*/
   border-collapse: collapse;
   font-size: 0.95em;
   width: 100%;
@@ -63,7 +63,7 @@
   font-family: "Poppins", serif;
 }
 
-.content-table-foods thead tr {
+.content-table-foods thead tr { /*Listo*/
   background-color: #4e9f6f;
   color: #ffffff;
   text-align: left;
@@ -71,11 +71,11 @@
   user-select: none;
 }
 
-.content-table-foods th {
+.content-table-foods th { /*Listo*/
   font-size: 22px;
 }
 
-.content-table-foods th > div {
+.content-table-foods th > div { /*Listo*/
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -83,30 +83,30 @@
   width: max-content;
 }
 
-.content-table-foods th > div > *:nth-child(1) {
+.content-table-foods th > div > *:nth-child(1) { /*Listo*/
   margin-right: 5px;
 }
 
 .content-table-foods th,
-.content-table-foods td {
+.content-table-foods td { /*Listo*/
   font-weight: 500;
   padding: 14px 18px;
   text-align: left;
 }
 
-.content-table-foods tbody tr {
+.content-table-foods tbody tr {  /*Listo*/
   border-bottom: 1px solid #dddddd;
 }
 
-.content-table-foods tbody tr:nth-of-type(even) {
+.content-table-foods tbody tr:nth-of-type(even) {  /*Listo*/
   background-color: #f8f8f8;
 }
 
-.content-table-foods tbody tr:last-of-type {
+.content-table-foods tbody tr:last-of-type {  /*Listo*/
   border-bottom: 2px solid #009879;
 }
 
-.content-table-foods tbody tr button {
+.content-table-foods tbody tr button { /*Listo*/
   background-color: #4e9f6f;
   border-radius: 30px;
   color: white;
@@ -121,8 +121,8 @@
   margin-bottom: 10px;
 }
 
-.content-table-foods tbody tr button:hover {
-  background-color: #007f67;
+.content-table-foods tbody tr button:hover {  /*Listo*/
+  background-color: #005561;
   transform: translateY(-3px);
 }
 

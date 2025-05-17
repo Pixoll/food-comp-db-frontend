@@ -1,5 +1,9 @@
 
 .food-list {
+  display: flex;
+  flex-direction: column;
+  width: 71%;
+  margin-right: 10px;
   flex-basis: 100%;
   padding: 20px;
   background-color: rgb(214, 226, 218);
@@ -8,9 +12,12 @@
 
 @media screen and (max-width: 992px) {
 
-  .food-filter,
-  .food-list {
+  .food-filter{
     flex: none;
+    width: 100%;
+    max-width: 100%;
+  }
+  .food-list {
     width: 100%;
     max-width: 100%;
   }
