@@ -1,3 +1,4 @@
+'use client'
 import { Edit2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import "../../../assets/css/_nutrientAccordion.css";

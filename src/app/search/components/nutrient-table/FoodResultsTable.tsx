@@ -56,7 +56,7 @@ export default function FoodResultsTable({
         : [];
 
     const toFoodDetail = (code: string) => {
-        router.push(`/search/details/${code}`);
+        router.push(`/detail-food/${code}`);
     };
 
 

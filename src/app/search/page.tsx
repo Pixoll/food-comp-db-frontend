@@ -1,7 +1,6 @@
 'use client'
 import qs from "qs";
 import {useState, useEffect} from "react";
-import {Accordion, AccordionBody, AccordionHeader, AccordionItem} from "react-bootstrap";
 import {FetchStatus, useFetch} from "../../core/hooks";
 import {useTranslation} from "react-i18next";
 import { useSearchParams } from 'next/navigation';
