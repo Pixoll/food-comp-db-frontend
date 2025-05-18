@@ -9,7 +9,7 @@ import {useComparison} from "../../../../core/context/ComparisonContext";
 import {FoodResult} from "../../../../core/types/option";
 import axios from "axios";
 import Pagination from "../Pagination";
-import "./nutrient-table.css"
+import "./index.css"
 
 interface FoodResultsListProps {
     data: FoodResult[];

@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "../../../core/context/AuthContext";
 import { useToast } from "../../../core/context/ToastContext";
 import makeRequest from "../../../core/utils/makeRequest";
-import "./navbar.css"
+import "./index.css"
 
 const NavBar2 = () => {
   const [menuOpen, setMenuOpen] = useState(false);
