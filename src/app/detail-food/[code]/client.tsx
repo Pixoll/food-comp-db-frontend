@@ -1,13 +1,16 @@
 'use client'
 import {useState} from 'react'
 import "../../../assets/css/_DetailPage.css";
-import {Card, Col, Container, ListGroup, Nav, Row, Tab} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
+import InfoAboutFoodComponent from "../components/InfoAboutFoodComponent";
+import TabItem from "../../components/Tabs/TabItem";
+import Tab from "../../components/Tabs/Tab";
 import {Graphic, LangualCodeComponent, NutrientAccordion, ReferencesList,} from "../../../core/components/detailFood";
+
 import {FetchStatus, useFetch} from "../../../core/hooks/useFetch";
 import {SingleFoodResult} from "../../../core/types/SingleFoodResult";
 
-function getDetail(code: string):SingleFoodResult {
+function getDetail(code: string): SingleFoodResult {
     const result = useFetch<SingleFoodResult>(`/foods/${code?.toString()}`);
 
     if (result.status === FetchStatus.Success) {
@@ -38,8 +41,9 @@ function getDetail(code: string):SingleFoodResult {
         };
     }
 }
-export default function ClientDetailPage({ code }:{ code:string}) {
-    const { t } = useTranslation();
+
+export default function ClientDetailPage({code}: { code: string }) {
+    const {t} = useTranslation();
     const [key, setKey] = useState<string>("first");
 
 
@@ -86,9 +90,6 @@ export default function ClientDetailPage({ code }:{ code:string}) {
     ];
 
 
-
-
-
     const references = data.references ?? [];
     const mainNutrients = data.nutrientMeasurements?.macronutrients ?? [];
 
@@ -118,293 +119,38 @@ export default function ClientDetailPage({ code }:{ code:string}) {
     };
 
     return (
-        <div className="detail-background">
-            <Container
-                className="custom-container-of-detail-page mt-1 mb-1 ml-1 mr-1"
-                fluid="xxl"
-            >
-                <Col>
-                    <Col>
-                        <Card className="shadow-sm mb-4">
-                            <Card.Body>
-                                <Card.Title className="text-dark mb-4">
-                                    {t("DetailFood.title")}
-                                </Card.Title>
-
-                                <Row className="mb-3">
-                                    <Col md={6}>
-                                        <ListGroup variant="flush">
-                                            <ListGroup.Item>
-                                                <strong>{t("DetailFood.code")}: </strong>
-                                                {code}
-                                            </ListGroup.Item>
-
-                                            {data.commonName.es && (
-                                                <ListGroup.Item>
-                                                    <strong>{t("DetailFood.name.Spanish")} </strong>
-                                                    {data.commonName.es}
-                                                </ListGroup.Item>
-                                            )}
-
-                                            {data.commonName.pt && (
-                                                <ListGroup.Item>
-                                                    <strong>{t("DetailFood.name.Portuguese")}: </strong>
-                                                    {data.commonName.pt}
-                                                </ListGroup.Item>
-                                            )}
-
-                                            {data.commonName.en && (
-                                                <ListGroup.Item>
-                                                    <strong>{t("DetailFood.name.English")} </strong>
-                                                    {data.commonName.en}
-                                                </ListGroup.Item>
-                                            )}
-
-                                            {data.scientificName && (
-                                                <ListGroup.Item>
-                                                    <strong>{t("DetailFood.name.scientific")} </strong>
-                                                    {data.scientificName}
-                                                </ListGroup.Item>
-                                            )}
-
-                                            {data.subspecies && (
-                                                <ListGroup.Item>
-                                                    <strong>{t("DetailFood.subspecies")} </strong>
-                                                    {data.subspecies}
-                                                </ListGroup.Item>
-                                            )}
-
-                                            {data.strain && (
-                                                <ListGroup.Item>
-                                                    <strong>{t("DetailFood.strain")}</strong>
-                                                    {data.strain}
-                                                </ListGroup.Item>
-                                            )}
-
-                                            {data.brand && (
-                                                <ListGroup.Item>
-                                                    <strong>{t("DetailFood.brand")} </strong>
-                                                    {data.brand}
-                                                </ListGroup.Item>
-                                            )}
-
-                                            {data.observation && (
-                                                <ListGroup.Item>
-                                                    <strong>{t("DetailFood.observation")} </strong>
-                                                    {data.observation}
-                                                </ListGroup.Item>
-                                            )}
-
-                                            <ListGroup.Item>
-                                                <strong>{t("DetailFood.group")} </strong>
-                                                {data.group.name}
-                                            </ListGroup.Item>
-
-                                            <ListGroup.Item>
-                                                <strong>{t("DetailFood.type")} </strong>
-                                                {data.type.name}
-                                            </ListGroup.Item>
-                                        </ListGroup>
-                                    </Col>
-
-                                    <Col md={6}>
-                                        {data.origins && data.origins.length > 0 && (
-                                            <Card className="mb-3">
-                                                <Card.Body>
-                                                    <Card.Subtitle className="mb-3 text-muted">
-                                                        {"Orígenes"}
-                                                    </Card.Subtitle>
-                                                    {data.origins.map((origin, index) => (
-                                                        <p key={index}>
-                                                            <strong>
-                                                                {"Origen"} {index + 1}:{" "}
-                                                            </strong>
-                                                            {origin.name}
-                                                        </p>
-                                                    ))}
-                                                </Card.Body>
-                                            </Card>
-                                        )}
-                                        {(data.ingredients.es ||
-                                            data.ingredients.en ||
-                                            data.ingredients.pt) && (
-                                            <Card>
-                                                <Card.Body>
-                                                    <Card.Subtitle className="mb-3 text-muted">
-                                                        {"Ingredientes"}
-                                                    </Card.Subtitle>
-
-                                                    {data.ingredients.es && (
-                                                        <p>
-                                                            <strong>
-                                                                {t("DetailFood.ingredients.Spanish")}{" "}
-                                                            </strong>
-                                                            {data.ingredients.es}
-                                                        </p>
-                                                    )}
-
-                                                    {data.ingredients.pt && (
-                                                        <p>
-                                                            <strong>
-                                                                {t("DetailFood.ingredients.Portuguese")}{" "}
-                                                            </strong>
-                                                            {data.ingredients.pt}
-                                                        </p>
-                                                    )}
-
-                                                    {data.ingredients.en && (
-                                                        <p>
-                                                            <strong>
-                                                                {t("DetailFood.ingredients.English")}{" "}
-                                                            </strong>
-                                                            {data.ingredients.en}
-                                                        </p>
-                                                    )}
-                                                </Card.Body>
-                                            </Card>
-                                        )}
-                                    </Col>
-                                </Row>
-
-                                <Row className="mb-3">
-                                    <Col>
-
-                                    </Col>
-                                </Row>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                    <Col>
-                        <div className="transparent-container">
-                            <Row>
-                                <Col md={6}>
-                                    <Graphic
-                                        key={grams}
-                                        data={graphicData}
-                                        title={t("DetailFood.graphics.title_L")}
-                                    />
-                                </Col>
-                                <Col md={6}>
-                                    <Graphic
-                                        key={grams}
-                                        data={graphicDataPercent}
-                                        title={t("DetailFood.graphics.title_R")}
-                                    />
-                                </Col>
-                            </Row>
-                            <Row className="mt-3">
-                                <Col>
-                                    <div style={{ textAlign: "center" }}>
-                                        <input
-                                            type="number"
-                                            value={inputGrams}
-                                            onChange={(e) => setInputGrams(+e.target.value)}
-                                            placeholder={t("DetailFood.grams.enter")}
-                                            min={1}
-                                            style={{
-                                                marginRight: "10px",
-                                                padding: "5px",
-                                                width: "120px",
-                                            }}
-                                        />
-                                        <button
-                                            onClick={handleGramsChange}
-                                            className="change-grams-button"
-                                            style={{
-                                                padding: "5px 10px",
-                                                backgroundColor: "#0d6efd",
-                                                color: "#fff",
-                                                border: "none",
-                                                borderRadius: "5px",
-                                            }}
-                                        >
-                                            {t("DetailFood.grams.change")}
-                                        </button>
-                                        <p>
-                                            {t("DetailFood.grams.current")} {grams}g
-                                        </p>
-                                    </div>
-                                </Col>
-                            </Row>
-                        </div>
-                    </Col>
-                </Col>
-
-                <Row className="mt-4">
-                    <Col>
-                        <div
-                            style={{
-                                backgroundColor: "#d1e7dd",
-                                padding: "20px 10px 5px 15px",
-                                borderRadius: "5px",
-                                height: "auto",
-                            }}
-                        >
-                            <Tab.Container
-                                activeKey={key}
-                                onSelect={(k) => setKey(k as string)}
-                            >
-                                <Nav
-                                    variant="tabs"
-                                    justify
-                                    className="mb-3"
-                                    style={{
-                                        borderBottom: "1px solid #d1e7dd",
-                                    }}
-                                >
-                                    <Nav.Item>
-                                        <Nav.Link
-                                            eventKey="first"
-                                            className="custom-tab-link text-center px-4"
-                                        >
-                                            {t("DetailFood.labels.Nutritional")}
-                                        </Nav.Link>
-                                    </Nav.Item>
-                                    <Nav.Item>
-                                        <Nav.Link
-                                            eventKey="second"
-                                            className="custom-tab-link text-center px-4"
-                                        >
-                                            {t("DetailFood.references.title")}
-                                        </Nav.Link>
-                                    </Nav.Item>
-                                    <Nav.Item>
-                                        <Nav.Link
-                                            eventKey="third"
-                                            className="custom-tab-link text-center px-4"
-                                        >
-                                            {t("DetailFood.labels.data")}
-                                        </Nav.Link>
-                                    </Nav.Item>
-                                </Nav>
-                                <Tab.Content>
-                                    <Tab.Pane eventKey="first">
-                                        <NutrientAccordion
-                                            data={
-                                                data?.nutrientMeasurements ?? {
-                                                    energy: [],
-                                                    macronutrients: [],
-                                                    micronutrients: { vitamins: [], minerals: [] },
-                                                }
-                                            }
-                                            onReferenceClick={handleReferenceClick}
-                                            actualGrams={grams}
-                                        />
-                                    </Tab.Pane>
-                                    <Tab.Pane eventKey="second">
-                                        <h4>{t("DetailFood.references.nutrients")}</h4>
-                                        <ReferencesList references={references}/>
-                                    </Tab.Pane>
-                                    <Tab.Pane eventKey="third">
-                                        <h4>{t("DetailFood.codes")}</h4>
-                                        <LangualCodeComponent data={data.langualCodes}/>
-                                    </Tab.Pane>
-                                </Tab.Content>
-                            </Tab.Container>
-                        </div>
-                    </Col>
-                </Row>
-            </Container>
+        <div className="w-full h-full bg-[#d7dbd6] rounded-t-[2px]">
+            {data.commonName.es && (
+                <h2 className="w-full py-[8px] px-[16px] text-[20px] font-[500] text-[#60625f]">
+                    {code},{", "}{data.commonName.es}
+                </h2>
+            )}
+            <Tab defaultTab={0} onChange={(index) => console.log(`${index}`)}>
+                <TabItem label="Información general">
+                    <InfoAboutFoodComponent data={
+                        {
+                            ingredients: data.ingredients,
+                            group: data.group,
+                            type: data.type,
+                            scientificName: data.scientificName,
+                            subspecies: data.subspecies ?? "",
+                            strain: data.strain ?? "",
+                            brand: data.brand ?? "",
+                            observation: data.observation ?? "",
+                            origins: data.origins ?? []
+                        }
+                    }/>
+                </TabItem>
+                <TabItem label="Composición del alimento">
+                    Contenido de la segunda pestaña
+                </TabItem>
+                <TabItem label="Códigos languales">
+                    componente de codigos languales
+                </TabItem>
+                <TabItem label="Referencias">
+                    componente de referencias
+                </TabItem>
+            </Tab>
         </div>
     );
 }

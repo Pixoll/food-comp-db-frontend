@@ -1,10 +1,13 @@
 import React from "react";
 import Footer from "../../components/Footer";
-export default function DetailFoodPageLayout({children}:{children:React.ReactNode}) {
+
+export default function DetailFoodPageLayout({children}: { children: React.ReactNode }) {
     return (
         <>
-            {children}
-            <Footer />
+            <div className="bg-[white] svg-background">
+                {children}
+            </div>
+            <Footer/>
         </>
     )
 }
