@@ -1,14 +1,13 @@
 'use client'
 import {useState} from 'react'
-import "../../../assets/css/_DetailPage.css";
 import {useTranslation} from "react-i18next";
 import InfoAboutFoodComponent from "../components/InfoAboutFoodComponent";
 import TabItem from "../../components/Tabs/TabItem";
 import Tab from "../../components/Tabs/Tab";
-import {Graphic, LangualCodeComponent, NutrientAccordion, ReferencesList,} from "../../../core/components/detailFood";
-
+import {Graphic} from "../../../core/components/detailFood";
 import {FetchStatus, useFetch} from "../../../core/hooks/useFetch";
 import {SingleFoodResult} from "../../../core/types/SingleFoodResult";
+import "../../../assets/css/_DetailPage.css";
 
 function getDetail(code: string): SingleFoodResult {
     const result = useFetch<SingleFoodResult>(`/foods/${code?.toString()}`);
@@ -117,12 +116,13 @@ export default function ClientDetailPage({code}: { code: string }) {
     const handleGramsChange = () => {
         setGrams(inputGrams);
     };
-
+    console.log(graphicData)
+    console.log(graphicDataPercent)
     return (
-        <div className="w-full h-full bg-[#d7dbd6] rounded-t-[2px]">
+        <div className="w-full h-full bg-[#effce8] rounded-t-[2px]">
             {data.commonName.es && (
                 <h2 className="w-full py-[8px] px-[16px] text-[20px] font-[500] text-[#60625f]">
-                    {code},{", "}{data.commonName.es}
+                    {code}, {data.commonName.es}
                 </h2>
             )}
             <Tab defaultTab={0} onChange={(index) => console.log(`${index}`)}>
@@ -142,7 +142,10 @@ export default function ClientDetailPage({code}: { code: string }) {
                     }/>
                 </TabItem>
                 <TabItem label="Composición del alimento">
-                    Contenido de la segunda pestaña
+                    <div className="flex flex-col">
+                    <Graphic title={t("DetailFood.graphics.title_L")} data={graphicData}/>
+                    <Graphic title={t("DetailFood.graphics.title_R")} data={graphicDataPercent}/>
+                    </div>
                 </TabItem>
                 <TabItem label="Códigos languales">
                     componente de codigos languales

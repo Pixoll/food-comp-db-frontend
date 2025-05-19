@@ -48,11 +48,10 @@ export default function Tab({children, defaultTab = 0, accentColor = "#7cbb75", 
                             onClick={() => handleTabClick(index)}
                             disabled={isDisabled}
                             className={`
-                            bg-[#d7dbd6]
                             transition-all duration-300 ease-in-out 
-                            text-center text-[18px] font-[300] py-[26px]
-                            cursor-pointer border-b-[0px] border-x-[0px] border-solid
-                            ${isDisabled ? 'opacity-[0.5] cursor-not-allowed' : 'hover:border-[#9bb698] hover:bg-[#d7dbd6] hover:border-b-[4px] hover:border-x-[4px]'}
+                            text-center text-[18px] font-[300] py-[20px]
+                            cursor-pointer border-t-[0px] border-x-[0px] border-solid bg-[#effce8]
+                            ${isDisabled ? 'opacity-[0.5] cursor-not-allowed' : 'hover:border-[#9bb698] hover:bg-[#effce8] hover:border-b-[4px]'}
                             ${isActive ? 'font-[500]' : 'font-[300]'}
                           `}
                             style={{
@@ -77,7 +76,7 @@ export default function Tab({children, defaultTab = 0, accentColor = "#7cbb75", 
                         key={`tabcontent-${index}`}
                         role="tabpanel"
                         aria-hidden={activeTab !== index}
-                        className={`transition-all duration-300 ease-in-out w-full bg-[#d7dbd6]${
+                        className={`transition-all duration-300 ease-in-out w-full bg-[#effce8]${
                             activeTab === index ? 'block opacity-[1]' : 'hidden opacity-0'
                         }`}
                     >
