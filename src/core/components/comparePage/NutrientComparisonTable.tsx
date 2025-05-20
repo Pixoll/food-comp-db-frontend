@@ -18,7 +18,7 @@ export default function NutrientComparisonTable({ foodsData, onRemoveFood }: Nut
     vitamins: false,
     minerals: false
   });
-  console.log(foodsData)
+
   const [expandedNutrients, setExpandedNutrients] = useState<Record<string, boolean>>({});
   
   const toggleSection = (section: keyof typeof expandedSections) => {

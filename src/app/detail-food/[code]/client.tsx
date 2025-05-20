@@ -4,7 +4,8 @@ import {useTranslation} from "react-i18next";
 import InfoAboutFoodComponent from "../components/InfoAboutFoodComponent";
 import TabItem from "../../components/Tabs/TabItem";
 import Tab from "../../components/Tabs/Tab";
-import {Graphic} from "../../../core/components/detailFood";
+import CompositionDropdown from "../components/composition-dropdown/CompositionDropdown";
+import Graphic from "../components/Graphic";
 import {FetchStatus, useFetch} from "../../../core/hooks/useFetch";
 import {SingleFoodResult} from "../../../core/types/SingleFoodResult";
 import "../../../assets/css/_DetailPage.css";
@@ -116,8 +117,6 @@ export default function ClientDetailPage({code}: { code: string }) {
     const handleGramsChange = () => {
         setGrams(inputGrams);
     };
-    console.log(graphicData)
-    console.log(graphicDataPercent)
     return (
         <div className="w-full h-full bg-[#effce8] rounded-t-[2px]">
             {data.commonName.es && (
@@ -143,8 +142,11 @@ export default function ClientDetailPage({code}: { code: string }) {
                 </TabItem>
                 <TabItem label="Composición del alimento">
                     <div className="flex flex-col">
-                    <Graphic title={t("DetailFood.graphics.title_L")} data={graphicData}/>
-                    <Graphic title={t("DetailFood.graphics.title_R")} data={graphicDataPercent}/>
+                        <Graphic title={t("DetailFood.graphics.title_L")} data={graphicData}/>
+                        <Graphic title={t("DetailFood.graphics.title_R")} data={graphicDataPercent}/>
+                    </div>
+                    <div className="border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white]">
+                        <CompositionDropdown nutrientData={data.nutrientMeasurements ?? []}/>
                     </div>
                 </TabItem>
                 <TabItem label="Códigos languales">

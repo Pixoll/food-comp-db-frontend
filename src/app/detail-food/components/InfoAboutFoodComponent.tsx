@@ -19,9 +19,8 @@ type InfoAboutFoodComponentProps = {
 }
 
 export default function InfoAboutFoodComponent({data}: { data: InfoAboutFoodComponentProps }) {
-
     return (
-        <div className="bg-[white] rounded-[8px] shadow-[0_1px_2px_0_rgb(0,0,0,0.05)] p-[18px]">
+        <div className="bg-[white] border-[1px] rounded-[8px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] p-[18px]">
             <h3 className="text-center text-[22px] font-[700] text-[#2b402b] mb-[20px]">Información del alimento</h3>
 
             <div className="flex flex-col md:flex-row gap-[32px]">
