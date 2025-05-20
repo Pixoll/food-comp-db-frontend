@@ -1,0 +1,218 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    transition: opacity 0.3s ease;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.modalContainer {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    max-width: 90%;
+    width: 100%;
+    transition: all 0.3s ease;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.modalHeader {
+    width: 100%;
+    min-height: 64px;
+    background: linear-gradient(135deg, #1a8d44 0%, #166534 100%);
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    border-bottom: 1px solid #0e4c25;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+.modalContent {
+    width: 100%;
+    flex: 1 1 auto;
+    padding: 20px;
+    box-sizing: border-box;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.modalTitle {
+    color: white;
+    font-weight: 600;
+    margin: 0;
+    font-size: 1.25rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.closeButton {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+.closeButton:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+}
+
+.modalContent {
+    width: 100%;
+    flex-grow: 1;
+    overflow: auto;
+    padding: 20px;
+    box-sizing: border-box;
+    max-height: calc(80vh - 128px);
+}
+
+.modalContent::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modalContent::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.modalContent::-webkit-scrollbar-thumb {
+    background-color: #d1d5db;
+    border-radius: 6px;
+}
+
+.modalFooter {
+    width: 100%;
+    min-height: 64px;
+    background: linear-gradient(135deg, #166534 0%, #14532d 100%);
+    padding: 16px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    border-top: 1px solid #0e4c25;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+.closeButtonFooter {
+    padding: 8px 18px;
+    background-color: white;
+    color: #166534;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.closeButtonFooter:hover {
+    background-color: #f9fafb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.closeButtonFooter:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.fadeIn {
+    animation: fadeIn 0.3s ease forwards;
+}
+
+.fadeOut {
+    animation: fadeOut 0.3s ease forwards;
+}
+
+.slideIn {
+    animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.slideOut {
+    animation: slideOut 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+}
+
+@media (max-width: 640px) {
+    .modalContainer {
+        width: 95% !important;
+        max-height: 80vh !important;
+    }
+
+    .modalHeader, .modalFooter {
+        height: 56px;
+        padding: 12px;
+    }
+
+    .modalTitle {
+        font-size: 1.1rem;
+    }
+}
