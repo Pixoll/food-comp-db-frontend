@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
-import { ChevronDown, ChevronRight } from 'lucide-react';
+import React, {useState} from 'react';
+import {ChevronDown, ChevronRight, Info} from 'lucide-react';
 import {
     NutrientsValue,
     NutrientMeasurement,
     NutrientMeasurementWithComponents
 } from '../../../../core/types/SingleFoodResult';
+import Modal from "../../../components/Modal/Modal"
 
 type NutrientCompositionProps = {
     nutrientData: NutrientsValue;
 };
 
-export default function NutrientComposition({ nutrientData }: NutrientCompositionProps) {
+export default function NutrientComposition({nutrientData}: NutrientCompositionProps) {
     const [expandedSections, setExpandedSections] = useState({
         energy: true,
         macronutrients: true,
@@ -20,6 +21,32 @@ export default function NutrientComposition({ nutrientData }: NutrientCompositio
     });
 
     const [expandedNutrients, setExpandedNutrients] = useState<Record<string, boolean>>({});
+    const [modalData, setModalData] = useState<{
+        deviation?: number;
+        min?: number;
+        max?: number;
+        sampleSize?: number;
+        standardized: boolean;
+        dataType: "analytic" | "calculated" | "assumed" | "borrowed";
+        note?: string;
+        referenceCodes?: number[]
+    } | null>(null);
+
+    const openNutrientModal = (nutrient: NutrientMeasurement) => {
+        setModalData({
+            deviation: nutrient.deviation,
+            min: nutrient.min,
+            max: nutrient.max,
+            sampleSize: nutrient.sampleSize,
+            standardized: nutrient.standardized,
+            dataType: nutrient.dataType,
+            note: nutrient.note,
+            referenceCodes: nutrient.referenceCodes ?? []
+        });
+    };
+    const closeModal = () => {
+        setModalData(null);
+    };
 
     const toggleSection = (section: keyof typeof expandedSections) => {
         setExpandedSections(prev => ({
@@ -100,6 +127,14 @@ export default function NutrientComposition({ nutrientData }: NutrientCompositio
                 <td className="text-center align-middle bg-[white]">
                     {getNutrientValue(nutrientData, nutrient.nutrientId)}
                 </td>
+                <td className="text-center align-middle bg-[white]">
+                    <button
+                        className="text-[#047857] hover:text-[#065f46] rounded-[50%] border-none focus:outline-none"
+                        onClick={() => openNutrientModal(nutrient)}
+                    >
+                        <Info size={22}/>
+                    </button>
+                </td>
             </tr>
         );
     };
@@ -134,6 +169,14 @@ export default function NutrientComposition({ nutrientData }: NutrientCompositio
                     <td className="text-center align-middle bg-[white]">
                         {getNutrientValue(nutrientData, nutrient.nutrientId)}
                     </td>
+                    <td className="text-center align-middle bg-[white]">
+                        <button
+                            className="text-[#047857] hover:text-[#065f46] rounded-[50%] border-none focus:outline-none"
+                            onClick={() => openNutrientModal(nutrient)}
+                        >
+                            <Info size={22}/>
+                        </button>
+                    </td>
                 </tr>
 
                 {isExpanded && hasComponents && nutrient.components.map(comp =>
@@ -148,14 +191,17 @@ export default function NutrientComposition({ nutrientData }: NutrientCompositio
             <table className="w-full min-w-[600px] border-collapse rounded-[8px] overflow-hidden">
                 <thead>
                 <tr>
-                    <th className="sticky top-0 bg-[#f7fef7] z-10 align-middle py-[12px] pl-[36px] text-left min-w-[200px] font-[600] text-[#064e3b] border-b-2 border-[#047857]">
+                    <th className="sticky top-0 bg-[#f7fef7] z-10 align-middle py-[12px] pl-[36px] text-left min-w-[200px] font-[600] text-[#064e3b] border-b-[2px] border-[#047857]">
                         Nutrientes
                     </th>
-                    <th className="sticky top-0 bg-[#f7fef7] z-10 align-middle py-[12px] px-[16px] text-center w-[80px] font-[600] text-[#064e3b] border-b-2 border-[#047857]">
+                    <th className="sticky top-0 bg-[#f7fef7] z-10 align-middle py-[12px] px-[16px] text-center w-[80px] font-[600] text-[#064e3b] border-b-[2px] border-[#047857]">
                         Unidad
                     </th>
-                    <th className="sticky top-0 bg-[#f7fef7] z-10 align-middle py-[12px] px-[16px] text-center min-w-[150px] font-[600] text-[#064e3b] border-b-2 border-[#047857]">
+                    <th className="sticky top-0 bg-[#f7fef7] z-10 align-middle py-[12px] px-[16px] text-center min-w-[150px] font-[600] text-[#064e3b] border-b-[2px] border-[#047857]">
                         Promedio
+                    </th>
+                    <th className="sticky top-0 bg-[#f7fef7] z-10 align-middle py-[12px] px-[16px] text-center min-w-[150px] font-[600] text-[#064e3b] border-b-2 border-[#047857]">
+                        Información
                     </th>
                 </tr>
                 </thead>
@@ -262,6 +308,78 @@ export default function NutrientComposition({ nutrientData }: NutrientCompositio
                 )}
                 </tbody>
             </table>
+            {modalData && (
+                <Modal
+                    width={800}
+                    height={300}
+                    header={"Información adicional"}
+                    onClose={closeModal}
+                >
+                    <div className="w-[100%] overflow-x-auto">
+                        <table className="w-[100%] min-w-[650px] border-collapse bg-[white] rounded-[4px]">
+                            <thead>
+                            <tr className="bg-[#166534] text-[white]">
+                                <th className="p-[12px] text-[14px] font-[600] text-left border-b-[2px] border-[#14532d]">
+                                    Desviación
+                                </th>
+                                <th className="p-[12px] text-[14px] font-[600] text-left border-b-[2px] border-[#14532d]">
+                                    Mínimo
+                                </th>
+                                <th className="p-[12px] text-[14px] font-[600] text-left border-b-[2px] border-[#14532d]">
+                                    Máximo
+                                </th>
+                                <th className="p-[12px] text-[14px] font-[600] text-left border-b-[2px] border-[#14532d]">
+                                    Tamaño de muestra
+                                </th>
+                                <th className="p-[12px] text-[14px] font-[600] text-left border-b-[2px] border-[#14532d]">
+                                    Estandarizado
+                                </th>
+                                <th className="p-[12px] text-[14px] font-[600] text-left border-b-[2px] border-[#14532d]">
+                                    Nota
+                                </th>
+                                <th className="p-[12px] text-[14px] font-[600] text-left border-b-[2px] border-[#14532d]">
+                                    Tipo de dato
+                                </th>
+                                <th className="p-[12px] text-[14px] font-[600] text-left border-b-[2px] border-[#14532d]">
+                                    Referencias
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr className="text-center hover:bg-[#f0fdf4] transition-colors duration-[200ms]">
+                                <td className="p-[12px] text-[14px] border-b-[1px] border-[#e5e7eb]">
+                                    {modalData.deviation?.toString() ?? '-'}
+                                </td>
+                                <td className="p-[12px] text-[14px] border-b-[1px] border-[#e5e7eb]">
+                                    {modalData.min?.toString() ?? '-'}
+                                </td>
+                                <td className="p-[12px] text-[14px] border-b-[1px] border-[#e5e7eb]">
+                                    {modalData.max?.toString() ?? '-'}
+                                </td>
+                                <td className="p-[12px] text-[14px] border-b-[1px] border-[#e5e7eb]">
+                                    {modalData.sampleSize?.toString() ?? '-'}
+                                </td>
+                                <td className="p-[12px] text-[14px] border-b-[1px] border-[#e5e7eb]">
+                            <span
+                                className={`inline-block px-[8px] py-[2px] rounded-[4px] ${modalData.standardized ? 'bg-[#dcfce7] text-[#166534]' : 'bg-[#fee2e2] text-[#991b1b]'}`}>
+                                {modalData.standardized ? "Sí" : "No"}
+                            </span>
+                                </td>
+                                <td className="p-[12px] text-[14px] border-b-[1px] border-[#e5e7eb]">
+                                    {modalData.note ?? '-'}
+                                </td>
+                                <td className="p-[12px] text-[14px] border-b-[1px] border-[#e5e7eb]">
+                                    {modalData.dataType ?? '-'}
+                                </td>
+                                <td className="p-[12px] text-[14px] border-b-[1px] border-[#e5e7eb]">
+                                    {modalData.referenceCodes?.join(", ") ?? '-'}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </Modal>
+            )}
         </div>
     );
 }
