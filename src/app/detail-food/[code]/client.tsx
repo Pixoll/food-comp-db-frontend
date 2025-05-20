@@ -120,7 +120,7 @@ export default function ClientDetailPage({code}: { code: string }) {
     return (
         <div className="w-full h-full bg-[#effce8] rounded-t-[2px]">
             {data.commonName.es && (
-                <h2 className="w-full py-[8px] px-[16px] text-[20px] font-[500] text-[#60625f]">
+                <h2 className="w-full py-[8px] px-[16px] text-[20px] font-[700] text-[#60625f]">
                     {code}, {data.commonName.es}
                 </h2>
             )}
@@ -145,7 +145,8 @@ export default function ClientDetailPage({code}: { code: string }) {
                         <Graphic title={t("DetailFood.graphics.title_L")} data={graphicData}/>
                         <Graphic title={t("DetailFood.graphics.title_R")} data={graphicDataPercent}/>
                     </div>
-                    <div className="border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white]">
+                    <div className="mt-[10px] border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white]">
+                        <h2 className="text-center ">Tabla de composición</h2>
                         <CompositionDropdown nutrientData={data.nutrientMeasurements ?? []}/>
                     </div>
                 </TabItem>
