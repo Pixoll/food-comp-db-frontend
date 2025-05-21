@@ -8,6 +8,7 @@ import CompositionDropdown from "../components/composition-dropdown/CompositionD
 import Graphic from "../components/Graphic";
 import {FetchStatus, useFetch} from "../../../core/hooks/useFetch";
 import {SingleFoodResult} from "../../../core/types/SingleFoodResult";
+import LangualCodes from "../components/LangualCodes";
 import "../../../assets/css/_DetailPage.css";
 
 function getDetail(code: string): SingleFoodResult {
@@ -89,7 +90,6 @@ export default function ClientDetailPage({code}: { code: string }) {
         "#17BECF",
     ];
 
-
     const references = data.references ?? [];
     const mainNutrients = data.nutrientMeasurements?.macronutrients ?? [];
 
@@ -151,7 +151,10 @@ export default function ClientDetailPage({code}: { code: string }) {
                     </div>
                 </TabItem>
                 <TabItem label="Códigos languales">
-                    componente de codigos languales
+                    <div className="flex flex-col mt-[10px] border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white]">
+                        <h2 className="text-center pb-[12px]">Códigos languales</h2>
+                        <LangualCodes data={data.langualCodes}/>
+                    </div>
                 </TabItem>
                 <TabItem label="Referencias">
                     componente de referencias
