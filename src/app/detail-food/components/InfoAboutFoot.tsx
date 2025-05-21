@@ -18,7 +18,7 @@ type InfoAboutFoodComponentProps = {
     origins?: Origin[];
 }
 
-export default function InfoAboutFoodComponent({data}: { data: InfoAboutFoodComponentProps }) {
+export default function InfoAboutFoot({data}: { data: InfoAboutFoodComponentProps }) {
     return (
         <div className="bg-[white] border-[1px] rounded-[8px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] p-[18px]">
             <h3 className="text-center text-[22px] font-[700] text-[#2b402b] mb-[20px]">Información del alimento</h3>

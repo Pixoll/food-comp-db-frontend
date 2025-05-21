@@ -1,14 +1,16 @@
 'use client'
 import {useState} from 'react'
 import {useTranslation} from "react-i18next";
-import InfoAboutFoodComponent from "../components/InfoAboutFoodComponent";
+import InfoAboutFoot from "../components/InfoAboutFoot";
 import TabItem from "../../components/Tabs/TabItem";
 import Tab from "../../components/Tabs/Tab";
 import CompositionDropdown from "../components/composition-dropdown/CompositionDropdown";
 import Graphic from "../components/Graphic";
+import LangualCodes from "../components/LangualCodes";
+import References from "../components/References";
 import {FetchStatus, useFetch} from "../../../core/hooks/useFetch";
 import {SingleFoodResult} from "../../../core/types/SingleFoodResult";
-import LangualCodes from "../components/LangualCodes";
+
 import "../../../assets/css/_DetailPage.css";
 
 function getDetail(code: string): SingleFoodResult {
@@ -45,18 +47,12 @@ function getDetail(code: string): SingleFoodResult {
 
 export default function ClientDetailPage({code}: { code: string }) {
     const {t} = useTranslation();
-    const [key, setKey] = useState<string>("first");
-
-
-    const handleReferenceClick = () => {
-        setKey("second");
-    };
 
     const [grams, setGrams] = useState<number>(100);
     const [inputGrams, setInputGrams] = useState<number>(100);
 
     const data = getDetail(code)
-
+    console.log(data.langualCodes)
     const colors = [
         "#0088FE",
         "#00C49F",
@@ -126,7 +122,7 @@ export default function ClientDetailPage({code}: { code: string }) {
             )}
             <Tab defaultTab={0} onChange={(index) => console.log(`${index}`)}>
                 <TabItem label="Información general">
-                    <InfoAboutFoodComponent data={
+                    <InfoAboutFoot data={
                         {
                             ingredients: data.ingredients,
                             group: data.group,
@@ -157,7 +153,11 @@ export default function ClientDetailPage({code}: { code: string }) {
                     </div>
                 </TabItem>
                 <TabItem label="Referencias">
-                    componente de referencias
+                    <div
+                        className="flex flex-col mt-[10px] border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white]">
+                        <h2 className="text-center pb-[12px]">Referencias</h2>
+                        <References data={references}/>
+                    </div>
                 </TabItem>
             </Tab>
         </div>
