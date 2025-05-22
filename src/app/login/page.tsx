@@ -162,8 +162,8 @@ export default function LoginPage() {
                         <span className="
                             absolute
                             top-[40px]
-                            left-0
-                            w-0
+                            left-[0px]
+                            w-[0px]
                             h-[2px]
                             bg-[#009000]
                             transition-all
