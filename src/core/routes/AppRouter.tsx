@@ -34,7 +34,7 @@ export const AppRouter = () => {
       <Suspense fallback={<FaSpinner/>}>
         <Routes>
             {/* <Route path="/" element={<HomePage/>}/>*/}
-          <Route path="login" element={<LoginPage/>}/>
+            {/*<Route path="login" element={<LoginPage/>}/>*/}
             {/*<Route path="search" element={<SearchPage/>}/>*/}
           <Route path="comparison" element={<ComparisonPage/>}/>
             {/*<Route path="search/details/:code" element={<DetailPage/>}/>*/}

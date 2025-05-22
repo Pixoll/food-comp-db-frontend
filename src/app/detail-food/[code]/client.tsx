@@ -116,7 +116,7 @@ export default function ClientDetailPage({code}: { code: string }) {
     return (
         <div className="w-full h-full bg-[#effce8] rounded-t-[2px]">
             {data.commonName.es && (
-                <h2 className="w-full py-[8px] px-[16px] text-[20px] font-[700] text-[#60625f]">
+                <h2 className="w-full py-[8px] px-[16px] font-[700] text-[#60625f] m-[0px]">
                     {code}, {data.commonName.es}
                 </h2>
             )}

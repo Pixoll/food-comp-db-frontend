@@ -27,11 +27,11 @@ const montserrat = Montserrat({
 
 export default function RootLayout({children}: RootLayoutProps) {
     return (
-        <html lang="en" className={montserrat.className} suppressHydrationWarning>
+        <html lang="en" className={`${montserrat.className} h-full`} suppressHydrationWarning>
         <body>
         <Providers>
-            <div id="root">
-                <NavBar />
+            <div className="flex flex-col" id="root">
+                <NavBar/>
                 {children}
             </div>
         </Providers>

@@ -5,8 +5,8 @@ import { useTranslation } from "react-i18next";
 const Footer = () => {
   const {t} = useTranslation();
   return (
-    <footer className="bg-[#343a40] text-white p-[20px] mt-0">
-      <div className="container mx-auto px-4">
+    <footer className="bg-[#343a40] text-[white] pb-[4px]">
+      <div className="container mx-auto px-[20px]">
         <div className="flex flex-wrap items-left justify-between">
           <div className="flex-grow text-[white]">
             <h5 className=""> {t('footer.contact.email')}</h5>
@@ -25,7 +25,7 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-        <div className="mt-3">
+        <div className="mt-[12px]">
           <div className="text-center text-[white]">
           <p>{t('footer.copyright')}</p>
           </div>

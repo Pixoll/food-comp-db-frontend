@@ -1,5 +1,6 @@
 import {ReactNode} from "react";
 import Footer from "../components/Footer"
+
 type SearchPageLayoutProps = {
     children: ReactNode;
 };
@@ -7,10 +8,10 @@ type SearchPageLayoutProps = {
 export default function SearchPageLayout({children}: SearchPageLayoutProps) {
     return (
         <>
-        <div className="bg-[white] svg-background">
-            {children}
-        </div>
-        <Footer />
+            <div className="bg-[white] svg-background">
+                {children}
+            </div>
+            <Footer/>
         </>
     )
 }

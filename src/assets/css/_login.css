@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
-.login-background {
+.login-background { /*refactored*/
     display: flex;
     align-items: center;
     justify-content: center;
@@ -8,7 +8,7 @@
      * bg image obtained from https://www.pexels.com/photo/delicious-multicolored-apples-and-oranges-with-mandarins-located-in-red-bowl-5945899/
      * marked as free to use by the photographer
      */
-    background: url('/src/assets/images/admin_login_bg.jpg') no-repeat center center;
+    background: url('/public/admin_login_bg.jpg') no-repeat center center;
     background-size: cover;
     height: 100vh;
 }

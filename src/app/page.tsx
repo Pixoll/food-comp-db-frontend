@@ -32,25 +32,25 @@ export default function HomePage() {
                     bg-cover
                     bg-center
                     h-screen
+                    m-[0px]
                     text-[white]
                     text-center
                     `}>
-                <div className="container mx-auto px-4 h-full">
+                <div className="container mx-auto h-full">
                     <div className="h-full flex justify-center items-center">
                         <div>
                             <h1
                                 className="
-                            font-bold
-                            text-5xl text-shadow-lg
-                            text-shadow-[2px_2px_8px_rgba(0,0,0,0.7)]
-                            font-[Poppins,_sans-serif]
-                            "
-                            >
+                                    font-[700]
+                                    text-[48px]
+                                    text-shadow-[2px_2px_8px_rgba(0,0,0,0.7)]
+                                    font-[Poppins,_sans-serif]
+                                    ">
                                 {t("homepage.title")}
                             </h1>
                             <p
                                 className="
-                            text-5xl
+                            text-[18px]
                             mb-[30px]
                             text-shadow-[2px_2px_8px_rgba(0,0,0,0.7)]
                             font-[Poppins,_sans-serif]
@@ -60,7 +60,7 @@ export default function HomePage() {
                             </p>
 
                             <form onSubmit={handleSubmit} className="w-full flex flex-col items-center">
-                                <div className="flex w-full h-[46px] max-w-xl mx-auto mb-4">
+                                <div className="flex w-full h-[60px] max-w-xl mx-auto mb-[20px]">
                                     <input
                                         type="text"
                                         placeholder={t("search.placeholder")}
@@ -68,26 +68,26 @@ export default function HomePage() {
                                         onChange={(e) => setFoodName(e.target.value)}
                                         className="
                                           w-full
-                                          py-3
-                                          px-6
-                                          text-lg
-                                          border-2
+                                          py-[12px]
+                                          px-[24px]
+                                          text-[18px]
+                                          border-[2px]
                                           border-gray-200
                                           rounded-l-full
                                           focus:outline-none
                                           focus:border-green-500
-                                          shadow-sm
+                                          shadow-[2px_2px_8px_rgba(0,0,0,0.9)]
                                         "
                                         aria-label="Buscar alimentos"
                                     />
                                     <button
                                         type="submit"
                                         className="
-                                          py-3
-                                          px-8
-                                          text-lg
-                                          text-black
-                                          font-medium
+                                          py-[12px]
+                                          px-[32px]
+                                          text-[18px]
+                                          text-[black]
+                                          font-[500]
                                           bg-[#28a745]
                                           hover:bg-[#19732f]
                                           border-none
@@ -95,7 +95,7 @@ export default function HomePage() {
                                           rounded-r-full
                                           transition-colors
                                           duration-200
-                                          shadow-sm
+                                          shadow-[2px_2px_8px_rgba(0,0,0,0.9)]
                                         "
                                     >
                                         {t("search.button")}
