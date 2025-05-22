@@ -62,7 +62,7 @@ export default function FoodResultsTable({
 
     const toModifyFoodDetail = (code: string) => {
         if (state.isAuthenticated) {
-            router.push(`/search/modify-details-food/${code}`);
+            router.push(`/modify-food/${code}`);
         } else {
             router.push("/login");
         }

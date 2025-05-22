@@ -47,14 +47,14 @@ export const AppRouter = () => {
             }
           />
 
-          <Route
+            {/*<Route
             path="search/modify-details-food/:code"
             element={
               <PrivateRoute>
                 <ModifyFoodDetail/>
               </PrivateRoute>
             }
-          />
+          />*/}
         </Routes>
       </Suspense>
     </>
