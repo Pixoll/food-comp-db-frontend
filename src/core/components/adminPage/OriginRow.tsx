@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Commune, Location, Province, Region } from "../../hooks";

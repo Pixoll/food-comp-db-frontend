@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import { ChevronDown, ChevronRight, Trash2, PlusCircle } from 'lucide-react';

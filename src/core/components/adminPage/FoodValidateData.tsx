@@ -1,3 +1,4 @@
+'use client'
 import { BadgeX, CheckCircle, PlusCircle, RefreshCw } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Container } from "react-bootstrap";

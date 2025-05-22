@@ -1,3 +1,5 @@
+'use client'
+
 import { FileTextIcon, FolderIcon, ListIcon, PackageIcon, PlusIcon, TagIcon, TypeIcon } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";

@@ -1,3 +1,4 @@
+'use client'
 import { useEffect, useState } from "react";
 import "../assets/css/_AdminPage.css";
 import { useTranslation } from "react-i18next";

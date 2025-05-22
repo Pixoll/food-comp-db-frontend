@@ -1,3 +1,5 @@
+'use client'
+
 import { BookOpen, FileText, Layers, PlusCircle, XCircle } from "lucide-react";
 import { useState } from "react";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";

@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from "react";
 import { Button, Card, Collapse, Form, Table } from "react-bootstrap";
 import { useTranslation } from "react-i18next";

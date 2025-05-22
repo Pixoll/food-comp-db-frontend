@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useCallback, useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import ListGroup from "react-bootstrap/ListGroup";
