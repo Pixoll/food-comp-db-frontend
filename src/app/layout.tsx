@@ -30,7 +30,7 @@ export default function RootLayout({children}: RootLayoutProps) {
         <html lang="en" className={`${montserrat.className} h-full`} suppressHydrationWarning>
         <body>
         <Providers>
-            <div className="flex flex-col" id="root">
+            <div className="flex flex-col h-[100%]" id="root">
                 <NavBar/>
                 {children}
             </div>

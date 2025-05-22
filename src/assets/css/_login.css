@@ -13,7 +13,7 @@
     height: 100vh;
 }
 
-.login-div {
+.login-div { /*refactored*/
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 2);
     font-family: 'Poppins', sans-serif;
     color: #ffffff;
@@ -28,20 +28,11 @@
 
 }
 
-.login-div h1 {
+.login-div h1 { /*Refactored*/
     text-align: center;
     margin-bottom: 20px;
     font-size: 24px;
     color: #ffffff;
-}
-
-.login-title {
-    display: inline-block; 
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 10px 20px; 
-    border-radius: 8px; 
-    color: #ffffff;
-    font-weight: bold; 
 }
 
 form .txt_field {

@@ -2,9 +2,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: url('/public/admin_login_bg.jpg') no-repeat center center;
+    background: no-repeat center center;
     background-size: cover;
-    height: 100%;
+    height: 100vh;
 }
 /*
  * bg image obtained from https://www.pexels.com/photo/delicious-multicolored-apples-and-oranges-with-mandarins-located-in-red-bowl-5945899/
