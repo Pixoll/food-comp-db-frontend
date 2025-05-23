@@ -13,7 +13,7 @@ type TextFieldProps = {
     disabled?: boolean;
     id?: string;
     name?: string;
-    onChange?: (value: string) => void;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 } & Omit<InputHTMLAttributes<HTMLInputElement>, "onChange" | "value" | "required" | "disabled" | "id" | "name">;
 
 export default function TextField({
@@ -32,7 +32,7 @@ export default function TextField({
                                       ...rest
                                   }: TextFieldProps) {
     function handleChange(e: ChangeEvent<HTMLInputElement>) {
-        onChange && onChange(e.target.value);
+        onChange && onChange(e);
     }
 
     const inputId = id || name || `text-field-${label?.toLowerCase().replace(/\s+/g, '-') || Math.random().toString(36).substring(2, 9)}`;
