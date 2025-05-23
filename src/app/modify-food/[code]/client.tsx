@@ -1,13 +1,11 @@
 'use client'
+
 import axios from "axios";
-import "../../../assets/css/_ModifyDetailFood.css";
+import {Collection} from "../../../core/utils/collection";
 import TabItem from "../../components/Tabs/TabItem";
 import Tab from "../../components/Tabs/Tab"
-import TextField from "../../components/TextField";
-
-import {ChangeEvent, FormEvent, useEffect, useState} from "react";
+import {FormEvent, useEffect} from "react";
 import {useTranslation} from "react-i18next";
-import {OriginSelector} from "../../../core/components/adminPage";
 import {useAuth} from "../../../core/context/AuthContext"
 import {
     FetchStatus,
@@ -28,7 +26,7 @@ import {
     NutrientMeasurement
 } from "../../../core/types/SingleFoodResult";
 import makeRequest from "../../../core/utils/makeRequest";
-import {Collection} from "../../../core/utils/collection";
+import TextField from "../../components/TextField";
 
 type FoodForm = {
     commonName: Record<"es" | "en" | "pt", string | undefined>;
@@ -162,6 +160,7 @@ export default function ModifyFoodPage({code}: { code: string }) {
     const token = state.token;
 
     const {data, groups, types, scientificNames, subspecies, regions} = getAllTypeData(code)
+
     const collectionsForNormalized = {
         scientificNames: {
             idToName: scientificNames.idToName,
@@ -178,7 +177,8 @@ export default function ModifyFoodPage({code}: { code: string }) {
         subspecies: subspecies.nameToId,
         regions: regions
     }
-    const { formState, setFormState } = useForm<FoodForm>(
+
+    const { formState, setFormState, onInputChange } = useForm<FoodForm>(
         data ? normalizeFoodFormForApi(data, collectionsForNormalized) : {
             commonName: { es: "", en: "", pt: "" },
             ingredients: { es: "", en: "", pt: "" },
@@ -289,11 +289,14 @@ export default function ModifyFoodPage({code}: { code: string }) {
             }));
         }
     };*/
-
+    const handleSubmit2 = async (e: FormEvent) => {
+        e.preventDefault();
+        const payload = formState;
+        console.log(payload);
+    }
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         const payload = normalizeFoodFormForApi(data,collectionsForNormalized);
-        console.log(payload);
         makeRequest("patch", `/foods/${code}`, {
             token,
             payload,
@@ -332,6 +335,7 @@ export default function ModifyFoodPage({code}: { code: string }) {
         });
     };
 
+    console.log(formState)
     return (
         <div className="w-full h-full bg-[#effce8] rounded-t-[2px]">
             <h2 className="text-center">{"Modificar alimento"}{code}</h2>
@@ -339,17 +343,54 @@ export default function ModifyFoodPage({code}: { code: string }) {
                 <TabItem label={"Modificar información general"}>
                     <div
                         className="flex flex-col mt-[10px] border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white]">
-                        {/*<TextField
-                            label="Nombre de usuario"
-                            value={"username"}
-                            onChange={() =>}
-                            error={!!usernameError}
-                            errorMessage={usernameError}
+                        <div>
+                            {Object.entries(formState.commonName).map(([lang, value]) => (
+                                <TextField
+                                    key={`commonName.${lang}`}
+                                    label={`Nombre común (${lang.toUpperCase()})`}
+                                    name={`commonName.${lang}`}
+                                    value={value || ""}
+                                    onChange={onInputChange}
+                                    fullWidth
+                                />
+                            ))}
+                        </div>
+                        <div>
+                            {Object.entries(formState.ingredients).map(([lang, value]) => (
+                                <TextField
+                                    key={`ingredients.${lang}`}
+                                    label={`Ingrediente(${lang.toUpperCase()})`}
+                                    name={`ingredients.${lang}`}
+                                    value={value || ""}
+                                    onChange={onInputChange}
+                                    fullWidth
+                                />
+                            ))}
+                        </div>
+                        <TextField
+                            label="Observación"
+                            name="observation"
+                            value={formState.observation || ""}
+                            onChange={onInputChange}
                             fullWidth
-                        />*/}
+                        />
+                        <TextField
+                            label="Marca"
+                            name="brand"
+                            value={formState.brand || ""}
+                            onChange={onInputChange}
+                            fullWidth
+                        />
+                        <TextField
+                            label="Marca"
+                            name="strain"
+                            value={formState.strain || ""}
+                            onChange={onInputChange}
+                            fullWidth
+                        />
                     </div>
                 </TabItem>
-                <TabItem label={"Modificar información general"}>
+                <TabItem label={"Modificar origines"}>
 
                 </TabItem>
                 <TabItem label={"Modificar información general"}>
@@ -359,6 +400,7 @@ export default function ModifyFoodPage({code}: { code: string }) {
 
                 </TabItem>
             </Tab>
+            <button onClick={handleSubmit2}>Guardar y enviar</button>
         </div>
     );
 }

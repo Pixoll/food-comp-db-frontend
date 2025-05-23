@@ -57,9 +57,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const [storedToken, setStoredToken] = useState<string | null>(null);
   const [storedUsername, setStoredUsername] = useState<string | null>(null);
-  useEffect(() => {
-    console.log("alskdmnaslkdmaksd");
 
+  useEffect(() => {
     setStoredToken(() => localStorage.getItem("token"))
     setStoredUsername(() => localStorage.getItem("username"))
   }, []);

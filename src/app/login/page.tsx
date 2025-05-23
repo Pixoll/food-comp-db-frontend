@@ -21,10 +21,6 @@ export default function LoginPage() {
         username: "",
         password: ""
     });
-    const validateUsername = (username: string): boolean => {
-        const regex = /^[A-Za-z0-9_]{8,32}$/;
-        return regex.test(username);
-    };
     const onLogin = (e: FormEvent) => {
         e.preventDefault();
 
