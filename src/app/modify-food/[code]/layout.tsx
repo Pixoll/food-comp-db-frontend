@@ -9,9 +9,7 @@ type ModifyFoodPageLayoutProps = {
 export default function ModifyFoodPageLayout({children}: ModifyFoodPageLayoutProps) {
     return (
         <div>
-            <div className="bg-[white] svg-background">
-                {children}
-            </div>
+            {children}
             <Footer/>
         </div>
     )

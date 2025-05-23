@@ -23,6 +23,7 @@ export function useForm<T extends object>(initialForm: FormState<T>) {
   return {
     ...formState,
     formState,
+    setFormState,
     onInputChange,
     onResetForm,
   };

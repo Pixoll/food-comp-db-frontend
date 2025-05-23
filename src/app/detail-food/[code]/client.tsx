@@ -120,7 +120,7 @@ export default function ClientDetailPage({code}: { code: string }) {
                     {code}, {data.commonName.es}
                 </h2>
             )}
-            <Tab defaultTab={0} onChange={(index) => console.log(`${index}`)}>
+            <Tab defaultTab={0} >
                 <TabItem label="Información general">
                     <InfoAboutFoot data={
                         {
