@@ -27,7 +27,7 @@ import {
 } from "../../../core/types/SingleFoodResult";
 import makeRequest from "../../../core/utils/makeRequest";
 import TextField from "../../components/TextField";
-
+import ModifyCompositionDropdown from "../components/ModifyCompositionDropdown";
 type FoodForm = {
     commonName: Record<"es" | "en" | "pt", string | undefined>;
     ingredients: Record<"es" | "en" | "pt", string | undefined>;
@@ -393,8 +393,17 @@ export default function ModifyFoodPage({code}: { code: string }) {
                 <TabItem label={"Modificar origines"}>
 
                 </TabItem>
-                <TabItem label={"Modificar información general"}>
+                <TabItem label={"Modificar información nutricional"}>
+                    <div className="flex flex-col mt-[10px] border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white] p-[16px]">
+                        <h3 className="text-[18px] font-[600] mb-[16px]">Información nutricional</h3>
 
+                        <ModifyCompositionDropdown
+                            nutrientData={data.nutrientMeasurements ?? []}
+                            formState={formState}
+                            onUpdateFormState={setFormState}
+                            isEditable={true}
+                        />
+                    </div>
                 </TabItem>
                 <TabItem label={"Modificar información general"}>
 
