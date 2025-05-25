@@ -379,13 +379,13 @@ export default function ModifyCompositionDropdown({
 
                         <div className="flex justify-end mt-[16px]">
                             <button
-                                className="px-[16px] py-[8px] bg-[#047857] text-white rounded-[4px] hover:bg-[#065f46]"
+                                className="px-[16px] py-[8px] bg-[#047857] text-[white] rounded-[4px] border-none hover:bg-[#065f46]"
                                 onClick={saveModalData}
                             >
                                 Guardar cambios
                             </button>
                             <button
-                                className="px-[16px] py-[8px] ml-[8px] bg-[#f3f4f6] text-[#374151] rounded-[4px] hover:bg-[#e5e7eb]"
+                                className="px-[16px] py-[8px] ml-[8px] bg-[#f3f4f6] text-[#374151] border-none rounded-[4px] hover:bg-[#e5e7eb]"
                                 onClick={closeModal}
                             >
                                 Cancelar

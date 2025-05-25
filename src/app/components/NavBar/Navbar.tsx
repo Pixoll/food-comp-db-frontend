@@ -69,8 +69,8 @@ const NavBar2 = () => {
             <ul className="navbar-menu-list">
               <li>
                 <Link href="/search" className="navbar-link" onClick={() => setMenuOpen(false)}>
-                  <Search className="icon" size={20}/>
                   Buscar
+                  <Search className="ml-[8px]" size={24}/>
                 </Link>
               </li>
               <li>
