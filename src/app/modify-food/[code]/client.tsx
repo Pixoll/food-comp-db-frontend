@@ -28,6 +28,8 @@ import {
 import makeRequest from "../../../core/utils/makeRequest";
 import TextField from "../../components/TextField";
 import ModifyCompositionDropdown from "../components/ModifyCompositionDropdown";
+import Origins from "../components/add-remove-origins/Origins"
+
 type FoodForm = {
     commonName: Record<"es" | "en" | "pt", string | undefined>;
     ingredients: Record<"es" | "en" | "pt", string | undefined>;
@@ -150,8 +152,8 @@ function getAllTypeData(code: string) {
     const types = useTypes();
     const scientificNames = useScientificNames();
     const subspecies = useSubspecies();
-    const {regions} = useOrigins();
-    return {data, groups, types, scientificNames, subspecies, regions}
+    const {regions, provinces, communes , locations} = useOrigins();
+    return {data, groups, types, scientificNames, subspecies, regions, provinces, communes , locations}
 }
 
 export default function ModifyFoodPage({code}: { code: string }) {
@@ -159,7 +161,7 @@ export default function ModifyFoodPage({code}: { code: string }) {
     const {state} = useAuth();
     const token = state.token;
 
-    const {data, groups, types, scientificNames, subspecies, regions} = getAllTypeData(code)
+    const {data, groups, types, scientificNames, subspecies, regions, provinces, communes , locations} = getAllTypeData(code)
 
     const collectionsForNormalized = {
         scientificNames: {
@@ -335,10 +337,9 @@ export default function ModifyFoodPage({code}: { code: string }) {
         });
     };
 
-    console.log(formState)
     return (
         <div className="w-full h-full bg-[#effce8] rounded-t-[2px]">
-            <h2 className="text-center">{"Modificar alimento"}{code}</h2>
+            <h2 className="text-center">{"Modificar alimento"} {code}</h2>
             <Tab defaultTab={0}>
                 <TabItem label={"Modificar información general"}>
                     <div
@@ -391,10 +392,29 @@ export default function ModifyFoodPage({code}: { code: string }) {
                     </div>
                 </TabItem>
                 <TabItem label={"Modificar origines"}>
-
+                    <div
+                        className="flex flex-col mt-[10px] border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white] p-[16px]">
+                        <h3 className="text-[18px] font-[600] mb-[16px]">Origines</h3>
+                        <Origins
+                            originsForm={data.origins || []}
+                            data={{
+                                regions: regions,
+                                provinces: provinces,
+                                communes: communes,
+                                locations: locations
+                            }}
+                            updateOrigins={(updatedOrigins) => {
+                                setFormState(prev => ({
+                                    ...prev,
+                                    originIds: [...new Set(updatedOrigins?.map(origin => origin.id))]
+                                }));
+                            }}
+                        />
+                    </div>
                 </TabItem>
                 <TabItem label={"Modificar información nutricional"}>
-                    <div className="flex flex-col mt-[10px] border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white] p-[16px]">
+                    <div
+                        className="flex flex-col mt-[10px] border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white] p-[16px]">
                         <h3 className="text-[18px] font-[600] mb-[16px]">Información nutricional</h3>
 
                         <ModifyCompositionDropdown
@@ -405,7 +425,7 @@ export default function ModifyFoodPage({code}: { code: string }) {
                         />
                     </div>
                 </TabItem>
-                <TabItem label={"Modificar información general"}>
+                <TabItem label={"Agregar y/o quitar referencias"}>
 
                 </TabItem>
             </Tab>
