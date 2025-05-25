@@ -96,7 +96,7 @@ const NavBar2 = () => {
 
             {state.isAuthenticated ? (
                 <>
-                  <Link href="/panel-admin" aria-label="Admin panel">
+                  <Link href="/admin-page" aria-label="Admin panel">
                     <MonitorCog color={"#FFFFFF"} size={24}/>
                   </Link>
                   <button onClick={handleLogout} aria-label="Log out" className="logout-btn">
