@@ -7,6 +7,7 @@ import Tab from "../../components/Tabs/Tab"
 import {FormEvent, useEffect} from "react";
 import {useTranslation} from "react-i18next";
 import {useAuth} from "../../../core/context/AuthContext"
+import {useToast} from "../../../core/context/ToastContext"
 import {
     FetchStatus,
     useFetch,
@@ -159,6 +160,9 @@ function getAllTypeData(code: string) {
 export default function ModifyFoodPage({code}: { code: string }) {
     const {t} = useTranslation();
     const {state} = useAuth();
+    const {addToast} = useToast()
+
+
     const token = state.token;
 
     const {data, groups, types, scientificNames, subspecies, regions, provinces, communes , locations} = getAllTypeData(code)
@@ -295,6 +299,13 @@ export default function ModifyFoodPage({code}: { code: string }) {
         e.preventDefault();
         const payload = formState;
         console.log(payload);
+        addToast({
+            message: "se agrego con exito",
+            title: "Modify",
+            type:"Success",
+            position: "top-end"
+        })
+
     }
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
