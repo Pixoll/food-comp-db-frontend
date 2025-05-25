@@ -36,16 +36,16 @@ export const AppRouter = () => {
             {/* <Route path="/" element={<HomePage/>}/>*/}
             {/*<Route path="login" element={<LoginPage/>}/>*/}
             {/*<Route path="search" element={<SearchPage/>}/>*/}
-          <Route path="comparison" element={<ComparisonPage/>}/>
+          {/*<Route path="comparison" element={<ComparisonPage/>}/>*/}
             {/*<Route path="search/details/:code" element={<DetailPage/>}/>*/}
-          <Route
+            {/*<Route
             path="panel-admin"
             element={
               <PrivateRoute>
                 <AdminPage/>
               </PrivateRoute>
             }
-          />
+          />*/}
 
             {/*<Route
             path="search/modify-details-food/:code"

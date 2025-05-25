@@ -4,12 +4,11 @@ import { I18nextProvider, initReactI18next } from "react-i18next";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./core/context/AuthContext";
 import ComparisonProvider from "./core/context/ComparisonContext";
-import "./assets/css/_App.css";
 import { ToastProvider } from "./core/context/ToastContext";
 import { AppRouter } from "./core/routes/AppRouter";
-import "bootstrap/dist/css/bootstrap.min.css";
 import english from "./translations/en.json";
 import spanish from "./translations/es.json";
+import "./assets/css/_App.css";
 
 i18next.use(initReactI18next).init({
   interpolation: {

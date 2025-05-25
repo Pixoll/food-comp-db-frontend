@@ -1,7 +1,6 @@
 'use client'
 import {ArrowDown, ArrowUp, Plus, Minus} from "lucide-react";
 import {useEffect, useState} from "react";
-import {Col, Row} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
 import {useRouter} from 'next/navigation';
 import {useAuth} from "../../../../core/context/AuthContext";
@@ -185,8 +184,8 @@ export default function FoodResultsTable({
         <div className="food-list">
             <h2 className="text-2xl font-poppins text-black text-left mb-[18px] border-b-2 border-[#a8d8d2] pb-[8px] tracking-wider transition-colors duration-300 ease-in-out hover:text-[#388e60]">{t("Table.title")}</h2>
             <div className="filter-name">
-                <Row className="g-3">
-                    <Col xs={12} className="input-name">
+                <div className="g-3">
+                    <div className="input-name">
                         <input
                             type="text"
                             placeholder={t("Table.search")}
@@ -194,9 +193,9 @@ export default function FoodResultsTable({
                             onChange={(e) => setSearchForName(e.target.value)}
                             className="form-control"
                         />
-                    </Col>
+                    </div>
 
-                    <Col xs={12} sm={4} className="sort-selector">
+                    <div className="sort-selector">
                         <h5>{t("Table.sort.by")}</h5>
                         <select
                             value={selectedSort}
@@ -213,9 +212,9 @@ export default function FoodResultsTable({
                                 {t("Table_FoodResults.scientific_name")}
                             </option>
                         </select>
-                    </Col>
+                    </div>
 
-                    <Col xs={12} sm={4} className="sort-selector">
+                    <div className="sort-selector">
                         <h5>{t("Table.sort.order")}</h5>
                         <select
                             value={sortOrder}
@@ -227,16 +226,16 @@ export default function FoodResultsTable({
                                 {t("Table.sort.descending")}
                             </option>
                         </select>
-                    </Col>
-                    <Col xs={12} sm={4}>
+                    </div>
+                    <div>
                         <button
                             className="export-button"
                             onClick={() => exportData(data.map((f) => f.code))}
                         >
                             Exportar resultados
                         </button>
-                    </Col>
-                    <Col xs={12} sm={4}>
+                    </div>
+                    <div>
                         <h5>{t("Table.results_per_page")}</h5>
                         <select
                             value={resultsPerPage}
@@ -248,8 +247,8 @@ export default function FoodResultsTable({
                             <option value="50">50</option>
                             <option value="100">100</option>
                         </select>
-                    </Col>
-                </Row>
+                    </div>
+                </div>
             </div>
 
             {!Array.isArray(sortedData) || sortedData.length === 0 ? (
