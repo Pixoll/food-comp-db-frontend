@@ -4,11 +4,13 @@ import "../../assets/css/_ComparisonPage.css";
 import { useComparison } from "../../core/context/ComparisonContext";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { Trash, ArrowRight, ArrowLeft } from "lucide-react";
+import axios from "axios";
 import { useFetch, FetchStatus } from "../../core/hooks";
 import {
   SingleFoodResult
 } from "../../core/types/SingleFoodResult";
 import NutrientComparisonTable from "../../core/components/comparePage/NutrientComparisonTable";
+import { useAuth } from "../../core/context/AuthContext";
 
 export type GetFoodMeasurementsResult = Pick<SingleFoodResult, "commonName" | "nutrientMeasurements"> & {
   code: string;
@@ -17,7 +19,46 @@ export type GetFoodMeasurementsResult = Pick<SingleFoodResult, "commonName" | "n
 export default function ComparisonPage() {
   const { comparisonFoods, removeFromComparison } = useComparison();
   const [comparisonSectionOpen, setComparisonSectionOpen] = useState(false);
+  const { state } = useAuth();
+  const { token } = state;
   const codes = comparisonFoods.map((food) => `${food.code}`).join(",");
+  const exportData = async (codes: string[]) => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/api/xlsx?codes=${codes.join(",")}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            responseType: "blob",
+          }
+        );
+  
+        const blob = new Blob([response.data], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+        const url = window.URL.createObjectURL(blob);
+  
+        let fileName = "foods_data.xlsx";
+        const contentDisposition = response.headers["content-disposition"];
+        if (contentDisposition) {
+          const match = contentDisposition.match(/filename="(.+)"/);
+          if (match && match[1]) {
+            fileName = match[1];
+          }
+        }
+  
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
   const foodsResult = useFetch<GetFoodMeasurementsResult[]>(
     `/foods/compare?codes=${codes}`
@@ -101,6 +142,12 @@ export default function ComparisonPage() {
               <Row className="mb-4">
                 <Col className="d-flex justify-content-between align-items-center">
                   <h2>Comparación de Nutrientes</h2>
+                  <button
+                  className="export-button"
+                  onClick={() => exportData(data.map((f) => f.code))}
+                >
+                  Exportar tabla comparativa
+                </button>
                   <Button
                     variant="outline-secondary"
                     onClick={() => setComparisonSectionOpen(false)}
