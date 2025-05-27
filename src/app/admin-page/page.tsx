@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function AdminPage() {
     return (
-        <div className="p-[32px] h-[100vh] flex flex-col">
+        <div className="p-[32px] h-[100vh] flex flex-col bg-gradient-to-b from-[#f0f9ff] to-[#e9f8d9]">
             <h1 className="text-center text-[36px] font-[700] mb-[32px] text-[#333] border-b-[2px] pb-[16px] border-[#eaeaea]">
                 Panel Administrativo
             </h1>
