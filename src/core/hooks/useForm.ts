@@ -1,10 +1,10 @@
 'use client'
 import { ChangeEvent, useState } from "react";
 
-type FormState<T> = {
+export type FormState<T> = {
   [K in keyof T]: T[K];
 };
-function setNestedValue(obj: any, path: string, value: any): any {
+export function setNestedValue(obj: any, path: string, value: any): any {
   if (!path) return value;
 
   const result = Array.isArray(obj) ? [...obj] : { ...obj };
