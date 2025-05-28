@@ -324,7 +324,7 @@
       "Preview": "Preview"
     }
   },
-  "NewGeneralData": {
+  "AddFoodGeneralData": {
     "code": "Food code",
     "strain": "Strain",
     "brand": "Brand",

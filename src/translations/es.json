@@ -324,7 +324,7 @@
       "Preview": "Previsualización"
     }
   },
-  "NewGeneralData": {
+  "AddFoodGeneralData": {
     "code": "Código del alimento",
     "strain": "Cepa",
     "brand": "Marca",

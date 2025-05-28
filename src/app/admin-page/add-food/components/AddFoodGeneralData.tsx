@@ -128,7 +128,7 @@ export default function AddFoodGeneralData({
                     icon={<FileTextIcon size={18}/>}
                     value={formData.observation || ""}
                     onChange={handleInputChange}
-                    placeholder={t("AddFoodGeneralData.")}
+                    placeholder={t("AddFoodGeneralData.Observation")}
                     fullWidth
                 />
             </div>
