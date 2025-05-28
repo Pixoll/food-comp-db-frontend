@@ -1,7 +1,6 @@
 'use client'
 import { Book, Calendar, FileText, Globe, Info, MapPin, TagIcon } from "lucide-react";
 import { useState } from "react";
-import { Card, Col, Form, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { City } from "../../hooks";
 import RequiredFieldLabel from "../detailFood/RequiredFieldLabel";

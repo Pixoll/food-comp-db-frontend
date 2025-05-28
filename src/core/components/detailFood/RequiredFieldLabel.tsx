@@ -1,6 +1,5 @@
 import { HelpCircleIcon } from "lucide-react";
 import React from "react";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 interface RequiredFieldLabelProps {
   label?: string;

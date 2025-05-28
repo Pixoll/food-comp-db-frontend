@@ -1,5 +1,4 @@
 import { CodeIcon, Database, Info, Leaf, Zap } from "lucide-react";
-import { Badge, Card, Col, Row, Table } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import {
   FoodForm,
@@ -17,7 +16,7 @@ import {
   searchScientificNameById,
   searchSubspeciesNameById,
   searchTypeNameById,
-} from "./NewGeneralData";
+} from "../../../app/admin-page/add-food/components/AddFoodGeneralData";
 import "../../../assets/css/_PreviewDataForm.css";
 
 type NewFood = {

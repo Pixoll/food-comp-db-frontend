@@ -2,7 +2,6 @@
 
 import { BookOpen, FileText, Layers, PlusCircle, XCircle } from "lucide-react";
 import { useState } from "react";
-import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { Article, Journal, JournalVolume } from "../../hooks";
 import { NewArticle, NewVolume } from "./NewReference";
 import "../../../assets/css/_NewVolumByReference.css";

@@ -2,7 +2,6 @@
 import qs from "qs";
 import {useState, useEffect} from "react";
 import { useSearchParams } from 'next/navigation';
-import {Accordion, AccordionBody, AccordionHeader, AccordionItem} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
 import {FetchStatus, useFetch} from "../../../core/hooks";
 import {FoodResult} from "../../../core/types/option";
@@ -78,7 +77,7 @@ export default function FoodFilter({foodName = ""}: FoodFilterProps) {
     return (
         <div className="w-full flex flex-col items-stretch justify-between gap-5 p-5 lg-custom:flex lg-custom:flex-row lg-custom:items-start"
              /*className="search-container"*/>
-            <Accordion defaultActiveKey="0" className="food-filter food-filter-accordion">
+            {/*<Accordion defaultActiveKey="0" className="food-filter food-filter-accordion">
                 <AccordionItem eventKey={"0"}>
                     <AccordionHeader>
                         <h5>{t("Filter.title")}</h5>
@@ -91,7 +90,7 @@ export default function FoodFilter({foodName = ""}: FoodFilterProps) {
                         />
                     </AccordionBody>
                 </AccordionItem>
-            </Accordion>
+            </Accordion>*/}
 
             <div className="food-filter food-filter-static">
                 <h4>{t("Filter.title")}</h4>

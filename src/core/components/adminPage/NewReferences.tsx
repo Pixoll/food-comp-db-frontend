@@ -6,7 +6,6 @@ import { useFetch ,FetchStatus } from "../../hooks";
 import { City, Author, Journal } from "../../hooks";
 import qs from "qs";
 import { SearchBox } from "../../../app/search/components";
-import { Button, Card, Col, Row, FormGroup, FormLabel} from "react-bootstrap";
 import { Collection } from "../../utils/collection";
 import {
   getNutrientNameById,

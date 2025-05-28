@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from "react";
-import { Button, Form, Table } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import {
   getNutrientNameById,

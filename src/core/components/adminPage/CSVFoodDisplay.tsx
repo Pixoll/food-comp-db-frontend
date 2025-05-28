@@ -13,16 +13,6 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import {
-  Accordion,
-  Button,
-  Card,
-  Col,
-  OverlayTrigger,
-  Row,
-  Table,
-  Tooltip,
-} from "react-bootstrap";
-import {
   CSVFood,
   CSVMeasurement,
   CSVStringTranslation,
