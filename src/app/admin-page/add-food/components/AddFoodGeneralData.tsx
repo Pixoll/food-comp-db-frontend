@@ -3,9 +3,9 @@
 import {FileTextIcon, ListIcon, PackageIcon, TagIcon} from "lucide-react";
 import {ChangeEvent, useState} from "react";
 import {useTranslation} from "react-i18next";
-import {Group, Language, ScientificName, Subspecies, Type} from "../../../../core/hooks";
-import Selector from "../../../components/Selector/Selector";
-import TextField from "../../../components/TextField";
+import {Group, Language, ScientificName, Subspecies, Type} from "@/core/hooks";
+import Selector from "@/app/components/Selector/Selector";
+import TextField from "@/app/components/TextField";
 
 export const searchScientificNameById = (
     id: number | undefined,

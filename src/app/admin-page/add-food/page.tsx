@@ -14,14 +14,14 @@ import {
     useTypes,
     useForm,
     FormState, AnyNutrient, MacroNutrient
-} from "../../../core/hooks";
+} from "@/core/hooks";
 import {
     NewGeneralData, NewLangualCode,
     NewMacronutrientWithComponent,
     NewNutrients,
     NewReferences,
     PreviewDataForm
-} from "../../../core/components/adminPage";
+} from "@/core/components/adminPage";
 import Origins from "./components/add-remove-origins/Origins"
 
 enum TypeOfHandle {

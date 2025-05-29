@@ -1,4 +1,4 @@
-import {FoodResult} from "../../../core/types/option";
+import {FoodResult} from "@/core/types/option";
 import ModifyFoodClient from "./client"
 
 export async function generateStaticParams() {

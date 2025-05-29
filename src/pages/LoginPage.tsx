@@ -1,13 +1,13 @@
-import "../assets/css/_login.css";
+import "@/assets/css/_login.css";
 import { FormEvent } from "react";
 import { Container, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { BiLogIn } from "react-icons/bi";
 import { FaLock, FaUserCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../core/context/AuthContext";
-import { useForm } from "../core/hooks";
-import makeRequest from "../core/utils/makeRequest";
+import { useAuth } from "@/core/context/AuthContext";
+import { useForm } from "@/core/hooks";
+import makeRequest from "@/core/utils/makeRequest";
 
 interface LoginForm {
   username: string;

@@ -3,7 +3,7 @@
 import { ChangeEvent, useState } from "react";
 import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { NutrientMeasurement } from "../../types/SingleFoodResult";
+import { NutrientMeasurement } from "@/core/types/SingleFoodResult";
 
 type ModalProps = {
   data: NutrientMeasurement;

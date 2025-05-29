@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Accordion, Badge, Button, Col, Container, Row, Table } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { BsInfoCircle, BsQuestionCircle } from "react-icons/bs";
-import { NutrientMeasurement, NutrientsValue } from "../../types/SingleFoodResult";
+import { NutrientMeasurement, NutrientsValue } from "@/core/types/SingleFoodResult";
 import CenteredModal from "./CenteredModal";
 
 interface NutrientAccordionProps {

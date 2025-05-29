@@ -1,14 +1,14 @@
 
 import { useState } from "react";
-import "../../assets/css/_ComparisonPage.css";
-import { useComparison } from "../../core/context/ComparisonContext";
+import "@/assets/css/_ComparisonPage.css";
+import { useComparison } from "@/core/context/ComparisonContext";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { Trash, ArrowRight, ArrowLeft } from "lucide-react";
-import { useFetch, FetchStatus } from "../../core/hooks";
+import { useFetch, FetchStatus } from "@/core/hooks";
 import {
   SingleFoodResult
-} from "../../core/types/SingleFoodResult";
-import NutrientComparisonTable from "../../core/components/comparePage/NutrientComparisonTable";
+} from "@/core/types/SingleFoodResult";
+import NutrientComparisonTable from "@/core/components/comparePage/NutrientComparisonTable";
 
 export type GetFoodMeasurementsResult = Pick<SingleFoodResult, "commonName" | "nutrientMeasurements"> & {
   code: string;

@@ -1,7 +1,7 @@
 'use client'
 import { useState } from "react";
-import { TypeFood } from "../types/option";
-import { Collection } from "../utils/collection";
+import { TypeFood } from "@/core/types/option";
+import { Collection } from "@/core/utils/collection";
 import { FetchStatus, useFetch } from "./useFetch";
 
 export type Type = {

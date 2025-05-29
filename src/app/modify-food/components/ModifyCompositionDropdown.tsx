@@ -4,7 +4,7 @@ import {
     NutrientsValue,
     NutrientMeasurement,
     NutrientMeasurementWithComponents
-} from '../../../core/types/SingleFoodResult';
+} from '@/core/types/SingleFoodResult';
 import Modal from "../../components/Modal/Modal";
 import NumericField from "../../components/NumericField";
 

@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from "react";
-import "../../../assets/css/_OriginSelector.css";
+import "@/assets/css/_OriginSelector.css";
 import { useTranslation } from "react-i18next";
 
 type OriginsSelectorProps = {

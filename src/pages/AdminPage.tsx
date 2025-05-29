@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from "react";
-import "../assets/css/_AdminPage.css";
+import "@/assets/css/_AdminPage.css";
 import { useTranslation } from "react-i18next";
 import {
   DataFromCsv,
@@ -18,7 +18,7 @@ import {
   PreviewNewReference,
   RecursivePartial,
   ReferenceForm,
-} from "../core/components/adminPage";
+} from "@/core/components/adminPage";
 import {
   AnyNutrient,
   Author,
@@ -32,8 +32,8 @@ import {
   useScientificNames,
   useSubspecies,
   useTypes,
-} from "../core/hooks";
-import { Origin } from "../core/types/SingleFoodResult";
+} from "@/core/hooks";
+import { Origin } from "@/core/types/SingleFoodResult";
 
 export type NutrientSummary = {
   id: number;

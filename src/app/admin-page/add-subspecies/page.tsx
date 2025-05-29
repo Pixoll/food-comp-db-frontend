@@ -1,5 +1,5 @@
 'use client'
-import { useSubspecies } from "../../../core/hooks";
+import { useSubspecies } from "@/core/hooks";
 import { useState } from "react";
 
 export default function AddSubspeciesPage() {

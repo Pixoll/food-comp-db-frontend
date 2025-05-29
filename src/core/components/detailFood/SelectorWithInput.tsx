@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from "react";
-import "../../../assets/css/_SelectorWithInput.css";
+import "@/assets/css/_SelectorWithInput.css";
 import { useTranslation } from "react-i18next";
 
 type SelectorWithInputProps = {

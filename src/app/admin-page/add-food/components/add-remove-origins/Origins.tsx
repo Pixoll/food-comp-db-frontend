@@ -2,9 +2,9 @@
 
 import React, {useCallback, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
-import {Commune, Location, Province, Region} from "../../../../../core/hooks";
-import {Origin} from "../../../../../core/types/SingleFoodResult";
-import {Collection} from "../../../../../core/utils/collection"
+import {Commune, Location, Province, Region} from "@/core/hooks";
+import {Origin} from "@/core/types/SingleFoodResult";
+import {Collection} from "@/core/utils/collection"
 import OriginRow from "./OriginRow";
 
 type OriginsProps = {

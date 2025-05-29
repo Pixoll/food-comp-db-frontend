@@ -2,8 +2,8 @@
 import { BadgeX, CheckCircle, PlusCircle, RefreshCw } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useAuth } from "../../context/AuthContext";
-import { useToast } from "../../context/ToastContext";
+import { useAuth } from "@/core/context/AuthContext";
+import { useToast } from "@/core/context/ToastContext";
 import {
   AnyNutrient,
   Commune,
@@ -15,10 +15,10 @@ import {
   ScientificName,
   Subspecies,
   Type,
-} from "../../hooks";
-import { Collection } from "../../utils/collection";
-import makeRequest from "../../utils/makeRequest";
-import Pagination from "../../../app/search/components/Pagination";
+} from "@/core/hooks";
+import { Collection } from "@/core/utils/collection";
+import makeRequest from "@/core/utils/makeRequest";
+import Pagination from "@/app/search/components/Pagination";
 import CSVFoodDisplay from "./CSVFoodDisplay";
 import { CSVFood } from "./DataFromCsv";
 

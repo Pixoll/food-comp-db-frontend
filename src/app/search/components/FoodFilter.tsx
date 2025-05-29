@@ -3,11 +3,11 @@ import qs from "qs";
 import {useState, useEffect} from "react";
 import { useSearchParams } from 'next/navigation';
 import {useTranslation} from "react-i18next";
-import {FetchStatus, useFetch} from "../../../core/hooks";
-import {FoodResult} from "../../../core/types/option";
+import {FetchStatus, useFetch} from "@/core/hooks";
+import {FoodResult} from "@/core/types/option";
 import FilterBody, {Filters} from "./FilterBody";
 import FoodResultsTable from "./nutrient-table/FoodResultsTable";
-import "../../../assets/css/_foodFilter.css";
+import "@/assets/css/_foodFilter.css";
 
 type FoodFilterProps = {
     foodName: string

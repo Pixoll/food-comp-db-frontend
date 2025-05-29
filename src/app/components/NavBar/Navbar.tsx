@@ -5,9 +5,9 @@ import { Languages, LogOut, MonitorCog, Search, Menu, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useAuth } from "../../../core/context/AuthContext";
-import { useToast } from "../../../core/context/ToastContext";
-import makeRequest from "../../../core/utils/makeRequest";
+import { useAuth } from "@/core/context/AuthContext";
+import { useToast } from "@/core/context/ToastContext";
+import makeRequest from "@/core/utils/makeRequest";
 import "./index.css"
 
 const NavBar2 = () => {

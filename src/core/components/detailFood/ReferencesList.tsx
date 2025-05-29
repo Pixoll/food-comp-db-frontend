@@ -1,6 +1,6 @@
 import { ListGroup } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { Reference } from "../../types/SingleFoodResult";
+import { Reference } from "@/core/types/SingleFoodResult";
 
 interface ReferencesListProps {
   references: Reference[];

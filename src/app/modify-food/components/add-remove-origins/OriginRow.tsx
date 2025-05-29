@@ -2,8 +2,8 @@
 
 import {useState} from "react";
 import {useTranslation} from "react-i18next";
-import {Commune, Location, Province, Region} from "../../../../core/hooks";
-import {Collection} from "../../../../core/utils/collection";
+import {Commune, Location, Province, Region} from "@/core/hooks";
+import {Collection} from "@/core/utils/collection";
 import Selector from "../../../components/Selector/Selector";
 
 type OriginRowProps = {

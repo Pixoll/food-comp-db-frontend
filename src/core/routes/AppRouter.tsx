@@ -1,17 +1,9 @@
 import { Suspense, useEffect } from "react";
 import { FaSpinner } from "react-icons/fa";
-import { Route, Routes, useLocation } from "react-router-dom";
-import AdminPage from "../../pages/AdminPage";
-import DetailPage from "../../pages/detailFood/DetailPage";
-import ModifyFoodDetail from "../../pages/detailFood/ModifyFoodDetail";
-import HomePage from "../../pages/home/HomePage";
-import LoginPage from "../../pages/LoginPage";
-import SearchPage from "../../pages/search/SearchPage";
-import NavBar from "../../app/components/NavBar/Navbar";
-import { useAuth } from "../context/AuthContext";
-import makeRequest from "../utils/makeRequest";
-import PrivateRoute from "./PrivateRoute";
-import ComparisonPage from "../../pages/comparison/ComparisonPage";
+import { Routes, useLocation } from "react-router-dom";
+import NavBar from "@/app/components/NavBar/Navbar";
+import { useAuth } from "@/core/context/AuthContext";
+import makeRequest from "@/core/utils/makeRequest";
 
 export const AppRouter = () => {
   const { state, logout } = useAuth();

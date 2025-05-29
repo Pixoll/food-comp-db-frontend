@@ -1,6 +1,6 @@
 import "i18next";
-import spanish from "../translations/es.json";
-import english from "../translations/en.json";
+import spanish from "@/translations/es.json";
+import english from "@/translations/en.json";
 
 declare module "i18next" {
   // noinspection JSUnusedGlobalSymbols

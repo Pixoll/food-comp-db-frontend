@@ -2,14 +2,14 @@
 
 import { BadgeX, CheckCircle, PlusCircle, RefreshCw } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { useAuth } from "../../context/AuthContext";
-import { useToast } from "../../context/ToastContext";
-import { Author, City, Journal, JournalVolume, Reference } from "../../hooks";
-import makeRequest from "../../utils/makeRequest";
-import Pagination from "../../../app/search/components/Pagination";
+import { useAuth } from "@/core/context/AuthContext";
+import { useToast } from "@/core/context/ToastContext";
+import { Author, City, Journal, JournalVolume, Reference } from "@/core/hooks";
+import makeRequest from "@/core/utils/makeRequest";
+import Pagination from "@/app/search/components/Pagination";
 import CSVReferenceDisplay from "./CSVReferenceDisplay";
 import { CSVReference } from "./DataFromCsv";
-import "../../../assets/css/_ReferenceValidated.css";
+import "@/assets/css/_ReferenceValidated.css";
 
 type ReferenceValidatedProps = {
   data: CSVReference[];

@@ -1,20 +1,20 @@
 import axios from "axios";
-import "../../assets/css/_ModifyDetailFood.css";
+import "@/assets/css/_ModifyDetailFood.css";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Button, Card, Col, Container, Form, Nav, Row, Tab } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import { OriginSelector } from "../../core/components/adminPage";
+import { OriginSelector } from "@/core/components/adminPage";
 import {
   LangualCodeComponent,
   NutrientAccordionModify,
   ReferencesList,
   RequiredFieldLabel,
   SelectorWithInput,
-} from "../../core/components/detailFood";
-import Footer from "../../app/components/Footer";
-import { useAuth } from "../../core/context/AuthContext";
-import { useToast } from "../../core/context/ToastContext";
+} from "@/core/components/detailFood";
+import Footer from "@/app/components/Footer";
+import { useAuth } from "@/core/context/AuthContext";
+import { useToast } from "@/core/context/ToastContext";
 import {
   FetchStatus,
   useFetch,
@@ -23,9 +23,9 @@ import {
   useScientificNames,
   useSubspecies,
   useTypes
-} from "../../core/hooks";
-import { LangualCode, NutrientsValue, Origin, SingleFoodResult } from "../../core/types/SingleFoodResult";
-import makeRequest from "../../core/utils/makeRequest";
+} from "@/core/hooks";
+import { LangualCode, NutrientsValue, Origin, SingleFoodResult } from "@/core/types/SingleFoodResult";
+import makeRequest from "@/core/utils/makeRequest";
 
 export default function ModifyFoodDetail() {
   const { code } = useParams();

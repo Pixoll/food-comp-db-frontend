@@ -1,13 +1,13 @@
 'use client'
 
 import axios from "axios";
-import {Collection} from "../../../core/utils/collection";
+import {Collection} from "@/core/utils/collection";
 import TabItem from "../../components/Tabs/TabItem";
 import Tab from "../../components/Tabs/Tab"
 import {FormEvent, useEffect} from "react";
 import {useTranslation} from "react-i18next";
-import {useAuth} from "../../../core/context/AuthContext"
-import {useToast} from "../../../core/context/ToastContext"
+import {useAuth} from "@/core/context/AuthContext"
+import {useToast} from "@/core/context/ToastContext"
 import {
     FetchStatus,
     useFetch,
@@ -18,15 +18,15 @@ import {
     useSubspecies,
     useTypes,
     Region
-} from "../../../core/hooks";
+} from "@/core/hooks";
 import {
     LangualCode,
     NutrientsValue,
     Origin,
     SingleFoodResult,
     NutrientMeasurement
-} from "../../../core/types/SingleFoodResult";
-import makeRequest from "../../../core/utils/makeRequest";
+} from "@/core/types/SingleFoodResult";
+import makeRequest from "@/core/utils/makeRequest";
 import TextField from "../../components/TextField";
 import ModifyCompositionDropdown from "../components/ModifyCompositionDropdown";
 import Origins from "../components/add-remove-origins/Origins"

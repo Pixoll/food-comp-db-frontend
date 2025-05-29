@@ -1,17 +1,17 @@
 import { useState } from "react";
-import "../../assets/css/_DetailPage.css";
+import "@/assets/css/_DetailPage.css";
 import { Card, Col, Container, ListGroup, Nav, Row, Tab } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import { Graphic, LangualCodeComponent, NutrientAccordion, ReferencesList, } from "../../core/components/detailFood";
-import Footer from "../../app/components/Footer";
-import { FetchStatus, useFetch } from "../../core/hooks";
-import { SingleFoodResult } from "../../core/types/SingleFoodResult";
-//import imagen from '../../assets/images/admin_login_bg.jpg';
-import ImageCarousel from '../../core/components/detailFood/ImageCarousel';
-import imagen1 from '../../assets/images/imagen1.jpg';
-import imagen2 from '../../assets/images/imagen2.jpg';
-import imagen3 from '../../assets/images/imagen3.jpg';
+import { Graphic, LangualCodeComponent, NutrientAccordion, ReferencesList, } from "@/core/components/detailFood";
+import Footer from "@/app/components/Footer";
+import { FetchStatus, useFetch } from "@/core/hooks";
+import { SingleFoodResult } from "@/core/types/SingleFoodResult";
+//import imagen from '@/assets/images/admin_login_bg.jpg';
+import ImageCarousel from '@/core/components/detailFood/ImageCarousel';
+import imagen1 from '@/assets/images/imagen1.jpg';
+import imagen2 from '@/assets/images/imagen2.jpg';
+import imagen3 from '@/assets/images/imagen3.jpg';
 
 export default function DetailPage() {
   const { t } = useTranslation();

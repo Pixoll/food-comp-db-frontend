@@ -1,13 +1,13 @@
 'use client'
 import qs from "qs";
 import {useState, useEffect} from "react";
-import {FetchStatus, useFetch} from "../../core/hooks";
+import {FetchStatus, useFetch} from "@/core/hooks";
 import {useTranslation} from "react-i18next";
 import { useSearchParams } from 'next/navigation';
 import FilterBody, {Filters} from "./components/FilterBody";
 import FoodResultsTable from "./components/nutrient-table/FoodResultsTable";
-import {FoodResult} from "../../core/types/option";
-import "../../assets/css/_searchPage.css"
+import {FoodResult} from "@/core/types/option";
+import "@/assets/css/_searchPage.css"
 import styles from "./search.module.css"
 
 export default function SearchPage() {

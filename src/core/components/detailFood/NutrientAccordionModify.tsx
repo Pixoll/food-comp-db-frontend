@@ -1,10 +1,10 @@
 'use client'
 import { Edit2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import "../../../assets/css/_nutrientAccordion.css";
+import "@/assets/css/_nutrientAccordion.css";
 import { Accordion, Button, Card, Col, Container, Row, Table, } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { NutrientMeasurement, NutrientMeasurementWithComponents, NutrientsValue, } from "../../types/SingleFoodResult";
+import { NutrientMeasurement, NutrientMeasurementWithComponents, NutrientsValue, } from "@/core/types/SingleFoodResult";
 import CenteredModifyModal from "./CenteredModifyModal";
 
 interface NutrientAccordionProps {

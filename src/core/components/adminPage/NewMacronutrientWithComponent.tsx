@@ -8,7 +8,7 @@ import {
   NutrientMeasurementForm,
   NutrientMeasurementWithComponentsForm,
   NutrientSummary,
-} from "../../../pages/AdminPage";
+} from "@/pages/AdminPage";
 import { NutrientMeasurementFormOnlyNumbers } from "./NewNutrients";
 
 type NewMacronutrientWithComponentProps = {

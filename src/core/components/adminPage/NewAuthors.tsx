@@ -1,9 +1,9 @@
 'use client'
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Author } from "../../hooks";
+import { Author } from "@/core/hooks";
 import SelectorWithInput from "../detailFood/SelectorWithInput";
-import "../../../assets/css/_NewAuthors.css";
+import "@/assets/css/_NewAuthors.css";
 
 type NewAuthorsProps = {
   authorIds?: number[];

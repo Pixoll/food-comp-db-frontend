@@ -2,10 +2,10 @@
 
 import { BookOpen, FileText, Layers, PlusCircle, XCircle } from "lucide-react";
 import { useState } from "react";
-import { Article, Journal, JournalVolume } from "../../hooks";
+import { Article, Journal, JournalVolume } from "@/core/hooks";
 import { NewArticle, NewVolume } from "./NewReference";
-import "../../../assets/css/_NewVolumByReference.css";
-import "../../../assets/css/_newReference.css";
+import "@/assets/css/_NewVolumByReference.css";
+import "@/assets/css/_newReference.css";
 
 type NewArticleByReferenceProps = {
   data: {

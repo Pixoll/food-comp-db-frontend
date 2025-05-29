@@ -4,11 +4,11 @@ import {useTranslation} from "react-i18next";
 import {
     NutrientMeasurementForm,
     NutrientSummary,
-} from "../../../pages/AdminPage";
+} from "@/pages/AdminPage";
 import {Ellipsis} from "lucide-react";
-import TextField from "../../../app/components/TextField";
-import NumericField from "../../../app/components/NumericField";
-import "../../../assets/css/_NewNutrient.css";
+import TextField from "@/app/components/TextField";
+import NumericField from "@/app/components/NumericField";
+import "@/assets/css/_NewNutrient.css";
 
 type NewNutrientsProps = {
     nutrients: NutrientMeasurementForm[];
