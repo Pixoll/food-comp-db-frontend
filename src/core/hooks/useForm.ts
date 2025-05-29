@@ -57,9 +57,8 @@ export function useForm<T extends object>(initialForm: FormState<T>) {
   const [formState, setFormState] = useState<FormState<T>>(initialForm);
 
   const onInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
-    console.log(target);
     const { name, value } = target;
-    setFormState((prevState: any) => setNestedValue(prevState, name, value));
+    setFormState((prevState: FormState<T>) => setNestedValue(prevState, name, value));
   };
 
   const onResetForm = () => {
