@@ -11,7 +11,7 @@ import {
 } from "../../core/types/SingleFoodResult";
 import NutrientComparisonTable from "../../core/components/comparePage/NutrientComparisonTable";
 import { useAuth } from "../../core/context/AuthContext";
-
+import { useNavigate } from "react-router-dom";
 export type GetFoodMeasurementsResult = Pick<SingleFoodResult, "commonName" | "nutrientMeasurements"> & {
   code: string;
 };
@@ -22,6 +22,7 @@ export default function ComparisonPage() {
   const { state } = useAuth();
   const { token } = state;
   const codes = comparisonFoods.map((food) => `${food.code}`).join(",");
+  const navigate = useNavigate();
   const exportData = async (codes: string[]) => {
       try {
         const response = await axios.get(
@@ -70,6 +71,14 @@ export default function ComparisonPage() {
     <Container className="comparison-page py-4">
       <Row className="mb-4">
         <Col>
+          <Button
+            onClick={() => navigate('/search')}
+            variant="outline-secondary"
+            size="lg"
+            className="back-btn"
+            >
+          <ArrowLeft size={16} className="me-2" /> Volver
+          </Button>
           <h1 className="text-center mb-3">Comparación de Alimentos</h1>
           <p className="text-center text-muted">
             Selecciona los alimentos que deseas comparar y presiona el botón
