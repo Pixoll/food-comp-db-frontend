@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ChevronDown, ChevronRight, Trash2, PlusCircle } from 'lucide-react';
 import { useTranslation } from "react-i18next";
-import { LangualCode } from "@/core/hooks";
+import { LangualCode } from "@/hooks";
 import { Pagination } from "@/app/search/components";
 
 type NewLangualCodeProps = {

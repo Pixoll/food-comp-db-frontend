@@ -1,6 +1,6 @@
 'use client'
 import { useState } from "react";
-import { Collection } from "@/core/utils/collection";
+import { Collection } from "@/utils/collection";
 import { FetchStatus, useFetch } from "./useFetch";
 
 export type GroupedNutrients = {

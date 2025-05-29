@@ -18,7 +18,7 @@ import {
   CSVStringTranslation,
   CSVValue,
 } from "./DataFromCsv";
-import { Collection } from "@/core/utils/collection";
+import { Collection } from "@/utils/collection";
 import {
   AnyNutrient,
   LangualCode,
@@ -26,7 +26,7 @@ import {
   Type,
   ScientificName,
   Subspecies,
-} from "@/core/hooks";
+} from "@/hooks";
 enum Flag {
   INVALID = 0,
   VALID = 1,

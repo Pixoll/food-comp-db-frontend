@@ -4,7 +4,7 @@ import {
     NutrientsValue,
     NutrientMeasurement,
     NutrientMeasurementWithComponents
-} from '@/core/types/SingleFoodResult';
+} from '@/types/SingleFoodResult';
 import Modal from "../../../components/Modal/Modal"
 
 type NutrientCompositionProps = {

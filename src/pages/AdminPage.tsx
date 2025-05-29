@@ -32,8 +32,8 @@ import {
   useScientificNames,
   useSubspecies,
   useTypes,
-} from "@/core/hooks";
-import { Origin } from "@/core/types/SingleFoodResult";
+} from "@/hooks";
+import { Origin } from "@/types/SingleFoodResult";
 
 export type NutrientSummary = {
   id: number;

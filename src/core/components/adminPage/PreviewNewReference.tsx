@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
-import { useAuth } from "@/core/context/AuthContext";
-import { useToast } from "@/core/context/ToastContext";
-import { Author, City, Journal, JournalVolume } from "@/core/hooks";
-import makeRequest from "@/core/utils/makeRequest";
+import { useAuth } from "@/context/AuthContext";
+import { useToast } from "@/context/ToastContext";
+import { Author, City, Journal, JournalVolume } from "@/hooks";
+import makeRequest from "@/utils/makeRequest";
 import "@/assets/css/_PreviewNewReference.css";
 import { NewArticle, ReferenceForm } from "./NewReference";
 

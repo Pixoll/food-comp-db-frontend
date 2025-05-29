@@ -2,8 +2,8 @@ import { Suspense, useEffect } from "react";
 import { FaSpinner } from "react-icons/fa";
 import { Routes, useLocation } from "react-router-dom";
 import NavBar from "@/app/components/NavBar/Navbar";
-import { useAuth } from "@/core/context/AuthContext";
-import makeRequest from "@/core/utils/makeRequest";
+import { useAuth } from "@/context/AuthContext";
+import makeRequest from "@/utils/makeRequest";
 
 export const AppRouter = () => {
   const { state, logout } = useAuth();

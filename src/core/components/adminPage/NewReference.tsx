@@ -2,7 +2,7 @@
 import { Book, Calendar, FileText, Globe, Info, MapPin, TagIcon } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { City } from "@/core/hooks";
+import { City } from "@/hooks";
 import RequiredFieldLabel from "../detailFood/RequiredFieldLabel";
 import SelectorWithInput from "../detailFood/SelectorWithInput";
 import "@/assets/css/_newReference.css";

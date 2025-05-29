@@ -1,7 +1,7 @@
 'use client'
 import React, {useState} from "react";
 import "@/assets/css/_searchBox.css";
-import {Collection} from "@/core/utils/collection";
+import {Collection} from "@/utils/collection";
 
 interface CheckboxFilterProps {
     options: Collection<string, string>;

@@ -1,7 +1,7 @@
 'use client'
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Author } from "@/core/hooks";
+import { Author } from "@/hooks";
 import SelectorWithInput from "../detailFood/SelectorWithInput";
 import "@/assets/css/_NewAuthors.css";
 

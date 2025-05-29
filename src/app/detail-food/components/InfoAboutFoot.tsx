@@ -1,4 +1,4 @@
-import {Origin} from "@/core/types/SingleFoodResult";
+import {Origin} from "@/types/SingleFoodResult";
 
 type InfoAboutFoodComponentProps = {
     ingredients: Partial<Record<"es" | "en" | "pt", string>>;

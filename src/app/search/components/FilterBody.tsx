@@ -1,7 +1,7 @@
 import {PlusCircle, XCircle} from "lucide-react";
 import {useTranslation} from "react-i18next";
-import {useGroups, useNutrients, useOrigins, useTypes} from "@/core/hooks";
-import {Collection} from "@/core/utils/collection";
+import {useGroups, useNutrients, useOrigins, useTypes} from "@/hooks";
+import {Collection} from "@/utils/collection";
 import SearchBox from "./SearchBox";
 
 export type Filters = {

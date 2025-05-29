@@ -3,7 +3,7 @@
 import {FileTextIcon, ListIcon, PackageIcon, TagIcon} from "lucide-react";
 import {ChangeEvent, useState} from "react";
 import {useTranslation} from "react-i18next";
-import {Group, Language, ScientificName, Subspecies, Type} from "@/core/hooks";
+import {Group, Language, ScientificName, Subspecies, Type} from "@/hooks";
 import Selector from "@/app/components/Selector/Selector";
 import TextField from "@/app/components/TextField";
 

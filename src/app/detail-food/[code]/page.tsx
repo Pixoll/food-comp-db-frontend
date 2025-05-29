@@ -1,5 +1,5 @@
 import ClientDetailPage from "./client";
-import {FoodResult} from "@/core/types/option";
+import {FoodResult} from "@/types/option";
 
 export async function generateStaticParams() {
     try {

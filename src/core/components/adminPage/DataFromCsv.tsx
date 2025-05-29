@@ -2,7 +2,7 @@
 import { ChangeEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import XLSX from "xlsx";
-import { useAuth } from "@/core/context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import {
   AnyNutrient,
   Author,
@@ -19,9 +19,9 @@ import {
   ScientificName,
   Subspecies,
   Type,
-} from "@/core/hooks";
-import { Collection } from "@/core/utils/collection";
-import makeRequest from "@/core/utils/makeRequest";
+} from "@/hooks";
+import { Collection } from "@/utils/collection";
+import makeRequest from "@/utils/makeRequest";
 import FoodValidateData from "./FoodValidateData";
 import ReferenceValidated from "./ReferenceValidated";
 

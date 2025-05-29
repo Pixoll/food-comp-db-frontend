@@ -7,10 +7,10 @@ import {
   NutrientMeasurementWithComponentsForm,
   NutrientSummary,
 } from "@/pages/AdminPage";
-import { useAuth } from "@/core/context/AuthContext";
-import { useToast } from "@/core/context/ToastContext";
-import { Group, LangualCode, ScientificName, Subspecies, Type, } from "@/core/hooks";
-import makeRequest from "@/core/utils/makeRequest";
+import { useAuth } from "@/context/AuthContext";
+import { useToast } from "@/context/ToastContext";
+import { Group, LangualCode, ScientificName, Subspecies, Type, } from "@/hooks";
+import makeRequest from "@/utils/makeRequest";
 import {
   searchGroupNameById,
   searchScientificNameById,

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import { ChevronDown, ChevronRight, X } from 'lucide-react';
-import { NutrientsValue, NutrientMeasurement, NutrientMeasurementWithComponents } from '@/core/types/SingleFoodResult';
+import { NutrientsValue, NutrientMeasurement, NutrientMeasurementWithComponents } from '@/types/SingleFoodResult';
 import { GetFoodMeasurementsResult } from '@/pages/comparison/ComparisonPage';
 import '@/assets/css/_NutrientComparisonTable.css';
 

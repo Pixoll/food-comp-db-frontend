@@ -1,5 +1,5 @@
 'use client'
-import { useScientificNames } from "@/core/hooks";
+import { useScientificNames } from "@/hooks";
 import { useState } from "react";
 
 export default function AddScientificNamePage() {

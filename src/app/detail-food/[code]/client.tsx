@@ -8,8 +8,8 @@ import CompositionDropdown from "../components/composition-dropdown/CompositionD
 import Graphic from "../components/Graphic";
 import LangualCodes from "../components/LangualCodes";
 import References from "../components/References";
-import {FetchStatus, useFetch} from "@/core/hooks/useFetch";
-import {SingleFoodResult} from "@/core/types/SingleFoodResult";
+import {FetchStatus, useFetch} from "@/hooks/useFetch";
+import {SingleFoodResult} from "@/types/SingleFoodResult";
 
 import "@/assets/css/_DetailPage.css";
 

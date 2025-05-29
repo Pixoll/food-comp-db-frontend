@@ -2,9 +2,9 @@
 import { BiLogIn } from "react-icons/bi";
 import { FaLock, FaUserCircle } from "react-icons/fa";
 import {useRouter} from "next/navigation";
-import makeRequest from "@/core/utils/makeRequest";
-import {useForm} from "@/core/hooks";
-import {useAuth} from "@/core/context/AuthContext";
+import makeRequest from "@/utils/makeRequest";
+import {useForm} from "@/hooks";
+import {useAuth} from "@/context/AuthContext";
 import { useTranslation } from "react-i18next";
 import {FormEvent} from "react";
 type LoginForm = {

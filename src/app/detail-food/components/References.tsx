@@ -1,4 +1,4 @@
-import {Reference} from "@/core/types/SingleFoodResult";
+import {Reference} from "@/types/SingleFoodResult";
 
 type ReferenceProps = {
     data: Reference[];

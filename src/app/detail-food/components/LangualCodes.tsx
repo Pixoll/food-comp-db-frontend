@@ -1,4 +1,4 @@
-import {LangualCode} from "@/core/types/SingleFoodResult";
+import {LangualCode} from "@/types/SingleFoodResult";
 type LangualCodesProps = {
     data: LangualCode[]
 }

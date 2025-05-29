@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import "@/assets/css/_nutrientAccordion.css";
 import { Accordion, Button, Card, Col, Container, Row, Table, } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { NutrientMeasurement, NutrientMeasurementWithComponents, NutrientsValue, } from "@/core/types/SingleFoodResult";
+import { NutrientMeasurement, NutrientMeasurementWithComponents, NutrientsValue, } from "@/types/SingleFoodResult";
 import CenteredModifyModal from "./CenteredModifyModal";
 
 interface NutrientAccordionProps {

@@ -2,11 +2,11 @@
 
 import { PlusCircle } from "lucide-react";
 import { useState } from "react";
-import { useFetch ,FetchStatus } from "@/core/hooks";
-import { City, Author, Journal } from "@/core/hooks";
+import { useFetch ,FetchStatus } from "@/hooks";
+import { City, Author, Journal } from "@/hooks";
 import qs from "qs";
 import { SearchBox } from "@/app/search/components";
-import { Collection } from "@/core/utils/collection";
+import { Collection } from "@/utils/collection";
 import {
   getNutrientNameById,
   NutrientMeasurementForm,
@@ -14,7 +14,7 @@ import {
   NutrientSummary,
   NutrientsValueForm,
 } from "@/pages/AdminPage";
-import { Reference } from "@/core/hooks";
+import { Reference } from "@/hooks";
 import Pagination from "@/app/search/components/Pagination";
 import ModalReferences from "./ModalReferences";
 

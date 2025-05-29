@@ -5,9 +5,9 @@ import { useTranslation } from "react-i18next";
 import { BiLogIn } from "react-icons/bi";
 import { FaLock, FaUserCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/core/context/AuthContext";
-import { useForm } from "@/core/hooks";
-import makeRequest from "@/core/utils/makeRequest";
+import { useAuth } from "@/context/AuthContext";
+import { useForm } from "@/hooks";
+import makeRequest from "@/utils/makeRequest";
 
 interface LoginForm {
   username: string;

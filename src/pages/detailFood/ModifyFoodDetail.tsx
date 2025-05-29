@@ -13,8 +13,8 @@ import {
   SelectorWithInput,
 } from "@/core/components/detailFood";
 import Footer from "@/app/components/Footer";
-import { useAuth } from "@/core/context/AuthContext";
-import { useToast } from "@/core/context/ToastContext";
+import { useAuth } from "@/context/AuthContext";
+import { useToast } from "@/context/ToastContext";
 import {
   FetchStatus,
   useFetch,
@@ -23,9 +23,9 @@ import {
   useScientificNames,
   useSubspecies,
   useTypes
-} from "@/core/hooks";
-import { LangualCode, NutrientsValue, Origin, SingleFoodResult } from "@/core/types/SingleFoodResult";
-import makeRequest from "@/core/utils/makeRequest";
+} from "@/hooks";
+import { LangualCode, NutrientsValue, Origin, SingleFoodResult } from "@/types/SingleFoodResult";
+import makeRequest from "@/utils/makeRequest";
 
 export default function ModifyFoodDetail() {
   const { code } = useParams();

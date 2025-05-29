@@ -3,9 +3,9 @@ import {ArrowDown, ArrowUp, Plus, Minus} from "lucide-react";
 import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useRouter} from 'next/navigation';
-import {useAuth} from "@/core/context/AuthContext";
-import {useComparison} from "@/core/context/ComparisonContext";
-import {FoodResult} from "@/core/types/option";
+import {useAuth} from "@/context/AuthContext";
+import {useComparison} from "@/context/ComparisonContext";
+import {FoodResult} from "@/types/option";
 import axios from "axios";
 import Pagination from "../Pagination";
 import "./index.css"

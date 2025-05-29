@@ -10,7 +10,7 @@ import {
   Badge
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { LangualCode } from "@/core/types/SingleFoodResult";
+import { LangualCode } from "@/types/SingleFoodResult";
 import { BsInfoCircle, BsSearch } from 'react-icons/bs';
 
 type LangualCodeComponentProps = {

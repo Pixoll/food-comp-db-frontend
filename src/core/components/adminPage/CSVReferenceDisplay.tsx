@@ -10,7 +10,7 @@ import {
   Users,
 } from "lucide-react";
 import { CSVReference, CSVValue } from "./DataFromCsv";
-import { City, Journal, Author, Reference } from "@/core/hooks";
+import { City, Journal, Author, Reference } from "@/hooks";
 
 enum Flag {
   VALID = 1,

@@ -1,8 +1,8 @@
 'use client'
-import {AuthProvider} from "@/core/context/AuthContext";
+import {AuthProvider} from "@/context/AuthContext";
 import {I18nextProvider, initReactI18next} from "react-i18next";
-import ComparisonProvider from "@/core/context/ComparisonContext";
-import {ToastProvider} from "@/core/context/ToastContext";
+import ComparisonProvider from "@/context/ComparisonContext";
+import {ToastProvider} from "@/context/ToastContext";
 import i18next from "i18next";
 import spanish from "@/translations/es.json";
 import english from "@/translations/en.json";

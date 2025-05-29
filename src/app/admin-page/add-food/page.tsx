@@ -14,7 +14,7 @@ import {
     useTypes,
     useForm,
     FormState, AnyNutrient, MacroNutrient
-} from "@/core/hooks";
+} from "@/hooks";
 import {
     NewGeneralData, NewLangualCode,
     NewMacronutrientWithComponent,
