@@ -4,6 +4,7 @@ import { Collection } from "../utils/collection";
 import { FetchStatus, useFetch } from "./useFetch";
 
 export type GroupedNutrients = {
+  energy: AnyNutrient[]
   macronutrients: MacroNutrient[];
   micronutrients: {
     vitamins: AnyNutrient[];
@@ -12,7 +13,6 @@ export type GroupedNutrients = {
 };
 
 export type MacroNutrient = AnyNutrient & {
-  isEnergy?: boolean;
   components?: AnyNutrient[];
 };
 
@@ -39,15 +39,14 @@ export function useNutrients() {
     && vitamins.size === 0
     && minerals.size === 0
   ) {
+    result.data.energy.forEach((energyN) => {
+      energy.set(energyN.id.toString(), energyN);
+      nutrients.set(energyN.id.toString(), energyN);
+    });
+
     result.data.macronutrients.forEach((macro) => {
       nutrients.set(macro.id.toString(), macro);
-
-      if (macro.isEnergy) {
-        energy.set(macro.id.toString(), macro);
-      } else {
-        macronutrients.set(macro.id.toString(), macro);
-      }
-
+      macronutrients.set(macro.id.toString(), macro);
       if (macro.components) {
         macro.components.forEach((component) => nutrients.set(component.id.toString(), component));
       }
