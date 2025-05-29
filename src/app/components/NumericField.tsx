@@ -2,7 +2,7 @@ import TextField from "./TextField";
 import { useState, useEffect } from "react";
 
 type NumericFieldProps = {
-    label: string;
+    label?: string;
     value: number | undefined;
     onChange: (value: number | undefined) => void;
     allowDecimals?: boolean;
@@ -12,6 +12,12 @@ type NumericFieldProps = {
     fullWidth?: boolean;
     error?: boolean;
     errorMessage?: string;
+    helperText?: string;
+    disabled?: boolean;
+    id?: string;
+    name?: string;
+    icon?: React.ReactNode;
+    className?: string;
 };
 
 export default function NumericField({
@@ -21,7 +27,17 @@ export default function NumericField({
                                          allowDecimals = true,
                                          min = 0,
                                          max,
-                                         ...props
+                                         required = false,
+                                         fullWidth = false,
+                                         error = false,
+                                         errorMessage,
+                                         helperText,
+                                         disabled = false,
+                                         id,
+                                         name,
+                                         icon,
+                                         className,
+                                         ...rest
                                      }: NumericFieldProps) {
     const [inputValue, setInputValue] = useState(value?.toString() || '');
 
@@ -39,20 +55,19 @@ export default function NumericField({
             return;
         }
 
-        const pattern = allowDecimals ? /^(\d*\.?\d*|\.\d*)$/ : /^\d+$/;
-
+        const pattern = allowDecimals ? /^-?(\d*\.?\d*|\.\d*)$/ : /^-?\d+$/;
         if (!pattern.test(newValue)) {
             return;
         }
 
         setInputValue(newValue);
 
-        if (newValue === '.' || (allowDecimals && newValue.endsWith('.'))) {
+        if (newValue === '.' || newValue === '-' ||
+            (allowDecimals && newValue.endsWith('.'))) {
             return;
         }
 
         const parsedValue = allowDecimals ? parseFloat(newValue) : parseInt(newValue);
-
         if (isNaN(parsedValue)) {
             return;
         }
@@ -68,17 +83,31 @@ export default function NumericField({
     };
 
     useEffect(() => {
-        setInputValue(value?.toString() || '');
+        if (value === undefined && inputValue !== '') {
+            setInputValue('');
+        } else if (value !== undefined && value.toString() !== inputValue) {
+            setInputValue(value.toString());
+        }
     }, [value]);
 
     return (
         <TextField
             label={label}
             value={inputValue}
-            onChange={e => handleChange(e)}
+            onChange={handleChange}
             type="text"
             inputMode={allowDecimals ? "decimal" : "numeric"}
-            {...props}
+            required={required}
+            fullWidth={fullWidth}
+            error={error}
+            errorMessage={errorMessage}
+            helperText={helperText}
+            disabled={disabled}
+            id={id}
+            name={name}
+            icon={icon}
+            className={className}
+            {...rest}
         />
     );
 }
