@@ -3,7 +3,6 @@
 import React, {useCallback, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Commune, Location, Province, Region} from "@/hooks";
-import {Origin} from "@/types/SingleFoodResult";
 import {Collection} from "@/utils/collection"
 import OriginRow from "./OriginRow";
 
@@ -15,7 +14,7 @@ type OriginsProps = {
         communes: Collection<number, Commune>;
         locations: Collection<number, Location>;
     };
-    updateOrigins: (origins: Origin[] | undefined) => void;
+    updateOrigins: (origins: number[] | undefined) => void;
 };
 
 export default function Origins({
@@ -29,22 +28,18 @@ export default function Origins({
         originsForm.length > 0 ? originsForm.map((_, i) => i) : [0]
     );
 
-    const [addresses, setAddresses] = useState<string[]>(
-        originsForm.map((origin) => origin.name)
-    );
+    const [addresses, setAddresses] = useState<string[]>([]);
 
     const [originIds, setOriginIds] = useState<(number | null)[]>(originsForm);
     useEffect(() => {
-        const updatedOrigins: Origin[] = [];
-
+        const updatedOrigins: number[] = [];
         for (let index = 0; index < originIds.length; index++) {
             const id = originIds[index];
             const name = addresses[index];
             if (id === null || !name) {
                 continue;
             }
-
-            updatedOrigins.push({ id, name });
+            updatedOrigins.push(id);
         }
 
         updateOrigins(updatedOrigins);

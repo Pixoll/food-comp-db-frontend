@@ -4,7 +4,7 @@ import {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Commune, Location, Province, Region} from "@/hooks";
 import {Collection} from "@/utils/collection";
-import Selector from "../../../components/Selector/Selector";
+import Selector from "@/app/components/Selector/Selector";
 
 type OriginRowProps = {
     data: {
@@ -72,22 +72,28 @@ export default function OriginRow({
     const communesOptions =
         selectedProvince !== null
             ? Array.from(provinces.get(selectedProvince)?.communes.values() || [])
-            : selectedRegion !== null
-                ? Array.from(regions.get(selectedRegion)?.provinces.values() || [])
-                    .flatMap(province => Array.from(province.communes.values()))
+            : Array.from(provinces.values())
+                ? Array.from(
+                    regionOptions.flatMap((region) =>
+                        Array.from(region.provinces.values()).flatMap((province) =>
+                            Array.from(province.communes.values())
+                        )
+                    )
+                )
                 : Array.from(communes.values());
 
     const locationOptions =
-        selectedCommune !== null
+        selectedCommune != null
             ? Array.from(communes.get(selectedCommune)?.locations.values() || [])
-            : selectedProvince !== null
-                ? Array.from(provinces.get(selectedProvince)?.communes.values() || [])
-                    .flatMap(commune => Array.from(commune.locations.values()))
-                : selectedRegion !== null
-                    ? Array.from(regions.get(selectedRegion)?.provinces.values() || [])
-                        .flatMap(province => Array.from(province.communes.values()))
-                        .flatMap(commune => Array.from(commune.locations.values()))
-                    : Array.from(locations.values());
+            : selectedProvince != null
+                ? Array.from(
+                    provincesOptions.flatMap((province) =>
+                        Array.from(province.communes.values()).flatMap((commune) =>
+                            Array.from(commune.locations.values())
+                        )
+                    )
+                )
+                : Array.from(locations.values());
 
     const handleSelection = (
         level: "region" | "province" | "commune" | "location",
@@ -267,7 +273,6 @@ export default function OriginRow({
             updatedSelectedRegion
         );
     };
-
     return (
         <tr className="min-h-[400px]">
             <td>
@@ -280,7 +285,7 @@ export default function OriginRow({
             </td>
             <td>
                 <Selector
-                    options={communesOptions.map((commune) => ({ id: commune.id, name: commune.name ?? "" }))}
+                    options={communesOptions.map((commune) => ({id: commune.id, name: commune.name ?? ""}))}
                     placeholder={t("OriginRow.selected")}
                     selectedValue={selectedProvinceName}
                     onSelect={(id, name) => handleSelection("province", id, name)}
@@ -288,7 +293,7 @@ export default function OriginRow({
             </td>
             <td>
                 <Selector
-                    options={communesOptions.map((commune) => ({ id: commune.id, name: commune.name ?? "" }))}
+                    options={communesOptions.map((commune) => ({id: commune.id, name: commune.name ?? ""}))}
                     placeholder={t("OriginRow.selected")}
                     selectedValue={selectedCommuneName}
                     onSelect={(id, name) => handleSelection("commune", id, name)}
@@ -296,7 +301,7 @@ export default function OriginRow({
             </td>
             <td>
                 <Selector
-                    options={locationOptions.map((location) => ({ id: location.id, name: location.name ?? "" }))}
+                    options={locationOptions.map((location) => ({id: location.id, name: location.name ?? ""}))}
                     placeholder={t("OriginRow.selected")}
                     selectedValue={selectedLocationName}
                     onSelect={(id, name) => handleSelection("location", id, name)}

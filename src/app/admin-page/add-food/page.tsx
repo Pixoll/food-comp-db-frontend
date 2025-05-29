@@ -97,17 +97,19 @@ function selectHandle<T extends object>(
                 ...(partialData.langualCodes !== undefined && {langualCodes: partialData.langualCodes}),
             }));
         case TypeOfHandle.ENERGY_DATA:
-            return setFormState((prev) =>
-                partialData.nutrientsValueForm?.energy
-                    ? {
-                        ...prev,
-                        nutrientsValueForm: {
-                            ...((prev as Partial<FoodForm>).nutrientsValueForm || {}),
-                            energy: partialData.nutrientsValueForm.energy
-                        }
+            return setFormState((prev) => {
+                if (!partialData.nutrientsValueForm?.energy) {
+                    return prev;
+                }
+                const prevForm = prev as Partial<FoodForm>;
+                return {
+                    ...prev,
+                    nutrientsValueForm: {
+                        ...(prevForm.nutrientsValueForm || {}),
+                        energy: partialData.nutrientsValueForm.energy
                     }
-                    : prev
-            );
+                };
+            });
         case TypeOfHandle.MAIN_NUTRIENTS_DATA:
             return setFormState((prev) =>
                 partialData.nutrientsValueForm?.mainNutrients
@@ -156,7 +158,7 @@ function selectHandle<T extends object>(
         case TypeOfHandle.ORIGINS_DATA:
             return setFormState((prev) => ({
                 ...prev,
-                origins: partialData.origins
+                origins: [...new Set(partialData.origins)]
             }))
         default:
             return setFormState;
@@ -223,10 +225,7 @@ export default function AddFoodPage() {
         languages,
         langualCodes
     } = getAllData()
-    const energyArray = Array.from(energy.values()).map((nutrient) => ({
-        nutrientId: +nutrient.id,
-        referenceCodes: []
-    }));
+
     const {formState, setFormState, onInputChange} = useForm<FoodForm>({
         code: "",
         commonName: {es: ""},
@@ -238,7 +237,10 @@ export default function AddFoodPage() {
         origins: [],
         langualCodes: [],
         nutrientsValueForm: {
-            energy: energyArray,
+            energy: Array.from(energy.values()).map((nutrient) => ({
+                nutrientId: +nutrient.id,
+                referenceCodes: []
+            })),
             mainNutrients: [],
             micronutrients: {
                 vitamins: [],
@@ -280,7 +282,7 @@ export default function AddFoodPage() {
         // eslint-disable-next-line
     }, [energy.size, macronutrients.size, vitamins.size, minerals.size]);
 
-    console.log(formState.nutrientsValueForm.energy);
+    console.log(formState.origins);
     const renderSection = () => {
         switch (activeSection) {
             case 1:
@@ -313,7 +315,24 @@ export default function AddFoodPage() {
                 return (
                     <NewNutrients
                         nutrients={formState.nutrientsValueForm.energy}
-                        onNutrientUpdate={(nutrientMeasurementForm) => selectHandle({...formState, ...nutrientMeasurementForm}, TypeOfHandle.ENERGY_DATA, setFormState)}
+                        onNutrientUpdate={(updatedNutrient) => {
+                            const updatedEnergyArray = formState.nutrientsValueForm.energy.map(item =>
+                                item.nutrientId === updatedNutrient.nutrientId
+                                    ? updatedNutrient
+                                    : item
+                            );
+                            selectHandle(
+                                {
+                                    nutrientsValueForm: {
+                                        energy: updatedEnergyArray,
+                                        mainNutrients: formState.nutrientsValueForm.mainNutrients,
+                                        micronutrients: formState.nutrientsValueForm.micronutrients
+                                    }
+                                },
+                                TypeOfHandle.ENERGY_DATA,
+                                setFormState
+                            );
+                        }}
                         nameAndIdNutrients={nutrients.map<{
                             id: number,
                             name: string,
@@ -373,15 +392,24 @@ export default function AddFoodPage() {
                         }>((n) => n)}
                     />
                 );
-            /*case 7: // Origines
+            case 7: // Origines
                  return (
                      <Origins
                          originsForm={formState.origins}
                          data={{regions, provinces, communes, locations}}
-                         updateOrigins={selectHandle(formState,TypeOfHandle.ORIGINS_DATA, setFormState)}
+                         updateOrigins={(origins) =>
+                             selectHandle(
+                                 {
+                                     ...formState,
+                                     origins: origins
+                                 },
+                                 TypeOfHandle.ORIGINS_DATA,
+                                 setFormState
+                             )
+                         }
                      />
                  );
-             case 8:
+             /*case 8:
                  return (
                      <NewReferences
                          references={references || []}
