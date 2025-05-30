@@ -301,11 +301,11 @@ export default function NewReferences({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-[24px] mb-[32px]">
+        <div className="grid grid-cols-1 gap-[24px] mb-[32px] overflow-y-auto max-h-[calc(100vh-200px)] pr-[8px]">
           {currentReferences.map((ref, index) => (
               <div
                   key={ref.code}
-                  className="bg-Ñ rounded-[8px] overflow-hidden shadow-[0_4px_15px_rgba(0,0,0,0.08)]
+                  className="rounded-[8px] overflow-hidden shadow-[0_4px_15px_rgba(0,0,0,0.08)]
                    hover:shadow-[0_8px_25px_rgba(0,0,0,0.12)] transition-all duration-[300ms]
                     h-full flex flex-col"
               >
