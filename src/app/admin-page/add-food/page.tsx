@@ -16,13 +16,15 @@ import {
     FormState, AnyNutrient, MacroNutrient
 } from "@/hooks";
 import {
-    NewGeneralData, NewLangualCode,
+    NewGeneralData,
     NewMacronutrientWithComponent,
     NewNutrients,
     NewReferences,
+    NewLangualCode,
     PreviewDataForm
 } from "@/core/components/adminPage";
 import Origins from "./components/add-remove-origins/Origins"
+import {NutrientsValueForm} from "@/pages/AdminPage";
 
 enum TypeOfHandle {
     GENERAL_DATA = 1,
@@ -31,6 +33,7 @@ enum TypeOfHandle {
     VITAMINS_DATA = 4,
     MINERALS_DATA = 5,
     ORIGINS_DATA = 6,
+    REFERENCES_DATA = 7,
 }
 
 
@@ -160,6 +163,13 @@ function selectHandle<T extends object>(
                 ...prev,
                 origins: [...new Set(partialData.origins)]
             }))
+        case TypeOfHandle.REFERENCES_DATA:
+            return setFormState((prev) => ({
+                ...prev,
+                nutrientsValueForm: {
+                    ...partialData.nutrientsValueForm,
+                },
+            }));
         default:
             return setFormState;
     }
@@ -282,7 +292,7 @@ export default function AddFoodPage() {
         // eslint-disable-next-line
     }, [energy.size, macronutrients.size, vitamins.size, minerals.size]);
 
-    console.log(formState.origins);
+    console.log(formState.nutrientsValueForm);
     const renderSection = () => {
         switch (activeSection) {
             case 1:
@@ -392,7 +402,7 @@ export default function AddFoodPage() {
                         }>((n) => n)}
                     />
                 );
-            case 7: // Origines
+            case 7:
                  return (
                      <Origins
                          originsForm={formState.origins}
@@ -409,39 +419,51 @@ export default function AddFoodPage() {
                          }
                      />
                  );
-             /*case 8:
+             case 8:
                  return (
                      <NewReferences
                          references={references || []}
                          nutrientValueForm={formState.nutrientsValueForm}
-                         nameAndIdNutrients={nameAndIdNutrients}
-                         onSelectReferenceForNutrients={handleReferences}
+                         nameAndIdNutrients={nutrients.map<{
+                             id: number,
+                             name: string,
+                             measurementUnit: string
+                         }>((n) => n)}
+                         onSelectReferenceForNutrients={(nutrientsForm) =>
+                             selectHandle(
+                                 {
+                                     ...formState,
+                                     nutrientsValueForm: nutrientsForm
+                                 },
+                                 TypeOfHandle.REFERENCES_DATA,
+                                 setFormState
+                             )}
                          cities={cities || []}
                          authors={authors || []}
                          journals={journals || []}
                      />
                  );
-             case 9:
-                 return (
-                     <NewLangualCode
-                         langualCodes={langualCodes.map((v) => v)}
-                         onLangualCodesChange={handleLangualCodes}
-                         selectedLangualCodes={formState.langualCodes}
-                     />
-                 );
-             case 10:
-                 return (
-                     <PreviewDataForm
-                         data={formState}
-                         nameAndIdNutrients={nameAndIdNutrients}
-                         origins={formState.origins?.map((o) => o.name) || []}
-                         types={types.idToObject.map((o) => o)}
-                         groups={groups.idToObject.map((o) => o)}
-                         langualCodes={langualCodes.map((v) => v)}
-                         scientificNames={scientificNames.idToObject.map((o) => o)}
-                         subspecies={subspecies.idToObject.map((o) => o)}
-                     />
-                 );*/
+            /*case 9:
+                return (
+                    <NewLangualCode
+                        langualCodes={langualCodes.map((v) => v)}
+                        onLangualCodesChange={handleLangualCodes}
+                        selectedLangualCodes={formState.langualCodes}
+                    />
+                );
+            case 10:
+                return (
+                    <PreviewDataForm
+                        data={formState}
+                        nameAndIdNutrients={nameAndIdNutrients}
+                        origins={formState.origins?.map((o) => o.name) || []}
+                        types={types.idToObject.map((o) => o)}
+                        groups={groups.idToObject.map((o) => o)}
+                        langualCodes={langualCodes.map((v) => v)}
+                        scientificNames={scientificNames.idToObject.map((o) => o)}
+                        subspecies={subspecies.idToObject.map((o) => o)}
+                    />
+                );*/
             default:
                 return null;
         }
