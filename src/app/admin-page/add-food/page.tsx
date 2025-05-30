@@ -34,6 +34,7 @@ enum TypeOfHandle {
     MINERALS_DATA = 5,
     ORIGINS_DATA = 6,
     REFERENCES_DATA = 7,
+    LANGUAL_CODES_DATA = 8,
 }
 
 
@@ -170,6 +171,11 @@ function selectHandle<T extends object>(
                     ...partialData.nutrientsValueForm,
                 },
             }));
+        case TypeOfHandle.LANGUAL_CODES_DATA:
+            return setFormState((prev) => ({
+                ...prev,
+                langualCodes: partialData.langualCodes,
+                }));
         default:
             return setFormState;
     }
@@ -292,7 +298,7 @@ export default function AddFoodPage() {
         // eslint-disable-next-line
     }, [energy.size, macronutrients.size, vitamins.size, minerals.size]);
 
-    console.log(formState.nutrientsValueForm);
+    console.log(formState.langualCodes);
     const renderSection = () => {
         switch (activeSection) {
             case 1:
@@ -443,15 +449,26 @@ export default function AddFoodPage() {
                          journals={journals || []}
                      />
                  );
-            /*case 9:
+            case 9:
                 return (
                     <NewLangualCode
                         langualCodes={langualCodes.map((v) => v)}
-                        onLangualCodesChange={handleLangualCodes}
+                        onLangualCodesChange={(langualCodeId) =>
+                            selectHandle(
+                                {
+                                    ...formState,
+                                    langualCodes: formState.langualCodes.includes(langualCodeId)
+                                        ? formState.langualCodes.filter(id => id !== langualCodeId)
+                                        : [...formState.langualCodes, langualCodeId]                
+                                },
+                                TypeOfHandle.LANGUAL_CODES_DATA,
+                                setFormState
+                            )
+                        }
                         selectedLangualCodes={formState.langualCodes}
                     />
                 );
-            case 10:
+            /*case 10:
                 return (
                     <PreviewDataForm
                         data={formState}
