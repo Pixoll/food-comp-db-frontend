@@ -24,7 +24,6 @@ import {
     PreviewDataForm
 } from "@/core/components/adminPage";
 import Origins from "./components/add-remove-origins/Origins"
-import {NutrientsValueForm} from "@/pages/AdminPage";
 
 enum TypeOfHandle {
     GENERAL_DATA = 1,
@@ -459,7 +458,7 @@ export default function AddFoodPage() {
                                     ...formState,
                                     langualCodes: formState.langualCodes.includes(langualCodeId)
                                         ? formState.langualCodes.filter(id => id !== langualCodeId)
-                                        : [...formState.langualCodes, langualCodeId]                
+                                        : [...formState.langualCodes, langualCodeId]
                                 },
                                 TypeOfHandle.LANGUAL_CODES_DATA,
                                 setFormState
@@ -468,19 +467,23 @@ export default function AddFoodPage() {
                         selectedLangualCodes={formState.langualCodes}
                     />
                 );
-            /*case 10:
+            case 10:
                 return (
                     <PreviewDataForm
-                        data={formState}
-                        nameAndIdNutrients={nameAndIdNutrients}
-                        origins={formState.origins?.map((o) => o.name) || []}
+                        data={formState as FoodForm}
+                        nameAndIdNutrients={nutrients.map<{
+                            id: number,
+                            name: string,
+                            measurementUnit: string
+                        }>((n) => n)}
+                        origins={formState.origins || []}
                         types={types.idToObject.map((o) => o)}
                         groups={groups.idToObject.map((o) => o)}
                         langualCodes={langualCodes.map((v) => v)}
                         scientificNames={scientificNames.idToObject.map((o) => o)}
                         subspecies={subspecies.idToObject.map((o) => o)}
                     />
-                );*/
+                );
             default:
                 return null;
         }
@@ -501,7 +504,8 @@ export default function AddFoodPage() {
 
     return (
         <>
-            <div className="left-column">
+            <div
+                className="left-column">
                 <h3 className="subtitle">{t("AdminPage.title")}</h3>
                 {sectionNames.map((name, index) => (
                     <button
@@ -516,7 +520,6 @@ export default function AddFoodPage() {
                 ))}
             </div>
             <div className="content-container">
-                <h2 className="title">{t("AdminPage.enter")}</h2>
                 {renderSection()}
             </div>
         </>
