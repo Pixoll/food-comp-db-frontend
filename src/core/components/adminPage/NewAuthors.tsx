@@ -3,7 +3,6 @@ import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Author } from "@/hooks";
 import SelectorWithInput from "../detailFood/SelectorWithInput";
-import "@/assets/css/_NewAuthors.css";
 
 type NewAuthorsProps = {
   authorIds?: number[];
@@ -68,43 +67,59 @@ export default function NewAuthors({ authorIds, newAuthors, data, updateAuthors 
   };
 
   return (
-    <Container>
-      <Row className="row">
-        {selectors.map((_, index) => (
-          <Col key={index} md={12} className="mb-2">
-            <Row>
-              <Col>
-                <SelectorWithInput
-                  options={data}
-                  newValueMaxLength={200}
-                  placeholder={t("NewAuthors.author")}
-                  selectedValue={selectedAuthors[index]?.name || ""}
-                  onSelect={(id, name) => handleSelectAuthor(index, id, name)}
-                />
-              </Col>
-              <Col xs="auto">
-                <Button
-                  variant="outline-danger"
-                  onClick={() => handleRemoveRow(index)}
-                >
-                  {t("NewAuthors.Eliminate")}
-                </Button>
-              </Col>
-            </Row>
-          </Col>
-        ))}
-      </Row>
-      <h4>{t("NewAuthors.Select")}</h4>
-      <ListGroup>
-        {selectedAuthors.map((author, index) => (
-          <ListGroup.Item key={author.id || index}>
-            {author.name || t("NewAuthors.No_selected")}
-          </ListGroup.Item>
-        ))}
-      </ListGroup>
-      <Button className="button" variant="primary" onClick={handleAddSelector}>
-        {t("NewAuthors.Add")}
-      </Button>
-    </Container>
+      <div className="container mx-auto px-[16px] md:px-[24px]">
+        <div className="flex flex-col gap-[8px] w-full">
+          {selectors.map((_, index) => (
+              <div key={index} className="w-full mb-[8px]">
+                <div className="flex flex-col sm:flex-row gap-[8px] items-start sm:items-center">
+                  <div className="flex-grow w-full">
+                    <SelectorWithInput
+                        options={data}
+                        newValueMaxLength={200}
+                        placeholder={t("NewAuthors.author")}
+                        selectedValue={selectedAuthors[index]?.name || ""}
+                        onSelect={(id, name) => handleSelectAuthor(index, id, name)}
+                    />
+                  </div>
+                  <div className="flex-shrink-0">
+                    <button
+                        onClick={() => handleRemoveRow(index)}
+                        className="px-[12px] py-[6px] border border-[#dc2626] text-[#dc2626] rounded-[4px] hover:bg-[#fee2e2] transition-colors duration-[200ms] font-[500] text-[14px]"
+                    >
+                      {t("NewAuthors.Eliminate")}
+                    </button>
+                  </div>
+                </div>
+              </div>
+          ))}
+        </div>
+
+        <h4 className="text-[18px] font-[600] mt-[16px] mb-[8px] text-[#1f2937]">
+          {t("NewAuthors.Select")}
+        </h4>
+
+        <ul className="border border-[#e5e7eb] rounded-[8px] divide-y divide-[#e5e7eb] mb-[16px] overflow-hidden">
+          {selectedAuthors.map((author, index) => (
+              <li
+                  key={author.id || index}
+                  className="px-[16px] py-[12px] bg-[white] hover:bg-[#f9fafb] transition-colors duration-[200ms]"
+              >
+                {author.name || t("NewAuthors.No_selected")}
+              </li>
+          ))}
+          {selectedAuthors.length === 0 && (
+              <li className="px-[16px] py-[12px] bg-[white] text-[#6b7280] italic">
+                {t("NewAuthors.No_selected")}
+              </li>
+          )}
+        </ul>
+
+        <button
+            onClick={handleAddSelector}
+            className="px-[16px] py-[8px] bg-[#2563eb] text-[white] border-none rounded-[4px] hover:bg-[#1d4ed8] transition-colors duration-[200ms] font-[500] text-[14px] shadow-sm"
+        >
+          {t("NewAuthors.Add")}
+        </button>
+      </div>
   );
 }
