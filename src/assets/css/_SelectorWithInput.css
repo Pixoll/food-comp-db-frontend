@@ -5,7 +5,6 @@
 }
 .select-option-with-input {
     position: relative;
-    height: 100%;
     display: flex;
     align-items: center;
     background-color: #fff;
@@ -43,13 +42,15 @@
     color: #000;
     border-radius: 7px;
     margin-top: 10px;
-
     width: 100%;
-    z-index: 999;
+    z-index: 9999;
     padding: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: none;
     animation: fadeIn 0.3s ease-in-out;
+    max-height: 300px;
+    overflow-y: auto;
+    left: 0;
 }
 .search-options input {
     width: 100%;
@@ -62,10 +63,11 @@
 }
 .options {
     margin-top: 10px;
-    max-height: 170px;
+    max-height: 200px;
     overflow-y: auto;
     padding: 0;
     list-style: none;
+    width: 100%;
 }
 .options li {
     padding: 10px 15px;
@@ -73,6 +75,9 @@
     cursor: pointer;
     border-bottom: 1px solid #f0f0f0;
     transition: background-color 0.2s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .options li:hover {
     background-color: #f9f9f9;
@@ -80,26 +85,31 @@
 .select-box-for.active .content-box {
     display: block;
 }
+.select-box-for.open-upward .content-box {
+    bottom: calc(100% + 10px);
+    top: auto;
+    margin-top: 0;
+}
 .select-box-for.active .select-option-with-input:after {
     transform: rotate(180deg) translateY(-50%);
 }
 .custom-option-input {
     margin-top: 10px;
     width: 100%;
-    display: flex; /* Para alinear el contenido */
+    display: flex;
     align-items: center;
     gap: 10px;
     animation: slideIn 0.3s ease-in-out;
 }
 
 .custom-option-input input {
-    width: 100%; /* Asegura que el input ocupe todo el ancho disponible */
+    width: 100%;
     font-size: 15px;
     padding: 8px;
     border: 1px solid #dcdcdc;
     border-radius: 5px;
     line-height: 21px !important;
-    box-sizing: border-box; /* Asegura que el padding no afecte el ancho */
+    box-sizing: border-box;
 }
 
 .custom-option-input button {
@@ -116,8 +126,6 @@
     background-color: #0056b3;
 }
 
-
-/* Animations */
 @keyframes fadeIn {
     from {
         opacity: 0;
