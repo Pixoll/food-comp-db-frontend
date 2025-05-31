@@ -3,7 +3,8 @@ import { Book, Calendar, FileText, Globe, Info, MapPin, TagIcon } from "lucide-r
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { City } from "@/hooks";
-import RequiredFieldLabel from "../detailFood/RequiredFieldLabel";
+import NumericField from "@/app/components/NumericField";
+import TextField from "@/app/components/TextField";
 import SelectorWithInput from "../detailFood/SelectorWithInput";
 import "@/assets/css/_newReference.css";
 
@@ -125,156 +126,126 @@ export default function NewReference({
   const isTypeWebsiteOrBook = type === "website" || type === "book";
 
   return (
-    <Card className="mt-4 shadow-sm">
-      <Card.Header className="card-header">
-        {getReferenceTypeIcon()}
-        <Card.Title className="mb-0">{t("NewReference.Add")}</Card.Title>
-      </Card.Header>
-      <Card.Body>
-        <Form>
-          <Row>
-            <Col md={6}>
-              <Form.Group controlId="formReferenceCode" className="mb-3">
-                <Form.Label className="d-flex align-items-center">
-                  <TagIcon className="me-2"/>
-                  {t("NewReference.Code")}
-                  <RequiredFieldLabel tooltipMessage={t("NewReference.required")}/>
-                </Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder={t("NewReference.Code")}
-                  value={code}
-                  disabled
-                />
-              </Form.Group>
-            </Col>
+      <div className="mt-[16px] rounded-[8px] border border-[#e5e7eb] shadow-sm bg-white overflow-hidden">
+        <div className="flex items-center p-[16px] border-b border-[#e5e7eb] bg-[#f9fafb]">
+          <span className="mr-[12px] text-[#4b5563]">{getReferenceTypeIcon()}</span>
+          <h2 className="text-[18px] font-[600] text-[#111827] m-0">{t("NewReference.Add")}</h2>
+        </div>
 
-            <Col md={6}>
-              <Form.Group controlId="formReferenceType" className="mb-3">
-                <Form.Label className="d-flex align-items-center">
-                  <Book className="me-2"/>
+        <div className="p-[20px]">
+          <form className="space-y-[20px]">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-[16px]">
+              <NumericField
+                  label={t("NewReference.Code")}
+                  value={code}
+                  onChange={() => {}}
+                  id="formReferenceCode"
+                  disabled={true}
+                  fullWidth
+                  icon={<span className="text-[#4b5563]"><TagIcon className="w-[18px] h-[18px]" /></span>}
+                  required
+              />
+
+              <div className="flex flex-col w-full">
+                <label
+                    htmlFor="formReferenceType"
+                    className="text-[14px] font-[500] mb-[4px] text-[#374151] flex items-center"
+                >
+                  <span className="mr-[8px] text-[#4b5563]"><Book className="w-[18px] h-[18px]" /></span>
                   {t("NewReference.Type")}
-                  <RequiredFieldLabel tooltipMessage={t("NewReference.required")}/>
-                </Form.Label>
-                <Form.Select
-                  value={referenceForm.type}
-                  onChange={(e) => handleInputChange("type", e.target.value as ReferenceForm["type"])}
+                  <span className="text-[#dc2626] ml-[4px]">*</span>
+                </label>
+
+                <select
+                    id="formReferenceType"
+                    value={referenceForm.type}
+                    onChange={(e) => handleInputChange("type", e.target.value as ReferenceForm["type"])}
+                    className="px-[12px] py-[8px] rounded-[4px] border border-[#d1d5db] bg-[white] focus:outline-none focus:ring-1 focus:ring-[#3b82f6] focus:border-[#3b82f6] w-full"
                 >
                   <option value="report">{t("NewReference.Report")}</option>
                   <option value="thesis">{t("NewReference.Thesis")}</option>
                   <option value="article">{t("NewReference.Article")}</option>
                   <option value="website">{t("NewReference.Website")}</option>
                   <option value="book">{t("NewReference.Book")}</option>
-                </Form.Select>
-              </Form.Group>
-            </Col>
-          </Row>
+                </select>
+              </div>
+            </div>
+            <TextField
+                label={t("NewReference.Title")}
+                value={referenceForm.title}
+                onChange={(e) => handleInputChange("title", e.target.value)}
+                id="formReferenceTitle"
+                fullWidth
+                maxLength={300}
+                placeholder={t("NewReference.Enter_t")}
+                error={referenceForm.title.length === 0}
+                errorMessage="Ingrese el título."
+                icon={<span className="text-[#4b5563]"><FileText className="w-[18px] h-[18px]" /></span>}
+                required
+            />
 
-          <Row>
-            <Col md={12}>
-              <Form.Group controlId="formReferenceTitle" className="mb-3">
-                <Form.Label className="d-flex align-items-center">
-                  <FileText className="me-2"/>
-                  {t("NewReference.Title")}
-                  <RequiredFieldLabel tooltipMessage={t("NewReference.required")}/>
-                </Form.Label>
-                <Form.Control
-                  type="text"
-                  maxLength={300}
-                  isInvalid={referenceForm.title.length === 0}
-                  placeholder={t("NewReference.Enter_t")}
-                  value={referenceForm.title}
-                  onChange={(e) => handleInputChange("title", e.target.value)}
-                />
-                <Form.Control.Feedback type="invalid">
-                  Ingrese el título.
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Col>
-          </Row>
-
-          <Row>
-            <Col md={6}>
-              <Form.Group controlId="formReferenceCity" className="mb-3">
-                <Form.Label className="d-flex align-items-center">
-                  <MapPin className="me-2"/>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-[16px]">
+              <div className="flex flex-col w-full">
+                <label
+                    htmlFor="formReferenceCity"
+                    className="text-[14px] font-[500] mb-[4px] text-[#374151] flex items-center"
+                >
+                  <span className="mr-[8px] text-[#4b5563]"><MapPin className="w-[18px] h-[18px]" /></span>
                   {t("NewReference.City")}
-                </Form.Label>
+                </label>
+
                 <SelectorWithInput
-                  options={cities}
-                  newValueMaxLength={100}
-                  placeholder={t("NewReference.Select")}
-                  selectedValue={
-                    searchCityNameByID(referenceForm.cityId, cities) || newCity
-                  }
-                  onSelect={(id, name) => {
-                    if (id) {
-                      handleInputChange("cityId", id);
-                    } else {
-                      handleInputChange("newCity", name);
+                    options={cities}
+                    newValueMaxLength={100}
+                    placeholder={t("NewReference.Select")}
+                    selectedValue={
+                        searchCityNameByID(referenceForm.cityId, cities) || newCity
                     }
-                  }}
+                    onSelect={(id, name) => {
+                      if (id) {
+                        handleInputChange("cityId", id);
+                      } else {
+                        handleInputChange("newCity", name);
+                      }
+                    }}
                 />
-              </Form.Group>
-            </Col>
+              </div>
 
-            <Col md={6}>
-              <Form.Group controlId="formReferenceYear" className="mb-3">
-                <Form.Label className="d-flex align-items-center">
-                  <Calendar className="me-2"/>
-                  {t("NewReference.Year")}
-                  {isTypeNotArticleOrWebsite && (
-                    <RequiredFieldLabel tooltipMessage={t("NewReference.required")}/>
-                  )}
-                </Form.Label>
-                <Form.Control
-                  type="number"
-                  isInvalid={
-                    (isYearDefined || isTypeNotArticleOrWebsite)
-                    && (isYearBelow1 || isYearOverCurrent || isYearNotInteger)
-                  }
-                  placeholder={t("NewReference.Enter_y")}
-                  value={referenceForm.year ?? ""}
-                  onChange={(e) =>
-                    handleInputChange("year", e.target.value.length > 0 ? +e.target.value : undefined)
-                  }
-                />
-                <Form.Control.Feedback type="invalid">
-                  {!isYearDefined ? "Ingrese el año."
+              <NumericField
+                  label={t("NewReference.Year")}
+                  value={referenceForm.year}
+                  onChange={(e) => handleInputChange("year", e)}
+                  id="formReferenceYear"
+                  fullWidth
+                  min={1}
+                  max={new Date().getFullYear()}
+                  allowDecimals={false}
+                  error={(isYearDefined || isTypeNotArticleOrWebsite) &&
+                      (isYearBelow1 || isYearOverCurrent || isYearNotInteger)}
+                  errorMessage={!isYearDefined ? "Ingrese el año."
                       : isYearBelow1 ? "Año debe ser al menos 1."
-                        : isYearOverCurrent ? "Año debe ser menor o igual al actual."
-                          : "Año debe ser un entero."}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Col>
-          </Row>
+                          : isYearOverCurrent ? "Año debe ser menor o igual al actual."
+                              : "Año debe ser un entero."}
+                  icon={<span className="text-[#4b5563]"><Calendar className="w-[18px] h-[18px]" /></span>}
+                  required={isTypeNotArticleOrWebsite}
+              />
+            </div>
 
-          <Row>
-            <Col>
-              <Form.Group controlId="formReferenceOther" className="mb-3">
-                <Form.Label className="d-flex align-items-center">
-                  <Info className="me-2"/>
-                  {t("NewReference.Other")}
-                  {isTypeWebsiteOrBook && (
-                    <RequiredFieldLabel tooltipMessage={t("NewReference.required")}/>
-                  )}
-                </Form.Label>
-                <Form.Control
-                  type="text"
-                  maxLength={100}
-                  isInvalid={isTypeWebsiteOrBook && !referenceForm.other?.length}
-                  placeholder={t("NewReference.Additional")}
-                  value={referenceForm.other || ""}
-                  onChange={(e) => handleInputChange("other", e.target.value)}
-                />
-                <Form.Control.Feedback type="invalid">
-                  Ingrese la información adicional.
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Col>
-          </Row>
-        </Form>
-      </Card.Body>
-    </Card>
+            <TextField
+                label={t("NewReference.Other")}
+                value={referenceForm.other || ""}
+                onChange={(e) => handleInputChange("other", e.target.value)}
+                id="formReferenceOther"
+                fullWidth
+                maxLength={100}
+                placeholder={t("NewReference.Additional")}
+                error={isTypeWebsiteOrBook && !referenceForm.other?.length}
+                errorMessage="Ingrese la información adicional."
+                icon={<span className="text-[#4b5563]"><Info className="w-[18px] h-[18px]" /></span>}
+                required={isTypeWebsiteOrBook}
+            />
+          </form>
+        </div>
+      </div>
   );
 };
