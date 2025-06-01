@@ -3,7 +3,6 @@ import {useAuth} from "@/context/AuthContext";
 import {useToast} from "@/context/ToastContext";
 import {Author, City, Journal, JournalVolume} from "@/hooks";
 import makeRequest from "@/utils/makeRequest";
-import "@/assets/css/_PreviewNewReference.css";
 import {NewArticle, ReferenceForm} from "./NewReference";
 
 type PreviewNewReferenceProps = {

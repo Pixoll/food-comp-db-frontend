@@ -4,8 +4,8 @@ import {BookOpen, FileText, Layers, PlusCircle, XCircle} from "lucide-react";
 import {useState} from "react";
 import {Article, Journal, JournalVolume} from "@/hooks";
 import {NewArticle, NewVolume} from "./NewReference";
-import NumericField from "@/app/components/NumericField";
-import TextField from "@/app/components/TextField";
+import NumericField from "@/app/components/Fields/NumericField";
+import TextField from "@/app/components/Fields/TextField";
 
 type NewArticleByReferenceProps = {
     data: {

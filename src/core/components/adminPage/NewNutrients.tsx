@@ -5,7 +5,7 @@ import {
     NutrientSummary,
 } from "@/pages/AdminPage";
 import { Ellipsis, AlertCircle } from "lucide-react";
-import NumericField from "@/app/components/NumericField";
+import NumericField from "@/app/components/Fields/NumericField";
 import ToolTip from "@/app/components/ToolTip";
 
 

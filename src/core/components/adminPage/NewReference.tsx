@@ -3,8 +3,8 @@ import { Book, Calendar, FileText, Globe, Info, MapPin, TagIcon } from "lucide-r
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { City } from "@/hooks";
-import NumericField from "@/app/components/NumericField";
-import TextField from "@/app/components/TextField";
+import NumericField from "@/app/components/Fields/NumericField";
+import TextField from "@/app/components/Fields/TextField";
 import SelectorWithInput from "../detailFood/SelectorWithInput";
 import "@/assets/css/_newReference.css";
 

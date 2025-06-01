@@ -6,7 +6,7 @@ import {
     NutrientMeasurementWithComponents
 } from '@/types/SingleFoodResult';
 import Modal from "../../components/Modal/Modal";
-import NumericField from "../../components/NumericField";
+import NumericField from "../../components/Fields/NumericField";
 
 type ModifyCompositionDropdownProps = {
     nutrientData: NutrientsValue;

@@ -5,7 +5,7 @@ import {ChangeEvent, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Group, Language, ScientificName, Subspecies, Type} from "@/hooks";
 import Selector from "@/app/components/Selector/Selector";
-import TextField from "@/app/components/TextField";
+import TextField from "@/app/components/Fields/TextField";
 
 export const searchScientificNameById = (
     id: number | undefined,

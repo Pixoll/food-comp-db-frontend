@@ -27,7 +27,7 @@ import {
     NutrientMeasurement
 } from "@/types/SingleFoodResult";
 import makeRequest from "@/utils/makeRequest";
-import TextField from "../../components/TextField";
+import TextField from "../../components/Fields/TextField";
 import ModifyCompositionDropdown from "../components/ModifyCompositionDropdown";
 import Origins from "../components/add-remove-origins/Origins"
 
