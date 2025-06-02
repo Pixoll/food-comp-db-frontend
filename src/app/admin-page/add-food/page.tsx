@@ -134,7 +134,6 @@ function selectHandle<T extends object>(
                     return prev;
                 }
                 const prevForm = prev as Partial<FoodForm>;
-                console.log(prevForm)
                 return {
                     ...prev,
                     nutrientsValueForm: {
@@ -370,10 +369,27 @@ export default function AddFoodPage() {
             case 3:
                 return (
                     <NewMacronutrientWithComponent
-                        macronutrientsWithComponents={formState.nutrientsValueForm.mainNutrients.filter(
-                            (n) => n.components?.length > 0
+                        macronutrientsWithComponents={formState.nutrientsValueForm.mainNutrients
+                            .filter((n) => n.components?.length > 0
                         )}
-                        onMacronutrientUpdate={(nutrientMeasurementForm) => selectHandle({...formState, ...nutrientMeasurementForm}, TypeOfHandle.MAIN_NUTRIENTS_DATA, setFormState)}
+                        onMacronutrientUpdate={(updatedNutrient) => {
+                            const updatedMainNutrientsArray = formState.nutrientsValueForm.mainNutrients.map(item =>
+                                item.nutrientId === updatedNutrient.nutrientId
+                                    ? {
+                                        ...item,
+                                        ...updatedNutrient,
+                                        components: [...updatedNutrient.components]
+                                    }
+                                    : item
+                            );
+                            selectHandle({
+                                nutrientsValueForm: {
+                                    energy: formState.nutrientsValueForm.energy,
+                                    mainNutrients: updatedMainNutrientsArray,
+                                    micronutrients: formState.nutrientsValueForm.micronutrients
+                                }
+                            }, TypeOfHandle.MAIN_NUTRIENTS_DATA, setFormState)
+                        }}
                         nameAndIdNutrients={nutrients.map<{
                             id: number,
                             name: string,
@@ -386,16 +402,32 @@ export default function AddFoodPage() {
                     <NewNutrients
                         nutrients={formState.nutrientsValueForm.mainNutrients
                             .filter((n) => n.components?.length === 0)
-                            .map((main) => ({nutrientId: main.nutrientId, referenceCodes: main.referenceCodes}))
                         }
-                        onNutrientUpdate={(nutrientMeasurementForm) => selectHandle({...formState, ...nutrientMeasurementForm}, TypeOfHandle.MAIN_NUTRIENTS_DATA, setFormState)}
+                        onNutrientUpdate={(updatedNutrient) => {
+                            const updatedMainNutrientsArray = formState.nutrientsValueForm.mainNutrients.map(item =>
+                                item.nutrientId === updatedNutrient.nutrientId
+                                    ? {
+                                        ...item,
+                                        ...updatedNutrient,
+                                        components: []
+                                    }
+                                    : item
+                            );
+                            selectHandle({
+                                nutrientsValueForm: {
+                                    energy: formState.nutrientsValueForm.energy,
+                                    mainNutrients: updatedMainNutrientsArray,
+                                    micronutrients: formState.nutrientsValueForm.micronutrients
+                                }
+                            }, TypeOfHandle.MAIN_NUTRIENTS_DATA, setFormState)
+                        }}
                         nameAndIdNutrients={nutrients.map<{
                             id: number,
                             name: string,
                             measurementUnit: string
                         }>((n) => n)}
                     />
-                );
+                )
             case 5:
                 return (
                     <NewNutrients
