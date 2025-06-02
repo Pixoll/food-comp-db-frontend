@@ -5,16 +5,16 @@
 }
 
 .selected-options-display, .filter-tag {
-  background-color: #1d6735; /* Verde más suave */
-  color: white;
-  padding: 12px;
-  border: 2px solid #388e60; /* Bordes más finos y elegantes */
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-radius: 8px; /* Bordes más redondeados */
-  transition: all 0.3s ease; /* Transición suave */
+    background-color: #1d6735; /* Verde más suave */
+    color: white;
+    padding: 12px;
+    border: 2px solid #1d6735; /* Bordes más finos y elegantes */
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 8px; /* Bordes más redondeados */
+    transition: all 0.3s ease; /* Transición suave */
 }
 
 .selected-options-display:hover, .filter-tag:hover {

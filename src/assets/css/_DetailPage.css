@@ -41,12 +41,12 @@ input[type="number"] {
   gap: 20px;
 }
 .custom-container-of-detail-page {
-  background-color: #337265ef;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
-  margin-bottom: 30px;
-  max-width: 1200px;
+    background-color: #1d6735;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+    margin-bottom: 30px;
+    max-width: 1200px;
 }
 .custom-tab-link {
   color: #11451e !important;

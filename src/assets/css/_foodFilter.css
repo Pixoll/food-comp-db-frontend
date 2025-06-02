@@ -44,7 +44,8 @@
 }
 
 .reset-button {
-    background-color: rgb(29, 103, 53);
+    background-color: #1d6735;
+    border: 2px solid #1d6735;
     color: white;
     padding: 10px;
     width: 100%;
