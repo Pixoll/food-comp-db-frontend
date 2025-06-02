@@ -44,13 +44,18 @@
 }
 
 .reset-button {
-  background-color: rgb(29, 103, 53);
-  color: white;
-  padding: 10px;
-  width: 100%;
-  border: none;
-  border-radius: 5px;
-  font-family: "Poppins", serif;
+    background-color: rgb(29, 103, 53);
+    color: white;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    font-family: "Poppins", serif;
+    transition: all 0.3s ease
+}
+
+.reset-button:hover {
+    background-color: #388e60;
 }
 
 .measurement-title {
