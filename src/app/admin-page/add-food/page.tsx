@@ -13,7 +13,7 @@ import {
     useGroups,
     useTypes,
     useForm,
-    FormState, AnyNutrient, MacroNutrient
+    FormState, AnyNutrient
 } from "@/hooks";
 import {
     NewGeneralData,
@@ -129,35 +129,40 @@ function selectHandle<T extends object>(
                     : prev
             );
         case TypeOfHandle.VITAMINS_DATA:
-            return setFormState((prev) =>
-                partialData.nutrientsValueForm?.micronutrients?.vitamins
-                    ? {
-                        ...prev,
-                        nutrientsValueForm: {
-                            ...((prev as Partial<FoodForm>).nutrientsValueForm || {}),
-                            micronutrients: {
-                                ...((prev as Partial<FoodForm>).nutrientsValueForm?.micronutrients || {}),
-                                vitamins: partialData.nutrientsValueForm.micronutrients.vitamins
-                            }
+            return setFormState((prev) => {
+                if (!partialData.nutrientsValueForm?.micronutrients.vitamins) {
+                    return prev;
+                }
+                const prevForm = prev as Partial<FoodForm>;
+                console.log(prevForm)
+                return {
+                    ...prev,
+                    nutrientsValueForm: {
+                        ...(prevForm.nutrientsValueForm || {}),
+                        micronutrients: {
+                            ...(prevForm.nutrientsValueForm?.micronutrients || {}),
+                            vitamins: partialData.nutrientsValueForm?.micronutrients.vitamins
                         }
                     }
-                    : prev
-            );
+                };
+            });
         case TypeOfHandle.MINERALS_DATA:
-            return setFormState((prev) =>
-                partialData.nutrientsValueForm?.micronutrients?.minerals
-                    ? {
-                        ...prev,
-                        nutrientsValueForm: {
-                            ...((prev as Partial<FoodForm>).nutrientsValueForm || {}),
-                            micronutrients: {
-                                ...((prev as Partial<FoodForm>).nutrientsValueForm?.micronutrients || {}),
-                                vitamins: partialData.nutrientsValueForm.micronutrients.minerals
-                            }
+            return setFormState((prev) => {
+                if (!partialData.nutrientsValueForm?.micronutrients.minerals) {
+                    return prev;
+                }
+                const prevForm = prev as Partial<FoodForm>;
+                return {
+                    ...prev,
+                    nutrientsValueForm: {
+                        ...(prevForm.nutrientsValueForm || {}),
+                        micronutrients: {
+                            ...((prev as Partial<FoodForm>).nutrientsValueForm?.micronutrients || {}),
+                            minerals: partialData.nutrientsValueForm?.micronutrients.minerals
                         }
                     }
-                    : prev
-            );
+                };
+            });
         case TypeOfHandle.ORIGINS_DATA:
             return setFormState((prev) => ({
                 ...prev,
@@ -174,7 +179,7 @@ function selectHandle<T extends object>(
             return setFormState((prev) => ({
                 ...prev,
                 langualCodes: partialData.langualCodes,
-                }));
+            }));
         default:
             return setFormState;
     }
@@ -241,7 +246,7 @@ export default function AddFoodPage() {
         langualCodes
     } = getAllData()
 
-    const {formState, setFormState, onInputChange} = useForm<FoodForm>({
+    const {formState, setFormState} = useForm<FoodForm>({
         code: "",
         commonName: {es: ""},
         ingredients: {},
@@ -252,10 +257,7 @@ export default function AddFoodPage() {
         origins: [],
         langualCodes: [],
         nutrientsValueForm: {
-            energy: Array.from(energy.values()).map((nutrient) => ({
-                nutrientId: +nutrient.id,
-                referenceCodes: []
-            })),
+            energy: [],
             mainNutrients: [],
             micronutrients: {
                 vitamins: [],
@@ -279,7 +281,16 @@ export default function AddFoodPage() {
                     nutrientId: +energy.id,
                     referenceCodes: [],
                 })),
-                mainNutrients: [],
+                mainNutrients: macronutrients.map((m) => ({
+                    nutrientId: m.id,
+                    referenceCodes: [],
+                    components: m.components?.length
+                        ? m.components.map((component) => ({
+                            nutrientId: component.id,
+                            referenceCodes: [],
+                        }))
+                        : [],
+                })),
                 micronutrients: {
                     vitamins: vitamins.map((vitamin: AnyNutrient) => ({
                         nutrientId: +vitamin.id,
@@ -296,8 +307,9 @@ export default function AddFoodPage() {
         setFormState(initialFormData);
         // eslint-disable-next-line
     }, [energy.size, macronutrients.size, vitamins.size, minerals.size]);
-
-    console.log(formState.langualCodes);
+    console.log(formState.nutrientsValueForm.mainNutrients.filter(
+        (n) => n.components?.length === 0
+    ))
     const renderSection = () => {
         switch (activeSection) {
             case 1:
@@ -372,9 +384,10 @@ export default function AddFoodPage() {
             case 4:
                 return (
                     <NewNutrients
-                        nutrients={formState.nutrientsValueForm.mainNutrients.filter(
-                            (n) => n.components?.length === 0
-                        )}
+                        nutrients={formState.nutrientsValueForm.mainNutrients
+                            .filter((n) => n.components?.length === 0)
+                            .map((main) => ({nutrientId: main.nutrientId, referenceCodes: main.referenceCodes}))
+                        }
                         onNutrientUpdate={(nutrientMeasurementForm) => selectHandle({...formState, ...nutrientMeasurementForm}, TypeOfHandle.MAIN_NUTRIENTS_DATA, setFormState)}
                         nameAndIdNutrients={nutrients.map<{
                             id: number,
@@ -387,7 +400,23 @@ export default function AddFoodPage() {
                 return (
                     <NewNutrients
                         nutrients={formState.nutrientsValueForm.micronutrients.vitamins}
-                        onNutrientUpdate={(nutrientMeasurementForm) => selectHandle({...formState, ...nutrientMeasurementForm}, TypeOfHandle.VITAMINS_DATA, setFormState)}
+                        onNutrientUpdate={(updatedNutrient) => {
+                            const updatedVitaminsArray = formState.nutrientsValueForm.micronutrients.vitamins.map(item =>
+                                item.nutrientId === updatedNutrient.nutrientId
+                                    ? updatedNutrient
+                                    : item
+                            );
+                            selectHandle({
+                                nutrientsValueForm: {
+                                    energy: formState.nutrientsValueForm.energy,
+                                    mainNutrients: formState.nutrientsValueForm.mainNutrients,
+                                    micronutrients: {
+                                        vitamins: updatedVitaminsArray,
+                                        minerals: formState.nutrientsValueForm.micronutrients.minerals
+                                    }
+                                }
+                            }, TypeOfHandle.VITAMINS_DATA, setFormState)
+                        }}
                         nameAndIdNutrients={nutrients.map<{
                             id: number,
                             name: string,
@@ -399,7 +428,23 @@ export default function AddFoodPage() {
                 return (
                     <NewNutrients
                         nutrients={formState.nutrientsValueForm.micronutrients.minerals}
-                        onNutrientUpdate={(nutrientMeasurementForm) => selectHandle({...formState, ...nutrientMeasurementForm}, TypeOfHandle.MINERALS_DATA, setFormState)}
+                        onNutrientUpdate={(updatedNutrient) => {
+                            const updatedMineralsArray = formState.nutrientsValueForm.micronutrients.minerals.map(item =>
+                                item.nutrientId === updatedNutrient.nutrientId
+                                    ? updatedNutrient
+                                    : item
+                            );
+                            selectHandle({
+                                nutrientsValueForm: {
+                                    energy: formState.nutrientsValueForm.energy,
+                                    mainNutrients: formState.nutrientsValueForm.mainNutrients,
+                                    micronutrients: {
+                                        vitamins: formState.nutrientsValueForm.micronutrients.vitamins,
+                                        minerals: updatedMineralsArray
+                                    }
+                                }
+                            }, TypeOfHandle.MINERALS_DATA, setFormState)
+                        }}
                         nameAndIdNutrients={nutrients.map<{
                             id: number,
                             name: string,
@@ -408,46 +453,46 @@ export default function AddFoodPage() {
                     />
                 );
             case 7:
-                 return (
-                     <Origins
-                         originsForm={formState.origins}
-                         data={{regions, provinces, communes, locations}}
-                         updateOrigins={(origins) =>
-                             selectHandle(
-                                 {
-                                     ...formState,
-                                     origins: origins
-                                 },
-                                 TypeOfHandle.ORIGINS_DATA,
-                                 setFormState
-                             )
-                         }
-                     />
-                 );
-             case 8:
-                 return (
-                     <NewReferences
-                         references={references || []}
-                         nutrientValueForm={formState.nutrientsValueForm}
-                         nameAndIdNutrients={nutrients.map<{
-                             id: number,
-                             name: string,
-                             measurementUnit: string
-                         }>((n) => n)}
-                         onSelectReferenceForNutrients={(nutrientsForm) =>
-                             selectHandle(
-                                 {
-                                     ...formState,
-                                     nutrientsValueForm: nutrientsForm
-                                 },
-                                 TypeOfHandle.REFERENCES_DATA,
-                                 setFormState
-                             )}
-                         cities={cities || []}
-                         authors={authors || []}
-                         journals={journals || []}
-                     />
-                 );
+                return (
+                    <Origins
+                        originsForm={formState.origins}
+                        data={{regions, provinces, communes, locations}}
+                        updateOrigins={(origins) =>
+                            selectHandle(
+                                {
+                                    ...formState,
+                                    origins: origins
+                                },
+                                TypeOfHandle.ORIGINS_DATA,
+                                setFormState
+                            )
+                        }
+                    />
+                );
+            case 8:
+                return (
+                    <NewReferences
+                        references={references || []}
+                        nutrientValueForm={formState.nutrientsValueForm}
+                        nameAndIdNutrients={nutrients.map<{
+                            id: number,
+                            name: string,
+                            measurementUnit: string
+                        }>((n) => n)}
+                        onSelectReferenceForNutrients={(nutrientsForm) =>
+                            selectHandle(
+                                {
+                                    ...formState,
+                                    nutrientsValueForm: nutrientsForm
+                                },
+                                TypeOfHandle.REFERENCES_DATA,
+                                setFormState
+                            )}
+                        cities={cities || []}
+                        authors={authors || []}
+                        journals={journals || []}
+                    />
+                );
             case 9:
                 return (
                     <NewLangualCode
