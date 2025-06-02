@@ -86,8 +86,8 @@ export default function MainSectionHome() {
                     padding: "15px 30px",
                     fontSize: "1.2rem",
                     borderRadius: "0 30px 30px 0",
-                    backgroundColor: "#019803",
-                    borderColor: "#28a745",
+                    backgroundColor: "#015746",
+                    borderColor: "#015746",
                   }}
                 >
                   {t("search.button")}
@@ -100,7 +100,7 @@ export default function MainSectionHome() {
                 style={{
                   padding: "10px 30px",
                   fontSize: "1.2rem",
-                  backgroundColor: "#28a745",
+                  backgroundColor: "#015746",
                   color: "white",
                   border: "none",
                   borderRadius: "5px",

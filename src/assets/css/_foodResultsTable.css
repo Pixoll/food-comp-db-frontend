@@ -175,7 +175,7 @@
   }
 }
 .export-button {
-  background-color: #4CAF50;
+  background-color: #1d6735;
   color: white;
   padding: 10px 15px;
   border: none;
@@ -191,11 +191,11 @@
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-.export-button:hover {
-  background-color: #45a049;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  transform: translateY(-1px);
-}
+    .export-button:hover {
+        background-color: #388e60;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        transform: translateY(-1px);
+    }
 
 .export-button:active {
   background-color: #3e8e41;
@@ -216,10 +216,10 @@
   transition: all 0.2s ease;
 }
 
-.comparison-button.add {
-  background-color: #a8dbc1; 
-  color: #059669;
-}
+    .comparison-button.add {
+        background-color: #a8dbc1;
+        color: #015545;
+    }
 
 .comparison-button.add:hover {
   background-color: #a7f3d0;
