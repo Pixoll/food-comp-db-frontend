@@ -3,7 +3,7 @@
 import {BookOpen, FileText, Layers, PlusCircle, XCircle} from "lucide-react";
 import {useState} from "react";
 import {Article, Journal, JournalVolume} from "@/hooks";
-import {NewArticle, NewVolume} from "./NewReference";
+import {NewArticle, NewVolume} from "./GeneralData";
 import NumericField from "@/app/components/Fields/NumericField";
 import TextField from "@/app/components/Fields/TextField";
 
@@ -34,7 +34,7 @@ const searchIdJournalByIdVolume = (id: number | undefined, volumes: JournalVolum
     return volume?.journalId;
 };
 
-export default function NewArticleByReference({data, dataForm, updateNewArticle}: NewArticleByReferenceProps) {
+export default function ArticleByReference({data, dataForm, updateNewArticle}: NewArticleByReferenceProps) {
     const {journals, journalVolumes} = data;
 
     const [selectedIdJournal, setSelectedIdJournal] = useState<number | undefined>(

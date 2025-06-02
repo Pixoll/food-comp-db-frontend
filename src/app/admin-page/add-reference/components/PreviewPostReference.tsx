@@ -3,7 +3,7 @@ import {useAuth} from "@/context/AuthContext";
 import {useToast} from "@/context/ToastContext";
 import {Author, City, Journal, JournalVolume} from "@/hooks";
 import makeRequest from "@/utils/makeRequest";
-import {NewArticle, ReferenceForm} from "./NewReference";
+import {NewArticle, ReferenceForm} from "./GeneralData";
 
 type PreviewNewReferenceProps = {
     data: ReferenceForm;
@@ -45,7 +45,7 @@ const searchVolumeInfoById = (
     return "Volumen no encontrado";
 };
 
-export default function PreviewNewReference({
+export default function PreviewPostReference({
                                                 data,
                                                 cities,
                                                 authors,
@@ -164,7 +164,7 @@ export default function PreviewNewReference({
                                     </div>
                                     <div>
                                         <span
-                                            className="font-[600] mr-[4px] text-[#475569]">{t("PreviewNewReference.Code")}</span>
+                                            className="font-[600] mr-[4px] text-[#475569]">{t("PreviewPostReference.Code")}</span>
                                         <span className="font-[500]">{data.code}</span>
                                     </div>
                                 </div>
@@ -180,7 +180,7 @@ export default function PreviewNewReference({
                                         </div>
                                         <div>
                                             <span
-                                                className="font-[600] mr-[4px] text-[#475569]">{t("PreviewNewReference.Authors")}</span>
+                                                className="font-[600] mr-[4px] text-[#475569]">{t("PreviewPostReference.Authors")}</span>
                                             <span className="font-[500]">{authorNames.join(" - ")}</span>
                                         </div>
                                     </div>
@@ -197,7 +197,7 @@ export default function PreviewNewReference({
                                         </div>
                                         <div>
                                             <span
-                                                className="font-[600] mr-[4px] text-[#475569]">{t("PreviewNewReference.New_A")}:</span>
+                                                className="font-[600] mr-[4px] text-[#475569]">{t("PreviewPostReference.New_A")}:</span>
                                             <span className="font-[500]">{data.newAuthors.join(" - ")}</span>
                                         </div>
                                     </div>
@@ -214,7 +214,7 @@ export default function PreviewNewReference({
                                         </div>
                                         <div>
                                             <span
-                                                className="font-[600] mr-[4px] text-[#475569]">{t("PreviewNewReference.New")}</span>
+                                                className="font-[600] mr-[4px] text-[#475569]">{t("PreviewPostReference.New")}</span>
                                             <span className="font-[500]">{formatNewArticle(data.newArticle)}</span>
                                         </div>
                                     </div>
@@ -233,7 +233,7 @@ export default function PreviewNewReference({
                                         </div>
                                         <div>
                                             <span
-                                                className="font-[600] mr-[4px] text-[#475569]">{t("PreviewNewReference.City")}</span>
+                                                className="font-[600] mr-[4px] text-[#475569]">{t("PreviewPostReference.City")}</span>
                                             <span className="font-[500]">{cityName}</span>
                                         </div>
                                     </div>
@@ -250,7 +250,7 @@ export default function PreviewNewReference({
                                         </div>
                                         <div>
                                             <span
-                                                className="font-[600] mr-[4px] text-[#475569]">{t("PreviewNewReference.Other")}</span>
+                                                className="font-[600] mr-[4px] text-[#475569]">{t("PreviewPostReference.Other")}</span>
                                             <span className="font-[500]">{data.other}</span>
                                         </div>
                                     </div>
@@ -281,7 +281,7 @@ export default function PreviewNewReference({
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                               d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/>
                     </svg>
-                    {t("PreviewNewReference.button")}
+                    {t("PreviewPostReference.button")}
                 </button>
             </div>
         </div>

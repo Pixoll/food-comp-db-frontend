@@ -324,7 +324,7 @@
       "Preview": "Previsualización"
     }
   },
-  "AddFoodGeneralData": {
+  "FoodGeneralData": {
     "code": "Código del alimento",
     "strain": "Cepa",
     "brand": "Marca",
@@ -413,7 +413,7 @@
     "Other": "Otro valor",
     "Enter": "Escriba otro valor"
   },
-  "PreviewNewReference": {
+  "PreviewPostReference": {
     "Code": "Código:",
     "Authors": "Autores:",
     "New_A": "Nuevos Autores:",
@@ -422,7 +422,7 @@
     "Other": "Otro:",
     "button": "Validar y enviar"
   },
-  "NewAuthors": {
+  "Authors": {
     "author": "Selecciona o agregar un autor",
     "Eliminate": "Eliminar",
     "Select": "Selecciona y agrega autores",
@@ -443,7 +443,7 @@
     "Close": "Cerrar",
     "Save": "Guardar cambios"
   },
-  "NewReference": {
+  "GeneralData": {
     "Add": "Agregar Nueva Referencia",
     "Code": "Código",
     "Title": "Título",

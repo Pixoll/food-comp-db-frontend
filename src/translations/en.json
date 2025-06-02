@@ -324,7 +324,7 @@
       "Preview": "Preview"
     }
   },
-  "AddFoodGeneralData": {
+  "FoodGeneralData": {
     "code": "Food code",
     "strain": "Strain",
     "brand": "Brand",
@@ -408,12 +408,12 @@
     "Main": "Main Nutrients",
     "Minerals": "Minerals"
   },
-  "SelectorWithInput": {
+  "SelectorWithInput": {F
     "button": "Search",
     "Other": "Other value",
     "Enter": "Enter another value"
   },
-  "PreviewNewReference": {
+  "PreviewPostReference": {
     "Code": "Code:",
     "Authors": "Authors:",
     "New_A": "New Authors:",
@@ -422,7 +422,7 @@
     "Other": "Other:",
     "button": "Validate and submit"
   },
-  "NewAuthors": {
+  "Authors": {
     "author": "Select or add an author",
     "Eliminate": "Eliminate",
     "Select": "Select and add authors",
@@ -443,7 +443,7 @@
     "Close": "Close",
     "Save": "Save changes"
   },
-  "NewReference": {
+  "GeneralData": {
     "Add": "Add New Reference",
     "Code": "Code",
     "Title": "Title",

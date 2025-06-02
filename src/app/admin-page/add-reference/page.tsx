@@ -55,15 +55,15 @@ export default function AddReferencePage() {
 
     const {formState, setFormState, onResetForm} = useForm<ReferenceForm>({
         code: 0,
-        type: "article", //Listo <NewReference>
-        title: "", //Listo <NewReference>
+        type: "article", //Listo <GeneralData>
+        title: "", //Listo <GeneralData>
         authorIds: undefined, //Listo <NewAuthor>
         newAuthors: undefined, //Listo<NewAuthor>
-        year: undefined, //Listo <NewReference>
+        year: undefined, //Listo <GeneralData>
         newArticle: undefined, //No listo <Para otro componente>
-        cityId: undefined, //Listo <NewReference>
-        newCity: undefined, //Listo <NewReference>
-        other: undefined, //Listo <NewReference>
+        cityId: undefined, //Listo <GeneralData>
+        newCity: undefined, //Listo <GeneralData>
+        other: undefined, //Listo <GeneralData>
     });
 
 

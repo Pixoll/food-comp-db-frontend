@@ -54,7 +54,7 @@ type Filters = {
   journalsFilter: Set<string>;
 };
 
-export default function NewReferences({
+export default function AddReferences({
   references,
   nutrientValueForm,
   nameAndIdNutrients,

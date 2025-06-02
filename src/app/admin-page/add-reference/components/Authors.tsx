@@ -2,7 +2,7 @@
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Author } from "@/hooks";
-import SelectorWithInput from "../detailFood/SelectorWithInput";
+import SelectorWithInput from "@/app/components/Selector/SelectorWithInput";
 
 type NewAuthorsProps = {
   authorIds?: number[];
@@ -28,7 +28,7 @@ const convert = (authorIds?: number[], newAuthors?: string[], authors?: Author[]
   return list;
 };
 
-export default function NewAuthors({ authorIds, newAuthors, data, updateAuthors }: NewAuthorsProps) {
+export default function Authors({ authorIds, newAuthors, data, updateAuthors }: NewAuthorsProps) {
   const { t } = useTranslation();
   const [selectedAuthors, setSelectedAuthors] = useState<Author[]>(convert(authorIds, newAuthors, data));
   const [selectors, setSelectors] = useState<number[]>(
@@ -76,7 +76,7 @@ export default function NewAuthors({ authorIds, newAuthors, data, updateAuthors 
                     <SelectorWithInput
                         options={data}
                         newValueMaxLength={200}
-                        placeholder={t("NewAuthors.author")}
+                        placeholder={t("Authors.author")}
                         selectedValue={selectedAuthors[index]?.name || ""}
                         onSelect={(id, name) => handleSelectAuthor(index, id, name)}
                     />
@@ -86,7 +86,7 @@ export default function NewAuthors({ authorIds, newAuthors, data, updateAuthors 
                         onClick={() => handleRemoveRow(index)}
                         className="px-[12px] py-[6px] border border-[#dc2626] text-[#dc2626] rounded-[4px] hover:bg-[#fee2e2] transition-colors duration-[200ms] font-[500] text-[14px]"
                     >
-                      {t("NewAuthors.Eliminate")}
+                      {t("Authors.Eliminate")}
                     </button>
                   </div>
                 </div>
@@ -95,7 +95,7 @@ export default function NewAuthors({ authorIds, newAuthors, data, updateAuthors 
         </div>
 
         <h4 className="text-[18px] font-[600] mt-[16px] mb-[8px] text-[#1f2937]">
-          {t("NewAuthors.Select")}
+          {t("Authors.Select")}
         </h4>
 
         <ul className="border border-[#e5e7eb] rounded-[8px] divide-y divide-[#e5e7eb] mb-[16px] overflow-hidden">
@@ -104,12 +104,12 @@ export default function NewAuthors({ authorIds, newAuthors, data, updateAuthors 
                   key={author.id || index}
                   className="px-[16px] py-[12px] bg-[white] hover:bg-[#f9fafb] transition-colors duration-[200ms]"
               >
-                {author.name || t("NewAuthors.No_selected")}
+                {author.name || t("Authors.No_selected")}
               </li>
           ))}
           {selectedAuthors.length === 0 && (
               <li className="px-[16px] py-[12px] bg-[white] text-[#6b7280] italic">
-                {t("NewAuthors.No_selected")}
+                {t("Authors.No_selected")}
               </li>
           )}
         </ul>
@@ -118,7 +118,7 @@ export default function NewAuthors({ authorIds, newAuthors, data, updateAuthors 
             onClick={handleAddSelector}
             className="px-[16px] py-[8px] bg-[#2563eb] text-[white] border-none rounded-[4px] hover:bg-[#1d4ed8] transition-colors duration-[200ms] font-[500] text-[14px] shadow-sm"
         >
-          {t("NewAuthors.Add")}
+          {t("Authors.Add")}
         </button>
       </div>
   );

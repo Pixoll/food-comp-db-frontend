@@ -12,7 +12,7 @@ type NewLangualCodeProps = {
     onLangualCodesChange: (updatedLangualCodeId: number) => void;
 };
 
-export default function NewLangualCode({
+export default function AddLangualCode({
                                            langualCodes,
                                            selectedLangualCodes,
                                            onLangualCodesChange

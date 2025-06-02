@@ -57,7 +57,7 @@ type NewGeneralDataProps = {
     subspecies: Subspecies[];
 };
 
-export default function AddFoodGeneralData({
+export default function FoodGeneralData({
                                            data,
                                            onUpdate,
                                            groups,
@@ -84,7 +84,7 @@ export default function AddFoodGeneralData({
         <form className="p-[16px] bg-[white] rounded-[4px]">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-[16px] mb-[12px]">
                 <TextField
-                    label={t("DetailFood.code")}
+                    label={t("FoodGeneralData.code")}
                     required
                     name="code"
                     maxLength={8}
@@ -98,37 +98,37 @@ export default function AddFoodGeneralData({
                 />
 
                 <TextField
-                    label={t("AddFoodGeneralData.strain")}
+                    label={t("FoodGeneralData.strain")}
                     name="strain"
                     maxLength={50}
                     icon={<ListIcon size={18}/>}
                     value={formData.strain || ""}
                     onChange={handleInputChange}
-                    placeholder={t("AddFoodGeneralData.strain")}
+                    placeholder={t("FoodGeneralData.strain")}
                     fullWidth
                 />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-[16px] mb-[12px]">
                 <TextField
-                    label={t("AddFoodGeneralData.brand")}
+                    label={t("FoodGeneralData.brand")}
                     name="brand"
                     maxLength={8}
                     icon={<PackageIcon size={18}/>}
                     value={formData.brand || ""}
                     onChange={handleInputChange}
-                    placeholder={t("AddFoodGeneralData.brand")}
+                    placeholder={t("FoodGeneralData.brand")}
                     fullWidth
                 />
 
                 <TextField
-                    label={t("AddFoodGeneralData.Observation")}
+                    label={t("FoodGeneralData.Observation")}
                     name="observation"
                     maxLength={200}
                     icon={<FileTextIcon size={18}/>}
                     value={formData.observation || ""}
                     onChange={handleInputChange}
-                    placeholder={t("AddFoodGeneralData.Observation")}
+                    placeholder={t("FoodGeneralData.Observation")}
                     fullWidth
                 />
             </div>
@@ -147,7 +147,7 @@ export default function AddFoodGeneralData({
                             name: group.name,
                         }))}
                         selectedValue={searchGroupNameById(formData.groupId, groups) ?? ""}
-                        placeholder={t("AddFoodGeneralData.select_G")}
+                        placeholder={t("FoodGeneralData.select_G")}
                         onSelect={(id) => {
                             if (id !== null) {
                                 const updatedFormData = {
@@ -176,7 +176,7 @@ export default function AddFoodGeneralData({
                             name: type.name,
                         }))}
                         selectedValue={searchTypeNameById(formData.typeId, types) ?? ""}
-                        placeholder={t("AddFoodGeneralData.select_A")}
+                        placeholder={t("FoodGeneralData.select_A")}
                         onSelect={(id) => {
                             if (id !== null) {
                                 const updatedFormData = {
@@ -193,7 +193,7 @@ export default function AddFoodGeneralData({
             <div className="mb-[12px]">
                 <div className="mb-[8px]">
                     <label className="block text-[14px] font-medium text-[#4B5563]">
-                        {t("AddFoodGeneralData.name_scientist")}
+                        {t("FoodGeneralData.name_scientist")}
                     </label>
                 </div>
                 {scientificNames && (
@@ -203,7 +203,7 @@ export default function AddFoodGeneralData({
                             name: sname.name,
                         }))}
                         selectedValue={searchScientificNameById(formData.scientificNameId, scientificNames) ?? ""}
-                        placeholder={t("AddFoodGeneralData.Select_scientific")}
+                        placeholder={t("FoodGeneralData.Select_scientific")}
                         onSelect={(id) => {
                             if (id !== null) {
                                 const updatedFormData = {
@@ -221,7 +221,7 @@ export default function AddFoodGeneralData({
             <div className="mb-[12px]">
                 <div className="mb-[8px]">
                     <label className="block text-[14px] font-medium text-[#4B5563]">
-                        {t("AddFoodGeneralData.Subspecies")}
+                        {t("FoodGeneralData.Subspecies")}
                     </label>
                 </div>
                 {subspecies && (
@@ -231,7 +231,7 @@ export default function AddFoodGeneralData({
                             name: sname.name,
                         }))}
                         selectedValue={searchSubspeciesNameById(formData.subspeciesId, subspecies) ?? ""}
-                        placeholder={t("AddFoodGeneralData.Select_subspecies")}
+                        placeholder={t("FoodGeneralData.Select_subspecies")}
                         onSelect={(id) => {
                             if (id !== null) {
                                 const updatedFormData = {
@@ -257,7 +257,7 @@ export default function AddFoodGeneralData({
                     <div key={lang.code} className={index > 0 ? "mt-[10px]" : ""}>
                         <TextField
                             maxLength={200}
-                            placeholder={`${t("AddFoodGeneralData.name_com")} (${lang.code})`}
+                            placeholder={`${t("FoodGeneralData.name_com")} (${lang.code})`}
                             value={formData.commonName[lang.code] || ""}
                             error={lang.code === "es" && !formData.commonName[lang.code]}
                             errorMessage={lang.code === "es" && !formData.commonName[lang.code] ? "Ingrese el nombre en español." : ""}
@@ -281,14 +281,14 @@ export default function AddFoodGeneralData({
             <div className="mb-[12px]">
                 <div className="mb-[8px]">
                     <label className="block text-[14px] font-medium text-[#4B5563]">
-                        {t("AddFoodGeneralData.Ingredients")}
+                        {t("FoodGeneralData.Ingredients")}
                     </label>
                 </div>
                 {languages?.map((lang, index) => (
                     <div key={lang.code} className={index > 0 ? "mt-[10px]" : ""}>
                         <TextField
                             maxLength={400}
-                            placeholder={`${t("AddFoodGeneralData.Ingredient")} (${lang.code})`}
+                            placeholder={`${t("FoodGeneralData.Ingredient")} (${lang.code})`}
                             value={formData.ingredients[lang.code] || ""}
                             onChange={(e) => {
                                 const updatedFormData = {

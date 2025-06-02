@@ -16,5 +16,5 @@ export * from "./ReferencesList";
 export { default as ReferencesList } from "./ReferencesList";
 export * from "./RequiredFieldLabel";
 export { default as RequiredFieldLabel } from "./RequiredFieldLabel";
-export * from "./SelectorWithInput";
-export { default as SelectorWithInput } from "./SelectorWithInput";
+export * from "../../../app/components/Selector/SelectorWithInput";
+export { default as SelectorWithInput } from "../../../app/components/Selector/SelectorWithInput";

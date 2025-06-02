@@ -16,7 +16,7 @@ import {
   searchScientificNameById,
   searchSubspeciesNameById,
   searchTypeNameById,
-} from "@/app/admin-page/add-food/components/AddFoodGeneralData";
+} from "@/app/admin-page/add-food/components/FoodGeneralData";
 import "@/assets/css/_PreviewDataForm.css";
 
 type NewFood = {

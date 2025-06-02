@@ -5,8 +5,7 @@ import { useTranslation } from "react-i18next";
 import { City } from "@/hooks";
 import NumericField from "@/app/components/Fields/NumericField";
 import TextField from "@/app/components/Fields/TextField";
-import SelectorWithInput from "../detailFood/SelectorWithInput";
-import "@/assets/css/_newReference.css";
+import SelectorWithInput from "../../../components/Selector/SelectorWithInput";
 
 export type ReferenceForm = {
   code: number;
@@ -57,7 +56,7 @@ const searchCityNameByID = (
   return city?.name;
 };
 
-export default function NewReference({
+export default function GeneralData({
   code,
   type,
   title,
@@ -103,15 +102,15 @@ export default function NewReference({
   const getReferenceTypeIcon = () => {
     switch (type) {
       case "book":
-        return <Book className="me-2"/>;
+        return <Book className="me-[8px]"/>;
       case "article":
-        return <FileText className="me-2"/>;
+        return <FileText className="me-[8px]"/>;
       case "website":
-        return <Globe className="me-2"/>;
+        return <Globe className="me-[8px]"/>;
       case "report":
-        return <Info className="me-2"/>;
+        return <Info className="me-[8px]"/>;
       case "thesis":
-        return <FileText className="me-2"/>;
+        return <FileText className="me-[8px]"/>;
       default:
         return null;
     }
@@ -129,14 +128,14 @@ export default function NewReference({
       <div className="mt-[16px] rounded-[8px] border border-[#e5e7eb] shadow-sm bg-white overflow-hidden">
         <div className="flex items-center p-[16px] border-b border-[#e5e7eb] bg-[#f9fafb]">
           <span className="mr-[12px] text-[#4b5563]">{getReferenceTypeIcon()}</span>
-          <h2 className="text-[18px] font-[600] text-[#111827] m-0">{t("NewReference.Add")}</h2>
+          <h2 className="text-[18px] font-[600] text-[#111827] m-0">{t("GeneralData.Add")}</h2>
         </div>
 
         <div className="p-[20px]">
           <form className="space-y-[20px]">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-[16px]">
               <NumericField
-                  label={t("NewReference.Code")}
+                  label={t("GeneralData.Code")}
                   value={code}
                   onChange={() => {}}
                   id="formReferenceCode"
@@ -152,7 +151,7 @@ export default function NewReference({
                     className="text-[14px] font-[500] mb-[4px] text-[#374151] flex items-center"
                 >
                   <span className="mr-[8px] text-[#4b5563]"><Book className="w-[18px] h-[18px]" /></span>
-                  {t("NewReference.Type")}
+                  {t("GeneralData.Type")}
                   <span className="text-[#dc2626] ml-[4px]">*</span>
                 </label>
 
@@ -162,22 +161,22 @@ export default function NewReference({
                     onChange={(e) => handleInputChange("type", e.target.value as ReferenceForm["type"])}
                     className="px-[12px] py-[8px] rounded-[4px] border border-[#d1d5db] bg-[white] focus:outline-none focus:ring-1 focus:ring-[#3b82f6] focus:border-[#3b82f6] w-full"
                 >
-                  <option value="report">{t("NewReference.Report")}</option>
-                  <option value="thesis">{t("NewReference.Thesis")}</option>
-                  <option value="article">{t("NewReference.Article")}</option>
-                  <option value="website">{t("NewReference.Website")}</option>
-                  <option value="book">{t("NewReference.Book")}</option>
+                  <option value="report">{t("GeneralData.Report")}</option>
+                  <option value="thesis">{t("GeneralData.Thesis")}</option>
+                  <option value="article">{t("GeneralData.Article")}</option>
+                  <option value="website">{t("GeneralData.Website")}</option>
+                  <option value="book">{t("GeneralData.Book")}</option>
                 </select>
               </div>
             </div>
             <TextField
-                label={t("NewReference.Title")}
+                label={t("GeneralData.Title")}
                 value={referenceForm.title}
                 onChange={(e) => handleInputChange("title", e.target.value)}
                 id="formReferenceTitle"
                 fullWidth
                 maxLength={300}
-                placeholder={t("NewReference.Enter_t")}
+                placeholder={t("GeneralData.Enter_t")}
                 error={referenceForm.title.length === 0}
                 errorMessage="Ingrese el título."
                 icon={<span className="text-[#4b5563]"><FileText className="w-[18px] h-[18px]" /></span>}
@@ -191,13 +190,13 @@ export default function NewReference({
                     className="text-[14px] font-[500] mb-[4px] text-[#374151] flex items-center"
                 >
                   <span className="mr-[8px] text-[#4b5563]"><MapPin className="w-[18px] h-[18px]" /></span>
-                  {t("NewReference.City")}
+                  {t("GeneralData.City")}
                 </label>
 
                 <SelectorWithInput
                     options={cities}
                     newValueMaxLength={100}
-                    placeholder={t("NewReference.Select")}
+                    placeholder={t("GeneralData.Select")}
                     selectedValue={
                         searchCityNameByID(referenceForm.cityId, cities) || newCity
                     }
@@ -212,7 +211,7 @@ export default function NewReference({
               </div>
 
               <NumericField
-                  label={t("NewReference.Year")}
+                  label={t("GeneralData.Year")}
                   value={referenceForm.year}
                   onChange={(e) => handleInputChange("year", e)}
                   id="formReferenceYear"
@@ -232,13 +231,13 @@ export default function NewReference({
             </div>
 
             <TextField
-                label={t("NewReference.Other")}
+                label={t("GeneralData.Other")}
                 value={referenceForm.other || ""}
                 onChange={(e) => handleInputChange("other", e.target.value)}
                 id="formReferenceOther"
                 fullWidth
                 maxLength={100}
-                placeholder={t("NewReference.Additional")}
+                placeholder={t("GeneralData.Additional")}
                 error={isTypeWebsiteOrBook && !referenceForm.other?.length}
                 errorMessage="Ingrese la información adicional."
                 icon={<span className="text-[#4b5563]"><Info className="w-[18px] h-[18px]" /></span>}
