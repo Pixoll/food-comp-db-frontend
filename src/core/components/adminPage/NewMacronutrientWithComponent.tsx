@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Ellipsis } from "lucide-react";
+import { Ellipsis, AlertCircle, ChevronDown, ChevronUp } from "lucide-react";
 import {
   getNutrientNameById,
   NutrientMeasurementForm,
@@ -10,6 +10,8 @@ import {
   NutrientSummary,
 } from "@/pages/AdminPage";
 import { NutrientMeasurementFormOnlyNumbers } from "./NewNutrients";
+import NumericField from "@/app/components/Fields/NumericField";
+import ToolTip from "@/app/components/ToolTip";
 
 type NewMacronutrientWithComponentProps = {
   macronutrientsWithComponents: NutrientMeasurementWithComponentsForm[];
@@ -121,326 +123,531 @@ export default function NewMacronutrientWithComponent({
   };
 
   return (
-    <div>
-      {macronutrientsWithComponents.map((nutrient) => (
-        <Card key={nutrient.nutrientId} className="card-of-new-nutrient">
-          <Card.Header className="card-of-new-nutrient-header">
-            <Button
-              onClick={() => toggleCollapse(nutrient.nutrientId.toString())}
-              aria-controls={`collapse-${nutrient.nutrientId}`}
-              aria-expanded={open.has(nutrient.nutrientId.toString())}
-              variant="link"
-              className="card-of-new-nutrient-toggle"
-            >
-              {`${getNutrientNameById(
-                nutrient.nutrientId,
-                nameAndIdNutrients
-              )}`}
-            </Button>
-          </Card.Header>
-          <Collapse in={open.has(nutrient.nutrientId.toString())}>
-            <Card.Body className="card-of-new-nutrient-collapse">
-              <Table striped bordered hover responsive>
-                <thead>
-                <tr>
-                  <th>{t("NewMacronutrient.name")}</th>
-                  <th>{t("NewMacronutrient.mean")}</th>
-                  <th>{t("NewMacronutrient.Deviation")}</th>
-                  <th>{t("NewMacronutrient.min")}</th>
-                  <th>{t("NewMacronutrient.max")}</th>
-                  <th>{t("NewMacronutrient.Size")}</th>
-                  <th>{t("NewMacronutrient.type")}</th>
-                  <th>{t("NewMacronutrient.Action")}</th>
-                </tr>
-                </thead>
-                <tbody>
-                {/* Renderizado de los componentes hijos */}
-                {nutrient.components?.map((component) => (
-                  <tr key={component.nutrientId}>
-                    {editingComponentId === component.nutrientId ? (
-                      <>
-                        <td>
-                          {getNutrientNameById(
-                            component.nutrientId,
-                            nameAndIdNutrients
-                          )}
-                        </td>
-                        <td>
-                          <Form.Control
-                            type="number"
-                            value={formData?.average ?? ""}
-                            isInvalid={isAverageInvalid}
-                            onChange={(e) =>
-                              handleInputChange("average", e.target.value.length > 0 ? +e.target.value : undefined)
-                            }
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            {!isValueDefined("average") ? "Ingrese el promedio." : "Promedio debe ser al menos 0."}
-                          </Form.Control.Feedback>
-                        </td>
-                        <td>
-                          <Form.Control
-                            type="number"
-                            value={formData?.deviation ?? ""}
-                            isInvalid={isDeviationInvalid}
-                            onChange={(e) =>
-                              handleInputChange("deviation", e.target.value.length > 0 ? +e.target.value : undefined)
-                            }
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            Desviación debe ser al menos 0.
-                          </Form.Control.Feedback>
-                        </td>
-                        <td>
-                          <Form.Control
-                            type="number"
-                            value={formData?.min ?? ""}
-                            isInvalid={isMinInvalid}
-                            onChange={(e) =>
-                              handleInputChange("min", e.target.value.length > 0 ? +e.target.value : undefined)
-                            }
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            Mínimo debe ser al menos 0.
-                          </Form.Control.Feedback>
-                        </td>
-                        <td>
-                          <Form.Control
-                            type="number"
-                            value={formData?.max ?? ""}
-                            isInvalid={isMaxInvalid}
-                            onChange={(e) =>
-                              handleInputChange("max", e.target.value.length > 0 ? +e.target.value : undefined)
-                            }
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            {isValueLessThan("max", 0)
-                              ? "Máximo debe ser al menos 0."
-                              : "Máximo debe ser mayor o igual al mínimo"}
-                          </Form.Control.Feedback>
-                        </td>
-                        <td>
-                          <Form.Control
-                            type="number"
-                            value={formData?.sampleSize ?? ""}
-                            isInvalid={isSampleSizeInvalid}
-                            onChange={(e) =>
-                              handleInputChange("sampleSize", e.target.value.length > 0 ? +e.target.value : undefined)
-                            }
-                          />
-                          <Form.Control.Feedback type="invalid">
-                            {isValueLessThan("sampleSize", 1)
-                              ? "Tamaño de muestra debe ser al menos 1."
-                              : "Tamaño de muestra debe ser un entero."}
-                          </Form.Control.Feedback>
-                        </td>
-                        <td>
-                          <Form.Select
-                            value={formData?.dataType || ""}
-                            isInvalid={isDataTypeInvalid}
-                            onChange={(e) =>
-                              handleInputChange("dataType", e.target.value)
-                            }
-                          >
-                            <option value="">Ninguna</option>
-                            <option value="analytic">{t("NewMacronutrient.Analytical")}</option>
-                            <option value="calculated">{t("NewMacronutrient.Calculated")}</option>
-                            <option value="assumed">{t("NewMacronutrient.Taken")}</option>
-                            <option value="borrowed">{t("NewMacronutrient.Borrowed")}</option>
-                          </Form.Select>
-                          <Form.Control.Feedback type="invalid">
-                            Ingrese el tipo de dato.
-                          </Form.Control.Feedback>
-                        </td>
-                        <td>
-                          <Button className="btn-save" onClick={saveChanges}>
-                            {t("NewMacronutrient.save")}
-                          </Button>{" "}
-                          <Button className="btn-cancel" onClick={cancelEditing}>
-                            {t("NewMacronutrient.cancel")}
-                          </Button>
-                        </td>
-                      </>
-                    ) : (
-                      <>
-                        <td>
-                          {getNutrientNameById(
-                            component.nutrientId,
-                            nameAndIdNutrients
-                          )}
-                        </td>
-                        <td>{component.average ?? <Ellipsis size={35}></Ellipsis>}</td>
-                        <td>{component.deviation ?? <Ellipsis size={35}></Ellipsis>}</td>
-                        <td>{component.min ?? <Ellipsis size={35}></Ellipsis>}</td>
-                        <td>{component.max ?? <Ellipsis size={35}></Ellipsis>}</td>
-                        <td>{component.sampleSize ?? <Ellipsis size={35}></Ellipsis>}</td>
-                        <td>
-                          {component.dataType
-                            ? component.dataType.charAt(0).toUpperCase() +
-                            component.dataType.slice(1)
-                            : <Ellipsis size={35}></Ellipsis>}
-                        </td>
-                        <td>
-                          <Button
-                            className="btn-edit"
-                            onClick={() => startEditing(component)}
-                          >
-                            {t("NewMacronutrient.Edit")}
-                          </Button>{" "}
-                        </td>
-                      </>
-                    )}
-                  </tr>
-                ))}
-
-                {/* Renderizar la fila del nutriente padre */}
-                <tr>
-                  {editingComponentId === nutrient.nutrientId ? (
-                    <>
-                      <td>
-                        {getNutrientNameById(
-                          nutrient.nutrientId,
-                          nameAndIdNutrients
-                        )}
-                      </td>
-                      <td>
-                        <Form.Control
-                          type="number"
-                          value={formData?.average ?? ""}
-                          isInvalid={isAverageInvalid}
-                          onChange={(e) =>
-                            handleInputChange("average", e.target.value.length > 0 ? +e.target.value : undefined)
-                          }
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {!isValueDefined("average") ? "Ingrese el promedio." : "Promedio debe ser al menos 0."}
-                        </Form.Control.Feedback>
-                      </td>
-                      <td>
-                        <Form.Control
-                          type="number"
-                          value={formData?.deviation ?? ""}
-                          isInvalid={isDeviationInvalid}
-                          onChange={(e) =>
-                            handleInputChange("deviation", e.target.value.length > 0 ? +e.target.value : undefined)
-                          }
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          Desviación debe ser al menos 0.
-                        </Form.Control.Feedback>
-                      </td>
-                      <td>
-                        <Form.Control
-                          type="number"
-                          value={formData?.min ?? ""}
-                          isInvalid={isMinInvalid}
-                          onChange={(e) =>
-                            handleInputChange("min", e.target.value.length > 0 ? +e.target.value : undefined)
-                          }
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          Mínimo debe ser al menos 0.
-                        </Form.Control.Feedback>
-                      </td>
-                      <td>
-                        <Form.Control
-                          type="number"
-                          value={formData?.max ?? ""}
-                          isInvalid={isMaxInvalid}
-                          onChange={(e) =>
-                            handleInputChange("max", e.target.value.length > 0 ? +e.target.value : undefined)
-                          }
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {isValueLessThan("max", 0)
-                            ? "Máximo debe ser al menos 0."
-                            : "Máximo debe ser mayor o igual al mínimo"}
-                        </Form.Control.Feedback>
-                      </td>
-                      <td>
-                        <Form.Control
-                          type="number"
-                          value={formData?.sampleSize ?? ""}
-                          isInvalid={isSampleSizeInvalid}
-                          onChange={(e) =>
-                            handleInputChange("sampleSize", e.target.value.length > 0 ? +e.target.value : undefined)
-                          }
-                        />
-                        <Form.Control.Feedback type="invalid">
-                          {isValueLessThan("sampleSize", 1)
-                            ? "Tamaño de muestra debe ser al menos 1."
-                            : "Tamaño de muestra debe ser un entero."}
-                        </Form.Control.Feedback>
-                      </td>
-                      <td>
-                        <Form.Select
-                          value={formData?.dataType || ""}
-                          isInvalid={isDataTypeInvalid}
-                          onChange={(e) =>
-                            handleInputChange("dataType", e.target.value)
-                          }
-                        >
-                          <option value="">Ninguna</option>
-                          <option value="analytic">{t("NewMacronutrient.Analytical")}</option>
-                          <option value="calculated">{t("NewMacronutrient.Calculated")}</option>
-                          <option value="assumed">{t("NewMacronutrient.Taken")}</option>
-                          <option value="borrowed">{t("NewMacronutrient.Borrowed")}</option>
-                        </Form.Select>
-                        <Form.Control.Feedback type="invalid">
-                          Ingrese el tipo de dato.
-                        </Form.Control.Feedback>
-                      </td>
-                      <td>
-                        <Button className="btn-save" onClick={saveChanges}>
-                          {t("NewMacronutrient.save")}
-                        </Button>{" "}
-                        <Button className="btn-cancel" onClick={cancelEditing}>
-                          {t("NewMacronutrient.cancel")}
-                        </Button>
-                      </td>
-                    </>
+      <div className="p-[20px] rounded-[8px] font-['Poppins',_sans-serif] text-[14px]">
+        {macronutrientsWithComponents.map((nutrient) => (
+            <div key={nutrient.nutrientId} className="mb-[16px] border-[1px] border-[#dee2e6] rounded-[5px] overflow-hidden">
+              <div
+                  className="bg-[#8fbc8f] p-[12px] flex justify-between items-center cursor-pointer"
+                  onClick={() => toggleCollapse(nutrient.nutrientId.toString())}
+              >
+                <div className="font-[700] text-[16px] text-[white]">
+                  {getNutrientNameById(nutrient.nutrientId, nameAndIdNutrients)}
+                </div>
+                <div>
+                  {open.has(nutrient.nutrientId.toString()) ? (
+                      <ChevronUp className="text-[white]" />
                   ) : (
-                    <>
-                      <td>
-                        <strong>
-                          {getNutrientNameById(
-                            nutrient.nutrientId,
-                            nameAndIdNutrients
-                          )}
-                        </strong>
-                      </td>
-                      <td>{nutrient.average ?? <Ellipsis size={35}></Ellipsis>}</td>
-                      <td>{nutrient.deviation ?? <Ellipsis size={35}></Ellipsis>}</td>
-                      <td>{nutrient.min ?? <Ellipsis size={35}></Ellipsis>}</td>
-                      <td>{nutrient.max ?? <Ellipsis size={35}></Ellipsis>}</td>
-                      <td>{nutrient.sampleSize ?? <Ellipsis size={35}></Ellipsis>}</td>
-                      <td>
-                        {nutrient.dataType
-                          ? nutrient.dataType.charAt(0).toUpperCase() +
-                          nutrient.dataType.slice(1)
-                          : <Ellipsis size={35}></Ellipsis>}
-                      </td>
-                      <td>
-                        <Button
-                          className="btn-edit"
-                          onClick={() =>
-                            startEditing({
-                              ...nutrient,
-                            })
-                          }
-                        >
-                          {t("NewMacronutrient.Edit")}
-                        </Button>
-                      </td>
-                    </>
+                      <ChevronDown className="text-[white]" />
                   )}
-                </tr>
-                </tbody>
-              </Table>
-            </Card.Body>
-          </Collapse>
-        </Card>
-      ))}
-    </div>
+                </div>
+              </div>
+
+              {open.has(nutrient.nutrientId.toString()) && (
+                  <div className="p-[12px]">
+                    <div className="overflow-x-auto">
+                      <table className="w-full border-[1px] border-[#dee2e6] rounded-[5px] table-fixed">
+                        <colgroup>
+                          <col className="w-[20%]" />
+                          <col className="w-[10%]" />
+                          <col className="w-[10%]" />
+                          <col className="w-[10%]" />
+                          <col className="w-[10%]" />
+                          <col className="w-[15%]" />
+                          <col className="w-[15%]" />
+                          <col className="w-[10%]" />
+                        </colgroup>
+                        <thead>
+                        <tr className="bg-[#8fbc8f] rounded-[5px]">
+                          <th className="bg-[white] text-[black] font-[700] p-[8px] text-left">
+                            {t("NewMacronutrient.name")}
+                          </th>
+                          <th className="bg-[white] text-[black] font-[700] p-[8px] text-center">
+                            {t("NewMacronutrient.mean")}
+                          </th>
+                          <th className="bg-[white] text-[black] font-[700] p-[8px] text-center">
+                            {t("NewMacronutrient.Deviation")}
+                          </th>
+                          <th className="bg-[white] text-[black] font-[700] p-[8px] text-center">
+                            {t("NewMacronutrient.min")}
+                          </th>
+                          <th className="bg-[white] text-[black] font-[700] p-[8px] text-center">
+                            {t("NewMacronutrient.max")}
+                          </th>
+                          <th className="bg-[white] text-[black] font-[700] p-[8px] text-center">
+                            {t("NewMacronutrient.Size")}
+                          </th>
+                          <th className="bg-[white] text-[black] font-[700] p-[8px] text-center">
+                            {t("NewMacronutrient.type")}
+                          </th>
+                          <th className="bg-[white] text-[black] font-[700] p-[8px] text-center">
+                            {t("NewMacronutrient.Action")}
+                          </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {nutrient.components?.map((component, index) => (
+                            <tr
+                                key={component.nutrientId}
+                                className={`${
+                                    index % 2 === 0 ? "bg-[#f2f2f2]" : "bg-[white]"
+                                } h-[60px] transition-all duration-200`}
+                            >
+                              {editingComponentId === component.nutrientId ? (
+                                  <>
+                                    <td className="p-[8px] align-middle">
+                                      <div className="text-[14px]">
+                                        {getNutrientNameById(component.nutrientId, nameAndIdNutrients)}
+                                      </div>
+                                    </td>
+                                    <td className="p-[4px] text-center relative">
+                                      <div className="flex flex-row">
+                                        <NumericField
+                                            value={formData?.average}
+                                            error={isAverageInvalid}
+                                            errorMessage=""
+                                            onChange={(value) => handleInputChange("average", value)}
+                                            allowDecimals={true}
+                                            min={0}
+                                            fullWidth={true}
+                                        />
+                                        {isAverageInvalid && (
+                                            <ToolTip
+                                                content={!isValueDefined("average")
+                                                    ? "Ingrese el promedio."
+                                                    : "Promedio debe ser al menos 0."}
+                                            >
+                                              <AlertCircle className="absolute right-[4px] top-[50%] -translate-y-[50%] h-[16px] w-[16px] text-[#ef4444]" />
+                                            </ToolTip>
+                                        )}
+                                      </div>
+                                    </td>
+                                    <td className="p-[4px] text-center relative">
+                                      <div className="flex flex-row">
+                                        <NumericField
+                                            value={formData?.deviation}
+                                            error={isDeviationInvalid}
+                                            errorMessage=""
+                                            onChange={(value) => handleInputChange("deviation", value)}
+                                            allowDecimals={true}
+                                            min={0}
+                                            fullWidth={true}
+                                        />
+                                        {isDeviationInvalid && (
+                                            <ToolTip content="Desviación debe ser al menos 0.">
+                                              <AlertCircle className="absolute right-[8px] top-[50%] -translate-y-[50%] h-[16px] w-[16px] text-[#ef4444]"/>
+                                            </ToolTip>
+                                        )}
+                                      </div>
+                                    </td>
+                                    <td className="p-[4px] text-center relative">
+                                      <div className="flex flex-row">
+                                        <NumericField
+                                            value={formData?.min}
+                                            error={isMinInvalid}
+                                            errorMessage=""
+                                            onChange={(value) => handleInputChange("min", value)}
+                                            allowDecimals={true}
+                                            min={0}
+                                            className="w-full"
+                                        />
+                                        {isMinInvalid && (
+                                            <ToolTip content="Mínimo debe ser al menos 0.">
+                                              <AlertCircle className="absolute right-[8px] top-[50%] -translate-y-[50%] h-[16px] w-[16px] text-[#ef4444]"/>
+                                            </ToolTip>
+                                        )}
+                                      </div>
+                                    </td>
+                                    <td className="p-[4px] text-center relative">
+                                      <div className="flex flex-row">
+                                        <NumericField
+                                            value={formData?.max}
+                                            error={isMaxInvalid}
+                                            errorMessage=""
+                                            onChange={(value) => handleInputChange("max", value)}
+                                            allowDecimals={true}
+                                            min={formData?.min ?? 0}
+                                            className="w-full"
+                                        />
+                                        {isMaxInvalid && (
+                                            <ToolTip
+                                                content={
+                                                  isValueLessThan("max", 0)
+                                                      ? "Máximo debe ser al menos 0."
+                                                      : "Máximo debe ser mayor o igual al mínimo"
+                                                }
+                                            >
+                                              <AlertCircle className="absolute right-[8px] top-[50%] -translate-y-[50%] h-[16px] w-[16px] text-[#ef4444]"/>
+                                            </ToolTip>
+                                        )}
+                                      </div>
+                                    </td>
+                                    <td className="p-[4px] text-center relative">
+                                      <div className="flex flex-row">
+                                        <NumericField
+                                            value={formData?.sampleSize}
+                                            error={isSampleSizeInvalid}
+                                            errorMessage=""
+                                            onChange={(value) => handleInputChange("sampleSize", value)}
+                                            allowDecimals={false}
+                                            min={1}
+                                            className="w-full"
+                                        />
+                                        {isSampleSizeInvalid && (
+                                            <ToolTip
+                                                content={
+                                                  isValueLessThan("sampleSize", 1)
+                                                      ? "Tamaño de muestra debe ser al menos 1."
+                                                      : "Tamaño de muestra debe ser un entero."
+                                                }
+                                            >
+                                              <AlertCircle className="absolute right-[8px] top-[50%] -translate-y-[50%] h-[16px] w-[16px] text-[#ef4444]"/>
+                                            </ToolTip>
+                                        )}
+                                      </div>
+                                    </td>
+                                    <td className="p-[4px] text-center relative">
+                                      <div className="flex flex-row">
+                                        <select
+                                            value={formData?.dataType || ""}
+                                            className={`w-full p-[8px] rounded-[4px] border ${
+                                                isDataTypeInvalid
+                                                    ? "border-[#ef4444]"
+                                                    : "border-[#d1d5db]"
+                                            }`}
+                                            onChange={(e) => handleInputChange("dataType", e.target.value)}
+                                        >
+                                          <option value="">Ninguna</option>
+                                          <option value="analytic">
+                                            {t("NewMacronutrient.Analytical")}
+                                          </option>
+                                          <option value="calculated">
+                                            {t("NewMacronutrient.Calculated")}
+                                          </option>
+                                          <option value="assumed">
+                                            {t("NewMacronutrient.Taken")}
+                                          </option>
+                                          <option value="borrowed">
+                                            {t("NewMacronutrient.Borrowed")}
+                                          </option>
+                                        </select>
+                                        {isDataTypeInvalid && (
+                                            <ToolTip content="Ingrese el tipo de dato.">
+                                              <AlertCircle className="absolute right-[8px] top-[50%] -translate-y-[50%] h-[16px] w-[16px] text-[#ef4444]"/>
+                                            </ToolTip>
+                                        )}
+                                      </div>
+                                    </td>
+                                    <td className="p-[8px] text-center">
+                                      <div className="flex flex-col space-y-[8px] justify-center">
+                                        <button
+                                            className="bg-[#3cb371] hover:bg-[#2e8b57] text-[white] py-[4px] px-[12px] rounded-[4px] transition-colors w-full"
+                                            onClick={saveChanges}
+                                        >
+                                          {t("NewMacronutrient.save")}
+                                        </button>
+                                        <button
+                                            className="bg-[#cd5c5c] hover:bg-[#b22222] text-[white] py-[4px] px-[12px] rounded-[4px] transition-colors w-full"
+                                            onClick={cancelEditing}
+                                        >
+                                          {t("NewMacronutrient.cancel")}
+                                        </button>
+                                      </div>
+                                    </td>
+                                  </>
+                              ) : (
+                                  <>
+                                    <td className="p-[8px] align-middle">
+                                      {getNutrientNameById(component.nutrientId, nameAndIdNutrients)}
+                                    </td>
+                                    <td className="text-center p-[8px] align-middle">
+                                      {component.average ?? (
+                                          <div className="flex justify-center">
+                                            <Ellipsis size={24} />
+                                          </div>
+                                      )}
+                                    </td>
+                                    <td className="text-center p-[8px] align-middle">
+                                      {component.deviation ?? (
+                                          <div className="flex justify-center">
+                                            <Ellipsis size={24} />
+                                          </div>
+                                      )}
+                                    </td>
+                                    <td className="text-center p-[8px] align-middle">
+                                      {component.min ?? (
+                                          <div className="flex justify-center">
+                                            <Ellipsis size={24} />
+                                          </div>
+                                      )}
+                                    </td>
+                                    <td className="text-center p-[8px] align-middle">
+                                      {component.max ?? (
+                                          <div className="flex justify-center">
+                                            <Ellipsis size={24} />
+                                          </div>
+                                      )}
+                                    </td>
+                                    <td className="text-center p-[8px] align-middle">
+                                      {component.sampleSize ?? (
+                                          <div className="flex justify-center">
+                                            <Ellipsis size={24} />
+                                          </div>
+                                      )}
+                                    </td>
+                                    <td className="text-center p-[8px] align-middle">
+                                      {component.dataType ? (
+                                          component.dataType.charAt(0).toUpperCase() +
+                                          component.dataType.slice(1)
+                                      ) : (
+                                          <div className="flex justify-center">
+                                            <Ellipsis size={24} />
+                                          </div>
+                                      )}
+                                    </td>
+                                    <td className="p-[8px] text-center align-middle">
+                                      <button
+                                          className="bg-[#6b8e23] hover:bg-[#556b2f] text-[white] py-[4px] px-[12px] rounded-[4px] transition-colors"
+                                          onClick={() => startEditing(component)}
+                                      >
+                                        {t("NewMacronutrient.Edit")}
+                                      </button>
+                                    </td>
+                                  </>
+                              )}
+                            </tr>
+                        ))}
+
+                        <tr className="bg-[#e6f0e6] h-[60px] transition-all duration-200 font-[600]">
+                          {editingComponentId === nutrient.nutrientId ? (
+                              <>
+                                <td className="p-[8px] align-middle">
+                                  <div className="text-[14px] font-[600]">
+                                    {getNutrientNameById(nutrient.nutrientId, nameAndIdNutrients)}
+                                  </div>
+                                </td>
+                                <td className="p-[4px] text-center relative">
+                                  <div className="flex flex-row">
+                                    <NumericField
+                                        value={formData?.average}
+                                        error={isAverageInvalid}
+                                        errorMessage=""
+                                        onChange={(value) => handleInputChange("average", value)}
+                                        allowDecimals={true}
+                                        min={0}
+                                        fullWidth={true}
+                                    />
+                                    {isAverageInvalid && (
+                                        <ToolTip
+                                            content={!isValueDefined("average")
+                                                ? "Ingrese el promedio."
+                                                : "Promedio debe ser al menos 0."}
+                                        >
+                                          <AlertCircle className="absolute right-[4px] top-[50%] -translate-y-[50%] h-[16px] w-[16px] text-[#ef4444]" />
+                                        </ToolTip>
+                                    )}
+                                  </div>
+                                </td>
+                                <td className="p-[4px] text-center relative">
+                                  <div className="flex flex-row">
+                                    <NumericField
+                                        value={formData?.deviation}
+                                        error={isDeviationInvalid}
+                                        errorMessage=""
+                                        onChange={(value) => handleInputChange("deviation", value)}
+                                        allowDecimals={true}
+                                        min={0}
+                                        fullWidth={true}
+                                    />
+                                    {isDeviationInvalid && (
+                                        <ToolTip content="Desviación debe ser al menos 0.">
+                                          <AlertCircle className="absolute right-[8px] top-[50%] -translate-y-[50%] h-[16px] w-[16px] text-[#ef4444]"/>
+                                        </ToolTip>
+                                    )}
+                                  </div>
+                                </td>
+                                <td className="p-[4px] text-center relative">
+                                  <div className="flex flex-row">
+                                    <NumericField
+                                        value={formData?.min}
+                                        error={isMinInvalid}
+                                        errorMessage=""
+                                        onChange={(value) => handleInputChange("min", value)}
+                                        allowDecimals={true}
+                                        min={0}
+                                        className="w-full"
+                                    />
+                                    {isMinInvalid && (
+                                        <ToolTip content="Mínimo debe ser al menos 0.">
+                                          <AlertCircle className="absolute right-[8px] top-[50%] -translate-y-[50%] h-[16px] w-[16px] text-[#ef4444]"/>
+                                        </ToolTip>
+                                    )}
+                                  </div>
+                                </td>
+                                <td className="p-[4px] text-center relative">
+                                  <div className="flex flex-row">
+                                    <NumericField
+                                        value={formData?.max}
+                                        error={isMaxInvalid}
+                                        errorMessage=""
+                                        onChange={(value) => handleInputChange("max", value)}
+                                        allowDecimals={true}
+                                        min={formData?.min ?? 0}
+                                        className="w-full"
+                                    />
+                                    {isMaxInvalid && (
+                                        <ToolTip
+                                            content={
+                                              isValueLessThan("max", 0)
+                                                  ? "Máximo debe ser al menos 0."
+                                                  : "Máximo debe ser mayor o igual al mínimo"
+                                            }
+                                        >
+                                          <AlertCircle className="absolute right-[8px] top-[50%] -translate-y-[50%] h-[16px] w-[16px] text-[#ef4444]"/>
+                                        </ToolTip>
+                                    )}
+                                  </div>
+                                </td>
+                                <td className="p-[4px] text-center relative">
+                                  <div className="flex flex-row">
+                                    <NumericField
+                                        value={formData?.sampleSize}
+                                        error={isSampleSizeInvalid}
+                                        errorMessage=""
+                                        onChange={(value) => handleInputChange("sampleSize", value)}
+                                        allowDecimals={false}
+                                        min={1}
+                                        className="w-full"
+                                    />
+                                    {isSampleSizeInvalid && (
+                                        <ToolTip
+                                            content={
+                                              isValueLessThan("sampleSize", 1)
+                                                  ? "Tamaño de muestra debe ser al menos 1."
+                                                  : "Tamaño de muestra debe ser un entero."
+                                            }
+                                        >
+                                          <AlertCircle className="absolute right-[8px] top-[50%] -translate-y-[50%] h-[16px] w-[16px] text-[#ef4444]"/>
+                                        </ToolTip>
+                                    )}
+                                  </div>
+                                </td>
+                                <td className="p-[4px] text-center relative">
+                                  <div className="flex flex-row">
+                                    <select
+                                        value={formData?.dataType || ""}
+                                        className={`w-full p-[8px] rounded-[4px] border ${
+                                            isDataTypeInvalid
+                                                ? "border-[#ef4444]"
+                                                : "border-[#d1d5db]"
+                                        }`}
+                                        onChange={(e) => handleInputChange("dataType", e.target.value)}
+                                    >
+                                      <option value="">Ninguna</option>
+                                      <option value="analytic">
+                                        {t("NewMacronutrient.Analytical")}
+                                      </option>
+                                      <option value="calculated">
+                                        {t("NewMacronutrient.Calculated")}
+                                      </option>
+                                      <option value="assumed">
+                                        {t("NewMacronutrient.Taken")}
+                                      </option>
+                                      <option value="borrowed">
+                                        {t("NewMacronutrient.Borrowed")}
+                                      </option>
+                                    </select>
+                                    {isDataTypeInvalid && (
+                                        <ToolTip content="Ingrese el tipo de dato.">
+                                          <AlertCircle className="absolute right-[8px] top-[50%] -translate-y-[50%] h-[16px] w-[16px] text-[#ef4444]"/>
+                                        </ToolTip>
+                                    )}
+                                  </div>
+                                </td>
+                                <td className="p-[8px] text-center">
+                                  <div className="flex flex-col space-y-[8px] justify-center">
+                                    <button
+                                        className="bg-[#3cb371] hover:bg-[#2e8b57] text-[white] py-[4px] px-[12px] rounded-[4px] transition-colors w-full"
+                                        onClick={saveChanges}
+                                    >
+                                      {t("NewMacronutrient.save")}
+                                    </button>
+                                    <button
+                                        className="bg-[#cd5c5c] hover:bg-[#b22222] text-[white] py-[4px] px-[12px] rounded-[4px] transition-colors w-full"
+                                        onClick={cancelEditing}
+                                    >
+                                      {t("NewMacronutrient.cancel")}
+                                    </button>
+                                  </div>
+                                </td>
+                              </>
+                          ) : (
+                              <>
+                                <td className="p-[8px] align-middle font-[600]">
+                                  {getNutrientNameById(nutrient.nutrientId, nameAndIdNutrients)}
+                                </td>
+                                <td className="text-center p-[8px] align-middle">
+                                  {nutrient.average ?? (
+                                      <div className="flex justify-center">
+                                        <Ellipsis size={24} />
+                                      </div>
+                                  )}
+                                </td>
+                                <td className="text-center p-[8px] align-middle">
+                                  {nutrient.deviation ?? (
+                                      <div className="flex justify-center">
+                                        <Ellipsis size={24} />
+                                      </div>
+                                  )}
+                                </td>
+                                <td className="text-center p-[8px] align-middle">
+                                  {nutrient.min ?? (
+                                      <div className="flex justify-center">
+                                        <Ellipsis size={24} />
+                                      </div>
+                                  )}
+                                </td>
+                                <td className="text-center p-[8px] align-middle">
+                                  {nutrient.max ?? (
+                                      <div className="flex justify-center">
+                                        <Ellipsis size={24} />
+                                      </div>
+                                  )}
+                                </td>
+                                <td className="text-center p-[8px] align-middle">
+                                  {nutrient.sampleSize ?? (
+                                      <div className="flex justify-center">
+                                        <Ellipsis size={24} />
+                                      </div>
+                                  )}
+                                </td>
+                                <td className="text-center p-[8px] align-middle">
+                                  {nutrient.dataType ? (
+                                      nutrient.dataType.charAt(0).toUpperCase() +
+                                      nutrient.dataType.slice(1)
+                                  ) : (
+                                      <div className="flex justify-center">
+                                        <Ellipsis size={24} />
+                                      </div>
+                                  )}
+                                </td>
+                                <td className="p-[8px] text-center align-middle">
+                                  <button
+                                      className="bg-[#6b8e23] hover:bg-[#556b2f] text-[white] py-[4px] px-[12px] rounded-[4px] transition-colors"
+                                      onClick={() => startEditing(nutrient)}
+                                  >
+                                    {t("NewMacronutrient.Edit")}
+                                  </button>
+                                </td>
+                              </>
+                          )}
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+              )}
+            </div>
+        ))}
+      </div>
   );
 }
