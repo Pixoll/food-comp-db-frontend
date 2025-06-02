@@ -408,7 +408,7 @@
     "Main": "Main Nutrients",
     "Minerals": "Minerals"
   },
-  "SelectorWithInput": {F
+  "SelectorWithInput": {
     "button": "Search",
     "Other": "Other value",
     "Enter": "Enter another value"
