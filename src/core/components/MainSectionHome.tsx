@@ -86,9 +86,11 @@ export default function MainSectionHome() {
                     padding: "15px 30px",
                     fontSize: "1.2rem",
                     borderRadius: "0 30px 30px 0",
-                    backgroundColor: "#015746",
-                    borderColor: "#015746",
-                  }}
+                    backgroundColor: "#1d6735",
+                    borderColor: "#1d6735",
+                  }
+                  
+                  }
                 >
                   {t("search.button")}
                 </Button>
@@ -100,11 +102,11 @@ export default function MainSectionHome() {
                 style={{
                   padding: "10px 30px",
                   fontSize: "1.2rem",
-                  backgroundColor: "#015746",
+                                  backgroundColor: "#1d6735",
                   color: "white",
                   border: "none",
                   borderRadius: "5px",
-                  borderColor: "#28a745",
+                                  borderColor: "#1d6735",
                 }}
                 onClick={() => navigate("/search")}
               >
