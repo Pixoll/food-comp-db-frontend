@@ -9,7 +9,7 @@ import {
   NutrientMeasurementWithComponentsForm,
   NutrientSummary,
 } from "@/pages/AdminPage";
-import { NutrientMeasurementFormOnlyNumbers } from "./NewNutrients";
+import { NutrientMeasurementFormOnlyNumbers } from "./AddNutrientsMeasurements";
 import NumericField from "@/app/components/Fields/NumericField";
 import ToolTip from "@/app/components/ToolTip";
 
@@ -21,7 +21,7 @@ type NewMacronutrientWithComponentProps = {
   nameAndIdNutrients: NutrientSummary[];
 };
 
-export default function NewMacronutrientWithComponent({
+export default function AddMeasurementsWithComponent({
   macronutrientsWithComponents,
   onMacronutrientUpdate,
   nameAndIdNutrients,

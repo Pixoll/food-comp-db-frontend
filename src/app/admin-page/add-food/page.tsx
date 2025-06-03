@@ -15,14 +15,12 @@ import {
     useForm,
     FormState, AnyNutrient
 } from "@/hooks";
-import {
-    NewGeneralData,
-    NewMacronutrientWithComponent,
-    NewNutrients,
-    NewReferences,
-    NewLangualCode,
-    PreviewDataForm
-} from "@/core/components/adminPage";
+import PreviewDataForm from "@/app/admin-page/add-food/components/PreviewDataForm";
+import AddReferences from "@/app/admin-page/add-food/components/AddReferences";
+import AddLangualCode from "@/app/admin-page/add-food/components/AddLangualCode";
+import AddMeasurementsWithComponent from "@/app/admin-page/add-food/components/AddMeasurementsWithComponent";
+import AddNutrientsMeasurements from "@/app/admin-page/add-food/components/AddNutrientsMeasurements";
+import FoodGeneralData from "@/app/admin-page/add-food/components/FoodGeneralData";
 import Origins from "./components/add-remove-origins/Origins"
 
 enum TypeOfHandle {
@@ -313,7 +311,7 @@ export default function AddFoodPage() {
         switch (activeSection) {
             case 1:
                 return (
-                    <NewGeneralData
+                    <FoodGeneralData
                         data={{
                             code: formState.code,
                             strain: formState.strain,
@@ -339,7 +337,7 @@ export default function AddFoodPage() {
 
             case 2:
                 return (
-                    <NewNutrients
+                    <AddNutrientsMeasurements
                         nutrients={formState.nutrientsValueForm.energy}
                         onNutrientUpdate={(updatedNutrient) => {
                             const updatedEnergyArray = formState.nutrientsValueForm.energy.map(item =>
@@ -368,7 +366,7 @@ export default function AddFoodPage() {
                 );
             case 3:
                 return (
-                    <NewMacronutrientWithComponent
+                    <AddMeasurementsWithComponent
                         macronutrientsWithComponents={formState.nutrientsValueForm.mainNutrients
                             .filter((n) => n.components?.length > 0
                         )}
@@ -399,7 +397,7 @@ export default function AddFoodPage() {
                 );
             case 4:
                 return (
-                    <NewNutrients
+                    <AddNutrientsMeasurements
                         nutrients={formState.nutrientsValueForm.mainNutrients
                             .filter((n) => n.components?.length === 0)
                         }
@@ -430,7 +428,7 @@ export default function AddFoodPage() {
                 )
             case 5:
                 return (
-                    <NewNutrients
+                    <AddNutrientsMeasurements
                         nutrients={formState.nutrientsValueForm.micronutrients.vitamins}
                         onNutrientUpdate={(updatedNutrient) => {
                             const updatedVitaminsArray = formState.nutrientsValueForm.micronutrients.vitamins.map(item =>
@@ -458,7 +456,7 @@ export default function AddFoodPage() {
                 );
             case 6:
                 return (
-                    <NewNutrients
+                    <AddNutrientsMeasurements
                         nutrients={formState.nutrientsValueForm.micronutrients.minerals}
                         onNutrientUpdate={(updatedNutrient) => {
                             const updatedMineralsArray = formState.nutrientsValueForm.micronutrients.minerals.map(item =>
@@ -503,7 +501,7 @@ export default function AddFoodPage() {
                 );
             case 8:
                 return (
-                    <NewReferences
+                    <AddReferences
                         references={references || []}
                         nutrientValueForm={formState.nutrientsValueForm}
                         nameAndIdNutrients={nutrients.map<{
@@ -527,7 +525,7 @@ export default function AddFoodPage() {
                 );
             case 9:
                 return (
-                    <NewLangualCode
+                    <AddLangualCode
                         langualCodes={langualCodes.map((v) => v)}
                         onLangualCodesChange={(langualCodeId) =>
                             selectHandle(

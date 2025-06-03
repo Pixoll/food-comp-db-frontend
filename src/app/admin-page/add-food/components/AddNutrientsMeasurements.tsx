@@ -28,7 +28,7 @@ type NewNutrientsProps = {
     onNutrientUpdate: (updatedNutrient: NutrientMeasurementForm) => void;
     nameAndIdNutrients: NutrientSummary[];
 };
-export default function NewNutrients({
+export default function AddNutrientsMeasurements({
                                          nutrients,
                                          onNutrientUpdate,
                                          nameAndIdNutrients,

@@ -55,7 +55,6 @@ type Filters = {
 };
 
 export default function AddReferences({
-  references,
   nutrientValueForm,
   nameAndIdNutrients,
   onSelectReferenceForNutrients,
@@ -386,7 +385,6 @@ export default function AddReferences({
             />
         ))}
 
-        {/* Paginación */}
         <div className="mt-[16px]">
           <Pagination
               currentPage={currentPage}
