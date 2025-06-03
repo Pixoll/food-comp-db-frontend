@@ -95,3 +95,33 @@
     transform: translateY(-2px);
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
   }
+
+.export-button-comparison {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 15px;
+  margin-right: 1%;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  width: 25%;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.export-button-comparison:hover {
+  background-color: #45a049;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transform: translateY(-1px);
+}
+
+.export-button-comparison:active {
+  background-color: #3e8e41;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  transform: translateY(1px);
+}

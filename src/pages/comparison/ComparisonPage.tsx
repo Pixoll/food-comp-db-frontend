@@ -149,10 +149,10 @@ export default function ComparisonPage() {
           ) : (
             <div className="nutrient-comparison-section">
               <Row className="mb-4">
-                <Col className="d-flex justify-content-between align-items-center">
-                  <h2>Comparación de Nutrientes</h2>
+                <Col className="d-flex bd-highlight mb-3">
+                  <h2 className="me-auto bd-highlight">Comparación de Nutrientes</h2>
                   <button
-                  className="export-button"
+                  className="export-button-comparison bd-highlight"
                   onClick={() => exportData(data.map((f) => f.code))}
                 >
                   Exportar tabla comparativa
@@ -160,7 +160,7 @@ export default function ComparisonPage() {
                   <Button
                     variant="outline-secondary"
                     onClick={() => setComparisonSectionOpen(false)}
-                    className="back-btn"
+                    className="back-btn bd-highlight "
                   >
                     <ArrowLeft size={16} className="me-2" /> Volver
                   </Button>
