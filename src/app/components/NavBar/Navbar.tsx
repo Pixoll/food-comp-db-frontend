@@ -74,7 +74,7 @@ const NavBar2 = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/comparison" className="navbar-link" onClick={() => setMenuOpen(false)}>
+                <Link href="/compare" className="navbar-link" onClick={() => setMenuOpen(false)}>
                   Comparar
                 </Link>
               </li>
