@@ -125,3 +125,11 @@
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   transform: translateY(1px);
 }
+.scrollable-card-container {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 10px;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}

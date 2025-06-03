@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import "../../assets/css/_ComparisonPage.css";
 import { useComparison } from "../../core/context/ComparisonContext";
@@ -6,13 +5,14 @@ import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { Trash, ArrowRight, ArrowLeft } from "lucide-react";
 import axios from "axios";
 import { useFetch, FetchStatus } from "../../core/hooks";
-import {
-  SingleFoodResult
-} from "../../core/types/SingleFoodResult";
+import { SingleFoodResult } from "../../core/types/SingleFoodResult";
 import NutrientComparisonTable from "../../core/components/comparePage/NutrientComparisonTable";
 import { useAuth } from "../../core/context/AuthContext";
 import { useNavigate } from "react-router-dom";
-export type GetFoodMeasurementsResult = Pick<SingleFoodResult, "commonName" | "nutrientMeasurements"> & {
+export type GetFoodMeasurementsResult = Pick<
+  SingleFoodResult,
+  "commonName" | "nutrientMeasurements"
+> & {
   code: string;
 };
 
@@ -24,60 +24,60 @@ export default function ComparisonPage() {
   const codes = comparisonFoods.map((food) => `${food.code}`).join(",");
   const navigate = useNavigate();
   const exportData = async (codes: string[]) => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3000/api/xlsx?codes=${codes.join(",")}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            responseType: "blob",
-          }
-        );
-  
-        const blob = new Blob([response.data], {
-          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        });
-        const url = window.URL.createObjectURL(blob);
-  
-        let fileName = "foods_data.xlsx";
-        const contentDisposition = response.headers["content-disposition"];
-        if (contentDisposition) {
-          const match = contentDisposition.match(/filename="(.+)"/);
-          if (match && match[1]) {
-            fileName = match[1];
-          }
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/api/xlsx?codes=${codes.join(",")}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          responseType: "blob",
         }
-  
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = fileName;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
-      } catch (error) {
-        console.error(error);
+      );
+
+      const blob = new Blob([response.data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      const url = window.URL.createObjectURL(blob);
+
+      let fileName = "foods_data.xlsx";
+      const contentDisposition = response.headers["content-disposition"];
+      if (contentDisposition) {
+        const match = contentDisposition.match(/filename="(.+)"/);
+        if (match && match[1]) {
+          fileName = match[1];
+        }
       }
-    };
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const foodsResult = useFetch<GetFoodMeasurementsResult[]>(
     `/foods/compare?codes=${codes}`
   );
   const data =
     foodsResult.status === FetchStatus.Success ? foodsResult.data : [];
-  console.log(data)
+  console.log(data);
   return (
     <Container className="comparison-page py-4">
       <Row className="mb-4">
         <Col>
           <Button
-            onClick={() => navigate('/search')}
+            onClick={() => navigate("/search")}
             variant="outline-secondary"
             size="lg"
             className="back-btn"
-            >
-          <ArrowLeft size={16} className="me-2" /> Volver
+          >
+            <ArrowLeft size={16} className="me-2" /> Volver
           </Button>
           <h1 className="text-center mb-3">Comparación de Alimentos</h1>
           <p className="text-center text-muted">
@@ -89,7 +89,9 @@ export default function ComparisonPage() {
 
       {comparisonFoods.length < 2 ? (
         <div className="empty-state text-center">
-          <h4 className="heading">No hay alimentos suficientes para comparar</h4>
+          <h4 className="heading">
+            No hay alimentos suficientes para comparar
+          </h4>
           <p>
             Por favor, agrega alimentos desde la sección de búsqueda para
             comenzar a comparar.
@@ -110,27 +112,33 @@ export default function ComparisonPage() {
                 </Col>
               </Row>
 
-              <Row className="comparison-items-container mb-4">
-                {comparisonFoods.map((food, index) => (
-                  <Col key={index} xs={12} md={6} lg={4} className="mb-3">
-                    <Card className="comparison-item h-100">
-                      <div className="card-header d-flex justify-content-between align-items-center">
-                        <span className="food-code">{food.code}</span>
-                        <Button
-                          variant="danger"
-                          size="sm"
-                          onClick={() => removeFromComparison(food.code)}
-                          className="remove-btn"
-                        >
-                          <Trash size={16} />
-                        </Button>
-                      </div>
-                      <div className="card-body">
-                        <h5 className="card-title">{food.name}</h5>
-                      </div>
-                    </Card>
-                  </Col>
-                ))}
+              <Row className="mb-4">
+                <Col>
+                  <div className="scrollable-card-container">
+                    <Row className="comparison-items-container">
+                      {comparisonFoods.map((food, index) => (
+                        <Col key={index} xs={12} md={6} lg={4} className="mb-3">
+                          <Card className="comparison-item h-100">
+                            <div className="card-header d-flex justify-content-between align-items-center">
+                              <span className="food-code">{food.code}</span>
+                              <Button
+                                variant="danger"
+                                size="sm"
+                                onClick={() => removeFromComparison(food.code)}
+                                className="remove-btn"
+                              >
+                                <Trash size={16} />
+                              </Button>
+                            </div>
+                            <div className="card-body">
+                              <h5 className="card-title">{food.name}</h5>
+                            </div>
+                          </Card>
+                        </Col>
+                      ))}
+                    </Row>
+                  </div>
+                </Col>
               </Row>
 
               <Row className="justify-content-center">
@@ -141,7 +149,8 @@ export default function ComparisonPage() {
                     size="lg"
                     className="compare-btn"
                   >
-                    Ver Comparación de Nutrientes <ArrowRight className="ms-2" />
+                    Ver Comparación de Nutrientes{" "}
+                    <ArrowRight className="ms-2" />
                   </Button>
                 </Col>
               </Row>
@@ -150,13 +159,15 @@ export default function ComparisonPage() {
             <div className="nutrient-comparison-section">
               <Row className="mb-4">
                 <Col className="d-flex bd-highlight mb-3">
-                  <h2 className="me-auto bd-highlight">Comparación de Nutrientes</h2>
+                  <h2 className="me-auto bd-highlight">
+                    Comparación de Nutrientes
+                  </h2>
                   <button
-                  className="export-button-comparison bd-highlight"
-                  onClick={() => exportData(data.map((f) => f.code))}
-                >
-                  Exportar tabla comparativa
-                </button>
+                    className="export-button-comparison bd-highlight"
+                    onClick={() => exportData(data.map((f) => f.code))}
+                  >
+                    Exportar tabla comparativa
+                  </button>
                   <Button
                     variant="outline-secondary"
                     onClick={() => setComparisonSectionOpen(false)}
@@ -182,17 +193,18 @@ export default function ComparisonPage() {
                 <Row>
                   <Col className="text-center py-5">
                     <div className="alert alert-danger">
-                      Error al cargar los datos nutricionales. Por favor, intente nuevamente.
+                      Error al cargar los datos nutricionales. Por favor,
+                      intente nuevamente.
                     </div>
                   </Col>
                 </Row>
               )}
 
               {foodsResult.status === FetchStatus.Success && (
-                <NutrientComparisonTable 
-                foodsData={data}
-                onRemoveFood={removeFromComparison}
-              />
+                <NutrientComparisonTable
+                  foodsData={data}
+                  onRemoveFood={removeFromComparison}
+                />
               )}
             </div>
           )}

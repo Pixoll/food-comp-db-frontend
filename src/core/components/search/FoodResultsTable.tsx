@@ -178,13 +178,27 @@ export default function FoodResultsTable({
       setSortOrder(SortOrder.ASC);
     }
   };
+  const selectAllFoodComparison = () => {
+    const currentFoodInComparison = new Set(comparisonFoods.map((f) => f.code));
+
+    const newItems = records.filter(
+      (item) => !currentFoodInComparison.has(item.code)
+    );
+
+    newItems.forEach((item) =>
+      addToComparison({
+        code: item.code,
+        name: item.commonName[selectedLanguage] ?? "",
+      })
+    );
+  };
 
   return (
     <div className="food-list">
       <h2>{t("Table.title")}</h2>
       <div className="filter-name">
         <Row className="g-3">
-          <Col xs={12} className="input-name">
+          <Col className="input-name">
             <input
               type="text"
               placeholder={t("Table.search")}
@@ -193,7 +207,21 @@ export default function FoodResultsTable({
               className="form-control"
             />
           </Col>
-
+          <Col sm={4}>
+            <h5>{t("Table.results_per_page")}</h5>
+            <select
+              value={resultsPerPage}
+              onChange={(e) => setResultsPerPage(+e.target.value)}
+              className="form-select"
+            >
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+          </Col>
+        </Row>
+        <Row className="g-3">
           <Col xs={12} sm={4} className="sort-selector">
             <h5>{t("Table.sort.by")}</h5>
             <select
@@ -227,8 +255,8 @@ export default function FoodResultsTable({
             </select>
           </Col>
           <Col xs={12} sm={4}>
-            <button 
-              onClick={() => navigate('/comparison')} 
+            <button
+              onClick={() => navigate("/comparison")}
               className="export-button"
             >
               Comparar
@@ -243,17 +271,12 @@ export default function FoodResultsTable({
             </button>
           </Col>
           <Col xs={12} sm={4}>
-            <h5>{t("Table.results_per_page")}</h5>
-            <select
-              value={resultsPerPage}
-              onChange={(e) => setResultsPerPage(+e.target.value)}
-              className="form-select"
+            <button
+              className="export-button"
+              onClick={() => selectAllFoodComparison()}
             >
-              <option value="10">10</option>
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </select>
+              Seleccionar todo
+            </button>
           </Col>
         </Row>
       </div>

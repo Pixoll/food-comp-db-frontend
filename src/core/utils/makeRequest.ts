@@ -23,19 +23,18 @@ export default function makeRequest(
     const { token, successCallback, errorCallback } = options;
 
     if ("payload" in options) {
+      console.log("payload", options.payload);
+      console.log(endpoint);
       const { payload, contentType } = options;
 
-      request = axios[method](
-        "http://localhost:3000/api" + endpoint,
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            ...contentType && { "Content-Type": contentType },
-          },
-        }
-      );
+      request = axios[method]("http://localhost:3000/api" + endpoint, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          ...(contentType && { "Content-Type": contentType }),
+        },
+      });
     } else {
+      console.log(endpoint);
       request = axios[method]("http://localhost:3000/api" + endpoint, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -59,9 +58,9 @@ type SuccessCallback = (response: AxiosResponse) => void | Promise<void>;
 type ErrorCallback = (error: any) => void | Promise<void>;
 
 type MakeRequestOptions = {
-  token?: string | null,
-  successCallback?: SuccessCallback,
-  errorCallback?: ErrorCallback
+  token?: string | null;
+  successCallback?: SuccessCallback;
+  errorCallback?: ErrorCallback;
 };
 
 type MakeRequestOptionsWithPayload = MakeRequestOptions & {
