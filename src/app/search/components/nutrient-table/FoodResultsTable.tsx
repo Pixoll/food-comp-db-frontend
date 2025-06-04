@@ -1,4 +1,5 @@
 'use client'
+import axios from "axios";
 import {ArrowDown, ArrowUp, Plus, Minus} from "lucide-react";
 import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
@@ -6,7 +7,6 @@ import {useRouter} from 'next/navigation';
 import {useAuth} from "@/context/AuthContext";
 import {useComparison} from "@/context/ComparisonContext";
 import {FoodResult} from "@/types/option";
-import axios from "axios";
 import Pagination from "../Pagination";
 import "./index.css"
 
@@ -179,75 +179,192 @@ export default function FoodResultsTable({
             setSortOrder(SortOrder.ASC);
         }
     };
+    const selectAllFoodComparison = () => {
+        const currentFoodInComparison = new Set(comparisonFoods.map((f) => f.code));
 
+        const newItems = records.filter(
+            (item) => !currentFoodInComparison.has(item.code)
+        );
+
+        newItems.forEach((item) =>
+            addToComparison({
+                code: item.code,
+                name: item.commonName[selectedLanguage] ?? "",
+            })
+        );
+    };
     return (
         <div className="food-list">
-            <h2 className="text-2xl font-poppins text-black text-left mb-[18px] border-b-2 border-[#a8d8d2] pb-[8px] tracking-wider transition-colors duration-300 ease-in-out hover:text-[#388e60]">{t("Table.title")}</h2>
+            <h2 className="text-[24px] text-[black] text-left mb-[18px] border-b-[2px]] border-[#a8d8d2] pb-[8px] tracking-wider transition-colors duration-300 ease-in-out hover:text-[#388e60]">{t("Table.title")}</h2>
             <div className="filter-name">
-                <div className="g-3">
-                    <div className="input-name">
-                        <input
-                            type="text"
-                            placeholder={t("Table.search")}
-                            value={searchForName}
-                            onChange={(e) => setSearchForName(e.target.value)}
-                            className="form-control"
-                        />
+                <div className="g-[12px]">
+                    <div className="flex flex-row items-center gap-[24px] w-full">
+                        <div className="flex-1 w-full">
+                            <input
+                                className="
+            w-full
+            bg-[#f9f9f9]
+            px-[16px]
+            py-[14px]
+            rounded-[30px]
+            border-[2px]
+            border-solid
+            border-[#a8d8d2]
+            shadow-[0_2px_6px_rgba(0,0,0,0.1)]
+            outline-[none]
+            transition-colors
+            duration-300
+            text-[16px]
+            focus:border-[#007f67]
+            focus:shadow-[0_4px_12px_rgba(0,127,103,0.2)]
+            placeholder:text-[#a9a9a9]
+            "
+                                type="text"
+                                placeholder={t("Table.search")}
+                                value={searchForName}
+                                onChange={(e) => setSearchForName(e.target.value)}
+                            />
+                        </div>
+
+                        <div className="flex flex-row items-center gap-[8px] min-w-[180px]">
+                            <label
+                                htmlFor="resultsPerPage"
+                                className="
+                                text-[14px]
+                                font-medium
+                                text-[#4a4a4a]
+                                whitespace-nowrap
+                                "
+                            >
+                                {t("Table.results_per_page")}
+                            </label>
+                            <div className="relative w-full md:w-[100px]">
+                                <select
+                                    id="resultsPerPage"
+                                    value={resultsPerPage}
+                                    onChange={(e) => setResultsPerPage(+e.target.value)}
+                                    className="
+                                    appearance-none
+                                    w-full
+                                    bg-[#f9f9f9]
+                                    px-[12px]
+                                    py-[10px]
+                                    pr-[32px]
+                                    rounded-[8px]
+                                    border-[2px]
+                                    border-solid
+                                    border-[#a8d8d2]
+                                    shadow-[0_2px_4px_rgba(0,0,0,0.05)]
+                                    outline-[none]
+                                    transition-colors
+                                    duration-300
+                                    text-[14px]
+                                    text-[#4a4a4a]
+                                    cursor-pointer
+                                    focus:border-[#007f67]
+                                    focus:shadow-[0_2px_8px_rgba(0,127,103,0.15)]
+                                    "
+                                >
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                <div
+                                    className="absolute right-[12px] top-[50%] transform translate-y-[-50%] pointer-events-none">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-[16px] w-[16px] text-[#007f67]"
+                                         fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                              d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div className="sort-selector">
-                        <h5>{t("Table.sort.by")}</h5>
-                        <select
-                            value={selectedSort}
-                            onChange={(e) => setSelectedSort(+e.target.value)}
-                            className="form-select"
-                        >
-                            <option value={SortType.CODE}>
-                                {t("Table_FoodResults.code")}
-                            </option>
-                            <option value={SortType.NAME}>
-                                {t("Table_FoodResults.name")}
-                            </option>
-                            <option value={SortType.SCIENTIFIC_NAME}>
-                                {t("Table_FoodResults.scientific_name")}
-                            </option>
-                        </select>
-                    </div>
-
-                    <div className="sort-selector">
-                        <h5>{t("Table.sort.order")}</h5>
-                        <select
-                            value={sortOrder}
-                            onChange={(e) => setSortOrder(+e.target.value)}
-                            className="form-select"
-                        >
-                            <option value={SortOrder.ASC}>{t("Table.sort.ascending")}</option>
-                            <option value={SortOrder.DESC}>
-                                {t("Table.sort.descending")}
-                            </option>
-                        </select>
-                    </div>
-                    <div>
+                    <div className="grid grid-cols-3 gap-[16px] my-[24px] w-full">
                         <button
-                            className="export-button"
+                            className="
+                            bg-[#4CAF50]
+                            text-[white]
+                            px-[16px]
+                            py-[14px]
+                            border-none
+                            rounded-[6px]
+                            text-[16px]
+                            font-[500]
+                            cursor-pointer
+                            transition-all
+                            duration-300
+                            ease-in-out
+                            w-full
+                            shadow-[0_2px_5px_rgba(0,0,0,0.2)]
+                            hover:bg-[#45a049]
+                            hover:shadow-[0_4px_8px_rgba(0,0,0,0.2)]
+                            hover:-translate-y-[1px]
+                            active:bg-[#3e8e41]
+                            active:shadow-[0_1px_3px_rgba(0,0,0,0.2)]
+                            active:translate-y-[1px]
+                            "
                             onClick={() => exportData(data.map((f) => f.code))}
                         >
                             Exportar resultados
                         </button>
-                    </div>
-                    <div>
-                        <h5>{t("Table.results_per_page")}</h5>
-                        <select
-                            value={resultsPerPage}
-                            onChange={(e) => setResultsPerPage(+e.target.value)}
-                            className="form-select"
+                        <button
+                            className="
+                            bg-[#4CAF50]
+                            text-[white]
+                            px-[16px]
+                            py-[14px]
+                            border-none
+                            rounded-[6px]
+                            text-[16px]
+                            font-[500]
+                            cursor-pointer
+                            transition-all
+                            duration-300
+                            ease-in-out
+                            w-full
+                            shadow-[0_2px_5px_rgba(0,0,0,0.2)]
+                            hover:bg-[#45a049]
+                            hover:shadow-[0_4px_8px_rgba(0,0,0,0.2)]
+                            hover:-translate-y-[1px]
+                            active:bg-[#3e8e41]
+                            active:shadow-[0_1px_3px_rgba(0,0,0,0.2)]
+                            active:translate-y-[1px]
+                            "
+                            onClick={() => router.push("/compare")}
                         >
-                            <option value="10">10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </select>
+                            Ir a comparar ({comparisonFoods.length})
+                        </button>
+                        <button
+                            className="
+                            bg-[#4CAF50]
+                            text-[white]
+                            px-[16px]
+                            py-[14px]
+                            border-none
+                            rounded-[6px]
+                            text-[16px]
+                            font-[500]
+                            cursor-pointer
+                            transition-all
+                            duration-300
+                            ease-in-out
+                            w-full
+                            shadow-[0_2px_5px_rgba(0,0,0,0.2)]
+                            hover:bg-[#45a049]
+                            hover:shadow-[0_4px_8px_rgba(0,0,0,0.2)]
+                            hover:-translate-y-[1px]
+                            active:bg-[#3e8e41]
+                            active:shadow-[0_1px_3px_rgba(0,0,0,0.2)]
+                            active:translate-y-[1px]
+                            "
+                            onClick={() => selectAllFoodComparison()}>
+                            Seleccionar todo
+                        </button>
                     </div>
+
                 </div>
             </div>
 
@@ -313,9 +430,9 @@ export default function FoodResultsTable({
                             <tr
                                 key={item.code}
                                 className={`
-                                border-b border-[#dddddd]
+                                border-b-[1px] border-[#dddddd]
                                 ${index % 2 === 1 ? "bg-[#f8f8f8]" : ""}
-                                ${index === records.length - 1 ? "border-b-2 border-[#009879]" : ""}
+                                ${index === records.length - 1 ? "border-b-[2px] border-[#009879]" : ""}
                                 `}>
                                 <td className="text-center" data-label="Code">{item.code}</td>
                                 <td data-label="Nombre">
@@ -342,7 +459,7 @@ export default function FoodResultsTable({
                                         border-none
                                         text-[14px]
                                         box-shadow[0_4px_6px_rgba(0,0,0,0.3)]
-                                        mb[10px]
+                                        mb-[10px]
                                         hover:bg-[#007f67]
                                         hover:translate-y-[3px]
                                         "
