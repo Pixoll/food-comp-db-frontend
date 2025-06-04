@@ -2,6 +2,7 @@ import {PlusCircle, XCircle} from "lucide-react";
 import {useTranslation} from "react-i18next";
 import {useGroups, useNutrients, useOrigins, useTypes} from "@/hooks";
 import {Collection} from "@/utils/collection";
+import NumericField from "@/app/components/Fields/NumericField";
 import SearchBox from "./SearchBox";
 
 export type Filters = {
@@ -111,20 +112,21 @@ export default function FilterBody({
         </div>
 
         {/* Measurement Section */}
-        <div
-            className="mb-[16px] bg-[#cbe0d4] rounded-[12px] shadow-[0_4px_12px_rgba(0,0,0,0.15)] p-[20px] relative !my-[0]">
-            <h3 className="flex items-center justify-center py-[12px] text-center gap-[10px] text-[#01190f] font-[500] text-[24px]">{t("Measurement.title")}</h3>
+        <div className="flex flex-col w-full bg-[#ffffff] rounded-[8px] p-[16px] shadow-[0_2px_8px_rgba(0,0,0,0.1)]">
+            <h3 className="text-[18px] font-[600] text-[#333333] mb-[16px]">{t("Measurement.title")}</h3>
+
             {selectedFilters.nutrientsFilter.map((nutrient, index, array) => (
-                <div key={index} className="align-items-start flex-column measurement-row mb-[0px]">
+                <div key={index} className="flex flex-col w-full mb-[20px]">
                     {selectedFilters.nutrientsFilter.length > 1 && index > 0 && (
-                        <div className="mb-3">
-                            <span className="block flex-grow border-b border-[#b0b0b0]"/>
+                        <div className="w-full mb-[16px]">
+                            <span className="block w-full h-[1px] bg-[#e0e0e0]"></span>
                         </div>
                     )}
 
-                    <div className="mb-3">
-                        {/*<Form.Group controlId="nutrient-select">
-                            <Form.Select
+                    <div className="w-full mb-[16px]">
+                        <div className="relative">
+                            <select
+                                id={`nutrient-select-${index}`}
                                 aria-label="Select nutrient"
                                 value={nutrient.id || ""}
                                 onChange={(e) => {
@@ -133,82 +135,163 @@ export default function FilterBody({
                                         handleNutrientFilterChange("id", id, index);
                                     }
                                 }}
+                                className="
+                                  appearance-none
+                                  w-full
+                                  bg-[#f8f9fa]
+                                  border-[1.5px]
+                                  border-[#ced4da]
+                                  rounded-[6px]
+                                  py-[10px]
+                                  px-[12px]
+                                  pr-[36px]
+                                  text-[16px]
+                                  font-[400]
+                                  text-[#495057]
+                                  focus:outline-none
+                                  focus:border-[#80bdff]
+                                  focus:shadow-[0_0_0_0.2rem_rgba(0,123,255,0.25)]
+                                  transition-colors
+                                  duration-[200ms]
+                                "
                             >
                                 <option value={""}>Nada seleccionado</option>
                                 {getAvailableNutrients(array.slice(0, index)).map(nutrient => (
-                                    <option key={nutrient.id}
-                                            value={nutrient.id}>{`${nutrient.name} (${nutrient.measurementUnit})`}</option>
+                                    <option
+                                        key={nutrient.id}
+                                        value={nutrient.id}
+                                    >{`${nutrient.name} (${nutrient.measurementUnit})`}</option>
                                 ))}
-                            </Form.Select>
-                        </Form.Group>*/}
+                            </select>
+                            <div
+                                className="absolute right-[12px] top-[50%] transform translate-y-[-50%] pointer-events-none text-[#6c757d]">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                     viewBox="0 0 16 16">
+                                    <path fillRule="evenodd"
+                                          d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                                </svg>
+                            </div>
+                        </div>
                     </div>
 
-                    <div style={{padding: "0"}}>
-                        <div>
-                            {/*<Form.Group controlId="operator-select">
-                                <Form.Select
+                    <div className="flex flex-row gap-[12px] w-full">
+                        <div className="w-[35%] sm:w-[30%] md:w-[25%]">
+                            <div className="relative">
+                                <select
+                                    id={`operator-select-${index}`}
                                     aria-label="Select operator"
                                     value={nutrient.op}
                                     onChange={(e) => handleNutrientFilterChange("op", e.target.value, index)}
+                                    className="
+                                    appearance-none
+                                    w-full
+                                    bg-[#f8f9fa]
+                                    border-[1.5px]
+                                    border-[#ced4da]
+                                    rounded-[6px]
+                                    py-[10px]
+                                    px-[12px]
+                                    pr-[36px]
+                                    text-[16px]
+                                    font-[400]
+                                    text-[#495057]
+                                    focus:outline-none
+                                    focus:border-[#80bdff]
+                                    focus:shadow-[0_0_0_0.2rem_rgba(0,123,255,0.25)]
+                                    transition-colors
+                                    duration-[200ms]
+                                  "
                                 >
                                     <option value="<">&lt;</option>
                                     <option value="<=">&le;</option>
                                     <option value="=">=</option>
                                     <option value=">=">&ge;</option>
                                     <option value=">">&gt;</option>
-                                </Form.Select>
-                            </Form.Group>*/}
+                                </select>
+                                <div
+                                    className="absolute right-[12px] top-[50%] transform translate-y-[-50%] pointer-events-none text-[#6c757d]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                         viewBox="0 0 16 16">
+                                        <path fillRule="evenodd"
+                                              d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                                    </svg>
+                                </div>
+                            </div>
                         </div>
 
-                        <div>
-                            {/*<Form.Group controlId="value-input">
-                                <InputGroup>
-                                    <Form.Control
-                                        type="number"
-                                        aria-label="Nutrient value"
-                                        placeholder={t("Measurement.value")}
-                                        value={nutrient.value ?? ""}
-                                        isInvalid={typeof nutrient.value !== "undefined" && nutrient.value < 0}
-                                        style={{borderRadius: "5px"}}
-                                        onChange={(e) =>
-                                            handleNutrientFilterChange(
-                                                "value",
-                                                e.target.value.length > 0 ? +e.target.value : undefined,
-                                                index
-                                            )
-                                        }
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        Valor no puede ser negativo.
-                                    </Form.Control.Feedback>
-                                </InputGroup>
-                            </Form.Group>*/}
+                        <div className="w-[65%] sm:w-[70%] md:w-[75%]">
+                            <NumericField
+                                id={`value-input-${index}`}
+                                value={nutrient.value}
+                                onChange={(value) => handleNutrientFilterChange("value", value, index)}
+                                allowDecimals={true}
+                                min={0}
+                                error={typeof nutrient.value !== "undefined" && nutrient.value < 0}
+                                errorMessage="Valor no puede ser negativo."
+                                className="w-full"
+                            />
                         </div>
                     </div>
                 </div>
             ))}
-            <div className="align-items-start flex-column">
+
+            <div className="flex flex-col sm:flex-row gap-[12px] mt-[8px]">
                 {selectedFilters.nutrientsFilter.length < nutrients.size && (
-                    <div className={selectedFilters.nutrientsFilter.length > 1 ? "mb-3" : ""}>
-                        <button
-                            onClick={handleAddNutrientFilter}
-                            className="large-button"
-                        >
-                            <PlusCircle className="me-2"/>
-                            Agregar
-                        </button>
-                    </div>
+                    <button
+                        onClick={handleAddNutrientFilter}
+                        className="
+                              flex
+                              items-center
+                              justify-center
+                              px-[16px]
+                              py-[10px]
+                              bg-[#ffffff]
+                              border-[1.5px]
+                              border-[#007bff]
+                              text-[#007bff]
+                              rounded-[6px]
+                              text-[14px]
+                              font-[500]
+                              transition-all
+                              duration-[200ms]
+                              hover:bg-[#007bff]
+                              hover:text-[#ffffff]
+                              focus:outline-none
+                              focus:shadow-[0_0_0_0.2rem_rgba(0,123,255,0.25)]
+                            "
+                    >
+                        <PlusCircle className="w-[18px] h-[18px] mr-[8px]"/>
+                        Agregar
+                    </button>
                 )}
+
                 {selectedFilters.nutrientsFilter.length > 1 && (
-                    <div>
-                        <button
-                            onClick={handleRemoveLastNutrientFilter}
-                            className="large-button"
-                        >
-                            <XCircle className="me-[8px]"/>
-                            Eliminar último
-                        </button>
-                    </div>
+                    <button
+                        onClick={handleRemoveLastNutrientFilter}
+                        className="
+                          flex
+                          items-center
+                          justify-center
+                          px-[16px]
+                          py-[10px]
+                          bg-[#ffffff]
+                          border-[1.5px]
+                          border-[#6c757d]
+                          text-[#6c757d]
+                          rounded-[6px]
+                          text-[14px]
+                          font-[500]
+                          transition-all
+                          duration-[200ms]
+                          hover:bg-[#6c757d]
+                          hover:text-[#ffffff]
+                          focus:outline-none
+                          focus:shadow-[0_0_0_0.2rem_rgba(108,117,125,0.25)]
+                        "
+                    >
+                        <XCircle className="w-[18px] h-[18px] mr-[8px]"/>
+                        Eliminar último
+                    </button>
                 )}
             </div>
         </div>
