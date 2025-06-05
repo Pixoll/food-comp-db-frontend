@@ -1,465 +1,465 @@
 export const es = {
-    "navbar": {
-        "home": "Página Principal",
-        "search": "Buscar",
-        "languages": "Idiomas",
-        "spanish": "ESPAÑOL",
-        "english": "INGLES",
-        "panel": "Panel",
-        "close": "Cerrar Sesión"
+    navbar: {
+        home: "Página Principal",
+        search: "Buscar",
+        languages: "Idiomas",
+        spanish: "ESPAÑOL",
+        english: "INGLES",
+        panel: "Panel",
+        close: "Cerrar Sesión"
     },
-    "homepage": {
-        "title": "Base de Datos de Composición de Alimentos",
-        "subtitle": "Una colección de datos de composición de alimentos y más."
+    homepage: {
+        title: "Base de Datos de Composición de Alimentos",
+        subtitle: "Una colección de datos de composición de alimentos y más."
     },
-    "search": {
-        "placeholder": "Buscar...",
-        "button": "Buscar",
-        "advancedSearch": "Búsqueda avanzada"
+    search: {
+        placeholder: "Buscar...",
+        button: "Buscar",
+        advancedSearch: "Búsqueda avanzada"
     },
-    "footer": {
-        "contact": {
-            "title": "Contacto",
-            "email": "Email: contacto@ejemplo.com"
+    footer: {
+        contact: {
+            title: "Contacto",
+            email: "Email: contacto@ejemplo.com"
         },
-        "address": {
-            "title": "Dirección",
-            "details": "123 Calle Falsa, Ciudad, País"
+        address: {
+            title: "Dirección",
+            details: "123 Calle Falsa, Ciudad, País"
         },
-        "policies": {
-            "title": "Políticas",
-            "privacy": "Política de Privacidad"
+        policies: {
+            title: "Políticas",
+            privacy: "Política de Privacidad"
         },
-        "copyright": "© 2024 Mi Empresa. Todos los derechos reservados."
+        copyright: "© 2024 Mi Empresa. Todos los derechos reservados."
     },
-    "loginPage": {
-        "title": "Iniciar Sesion",
-        "username": "Nombre de usuario",
-        "password": "Contraseña",
-        "recover": "¿Olvidaste tu contraseña?",
-        "state": {
-            "request": "Enviando solicitud a:",
-            "send": "Datos enviados:",
-            "Response": "Respuesta recibida:"
+    loginPage: {
+        title: "Iniciar Sesion",
+        username: "Nombre de usuario",
+        password: "Contraseña",
+        recover: "¿Olvidaste tu contraseña?",
+        state: {
+            request: "Enviando solicitud a:",
+            send: "Datos enviados:",
+            Response: "Respuesta recibida:"
         },
-        "errors": {
-            "login": "Error en el inicio de sesión",
-            "response": "Respuesta de error:",
-            "state": "Codigo de estado:",
-            "received": "No se recibió respuesta:",
-            "unknown": "Error desconocido:"
+        errors: {
+            login: "Error en el inicio de sesión",
+            response: "Respuesta de error:",
+            state: "Codigo de estado:",
+            received: "No se recibió respuesta:",
+            unknown: "Error desconocido:"
         }
     },
-    "Filter": {
-        "title": "Filtros",
-        "type": "Tipo de alimento",
-        "reset": "Reestablecer filtros",
-        "regions": "Regiones de Chile",
-        "group": "Grupo alimentario",
-        "Languages": "Lenguajes"
+    Filter: {
+        title: "Filtros",
+        type: "Tipo de alimento",
+        reset: "Reestablecer filtros",
+        regions: "Regiones de Chile",
+        group: "Grupo alimentario",
+        Languages: "Lenguajes"
     },
-    "Measurement": {
-        "title": "Medición de nutrientes",
-        "operator": {
-            "less": "Menor que",
-            "less_equal": "Menor o igual a",
-            "equal": "Igual a",
-            "greater_equal": "Mayor o igual a",
-            "greater": "Mayor que"
+    Measurement: {
+        title: "Medición de nutrientes",
+        operator: {
+            less: "Menor que",
+            less_equal: "Menor o igual a",
+            equal: "Igual a",
+            greater_equal: "Mayor o igual a",
+            greater: "Mayor que"
         },
-        "value": "Valor"
+        value: "Valor"
     },
-    "Table": {
-        "title": "Lista de resultados",
-        "search": "Buscar por nombre...",
-        "no_results": "No hay resultados que mostrar.",
-        "sort": {
-            "by": "Ordenar por:",
-            "order": "Orden:",
-            "ascending": "Ascendente",
-            "descending": "Descendiente"
+    Table: {
+        title: "Lista de resultados",
+        search: "Buscar por nombre...",
+        no_results: "No hay resultados que mostrar.",
+        sort: {
+            by: "Ordenar por:",
+            order: "Orden:",
+            ascending: "Ascendente",
+            descending: "Descendiente"
         },
-        "results_per_page": "Resultados por página:"
+        results_per_page: "Resultados por página:"
     },
-    "Table_FoodResults": {
-        "code": "Código",
-        "name": "Nombre",
-        "scientific_name": "Nombre cientifico",
-        "action": "Acción",
-        "details": "Detalles",
-        "modify": "Modificar"
+    Table_FoodResults: {
+        code: "Código",
+        name: "Nombre",
+        scientific_name: "Nombre cientifico",
+        action: "Acción",
+        details: "Detalles",
+        modify: "Modificar"
     },
-    "DetailFood": {
-        "loading": "Cargando...",
-        "title": "Datos generales del alimento:",
-        "code": "Código",
-        "name": {
-            "title": "Nombre",
-            "Spanish": "Nombre en Español:",
-            "Portuguese": "Nombre en Portugués",
-            "English": "Nombre en Inglés:",
-            "scientific": "Nombre Científico:"
+    DetailFood: {
+        loading: "Cargando...",
+        title: "Datos generales del alimento:",
+        code: "Código",
+        name: {
+            title: "Nombre",
+            Spanish: "Nombre en Español:",
+            Portuguese: "Nombre en Portugués",
+            English: "Nombre en Inglés:",
+            scientific: "Nombre Científico:"
         },
-        "subspecies": "Subespecie:",
-        "strain": "Variante:",
-        "brand": "Marca:",
-        "observation": "Observación:",
-        "type": "Tipo de alimento:",
-        "group": "Grupo de comida:",
-        "ingredients": {
-            "title": "Ingredientes",
-            "Spanish": "Ingredientes (Español):",
-            "Portuguese": "Ingredientes (Portugués):",
-            "English": "Ingredientes (Inglés):"
+        subspecies: "Subespecie:",
+        strain: "Variante:",
+        brand: "Marca:",
+        observation: "Observación:",
+        type: "Tipo de alimento:",
+        group: "Grupo de comida:",
+        ingredients: {
+            title: "Ingredientes",
+            Spanish: "Ingredientes (Español):",
+            Portuguese: "Ingredientes (Portugués):",
+            English: "Ingredientes (Inglés):"
         },
-        "grams": {
-            "enter": "Ingrese gramos",
-            "change": "Cambiar gramos",
-            "current": "Gramos actuales:"
+        grams: {
+            enter: "Ingrese gramos",
+            change: "Cambiar gramos",
+            current: "Gramos actuales:"
         },
-        "labels": {
-            "Nutritional": "Etiquetado Nutricional",
-            "data": "Todos los datos"
+        labels: {
+            Nutritional: "Etiquetado Nutricional",
+            data: "Todos los datos"
         },
-        "codes": "Codigos lenguales",
-        "references": {
-            "title": "Referencias",
-            "nutrients": "Referencias de nutrientes"
+        codes: "Codigos lenguales",
+        references: {
+            title: "Referencias",
+            nutrients: "Referencias de nutrientes"
         },
-        "modify": "Modificar detalles del alimento",
-        "required": "Este campo es requerido",
-        "enter": "Ingresa el código",
-        "save": "Guardar Cambios",
-        "label_type": "Tipo",
-        "label_group": "Grupo",
-        "graphics": {
-            "title_L": "Composición",
-            "title_R": "Contenido energetico"
+        modify: "Modificar detalles del alimento",
+        required: "Este campo es requerido",
+        enter: "Ingresa el código",
+        save: "Guardar Cambios",
+        label_type: "Tipo",
+        label_group: "Grupo",
+        graphics: {
+            title_L: "Composición",
+            title_R: "Contenido energetico"
         },
-        "selected": "Nada seleccionado",
-        "Apply": "Aplicar cambios"
+        selected: "Nada seleccionado",
+        Apply: "Aplicar cambios"
     },
-    "components_home": {
-        "title": "Buscar Composición"
+    components_home: {
+        title: "Buscar Composición"
     },
-    "nutrientAccordion": {
-        "Energy": "Valor energético",
-        "Main": "Nutrientes principales",
-        "Micronutrients": "Micronutrientes",
-        "name": "Nombre",
-        "modify": "Modificar",
-        "unit": "Unidad",
-        "mean": "Promedio",
-        "details": "Detalles"
+    nutrientAccordion: {
+        Energy: "Valor energético",
+        Main: "Nutrientes principales",
+        Micronutrients: "Micronutrientes",
+        name: "Nombre",
+        modify: "Modificar",
+        unit: "Unidad",
+        mean: "Promedio",
+        details: "Detalles"
     },
-    "Centered": {
-        "details": "Detalles del Nutriente",
-        "mean": "Promedio",
-        "deviation": "Desviación",
-        "min": "Mínimo",
-        "max": "Máximo",
-        "note": "Notas",
-        "standardized": "Estandarizado",
-        "save": "Guardar",
-        "close": "Cerrar",
-        "references": "Referencias",
-        "yes": "Sí",
-        "type": "Tipo de dato",
-        "size": "Tamaño de muestra"
+    Centered: {
+        details: "Detalles del Nutriente",
+        mean: "Promedio",
+        deviation: "Desviación",
+        min: "Mínimo",
+        max: "Máximo",
+        note: "Notas",
+        standardized: "Estandarizado",
+        save: "Guardar",
+        close: "Cerrar",
+        references: "Referencias",
+        yes: "Sí",
+        type: "Tipo de dato",
+        size: "Tamaño de muestra"
     },
-    "LangualCode": {
-        "description_main": "Descripción Principal",
-        "code": "Código",
-        "description": "Descripción",
-        "Search": "Buscar por código Langual",
-        "Eliminate": "Eliminar",
-        "Add": "Agregar"
+    LangualCode: {
+        description_main: "Descripción Principal",
+        code: "Código",
+        description: "Descripción",
+        Search: "Buscar por código Langual",
+        Eliminate: "Eliminar",
+        Add: "Agregar"
     },
-    "References": {
-        "type": "Tipo:",
-        "authors": "Autores:",
-        "year": "Año:",
-        "city": "Ciudad:",
-        "magazine": "Revista:",
-        "Volume": "Volumen:",
-        "pages": "Páginas:",
-        "additional": "Otra información:",
-        "Add": "Agregar",
-        "Additional": "Información adicional:",
-        "Publication": "Publicación:"
+    References: {
+        type: "Tipo:",
+        authors: "Autores:",
+        year: "Año:",
+        city: "Ciudad:",
+        magazine: "Revista:",
+        Volume: "Volumen:",
+        pages: "Páginas:",
+        additional: "Otra información:",
+        Add: "Agregar",
+        Additional: "Información adicional:",
+        Publication: "Publicación:"
     },
-    "Origins": {
-        "title": "Origines",
-        "Region": "Región",
-        "Province": "Provincia",
-        "Commune": "Comuna",
-        "Location": "Localidad",
-        "select_region": "Selecciona una región",
-        "select": "Selecciona una",
-        "action": "Acciones",
-        "add": "Agregar origen",
-        "selected": "Direcciones seleccionadas:",
-        "no_direction": "Sin dirección seleccionada",
-        "minimum": "El mínimo de orígenes es uno",
-        "Add": "Añadir un origen",
-        "Delete": "Eliminar un origen"
+    Origins: {
+        title: "Origines",
+        Region: "Región",
+        Province: "Provincia",
+        Commune: "Comuna",
+        Location: "Localidad",
+        select_region: "Selecciona una región",
+        select: "Selecciona una",
+        action: "Acciones",
+        add: "Agregar origen",
+        selected: "Direcciones seleccionadas:",
+        no_direction: "Sin dirección seleccionada",
+        minimum: "El mínimo de orígenes es uno",
+        Add: "Añadir un origen",
+        Delete: "Eliminar un origen"
     },
-    "Case_1": {
-        "name": "Nombre",
-        "title": "Atributos Básicos",
-        "food_E": "Nombre alimento (Español):",
-        "Spanish": "Nombre en Español",
-        "food_P": "Nombre alimento (Portugués):",
-        "Portuguese": "Nombre en Portugués",
-        "food_I": "Nombre alimento (Inglés):",
-        "English": "Nombre en Inglés"
+    Case_1: {
+        name: "Nombre",
+        title: "Atributos Básicos",
+        food_E: "Nombre alimento (Español):",
+        Spanish: "Nombre en Español",
+        food_P: "Nombre alimento (Portugués):",
+        Portuguese: "Nombre en Portugués",
+        food_I: "Nombre alimento (Inglés):",
+        English: "Nombre en Inglés"
     },
-    "Case_2": {
-        "title": "Grupo y Tipo",
-        "group_name": "Grupo (Nombre):",
-        "name_G": "Nombre del Grupo",
-        "group_code": "Grupo (Código):",
-        "code_G": "Código del Grupo",
-        "type_name": "Tipo (Nombre):",
-        "name_T": "Nombre del Tipo",
-        "type_code": "Tipo (Código):",
-        "code_T": "Código del Tipo"
+    Case_2: {
+        title: "Grupo y Tipo",
+        group_name: "Grupo (Nombre):",
+        name_G: "Nombre del Grupo",
+        group_code: "Grupo (Código):",
+        code_G: "Código del Grupo",
+        type_name: "Tipo (Nombre):",
+        name_T: "Nombre del Tipo",
+        type_code: "Tipo (Código):",
+        code_T: "Código del Tipo"
     },
-    "Case_3": {
-        "title": "Ingredientes",
-        "Ingredients_E": "Ingredientes (Español):",
-        "Spanish": "Ingredientes en Español",
-        "Ingredients_P": "Ingredientes (Portugués):",
-        "Portuguese": "Ingredientes en Portugués",
-        "Ingredients_I": "Ingredientes (Inglés):",
-        "English": "Ingredientes en Inglés"
+    Case_3: {
+        title: "Ingredientes",
+        Ingredients_E: "Ingredientes (Español):",
+        Spanish: "Ingredientes en Español",
+        Ingredients_P: "Ingredientes (Portugués):",
+        Portuguese: "Ingredientes en Portugués",
+        Ingredients_I: "Ingredientes (Inglés):",
+        English: "Ingredientes en Inglés"
     },
-    "Case_4": {
-        "title": "Subespecie y variante",
-        "Subspecies": "Subespecie",
-        "strain": "Variante"
+    Case_4: {
+        title: "Subespecie y variante",
+        Subspecies: "Subespecie",
+        strain: "Variante"
     },
-    "Case_5": {
-        "title": "Macronutrientes",
-        "carbohydrates_T": "Carbohidratos Totales",
-        "carbohydrates_D": "Carbohidratos Disponibles",
-        "Protein": "Proteína",
-        "Lipid": "Lípido Total",
-        "fiber_G": "Fibra Alimentaria Total (g):",
-        "fiber": "Fibra Alimentaria"
+    Case_5: {
+        title: "Macronutrientes",
+        carbohydrates_T: "Carbohidratos Totales",
+        carbohydrates_D: "Carbohidratos Disponibles",
+        Protein: "Proteína",
+        Lipid: "Lípido Total",
+        fiber_G: "Fibra Alimentaria Total (g):",
+        fiber: "Fibra Alimentaria"
     },
-    "Case_6": {
-        "section": "Alcohol y Compuestos",
-        "title": "Alcohol y Compuestos Específicos",
-        "Alcohol": "Alcohol",
-        "acids_T_G": "Ácidos Orgánicos Totales (g):",
-        "acids": "Ácidos Orgánicos",
-        "Polyols": "Polioles Totales"
+    Case_6: {
+        section: "Alcohol y Compuestos",
+        title: "Alcohol y Compuestos Específicos",
+        Alcohol: "Alcohol",
+        acids_T_G: "Ácidos Orgánicos Totales (g):",
+        acids: "Ácidos Orgánicos",
+        Polyols: "Polioles Totales"
     },
-    "Case_7": {
-        "title": "Grasas y Ácidos Grasos",
-        "Saturated": "Ácidos Grasos Saturados",
-        "Monounsaturated": "Ácidos Grasos Monoinsaturados",
-        "Polyunsaturated": "Ácidos Grasos Poliinsaturados",
-        "Trans": "Ácidos Grasos Trans",
-        "Cholesterol": "Colesterol"
+    Case_7: {
+        title: "Grasas y Ácidos Grasos",
+        Saturated: "Ácidos Grasos Saturados",
+        Monounsaturated: "Ácidos Grasos Monoinsaturados",
+        Polyunsaturated: "Ácidos Grasos Poliinsaturados",
+        Trans: "Ácidos Grasos Trans",
+        Cholesterol: "Colesterol"
     },
-    "Case_8": {
-        "title": "Minerales",
-        "Calcium": "Calcio",
-        "Iron": "Hierro",
-        "Sodium": "Sodio",
-        "Magnesium": "Magnesio",
-        "Phosphorus": "Fósforo",
-        "Potassium": "Potasio",
-        "Manganese": "Manganeso",
-        "Copper": "Cobre",
-        "Selenium": "Selenio"
+    Case_8: {
+        title: "Minerales",
+        Calcium: "Calcio",
+        Iron: "Hierro",
+        Sodium: "Sodio",
+        Magnesium: "Magnesio",
+        Phosphorus: "Fósforo",
+        Potassium: "Potasio",
+        Manganese: "Manganeso",
+        Copper: "Cobre",
+        Selenium: "Selenio"
     },
-    "Case_9": {
-        "title": "Vitaminas",
-        "A": "Vitamina A",
-        "RAE": "Vitamina RAE",
-        "D": "Vitamina D",
-        "Tocopherol": "Alfa Tocoferol",
-        "Thiamin": "Tiamina",
-        "Riboflavin": "Riboflavina",
-        "Niacin": "Niacina Preformada",
-        "B6": "Vitamina B6",
-        "B12": "Vitamina B12",
-        "C": "Vitamina C"
+    Case_9: {
+        title: "Vitaminas",
+        A: "Vitamina A",
+        RAE: "Vitamina RAE",
+        D: "Vitamina D",
+        Tocopherol: "Alfa Tocoferol",
+        Thiamin: "Tiamina",
+        Riboflavin: "Riboflavina",
+        Niacin: "Niacina Preformada",
+        B6: "Vitamina B6",
+        B12: "Vitamina B12",
+        C: "Vitamina C"
     },
-    "AdminPage": {
-        "manual": "Ingreso Manual",
-        "load": "Cargar desde Archivo",
-        "title": "Secciones",
-        "enter": "Ingresar Datos de Alimentos",
-        "back": "Atras",
-        "next": "Siguiente",
-        "import": "Importar Plantilla",
-        "process": "Procesar Datos",
-        "upload": "Suba un archivo en formato",
-        "uploadError": "Sucedió un error al subir el archivo",
-        "noFileSelected": "No se ha seleccionado un archivo",
-        "or": "o",
-        "point": ".",
-        "sectionNames": {
-            "data": "Datos generales",
-            "value": "Valor energetico",
-            "compound": "Macronutrientes compuestos",
-            "non_compounded": "Macronutrientes no compuestos",
-            "vitamins": "Vitaminas",
-            "minerals": "Minerales",
-            "origins": "Origines del alimento",
-            "references": "Referencias",
-            "codes": "Codigos languales",
-            "view": "Vista de información actual"
+    AdminPage: {
+        manual: "Ingreso Manual",
+        load: "Cargar desde Archivo",
+        title: "Secciones",
+        enter: "Ingresar Datos de Alimentos",
+        back: "Atras",
+        next: "Siguiente",
+        import: "Importar Plantilla",
+        process: "Procesar Datos",
+        upload: "Suba un archivo en formato",
+        uploadError: "Sucedió un error al subir el archivo",
+        noFileSelected: "No se ha seleccionado un archivo",
+        or: "o",
+        point: ".",
+        sectionNames: {
+            data: "Datos generales",
+            value: "Valor energetico",
+            compound: "Macronutrientes compuestos",
+            non_compounded: "Macronutrientes no compuestos",
+            vitamins: "Vitaminas",
+            minerals: "Minerales",
+            origins: "Origines del alimento",
+            references: "Referencias",
+            codes: "Codigos languales",
+            view: "Vista de información actual"
         },
-        "Enter_New_R": "Ingresar una nueva referencia",
-        "New_R": "Nueva referencia",
-        "sectionNamesByNewReference": {
-            "Data": "Datos generales",
-            "Authors": "Autores",
-            "Article": "Artículo",
-            "Preview": "Previsualización"
+        Enter_New_R: "Ingresar una nueva referencia",
+        New_R: "Nueva referencia",
+        sectionNamesByNewReference: {
+            Data: "Datos generales",
+            Authors: "Autores",
+            Article: "Artículo",
+            Preview: "Previsualización"
         }
     },
-    "FoodGeneralData": {
-        "code": "Código del alimento",
-        "strain": "Cepa",
-        "brand": "Marca",
-        "Observation": "Observación",
-        "group": "Grupo alimenticio",
-        "select_G": "Selecciona un grupo alimenticio",
-        "type": "Tipo de alimento",
-        "select_A": "Selecciona un tipo de alimento",
-        "name_scientist": "Nombre científico",
-        "Subspecies": "Subespecie",
-        "name_common": "Nombres comunes",
-        "name_com": "Nombre común",
-        "Ingredients": "Ingredientes",
-        "Ingredient": "Ingrediente",
-        "alert": {
-            "authentication": "No hay token de autenticación disponible",
-            "group": "Por favor, ingrese tanto el nombre como el código del grupo",
-            "Failed_group": "Fallo al crear el grupo",
-            "type": "Por favor, ingrese tanto el nombre como el código del tipo",
-            "Failed_type": "Fallo al crear el tipo",
-            "scientific": "Por favor, ingrese un nombre científico",
-            "Failed_scientific": "Fallo al crear el nombre científico",
-            "subspecies": "Por favor, ingrese una subespecie",
-            "Failed_subspecies": "Fallo al crear la subespecie"
+    FoodGeneralData: {
+        code: "Código del alimento",
+        strain: "Cepa",
+        brand: "Marca",
+        Observation: "Observación",
+        group: "Grupo alimenticio",
+        select_G: "Selecciona un grupo alimenticio",
+        type: "Tipo de alimento",
+        select_A: "Selecciona un tipo de alimento",
+        name_scientist: "Nombre científico",
+        Subspecies: "Subespecie",
+        name_common: "Nombres comunes",
+        name_com: "Nombre común",
+        Ingredients: "Ingredientes",
+        Ingredient: "Ingrediente",
+        alert: {
+            authentication: "No hay token de autenticación disponible",
+            group: "Por favor, ingrese tanto el nombre como el código del grupo",
+            Failed_group: "Fallo al crear el grupo",
+            type: "Por favor, ingrese tanto el nombre como el código del tipo",
+            Failed_type: "Fallo al crear el tipo",
+            scientific: "Por favor, ingrese un nombre científico",
+            Failed_scientific: "Fallo al crear el nombre científico",
+            subspecies: "Por favor, ingrese una subespecie",
+            Failed_subspecies: "Fallo al crear la subespecie"
         },
-        "error": {
-            "group": "Error al crear el grupo:",
-            "type": "Error al crear el tipo:",
-            "scientific": "Error al crear el nombre científico:",
-            "subspecies": "Error al crear la subespecie:"
+        error: {
+            group: "Error al crear el grupo:",
+            type: "Error al crear el tipo:",
+            scientific: "Error al crear el nombre científico:",
+            subspecies: "Error al crear la subespecie:"
         },
-        "Group": "Código del grupo",
-        "create_group": "Crear Grupo",
-        "Type": "Código del tipo",
-        "Create": "Crear Tipo",
-        "Select_scientific": "Selecciona un nombre científico",
-        "Create_Scientific": "Crear Nombre Científico",
-        "Select_subspecies": "Selecciona una subespecie",
-        "Create_subspecies": "Crear Subespecie"
+        Group: "Código del grupo",
+        create_group: "Crear Grupo",
+        Type: "Código del tipo",
+        Create: "Crear Tipo",
+        Select_scientific: "Selecciona un nombre científico",
+        Create_Scientific: "Crear Nombre Científico",
+        Select_subspecies: "Selecciona una subespecie",
+        Create_subspecies: "Crear Subespecie"
     },
-    "NewMacronutrient": {
-        "name": "Nombre nutriente",
-        "mean": "Promedio",
-        "Deviation": "Desviación",
-        "min": "Mínimo",
-        "max": "Máximo",
-        "Size": "Tamaño de muestra",
-        "type": "Tipo de dato",
-        "Action": "Acción",
-        "Analytical": "Analítico",
-        "Calculated": "Calculado",
-        "Taken": "Asumido",
-        "Borrowed": "Prestado",
-        "Edit": "Editar",
-        "parent": "Nutriente Padre:",
-        "save": "Guardar",
-        "cancel": "Cancelar"
+    NewMacronutrient: {
+        name: "Nombre nutriente",
+        mean: "Promedio",
+        Deviation: "Desviación",
+        min: "Mínimo",
+        max: "Máximo",
+        Size: "Tamaño de muestra",
+        type: "Tipo de dato",
+        Action: "Acción",
+        Analytical: "Analítico",
+        Calculated: "Calculado",
+        Taken: "Asumido",
+        Borrowed: "Prestado",
+        Edit: "Editar",
+        parent: "Nutriente Padre:",
+        save: "Guardar",
+        cancel: "Cancelar"
     },
-    "OriginRow": {
-        "selected": "Nada seleccionado",
-        "remove": "Eliminar"
+    OriginRow: {
+        selected: "Nada seleccionado",
+        remove: "Eliminar"
     },
-    "PreviewDataFrom": {
-        "General": "Datos Generales",
-        "Code": "Código:",
-        "Scientific": "Nombre científico:",
-        "Group": "Grupo:",
-        "Type": "Tipo:",
-        "Subspecies": "Subespecie:",
-        "Strain": "Cepa:",
-        "Brand": "Marca:",
-        "Observation": "Observación:",
-        "Common": "Nombre común",
-        "Nutritional": "Datos Nutricionales",
-        "Energy": "Energía",
-        "Nutrient": "ID de nutriente:",
-        "Average": "Promedio:",
-        "Components": "Componentes:",
-        "Micronutrients": "Micronutrientes",
-        "Vitamins": "Vitaminas",
-        "Main": "Nutrientes Principales",
-        "Minerals": "Minerales"
+    PreviewDataFrom: {
+        General: "Datos Generales",
+        Code: "Código:",
+        Scientific: "Nombre científico:",
+        Group: "Grupo:",
+        Type: "Tipo:",
+        Subspecies: "Subespecie:",
+        Strain: "Cepa:",
+        Brand: "Marca:",
+        Observation: "Observación:",
+        Common: "Nombre común",
+        Nutritional: "Datos Nutricionales",
+        Energy: "Energía",
+        Nutrient: "ID de nutriente:",
+        Average: "Promedio:",
+        Components: "Componentes:",
+        Micronutrients: "Micronutrientes",
+        Vitamins: "Vitaminas",
+        Main: "Nutrientes Principales",
+        Minerals: "Minerales"
     },
-    "SelectorWithInput": {
-        "button": "Buscar",
-        "Other": "Otro valor",
-        "Enter": "Escriba otro valor"
+    SelectorWithInput: {
+        button: "Buscar",
+        Other: "Otro valor",
+        Enter: "Escriba otro valor"
     },
-    "PreviewPostReference": {
-        "Code": "Código:",
-        "Authors": "Autores:",
-        "New_A": "Nuevos Autores:",
-        "New": "Artículo Nuevo:",
-        "City": "Ciudad:",
-        "Other": "Otro:",
-        "button": "Validar y enviar"
+    PreviewPostReference: {
+        Code: "Código:",
+        Authors: "Autores:",
+        New_A: "Nuevos Autores:",
+        New: "Artículo Nuevo:",
+        City: "Ciudad:",
+        Other: "Otro:",
+        button: "Validar y enviar"
     },
-    "Authors": {
-        "author": "Selecciona o agregar un autor",
-        "Eliminate": "Eliminar",
-        "Select": "Selecciona y agrega autores",
-        "Add": "Agregar autor",
-        "No_selected": "No se ha seleccionado un autor"
+    Authors: {
+        author: "Selecciona o agregar un autor",
+        Eliminate: "Eliminar",
+        Select: "Selecciona y agrega autores",
+        Add: "Agregar autor",
+        No_selected: "No se ha seleccionado un autor"
     },
-    "FoodTableAdmin": {
-        "List": "Lista de Alimentos Ingresados",
-        "available": "No hay alimentos disponibles",
-        "Name": "Nombre",
-        "Actions": "Acciones",
-        "Verify": "Verificar",
-        "Check": "Verificar Alimento",
-        "Back": "Volver a la lista"
+    FoodTableAdmin: {
+        List: "Lista de Alimentos Ingresados",
+        available: "No hay alimentos disponibles",
+        Name: "Nombre",
+        Actions: "Acciones",
+        Verify: "Verificar",
+        Check: "Verificar Alimento",
+        Back: "Volver a la lista"
     },
-    "ModalReferences": {
-        "Select": "Seleccionar nutrientes",
-        "Close": "Cerrar",
-        "Save": "Guardar cambios"
+    ModalReferences: {
+        Select: "Seleccionar nutrientes",
+        Close: "Cerrar",
+        Save: "Guardar cambios"
     },
-    "GeneralData": {
-        "Add": "Agregar Nueva Referencia",
-        "Code": "Código",
-        "Title": "Título",
-        "Enter_t": "Ingrese el título",
-        "Type": "Tipo",
-        "required": "Es obligatorio",
-        "Report": "Reporte",
-        "Thesis": "Tesis",
-        "Article": "Artículo",
-        "Website": "Sitio web",
-        "Book": "Libro",
-        "City": "Ciudad",
-        "Select": "Seleccione una ciudad",
-        "Year": "Año",
-        "Enter_y": "Ingrese el año",
-        "Other": "Otro",
-        "Additional": "Información adicional"
+    GeneralData: {
+        Add: "Agregar Nueva Referencia",
+        Code: "Código",
+        Title: "Título",
+        Enter_t: "Ingrese el título",
+        Type: "Tipo",
+        required: "Es obligatorio",
+        Report: "Reporte",
+        Thesis: "Tesis",
+        Article: "Artículo",
+        Website: "Sitio web",
+        Book: "Libro",
+        City: "Ciudad",
+        Select: "Seleccione una ciudad",
+        Year: "Año",
+        Enter_y: "Ingrese el año",
+        Other: "Otro",
+        Additional: "Información adicional"
     }
 };
