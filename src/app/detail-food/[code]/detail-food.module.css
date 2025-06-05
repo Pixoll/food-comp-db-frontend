@@ -1,0 +1,11 @@
+.graphic-container{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+@media screen and (max-width: 1020px) {
+    .graphic-container{
+        flex-direction: column;
+    }
+}
