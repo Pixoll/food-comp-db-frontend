@@ -26,7 +26,7 @@ export default function makeRequest(
       const { payload, contentType } = options;
 
       request = axios[method](
-        "http://localhost:3000/api" + endpoint,
+        process.env.NEXT_PUBLIC_API_URL + endpoint,
         payload,
         {
           headers: {
@@ -36,7 +36,7 @@ export default function makeRequest(
         }
       );
     } else {
-      request = axios[method]("http://localhost:3000/api" + endpoint, {
+      request = axios[method](process.env.NEXT_PUBLIC_API_URL + endpoint, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

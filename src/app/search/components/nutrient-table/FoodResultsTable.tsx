@@ -75,7 +75,7 @@ export default function FoodResultsTable({
     const exportData = async (codes: string[]) => {
         try {
             const response = await axios.get(
-                `http://localhost:3000/api/xlsx?codes=${codes.join(",")}`,
+                `${process.env.NEXT_PUBLIC_API_URL}/xlsx?codes=${codes.join(",")}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,

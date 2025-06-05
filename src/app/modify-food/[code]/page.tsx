@@ -3,7 +3,7 @@ import ModifyFoodClient from "./client";
 
 export async function generateStaticParams() {
     try {
-        const response = await fetch("http://localhost:3000/api/foods");
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/foods`);
         if (!response.ok) {
             throw new Error(`${response.status}`);
         }
