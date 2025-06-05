@@ -40,7 +40,8 @@
     "./.next/types/**/*.ts",
     "./build/types/**/*.ts",
     "./src",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "build/types/**/*.ts"
   ],
   "exclude": [
     "./node_modules",
