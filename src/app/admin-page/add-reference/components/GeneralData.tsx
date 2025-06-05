@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { City } from "@/hooks";
 import NumericField from "@/app/components/Fields/NumericField";
 import TextField from "@/app/components/Fields/TextField";
-import SelectorWithInput from "../../../components/Selector/SelectorWithInput";
+import SelectorWithInput from "@/app/components/Selector/SelectorWithInput";
 
 export type ReferenceForm = {
   code: number;

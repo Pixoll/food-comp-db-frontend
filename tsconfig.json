@@ -7,17 +7,17 @@
     "lib": [
       "dom",
       "dom.iterable",
-      "esnext",
+      "esnext"
     ],
     "plugins": [
       {
-        "name": "next",
-      },
+        "name": "next"
+      }
     ],
     "paths": {
       "@/*": [
-        "src/*",
-      ],
+        "./src/*"
+      ]
     },
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
@@ -37,10 +37,13 @@
     "strict": true
   },
   "include": [
-    "src",
-    "build/types/**/*.ts",
+    "./.next/types/**/*.ts",
+    "./build/types/**/*.ts",
+    "./src",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules",
-  ],
+    "./node_modules",
+    "./src/core/**"
+  ]
 }

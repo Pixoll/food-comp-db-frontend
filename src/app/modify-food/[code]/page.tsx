@@ -1,5 +1,5 @@
-import {FoodResult} from "@/types/option";
-import ModifyFoodClient from "./client"
+import { FoodResult } from "@/types/option";
+import ModifyFoodClient from "./client";
 
 export async function generateStaticParams() {
     try {
@@ -15,7 +15,8 @@ export async function generateStaticParams() {
         return [];
     }
 }
-export default function ModifyFoodPage({ params }:{ params: {code:string}}) {
-    const code  = params.code;
-    return (<ModifyFoodClient code={code} />);
+
+export default async function ModifyFoodPage({ params }: { params: Promise<{ code: string }> }) {
+    const { code } = await params;
+    return <ModifyFoodClient code={code}/>;
 }

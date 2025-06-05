@@ -2,8 +2,6 @@
 
 export * from "./CheckboxFilter";
 export { default as CheckboxFilter } from "./CheckboxFilter";
-export * from "./FoodFilter";
-export { default as FoodFilter } from "./FoodFilter";
 export * from "./nutrient-table/FoodResultsTable";
 export { default as FoodResultsTable } from "./nutrient-table/FoodResultsTable";
 export * from "./Pagination";

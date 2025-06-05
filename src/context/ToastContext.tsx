@@ -2,7 +2,7 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 import ToastComponent, {
   ToastComponentProps,
-} from "@/core/components/ToastComponent";
+} from "@/app/components/ToastComponent";
 
 type ToastContextProps = {
   addToast: (toast: ToastComponentProps) => void;

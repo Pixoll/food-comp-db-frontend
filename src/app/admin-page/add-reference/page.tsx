@@ -3,13 +3,7 @@
 import {Dispatch, SetStateAction, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {FormState, useForm, useReferences} from "@/hooks";
-import {
-    NewArticleByReference,
-    NewAuthors,
-    NewReference,
-    PreviewNewReference,
-    ReferenceForm
-} from "@/core/components/adminPage";
+import { ArticleByReference, Authors, GeneralData, PreviewPostReference, ReferenceForm } from "./components";
 
 enum TypeOfHandle {
     GENERAL_DATA = 1,
@@ -110,7 +104,7 @@ if (formState.type === "article") {
         switch (activeSection) {
             case "general":
                 return (
-                    <NewReference
+                    <GeneralData
                         code={formState.code}
                         type={formState.type}
                         title={formState.title}
@@ -124,7 +118,7 @@ if (formState.type === "article") {
                 );
             case "authors":
                 return (
-                    <NewAuthors
+                    <Authors
                         authorIds={formState.authorIds}
                         newAuthors={formState.newAuthors}
                         data={authors || []}
@@ -147,7 +141,7 @@ if (formState.type === "article") {
 
             case "article":
                 return (
-                    <NewArticleByReference
+                    <ArticleByReference
                         data={{
                             journals: journals || [],
                             journalVolumes: journalVolumes || [],
@@ -167,7 +161,7 @@ if (formState.type === "article") {
                 );
             case "preview":
                 return (
-                    <PreviewNewReference
+                    <PreviewPostReference
                         data={formState}
                         authors={authors || []}
                         cities={cities || []}

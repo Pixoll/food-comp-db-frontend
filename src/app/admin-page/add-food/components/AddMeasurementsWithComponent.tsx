@@ -8,7 +8,7 @@ import {
   NutrientMeasurementForm,
   NutrientMeasurementWithComponentsForm,
   NutrientSummary,
-} from "@/pages/AdminPage";
+} from "@/types/nutrients";
 import { NutrientMeasurementFormOnlyNumbers } from "./AddNutrientsMeasurements";
 import NumericField from "@/app/components/Fields/NumericField";
 import ToolTip from "@/app/components/ToolTip";

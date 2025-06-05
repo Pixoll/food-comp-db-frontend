@@ -3,7 +3,7 @@ import {useTranslation} from "react-i18next";
 import {
     NutrientMeasurementForm,
     NutrientSummary,
-} from "@/pages/AdminPage";
+} from "@/types/nutrients";
 import { Ellipsis, AlertCircle } from "lucide-react";
 import NumericField from "@/app/components/Fields/NumericField";
 import ToolTip from "@/app/components/ToolTip";

@@ -1,7 +1,7 @@
 'use client'
 import { useState } from "react";
 import { Collection } from "@/utils/collection";
-import "@/assets/css/_searchBox.css";
+import "@/app/search/components/SearchBox.css";
 
 interface SingleOptionFilterProps {
   options: Collection<string, string>;

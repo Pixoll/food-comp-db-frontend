@@ -1,12 +1,11 @@
-'use client'
-import {useState} from "react";
-import {useRouter} from "next/navigation";
-import {useTranslation} from "react-i18next";
-import background from "../../public/main_page_bg.jpg";
+"use client";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import Footer from "./components/Footer";
 
 export default function HomePage() {
-    const {t} = useTranslation();
+    const { t } = useTranslation();
     const router = useRouter();
     const [foodName, setFoodName] = useState("");
     const handleSubmit = (e: React.FormEvent) => {
@@ -17,7 +16,7 @@ export default function HomePage() {
     };
     const toSearchPage = (foodName: string) => {
         const trimmedName = foodName.trim();
-        router.push(`/search?foodName=${encodeURIComponent(JSON.stringify({foodName: trimmedName}))}`);
+        router.push(`/search?foodName=${encodeURIComponent(JSON.stringify({ foodName: trimmedName }))}`);
     };
     return (
         <>
@@ -25,7 +24,7 @@ export default function HomePage() {
                 // bg image obtained from https://www.pexels.com/photo/assorted-vegetables-on-brown-surface-616404/
                 // marked as free to use by the photographe
                 style={{
-                    backgroundImage: `url(${background.src}), radial-gradient(rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 50%)`
+                    backgroundImage: "url(/main_page_bg.jpg), radial-gradient(rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 50%)"
                 }}
                 className={`
                     bg-blend-overlay
@@ -35,7 +34,8 @@ export default function HomePage() {
                     m-[0px]
                     text-[white]
                     text-center
-                    `}>
+                    `}
+            >
                 <div className="container mx-auto h-full">
                     <div className="h-full flex justify-center items-center">
                         <div>
@@ -45,7 +45,8 @@ export default function HomePage() {
                                     text-[48px]
                                     text-shadow-[2px_2px_8px_rgba(0,0,0,0.7)]
                                     font-[Poppins,_sans-serif]
-                                    ">
+                                    "
+                            >
                                 {t("homepage.title")}
                             </h1>
                             <p
@@ -126,5 +127,5 @@ export default function HomePage() {
             </div>
             <Footer/>
         </>
-    )
+    );
 }

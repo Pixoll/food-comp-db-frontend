@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Trash, ArrowRight, ArrowLeft, Download } from "lucide-react";
 import {useComparison} from "@/context/ComparisonContext";
 import {useFetch, FetchStatus} from "@/hooks";
-import NutrientComparisonTable from "../../core/components/comparePage/NutrientComparisonTable";
+import NutrientComparisonTable from "./components/NutrientComparisonTable";
 import {useAuth} from "@/context/AuthContext";
 import {useRouter} from "next/navigation";
 import {SingleFoodResult} from "@/types/SingleFoodResult";

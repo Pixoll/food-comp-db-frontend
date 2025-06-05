@@ -12,12 +12,19 @@ import {
   NutrientMeasurementForm,
   NutrientMeasurementWithComponentsForm,
   NutrientSummary,
-  NutrientsValueForm,
-} from "@/pages/AdminPage";
+} from "@/types/nutrients";
 import { Reference } from "@/hooks";
 import Pagination from "@/app/search/components/Pagination";
 import ModalReferences from "@/app/admin-page/add-food/components/ModalReferences";
 
+type NutrientsValueForm = {
+  energy: NutrientMeasurementForm[];
+  mainNutrients: NutrientMeasurementWithComponentsForm[];
+  micronutrients: {
+    vitamins: NutrientMeasurementForm[];
+    minerals: NutrientMeasurementForm[];
+  };
+};
 
 type NewReferencesProps = {
   references: Reference[];

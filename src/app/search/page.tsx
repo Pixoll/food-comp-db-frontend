@@ -1,18 +1,18 @@
-'use client'
+"use client";
+import { FetchStatus, useFetch } from "@/hooks";
+import { FoodResult } from "@/types/option";
+import { useSearchParams } from "next/navigation";
 import qs from "qs";
-import {useState, useEffect} from "react";
-import {FetchStatus, useFetch} from "@/hooks";
-import {useTranslation} from "react-i18next";
-import { useSearchParams } from 'next/navigation';
-import FilterBody, {Filters} from "./components/FilterBody";
+import { Suspense, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import FilterBody, { Filters } from "./components/FilterBody";
 import FoodResultsTable from "./components/nutrient-table/FoodResultsTable";
-import {FoodResult} from "@/types/option";
-import styles from "./search.module.css"
+import styles from "./search.module.css";
 
-export default function SearchPage() {
-    const {t} = useTranslation();
+function Search() {
+    const { t } = useTranslation();
     const searchParams = useSearchParams();
-    const paramFoodName = searchParams.get('foodName') || "";
+    const paramFoodName = searchParams.get("foodName") || "";
 
     const [selectedFilters, setSelectedFilters] = useState<Filters>({
         foodTypeFilter: new Set(),
@@ -87,5 +87,13 @@ export default function SearchPage() {
                 setSearchForName={setSearchForName}
             />
         </div>
+    );
+}
+
+export default function SearchPage() {
+    return (
+        <Suspense>
+            <Search/>
+        </Suspense>
     );
 }

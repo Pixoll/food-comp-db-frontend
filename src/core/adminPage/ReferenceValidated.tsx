@@ -9,7 +9,7 @@ import makeRequest from "@/utils/makeRequest";
 import Pagination from "@/app/search/components/Pagination";
 import CSVReferenceDisplay from "./CSVReferenceDisplay";
 import { CSVReference } from "./DataFromCsv";
-import "@/assets/css/_ReferenceValidated.css";
+import "@/core/adminPage/ReferenceValidated.css";
 
 type ReferenceValidatedProps = {
   data: CSVReference[];

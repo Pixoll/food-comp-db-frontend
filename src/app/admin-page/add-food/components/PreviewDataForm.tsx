@@ -5,7 +5,7 @@ import {
   NutrientMeasurementForm,
   NutrientMeasurementWithComponentsForm,
   NutrientSummary,
-} from "@/pages/AdminPage";
+} from "@/types/nutrients";
 import {FoodForm} from "@/app/admin-page/add-food/page"
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/context/ToastContext";
@@ -17,7 +17,6 @@ import {
   searchSubspeciesNameById,
   searchTypeNameById,
 } from "@/app/admin-page/add-food/components/FoodGeneralData";
-import "@/assets/css/_PreviewDataForm.css";
 
 type NewFood = {
   commonName: Record<"es", string> &
