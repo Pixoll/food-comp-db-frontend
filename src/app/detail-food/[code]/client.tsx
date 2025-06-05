@@ -145,7 +145,7 @@ export default function ClientDetailPage({code}: { code: string }) {
                     </div>
                     <div className="mt-[10px] border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white]">
                         <h2 className="text-center ">Tabla de composición</h2>
-                        <CompositionDropdown nutrientData={data.nutrientMeasurements ?? []}/>
+                        <CompositionDropdown nutrientData={data.nutrientMeasurements ?? []} grams = {grams}/>
                     </div>
                 </TabItem>
                 <TabItem label="Códigos languales">

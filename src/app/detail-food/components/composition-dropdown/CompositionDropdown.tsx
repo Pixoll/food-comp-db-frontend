@@ -9,9 +9,10 @@ import Modal from "../../../components/Modal/Modal"
 
 type NutrientCompositionProps = {
     nutrientData: NutrientsValue;
+    grams: number;
 };
 
-export default function NutrientComposition({nutrientData}: NutrientCompositionProps) {
+export default function NutrientComposition({nutrientData, grams}: NutrientCompositionProps) {
     const [expandedSections, setExpandedSections] = useState({
         energy: true,
         macronutrients: true,
@@ -66,21 +67,21 @@ export default function NutrientComposition({nutrientData}: NutrientCompositionP
         if (nutrientMeasurements?.energy) {
             const energyNutrient = nutrientMeasurements.energy.find(n => n.nutrientId === nutrientId);
             if (energyNutrient) {
-                return energyNutrient.average?.toString() || '-';
+                return (energyNutrient.average*(grams/100)).toString()|| '-';
             }
         }
 
         if (nutrientMeasurements?.macronutrients) {
             const macroNutrient = nutrientMeasurements.macronutrients.find(n => n.nutrientId === nutrientId);
             if (macroNutrient) {
-                return macroNutrient.average?.toString() || '-';
+                return (macroNutrient.average*(grams/100)).toString() || '-';
             }
 
             for (const macro of nutrientMeasurements.macronutrients) {
                 if (macro.components) {
                     const component = macro.components.find(c => c.nutrientId === nutrientId);
                     if (component) {
-                        return component.average?.toString() || '-';
+                        return (component.average*(grams/100)).toString() || '-';
                     }
                 }
             }
@@ -90,14 +91,14 @@ export default function NutrientComposition({nutrientData}: NutrientCompositionP
             if (nutrientMeasurements.micronutrients.vitamins) {
                 const vitamin = nutrientMeasurements.micronutrients.vitamins.find(n => n.nutrientId === nutrientId);
                 if (vitamin) {
-                    return vitamin.average?.toString() || '-';
+                    return (vitamin.average*(grams/100)).toString() || '-';
                 }
             }
 
             if (nutrientMeasurements.micronutrients.minerals) {
                 const mineral = nutrientMeasurements.micronutrients.minerals.find(n => n.nutrientId === nutrientId);
                 if (mineral) {
-                    return mineral.average?.toString() || '-';
+                    return (mineral.average*(grams/100)).toString() || '-';
                 }
             }
         }
