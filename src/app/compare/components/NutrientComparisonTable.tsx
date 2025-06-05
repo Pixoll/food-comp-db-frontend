@@ -5,7 +5,7 @@ import { GetFoodMeasurementsResult } from "@/app/compare/page"
 
 type NutrientComparisonTableProps = {
   foodsData: GetFoodMeasurementsResult[];
-  onRemoveFood: (code: string) => void;
+  onRemoveFood: (codes: string[]) => void;
 };
 
 export default function NutrientComparisonTable({ foodsData, onRemoveFood }: NutrientComparisonTableProps) {
@@ -200,7 +200,7 @@ export default function NutrientComparisonTable({ foodsData, onRemoveFood }: Nut
                     <span>{getFoodName(food.commonName.es || "")}</span>
                     <button
                         className="p-[3px] leading-none rounded-full text-[#991b1b] bg-[#fee2e2] hover:bg-[#fecaca] hover:text-[#7f1d1d] transition-colors duration-200"
-                        onClick={() => onRemoveFood(food.code)}
+                        onClick={() => onRemoveFood([food.code])}
                         aria-label={`Remove ${getFoodName(food.commonName.es || "")}`}
                     >
                       <X size={16} />
