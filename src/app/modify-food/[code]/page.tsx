@@ -1,15 +1,15 @@
-import { FoodResult } from "@/types/option";
+import api from "@/api";
 import ModifyFoodClient from "./client";
 
 export async function generateStaticParams() {
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/foods`);
-        if (!response.ok) {
-            throw new Error(`${response.status}`);
+        const result = await api.getFoodsV1();
+        if (result.error) {
+            console.error("Error generating static params:", result.error);
+            return [];
         }
 
-        const foods: FoodResult[] = await response.json();
-        return foods.map((food: FoodResult) => ({ code: food.code }));
+        return result.data.map(food => ({ code: food.code }));
     } catch (error) {
         console.error("Error generating static params:", error);
         return [];

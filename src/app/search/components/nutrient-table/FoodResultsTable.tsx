@@ -1,14 +1,14 @@
-'use client'
-import axios from "axios";
-import {ArrowDown, ArrowUp, Plus, Minus} from "lucide-react";
-import {useEffect, useState} from "react";
-import {useTranslation} from "react-i18next";
-import {useRouter} from 'next/navigation';
-import {useAuth} from "@/context/AuthContext";
-import {useComparison} from "@/context/ComparisonContext";
-import {FoodResult} from "@/types/option";
+"use client";
+import api from "@/api";
+import { useAuth } from "@/context/AuthContext";
+import { useComparison } from "@/context/ComparisonContext";
+import { FoodResult } from "@/types/option";
+import { ArrowDown, ArrowUp, Minus, Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Pagination from "../Pagination";
-import "./index.css"
+import "./index.css";
 
 interface FoodResultsListProps {
     data: FoodResult[];
@@ -28,16 +28,16 @@ enum SortOrder {
 }
 
 export default function FoodResultsTable({
-                                             data,
-                                             searchForName,
-                                             setSearchForName,
-                                         }: FoodResultsListProps) {
+    data,
+    searchForName,
+    setSearchForName,
+}: FoodResultsListProps) {
     const router = useRouter();
-    const {state} = useAuth();
-    const {token} = state;
-    const {comparisonFoods, addToComparison, removeFromComparison} =
+    const { state } = useAuth();
+    const { token } = state;
+    const { comparisonFoods, addToComparison, removeFromComparison } =
         useComparison();
-    const {t, i18n} = useTranslation();
+    const { t, i18n } = useTranslation();
     const [selectedSort, setSelectedSort] = useState(SortType.NAME);
     const [sortOrder, setSortOrder] = useState(SortOrder.ASC);
     const [resultsPerPage, setResultsPerPage] = useState(10);
@@ -58,7 +58,6 @@ export default function FoodResultsTable({
         router.push(`/detail-food/${code}`);
     };
 
-
     const toModifyFoodDetail = (code: string) => {
         if (state.isAuthenticated) {
             router.push(`/modify-food/${code}`);
@@ -74,36 +73,30 @@ export default function FoodResultsTable({
     };
     const exportData = async (codes: string[]) => {
         try {
-            const response = await axios.get(
-                `${process.env.NEXT_PUBLIC_API_URL}/xlsx?codes=${codes.join(",")}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                    responseType: "blob",
-                }
-            );
+            const result = await api.getXlsxV1({
+                query: {
+                    codes,
+                },
+                auth: token ?? "",
+            });
 
-            const blob = new Blob([response.data], {
-                type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            if (result.error) {
+                console.error(result.error);
+                return;
+            }
+
+            const blob = new Blob([result.data as any], {
+                type: result.response.headers.get("content-type")!,
             });
             const url = window.URL.createObjectURL(blob);
 
-            let fileName = "foods_data.xlsx";
-            const contentDisposition = response.headers["content-disposition"];
-            if (contentDisposition) {
-                const match = contentDisposition.match(/filename="(.+)"/);
-                if (match && match[1]) {
-                    fileName = match[1];
-                }
-            }
+            let fileName = result.response.headers.get("content-disposition")?.match(/filename="([^"]+)"/)?.[1]
+                ?? "foods_data.xlsx";
 
             const link = document.createElement("a");
             link.href = url;
             link.download = fileName;
-            document.body.appendChild(link);
             link.click();
-            document.body.removeChild(link);
             window.URL.revokeObjectURL(url);
         } catch (error) {
             console.error(error);
@@ -271,11 +264,16 @@ export default function FoodResultsTable({
                                     <option value="100">100</option>
                                 </select>
                                 <div
-                                    className="absolute right-[12px] top-[50%] transform translate-y-[-50%] pointer-events-none">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-[16px] w-[16px] text-[#007f67]"
-                                         fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                                              d="M19 9l-7 7-7-7"/>
+                                    className="absolute right-[12px] top-[50%] transform translate-y-[-50%] pointer-events-none"
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg" className="h-[16px] w-[16px] text-[#007f67]"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                    >
+                                        <path
+                                            strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                            d="M19 9l-7 7-7-7"
+                                        />
                                     </svg>
                                 </div>
                             </div>
@@ -360,7 +358,8 @@ export default function FoodResultsTable({
                             active:shadow-[0_1px_3px_rgba(0,0,0,0.2)]
                             active:translate-y-[1px]
                             "
-                            onClick={() => selectAllFoodComparison()}>
+                            onClick={() => selectAllFoodComparison()}
+                        >
                             Seleccionar todo
                         </button>
                     </div>
@@ -372,7 +371,8 @@ export default function FoodResultsTable({
                 <p>{t("Table.no_results")}</p>
             ) : (
                 <>
-                    <table className="content-table-foods
+                    <table
+                        className="content-table-foods
                             border-collapse
                             font-[0.95em]
                             w-full
@@ -384,8 +384,10 @@ export default function FoodResultsTable({
                         <thead>
                         <tr className="bg-[#4e9f6f] text-[white] text-left font-[700] select-none">
                             <th className="text-[22px] font-[500] py-[14px] px-[18px] text-left">
-                                <div className="flex flex-row items-center cursor-pointer w-[max-content]"
-                                     onClick={() => handleSortClick(SortType.CODE)}>
+                                <div
+                                    className="flex flex-row items-center cursor-pointer w-[max-content]"
+                                    onClick={() => handleSortClick(SortType.CODE)}
+                                >
                                     {selectedSort === SortType.CODE &&
                                         (sortOrder === SortOrder.ASC ? (
                                             <ArrowUp className="mr-[5px]" height={24}/>
@@ -396,8 +398,10 @@ export default function FoodResultsTable({
                                 </div>
                             </th>
                             <th className="text-[22px] font-[500] py-[14px] px-[18px] text-left">
-                                <div className="flex flex-row items-center cursor-pointer w-[max-content]"
-                                     onClick={() => handleSortClick(SortType.NAME)}>
+                                <div
+                                    className="flex flex-row items-center cursor-pointer w-[max-content]"
+                                    onClick={() => handleSortClick(SortType.NAME)}
+                                >
                                     {selectedSort === SortType.NAME &&
                                         (sortOrder === SortOrder.ASC ? (
                                             <ArrowUp className="mr-[5px]" height={24}/>
@@ -433,7 +437,8 @@ export default function FoodResultsTable({
                                 border-b-[1px] border-[#dddddd]
                                 ${index % 2 === 1 ? "bg-[#f8f8f8]" : ""}
                                 ${index === records.length - 1 ? "border-b-[2px] border-[#009879]" : ""}
-                                `}>
+                                `}
+                            >
                                 <td className="text-center" data-label="Code">{item.code}</td>
                                 <td data-label="Nombre">
                                     {item.commonName[selectedLanguage] || "N/A"}

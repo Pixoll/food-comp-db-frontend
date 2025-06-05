@@ -37,6 +37,7 @@ export function useFetch<T>(url: string): FetchResult<T> {
     const abortController = new AbortController();
     setController(abortController);
 
+    // TODO use generated api object
     fetch(process.env.NEXT_PUBLIC_API_URL + url, { signal: abortController.signal })
       .then(async (response) => {
         const contentType = response.headers.get("content-type");

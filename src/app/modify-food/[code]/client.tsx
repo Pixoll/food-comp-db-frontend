@@ -1,35 +1,28 @@
-'use client'
+"use client";
 
-import axios from "axios";
-import {Collection} from "@/utils/collection";
-import TabItem from "../../components/Tabs/TabItem";
-import Tab from "../../components/Tabs/Tab"
-import {FormEvent, useEffect} from "react";
-import {useTranslation} from "react-i18next";
-import {useAuth} from "@/context/AuthContext"
-import {useToast} from "@/context/ToastContext"
+import api from "@/api";
+import { useAuth } from "@/context/AuthContext";
+import { useToast } from "@/context/ToastContext";
 import {
     FetchStatus,
+    Region,
     useFetch,
-    useGroups,
     useForm,
+    useGroups,
     useOrigins,
     useScientificNames,
     useSubspecies,
-    useTypes,
-    Region
+    useTypes
 } from "@/hooks";
-import {
-    LangualCode,
-    NutrientsValue,
-    Origin,
-    SingleFoodResult,
-    NutrientMeasurement
-} from "@/types/SingleFoodResult";
-import makeRequest from "@/utils/makeRequest";
+import { LangualCode, NutrientMeasurement, NutrientsValue, Origin, SingleFoodResult } from "@/types/SingleFoodResult";
+import { Collection } from "@/utils/collection";
+import { FormEvent, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import TextField from "../../components/Fields/TextField";
+import Tab from "../../components/Tabs/Tab";
+import TabItem from "../../components/Tabs/TabItem";
+import Origins from "../components/add-remove-origins/Origins";
 import ModifyCompositionDropdown from "../components/ModifyCompositionDropdown";
-import Origins from "../components/add-remove-origins/Origins"
 
 type FoodForm = {
     commonName: Record<"es" | "en" | "pt", string | undefined>;
@@ -123,11 +116,11 @@ function normalizeAllNutrientMeasurements(nutrientValues: NutrientsValue): nutri
 function normalizeFoodFormForApi(
     data: SingleFoodResult,
     collections: {
-        scientificNames: { idToName: Collection<string, string>, nameToId: Collection<string, number>}
+        scientificNames: { idToName: Collection<string, string>, nameToId: Collection<string, number> }
         groups: { idToName: Collection<string, string>, codeToId: Collection<string, number> }
         types: { idToName: Collection<string, string>, codeToId: Collection<string, number> }
         subspecies: Collection<string, number>;
-        regions:  Collection<number, Region>
+        regions: Collection<number, Region>
     }
 ): FoodForm {
     return {
@@ -140,7 +133,7 @@ function normalizeFoodFormForApi(
         strain: normalizeStringValue(data.strain),
         brand: normalizeStringValue(data.brand),
         observation: normalizeStringValue(data.observation),
-        originIds: getUniqueRegionIds(data.origins,  [...collections.regions.keys()] as number[]),
+        originIds: getUniqueRegionIds(data.origins, [...collections.regions.keys()] as number[]),
         langualCodes: getUniqueLangualCodeIds(data.langualCodes),
         nutrientMeasurements: normalizeAllNutrientMeasurements(data.nutrientMeasurements)
     };
@@ -153,19 +146,28 @@ function getAllTypeData(code: string) {
     const types = useTypes();
     const scientificNames = useScientificNames();
     const subspecies = useSubspecies();
-    const {regions, provinces, communes , locations} = useOrigins();
-    return {data, groups, types, scientificNames, subspecies, regions, provinces, communes , locations}
+    const { regions, provinces, communes, locations } = useOrigins();
+    return { data, groups, types, scientificNames, subspecies, regions, provinces, communes, locations };
 }
 
-export default function ModifyFoodPage({code}: { code: string }) {
-    const {t} = useTranslation();
-    const {state} = useAuth();
-    const {addToast} = useToast()
-
+export default function ModifyFoodPage({ code }: { code: string }) {
+    const { t } = useTranslation();
+    const { state } = useAuth();
+    const { addToast } = useToast();
 
     const token = state.token;
 
-    const {data, groups, types, scientificNames, subspecies, regions, provinces, communes , locations} = getAllTypeData(code)
+    const {
+        data,
+        groups,
+        types,
+        scientificNames,
+        subspecies,
+        regions,
+        provinces,
+        communes,
+        locations
+    } = getAllTypeData(code);
 
     const collectionsForNormalized = {
         scientificNames: {
@@ -182,7 +184,7 @@ export default function ModifyFoodPage({code}: { code: string }) {
         },
         subspecies: subspecies.nameToId,
         regions: regions
-    }
+    };
 
     const { formState, setFormState, onInputChange } = useForm<FoodForm>(
         data ? normalizeFoodFormForApi(data, collectionsForNormalized) : {
@@ -192,7 +194,7 @@ export default function ModifyFoodPage({code}: { code: string }) {
         }
     );
 
-    const handleScientificName = () => {
+    const handleScientificName = async () => {
         const scientificNameId = formState.scientificNameId;
 
         const payload = {
@@ -204,30 +206,37 @@ export default function ModifyFoodPage({code}: { code: string }) {
 
         if (!payload.scientificNameId && payload.scientificName) {
             const name = payload.scientificName;
-            makeRequest("post", "/scientific-names", {
-                token: state.token,
-                payload: {name},
-                successCallback: () => {
-                    scientificNames.forceReload();
-                    setFormState((prev)=>({
-                        ...prev,
-                        scientificNameId: scientificNames.nameToId.get(name)
-                    }));
-                },
-                errorCallback: (error) => {
-                    console.error("Error al actualizar:", error.response?.data ?? error);
-                },
-            });
+
+            try {
+                const result = await api.createScientificNameV1({
+                    auth: state.token ?? "",
+                    body: {
+                        name,
+                    },
+                });
+
+                if (result.error) {
+                    console.error("Error al actualizar:", result.error);
+                    return;
+                }
+
+                scientificNames.forceReload();
+                setFormState((prev) => ({
+                    ...prev,
+                    scientificNameId: scientificNames.nameToId.get(name)
+                }));
+            } catch (error) {
+                console.error("Error al actualizar:", error);
+            }
         } else if (payload.scientificNameId && payload.scientificName) {
-            setFormState((prev)=>({
+            setFormState((prev) => ({
                 ...prev,
                 scientificNameId: payload.scientificNameId
             }));
         }
     };
 
-
-    const handleSubspecies = () => {
+    const handleSubspecies = async () => {
         const subspeciesId = formState.subspeciesId;
 
         const payload = {
@@ -239,28 +248,35 @@ export default function ModifyFoodPage({code}: { code: string }) {
 
         if (!payload.subspeciesId && payload.subspecies) {
             const name = payload.subspecies;
-            makeRequest("post", "/subspecies", {
-                token: state.token,
-                payload: {name},
-                successCallback: () => {
-                    subspecies.forceReload();
-                    setFormState((prev)=>({
-                        ...prev,
-                        subspeciesId: subspecies.nameToId.get(name)
-                    }));
-                },
-                errorCallback: (error) => {
-                    console.error("Error al actualizar:", error.response?.data ?? error);
-                },
-            });
+
+            try {
+                const result = await api.createSubspeciesV1({
+                    auth: state.token ?? "",
+                    body: {
+                        name,
+                    },
+                });
+
+                if (result.error) {
+                    console.error("Error al actualizar:", result.error);
+                    return;
+                }
+
+                subspecies.forceReload();
+                setFormState((prev) => ({
+                    ...prev,
+                    subspeciesId: subspecies.nameToId.get(name)
+                }));
+            } catch (error) {
+                console.error("Error al actualizar:", error);
+            }
         }
     };
 
-
     useEffect(() => {
         if (data) {
-            const updatedDataFomr = normalizeFoodFormForApi(data,collectionsForNormalized);
-            setFormState(updatedDataFomr)
+            const updatedDataFomr = normalizeFoodFormForApi(data, collectionsForNormalized);
+            setFormState(updatedDataFomr);
         }
         // eslint-disable-next-line
     }, [data]);
@@ -270,82 +286,82 @@ export default function ModifyFoodPage({code}: { code: string }) {
     }
 
     /*const handleUpdateNutrients = (updatedData: NutrientsValue) => {
-        setNutrientValue(updatedData);
-    };
+     setNutrientValue(updatedData);
+     };
 
-    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = e.target;
+     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+     const {name, value} = e.target;
 
-        const processValue = (value: string) =>
-            value.trim() === "" ? undefined : value;
+     const processValue = (value: string) =>
+     value.trim() === "" ? undefined : value;
 
-        if (name.startsWith("commonName.") || name.startsWith("ingredients.")) {
-            const [field, lang] = name.split(".");
-            setNamesAndIngredients((prevState) => ({
-                ...prevState,
-                [field]: {
-                    ...prevState[field as keyof typeof prevState],
-                    [lang]: processValue(value),
-                },
-            }));
-        } else {
-            setGeneralData((prevState) => ({
-                ...prevState,
-                [name]: processValue(value),
-            }));
-        }
-    };*/
+     if (name.startsWith("commonName.") || name.startsWith("ingredients.")) {
+     const [field, lang] = name.split(".");
+     setNamesAndIngredients((prevState) => ({
+     ...prevState,
+     [field]: {
+     ...prevState[field as keyof typeof prevState],
+     [lang]: processValue(value),
+     },
+     }));
+     } else {
+     setGeneralData((prevState) => ({
+     ...prevState,
+     [name]: processValue(value),
+     }));
+     }
+     };*/
     const handleSubmit2 = async (e: FormEvent) => {
         e.preventDefault();
-        const payload = formState;
-        console.log(payload);
+        console.log(formState);
         addToast({
             message: "se agrego con exito",
             title: "Modify",
-            type:"Success",
+            type: "Success",
             position: "top-end"
-        })
+        });
+    };
 
-    }
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        const payload = normalizeFoodFormForApi(data,collectionsForNormalized);
-        makeRequest("patch", `/foods/${code}`, {
-            token,
-            payload,
-            successCallback: (response) => {
+        const payload = normalizeFoodFormForApi(data, collectionsForNormalized);
+
+        try {
+            const result = await api.updateFoodV1({
+                path: {
+                    code,
+                },
+                auth: token ?? "",
+                body: payload,
+            });
+
+            if (result.error) {
                 /*addToast({
-                    type: "Success",
-                    message:
-                        response.data.message ||
-                        "Los cambios fueron realizados exitosamente",
-                    title: "Éxito",
-                    position: "middle-center",
-                    duration: 3000,
-                });*/
-            },
-            errorCallback: (error) => {
-                if (axios.isAxiosError(error)) {
-                    if ((error.response?.status || -1) >= 400) {
-                        /*addToast({
-                            type: "Danger",
-                            message:
-                                error.response?.data?.message ||
-                                error.message ||
-                                "A ocurrido un error",
-                            title: "Error",
-                            position: "middle-center",
-                            duration: 5000,
-                        });
-                        return;*/
-                    }
-                    console.error(
-                        "Error en la solicitud:",
-                        error.response?.data || error.message
-                    );
-                }
-            },
-        });
+                 type: "Danger",
+                 message:
+                 error.response?.data?.message ||
+                 error.message ||
+                 "A ocurrido un error",
+                 title: "Error",
+                 position: "middle-center",
+                 duration: 5000,
+                 });*/
+                console.error("Error en la solicitud:", result.error);
+                return;
+            }
+
+            /*addToast({
+             type: "Success",
+             message:
+             response.data.message ||
+             "Los cambios fueron realizados exitosamente",
+             title: "Éxito",
+             position: "middle-center",
+             duration: 3000,
+             });*/
+        } catch (error) {
+            console.error("Error en la solicitud:", error);
+        }
     };
 
     return (
@@ -354,7 +370,8 @@ export default function ModifyFoodPage({code}: { code: string }) {
             <Tab defaultTab={0}>
                 <TabItem label={"Modificar información general"}>
                     <div
-                        className="flex flex-col mt-[10px] border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white]">
+                        className="flex flex-col mt-[10px] border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white]"
+                    >
                         <div>
                             {Object.entries(formState.commonName).map(([lang, value]) => (
                                 <TextField
@@ -404,7 +421,8 @@ export default function ModifyFoodPage({code}: { code: string }) {
                 </TabItem>
                 <TabItem label={"Modificar origines"}>
                     <div
-                        className="flex flex-col mt-[10px] border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white] p-[16px]">
+                        className="flex flex-col mt-[10px] border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white] p-[16px]"
+                    >
                         <h3 className="text-[18px] font-[600] mb-[16px]">Origines</h3>
                         <Origins
                             originsForm={data.origins || []}
@@ -425,7 +443,8 @@ export default function ModifyFoodPage({code}: { code: string }) {
                 </TabItem>
                 <TabItem label={"Modificar información nutricional"}>
                     <div
-                        className="flex flex-col mt-[10px] border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white] p-[16px]">
+                        className="flex flex-col mt-[10px] border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white] p-[16px]"
+                    >
                         <h3 className="text-[18px] font-[600] mb-[16px]">Información nutricional</h3>
 
                         <ModifyCompositionDropdown
