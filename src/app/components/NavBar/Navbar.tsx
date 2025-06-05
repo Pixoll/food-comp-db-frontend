@@ -10,7 +10,7 @@ import { useToast } from "@/context/ToastContext";
 import makeRequest from "@/utils/makeRequest";
 import "./index.css"
 
-const NavBar2 = () => {
+const NavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const { t, i18n } = useTranslation();
@@ -120,4 +120,4 @@ const NavBar2 = () => {
   );
 };
 
-export default NavBar2;
+export default NavBar;
