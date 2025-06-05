@@ -1,14 +1,15 @@
 import Link from "next/link";
+import styles from "./admin-page.module.css"
 
 export default function AdminPage() {
     return (
-        <div className="p-[32px] h-[100vh] flex flex-col bg-gradient-to-b from-[#f0f9ff] to-[#e9f8d9]">
+        <div className="p-[36px] h-auto flex flex-col bg-gradient-to-b from-[#f0f9ff] to-[#e9f8d9]">
             <h1 className="text-center text-[36px] font-[700] mb-[32px] text-[#333] border-b-[2px] pb-[16px] border-[#eaeaea]">
                 Panel Administrativo
             </h1>
 
             <div
-                className="grid grid-cols-3 gap-[24px] flex-grow">
+                className={styles["grid-container"]}>
                 <div
                     className="bg-[#f8f9fa] rounded-[8px] shadow-[0_4px_12px_rgba(0,0,0,0.05)] overflow-hidden border-[1px] border-[#e9ecef] hover:shadow-[0_8px_16px_rgba(0,0,0,0.1)] transition-shadow duration-[300ms] flex flex-col">
                     <div className="p-[20px] flex-grow flex flex-col">
