@@ -1,55 +1,131 @@
 'use client'
 import { createContext, useState, useContext } from 'react';
+import { useToast } from "@/context/ToastContext";
+
 type foodTag = {
-  code: string;
-  name: string;
+    code: string;
+    name: string;
 }
+
 type ComparisonContextType = {
     comparisonFoods: foodTag[];
-    addToComparison: (food: foodTag) => void;
-    removeFromComparison: (itemId: string) => void;
+    addToComparison: (foods: foodTag[]) => void;
+    removeFromComparison: (codes: string[]) => void;
     clearComparison: () => void;
-  }
+}
+
 const ComparisonContext = createContext<ComparisonContextType | undefined>(undefined);
 
 export default function ComparisonProvider({children}: {children: React.ReactNode}) {
-    const [comparisonFoods, setComparisonFoods] = useState<foodTag[]>([]); // codes of the foods to compare of moment
+    const [comparisonFoods, setComparisonFoods] = useState<foodTag[]>([]);
+    const { addToast } = useToast();
 
-    const addToComparison = (food: foodTag) => {
-        setComparisonFoods(prev => {
-        if (prev.some(i => i.code === food.code)) {
-            return prev;
+    const addToComparison = (foods: foodTag[]) => {
+        const newFoods = foods.filter(food =>
+            !comparisonFoods.some(existing => existing.code === food.code)
+        );
+
+        if (newFoods.length === 0) {
+            addToast({
+                type: "Warning",
+                message: "Los alimentos seleccionados ya están en la comparación.",
+                title: "Aviso",
+                position: "top-end",
+                duration: 3000,
+            });
+            return;
         }
-        return [...prev, food]; // Assuming the name is the same as the code for now
-        });
-        
-      };
-      const removeFromComparison = (code: string) => {
-        setComparisonFoods(prev => prev.filter(item => item.code !== code));
-      };
 
-      const clearComparison = () => {
+        setComparisonFoods(prev => [...prev, ...newFoods]);
+
+        if (newFoods.length === 1) {
+            addToast({
+                type: "Success",
+                message: `El alimento ${newFoods[0].code} se ha agregado con éxito para comparar.`,
+                title: "Éxito",
+                position: "top-end",
+                duration: 3000,
+            });
+        } else {
+            addToast({
+                type: "Success",
+                message: `Se han agregado ${newFoods.length} alimentos para comparar.`,
+                title: "Éxito",
+                position: "top-end",
+                duration: 3000,
+            });
+        }
+    };
+
+    const removeFromComparison = (codes: string[]) => {
+        const foodsToRemove = comparisonFoods.filter(food => codes.includes(food.code));
+
+        if (foodsToRemove.length === 0) {
+            addToast({
+                type: "Warning",
+                message: "No se encontraron alimentos para eliminar.",
+                title: "Aviso",
+                position: "top-end",
+                duration: 3000,
+            });
+            return;
+        }
+
+        setComparisonFoods(prev => prev.filter(item => !codes.includes(item.code)));
+        if (foodsToRemove.length === 1) {
+            addToast({
+                type: "Danger",
+                message: `El alimento ${foodsToRemove[0].code} se ha eliminado de la comparación.`,
+                title: "Eliminado de la lista",
+                position: "top-end",
+                duration: 3000,
+            });
+        } else {
+            addToast({
+                type: "Danger",
+                message: `Se han eliminado ${foodsToRemove.length} alimentos de la comparación.`,
+                title: "Eliminados de la lista",
+                position: "top-end",
+                duration: 3000,
+            });
+        }
+    };
+
+    const clearComparison = () => {
+        const count = comparisonFoods.length;
         setComparisonFoods([]);
-      };
-      const value: ComparisonContextType = {
+
+        if (count > 0) {
+            addToast({
+                type: "Info",
+                message: `Se han eliminado ${count} alimentos de la comparación.`,
+                title: "Lista limpiada",
+                position: "top-end",
+                duration: 3000,
+            });
+        }
+    };
+
+    const value: ComparisonContextType = {
         comparisonFoods,
         addToComparison,
         removeFromComparison,
         clearComparison
-      };
-      return (
+    };
+
+    return (
         <ComparisonContext.Provider value={value}>
-          {children}
+            {children}
         </ComparisonContext.Provider>
-      );
-      
+    );
 }
+
 export function useComparison(): ComparisonContextType {
     const context = useContext(ComparisonContext);
-    
+
     if (context === undefined) {
-      throw new Error('useComparison debe usarse dentro de un ComparisonProvider');
+        throw new Error('useComparison debe usarse dentro de un ComparisonProvider');
     }
-    
+
     return context;
-  }
+}
