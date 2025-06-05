@@ -497,9 +497,9 @@ export default function FoodResultsTable({
                                     {comparisonFoods.map((f) => f.code).includes(item.code) ? (
                                         <button
                                             onClick={() => removeFromComparison(item.code)}
-                                            className="flex items-center justify-center w-full h-[45px] rounded-[6px] md:rounded-[50%] border-none
+                                            className="flex items-center justify-center w-full h-[45px] rounded-[6px] border-none
                                                 cursor-pointer transition-all duration-200 ease-in-out bg-[#ecc1c1] text-[#c31a3f]
-                                                hover:bg-[#fecaca] md:w-[45px] md:h-[45px]"
+                                                hover:bg-[#fecaca]"
                                             aria-label="Eliminar"
                                         >
                                             <Minus size={16}/>
@@ -512,9 +512,9 @@ export default function FoodResultsTable({
                                                     name: item.commonName[selectedLanguage] ?? "",
                                                 })
                                             }
-                                            className="flex items-center justify-center w-full h-[45px] rounded-md md:rounded-full border-none
+                                            className="flex items-center justify-center w-full h-[45px] rounded-[6px] border-none
                                                 cursor-pointer transition-all duration-200 ease-in-out bg-[#a8dbc1] text-[#059669]
-                                                hover:bg-[#a7f3d0] md:w-[45px] md:h-[45px]"
+                                                hover:bg-[#a7f3d0]"
                                             aria-label="Comparar"
                                         >
                                             <Plus size={16}/>
