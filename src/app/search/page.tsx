@@ -72,7 +72,7 @@ function Search() {
 
     return (
         <div className={styles["search-container"]}>
-            <div className={`${styles["filter-body-container"]} p-[20px] flex flex-col bg-[white] rounded-[10px] relative shadow-[0_4px_6px_-1px_rgb(0,0,0,0.1)]`}/*className="food-filter food-filter-static"*/>
+            <div className={`${styles["filter-body-container"]} p-[20px] m-[12px] flex flex-col bg-[white] rounded-[10px] relative shadow-[0_4px_6px_-1px_rgb(0,0,0,0.1)]`}/*className="food-filter food-filter-static"*/>
                 <h4>{t("Filter.title")}</h4>
                 <FilterBody
                     selectedFilters={selectedFilters}
