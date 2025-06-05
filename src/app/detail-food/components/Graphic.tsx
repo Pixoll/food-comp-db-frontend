@@ -1,5 +1,5 @@
 'use client'
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import { Legend, Pie, PieChart, Tooltip, Cell, PieLabelRenderProps } from "recharts";
 
     type DataItem = {
@@ -11,6 +11,7 @@ import { Legend, Pie, PieChart, Tooltip, Cell, PieLabelRenderProps } from "recha
     type GraphicProps = {
       data: DataItem[];
       title: string;
+      grams: number;
     };
 
     const renderCustomizedLabel = (props: PieLabelRenderProps) => {
@@ -62,15 +63,15 @@ import { Legend, Pie, PieChart, Tooltip, Cell, PieLabelRenderProps } from "recha
         );
     };
 
-    export default function Graphic({ data, title }: GraphicProps) {
+    export default function Graphic({ data, title , grams}: GraphicProps) {
         const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
         return (
-            <div className="md:w-[50%] p-[16px] border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white]">
+            <div className="w-full p-[16px] border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white]">
                 <div className="text-center">
                     <h3 className="text-[20px] font-[700] text-gray-800">{title}</h3>
                 </div>
                 <div className="w-full h-[400px] mt-[10px] flex justify-center">
-                    <PieChart width={450} height={400}>
+                    <PieChart key ={grams} width={450} height={400}>
                         <Pie
                             data={data.filter((item) => item.value >= 0.01)}
                             dataKey="value"

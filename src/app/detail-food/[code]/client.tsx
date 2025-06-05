@@ -8,10 +8,10 @@ import CompositionDropdown from "../components/composition-dropdown/CompositionD
 import Graphic from "../components/Graphic";
 import LangualCodes from "../components/LangualCodes";
 import References from "../components/References";
+import GramsAdjuster from "@/app/detail-food/components/grams-adjuster/GramsAdjuster";
 import {FetchStatus, useFetch} from "@/hooks/useFetch";
 import {SingleFoodResult} from "@/types/SingleFoodResult";
-
-import "@/assets/css/_DetailPage.css";
+import styles from "./detail-food.module.css"
 
 function getDetail(code: string): SingleFoodResult {
     const result = useFetch<SingleFoodResult>(`/foods/${code?.toString()}`);
@@ -49,10 +49,9 @@ export default function ClientDetailPage({code}: { code: string }) {
     const {t} = useTranslation();
 
     const [grams, setGrams] = useState<number>(100);
-    const [inputGrams, setInputGrams] = useState<number>(100);
 
     const data = getDetail(code)
-    console.log(data.langualCodes)
+
     const colors = [
         "#0088FE",
         "#00C49F",
@@ -110,9 +109,6 @@ export default function ClientDetailPage({code}: { code: string }) {
                 fill: colors[index % colors.length],
             })) || [];
 
-    const handleGramsChange = () => {
-        setGrams(inputGrams);
-    };
     return (
         <div className="w-full h-full bg-[#effce8] rounded-t-[2px]">
             {data.commonName.es && (
@@ -137,9 +133,15 @@ export default function ClientDetailPage({code}: { code: string }) {
                     }/>
                 </TabItem>
                 <TabItem label="Composición del alimento">
-                    <div className="flex flex-col">
-                        <Graphic title={t("DetailFood.graphics.title_L")} data={graphicData}/>
-                        <Graphic title={t("DetailFood.graphics.title_R")} data={graphicDataPercent}/>
+                    <GramsAdjuster
+                        initialGrams={100}
+                        onGramsChange={(newGrams) => {
+                            setGrams(newGrams);
+                        }}
+                    />
+                    <div className={styles["graphic-container"]}>
+                        <Graphic title={t("DetailFood.graphics.title_L")} data={graphicData} grams={grams}/>
+                        <Graphic title={t("DetailFood.graphics.title_R")} data={graphicDataPercent} grams={grams}/>
                     </div>
                     <div className="mt-[10px] border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white]">
                         <h2 className="text-center ">Tabla de composición</h2>
