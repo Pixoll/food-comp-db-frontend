@@ -28,3 +28,38 @@ declare module "i18next" {
         };
     }
 }
+
+type I18NObject = {
+    [key: string]: string | I18NObject;
+};
+
+type JoinKeys<K extends string, P extends string> = `${K}.${P}`;
+
+type I18NKeys<T extends object> = {
+    [K in keyof T & string]: T[K] extends object
+        ? K | JoinKeys<K, I18NKeys<T[K]>>
+        : T[K] extends string
+            ? K
+            : never
+}[keyof T & string];
+
+type EsKeys = I18NKeys<typeof es>;
+type EnKeys = I18NKeys<typeof en>;
+
+type MissingKeys =
+    | Exclude<EsKeys, EnKeys>
+    | Exclude<EnKeys, EsKeys>;
+
+/*
+ * Ensure build is not possible if:
+ *
+ * - i18n object has illegal values
+ * - some keys are missing in either translation dictionary
+ */
+
+// noinspection BadExpressionStatementJS
+(es satisfies I18NObject);
+// noinspection BadExpressionStatementJS
+(en satisfies I18NObject);
+// noinspection BadExpressionStatementJS
+({} satisfies Record<MissingKeys, never>);
