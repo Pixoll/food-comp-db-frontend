@@ -3,7 +3,7 @@ import api from "@/api";
 import { useAuth } from "@/context/AuthContext";
 import { useComparison } from "@/context/ComparisonContext";
 import { FoodResult } from "@/types/option";
-import { ArrowDown, ArrowUp, Minus, Plus } from "lucide-react";
+import { ArrowDown, ArrowUp, Minus, Plus, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -172,19 +172,49 @@ export default function FoodResultsTable({
             setSortOrder(SortOrder.ASC);
         }
     };
+
     const selectAllFoodComparison = () => {
-        const currentFoodInComparison = new Set(comparisonFoods.map((f) => f.code));
+        const currentSelected = new Set(comparisonFoods.map(f => f.code));
 
         const newItems = records.filter(
-            (item) => !currentFoodInComparison.has(item.code)
+            (item) => !currentSelected.has(item.code)
         );
 
-        newItems.forEach((item) =>
-            addToComparison({
-                code: item.code,
-                name: item.commonName[selectedLanguage] ?? "",
-            })
-        );
+        if (newItems.length === 0) return;
+
+        const foodsToAdd = newItems.map(item => ({
+            code: item.code,
+            name: item.commonName[selectedLanguage] ?? "",
+        }));
+
+        addToComparison(foodsToAdd);
+    };
+
+    const deselectAllFoodComparison = () => {
+        const currentSelected = new Set(comparisonFoods.map(f => f.code));
+
+        const itemsToRemove = records
+            .filter(item => currentSelected.has(item.code))
+            .map(item => item.code);
+
+        if (itemsToRemove.length === 0) return;
+
+        removeFromComparison(itemsToRemove);
+    };
+
+    const currentFoodInComparison = new Set(comparisonFoods.map((f) => f.code));
+    const selectedItemsInCurrentPage = records.filter((item) =>
+        currentFoodInComparison.has(item.code)
+    ).length;
+
+    const isAllSelected = selectedItemsInCurrentPage === records.length && records.length > 0;
+
+    const handleToggle = () => {
+        if (isAllSelected) {
+            deselectAllFoodComparison();
+        } else {
+            selectAllFoodComparison();
+        }
     };
     return (
         <div className="food-list">
@@ -336,31 +366,51 @@ export default function FoodResultsTable({
                             Ir a comparar ({comparisonFoods.length})
                         </button>
                         <button
-                            className="
-                            bg-[#4CAF50]
-                            text-[white]
-                            px-[16px]
-                            py-[14px]
-                            border-none
-                            rounded-[6px]
-                            text-[16px]
-                            font-[500]
-                            cursor-pointer
-                            transition-all
-                            duration-300
-                            ease-in-out
-                            w-full
-                            shadow-[0_2px_5px_rgba(0,0,0,0.2)]
-                            hover:bg-[#45a049]
-                            hover:shadow-[0_4px_8px_rgba(0,0,0,0.2)]
-                            hover:-translate-y-[1px]
-                            active:bg-[#3e8e41]
-                            active:shadow-[0_1px_3px_rgba(0,0,0,0.2)]
-                            active:translate-y-[1px]
-                            "
-                            onClick={() => selectAllFoodComparison()}
-                        >
-                            Seleccionar todo
+                            className={`
+                                ${isAllSelected
+                                ? 'bg-gradient-to-r from-[#ef4444] to-[#dc2626] hover:from-[#dc2626] hover:to-[#b91c1c]'
+                                : 'bg-gradient-to-r from-[#10b981] to-[#059669] hover:from-[#059669] hover:to-[#047857]'
+                                }
+                                text-[white]
+                                px-[20px]
+                                py-[16px]
+                                border-none
+                                rounded-[12px]
+                                text-[16px]
+                                font-[600]
+                                cursor-pointer
+                                transition-all
+                                duration-300
+                                ease-in-out
+                                w-full
+                                shadow-[0_4px_14px_rgba(0,0,0,0.25)]
+                                hover:shadow-[0_6px_20px_rgba(0,0,0,0.3)]
+                                hover:-translate-y-[2px]
+                                active:translate-y-[0px]
+                                active:shadow-[0_2px_8px_rgba(0,0,0,0.2)]
+                                flex
+                                items-center
+                                justify-center
+                                gap-[10px]
+                                relative
+                                overflow-hidden
+                                ${records.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}
+                                group
+                            `}
+                            onClick={handleToggle}
+                            disabled={records.length === 0}>
+                            <div
+                                className="absolute inset-0 bg-gradient-to-r from-transparent via-[white]/[0.2] to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-[600ms]"></div>
+                            <span className="relative z-10 flex items-center gap-[10px]">
+                            <span className="group-hover:scale-[1.1] transition-transform duration-[200ms]">
+                            {isAllSelected ? (
+                                <X className="w-[18px] h-[18px]"/>
+                            ) : (
+                                <Plus className="w-[18px] h-[18px]"/>
+                            )}
+                            </span>
+                                {isAllSelected ? 'Deseleccionar página' : 'Seleccionar pagina'}
+                             </span>
                         </button>
                     </div>
 
@@ -501,7 +551,7 @@ export default function FoodResultsTable({
                                 <th className="flex items-center justify-center h-[55px] md:h-auto">
                                     {comparisonFoods.map((f) => f.code).includes(item.code) ? (
                                         <button
-                                            onClick={() => removeFromComparison(item.code)}
+                                            onClick={() => removeFromComparison([item.code])}
                                             className="flex items-center justify-center w-full h-[45px] rounded-[6px] border-none
                                                 cursor-pointer transition-all duration-200 ease-in-out bg-[#ecc1c1] text-[#c31a3f]
                                                 hover:bg-[#fecaca]"
@@ -512,10 +562,10 @@ export default function FoodResultsTable({
                                     ) : (
                                         <button
                                             onClick={() =>
-                                                addToComparison({
+                                                addToComparison([{
                                                     code: item.code,
                                                     name: item.commonName[selectedLanguage] ?? "",
-                                                })
+                                                }])
                                             }
                                             className="flex items-center justify-center w-full h-[45px] rounded-[6px] border-none
                                                 cursor-pointer transition-all duration-200 ease-in-out bg-[#a8dbc1] text-[#059669]
