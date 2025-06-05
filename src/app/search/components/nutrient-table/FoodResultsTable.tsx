@@ -202,23 +202,23 @@ export default function FoodResultsTable({
                         <div className="flex-1 w-full">
                             <input
                                 className="
-            w-full
-            bg-[#f9f9f9]
-            px-[16px]
-            py-[14px]
-            rounded-[30px]
-            border-[2px]
-            border-solid
-            border-[#a8d8d2]
-            shadow-[0_2px_6px_rgba(0,0,0,0.1)]
-            outline-[none]
-            transition-colors
-            duration-300
-            text-[16px]
-            focus:border-[#007f67]
-            focus:shadow-[0_4px_12px_rgba(0,127,103,0.2)]
-            placeholder:text-[#a9a9a9]
-            "
+                                    w-full
+                                    bg-[#f9f9f9]
+                                    px-[16px]
+                                    py-[14px]
+                                    rounded-[30px]
+                                    border-[2px]
+                                    border-solid
+                                    border-[#a8d8d2]
+                                    shadow-[0_2px_6px_rgba(0,0,0,0.1)]
+                                    outline-[none]
+                                    transition-colors
+                                    duration-300
+                                    text-[16px]
+                                    focus:border-[#007f67]
+                                    focus:shadow-[0_4px_12px_rgba(0,127,103,0.2)]
+                                    placeholder:text-[#a9a9a9]
+                                    "
                                 type="text"
                                 placeholder={t("Table.search")}
                                 value={searchForName}

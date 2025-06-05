@@ -48,17 +48,17 @@ export default function CheckboxFilter({options, selectedOptions, setSelectedOpt
     return (<>
             <div
                 className="flex justify-between items-center rounded-[8px] bg-[#4e9f6f] text-[white] p-[12px]
-                border-2 border-solid border-[#388e60] cursor-pointer transition-all duration-300 ease-in-out
-                hover:bg-[#388e60] hover:border-[#2c6b49] md:text-base"
+                border-[2px] border-solid border-[#388e60] cursor-pointer transition-all duration-300 ease-in-out
+                hover:bg-[#388e60] hover:border-[#2c6b49]"
                 //className="selected-options-display"
                 onClick={() => setDropdownOpen(!dropdownOpen)}
             >
                 {getSelectedLabel()}
-                <span className="text-sm">{dropdownOpen ? "▲" : "▼"}</span>
+                <span className="text-[14px]">{dropdownOpen ? "▲" : "▼"}</span>
             </div>
 
             {dropdownOpen && (
-                <div className="absolute p-[12px] left-0 right-0 max-h-[250px] overflow-y-auto shadow-[6px_12px_rgba(0,0,0,0.1) bg-[white]
+                <div className="w-full absolute p-[12px] left-[0px] right-[0px] max-h-[250px] overflow-y-auto shadow-[6px_12px_rgba(0,0,0,0.1) bg-[white]
                     border-[px] border-solid border-[#d6f4e9] z-[20] rounded-[6px] transition-all
                     duration-300 ease-in-out md:max-w-[250px] mt-[4px]"
                     //className="dropdown-options"
