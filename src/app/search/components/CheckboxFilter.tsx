@@ -47,9 +47,9 @@ export default function CheckboxFilter({options, selectedOptions, setSelectedOpt
 
     return (<>
             <div
-                className="flex justify-between items-center rounded-[8px] bg-[#4e9f6f] text-[white] p-[12px]
-                border-[2px] border-solid border-[#388e60] cursor-pointer transition-all duration-300 ease-in-out
-                hover:bg-[#388e60] hover:border-[#2c6b49]"
+                className="flex justify-between items-center rounded-[8px] bg-[#1d6735] text-[white] p-[12px]
+                border-[2px] border-solid border-[#015746] cursor-pointer transition-all duration-300 ease-in-out
+                hover:bg-[#20703a] hover:border-[#2c6b49]"
                 //className="selected-options-display"
                 onClick={() => setDropdownOpen(!dropdownOpen)}
             >

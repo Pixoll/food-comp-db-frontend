@@ -61,7 +61,7 @@ export default function HomePage() {
                             </p>
 
                             <form onSubmit={handleSubmit} className="w-full flex flex-col items-center">
-                                <div className="flex w-full h-[60px] max-w-xl mx-auto mb-[20px]">
+                                <div className="flex w-full h-[60px] max-w-[568px] mx-auto mb-[20px]">
                                     <input
                                         type="text"
                                         placeholder={t("search.placeholder")}
@@ -77,7 +77,7 @@ export default function HomePage() {
                                           rounded-l-full
                                           focus:outline-none
                                           focus:border-green-500
-                                          shadow-[2px_2px_8px_rgba(0,0,0,0.9)]
+                                          shadow-[2px_2px_6px_rgba(0,0,0,0.9)]
                                         "
                                         aria-label="Buscar alimentos"
                                     />
@@ -87,10 +87,10 @@ export default function HomePage() {
                                           py-[12px]
                                           px-[32px]
                                           text-[18px]
-                                          text-[black]
+                                          text-[white]
                                           font-[500]
-                                          bg-[#28a745]
-                                          hover:bg-[#19732f]
+                                          bg-[#015746]
+                                          hover:bg-[#20703a]
                                           border-none
                                           cursor-pointer
                                           rounded-r-full
@@ -109,11 +109,11 @@ export default function HomePage() {
                                 py-[10px]
                                 px-[20px]
                                 text-xl
-                                bg-[#28a745]
+                                bg-[#015746]
                                 text-[white]
                                 border-none
                                 rounded-[5px]
-                                border-[#28a745]
+                                border-[#015746]
                                 cursor-pointer
                                 "
                                     onClick={() => router.push("/search")}

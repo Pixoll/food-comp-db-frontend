@@ -313,7 +313,7 @@ export default function FoodResultsTable({
                     <div className="grid grid-cols-3 gap-[16px] my-[24px] w-full">
                         <button
                             className="
-                            bg-[#4CAF50]
+                            bg-[#1d6735]
                             text-[white]
                             px-[16px]
                             py-[14px]
@@ -327,7 +327,7 @@ export default function FoodResultsTable({
                             ease-in-out
                             w-full
                             shadow-[0_2px_5px_rgba(0,0,0,0.2)]
-                            hover:bg-[#45a049]
+                            hover:bg-[#20703a]
                             hover:shadow-[0_4px_8px_rgba(0,0,0,0.2)]
                             hover:-translate-y-[1px]
                             active:bg-[#3e8e41]
@@ -340,7 +340,7 @@ export default function FoodResultsTable({
                         </button>
                         <button
                             className="
-                            bg-[#4CAF50]
+                            bg-[#1d6735]
                             text-[white]
                             px-[16px]
                             py-[14px]
@@ -354,7 +354,7 @@ export default function FoodResultsTable({
                             ease-in-out
                             w-full
                             shadow-[0_2px_5px_rgba(0,0,0,0.2)]
-                            hover:bg-[#45a049]
+                            hover:bg-[#20703a]
                             hover:shadow-[0_4px_8px_rgba(0,0,0,0.2)]
                             hover:-translate-y-[1px]
                             active:bg-[#3e8e41]
@@ -432,7 +432,7 @@ export default function FoodResultsTable({
                         "
                         /*className="content-table-foods"*/>
                         <thead>
-                        <tr className="bg-[#4e9f6f] text-[white] text-left font-[700] select-none">
+                        <tr className="bg-[#1d6735] text-[#F8F8FF] text-left font-[700] select-none">
                             <th className="text-[22px] font-[500] py-[14px] px-[18px] text-left">
                                 <div
                                     className="flex flex-row items-center cursor-pointer w-[max-content]"
@@ -501,7 +501,7 @@ export default function FoodResultsTable({
                                 <td className="text-center">
                                     <button
                                         className="
-                                        bg-[#4e9f6f]
+                                        bg-[#1d6735]
                                         rounded-[30px]
                                         text-[white]
                                         cursor-pointer
@@ -515,7 +515,7 @@ export default function FoodResultsTable({
                                         text-[14px]
                                         box-shadow[0_4px_6px_rgba(0,0,0,0.3)]
                                         mb-[10px]
-                                        hover:bg-[#007f67]
+                                        hover:bg-[#388e60]
                                         hover:translate-y-[3px]
                                         "
                                         onClick={() => toFoodDetail(item.code)}

@@ -297,7 +297,7 @@ export default function FilterBody({
         </div>
 
         <button onClick={resetFilters}
-                className="bg-[#1D6735FF] text-[white] p-[10px] border-none w-full rounded-[5px]">
+                className="bg-[#1d6735] text-[white] p-[10px] transition-all duration-300 ease-in-out border-none w-full rounded-[5px] hover:bg-[#388e60]">
             {t("Filter.reset")}
         </button>
     </>;
