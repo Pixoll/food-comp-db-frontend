@@ -54,19 +54,6 @@ export default function NutrientComparisonTable({ foodsData, onRemoveFood }: Nut
             {indentLevel >= 1 && (
                 <div className="absolute left-[20px] top-[0px] bottom-[0px] w-[3px] bg-[#047857]"></div>
             )}
-            <span className="relative">{nutrient.name}</span>
-            {nutrient.dataType && (
-                <span
-                    className={`inline-flex items-center justify-center w-[18px] h-[18px] rounded-full text-[10px] ml-[8px] text-[white] font-[700] bg-[${
-                        nutrient.dataType === 'calculated' ? '#6366f1' :
-                            nutrient.dataType === 'borrowed' ? '#10b981' :
-                                '#f59e0b'
-                    }]`}
-                    title={nutrient.dataType}
-                >
-              {nutrient.dataType.charAt(0)}
-            </span>
-            )}
           </td>
           <td className="text-center align-middle bg-[white]">{nutrient.measurementUnit}</td>
 
@@ -150,18 +137,6 @@ export default function NutrientComparisonTable({ foodsData, onRemoveFood }: Nut
               )}
                 {nutrient.name}
             </span>
-              {nutrient.dataType && (
-                  <span
-                      className={`inline-flex items-center justify-center w-[18px] h-[18px] rounded-full text-[10px] ml-[8px] text-[white] font-[700] bg-[${
-                          nutrient.dataType === 'calculated' ? '#6366f1' :
-                              nutrient.dataType === 'borrowed' ? '#10b981' :
-                                  '#f59e0b'
-                      }]`}
-                      title={nutrient.dataType}
-                  >
-                {nutrient.dataType.charAt(0)}
-              </span>
-              )}
             </td>
             <td className="text-center align-middle bg-[white]">{nutrient.measurementUnit}</td>
 
