@@ -2168,7 +2168,7 @@ export type GetOriginChildrenV1Response = GetOriginChildrenV1Responses[keyof Get
 export type GetReferencesV1Data = {
     body?: never;
     path?: never;
-    query: {
+    query?: {
         /**
          * The title of the reference.
          */
@@ -2176,15 +2176,15 @@ export type GetReferencesV1Data = {
         /**
          * An array of author IDs.
          */
-        authors: Array<number>;
+        authors?: Array<number>;
         /**
          * An array of journal IDs.
          */
-        journals: Array<number>;
+        journals?: Array<number>;
         /**
          * An array of city IDs.
          */
-        cities: Array<number>;
+        cities?: Array<number>;
     };
     url: '/references';
 };

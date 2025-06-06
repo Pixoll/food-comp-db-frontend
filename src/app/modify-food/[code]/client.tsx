@@ -1,12 +1,12 @@
 "use client";
 
-import api from "@/api";
+import api, { Food } from "@/api";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/context/ToastContext";
 import {
     FetchStatus,
     Region,
-    useFetch,
+    useApi,
     useForm,
     useGroups,
     useOrigins,
@@ -114,7 +114,7 @@ function normalizeAllNutrientMeasurements(nutrientValues: NutrientsValue): nutri
 }
 
 function normalizeFoodFormForApi(
-    data: SingleFoodResult,
+    data: Food,
     collections: {
         scientificNames: { idToName: Collection<string, string>, nameToId: Collection<string, number> }
         groups: { idToName: Collection<string, string>, codeToId: Collection<string, number> }
@@ -140,7 +140,11 @@ function normalizeFoodFormForApi(
 }
 
 function getAllTypeData(code: string) {
-    const result = useFetch<SingleFoodResult>(`/foods/${code}`);
+    const result = useApi([code], (api, code) => api.getFoodV1({
+        path: {
+            code,
+        },
+    }));
     const data = result.status === FetchStatus.Success ? result.data : null;
     const groups = useGroups();
     const types = useTypes();

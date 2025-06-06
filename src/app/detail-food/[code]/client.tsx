@@ -1,36 +1,50 @@
-'use client'
-import {useState} from 'react'
-import {useTranslation} from "react-i18next";
-import InfoAboutFoot from "../components/InfoAboutFoot";
-import TabItem from "../../components/Tabs/TabItem";
+"use client";
+
+import { Food } from "@/api";
+import GramsAdjuster from "@/app/detail-food/components/grams-adjuster/GramsAdjuster";
+import { FetchStatus, useApi } from "@/hooks";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import Tab from "../../components/Tabs/Tab";
+import TabItem from "../../components/Tabs/TabItem";
 import CompositionDropdown from "../components/composition-dropdown/CompositionDropdown";
 import Graphic from "../components/Graphic";
+import InfoAboutFoot from "../components/InfoAboutFoot";
 import LangualCodes from "../components/LangualCodes";
 import References from "../components/References";
-import GramsAdjuster from "@/app/detail-food/components/grams-adjuster/GramsAdjuster";
-import {FetchStatus, useFetch} from "@/hooks/useFetch";
-import {SingleFoodResult} from "@/types/SingleFoodResult";
-import styles from "./detail-food.module.css"
+import styles from "./detail-food.module.css";
 
-function getDetail(code: string): SingleFoodResult {
-    const result = useFetch<SingleFoodResult>(`/foods/${code?.toString()}`);
+function getDetail(code: string): Food {
+    const result = useApi([code], (api, depCode) => api.getFoodV1({
+        path: {
+            code: depCode,
+        },
+    }));
 
     if (result.status === FetchStatus.Success) {
         return result.data;
     } else {
         return {
-            commonName: {},
-            ingredients: {},
+            commonName: {
+                es: null,
+                en: null,
+                pt: null,
+            },
+            ingredients: {
+                es: null,
+                en: null,
+                pt: null,
+            },
             group: {
-                code: '',
-                name: ''
+                code: "",
+                name: ""
             },
             type: {
-                code: '',
-                name: ''
+                code: "",
+                name: ""
             },
             brand: undefined,
+            origins: [],
             nutrientMeasurements: {
                 energy: [],
                 macronutrients: [],
@@ -45,44 +59,44 @@ function getDetail(code: string): SingleFoodResult {
     }
 }
 
-export default function ClientDetailPage({code}: { code: string }) {
-    const {t} = useTranslation();
+export default function ClientDetailPage({ code }: { code: string }) {
+    const { t } = useTranslation();
 
     const [grams, setGrams] = useState<number>(100);
 
-    const data = getDetail(code)
+    const data = getDetail(code);
 
     const colors = [
-        "#0088FE",
-        "#00C49F",
-        "#FFBB28",
-        "#FF8042",
-        "#A28CC3",
-        "#FF6361",
-        "#BC5090",
-        "#58508D",
-        "#003F5C",
-        "#FFA600",
-        "#2F4B7C",
+        "#0088fe",
+        "#00c49f",
+        "#ffbb28",
+        "#ff8042",
+        "#a28cc3",
+        "#ff6361",
+        "#bc5090",
+        "#58508d",
+        "#003f5c",
+        "#ffa600",
+        "#2f4b7c",
         "#665191",
-        "#D45087",
-        "#F95D6A",
-        "#FF7C43",
-        "#1F77B4",
-        "#AEC7E8",
-        "#FF9896",
-        "#98DF8A",
-        "#C5B0D5",
-        "#FFBB78",
-        "#9467BD",
-        "#C49C94",
-        "#E377C2",
-        "#F7B6D2",
-        "#7F7F7F",
-        "#C7C7C7",
-        "#BCBD22",
-        "#DBDB8D",
-        "#17BECF",
+        "#d45087",
+        "#f95d6a",
+        "#ff7c43",
+        "#1f77b4",
+        "#aec7e8",
+        "#ff9896",
+        "#98df8a",
+        "#c5b0d5",
+        "#ffbb78",
+        "#9467bd",
+        "#c49c94",
+        "#e377c2",
+        "#f7b6d2",
+        "#7f7f7f",
+        "#c7c7c7",
+        "#bcbd22",
+        "#dbdb8d",
+        "#17becf",
     ];
 
     const references = data.references ?? [];
@@ -116,10 +130,10 @@ export default function ClientDetailPage({code}: { code: string }) {
                     {code}, {data.commonName.es}
                 </h2>
             )}
-            <Tab defaultTab={0} >
+            <Tab defaultTab={0}>
                 <TabItem label="Información general">
-                    <InfoAboutFoot data={
-                        {
+                    <InfoAboutFoot
+                        data={{
                             ingredients: data.ingredients,
                             group: data.group,
                             type: data.type,
@@ -129,8 +143,8 @@ export default function ClientDetailPage({code}: { code: string }) {
                             brand: data.brand ?? "",
                             observation: data.observation ?? "",
                             origins: data.origins ?? []
-                        }
-                    }/>
+                        }}
+                    />
                 </TabItem>
                 <TabItem label="Composición del alimento">
                     <GramsAdjuster
@@ -145,7 +159,7 @@ export default function ClientDetailPage({code}: { code: string }) {
                     </div>
                     <div className="mt-[10px] border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white]">
                         <h2 className="text-center ">Tabla de composición</h2>
-                        <CompositionDropdown nutrientData={data.nutrientMeasurements ?? []} grams = {grams}/>
+                        <CompositionDropdown nutrientData={data.nutrientMeasurements ?? []} grams={grams}/>
                     </div>
                 </TabItem>
                 <TabItem label="Códigos languales">
@@ -156,7 +170,8 @@ export default function ClientDetailPage({code}: { code: string }) {
                 </TabItem>
                 <TabItem label="Referencias">
                     <div
-                        className="flex flex-col mt-[10px] border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white]">
+                        className="flex flex-col mt-[10px] border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white]"
+                    >
                         <h2 className="text-center pb-[12px]">Referencias</h2>
                         <References data={references}/>
                     </div>

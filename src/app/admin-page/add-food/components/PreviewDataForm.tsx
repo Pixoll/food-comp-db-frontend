@@ -8,6 +8,8 @@ import {
 import { FoodForm } from "@/app/admin-page/add-food/page";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/context/ToastContext";
+// TODO some really horrible shit 2
+// @ts-expect-error
 import { Group, LangualCode, ScientificName, Subspecies, Type, } from "@/hooks";
 import {
     getNutrientNameById,
@@ -17,33 +19,6 @@ import {
 } from "@/types/nutrients";
 import { CodeIcon, Database, Info, Leaf, Zap } from "lucide-react";
 import { useTranslation } from "react-i18next";
-
-type NewFood = {
-    commonName: Record<"es", string> &
-        Partial<Record<"en" | "pt", string | null>>;
-    ingredients?: Partial<Record<"es" | "en" | "pt", string | null>>;
-    scientificNameId?: number;
-    subspeciesId?: number;
-    groupId: number;
-    typeId: number;
-    strain?: string;
-    brand?: string;
-    observation?: string;
-    originIds?: number[];
-    nutrientMeasurements: NewNutrientMeasurement[];
-    langualCodes: number[];
-};
-
-type NewNutrientMeasurement = {
-    nutrientId: number;
-    average: number;
-    deviation?: number;
-    min?: number;
-    max?: number;
-    sampleSize?: number;
-    dataType: "analytic" | "calculated" | "assumed" | "borrowed";
-    referenceCodes?: number[];
-};
 
 type PreviewDataFormProps = {
     data: FoodForm;

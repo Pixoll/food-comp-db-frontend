@@ -1,4 +1,4 @@
-export * from "./useFetch";
+export * from "./useApi";
 export * from "./useForm";
 export * from "./useGroups";
 export * from "./useLanguages";

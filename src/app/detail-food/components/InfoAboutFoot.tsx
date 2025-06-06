@@ -1,7 +1,8 @@
+import { StringTranslation } from "@/api";
 import {Origin} from "@/types/SingleFoodResult";
 
 type InfoAboutFoodComponentProps = {
-    ingredients: Partial<Record<"es" | "en" | "pt", string>>;
+    ingredients: StringTranslation;
     group: {
         code: string;
         name: string;

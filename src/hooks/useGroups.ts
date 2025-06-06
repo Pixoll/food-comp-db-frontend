@@ -1,42 +1,43 @@
-'use client'
-import { useState } from "react";
+"use client";
+
 import { Collection } from "@/utils/collection";
-import { FetchStatus, useFetch } from "./useFetch";
+import { useState } from "react";
+import { FetchStatus, useApi } from "./useApi";
 
 export type Group = {
-  id: number;
-  code: string;
-  name: string;
+    id: number;
+    code: string;
+    name: string;
 };
 
 export function useGroups() {
-  const result = useFetch<Group[]>("/groups");
-  const [idToObject, setIdToObject] = useState(new Collection<number, Group>());
-  const [idToName, setIdToName] = useState(new Collection<string, string>());
-  const [codeToId, setCodeToId] = useState(new Collection<string, number>());
+    const result = useApi([], (api) => api.getFoodGroupsV1());
+    const [idToObject, setIdToObject] = useState(new Collection<number, Group>());
+    const [idToName, setIdToName] = useState(new Collection<string, string>());
+    const [codeToId, setCodeToId] = useState(new Collection<string, number>());
 
-  if (result.status === FetchStatus.Success && idToObject.size === 0 && idToName.size === 0 && codeToId.size === 0) {
-    result.data.forEach((group) => {
-      idToObject.set(group.id, group);
-      idToName.set(group.id.toString(), group.name);
-      codeToId.set(group.code, group.id);
-    });
-    setIdToObject(idToObject.clone());
-    setIdToName(idToName.clone());
-    setCodeToId(codeToId.clone());
-  }
-
-  const forceReload = () => {
-    if (result.status !== FetchStatus.Loading) {
-      result.forceReload();
-      idToObject.clear();
-      idToName.clear();
-      codeToId.clear();
-      setIdToObject(new Collection());
-      setIdToName(new Collection());
-      setCodeToId(new Collection());
+    if (result.status === FetchStatus.Success && idToObject.size === 0 && idToName.size === 0 && codeToId.size === 0) {
+        result.data.forEach((group) => {
+            idToObject.set(group.id, group);
+            idToName.set(group.id.toString(), group.name);
+            codeToId.set(group.code, group.id);
+        });
+        setIdToObject(idToObject.clone());
+        setIdToName(idToName.clone());
+        setCodeToId(codeToId.clone());
     }
-  };
 
-  return { idToObject, idToName, codeToId, forceReload };
+    const forceReload = () => {
+        if (result.status !== FetchStatus.Loading) {
+            result.forceReload();
+            idToObject.clear();
+            idToName.clear();
+            codeToId.clear();
+            setIdToObject(new Collection());
+            setIdToName(new Collection());
+            setCodeToId(new Collection());
+        }
+    };
+
+    return { idToObject, idToName, codeToId, forceReload };
 }

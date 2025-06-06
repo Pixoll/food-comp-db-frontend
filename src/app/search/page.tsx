@@ -1,13 +1,14 @@
 "use client";
-import { FetchStatus, useFetch } from "@/hooks";
-import { FoodResult } from "@/types/option";
+
+import { FetchStatus, useApi } from "@/hooks";
 import { useSearchParams } from "next/navigation";
-import qs from "qs";
 import { Suspense, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import FilterBody, { Filters } from "./components/FilterBody";
 import FoodResultsTable from "./components/nutrient-table/FoodResultsTable";
 import styles from "./search.module.css";
+
+type Operator = "=" | "<" | "<=" | ">=" | ">";
 
 function Search() {
     const { t } = useTranslation();
@@ -30,30 +31,6 @@ function Search() {
         }
     }, [paramFoodName]);
 
-    const filters = {
-        name: searchForName.trim(),
-        types: Array.from(selectedFilters.foodTypeFilter),
-        regions: Array.from(selectedFilters.regionsFilter),
-        groups: Array.from(selectedFilters.groupsFilter),
-        ...selectedFilters.nutrientsFilter.reduce((acc, n) => {
-            if (n.id > 0 && typeof n.value !== "undefined" && n.value >= 0) {
-                acc.nutrients.push(n.id);
-                acc.operators.push(n.op);
-                acc.values.push(n.value);
-            }
-            return acc;
-        }, {
-            nutrients: [] as number[],
-            operators: [] as string[],
-            values: [] as number[],
-        }),
-    };
-
-    const queryString = qs.stringify(filters, {
-        arrayFormat: "comma",
-        skipNulls: true,
-    });
-
     const resetFilters = () => {
         setSelectedFilters({
             foodTypeFilter: new Set(),
@@ -67,7 +44,26 @@ function Search() {
         setSearchForName("");
     };
 
-    const foodsResult = useFetch<FoodResult[]>(`/foods?${queryString}`);
+    const foodsResult = useApi([searchForName, selectedFilters], (api, name, filters) => api.getFoodsV1({
+        query: {
+            name: name.trim(),
+            types: Array.from(filters.foodTypeFilter).map(n => +n),
+            regions: Array.from(filters.regionsFilter).map(n => +n),
+            groups: Array.from(filters.groupsFilter).map(n => +n),
+            ...filters.nutrientsFilter.reduce((acc, n) => {
+                if (n.id > 0 && typeof n.value !== "undefined" && n.value >= 0) {
+                    acc.nutrients.push(n.id);
+                    acc.operators.push(n.op as Operator);
+                    acc.values.push(n.value);
+                }
+                return acc;
+            }, {
+                nutrients: [] as number[],
+                operators: [] as Operator[],
+                values: [] as number[],
+            }),
+        }
+    }));
     const foods = foodsResult.status === FetchStatus.Success ? foodsResult.data : [];
 
     return (

@@ -320,8 +320,8 @@ export const getOriginChildrenV1 = <ThrowOnError extends boolean = false>(option
 /**
  * Retrieves references based on query parameters.
  */
-export const getReferencesV1 = <ThrowOnError extends boolean = false>(options: Options<GetReferencesV1Data, ThrowOnError>) => {
-    return (options.client ?? _heyApiClient).get<GetReferencesV1Responses, GetReferencesV1Errors, ThrowOnError>({
+export const getReferencesV1 = <ThrowOnError extends boolean = false>(options?: Options<GetReferencesV1Data, ThrowOnError>) => {
+    return (options?.client ?? _heyApiClient).get<GetReferencesV1Responses, GetReferencesV1Errors, ThrowOnError>({
         url: '/references',
         ...options
     });
