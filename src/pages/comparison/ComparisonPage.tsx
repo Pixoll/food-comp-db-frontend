@@ -105,7 +105,7 @@ export default function ComparisonPage() {
                 <Col>
                   <div className="food-count-badge">
                     <span className="count-indicator">
-                      {comparisonFoods.length} /5{" "}
+                      {comparisonFoods.length}{" "}
                       {comparisonFoods.length === 1 ? "alimento" : "alimentos"}
                     </span>
                   </div>
