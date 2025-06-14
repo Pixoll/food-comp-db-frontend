@@ -11,7 +11,7 @@ export type Type = {
 };
 
 export function useTypes() {
-    const result = useApi([], (api) => api.getFoodTypesV1());
+    const result = useApi([], (api) => api.getFoodTypes());
     const [idToObject, setIdToObject] = useState(new Collection<number, Type>());
     const [idToName, setIdToName] = useState(new Collection<string, string>());
     const [codeToId, setCodeToId] = useState(new Collection<string, number>());

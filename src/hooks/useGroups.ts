@@ -11,7 +11,7 @@ export type Group = {
 };
 
 export function useGroups() {
-    const result = useApi([], (api) => api.getFoodGroupsV1());
+    const result = useApi([], (api) => api.getFoodGroups());
     const [idToObject, setIdToObject] = useState(new Collection<number, Group>());
     const [idToName, setIdToName] = useState(new Collection<string, string>());
     const [codeToId, setCodeToId] = useState(new Collection<string, number>());

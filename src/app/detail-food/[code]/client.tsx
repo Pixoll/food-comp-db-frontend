@@ -15,7 +15,7 @@ import References from "../components/References";
 import styles from "./detail-food.module.css";
 
 function getDetail(code: string): Food {
-    const result = useApi([code], (api, depCode) => api.getFoodV1({
+    const result = useApi([code], (api, depCode) => api.getFood({
         path: {
             code: depCode,
         },

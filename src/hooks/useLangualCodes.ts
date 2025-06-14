@@ -6,7 +6,7 @@ import { useState } from "react";
 import { FetchStatus, useApi } from "./useApi";
 
 export function useLangualCodes() {
-    const result = useApi([], (api) => api.getLangualCodesV1());
+    const result = useApi([], (api) => api.getLangualCodes());
     const [langualCodes, setLangualCodes] = useState(new Collection<string, LangualCode>());
 
     if (result.status === FetchStatus.Success && langualCodes.size === 0) {

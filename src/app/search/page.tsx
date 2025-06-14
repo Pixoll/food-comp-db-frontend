@@ -1,15 +1,15 @@
 "use client";
 
-import { FetchStatus, useApi } from "@/hooks";
+import { GetFoodsData } from "@/api";
+import { useApi } from "@/hooks";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import FilterBody, { Filters } from "./components/FilterBody";
 import FoodResultsTable from "./components/nutrient-table/FoodResultsTable";
 import styles from "./search.module.css";
-import {GetFoodsV1Data} from "@/api";
 
-type Operator = NonNullable<NonNullable<GetFoodsV1Data["query"]>["operators"]>[number];
+type Operator = NonNullable<NonNullable<GetFoodsData["query"]>["operators"]>[number];
 
 function Search() {
     const { t } = useTranslation();
@@ -45,7 +45,7 @@ function Search() {
         setSearchForName("");
     };
 
-    const foodsResult = useApi([searchForName, selectedFilters], (api, name, filters) => api.getFoodsV1({
+    const foodsResult = useApi([searchForName, selectedFilters], (api, name, filters) => api.getFoods({
         query: {
             name: name.trim(),
             types: Array.from(filters.foodTypeFilter).map(n => +n),
@@ -65,7 +65,6 @@ function Search() {
             }),
         }
     }));
-
 
     return (
         <div className={styles["search-container"]}>

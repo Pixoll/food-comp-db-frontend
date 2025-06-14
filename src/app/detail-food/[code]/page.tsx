@@ -3,7 +3,7 @@ import ClientDetailPage from "./client";
 
 export async function generateStaticParams() {
     try {
-        const result = await api.getFoodsV1();
+        const result = await api.getFoods();
         if (result.error) {
             console.error("Error generating static params:", result.error);
             return [];

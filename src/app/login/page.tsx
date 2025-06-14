@@ -1,4 +1,5 @@
 "use client";
+
 import api from "@/api";
 import { useAuth } from "@/context/AuthContext";
 import { useForm } from "@/hooks";
@@ -13,7 +14,6 @@ type LoginForm = {
     password: string;
 }
 export default function LoginPage() {
-
     const { t } = useTranslation();
     const { login } = useAuth();
     const router = useRouter();
@@ -26,11 +26,9 @@ export default function LoginPage() {
         e.preventDefault();
 
         try {
-            const result = await api.createSessionV1({
-                path: {
-                    username: formState.username,
-                },
+            const result = await api.login({
                 body: {
+                    username: formState.username,
                     password: formState.password,
                 },
             });
@@ -40,9 +38,7 @@ export default function LoginPage() {
                 return;
             }
 
-            const { token } = result.data;
-            login(token, formState.username);
-
+            login();
             onResetForm();
             router.push("/");
         } catch (error) {

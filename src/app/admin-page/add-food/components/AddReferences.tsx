@@ -74,7 +74,7 @@ export default function AddReferences({
         journalsFilter: new Set(),
     });
 
-    const referencesResult = useApi([selectedFilters], (api, filters) => api.getReferencesV1({
+    const referencesResult = useApi([selectedFilters], (api, filters) => api.getReferences({
         query: {
             title: filters.nameTittle,
             authors: Array.from(filters.authorsFilter).map(n => +n),

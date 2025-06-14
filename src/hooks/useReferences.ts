@@ -49,12 +49,12 @@ export type Article = {
 };
 
 export function useReferences() {
-    const referencesResult = useApi([], (api) => api.getReferencesV1());
-    const authorsResult = useApi([], (api) => api.getAuthorsV1());
-    const citiesResult = useApi([], (api) => api.getCitiesV1());
-    const journalsResult = useApi([], (api) => api.getJournalsV1());
-    const journalsVolumesResult = useApi([], (api) => api.getJournalVolumesV1());
-    const articlesResult = useApi([], (api) => api.getArticlesV1());
+    const referencesResult = useApi([], (api) => api.getReferences());
+    const authorsResult = useApi([], (api) => api.getAuthors());
+    const citiesResult = useApi([], (api) => api.getCities());
+    const journalsResult = useApi([], (api) => api.getJournals());
+    const journalsVolumesResult = useApi([], (api) => api.getJournalVolumes());
+    const articlesResult = useApi([], (api) => api.getArticles());
 
     const forceReload = () => {
         if (referencesResult.status !== FetchStatus.Loading) {

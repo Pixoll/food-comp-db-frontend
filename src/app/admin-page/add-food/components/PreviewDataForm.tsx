@@ -6,7 +6,6 @@ import {
     searchTypeNameById,
 } from "@/app/admin-page/add-food/components/FoodGeneralData";
 import { FoodForm } from "@/app/admin-page/add-food/page";
-import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/context/ToastContext";
 // TODO some really horrible shit 2
 // @ts-expect-error
@@ -43,7 +42,6 @@ export default function PreviewDataForm({
 }: PreviewDataFormProps) {
     console.log(data);
     const { t } = useTranslation();
-    const { state } = useAuth();
     const { addToast } = useToast();
     const hasValidData = <T extends NutrientMeasurementForm>(
         nutrient: T
@@ -157,11 +155,10 @@ export default function PreviewDataForm({
         };
 
         try {
-            const result = await api.createFoodV1({
+            const result = await api.createFood({
                 path: {
                     code: data.code,
                 },
-                auth: state.token ?? "",
                 body: payload,
             });
 

@@ -17,7 +17,7 @@ export type AnyNutrient = {
 };
 
 export function useNutrients() {
-    const result = useApi([], (api) => api.getNutrientsV1());
+    const result = useApi([], (api) => api.getNutrients());
     const [nutrients, setNutrients] = useState(new Collection<string, AnyNutrient>());
     const [energy, setEnergy] = useState(new Collection<string, AnyNutrient>());
     const [macronutrients, setMacronutrients] = useState(new Collection<string, MacroNutrient>());

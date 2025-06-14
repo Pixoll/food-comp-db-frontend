@@ -1,7 +1,6 @@
 "use client";
 
 import api from "@/api";
-import { useAuth } from "@/context/AuthContext";
 import { useComparison } from "@/context/ComparisonContext";
 import { FetchStatus, useApi } from "@/hooks";
 import { SingleFoodResult } from "@/types/SingleFoodResult";
@@ -17,17 +16,14 @@ export type GetFoodMeasurementsResult = Pick<SingleFoodResult, "commonName" | "n
 export default function ComparisonPage() {
     const { comparisonFoods, removeFromComparison } = useComparison();
     const [comparisonSectionOpen, setComparisonSectionOpen] = useState(false);
-    const { state } = useAuth();
-    const { token } = state;
     const router = useRouter();
 
     const exportData = async (codes: string[]) => {
         try {
-            const result = await api.getXlsxV1({
+            const result = await api.getXlsx({
                 query: {
                     codes,
                 },
-                auth: token ?? "",
             });
 
             if (result.error) {
@@ -53,7 +49,7 @@ export default function ComparisonPage() {
         }
     };
 
-    const foodsResult = useApi([comparisonFoods], (api, foods) => api.compareFoodsV1({
+    const foodsResult = useApi([comparisonFoods], (api, foods) => api.compareFoods({
             query: {
                 codes: foods.map(f => f.code),
             },

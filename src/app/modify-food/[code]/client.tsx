@@ -1,7 +1,6 @@
 "use client";
 
 import api, { Food } from "@/api";
-import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/context/ToastContext";
 import {
     FetchStatus,
@@ -14,7 +13,7 @@ import {
     useSubspecies,
     useTypes
 } from "@/hooks";
-import { LangualCode, NutrientMeasurement, NutrientsValue, Origin, SingleFoodResult } from "@/types/SingleFoodResult";
+import { LangualCode, NutrientMeasurement, NutrientsValue, Origin } from "@/types/SingleFoodResult";
 import { Collection } from "@/utils/collection";
 import { FormEvent, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -140,7 +139,7 @@ function normalizeFoodFormForApi(
 }
 
 function getAllTypeData(code: string) {
-    const result = useApi([code], (api, code) => api.getFoodV1({
+    const result = useApi([code], (api, code) => api.getFood({
         path: {
             code,
         },
@@ -156,10 +155,7 @@ function getAllTypeData(code: string) {
 
 export default function ModifyFoodPage({ code }: { code: string }) {
     const { t } = useTranslation();
-    const { state } = useAuth();
     const { addToast } = useToast();
-
-    const token = state.token;
 
     const {
         data,
@@ -212,8 +208,7 @@ export default function ModifyFoodPage({ code }: { code: string }) {
             const name = payload.scientificName;
 
             try {
-                const result = await api.createScientificNameV1({
-                    auth: state.token ?? "",
+                const result = await api.createScientificName({
                     body: {
                         name,
                     },
@@ -254,8 +249,7 @@ export default function ModifyFoodPage({ code }: { code: string }) {
             const name = payload.subspecies;
 
             try {
-                const result = await api.createSubspeciesV1({
-                    auth: state.token ?? "",
+                const result = await api.createSubspecies({
                     body: {
                         name,
                     },
@@ -331,11 +325,10 @@ export default function ModifyFoodPage({ code }: { code: string }) {
         const payload = normalizeFoodFormForApi(data, collectionsForNormalized);
 
         try {
-            const result = await api.updateFoodV1({
+            const result = await api.updateFood({
                 path: {
                     code,
                 },
-                auth: token ?? "",
                 body: payload,
             });
 

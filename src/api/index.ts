@@ -6,5 +6,5 @@ export * from "./types.gen";
 
 client.setConfig({
     baseUrl: process.env.NEXT_PUBLIC_API_URL,
-    // TODO setup auth
+    credentials: "include",
 });

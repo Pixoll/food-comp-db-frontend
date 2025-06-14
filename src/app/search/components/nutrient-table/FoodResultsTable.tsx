@@ -1,18 +1,19 @@
 "use client";
-import api, {BaseFood} from "@/api";
-import {FetchResult, FetchStatus} from "@/hooks";
-import {useAuth} from "@/context/AuthContext";
-import {useComparison} from "@/context/ComparisonContext";
-import {ArrowDown, ArrowUp, Minus, Plus, X} from "lucide-react";
-import {useRouter} from "next/navigation";
-import {useEffect, useState} from "react";
-import {useTranslation} from "react-i18next";
-import Pagination from "../Pagination";
+
+import api, { BaseFood } from "@/api";
 import Loading from "@/app/components/Loading/Loading";
+import { useAuth } from "@/context/AuthContext";
+import { useComparison } from "@/context/ComparisonContext";
+import { FetchResult, FetchStatus } from "@/hooks";
+import { ArrowDown, ArrowUp, Minus, Plus, X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import Pagination from "../Pagination";
 import "./index.css";
 
 interface FoodResultsListProps {
-    data: FetchResult<BaseFood[]>
+    data: FetchResult<BaseFood[]>;
     status: FetchStatus;
     searchForName: string;
     setSearchForName: (value: string) => void;
@@ -30,16 +31,15 @@ enum SortOrder {
 }
 
 export default function FoodResultsTable({
-                                             data,
-                                             searchForName,
-                                             setSearchForName,
-                                         }: FoodResultsListProps) {
+    data,
+    searchForName,
+    setSearchForName,
+}: FoodResultsListProps) {
     const router = useRouter();
-    const {state} = useAuth();
-    const {token} = state;
-    const {comparisonFoods, addToComparison, removeFromComparison} =
+    const { state } = useAuth();
+    const { comparisonFoods, addToComparison, removeFromComparison } =
         useComparison();
-    const {t, i18n} = useTranslation();
+    const { t, i18n } = useTranslation();
     const [selectedSort, setSelectedSort] = useState(SortType.NAME);
     const [sortOrder, setSortOrder] = useState(SortOrder.ASC);
     const [resultsPerPage, setResultsPerPage] = useState(10);
@@ -75,11 +75,10 @@ export default function FoodResultsTable({
     };
     const exportData = async (codes: string[]) => {
         try {
-            const result = await api.getXlsxV1({
+            const result = await api.getXlsx({
                 query: {
                     codes,
                 },
-                auth: token ?? "",
             });
 
             if (result.error) {
@@ -374,8 +373,8 @@ export default function FoodResultsTable({
                             <button
                                 className={`
                                 ${isAllSelected
-                                    ? 'bg-gradient-to-r from-[#ef4444] to-[#dc2626] hover:from-[#dc2626] hover:to-[#b91c1c]'
-                                    : 'bg-gradient-to-r from-[#10b981] to-[#059669] hover:from-[#059669] hover:to-[#047857]'
+                                    ? "bg-gradient-to-r from-[#ef4444] to-[#dc2626] hover:from-[#dc2626] hover:to-[#b91c1c]"
+                                    : "bg-gradient-to-r from-[#10b981] to-[#059669] hover:from-[#059669] hover:to-[#047857]"
                                 }
                                 text-[white]
                                 px-[20px]
@@ -400,13 +399,15 @@ export default function FoodResultsTable({
                                 gap-[10px]
                                 relative
                                 overflow-hidden
-                                ${records.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}
+                                ${records.length === 0 ? "opacity-50 cursor-not-allowed" : ""}
                                 group
                             `}
                                 onClick={handleToggle}
-                                disabled={records.length === 0}>
+                                disabled={records.length === 0}
+                            >
                                 <div
-                                    className="absolute inset-0 bg-gradient-to-r from-transparent via-[white]/[0.2] to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-[600ms]"></div>
+                                    className="absolute inset-0 bg-gradient-to-r from-transparent via-[white]/[0.2] to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-[600ms]"
+                                ></div>
                                 <span className="relative z-10 flex items-center gap-[10px]">
                             <span className="group-hover:scale-[1.1] transition-transform duration-[200ms]">
                             {isAllSelected ? (
@@ -415,7 +416,7 @@ export default function FoodResultsTable({
                                 <Plus className="w-[18px] h-[18px]"/>
                             )}
                             </span>
-                                    {isAllSelected ? 'Deseleccionar página' : 'Seleccionar pagina'}
+                                    {isAllSelected ? "Deseleccionar página" : "Seleccionar pagina"}
                              </span>
                             </button>
                         </div>
@@ -580,8 +581,8 @@ export default function FoodResultsTable({
                         <button
                             className={`
                                 ${isAllSelected
-                                ? 'bg-gradient-to-r from-[#ef4444] to-[#dc2626] hover:from-[#dc2626] hover:to-[#b91c1c]'
-                                : 'bg-gradient-to-r from-[#10b981] to-[#059669] hover:from-[#059669] hover:to-[#047857]'
+                                ? "bg-gradient-to-r from-[#ef4444] to-[#dc2626] hover:from-[#dc2626] hover:to-[#b91c1c]"
+                                : "bg-gradient-to-r from-[#10b981] to-[#059669] hover:from-[#059669] hover:to-[#047857]"
                             }
                                 text-[white]
                                 px-[20px]
@@ -606,13 +607,15 @@ export default function FoodResultsTable({
                                 gap-[10px]
                                 relative
                                 overflow-hidden
-                                ${records.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}
+                                ${records.length === 0 ? "opacity-50 cursor-not-allowed" : ""}
                                 group
                             `}
                             onClick={handleToggle}
-                            disabled={records.length === 0}>
+                            disabled={records.length === 0}
+                        >
                             <div
-                                className="absolute inset-0 bg-gradient-to-r from-transparent via-[white]/[0.2] to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-[600ms]"></div>
+                                className="absolute inset-0 bg-gradient-to-r from-transparent via-[white]/[0.2] to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-[600ms]"
+                            ></div>
                             <span className="relative z-10 flex items-center gap-[10px]">
                             <span className="group-hover:scale-[1.1] transition-transform duration-[200ms]">
                             {isAllSelected ? (
@@ -621,7 +624,7 @@ export default function FoodResultsTable({
                                 <Plus className="w-[18px] h-[18px]"/>
                             )}
                             </span>
-                                {isAllSelected ? 'Deseleccionar página' : 'Seleccionar pagina'}
+                                {isAllSelected ? "Deseleccionar página" : "Seleccionar pagina"}
                              </span>
                         </button>
                     </div>

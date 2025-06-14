@@ -31,7 +31,7 @@ export type Location = CommonOrigin & {
 };
 
 export function useOrigins() {
-    const result = useApi([], (api) => api.getOriginsV1());
+    const result = useApi([], (api) => api.getOrigins());
     const [regions, setRegions] = useState(new Collection<number, Region>());
     const [provinces, setProvinces] = useState(new Collection<number, Province>());
     const [communes, setCommunes] = useState(new Collection<number, Commune>());

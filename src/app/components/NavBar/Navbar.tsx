@@ -35,12 +35,7 @@ const NavBar = () => {
 
     const handleLogout = async () => {
         try {
-            const result = await api.deleteSessionV1({
-                path: {
-                    username: state.username ?? "_",
-                },
-                auth: state.token ?? "",
-            });
+            const result = await api.logout();
 
             if (result.error) {
                 console.error(result.error);
@@ -51,7 +46,6 @@ const NavBar = () => {
                 return;
             }
 
-            console.log(result.data);
             logout();
             router.push("/");
         } catch (error) {

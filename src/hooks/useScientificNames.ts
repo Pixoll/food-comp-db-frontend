@@ -10,7 +10,7 @@ export type ScientificName = {
 };
 
 export function useScientificNames() {
-    const result = useApi([], (api) => api.getScientificNamesV1());
+    const result = useApi([], (api) => api.getScientificNames());
     const [idToObject, setIdToObject] = useState(new Collection<number, ScientificName>());
     const [idToName, setIdToName] = useState(new Collection<string, string>());
     const [nameToId, setNameToId] = useState(new Collection<string, number>());

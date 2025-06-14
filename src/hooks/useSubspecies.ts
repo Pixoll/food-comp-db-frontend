@@ -10,7 +10,7 @@ export type Subspecies = {
 };
 
 export function useSubspecies() {
-    const result = useApi([], (api) => api.getSubspeciesV1());
+    const result = useApi([], (api) => api.getSubspecies());
     const [idToObject, setIdToObject] = useState(new Collection<number, Subspecies>());
     const [idToName, setIdToName] = useState(new Collection<string, string>());
     const [nameToId, setNameToId] = useState(new Collection<string, number>());

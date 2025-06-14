@@ -1,5 +1,4 @@
 import api, { NewReferenceDto } from "@/api";
-import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/context/ToastContext";
 import { Author, City, Journal, JournalVolume } from "@/hooks";
 import { useTranslation } from "react-i18next";
@@ -54,7 +53,6 @@ export default function PreviewPostReference({
     forceReload,
     handleResetReferenceForm,
 }: PreviewNewReferenceProps) {
-    const { state } = useAuth();
     const { t } = useTranslation();
     const { addToast } = useToast();
     const formatNewArticle = (newArticle: NewArticle): string => {
@@ -101,11 +99,10 @@ export default function PreviewPostReference({
                 }
             }
 
-            const result = await api.createReferenceV1({
+            const result = await api.createReference({
                 path: {
                     code: data.code,
                 },
-                auth: state.token ?? "",
                 body: payload as NewReferenceDto,
             });
 

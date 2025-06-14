@@ -11,7 +11,7 @@ export type Language = {
 };
 
 export function useLanguages() {
-    const result = useApi([], (api) => api.getLanguagesV1());
+    const result = useApi([], (api) => api.getLanguages());
     const [languages, setLanguages] = useState(new Collection<number, Language>());
 
     if (result.status === FetchStatus.Success && languages.size === 0) {

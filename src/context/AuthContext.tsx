@@ -1,137 +1,108 @@
-'use client'
-import { createContext, ReactNode, useCallback, useContext, useEffect, useReducer, useState, } from "react";
+"use client";
+
+import api from "@/api";
+import { createContext, ReactNode, useCallback, useContext, useEffect, useReducer, useRef } from "react";
 
 type AuthState = {
-  isAuthenticated: true;
-  token: string;
-  username: string;
-} | {
-  isAuthenticated: false;
-  token: null;
-  username: null;
+    isAuthenticated: boolean;
 };
 
 type AuthAction = {
-  type: "login";
-  payload: {
-    token: string;
-    username: string;
-  };
-} | {
-  type: "logout";
+    type: "login" | "logout";
 };
 
 interface AuthContextType {
-  state: AuthState;
-  login: (token: string, username: string) => void;
-  logout: () => void;
+    state: AuthState;
+    login: () => void;
+    logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 function authReducer(state: AuthState, action: AuthAction): AuthState {
-  switch (action.type) {
-    case "login":
-      return {
-        ...state,
-        isAuthenticated: true,
-        ...action.payload,
-      };
-    case "logout":
-      return {
-        ...state,
-        isAuthenticated: false,
-        token: null,
-        username: null,
-      };
-    default:
-      return state;
-  }
+    switch (action.type) {
+        case "login":
+            return {
+                ...state,
+                isAuthenticated: true,
+            };
+        case "logout":
+            return {
+                ...state,
+                isAuthenticated: false,
+            };
+        default:
+            return state;
+    }
 }
 
 type AuthProviderProps = {
-  children: ReactNode;
+    children: ReactNode;
 };
 
+const SESSION_CHECK_INTERVAL = 5 * 60_000;
+
 export function AuthProvider({ children }: AuthProviderProps) {
+    const [state, dispatch] = useReducer(authReducer, { isAuthenticated: false });
+    const intervalRef = useRef<number>(0);
 
-  const [storedToken, setStoredToken] = useState<string | null>(null);
-  const [storedUsername, setStoredUsername] = useState<string | null>(null);
+    useEffect(() => {
+        checkStatus();
 
-  useEffect(() => {
-    setStoredToken(() => localStorage.getItem("token"))
-    setStoredUsername(() => localStorage.getItem("username"))
-  }, []);
+        return () => {
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+            }
+        };
+    }, []);
 
+    const checkStatus = async () => {
+        const response = await api.getSessionInfo().catch(error => ({ error }));
 
-  const [state, dispatch] = useReducer(authReducer, {
-    isAuthenticated: !!(storedToken && storedUsername),
-    token: storedToken,
-    username: storedUsername,
-  } as AuthState);
-
-  const login = useCallback((token: string, username: string) => {
-    setStoredToken(token);
-    setStoredUsername(username);
-    localStorage.setItem("token", token);
-    localStorage.setItem("username", username);
-    dispatch({
-      type: "login",
-      payload: { token, username },
-    });
-  }, []);
-
-  const logout = useCallback(() => {
-    setStoredToken("");
-    setStoredUsername("");
-    localStorage.removeItem("token");
-    localStorage.removeItem("username");
-    dispatch({ type: "logout" });
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const token = localStorage.getItem("token");
-      const username = localStorage.getItem("username");
-      if (storedToken !== token || storedUsername !== username) {
-        if (token && username) {
-          login(token, username);
-        } else if (storedToken || storedUsername) {
-          logout();
+        if (response.error) {
+            if (state.isAuthenticated) {
+                logout();
+            }
+        } else {
+            if (!state.isAuthenticated) {
+                login();
+            }
         }
-      }
-    }, 1000);
+    };
 
-    return () => clearInterval(interval);
-    // eslint-disable-next-line
-  }, [storedToken, storedUsername]);
+    // noinspection com.intellij.reactbuddy.ExhaustiveDepsInspection
+    const login = useCallback(() => {
+        dispatch({ type: "login" });
 
-  useEffect(() => {
-    if (state.isAuthenticated) {
-      setStoredToken(state.token);
-      setStoredUsername(state.username);
-      localStorage.setItem("token", state.token);
-      localStorage.setItem("username", state.username);
-    } else {
-      setStoredToken("");
-      setStoredUsername("");
-      localStorage.removeItem("token");
-      localStorage.removeItem("username");
-    }
-  }, [state.isAuthenticated, state.token, state.username]);
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+        }
 
-  return (
-    <AuthContext.Provider value={{ state, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+        intervalRef.current = setInterval(checkStatus, SESSION_CHECK_INTERVAL) as unknown as number;
+    }, []);
+
+    // noinspection com.intellij.reactbuddy.ExhaustiveDepsInspection
+    const logout = useCallback(() => {
+        dispatch({ type: "logout" });
+
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = 0;
+        }
+    }, []);
+
+    return (
+        <AuthContext.Provider value={{ state, login, logout }}>
+            {children}
+        </AuthContext.Provider>
+    );
 }
 
 // Custom hook for accessing AuthContext easily
 export function useAuth() {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
+    const context = useContext(AuthContext);
+    if (!context) {
+        throw new Error("useAuth must be used within an AuthProvider");
+    }
+    return context;
 }
