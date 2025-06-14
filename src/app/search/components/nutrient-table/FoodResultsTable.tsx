@@ -1,17 +1,19 @@
 "use client";
-import api from "@/api";
-import { useAuth } from "@/context/AuthContext";
-import { useComparison } from "@/context/ComparisonContext";
-import { FoodResult } from "@/types/option";
-import { ArrowDown, ArrowUp, Minus, Plus, X } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import api, {BaseFood} from "@/api";
+import {FetchResult, FetchStatus} from "@/hooks";
+import {useAuth} from "@/context/AuthContext";
+import {useComparison} from "@/context/ComparisonContext";
+import {ArrowDown, ArrowUp, Minus, Plus, X} from "lucide-react";
+import {useRouter} from "next/navigation";
+import {useEffect, useState} from "react";
+import {useTranslation} from "react-i18next";
 import Pagination from "../Pagination";
+import Loading from "@/app/components/Loading/Loading";
 import "./index.css";
 
 interface FoodResultsListProps {
-    data: FoodResult[];
+    data: FetchResult<BaseFood[]>
+    status: FetchStatus;
     searchForName: string;
     setSearchForName: (value: string) => void;
 }
@@ -28,21 +30,21 @@ enum SortOrder {
 }
 
 export default function FoodResultsTable({
-    data,
-    searchForName,
-    setSearchForName,
-}: FoodResultsListProps) {
+                                             data,
+                                             searchForName,
+                                             setSearchForName,
+                                         }: FoodResultsListProps) {
     const router = useRouter();
-    const { state } = useAuth();
-    const { token } = state;
-    const { comparisonFoods, addToComparison, removeFromComparison } =
+    const {state} = useAuth();
+    const {token} = state;
+    const {comparisonFoods, addToComparison, removeFromComparison} =
         useComparison();
-    const { t, i18n } = useTranslation();
+    const {t, i18n} = useTranslation();
     const [selectedSort, setSelectedSort] = useState(SortType.NAME);
     const [sortOrder, setSortOrder] = useState(SortOrder.ASC);
     const [resultsPerPage, setResultsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
-    const [sortedData, setSortedData] = useState<FoodResult[]>([]);
+    const [sortedData, setSortedData] = useState<BaseFood[]>([]);
     const selectedLanguage = i18n.language as "en" | "es" | "pt";
 
     const npage = Array.isArray(sortedData)
@@ -103,7 +105,7 @@ export default function FoodResultsTable({
         }
     };
     useEffect(() => {
-        const sorted = [...data].sort((a, b) => {
+        const sorted = [...(data.status === FetchStatus.Success ? data.data : [])].sort((a, b) => {
             let stringA: string;
             let stringB: string;
 
@@ -216,6 +218,215 @@ export default function FoodResultsTable({
             selectAllFoodComparison();
         }
     };
+    const [isSimulatedLoading, setIsSimulatedLoading] = useState(true);
+
+    if (isSimulatedLoading) {
+        return (
+            <div className="food-list">
+                <h2 className="text-[24px] text-[black] text-left mb-[18px] border-b-[2px]] border-[#a8d8d2] pb-[8px] tracking-wider transition-colors duration-300 ease-in-out hover:text-[#388e60]">{t("Table.title")}</h2>
+                <div className="filter-name">
+                    <div className="g-[12px]">
+                        <div className="flex flex-row items-center gap-[24px] w-full">
+                            <div className="flex-1 w-full">
+                                <input
+                                    className="
+                                    w-full
+                                    bg-[#f9f9f9]
+                                    px-[16px]
+                                    py-[14px]
+                                    rounded-[30px]
+                                    border-[2px]
+                                    border-solid
+                                    border-[#a8d8d2]
+                                    shadow-[0_2px_6px_rgba(0,0,0,0.1)]
+                                    outline-[none]
+                                    transition-colors
+                                    duration-300
+                                    text-[16px]
+                                    focus:border-[#007f67]
+                                    focus:shadow-[0_4px_12px_rgba(0,127,103,0.2)]
+                                    placeholder:text-[#a9a9a9]
+                                    "
+                                    type="text"
+                                    placeholder={t("Table.search")}
+                                    value={searchForName}
+                                    onChange={(e) => setSearchForName(e.target.value)}
+                                />
+                            </div>
+
+                            <div className="flex flex-row items-center gap-[8px] min-w-[180px]">
+                                <label
+                                    htmlFor="resultsPerPage"
+                                    className="
+                                text-[14px]
+                                font-medium
+                                text-[#4a4a4a]
+                                whitespace-nowrap
+                                "
+                                >
+                                    {t("Table.results_per_page")}
+                                </label>
+                                <div className="relative w-full md:w-[100px]">
+                                    <select
+                                        id="resultsPerPage"
+                                        value={resultsPerPage}
+                                        onChange={(e) => setResultsPerPage(+e.target.value)}
+                                        className="
+                                    appearance-none
+                                    w-full
+                                    bg-[#f9f9f9]
+                                    px-[12px]
+                                    py-[10px]
+                                    pr-[32px]
+                                    rounded-[8px]
+                                    border-[2px]
+                                    border-solid
+                                    border-[#a8d8d2]
+                                    shadow-[0_2px_4px_rgba(0,0,0,0.05)]
+                                    outline-[none]
+                                    transition-colors
+                                    duration-300
+                                    text-[14px]
+                                    text-[#4a4a4a]
+                                    cursor-pointer
+                                    focus:border-[#007f67]
+                                    focus:shadow-[0_2px_8px_rgba(0,127,103,0.15)]
+                                    "
+                                    >
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                    <div
+                                        className="absolute right-[12px] top-[50%] transform translate-y-[-50%] pointer-events-none"
+                                    >
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="h-[16px] w-[16px] text-[#007f67]"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                        >
+                                            <path
+                                                strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                                d="M19 9l-7 7-7-7"
+                                            />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-3 gap-[16px] my-[24px] w-full">
+                            <button
+                                className="
+                            bg-[#1d6735]
+                            text-[white]
+                            px-[16px]
+                            py-[14px]
+                            border-none
+                            rounded-[6px]
+                            text-[16px]
+                            font-[500]
+                            cursor-pointer
+                            transition-all
+                            duration-300
+                            ease-in-out
+                            w-full
+                            shadow-[0_2px_5px_rgba(0,0,0,0.2)]
+                            hover:bg-[#20703a]
+                            hover:shadow-[0_4px_8px_rgba(0,0,0,0.2)]
+                            hover:-translate-y-[1px]
+                            active:bg-[#3e8e41]
+                            active:shadow-[0_1px_3px_rgba(0,0,0,0.2)]
+                            active:translate-y-[1px]
+                            "
+                                onClick={() => exportData((data.status === FetchStatus.Success ? data.data : []).map((f) => f.code))}
+                            >
+                                Exportar resultados
+                            </button>
+                            <button
+                                className="
+                            bg-[#1d6735]
+                            text-[white]
+                            px-[16px]
+                            py-[14px]
+                            border-none
+                            rounded-[6px]
+                            text-[16px]
+                            font-[500]
+                            cursor-pointer
+                            transition-all
+                            duration-300
+                            ease-in-out
+                            w-full
+                            shadow-[0_2px_5px_rgba(0,0,0,0.2)]
+                            hover:bg-[#20703a]
+                            hover:shadow-[0_4px_8px_rgba(0,0,0,0.2)]
+                            hover:-translate-y-[1px]
+                            active:bg-[#3e8e41]
+                            active:shadow-[0_1px_3px_rgba(0,0,0,0.2)]
+                            active:translate-y-[1px]
+                            "
+                                onClick={() => router.push("/compare")}
+                            >
+                                Ir a comparar ({comparisonFoods.length})
+                            </button>
+                            <button
+                                className={`
+                                ${isAllSelected
+                                    ? 'bg-gradient-to-r from-[#ef4444] to-[#dc2626] hover:from-[#dc2626] hover:to-[#b91c1c]'
+                                    : 'bg-gradient-to-r from-[#10b981] to-[#059669] hover:from-[#059669] hover:to-[#047857]'
+                                }
+                                text-[white]
+                                px-[20px]
+                                py-[16px]
+                                border-none
+                                rounded-[12px]
+                                text-[16px]
+                                font-[600]
+                                cursor-pointer
+                                transition-all
+                                duration-300
+                                ease-in-out
+                                w-full
+                                shadow-[0_4px_14px_rgba(0,0,0,0.25)]
+                                hover:shadow-[0_6px_20px_rgba(0,0,0,0.3)]
+                                hover:-translate-y-[2px]
+                                active:translate-y-[0px]
+                                active:shadow-[0_2px_8px_rgba(0,0,0,0.2)]
+                                flex
+                                items-center
+                                justify-center
+                                gap-[10px]
+                                relative
+                                overflow-hidden
+                                ${records.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}
+                                group
+                            `}
+                                onClick={handleToggle}
+                                disabled={records.length === 0}>
+                                <div
+                                    className="absolute inset-0 bg-gradient-to-r from-transparent via-[white]/[0.2] to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-[600ms]"></div>
+                                <span className="relative z-10 flex items-center gap-[10px]">
+                            <span className="group-hover:scale-[1.1] transition-transform duration-[200ms]">
+                            {isAllSelected ? (
+                                <X className="w-[18px] h-[18px]"/>
+                            ) : (
+                                <Plus className="w-[18px] h-[18px]"/>
+                            )}
+                            </span>
+                                    {isAllSelected ? 'Deseleccionar página' : 'Seleccionar pagina'}
+                             </span>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+                <Loading size="large" text="Cargando alimentos..."/>
+
+            </div>
+        );
+    }
     return (
         <div className="food-list">
             <h2 className="text-[24px] text-[black] text-left mb-[18px] border-b-[2px]] border-[#a8d8d2] pb-[8px] tracking-wider transition-colors duration-300 ease-in-out hover:text-[#388e60]">{t("Table.title")}</h2>
@@ -297,7 +508,8 @@ export default function FoodResultsTable({
                                     className="absolute right-[12px] top-[50%] transform translate-y-[-50%] pointer-events-none"
                                 >
                                     <svg
-                                        xmlns="http://www.w3.org/2000/svg" className="h-[16px] w-[16px] text-[#007f67]"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="h-[16px] w-[16px] text-[#007f67]"
                                         fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                     >
                                         <path
@@ -334,7 +546,7 @@ export default function FoodResultsTable({
                             active:shadow-[0_1px_3px_rgba(0,0,0,0.2)]
                             active:translate-y-[1px]
                             "
-                            onClick={() => exportData(data.map((f) => f.code))}
+                            onClick={() => exportData((data.status === FetchStatus.Success ? data.data : []).map((f) => f.code))}
                         >
                             Exportar resultados
                         </button>
@@ -370,7 +582,7 @@ export default function FoodResultsTable({
                                 ${isAllSelected
                                 ? 'bg-gradient-to-r from-[#ef4444] to-[#dc2626] hover:from-[#dc2626] hover:to-[#b91c1c]'
                                 : 'bg-gradient-to-r from-[#10b981] to-[#059669] hover:from-[#059669] hover:to-[#047857]'
-                                }
+                            }
                                 text-[white]
                                 px-[20px]
                                 py-[16px]
