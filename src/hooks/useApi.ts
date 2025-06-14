@@ -10,7 +10,7 @@ export enum FetchStatus {
     Failed,
 }
 
-type FetchResult<T> = FetchInProgress | FetchSuccess<T> | FetchFailed;
+export type FetchResult<T> = FetchInProgress | FetchSuccess<T> | FetchFailed;
 
 type FetchInProgress = {
     status: FetchStatus.Loading;
