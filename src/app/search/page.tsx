@@ -7,8 +7,9 @@ import { useTranslation } from "react-i18next";
 import FilterBody, { Filters } from "./components/FilterBody";
 import FoodResultsTable from "./components/nutrient-table/FoodResultsTable";
 import styles from "./search.module.css";
+import {GetFoodsV1Data} from "@/api";
 
-type Operator = "=" | "<" | "<=" | ">=" | ">";
+type Operator = NonNullable<NonNullable<GetFoodsV1Data["query"]>["operators"]>[number];
 
 function Search() {
     const { t } = useTranslation();
@@ -64,7 +65,7 @@ function Search() {
             }),
         }
     }));
-    const foods = foodsResult.status === FetchStatus.Success ? foodsResult.data : [];
+
 
     return (
         <div className={styles["search-container"]}>
@@ -78,7 +79,8 @@ function Search() {
             </div>
 
             <FoodResultsTable
-                data={foods}
+                data={foodsResult}
+                status={foodsResult.status}
                 searchForName={searchForName}
                 setSearchForName={setSearchForName}
             />
