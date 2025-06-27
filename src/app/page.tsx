@@ -34,6 +34,7 @@ export default function HomePage() {
                     m-[0px]
                     text-[white]
                     text-center
+                    py-[16px]
                     `}
             >
                 <div className="container mx-auto h-full">
@@ -72,6 +73,7 @@ export default function HomePage() {
                                           py-[12px]
                                           px-[24px]
                                           text-[18px]
+                                          ml-[12px]
                                           border-[2px]
                                           border-gray-200
                                           rounded-l-full
@@ -88,6 +90,7 @@ export default function HomePage() {
                                           px-[32px]
                                           text-[18px]
                                           text-[white]
+                                          mr-[12px]
                                           font-[500]
                                           bg-[#015746]
                                           hover:bg-[#20703a]
