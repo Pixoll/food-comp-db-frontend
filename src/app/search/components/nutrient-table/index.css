@@ -3,7 +3,7 @@
     display: flex;
     flex-direction: column;
     width: 71%;
-    margin: 10px;
+    margin: 12px;
     flex-basis: 100%;
     padding: 20px;
     background-color: #d6e2da;
@@ -47,6 +47,7 @@
 }
 @media screen and (max-width: 992px) {
     .food-list {
+        margin: 12px 0 0 0;
         width: 100%;
         max-width: 100%;
     }
