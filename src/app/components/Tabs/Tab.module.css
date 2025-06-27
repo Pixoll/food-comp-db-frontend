@@ -1,0 +1,223 @@
+.tabContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.tabsWrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.tabsList {
+    display: flex;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #9bb698 transparent;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+.tabsList::-webkit-scrollbar {
+    height: 3px;
+}
+
+.tabsList::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.tabsList::-webkit-scrollbar-thumb {
+    background-color: #9bb698;
+    border-radius: 3px;
+}
+
+.tabButton {
+    flex: 1 0 auto;
+    min-width: fit-content;
+    padding: 20px 16px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 300;
+    cursor: pointer;
+    border: none;
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 2px solid #9bb698;
+    background-color: #effce8;
+    transition: all 0.3s ease-in-out;
+    white-space: nowrap;
+    position: relative;
+}
+
+.tabButton:hover:not(.tabButtonDisabled) {
+    border-bottom: 4px solid #9bb698;
+    background-color: #e3f7dc;
+}
+
+.tabButtonActive {
+    font-weight: 500;
+    border-bottom-width: 4px;
+}
+
+.tabButtonDisabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.tabContent {
+    width: 100%;
+    background-color: #effce8;
+}
+
+.tabPanel {
+    width: 100%;
+    transition: all 0.3s ease-in-out;
+}
+
+.tabPanelHidden {
+    display: none;
+    opacity: 0;
+}
+
+.tabPanelVisible {
+    display: block;
+    opacity: 1;
+}
+
+.tabPanelContent {
+    padding: 26px;
+}
+
+.tabsWrapper::before,
+.tabsWrapper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    pointer-events: none;
+    z-index: 10;
+    transition: opacity 0.3s ease;
+}
+
+.tabsWrapper::before {
+    left: 0;
+    background: linear-gradient(to right, #effce8, transparent);
+    opacity: 0;
+}
+
+.tabsWrapper::after {
+    right: 0;
+    background: linear-gradient(to left, #effce8, transparent);
+    opacity: 0;
+}
+
+.tabsWrapper.showLeftShadow::before {
+    opacity: 1;
+}
+
+.tabsWrapper.showRightShadow::after {
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .tabButton {
+        padding: 16px 14px;
+        font-size: 16px;
+        min-width: 120px;
+    }
+
+    .tabPanelContent {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 640px) {
+    .tabButton {
+        padding: 14px 12px;
+        font-size: 15px;
+        min-width: 100px;
+    }
+
+    .tabPanelContent {
+        padding: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .tabButton {
+        padding: 12px 10px;
+        font-size: 14px;
+        min-width: 85px;
+    }
+
+    .tabPanelContent {
+        padding: 16px;
+    }
+
+    .tabsList {
+        scrollbar-width: auto;
+    }
+
+    .tabsList::-webkit-scrollbar {
+        height: 4px;
+    }
+}
+
+@media (max-width: 360px) {
+    .tabButton {
+        padding: 10px 8px;
+        font-size: 13px;
+        min-width: 75px;
+    }
+
+    .tabPanelContent {
+        padding: 14px;
+    }
+}
+
+.tabButton:focus {
+    outline: 2px solid #7cbb75;
+    outline-offset: 2px;
+    z-index: 1;
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .tabButton {
+        padding: 16px 12px;
+    }
+
+    .tabButton:hover {
+        background-color: #effce8;
+        border-bottom: 2px solid #9bb698;
+    }
+
+    .tabButton:active:not(.tabButtonDisabled) {
+        background-color: #e3f7dc;
+        transform: scale(0.98);
+    }
+}
+
+@media (max-width: 640px) {
+    .tabsWrapper {
+        position: relative;
+    }
+
+    .tabsWrapper::after {
+        display: none;
+    }
+
+    .scrollHint {
+        position: absolute;
+        bottom: -15px;
+        right: 10px;
+        font-size: 10px;
+        color: #64748b;
+        opacity: 0.7;
+        pointer-events: none;
+    }
+}
