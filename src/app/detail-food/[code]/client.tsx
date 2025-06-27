@@ -10,9 +10,10 @@ import TabItem from "../../components/Tabs/TabItem";
 import CompositionDropdown from "../components/composition-dropdown/CompositionDropdown";
 import Graphic from "../components/Graphic";
 import InfoAboutFoot from "../components/InfoAboutFoot";
-import LangualCodes from "../components/LangualCodes";
+import LangualCodes from "../components/LangualCodes/LangualCodes";
 import References from "../components/References";
 import styles from "./detail-food.module.css";
+import i18n from "@/i18n";
 
 function getDetail(code: string): Food {
     const result = useApi([code], (api, depCode) => api.getFood({
@@ -61,7 +62,7 @@ function getDetail(code: string): Food {
 
 export default function ClientDetailPage({ code }: { code: string }) {
     const { t } = useTranslation();
-
+    const selectedLanguage = i18n.language as "en" | "es" | "pt";
     const [grams, setGrams] = useState<number>(100);
 
     const data = getDetail(code);
@@ -125,10 +126,41 @@ export default function ClientDetailPage({ code }: { code: string }) {
 
     return (
         <div className="w-full h-full bg-[#effce8] rounded-t-[2px]">
-            {data.commonName.es && (
-                <h2 className="py-[8px] px-[16px] font-[700] text-[#60625f] m-[0px]">
-                    {code}, {data.commonName.es}
-                </h2>
+            {(data.commonName.es || data.commonName.en || data.commonName.pt) && (
+                <div className="
+                px-[24px] py-[20px]
+                bg-gradient-to-r from-[#ffffff] to-[#f8fdf6]
+                border-b-[2px] border-b-[#7cbb75]
+                shadow-[0_2px_8px_rgba(0,0,0,0.08)]
+                mb-[16px]
+            ">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-[8px] sm:gap-[16px]">
+                    <span className="
+                        inline-flex items-center justify-center
+                        bg-[#7cbb70]
+                        text-white
+                        font-[600]
+                        text-[16px]
+                        px-[6px] py-[4px]
+                        rounded-[8px]
+                        min-w-[80px]
+                        text-center
+                        shadow-[0_2px_4px_rgba(124,187,117,0.3)]
+                    ">
+                    </span>
+                        <h1 className="
+                        font-[700]
+                        text-[28px] sm:text-[32px]
+                        text-[#2d3748]
+                        m-[0px]
+                        leading-[1.1]
+                        tracking-[-0.02em]
+                        flex-1
+                    ">
+                            {code},{data.commonName[selectedLanguage] ?? ""}
+                        </h1>
+                    </div>
+                </div>
             )}
             <Tab defaultTab={0}>
                 <TabItem label="Información general">
