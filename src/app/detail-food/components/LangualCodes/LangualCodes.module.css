@@ -1,0 +1,279 @@
+.tableContainer {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    background: white;
+}
+
+.table {
+    width: 100%;
+    min-width: 600px;
+    border-collapse: collapse;
+}
+
+.thead {
+    background-color: #f8f9fa;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.headerRow {
+    border: 2px solid #000000;
+}
+
+.headerCell {
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: left;
+    border-bottom: 2px solid #e2e8f0;
+    white-space: nowrap;
+    background-color: #f8f9fa;
+}
+
+.mainRow {
+    border-bottom: 1px solid #e2e8f0;
+    transition: background-color 0.2s ease;
+}
+
+.mainRow:hover {
+    background-color: #f1f5f9;
+}
+
+.childRow {
+    border-bottom: 1px solid #e2e8f0;
+    background-color: #f8fafc;
+    transition: background-color 0.2s ease;
+}
+
+.childRow:hover {
+    background-color: #f1f5f9;
+}
+
+.cell {
+    padding: 12px 16px;
+    font-size: 14px;
+    color: #334155;
+    vertical-align: top;
+}
+
+.cellBold {
+    font-weight: 500;
+}
+
+.childCell {
+    padding: 8px 16px;
+    font-size: 13px;
+    color: #64748b;
+    vertical-align: top;
+}
+
+.childCellIndented {
+    padding-left: 32px;
+}
+
+.childCode {
+    font-weight: 500;
+}
+
+.codeColumn {
+    width: 80px;
+    min-width: 80px;
+}
+
+.descriptionColumn {
+    width: 35%;
+    min-width: 200px;
+}
+
+.classificationColumn {
+    width: auto;
+    min-width: 250px;
+}
+
+@media (max-width: 768px) {
+    .table {
+        min-width: 550px;
+    }
+
+    .headerCell {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+    .cell {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+    .childCell {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+
+    .childCellIndented {
+        padding-left: 24px;
+    }
+
+    .codeColumn {
+        width: 70px;
+        min-width: 70px;
+    }
+
+    .descriptionColumn {
+        min-width: 180px;
+    }
+
+    .classificationColumn {
+        min-width: 220px;
+    }
+}
+
+@media (max-width: 480px) {
+    .tableContainer {
+        border-radius: 4px;
+        position: relative;
+    }
+
+    .tableContainer::after {
+        content: "← Desliza para ver más →";
+        position: absolute;
+        bottom: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 11px;
+        color: #64748b;
+        font-style: italic;
+    }
+
+    .table {
+        min-width: 500px;
+    }
+
+    .headerCell {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+    .cell {
+        padding: 8px 10px;
+        font-size: 12px;
+        line-height: 1.4;
+    }
+
+    .childCell {
+        padding: 6px 10px;
+        font-size: 11px;
+        line-height: 1.4;
+    }
+
+    .childCellIndented {
+        padding-left: 20px;
+    }
+
+    .codeColumn {
+        width: 60px;
+        min-width: 60px;
+    }
+
+    .descriptionColumn {
+        min-width: 160px;
+    }
+
+    .classificationColumn {
+        min-width: 200px;
+    }
+}
+
+@media (max-width: 360px) {
+    .tableContainer {
+        border-radius: 8px;
+        box-shadow: none;
+    }
+
+    .tableContainer::after {
+        display: none;
+    }
+
+    .table {
+        display: none;
+    }
+
+}
+.cardsContainer {
+    display: none;
+}
+
+@media (max-width: 360px) {
+    .cardsContainer {
+        display: block;
+        padding: 8px;
+    }
+
+    .card {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        padding: 16px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .cardRow {
+        display: flex;
+        margin-bottom: 8px;
+        align-items: flex-start;
+    }
+
+    .cardRow:last-child {
+        margin-bottom: 0;
+    }
+
+    .cardLabel {
+        font-weight: 600;
+        color: #64748b;
+        font-size: 12px;
+        min-width: 80px;
+        margin-right: 8px;
+        flex-shrink: 0;
+    }
+
+    .cardValue {
+        color: #334155;
+        font-size: 12px;
+        line-height: 1.4;
+        flex: 1;
+    }
+
+    .cardValueBold {
+        font-weight: 500;
+    }
+
+    .childCard {
+        background: #f8fafc;
+        margin-left: 16px;
+        margin-top: 8px;
+        padding: 12px;
+    }
+
+    .childCardValue {
+        color: #64748b;
+        font-size: 11px;
+    }
+}
+
+.scrollIndicator {
+    text-align: center;
+    margin-top: 8px;
+    color: #64748b;
+    font-size: 11px;
+    font-style: italic;
+}
+
+@media (min-width: 769px) {
+    .scrollIndicator {
+        display: none;
+    }
+}
