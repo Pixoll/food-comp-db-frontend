@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "next dev --turbopack",
+    "prestart": "next build",
     "start": "npx serve@latest ./build",
     "build": "next build",
     "openapi": "openapi-ts"
