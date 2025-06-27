@@ -1,14 +1,14 @@
 "use client";
 
-import api, { BaseFood } from "@/api";
+import api, {BaseFood} from "@/api";
 import Loading from "@/app/components/Loading/Loading";
-import { useAuth } from "@/context/AuthContext";
-import { useComparison } from "@/context/ComparisonContext";
-import { FetchResult, FetchStatus } from "@/hooks";
-import { ArrowDown, ArrowUp, Minus, Plus, X } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import {useAuth} from "@/context/AuthContext";
+import {useComparison} from "@/context/ComparisonContext";
+import {FetchResult, FetchStatus} from "@/hooks";
+import {ArrowDown, ArrowUp, Minus, Plus, X} from "lucide-react";
+import {useRouter} from "next/navigation";
+import {useEffect, useState} from "react";
+import {useTranslation} from "react-i18next";
 import Pagination from "../Pagination";
 import "./index.css";
 
@@ -217,9 +217,8 @@ export default function FoodResultsTable({
             selectAllFoodComparison();
         }
     };
-    const [isSimulatedLoading, setIsSimulatedLoading] = useState(true);
 
-    if (isSimulatedLoading) {
+    if (data.status === FetchStatus.Loading) {
         return (
             <div className="food-list">
                 <h2 className="text-[24px] text-[black] text-left mb-[18px] border-b-[2px]] border-[#a8d8d2] pb-[8px] tracking-wider transition-colors duration-300 ease-in-out hover:text-[#388e60]">{t("Table.title")}</h2>
@@ -339,7 +338,6 @@ export default function FoodResultsTable({
                             active:shadow-[0_1px_3px_rgba(0,0,0,0.2)]
                             active:translate-y-[1px]
                             "
-                                onClick={() => exportData((data.status === FetchStatus.Success ? data.data : []).map((f) => f.code))}
                             >
                                 Exportar resultados
                             </button>
