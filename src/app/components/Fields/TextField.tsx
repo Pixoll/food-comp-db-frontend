@@ -1,6 +1,6 @@
 "use client";
 
-import {ChangeEvent, InputHTMLAttributes, ReactNode} from "react";
+import type { ChangeEvent, InputHTMLAttributes, ReactNode } from "react";
 
 type TextFieldProps = {
     value: string;
@@ -14,38 +14,37 @@ type TextFieldProps = {
     id?: string;
     name?: string;
     icon?: ReactNode;
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 } & Omit<
     InputHTMLAttributes<HTMLInputElement>,
     "onChange" | "value" | "required" | "disabled" | "id" | "name"
 >;
 
 export default function TextField({
-                                      value,
-                                      label,
-                                      required = false,
-                                      helperText,
-                                      fullWidth = false,
-                                      error = false,
-                                      errorMessage,
-                                      disabled = false,
-                                      id,
-                                      name,
-                                      icon,
-                                      onChange,
-                                      className,
-                                      ...rest
-                                  }: TextFieldProps) {
-    function handleChange(e: ChangeEvent<HTMLInputElement>) {
-        onChange && onChange(e);
-    }
+    value,
+    label,
+    required = false,
+    helperText,
+    fullWidth = false,
+    error = false,
+    errorMessage,
+    disabled = false,
+    id,
+    name,
+    icon,
+    onChange,
+    className,
+    ...rest
+}: TextFieldProps): JSX.Element {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
+        onChange?.(e);
+    };
 
-    const inputId =
-        id ||
-        name ||
-        `text-field-${
-            label?.toLowerCase().replace(/\s+/g, "-") ||
-            Math.random().toString(36).substring(2, 9)
+    const inputId = id
+        || name
+        || `text-field-${
+            label?.toLowerCase().replace(/\s+/g, "-")
+            || Math.random().toString(36).substring(2, 9)
         }`;
 
     return (
@@ -67,7 +66,19 @@ export default function TextField({
             <div className="flex">
                 {icon && (
                     <div
-                        className="flex items-center justify-center bg-[#F9FAFB] px-[12px] py-[8px] border border-[#D1D5DB] border-r-0 rounded-l-[4px]">
+                        className="
+                        flex
+                        items-center
+                        justify-center
+                        bg-[#F9FAFB]
+                        px-[12px]
+                        py-[8px]
+                        border
+                        border-[#D1D5DB]
+                        border-r-0
+                        rounded-l-[4px]
+                        "
+                    >
                         {icon}
                     </div>
                 )}
@@ -82,16 +93,19 @@ export default function TextField({
                     aria-required={required}
                     aria-invalid={error}
                     className={`
-                      px-[8px] py-[6px] 
-                      ${icon ? "rounded-r-[4px] rounded-l-[0px]" : "rounded-[4px]"} 
-                      border text-center
-                      ${error ? "border-[#ef4444] bg-[#fef2f2]" : "border-[#d1d5db]"} 
-                      ${disabled ? "bg-[#f3f4f6] text-[#6b7280] cursor-not-allowed" : "bg-[white]"} 
-                      focus:outline-none focus:ring-1
-                      ${error ? "focus:ring-[#ef4444] focus:border-[#ef4444]" : "focus:ring-[#3b82f6] focus:border-[#3b82f6]"} 
-                      transition-colors 
-                      ${fullWidth ? "w-full" : "w-auto"}
-                      ${className || ""}
+                    px-[8px] py-[6px] 
+                    ${icon ? "rounded-r-[4px] rounded-l-[0px]" : "rounded-[4px]"} 
+                    border text-center
+                    ${error ? "border-[#ef4444] bg-[#fef2f2]" : "border-[#d1d5db]"} 
+                    ${disabled ? "bg-[#f3f4f6] text-[#6b7280] cursor-not-allowed" : "bg-[white]"} 
+                    focus:outline-none focus:ring-1
+                    ${error
+                        ? "focus:ring-[#ef4444] focus:border-[#ef4444]"
+                        : "focus:ring-[#3b82f6] focus:border-[#3b82f6]"
+                    } 
+                    transition-colors 
+                    ${fullWidth ? "w-full" : "w-auto"}
+                    ${className || ""}
                     `}
                     {...rest}
                 />

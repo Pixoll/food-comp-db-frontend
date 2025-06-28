@@ -1,13 +1,13 @@
 
 .food-list {
-    display: flex;
-    flex-direction: column;
-    width: 71%;
-    margin: 12px;
-    flex-basis: 100%;
-    padding: 20px;
     background-color: #d6e2da;
     border-radius: 10px;
+    display: flex;
+    flex-basis: 100%;
+    flex-direction: column;
+    margin: 12px;
+    padding: 20px;
+    width: 71%;
 }
 
 @media screen and (max-width: 768px) {
@@ -25,30 +25,31 @@
     }
 
     .content-table-foods td {
-        position: relative;
         padding: 14px 18px 14px 50%;
+        position: relative;
         text-align: left;
     }
 
     .content-table-foods td::before {
         content: attr(data-label);
-        position: absolute;
-        left: 0;
-        width: 45%;
-        padding-left: 18px;
         font-weight: bold;
+        left: 0;
+        padding-left: 18px;
+        position: absolute;
         text-align: left;
         white-space: nowrap;
+        width: 45%;
     }
 
     .content-table-foods tr {
         margin-bottom: 12px;
     }
 }
+
 @media screen and (max-width: 992px) {
     .food-list {
         margin: 12px 0 0 0;
-        width: 100%;
         max-width: 100%;
+        width: 100%;
     }
 }

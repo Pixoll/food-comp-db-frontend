@@ -1,11 +1,10 @@
-'use client'
+"use client";
 
-import {BookOpen, FileText, Layers, PlusCircle, XCircle} from "lucide-react";
-import {useState} from "react";
-import {Article, Journal, JournalVolume} from "@/hooks";
-import {NewArticle, NewVolume} from "./GeneralData";
+import type { Article, Journal, JournalVolume, NewArticleDto, NewVolumeDto } from "@/api";
 import NumericField from "@/app/components/Fields/NumericField";
 import TextField from "@/app/components/Fields/TextField";
+import { BookOpen, FileText, Layers, PlusCircle, XCircle } from "lucide-react";
+import { useState } from "react";
 
 type NewArticleByReferenceProps = {
     data: {
@@ -14,9 +13,9 @@ type NewArticleByReferenceProps = {
         articles: Article[];
     };
     dataForm: {
-        newArticle?: NewArticle;
+        newArticle?: RecursivePartial<NewArticleDto>;
     };
-    updateNewArticle: (updatedArticle: RecursivePartial<NewArticle>) => void;
+    updateNewArticle: (updatedArticle: RecursivePartial<NewArticleDto>) => void;
 };
 
 export type RecursivePartial<T> = {
@@ -29,13 +28,17 @@ export type RecursivePartial<T> = {
                 : T[K];
 };
 
-const searchIdJournalByIdVolume = (id: number | undefined, volumes: JournalVolume[]) => {
+const searchIdJournalByIdVolume = (id: number | undefined, volumes: JournalVolume[]): number | undefined => {
     const volume = volumes.find((volume) => volume.id === id);
     return volume?.journalId;
 };
 
-export default function ArticleByReference({data, dataForm, updateNewArticle}: NewArticleByReferenceProps) {
-    const {journals, journalVolumes} = data;
+export default function ArticleByReference({
+    data,
+    dataForm,
+    updateNewArticle,
+}: NewArticleByReferenceProps): JSX.Element {
+    const { journals, journalVolumes } = data;
 
     const [selectedIdJournal, setSelectedIdJournal] = useState<number | undefined>(
         searchIdJournalByIdVolume(dataForm.newArticle?.volumeId, journalVolumes)
@@ -49,9 +52,9 @@ export default function ArticleByReference({data, dataForm, updateNewArticle}: N
     const [selectedIdVolume, setSelectedIdVolume] = useState<number | undefined>(
         doesJournalHaveValue ? dataForm.newArticle?.volumeId : undefined
     );
-    const [selectedVolume, setSelectedVolume] = useState<Partial<NewVolume> | undefined>(
+    const [selectedVolume, setSelectedVolume] = useState<Partial<NewVolumeDto> | undefined>(
         doesJournalHaveValue && dataForm.newArticle?.newVolume
-            ? {...dataForm.newArticle.newVolume}
+            ? { ...dataForm.newArticle.newVolume }
             : undefined
     );
     const [newVolume, setNewVolume] = useState(!!selectedVolume);
@@ -59,11 +62,11 @@ export default function ArticleByReference({data, dataForm, updateNewArticle}: N
     const doesVolumeHaveValue = doesJournalHaveValue
         && !!(selectedIdVolume ?? (selectedVolume?.volume && selectedVolume.issue && selectedVolume.year));
 
-    const [selectedArticle, setSelectedArticle] = useState<RecursivePartial<NewArticle> | undefined>(
+    const [selectedArticle, setSelectedArticle] = useState<RecursivePartial<NewArticleDto> | undefined>(
         doesVolumeHaveValue ? dataForm.newArticle : undefined
     );
 
-    const handleSelectVolume = (id: number | undefined) => {
+    const handleSelectVolume = (id: number | undefined): void => {
         if (id !== undefined) {
             const selectedJournalVolume = journalVolumes.find((v) => v.id === id);
             if (selectedJournalVolume) {
@@ -75,7 +78,10 @@ export default function ArticleByReference({data, dataForm, updateNewArticle}: N
         setSelectedIdVolume(undefined);
     };
 
-    const handleUpdateVolume = <K extends keyof NewVolume>(field: K, value: NewVolume[K]) => {
+    const handleUpdateVolume = <K extends keyof NewVolumeDto>(
+        field: K,
+        value: NewVolumeDto[K] | undefined
+    ): void => {
         setSelectedIdVolume(undefined);
         setSelectedVolume((prev) => ({
             ...prev,
@@ -87,7 +93,7 @@ export default function ArticleByReference({data, dataForm, updateNewArticle}: N
         }
     };
 
-    const handleAddJournal = () => {
+    const handleAddJournal = (): void => {
         setNewJournal(!newJournal);
         if (selectedIdJournal) {
             setSelectedIdJournal(undefined);
@@ -101,7 +107,7 @@ export default function ArticleByReference({data, dataForm, updateNewArticle}: N
         }
     };
 
-    const handleAddVolume = () => {
+    const handleAddVolume = (): void => {
         setNewVolume(!newVolume);
         setSelectedArticle(undefined);
 
@@ -118,8 +124,11 @@ export default function ArticleByReference({data, dataForm, updateNewArticle}: N
         }
     };
 
-    const handleUpdateArticle = <K extends keyof NewArticle>(field: K, value: NewArticle[K]) => {
-        const updatedArticle: RecursivePartial<NewArticle> = {
+    const handleUpdateArticle = <K extends keyof NewArticleDto>(
+        field: K,
+        value: NewArticleDto[K] | undefined
+    ): void => {
+        const updatedArticle: RecursivePartial<NewArticleDto> = {
             ...selectedArticle,
             [field]: value,
             volumeId: selectedIdVolume,
@@ -187,7 +196,21 @@ export default function ArticleByReference({data, dataForm, updateNewArticle}: N
                             <div className="md:w-[33.33%]">
                                 <button
                                     onClick={handleAddJournal}
-                                    className="w-full px-[16px] py-[8px] border border-[#6b7280] text-[#6b7280] rounded-[4px] hover:bg-[#f3f4f6] transition-colors duration-200 flex items-center justify-center"
+                                    className="
+                                    w-full
+                                    px-[16px]
+                                    py-[8px]
+                                    border
+                                    border-[#6b7280]
+                                    text-[#6b7280]
+                                    rounded-[4px]
+                                    hover:bg-[#f3f4f6]
+                                    transition-colors
+                                    duration-200
+                                    flex
+                                    items-center
+                                    justify-center
+                                    "
                                 >
                                     <XCircle className="mr-[8px]"/>
                                     Cancelar
@@ -208,7 +231,18 @@ export default function ArticleByReference({data, dataForm, updateNewArticle}: N
                                             setSelectedVolume(undefined);
                                             setSelectedArticle(undefined);
                                         }}
-                                        className="px-[12px] py-[8px] rounded-[4px] border border-[#d1d5db] w-full focus:outline-none focus:ring-1 focus:ring-[#3b82f6] focus:border-[#3b82f6]"
+                                        className="
+                                        px-[12px]
+                                        py-[8px]
+                                        rounded-[4px]
+                                        border
+                                        border-[#d1d5db]
+                                        w-full
+                                        focus:outline-none
+                                        focus:ring-1
+                                        focus:ring-[#3b82f6]
+                                        focus:border-[#3b82f6]
+                                        "
                                     >
                                         <option value="">Selecciona una revista existente</option>
                                         {journals.map((journal) => (
@@ -222,7 +256,21 @@ export default function ArticleByReference({data, dataForm, updateNewArticle}: N
                             <div className="md:w-[33.33%]">
                                 <button
                                     onClick={handleAddJournal}
-                                    className="w-full px-[16px] py-[8px] border border-[#3b82f6] text-[#3b82f6] rounded-[4px] hover:bg-[#eff6ff] transition-colors duration-200 flex items-center justify-center"
+                                    className="
+                                    w-full
+                                    px-[16px]
+                                    py-[8px]
+                                    border
+                                    border-[#3b82f6]
+                                    text-[#3b82f6]
+                                    rounded-[4px]
+                                    hover:bg-[#eff6ff]
+                                    transition-colors
+                                    duration-200
+                                    flex
+                                    items-center
+                                    justify-center
+                                    "
                                 >
                                     <PlusCircle className="mr-[8px]"/>
                                     Nueva revista
@@ -251,7 +299,18 @@ export default function ArticleByReference({data, dataForm, updateNewArticle}: N
                                                 handleSelectVolume(id);
                                                 setSelectedArticle(undefined);
                                             }}
-                                            className="px-[12px] py-[8px] rounded-[4px] border border-[#d1d5db] w-full focus:outline-none focus:ring-1 focus:ring-[#3b82f6] focus:border-[#3b82f6]"
+                                            className="
+                                            px-[12px]
+                                            py-[8px]
+                                            rounded-[4px]
+                                            border
+                                            border-[#d1d5db]
+                                            w-full
+                                            focus:outline-none
+                                            focus:ring-1
+                                            focus:ring-[#3b82f6]
+                                            focus:border-[#3b82f6]
+                                            "
                                         >
                                             <option value="">Selecciona un volumen existente</option>
                                             {journalVolumes
@@ -267,7 +326,21 @@ export default function ArticleByReference({data, dataForm, updateNewArticle}: N
                                 <div className="md:w-[33.33%]">
                                     <button
                                         onClick={handleAddVolume}
-                                        className="w-full px-[16px] py-[8px] border border-[#3b82f6] text-[#3b82f6] rounded-[4px] hover:bg-[#eff6ff] transition-colors duration-200 flex items-center justify-center"
+                                        className="
+                                        w-full
+                                        px-[16px]
+                                        py-[8px]
+                                        border
+                                        border-[#3b82f6]
+                                        text-[#3b82f6]
+                                        rounded-[4px]
+                                        hover:bg-[#eff6ff]
+                                        transition-colors
+                                        duration-200
+                                        flex
+                                        items-center
+                                        justify-center
+                                        "
                                     >
                                         <PlusCircle className="mr-[8px]"/>
                                         Nuevo volumen
@@ -284,8 +357,10 @@ export default function ArticleByReference({data, dataForm, updateNewArticle}: N
                                         allowDecimals={false}
                                         error={isVolumeUndefined || isVolumeBelow1 || isVolumeNotInteger}
                                         errorMessage={
-                                            isVolumeUndefined ? "Ingrese el volúmen."
-                                                : isVolumeBelow1 ? "Volúmen debe ser al menos 1."
+                                            isVolumeUndefined
+                                                ? "Ingrese el volúmen."
+                                                : isVolumeBelow1
+                                                    ? "Volúmen debe ser al menos 1."
                                                     : "Volúmen debe ser un entero."
                                         }
                                         helperText="Volumen"
@@ -300,8 +375,10 @@ export default function ArticleByReference({data, dataForm, updateNewArticle}: N
                                         allowDecimals={false}
                                         error={isIssueUndefined || isIssueBelow1 || isIssueNotInteger}
                                         errorMessage={
-                                            isIssueUndefined ? "Ingrese el número."
-                                                : isIssueBelow1 ? "Número debe ser al menos 1."
+                                            isIssueUndefined
+                                                ? "Ingrese el número."
+                                                : isIssueBelow1
+                                                    ? "Número debe ser al menos 1."
                                                     : "Número debe ser un entero."
                                         }
                                         helperText="Número (Issue)"
@@ -317,9 +394,12 @@ export default function ArticleByReference({data, dataForm, updateNewArticle}: N
                                         allowDecimals={false}
                                         error={isYearUndefined || isYearBelow1 || isYearOverCurrent || isYearNotInteger}
                                         errorMessage={
-                                            isYearUndefined ? "Ingrese el año."
-                                                : isYearBelow1 ? "Año debe ser al menos 1."
-                                                    : isYearOverCurrent ? "Año debe ser menor o igual al actual."
+                                            isYearUndefined
+                                                ? "Ingrese el año."
+                                                : isYearBelow1
+                                                    ? "Año debe ser al menos 1."
+                                                    : isYearOverCurrent
+                                                        ? "Año debe ser menor o igual al actual."
                                                         : "Año debe ser un entero."
                                         }
                                         helperText="Año"
@@ -329,7 +409,23 @@ export default function ArticleByReference({data, dataForm, updateNewArticle}: N
                                 <div>
                                     <button
                                         onClick={handleAddVolume}
-                                        className="w-full px-[16px] py-[8px] border border-[#6b7280] text-[#6b7280] rounded-[4px] hover:bg-[#f3f4f6] transition-colors duration-200 flex items-center justify-center h-[38px] mt-[4px]"
+                                        className="
+                                        w-full
+                                        px-[16px]
+                                        py-[8px]
+                                        border
+                                        border-[#6b7280]
+                                        text-[#6b7280]
+                                        rounded-[4px]
+                                        hover:bg-[#f3f4f6]
+                                        transition-colors
+                                        duration-200
+                                        flex
+                                        items-center
+                                        justify-center
+                                        h-[38px]
+                                        mt-[4px]
+                                        "
                                     >
                                         <XCircle className="mr-[8px]"/>
                                         Cancelar
@@ -357,8 +453,10 @@ export default function ArticleByReference({data, dataForm, updateNewArticle}: N
                                     allowDecimals={false}
                                     error={isPageStartUndefined || isPageStartBelow1 || isPageStartNotInteger}
                                     errorMessage={
-                                        isPageStartUndefined ? "Ingrese la página de inicio."
-                                            : isPageStartBelow1 ? "Página de inicio debe ser al menos 1."
+                                        isPageStartUndefined
+                                            ? "Ingrese la página de inicio."
+                                            : isPageStartBelow1
+                                                ? "Página de inicio debe ser al menos 1."
                                                 : "Página de inicio debe ser un entero."
                                     }
                                     helperText="Página de inicio"
@@ -371,11 +469,18 @@ export default function ArticleByReference({data, dataForm, updateNewArticle}: N
                                     onChange={(val) => handleUpdateArticle("pageEnd", val)}
                                     min={1}
                                     allowDecimals={false}
-                                    error={isPageEndUndefined || isPageEndBelow1 || isPageEndBelowPageStart || isPageEndNotInteger}
+                                    error={isPageEndUndefined
+                                        || isPageEndBelow1
+                                        || isPageEndBelowPageStart
+                                        || isPageEndNotInteger
+                                    }
                                     errorMessage={
-                                        isPageEndUndefined ? "Ingrese la página final."
-                                            : isPageEndBelow1 ? "Página final debe ser al menos 1."
-                                                : isPageEndBelowPageStart ? "Página final debe ser mayor a página de inicio."
+                                        isPageEndUndefined
+                                            ? "Ingrese la página final."
+                                            : isPageEndBelow1
+                                                ? "Página final debe ser al menos 1."
+                                                : isPageEndBelowPageStart
+                                                    ? "Página final debe ser mayor a página de inicio."
                                                     : "Página final debe ser un entero."
                                     }
                                     helperText="Página final"

@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import {useEffect, useState} from "react";
-import {useTranslation} from "react-i18next";
 import Modal from "@/app/components/Modal/Modal";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 type NutrientConvert = {
     id: number;
@@ -19,14 +19,14 @@ type ModalReferencesProps = {
 };
 
 export default function ModalReferences({
-                                            nutrients,
-                                            show,
-                                            onHide,
-                                            onSelectReferenceForNutrients,
-                                            selectedReference,
-                                        }: ModalReferencesProps) {
+    nutrients,
+    show,
+    onHide,
+    onSelectReferenceForNutrients,
+    selectedReference,
+}: ModalReferencesProps): JSX.Element | null {
     const [selectedNutrientIds, setSelectedNutrientIds] = useState<number[]>([]);
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (show) {
@@ -37,7 +37,7 @@ export default function ModalReferences({
         }
     }, [nutrients, show]);
 
-    const handleSelect = (id: number) => {
+    const handleSelect = (id: number): void => {
         setSelectedNutrientIds((prev) =>
             prev.includes(id)
                 ? prev.filter((nid) => nid !== id)
@@ -45,14 +45,16 @@ export default function ModalReferences({
         );
     };
 
-    const handleAddReference = () => {
+    const handleAddReference = (): void => {
         if (selectedReference !== null) {
             onSelectReferenceForNutrients(selectedNutrientIds, selectedReference);
             onHide();
         }
     };
 
-    if (!show) return null;
+    if (!show) {
+        return null;
+    }
 
     return (
         <Modal
@@ -67,16 +69,16 @@ export default function ModalReferences({
                             key={nutrient.id}
                             onClick={() => handleSelect(nutrient.id)}
                             className={`
-                                py-[12px] px-[16px]
-                                border-b-[1px] border-[#e5f1eb]
-                                cursor-pointer
-                                transition-colors duration-[150ms]
-                                ${selectedNutrientIds.includes(nutrient.id)
-                                ? 'bg-[#047857] text-[white]'
-                                : 'bg-transparent'
-                                }
-                                last:border-b-[0px]
-                              `}
+                            py-[12px] px-[16px]
+                            border-b-[1px] border-[#e5f1eb]
+                            cursor-pointer
+                            transition-colors duration-[150ms]
+                            ${selectedNutrientIds.includes(nutrient.id)
+                                ? "bg-[#047857] text-[white]"
+                                : "bg-transparent"
+                            }
+                            last:border-b-[0px]
+                           `}
                         >
                             {nutrient.name}
                         </li>
@@ -95,16 +97,16 @@ export default function ModalReferences({
                     onClick={handleAddReference}
                     disabled={selectedReference === null}
                     className={`
-            px-[8px] py-[16px] 
-            bg-[#61d98b]
-            text-[white]
-            border-none rounded-[4px]
-            cursor-pointer 
-            ${selectedReference === null
-                        ? 'bg-[#6c757d] [opacity:0.65] cursor-not-allowed'
-                        : 'bg-[#0d6efd] hover:bg-[#0b5ed7]'
+                    px-[8px] py-[16px] 
+                    bg-[#61d98b]
+                    text-[white]
+                    border-none rounded-[4px]
+                    cursor-pointer 
+                    ${selectedReference === null
+                        ? "bg-[#6c757d] [opacity:0.65] cursor-not-allowed"
+                        : "bg-[#0d6efd] hover:bg-[#0b5ed7]"
                     }
-          `}
+                    `}
                 >
                     {t("ModalReferences.Save")}
                 </button>

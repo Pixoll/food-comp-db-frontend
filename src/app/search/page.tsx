@@ -1,17 +1,17 @@
 "use client";
 
-import { GetFoodsData } from "@/api";
+import type { GetFoodsData } from "@/api";
 import { useApi } from "@/hooks";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import FilterBody, { Filters } from "./components/FilterBody";
+import FilterBody, { type Filters } from "./components/FilterBody";
 import FoodResultsTable from "./components/nutrient-table/FoodResultsTable";
 import styles from "./search.module.css";
 
 type Operator = NonNullable<NonNullable<GetFoodsData["query"]>["operators"]>[number];
 
-function Search() {
+function Search(): JSX.Element {
     const { t } = useTranslation();
     const searchParams = useSearchParams();
     const paramFoodName = searchParams.get("foodName") || "";
@@ -32,7 +32,7 @@ function Search() {
         }
     }, [paramFoodName]);
 
-    const resetFilters = () => {
+    const resetFilters = (): void => {
         setSelectedFilters({
             foodTypeFilter: new Set(),
             regionsFilter: new Set(),
@@ -63,12 +63,24 @@ function Search() {
                 operators: [] as Operator[],
                 values: [] as number[],
             }),
-        }
+        },
     }));
 
     return (
         <div className={styles["search-container"]}>
-            <div className={`${styles["filter-body-container"]} p-[20px] flex flex-col bg-[white] rounded-[10px] relative shadow-[0_4px_6px_-1px_rgb(0,0,0,0.1)]`}/*className="food-filter food-filter-static"*/>
+            <div
+                className={`
+                ${styles["filter-body-container"]}
+                p-[20px]
+                flex
+                flex-col
+                bg-[white]
+                rounded-[10px]
+                relative
+                shadow-[0_4px_6px_-1px_rgb(0,0,0,0.1)]
+                `}
+                /*className="food-filter food-filter-static"*/
+            >
                 <h4>{t("Filter.title")}</h4>
                 <FilterBody
                     selectedFilters={selectedFilters}
@@ -87,7 +99,7 @@ function Search() {
     );
 }
 
-export default function SearchPage() {
+export default function SearchPage(): JSX.Element {
     return (
         <Suspense>
             <Search/>

@@ -1,5 +1,5 @@
-import { StringTranslation } from "@/api";
-import {Origin} from "@/types/SingleFoodResult";
+import type { StringTranslation } from "@/api";
+import type { Origin } from "@/types/SingleFoodResult";
 
 type InfoAboutFoodComponentProps = {
     ingredients: StringTranslation;
@@ -17,9 +17,9 @@ type InfoAboutFoodComponentProps = {
     brand?: string;
     observation?: string;
     origins?: Origin[];
-}
+};
 
-export default function InfoAboutFoot({data}: { data: InfoAboutFoodComponentProps }) {
+export default function InfoAboutFoot({ data }: { data: InfoAboutFoodComponentProps }): JSX.Element {
     return (
         <div className="bg-[white] border-[1px] rounded-[8px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] p-[18px]">
             <h3 className="text-center text-[22px] font-[700] text-[#2b402b] mb-[20px]">Información del alimento</h3>
@@ -44,16 +44,24 @@ export default function InfoAboutFoot({data}: { data: InfoAboutFoodComponentProp
                         {data.group && (
                             <div className="flex flex-row space-x-[6px]">
                                 <span className="text-[18px] font-medium text-gray-500">Grupo:</span>
-                                <span className="text-[16px] text-gray-800">{data.group.name} <span
-                                    className="text-[16px] text-gray-500">({data.group.code})</span></span>
+                                <span className="text-[16px] text-gray-800">
+                                    {data.group.name}
+                                    <span className="text-[16px] text-gray-500">
+                                        ({data.group.code})
+                                    </span>
+                                </span>
                             </div>
-                            )}
+                        )}
 
                         {data.type && (
                             <div className="flex flex-row space-x-[6px]">
                                 <span className="text-[18px] font-medium text-gray-500">Tipo:</span>
-                                <span className="text-[16px] text-gray-800">{data.type.name} <span
-                                    className="text-[16px] text-gray-500">({data.type.code})</span></span>
+                                <span className="text-[16px] text-gray-800">
+                                    {data.type.name}
+                                    <span className="text-[16px] text-gray-500">
+                                        ({data.type.code})
+                                    </span>
+                                </span>
                             </div>
                         )}
                     </div>
@@ -94,12 +102,12 @@ export default function InfoAboutFoot({data}: { data: InfoAboutFoodComponentProp
                                 key={origin.id}
                                 className="px-[12px] py-[4px] bg-gray-100 text-gray-700 rounded-[50%] text-sm"
                             >
-                {origin.name}
-              </span>
+                                {origin.name}
+                            </span>
                         ))}
                     </div>
                 </div>
             )}
         </div>
-);
+    );
 }

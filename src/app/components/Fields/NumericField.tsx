@@ -1,5 +1,5 @@
+import { type ChangeEvent, type ReactNode, useEffect, useState } from "react";
 import TextField from "./TextField";
-import { useState, useEffect } from "react";
 
 type NumericFieldProps = {
     label?: string;
@@ -16,42 +16,42 @@ type NumericFieldProps = {
     disabled?: boolean;
     id?: string;
     name?: string;
-    icon?: React.ReactNode;
+    icon?: ReactNode;
     className?: string;
 };
 
 export default function NumericField({
-                                         label,
-                                         value,
-                                         onChange,
-                                         allowDecimals = true,
-                                         min = 0,
-                                         max,
-                                         required = false,
-                                         fullWidth = false,
-                                         error = false,
-                                         errorMessage,
-                                         helperText,
-                                         disabled = false,
-                                         id,
-                                         name,
-                                         icon,
-                                         className,
-                                         ...rest
-                                     }: NumericFieldProps) {
-    const [inputValue, setInputValue] = useState(value?.toString() || '');
+    label,
+    value,
+    onChange,
+    allowDecimals = true,
+    min = 0,
+    max,
+    required = false,
+    fullWidth = false,
+    error = false,
+    errorMessage,
+    helperText,
+    disabled = false,
+    id,
+    name,
+    icon,
+    className,
+    ...rest
+}: NumericFieldProps): JSX.Element {
+    const [inputValue, setInputValue] = useState(value?.toString() || "");
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const newValue = e.target.value;
 
-        if (newValue === '') {
-            setInputValue('');
+        if (newValue === "") {
+            setInputValue("");
             onChange(undefined);
             return;
         }
 
-        if (allowDecimals && newValue === '.') {
-            setInputValue('.');
+        if (allowDecimals && newValue === ".") {
+            setInputValue(".");
             return;
         }
 
@@ -62,8 +62,10 @@ export default function NumericField({
 
         setInputValue(newValue);
 
-        if (newValue === '.' || newValue === '-' ||
-            (allowDecimals && newValue.endsWith('.'))) {
+        if (newValue === "."
+            || newValue === "-"
+            || (allowDecimals && newValue.endsWith("."))
+        ) {
             return;
         }
 
@@ -83,11 +85,12 @@ export default function NumericField({
     };
 
     useEffect(() => {
-        if (value === undefined && inputValue !== '') {
-            setInputValue('');
+        if (value === undefined && inputValue !== "") {
+            setInputValue("");
         } else if (value !== undefined && value.toString() !== inputValue) {
             setInputValue(value.toString());
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value]);
 
     return (

@@ -1,54 +1,19 @@
 "use client";
 
+import type { Article, Author, City, Journal, JournalVolume, Reference } from "@/api";
 import { FetchStatus, useApi } from "./useApi";
 
-export type Reference = {
-    code: number;
-    type: "report" | "thesis" | "article" | "website" | "book";
-    title: string;
-    authors: string[];
-    year?: number;
-    volume?: number;
-    issue?: number;
-    volumeYear?: number;
-    journalName?: string;
-    pageStart?: number;
-    pageEnd?: number;
-    city?: string;
-    other?: string;
+type UseReferences = {
+    references: Reference[] | null;
+    authors: Author[] | null;
+    cities: City[] | null;
+    journals: Journal[] | null;
+    journalVolumes: JournalVolume[] | null;
+    articles: Article[] | null;
+    forceReload: () => void;
 };
 
-export type Author = {
-    id: number;
-    name: string;
-};
-
-export type City = {
-    id: number;
-    name: string;
-};
-
-export type Journal = {
-    id: number;
-    name: string;
-};
-
-export type JournalVolume = {
-    id: number;
-    journalId: number;
-    volume: number;
-    issue: number;
-    year: number;
-};
-
-export type Article = {
-    id: number;
-    volumeId: number;
-    pageStart: number;
-    pageEnd: number;
-};
-
-export function useReferences() {
+export function useReferences(): UseReferences {
     const referencesResult = useApi([], (api) => api.getReferences());
     const authorsResult = useApi([], (api) => api.getAuthors());
     const citiesResult = useApi([], (api) => api.getCities());
@@ -56,7 +21,7 @@ export function useReferences() {
     const journalsVolumesResult = useApi([], (api) => api.getJournalVolumes());
     const articlesResult = useApi([], (api) => api.getArticles());
 
-    const forceReload = () => {
+    const forceReload = (): void => {
         if (referencesResult.status !== FetchStatus.Loading) {
             referencesResult.forceReload();
         }

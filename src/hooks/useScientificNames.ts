@@ -1,15 +1,18 @@
 "use client";
 
+import type { ScientificName } from "@/api";
 import { Collection } from "@/utils/collection";
 import { useState } from "react";
 import { FetchStatus, useApi } from "./useApi";
 
-export type ScientificName = {
-    id: number;
-    name: string;
+export type UseScientificNames = {
+    idToObject: Collection<number, ScientificName>;
+    idToName: Collection<string, string>;
+    nameToId: Collection<string, number>;
+    forceReload: () => void;
 };
 
-export function useScientificNames() {
+export function useScientificNames(): UseScientificNames {
     const result = useApi([], (api) => api.getScientificNames());
     const [idToObject, setIdToObject] = useState(new Collection<number, ScientificName>());
     const [idToName, setIdToName] = useState(new Collection<string, string>());
@@ -26,7 +29,7 @@ export function useScientificNames() {
         setNameToId(nameToId.clone());
     }
 
-    const forceReload = () => {
+    const forceReload = (): void => {
         if (result.status !== FetchStatus.Loading) {
             result.forceReload();
             idToObject.clear();

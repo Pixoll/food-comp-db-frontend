@@ -1,15 +1,14 @@
-import React from "react"
-import styles from "./add-food.module.css"
+import type { ReactNode } from "react";
+import styles from "./add-food.module.css";
 
 type LayoutProps = {
-    children: React.ReactNode
-}
+    children: ReactNode;
+};
 
-export default function AddPageLayout({children}: LayoutProps) {
-
-    return(
+export default function AddPageLayout({ children }: LayoutProps): JSX.Element {
+    return (
         <div className={styles["layout"]}>
             {children}
         </div>
-    )
+    );
 }

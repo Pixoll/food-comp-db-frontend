@@ -1,16 +1,11 @@
 "use client";
 
+import type { Language } from "@/api";
 import { FetchStatus, useApi } from "@/hooks/useApi";
 import { Collection } from "@/utils/collection";
 import { useState } from "react";
 
-export type Language = {
-    id: number;
-    code: "es" | "en" | "pt";
-    name: string;
-};
-
-export function useLanguages() {
+export function useLanguages(): Collection<number, Language> {
     const result = useApi([], (api) => api.getLanguages());
     const [languages, setLanguages] = useState(new Collection<number, Language>());
 

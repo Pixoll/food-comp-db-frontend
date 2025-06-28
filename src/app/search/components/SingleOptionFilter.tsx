@@ -1,59 +1,64 @@
-'use client'
-import { useState } from "react";
+"use client";
+
 import { Collection } from "@/utils/collection";
+import { useState } from "react";
 import "@/app/search/components/SearchBox.css";
 
 interface SingleOptionFilterProps {
-  options: Collection<string, string>;
-  selectedOption: string | null;
-  setSelectedOption: (option: string | null) => void;
+    options: Collection<string, string>;
+    selectedOption: string | null;
+    setSelectedOption: (option: string | null) => void;
 }
 
-export default function SingleOptionFilter({ options, selectedOption, setSelectedOption }: SingleOptionFilterProps) {
-  const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
+export default function SingleOptionFilter({
+    options,
+    selectedOption,
+    setSelectedOption,
+}: SingleOptionFilterProps): JSX.Element {
+    const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
 
-  const handleOptionChange = (optionValue: string) => {
-    setSelectedOption(selectedOption === optionValue ? null : optionValue);
-  };
+    const handleOptionChange = (optionValue: string): void => {
+        setSelectedOption(selectedOption === optionValue ? null : optionValue);
+    };
 
-  const filteredOptions = options.filter((_, label) =>
-    label.toLowerCase().includes("".toLowerCase())
-  );
+    const filteredOptions = options.filter((_, label) =>
+        label.toLowerCase().includes("".toLowerCase())
+    );
 
-  const getSelectedLabel = () => {
-    if (!selectedOption) {
-      return "Nada seleccionado";
-    }
-    return options.get(selectedOption) ?? "Opción desconocida";
-  };
+    const getSelectedLabel = (): string => {
+        if (!selectedOption) {
+            return "Nada seleccionado";
+        }
+        return options.get(selectedOption) ?? "Opción desconocida";
+    };
 
-  return (
-    <div className={`checkbox-filter ${dropdownOpen ? "show" : ""}`}>
-      <div
-        className="selected-options-display"
-        onClick={() => setDropdownOpen(!dropdownOpen)}
-      >
-        {getSelectedLabel()}
-        <span>▼</span>
-      </div>
-      {dropdownOpen && (
-        <div className="dropdown-options">
-          {filteredOptions.map((label, option) => (
-            <label key={option}>
-              <input
-                type="checkbox"
-                value={option}
-                checked={selectedOption === option}
-                onChange={() => handleOptionChange(option)}
-              />
-              {label}
-              {selectedOption === option && (
-                <span className="float-right text-[#81c784] text-xl">✔</span>
-              )}
-            </label>
-          ))}
+    return (
+        <div className={`checkbox-filter ${dropdownOpen ? "show" : ""}`}>
+            <div
+                className="selected-options-display"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+            >
+                {getSelectedLabel()}
+                <span>▼</span>
+            </div>
+            {dropdownOpen && (
+                <div className="dropdown-options">
+                    {filteredOptions.map((label, option) => (
+                        <label key={option}>
+                            <input
+                                type="checkbox"
+                                value={option}
+                                checked={selectedOption === option}
+                                onChange={() => handleOptionChange(option)}
+                            />
+                            {label}
+                            {selectedOption === option && (
+                                <span className="float-right text-[#81c784] text-xl">✔</span>
+                            )}
+                        </label>
+                    ))}
+                </div>
+            )}
         </div>
-      )}
-    </div>
-  );
+    );
 }

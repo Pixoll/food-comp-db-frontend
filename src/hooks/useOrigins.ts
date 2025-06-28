@@ -30,7 +30,14 @@ export type Location = CommonOrigin & {
     type: "city" | "town";
 };
 
-export function useOrigins() {
+type UseOrigins = {
+    regions: Collection<number, Region>;
+    provinces: Collection<number, Province>;
+    communes: Collection<number, Commune>;
+    locations: Collection<number, Location>;
+};
+
+export function useOrigins(): UseOrigins {
     const result = useApi([], (api) => api.getOrigins());
     const [regions, setRegions] = useState(new Collection<number, Region>());
     const [provinces, setProvinces] = useState(new Collection<number, Province>());

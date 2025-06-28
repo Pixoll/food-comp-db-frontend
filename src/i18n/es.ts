@@ -6,31 +6,31 @@ export const es = {
         spanish: "ESPAÑOL",
         english: "INGLES",
         panel: "Panel",
-        close: "Cerrar Sesión"
+        close: "Cerrar Sesión",
     },
     homepage: {
         title: "Base de Datos de Composición de Alimentos",
-        subtitle: "Una colección de datos de composición de alimentos y más."
+        subtitle: "Una colección de datos de composición de alimentos y más.",
     },
     search: {
         placeholder: "Buscar...",
         button: "Buscar",
-        advancedSearch: "Búsqueda avanzada"
+        advancedSearch: "Búsqueda avanzada",
     },
     footer: {
         contact: {
             title: "Contacto",
-            email: "Email: contacto@ejemplo.com"
+            email: "Email: contacto@ejemplo.com",
         },
         address: {
             title: "Dirección",
-            details: "123 Calle Falsa, Ciudad, País"
+            details: "123 Calle Falsa, Ciudad, País",
         },
         policies: {
             title: "Políticas",
-            privacy: "Política de Privacidad"
+            privacy: "Política de Privacidad",
         },
-        copyright: "© 2024 Mi Empresa. Todos los derechos reservados."
+        copyright: "© 2024 Mi Empresa. Todos los derechos reservados.",
     },
     loginPage: {
         title: "Iniciar Sesion",
@@ -40,15 +40,15 @@ export const es = {
         state: {
             request: "Enviando solicitud a:",
             send: "Datos enviados:",
-            Response: "Respuesta recibida:"
+            Response: "Respuesta recibida:",
         },
         errors: {
             login: "Error en el inicio de sesión",
             response: "Respuesta de error:",
             state: "Codigo de estado:",
             received: "No se recibió respuesta:",
-            unknown: "Error desconocido:"
-        }
+            unknown: "Error desconocido:",
+        },
     },
     Filter: {
         title: "Filtros",
@@ -56,7 +56,7 @@ export const es = {
         reset: "Reestablecer filtros",
         regions: "Regiones de Chile",
         group: "Grupo alimentario",
-        Languages: "Lenguajes"
+        Languages: "Lenguajes",
     },
     Measurement: {
         title: "Medición de nutrientes",
@@ -65,9 +65,9 @@ export const es = {
             less_equal: "Menor o igual a",
             equal: "Igual a",
             greater_equal: "Mayor o igual a",
-            greater: "Mayor que"
+            greater: "Mayor que",
         },
-        value: "Valor"
+        value: "Valor",
     },
     Table: {
         title: "Lista de resultados",
@@ -77,9 +77,9 @@ export const es = {
             by: "Ordenar por:",
             order: "Orden:",
             ascending: "Ascendente",
-            descending: "Descendiente"
+            descending: "Descendiente",
         },
-        results_per_page: "Resultados por página:"
+        results_per_page: "Resultados por página:",
     },
     Table_FoodResults: {
         code: "Código",
@@ -87,7 +87,7 @@ export const es = {
         scientific_name: "Nombre cientifico",
         action: "Acción",
         details: "Detalles",
-        modify: "Modificar"
+        modify: "Modificar",
     },
     DetailFood: {
         loading: "Cargando...",
@@ -98,7 +98,7 @@ export const es = {
             Spanish: "Nombre en Español:",
             Portuguese: "Nombre en Portugués",
             English: "Nombre en Inglés:",
-            scientific: "Nombre Científico:"
+            scientific: "Nombre Científico:",
         },
         subspecies: "Subespecie:",
         strain: "Variante:",
@@ -110,21 +110,21 @@ export const es = {
             title: "Ingredientes",
             Spanish: "Ingredientes (Español):",
             Portuguese: "Ingredientes (Portugués):",
-            English: "Ingredientes (Inglés):"
+            English: "Ingredientes (Inglés):",
         },
         grams: {
             enter: "Ingrese gramos",
             change: "Cambiar gramos",
-            current: "Gramos actuales:"
+            current: "Gramos actuales:",
         },
         labels: {
             Nutritional: "Etiquetado Nutricional",
-            data: "Todos los datos"
+            data: "Todos los datos",
         },
         codes: "Codigos lenguales",
         references: {
             title: "Referencias",
-            nutrients: "Referencias de nutrientes"
+            nutrients: "Referencias de nutrientes",
         },
         modify: "Modificar detalles del alimento",
         required: "Este campo es requerido",
@@ -134,13 +134,13 @@ export const es = {
         label_group: "Grupo",
         graphics: {
             title_L: "Composición",
-            title_R: "Contenido energetico"
+            title_R: "Contenido energetico",
         },
         selected: "Nada seleccionado",
-        Apply: "Aplicar cambios"
+        Apply: "Aplicar cambios",
     },
     components_home: {
-        title: "Buscar Composición"
+        title: "Buscar Composición",
     },
     nutrientAccordion: {
         Energy: "Valor energético",
@@ -150,7 +150,7 @@ export const es = {
         modify: "Modificar",
         unit: "Unidad",
         mean: "Promedio",
-        details: "Detalles"
+        details: "Detalles",
     },
     Centered: {
         details: "Detalles del Nutriente",
@@ -165,7 +165,7 @@ export const es = {
         references: "Referencias",
         yes: "Sí",
         type: "Tipo de dato",
-        size: "Tamaño de muestra"
+        size: "Tamaño de muestra",
     },
     LangualCode: {
         description_main: "Descripción Principal",
@@ -173,7 +173,7 @@ export const es = {
         description: "Descripción",
         Search: "Buscar por código Langual",
         Eliminate: "Eliminar",
-        Add: "Agregar"
+        Add: "Agregar",
     },
     References: {
         type: "Tipo:",
@@ -186,7 +186,7 @@ export const es = {
         additional: "Otra información:",
         Add: "Agregar",
         Additional: "Información adicional:",
-        Publication: "Publicación:"
+        Publication: "Publicación:",
     },
     Origins: {
         title: "Origines",
@@ -202,7 +202,7 @@ export const es = {
         no_direction: "Sin dirección seleccionada",
         minimum: "El mínimo de orígenes es uno",
         Add: "Añadir un origen",
-        Delete: "Eliminar un origen"
+        Delete: "Eliminar un origen",
     },
     Case_1: {
         name: "Nombre",
@@ -212,7 +212,7 @@ export const es = {
         food_P: "Nombre alimento (Portugués):",
         Portuguese: "Nombre en Portugués",
         food_I: "Nombre alimento (Inglés):",
-        English: "Nombre en Inglés"
+        English: "Nombre en Inglés",
     },
     Case_2: {
         title: "Grupo y Tipo",
@@ -223,7 +223,7 @@ export const es = {
         type_name: "Tipo (Nombre):",
         name_T: "Nombre del Tipo",
         type_code: "Tipo (Código):",
-        code_T: "Código del Tipo"
+        code_T: "Código del Tipo",
     },
     Case_3: {
         title: "Ingredientes",
@@ -232,12 +232,12 @@ export const es = {
         Ingredients_P: "Ingredientes (Portugués):",
         Portuguese: "Ingredientes en Portugués",
         Ingredients_I: "Ingredientes (Inglés):",
-        English: "Ingredientes en Inglés"
+        English: "Ingredientes en Inglés",
     },
     Case_4: {
         title: "Subespecie y variante",
         Subspecies: "Subespecie",
-        strain: "Variante"
+        strain: "Variante",
     },
     Case_5: {
         title: "Macronutrientes",
@@ -246,7 +246,7 @@ export const es = {
         Protein: "Proteína",
         Lipid: "Lípido Total",
         fiber_G: "Fibra Alimentaria Total (g):",
-        fiber: "Fibra Alimentaria"
+        fiber: "Fibra Alimentaria",
     },
     Case_6: {
         section: "Alcohol y Compuestos",
@@ -254,7 +254,7 @@ export const es = {
         Alcohol: "Alcohol",
         acids_T_G: "Ácidos Orgánicos Totales (g):",
         acids: "Ácidos Orgánicos",
-        Polyols: "Polioles Totales"
+        Polyols: "Polioles Totales",
     },
     Case_7: {
         title: "Grasas y Ácidos Grasos",
@@ -262,7 +262,7 @@ export const es = {
         Monounsaturated: "Ácidos Grasos Monoinsaturados",
         Polyunsaturated: "Ácidos Grasos Poliinsaturados",
         Trans: "Ácidos Grasos Trans",
-        Cholesterol: "Colesterol"
+        Cholesterol: "Colesterol",
     },
     Case_8: {
         title: "Minerales",
@@ -274,7 +274,7 @@ export const es = {
         Potassium: "Potasio",
         Manganese: "Manganeso",
         Copper: "Cobre",
-        Selenium: "Selenio"
+        Selenium: "Selenio",
     },
     Case_9: {
         title: "Vitaminas",
@@ -287,7 +287,7 @@ export const es = {
         Niacin: "Niacina Preformada",
         B6: "Vitamina B6",
         B12: "Vitamina B12",
-        C: "Vitamina C"
+        C: "Vitamina C",
     },
     AdminPage: {
         manual: "Ingreso Manual",
@@ -313,7 +313,7 @@ export const es = {
             origins: "Origines del alimento",
             references: "Referencias",
             codes: "Codigos languales",
-            view: "Vista de información actual"
+            view: "Vista de información actual",
         },
         Enter_New_R: "Ingresar una nueva referencia",
         New_R: "Nueva referencia",
@@ -321,8 +321,8 @@ export const es = {
             Data: "Datos generales",
             Authors: "Autores",
             Article: "Artículo",
-            Preview: "Previsualización"
-        }
+            Preview: "Previsualización",
+        },
     },
     FoodGeneralData: {
         code: "Código del alimento",
@@ -348,13 +348,13 @@ export const es = {
             scientific: "Por favor, ingrese un nombre científico",
             Failed_scientific: "Fallo al crear el nombre científico",
             subspecies: "Por favor, ingrese una subespecie",
-            Failed_subspecies: "Fallo al crear la subespecie"
+            Failed_subspecies: "Fallo al crear la subespecie",
         },
         error: {
             group: "Error al crear el grupo:",
             type: "Error al crear el tipo:",
             scientific: "Error al crear el nombre científico:",
-            subspecies: "Error al crear la subespecie:"
+            subspecies: "Error al crear la subespecie:",
         },
         Group: "Código del grupo",
         create_group: "Crear Grupo",
@@ -363,7 +363,7 @@ export const es = {
         Select_scientific: "Selecciona un nombre científico",
         Create_Scientific: "Crear Nombre Científico",
         Select_subspecies: "Selecciona una subespecie",
-        Create_subspecies: "Crear Subespecie"
+        Create_subspecies: "Crear Subespecie",
     },
     NewMacronutrient: {
         name: "Nombre nutriente",
@@ -381,11 +381,11 @@ export const es = {
         Edit: "Editar",
         parent: "Nutriente Padre:",
         save: "Guardar",
-        cancel: "Cancelar"
+        cancel: "Cancelar",
     },
     OriginRow: {
         selected: "Nada seleccionado",
-        remove: "Eliminar"
+        remove: "Eliminar",
     },
     PreviewDataFrom: {
         General: "Datos Generales",
@@ -406,12 +406,12 @@ export const es = {
         Micronutrients: "Micronutrientes",
         Vitamins: "Vitaminas",
         Main: "Nutrientes Principales",
-        Minerals: "Minerales"
+        Minerals: "Minerales",
     },
     SelectorWithInput: {
         button: "Buscar",
         Other: "Otro valor",
-        Enter: "Escriba otro valor"
+        Enter: "Escriba otro valor",
     },
     PreviewPostReference: {
         Code: "Código:",
@@ -420,14 +420,14 @@ export const es = {
         New: "Artículo Nuevo:",
         City: "Ciudad:",
         Other: "Otro:",
-        button: "Validar y enviar"
+        button: "Validar y enviar",
     },
     Authors: {
         author: "Selecciona o agregar un autor",
         Eliminate: "Eliminar",
         Select: "Selecciona y agrega autores",
         Add: "Agregar autor",
-        No_selected: "No se ha seleccionado un autor"
+        No_selected: "No se ha seleccionado un autor",
     },
     FoodTableAdmin: {
         List: "Lista de Alimentos Ingresados",
@@ -436,12 +436,12 @@ export const es = {
         Actions: "Acciones",
         Verify: "Verificar",
         Check: "Verificar Alimento",
-        Back: "Volver a la lista"
+        Back: "Volver a la lista",
     },
     ModalReferences: {
         Select: "Seleccionar nutrientes",
         Close: "Cerrar",
-        Save: "Guardar cambios"
+        Save: "Guardar cambios",
     },
     GeneralData: {
         Add: "Agregar Nueva Referencia",
@@ -460,6 +460,6 @@ export const es = {
         Year: "Año",
         Enter_y: "Ingrese el año",
         Other: "Otro",
-        Additional: "Información adicional"
-    }
+        Additional: "Información adicional",
+    },
 };

@@ -1,15 +1,15 @@
 .tableContainer {
-    width: 100%;
-    overflow-x: auto;
+    background: white;
     border-radius: 8px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    background: white;
+    overflow-x: auto;
+    width: 100%;
 }
 
 .table {
-    width: 100%;
-    min-width: 600px;
     border-collapse: collapse;
+    min-width: 600px;
+    width: 100%;
 }
 
 .thead {
@@ -24,13 +24,13 @@
 }
 
 .headerCell {
-    padding: 12px 16px;
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #e2e8f0;
     font-size: 14px;
     font-weight: 600;
+    padding: 12px 16px;
     text-align: left;
-    border-bottom: 2px solid #e2e8f0;
     white-space: nowrap;
-    background-color: #f8f9fa;
 }
 
 .mainRow {
@@ -43,8 +43,8 @@
 }
 
 .childRow {
-    border-bottom: 1px solid #e2e8f0;
     background-color: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
     transition: background-color 0.2s ease;
 }
 
@@ -53,9 +53,9 @@
 }
 
 .cell {
-    padding: 12px 16px;
-    font-size: 14px;
     color: #334155;
+    font-size: 14px;
+    padding: 12px 16px;
     vertical-align: top;
 }
 
@@ -64,9 +64,9 @@
 }
 
 .childCell {
-    padding: 8px 16px;
-    font-size: 13px;
     color: #64748b;
+    font-size: 13px;
+    padding: 8px 16px;
     vertical-align: top;
 }
 
@@ -79,18 +79,18 @@
 }
 
 .codeColumn {
-    width: 80px;
     min-width: 80px;
+    width: 80px;
 }
 
 .descriptionColumn {
-    width: 35%;
     min-width: 200px;
+    width: 35%;
 }
 
 .classificationColumn {
-    width: auto;
     min-width: 250px;
+    width: auto;
 }
 
 @media (max-width: 768px) {
@@ -99,18 +99,18 @@
     }
 
     .headerCell {
-        padding: 10px 12px;
         font-size: 13px;
+        padding: 10px 12px;
     }
 
     .cell {
-        padding: 10px 12px;
         font-size: 13px;
+        padding: 10px 12px;
     }
 
     .childCell {
-        padding: 6px 12px;
         font-size: 12px;
+        padding: 6px 12px;
     }
 
     .childCellIndented {
@@ -118,8 +118,8 @@
     }
 
     .codeColumn {
-        width: 70px;
         min-width: 70px;
+        width: 70px;
     }
 
     .descriptionColumn {
@@ -138,14 +138,14 @@
     }
 
     .tableContainer::after {
-        content: "← Desliza para ver más →";
-        position: absolute;
         bottom: -25px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 11px;
         color: #64748b;
+        content: "← Desliza para ver más →";
+        font-size: 11px;
         font-style: italic;
+        left: 50%;
+        position: absolute;
+        transform: translateX(-50%);
     }
 
     .table {
@@ -153,20 +153,20 @@
     }
 
     .headerCell {
-        padding: 8px 10px;
         font-size: 12px;
+        padding: 8px 10px;
     }
 
     .cell {
-        padding: 8px 10px;
         font-size: 12px;
         line-height: 1.4;
+        padding: 8px 10px;
     }
 
     .childCell {
-        padding: 6px 10px;
         font-size: 11px;
         line-height: 1.4;
+        padding: 6px 10px;
     }
 
     .childCellIndented {
@@ -174,8 +174,8 @@
     }
 
     .codeColumn {
-        width: 60px;
         min-width: 60px;
+        width: 60px;
     }
 
     .descriptionColumn {
@@ -202,6 +202,7 @@
     }
 
 }
+
 .cardsContainer {
     display: none;
 }
@@ -216,15 +217,15 @@
         background: white;
         border: 1px solid #e2e8f0;
         border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         margin-bottom: 12px;
         padding: 16px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
 
     .cardRow {
+        align-items: flex-start;
         display: flex;
         margin-bottom: 8px;
-        align-items: flex-start;
     }
 
     .cardRow:last-child {
@@ -232,19 +233,19 @@
     }
 
     .cardLabel {
-        font-weight: 600;
         color: #64748b;
-        font-size: 12px;
-        min-width: 80px;
-        margin-right: 8px;
         flex-shrink: 0;
+        font-size: 12px;
+        font-weight: 600;
+        margin-right: 8px;
+        min-width: 80px;
     }
 
     .cardValue {
         color: #334155;
+        flex: 1;
         font-size: 12px;
         line-height: 1.4;
-        flex: 1;
     }
 
     .cardValueBold {
@@ -265,11 +266,11 @@
 }
 
 .scrollIndicator {
-    text-align: center;
-    margin-top: 8px;
     color: #64748b;
     font-size: 11px;
     font-style: italic;
+    margin-top: 8px;
+    text-align: center;
 }
 
 @media (min-width: 769px) {

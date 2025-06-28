@@ -1,21 +1,22 @@
-import React, { useState, useEffect, useRef } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import styles from "./Modal.module.css";
 
 type ModalProps = {
     width?: number;
     height?: number;
     header?: string;
-    children: React.ReactNode;
+    children: ReactNode;
     onClose?: () => void;
-}
+};
 
-export default function Modal(props: ModalProps) {
+export default function Modal(props: ModalProps): JSX.Element | null {
     const {
         width = 700,
         height,
         header = "Modal",
         children,
-        onClose = () => {}
+        onClose = () => {
+        },
     } = props;
 
     const [isOpen, setIsOpen] = useState(true);
@@ -23,7 +24,7 @@ export default function Modal(props: ModalProps) {
     const modalRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
+        const handleClickOutside = (event: MouseEvent): void => {
             if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
                 handleClose();
             }
@@ -33,22 +34,24 @@ export default function Modal(props: ModalProps) {
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
-        const handleEsc = (event: KeyboardEvent) => {
-            if (event.key === 'Escape') {
+        const handleEsc = (event: KeyboardEvent): void => {
+            if (event.key === "Escape") {
                 handleClose();
             }
         };
 
-        window.addEventListener('keydown', handleEsc);
+        window.addEventListener("keydown", handleEsc);
         return () => {
-            window.removeEventListener('keydown', handleEsc);
+            window.removeEventListener("keydown", handleEsc);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const handleClose = () => {
+    const handleClose = (): void => {
         setIsClosing(true);
         setTimeout(() => {
             setIsOpen(false);
@@ -59,8 +62,8 @@ export default function Modal(props: ModalProps) {
     if (!isOpen) return null;
 
     const containerStyle = {
-        width: width ? `${width}px` : '400px',
-        ...(height ? { height: `${height}px` } : {})
+        width: width ? `${width}px` : "400px",
+        ...height && { height: `${height}px` },
     };
 
     return (

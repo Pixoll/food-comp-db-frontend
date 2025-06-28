@@ -1,10 +1,13 @@
-'use client'
+"use client";
 
-import {useState} from "react";
-import {useTranslation} from "react-i18next";
-import {Commune, Location, Province, Region} from "@/hooks";
-import {Collection} from "@/utils/collection";
+import type { Origin } from "@/api";
+import type { Commune, Location, Province, Region } from "@/hooks";
+import { Collection } from "@/utils/collection";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import Selector from "../../../components/Selector/Selector";
+
+type OriginType = Origin["type"];
 
 type OriginRowProps = {
     data: {
@@ -20,13 +23,13 @@ type OriginRowProps = {
 };
 
 export default function OriginRow({
-                                      data,
-                                      onAddressChange,
-                                      onIdChange,
-                                      index,
-                                      initialId,
-                                  }: OriginRowProps) {
-    const {regions, provinces, communes, locations} = data;
+    data,
+    onAddressChange,
+    onIdChange,
+    index,
+    initialId,
+}: OriginRowProps): JSX.Element {
+    const { regions, provinces, communes, locations } = data;
 
     const location = locations.get(initialId);
     const commune = communes.get(location?.parent.id ?? initialId);
@@ -47,53 +50,49 @@ export default function OriginRow({
 
     const regionOptions = Array.from(regions.values());
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     const notifyIdsChange = (
         updatedSelectedLocation: number | null,
         updatedSelectedCommune: number | null,
         updatedSelectedProvince: number | null,
         updatedSelectedRegion: number | null
-    ) => {
-        const selectedId =
-            updatedSelectedLocation ??
-            updatedSelectedCommune ??
-            updatedSelectedProvince ??
-            updatedSelectedRegion ??
-            null;
+    ): void => {
+        const selectedId = updatedSelectedLocation
+            ?? updatedSelectedCommune
+            ?? updatedSelectedProvince
+            ?? updatedSelectedRegion;
         onIdChange(selectedId, index);
     };
 
-    const provincesOptions =
-        selectedRegion !== null
-            ? Array.from(regions.get(selectedRegion)?.provinces.values() || [])
-            : Array.from(provinces.values());
+    // const provincesOptions =
+    //     selectedRegion !== null
+    //         ? Array.from(regions.get(selectedRegion)?.provinces.values() || [])
+    //         : Array.from(provinces.values());
 
-    const communesOptions =
-        selectedProvince !== null
+    const communesOptions = selectedProvince !== null
+        ? Array.from(provinces.get(selectedProvince)?.communes.values() || [])
+        : selectedRegion !== null
+            ? Array.from(regions.get(selectedRegion)?.provinces.values() || [])
+                .flatMap(province => Array.from(province.communes.values()))
+            : Array.from(communes.values());
+
+    const locationOptions = selectedCommune !== null
+        ? Array.from(communes.get(selectedCommune)?.locations.values() || [])
+        : selectedProvince !== null
             ? Array.from(provinces.get(selectedProvince)?.communes.values() || [])
+                .flatMap(commune => Array.from(commune.locations.values()))
             : selectedRegion !== null
                 ? Array.from(regions.get(selectedRegion)?.provinces.values() || [])
                     .flatMap(province => Array.from(province.communes.values()))
-                : Array.from(communes.values());
-
-    const locationOptions =
-        selectedCommune !== null
-            ? Array.from(communes.get(selectedCommune)?.locations.values() || [])
-            : selectedProvince !== null
-                ? Array.from(provinces.get(selectedProvince)?.communes.values() || [])
                     .flatMap(commune => Array.from(commune.locations.values()))
-                : selectedRegion !== null
-                    ? Array.from(regions.get(selectedRegion)?.provinces.values() || [])
-                        .flatMap(province => Array.from(province.communes.values()))
-                        .flatMap(commune => Array.from(commune.locations.values()))
-                    : Array.from(locations.values());
+                : Array.from(locations.values());
 
     const handleSelection = (
-        level: "region" | "province" | "commune" | "location",
+        level: OriginType,
         id: number | null,
         name: string
-    ) => {
+    ): void => {
         let regionName = selectedRegionName;
         let provinceName = selectedProvinceName;
         let communeName = selectedCommuneName;
@@ -104,86 +103,98 @@ export default function OriginRow({
         let updatedSelectedCommune = selectedCommune;
         let updatedSelectedLocation = selectedLocation;
 
-        if (level === "region") {
-            if (id === null) {
-                updatedSelectedRegion = null;
-                updatedSelectedProvince = null;
-                updatedSelectedCommune = null;
-                updatedSelectedLocation = null;
-                setSelectedRegion(null);
-                setSelectedProvince(null);
-                setSelectedCommune(null);
-                setSelectedLocation(null);
-                setSelectedRegionName("");
-                setSelectedProvinceName("");
-                setSelectedCommuneName("");
-                setSelectedLocationName("");
-                regionName = "";
-                provinceName = "";
-                communeName = "";
-                locationName = "";
-            } else {
-                updatedSelectedRegion = id;
-                setSelectedRegion(id);
-                setSelectedRegionName(name);
-                setSelectedProvince(null);
-                setSelectedProvinceName("");
-                setSelectedCommune(null);
-                setSelectedCommuneName("");
-                setSelectedLocation(null);
-                setSelectedLocationName("");
-                regionName = name;
-                provinceName = "";
-                communeName = "";
-                locationName = "";
-            }
-        } else if (level === "province") {
-            if (id === null) {
-                updatedSelectedProvince = null;
-                updatedSelectedCommune = null;
-                updatedSelectedLocation = null;
-                setSelectedProvince(null);
-                setSelectedCommune(null);
-                setSelectedLocation(null);
-                setSelectedProvinceName("");
-                setSelectedCommuneName("");
-                setSelectedLocationName("");
-                provinceName = "";
-                communeName = "";
-                locationName = "";
-            } else {
-                updatedSelectedProvince = id;
-                setSelectedProvince(id);
-                setSelectedProvinceName(name);
-                setSelectedCommune(null);
-                setSelectedCommuneName("");
-                setSelectedLocation(null);
-                setSelectedLocationName("");
-                provinceName = name;
-                communeName = "";
-                locationName = "";
-
-                const parentRegion = Array.from(regions.values()).find((region) =>
-                    region.provinces.has(id!)
-                );
-                if (parentRegion) {
-                    updatedSelectedRegion = parentRegion.id;
-                    setSelectedRegion(parentRegion.id);
-                    setSelectedRegionName(parentRegion.name);
-                    regionName = parentRegion.name;
+        switch (level) {
+            case "region": {
+                if (id === null) {
+                    updatedSelectedRegion = null;
+                    updatedSelectedProvince = null;
+                    updatedSelectedCommune = null;
+                    updatedSelectedLocation = null;
+                    setSelectedRegion(null);
+                    setSelectedProvince(null);
+                    setSelectedCommune(null);
+                    setSelectedLocation(null);
+                    setSelectedRegionName("");
+                    setSelectedProvinceName("");
+                    setSelectedCommuneName("");
+                    setSelectedLocationName("");
+                    regionName = "";
+                    provinceName = "";
+                    communeName = "";
+                    locationName = "";
+                } else {
+                    updatedSelectedRegion = id;
+                    setSelectedRegion(id);
+                    setSelectedRegionName(name);
+                    setSelectedProvince(null);
+                    setSelectedProvinceName("");
+                    setSelectedCommune(null);
+                    setSelectedCommuneName("");
+                    setSelectedLocation(null);
+                    setSelectedLocationName("");
+                    regionName = name;
+                    provinceName = "";
+                    communeName = "";
+                    locationName = "";
                 }
+
+                break;
             }
-        } else if (level === "commune") {
-            if (id === null) {
-                updatedSelectedCommune = null;
-                updatedSelectedLocation = null;
-                setSelectedCommune(null);
-                setSelectedLocation(null);
-                setSelectedCommuneName("");
-                setSelectedLocationName("");
-                communeName = "";
-                locationName = "";
-            } else {
+
+            case "province": {
+                if (id === null) {
+                    updatedSelectedProvince = null;
+                    updatedSelectedCommune = null;
+                    updatedSelectedLocation = null;
+                    setSelectedProvince(null);
+                    setSelectedCommune(null);
+                    setSelectedLocation(null);
+                    setSelectedProvinceName("");
+                    setSelectedCommuneName("");
+                    setSelectedLocationName("");
+                    provinceName = "";
+                    communeName = "";
+                    locationName = "";
+                } else {
+                    updatedSelectedProvince = id;
+                    setSelectedProvince(id);
+                    setSelectedProvinceName(name);
+                    setSelectedCommune(null);
+                    setSelectedCommuneName("");
+                    setSelectedLocation(null);
+                    setSelectedLocationName("");
+                    provinceName = name;
+                    communeName = "";
+                    locationName = "";
+
+                    const parentRegion = Array.from(regions.values()).find((region) =>
+                        region.provinces.has(id!)
+                    );
+                    if (parentRegion) {
+                        updatedSelectedRegion = parentRegion.id;
+                        setSelectedRegion(parentRegion.id);
+                        setSelectedRegionName(parentRegion.name);
+                        regionName = parentRegion.name;
+                    }
+                }
+
+                break;
+            }
+
+            case "commune": {
+                if (id === null) {
+                    updatedSelectedCommune = null;
+                    updatedSelectedLocation = null;
+                    setSelectedCommune(null);
+                    setSelectedLocation(null);
+                    setSelectedCommuneName("");
+                    setSelectedLocationName("");
+                    communeName = "";
+                    locationName = "";
+
+                    break;
+                }
+
                 updatedSelectedCommune = id;
                 setSelectedCommune(id);
                 setSelectedCommuneName(name);
@@ -195,6 +206,7 @@ export default function OriginRow({
                 const parentProvince = Array.from(provinces.values()).find((province) =>
                     province.communes.has(id!)
                 );
+
                 if (parentProvince) {
                     updatedSelectedProvince = parentProvince.id;
                     setSelectedProvince(parentProvince.id);
@@ -204,6 +216,7 @@ export default function OriginRow({
                     const parentRegion = Array.from(regions.values()).find((region) =>
                         region.provinces.has(parentProvince.id)
                     );
+
                     if (parentRegion) {
                         updatedSelectedRegion = parentRegion.id;
                         setSelectedRegion(parentRegion.id);
@@ -211,14 +224,19 @@ export default function OriginRow({
                         regionName = parentRegion.name;
                     }
                 }
+
+                break;
             }
-        } else if (level === "location") {
-            if (id === null) {
-                updatedSelectedLocation = null;
-                setSelectedLocation(null);
-                setSelectedLocationName("");
-                locationName = "";
-            } else {
+
+            case "location": {
+                if (id === null) {
+                    updatedSelectedLocation = null;
+                    setSelectedLocation(null);
+                    setSelectedLocationName("");
+                    locationName = "";
+                    break;
+                }
+
                 updatedSelectedLocation = id;
                 setSelectedLocation(id);
                 setSelectedLocationName(name);
@@ -227,6 +245,7 @@ export default function OriginRow({
                 const parentCommune = Array.from(communes.values()).find((commune) =>
                     commune.locations.has(id!)
                 );
+
                 if (parentCommune) {
                     updatedSelectedCommune = parentCommune.id;
                     setSelectedCommune(parentCommune.id);
@@ -236,25 +255,32 @@ export default function OriginRow({
                     const parentProvince = Array.from(provinces.values()).find((province) =>
                         province.communes.has(parentCommune.id)
                     );
-                    if (parentProvince) {
-                        updatedSelectedProvince = parentProvince.id;
-                        setSelectedProvince(parentProvince.id);
-                        setSelectedProvinceName(parentProvince.name);
-                        provinceName = parentProvince.name;
 
-                        const parentRegion = Array.from(regions.values()).find((region) =>
-                            region.provinces.has(parentProvince.id)
-                        );
-                        if (parentRegion) {
-                            updatedSelectedRegion = parentRegion.id;
-                            setSelectedRegion(parentRegion.id);
-                            setSelectedRegionName(parentRegion.name);
-                            regionName = parentRegion.name;
-                        }
+                    if (!parentProvince) {
+                        break;
+                    }
+
+                    updatedSelectedProvince = parentProvince.id;
+                    setSelectedProvince(parentProvince.id);
+                    setSelectedProvinceName(parentProvince.name);
+                    provinceName = parentProvince.name;
+
+                    const parentRegion = Array.from(regions.values()).find((region) =>
+                        region.provinces.has(parentProvince.id)
+                    );
+
+                    if (parentRegion) {
+                        updatedSelectedRegion = parentRegion.id;
+                        setSelectedRegion(parentRegion.id);
+                        setSelectedRegionName(parentRegion.name);
+                        regionName = parentRegion.name;
                     }
                 }
+
+                break;
             }
         }
+
         const address = [regionName, provinceName, communeName, locationName]
             .filter((part) => part !== "")
             .join(", ");
@@ -272,7 +298,7 @@ export default function OriginRow({
         <tr className="min-h-[400px]">
             <td>
                 <Selector
-                    options={regionOptions.map((region) => ({id: region.id, name: region.name ?? ""}))}
+                    options={regionOptions.map((region) => ({ id: region.id, name: region.name ?? "" }))}
                     placeholder={t("OriginRow.selected")}
                     selectedValue={selectedRegionName}
                     onSelect={(id, name) => handleSelection("region", id, name)}

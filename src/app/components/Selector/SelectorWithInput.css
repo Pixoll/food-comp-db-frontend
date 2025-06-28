@@ -1,124 +1,134 @@
 .select-box-for {
     margin: 0;
+    position: relative;
     width: 100%;
-    position: relative;
 }
+
 .select-option-with-input {
-    position: relative;
-    display: flex;
     align-items: center;
-    background-color: #fff;
+    background-color: #ffffff;
     border-radius: 7px;
+    display: flex;
+    position: relative;
 }
 
 .select-option-with-input input {
-    flex-grow: 1;
-    width: 100%;
     background-color: transparent;
-    color: #000;
     border: 1px solid #dcdcdc !important;
     border-radius: 5px;
-    outline: 0 !important;
+    color: #000000;
     cursor: pointer;
+    flex-grow: 1;
     font-size: 15px;
-    padding: 8px 36px 8px 8px;
     line-height: 21px !important;
+    outline: 0 !important;
+    padding: 8px 36px 8px 8px;
+    width: 100%;
 }
 
 .select-option-with-input:after {
-    content: "";
-    border-top: 12px solid #000;
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
+    border-top: 12px solid #000000;
+    content: "";
     position: absolute;
     right: 10px;
     top: 50%;
     transform: translateY(-50%);
     transition: transform 0.3s ease;
 }
+
 .content-box {
-    background-color: #fff;
-    position: absolute;
-    color: #000;
-    border-radius: 7px;
-    margin-top: 10px;
-    width: 100%;
-    z-index: 9999;
-    padding: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    display: none;
     animation: fadeIn 0.3s ease-in-out;
+    background-color: #ffffff;
+    border-radius: 7px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #000000;
+    display: none;
+    left: 0;
+    margin-top: 10px;
     max-height: 300px;
     overflow-y: auto;
-    left: 0;
-}
-.search-options input {
+    padding: 15px;
+    position: absolute;
     width: 100%;
-    font-size: 17px;
-    padding: 10px;
-    outline: 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-bottom: 10px;
+    z-index: 9999;
 }
+
+.search-options input {
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    font-size: 17px;
+    margin-bottom: 10px;
+    outline: 0;
+    padding: 10px;
+    width: 100%;
+}
+
 .options {
+    list-style: none;
     margin-top: 10px;
     max-height: 200px;
     overflow-y: auto;
     padding: 0;
-    list-style: none;
     width: 100%;
 }
+
 .options li {
-    padding: 10px 15px;
-    font-size: 15px;
-    cursor: pointer;
     border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    font-size: 15px;
+    overflow: hidden;
+    padding: 10px 15px;
+    text-overflow: ellipsis;
     transition: background-color 0.2s ease;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
+
 .options li:hover {
     background-color: #f9f9f9;
 }
+
 .select-box-for.active .content-box {
     display: block;
 }
+
 .select-box-for.open-upward .content-box {
     bottom: calc(100% + 10px);
-    top: auto;
     margin-top: 0;
+    top: auto;
 }
+
 .select-box-for.active .select-option-with-input:after {
     transform: rotate(180deg) translateY(-50%);
 }
+
 .custom-option-input {
+    align-items: center;
+    animation: slideIn 0.3s ease-in-out;
+    display: flex;
+    gap: 10px;
     margin-top: 10px;
     width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    animation: slideIn 0.3s ease-in-out;
 }
 
 .custom-option-input input {
-    width: 100%;
-    font-size: 15px;
-    padding: 8px;
     border: 1px solid #dcdcdc;
     border-radius: 5px;
-    line-height: 21px !important;
     box-sizing: border-box;
+    font-size: 15px;
+    line-height: 21px !important;
+    padding: 8px;
+    width: 100%;
 }
 
 .custom-option-input button {
-    font-size: 17px;
-    color: #fff;
     background-color: #007bff;
     border: none;
     border-radius: 5px;
+    color: #ffffff;
     cursor: pointer;
+    font-size: 17px;
     transition: background-color 0.2s ease;
 }
 

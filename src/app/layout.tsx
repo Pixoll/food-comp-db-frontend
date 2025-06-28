@@ -1,17 +1,16 @@
-import {Metadata, Viewport} from "next";
-import {ReactNode} from "react";
-import {Montserrat} from "next/font/google";
-import Providers from "./Providers";
+import type { Metadata, Viewport } from "next";
+import { Montserrat } from "next/font/google";
+import type { ReactNode } from "react";
 import NavBar from "./components/NavBar/Navbar";
-import "./globals.css"
-
+import Providers from "./Providers";
+import "./globals.css";
 
 type RootLayoutProps = {
     children: ReactNode;
 };
 
 export const metadata: Metadata = {
-    title: "Capchical",
+    title: "CapChiCAL",
     description: "Web site created using create-react-app",
     manifest: "/manifest.json",
 };
@@ -25,17 +24,17 @@ const montserrat = Montserrat({
     display: "swap",
 });
 
-export default function RootLayout({children}: RootLayoutProps) {
+export default function RootLayout({ children }: RootLayoutProps): JSX.Element {
     return (
         <html lang="en" className={`${montserrat.className} h-full`} suppressHydrationWarning>
-        <body>
-        <Providers>
-            <div className="flex flex-col h-[100%]" id="root">
-                <NavBar/>
-                {children}
-            </div>
-        </Providers>
-        </body>
+            <body>
+                <Providers>
+                    <div className="flex flex-col h-[100%]" id="root">
+                        <NavBar/>
+                        {children}
+                    </div>
+                </Providers>
+            </body>
         </html>
     );
 }

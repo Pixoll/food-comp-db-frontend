@@ -1,20 +1,20 @@
-import api, { NewFoodDto } from "@/api";
+import api, { type FoodGroup, type FoodType, type NewFoodDto, type ScientificName, type Subspecies } from "@/api";
 import {
     searchGroupNameById,
     searchScientificNameById,
     searchSubspeciesNameById,
     searchTypeNameById,
 } from "@/app/admin-page/add-food/components/FoodGeneralData";
-import { FoodForm } from "@/app/admin-page/add-food/page";
+import type { FoodForm } from "@/app/admin-page/add-food/page";
 import { useToast } from "@/context/ToastContext";
 // TODO some really horrible shit 2
-// @ts-expect-error
-import { Group, LangualCode, ScientificName, Subspecies, Type, } from "@/hooks";
+// @ts-expect-error: uh oh
+import { LangualCode } from "@/hooks";
 import {
     getNutrientNameById,
-    NutrientMeasurementForm,
-    NutrientMeasurementWithComponentsForm,
-    NutrientSummary,
+    type NutrientMeasurementForm,
+    type NutrientMeasurementWithComponentsForm,
+    type NutrientSummary,
 } from "@/types/nutrients";
 import { CodeIcon, Database, Info, Leaf, Zap } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -22,8 +22,8 @@ import { useTranslation } from "react-i18next";
 type PreviewDataFormProps = {
     data: FoodForm;
     nameAndIdNutrients: NutrientSummary[];
-    types: Type[];
-    groups: Group[];
+    types: FoodType[];
+    groups: FoodGroup[];
     scientificNames: ScientificName[];
     langualCodes: LangualCode[];
     subspecies: Subspecies[];
@@ -39,22 +39,22 @@ export default function PreviewDataForm({
     langualCodes,
     subspecies,
     types,
-}: PreviewDataFormProps) {
+}: PreviewDataFormProps): JSX.Element {
     console.log(data);
     const { t } = useTranslation();
     const { addToast } = useToast();
     const hasValidData = <T extends NutrientMeasurementForm>(
         nutrient: T
-        // @ts-expect-error
+        // @ts-expect-error: just for type hints
     ): nutrient is Omit<T, "average" | "dataType"> &
         Required<Pick<T, "average" | "dataType">> => {
         return (
-            typeof nutrient.average !== "undefined" &&
-            typeof nutrient.dataType !== "undefined"
+            typeof nutrient.average !== "undefined"
+            && typeof nutrient.dataType !== "undefined"
         );
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (): Promise<void> => {
         const payload: NewFoodDto = {
             commonName: {
                 es: data.commonName.es,
@@ -214,14 +214,12 @@ export default function PreviewDataForm({
             .map((parentId) => langualCodes.find((code) => code.id === parentId))
             .filter((parent): parent is LangualCode => parent !== undefined);
 
-        const result: DataRender[] = parentsInfo.map((parent) => ({
+        return parentsInfo.map((parent) => ({
             parentSelected: parent,
             childrenSelecteds: childrenInfo.filter(
                 (child) => child.parentId === parent.id
             ),
         }));
-
-        return result;
     }
 
     const langualCodesInfo = searchLangualCodes(
@@ -232,7 +230,7 @@ export default function PreviewDataForm({
     const renderNutrientTable = (
         title: string,
         nutrients: NutrientMeasurementForm[]
-    ) => {
+    ): JSX.Element | null => {
         const validNutrients = nutrients.filter(hasValidData);
         if (validNutrients.length === 0) return null;
 
@@ -243,90 +241,251 @@ export default function PreviewDataForm({
                     <h5 className="text-[18px] font-[600] m-[0]">{title}</h5>
                 </div>
                 <div
-                    className="overflow-x-auto rounded-[8px] border-[1px] border-[#e5e7eb] shadow-[0_2px_4px_rgba(0,0,0,0.05)]"
+                    className="
+                    overflow-x-auto
+                    rounded-[8px]
+                    border-[1px]
+                    border-[#e5e7eb]
+                    shadow-[0_2px_4px_rgba(0,0,0,0.05)]
+                    "
                 >
                     <table className="w-full min-w-[800px] border-collapse">
                         <thead>
-                        <tr className="bg-[#f9fafb]">
-                            <th className="py-[12px] px-[16px] text-left font-[600] text-[14px] text-[#374151] border-b-[1px] border-[#e5e7eb]">Nombre
-                                                                                                                                                del
-                                                                                                                                                nutriente
-                            </th>
-                            <th className="py-[12px] px-[16px] text-center font-[600] text-[14px] text-[#374151] border-b-[1px] border-[#e5e7eb]">Promedio</th>
-                            <th className="py-[12px] px-[16px] text-center font-[600] text-[14px] text-[#374151] border-b-[1px] border-[#e5e7eb]">Desviación</th>
-                            <th className="py-[12px] px-[16px] text-center font-[600] text-[14px] text-[#374151] border-b-[1px] border-[#e5e7eb]">Mínimo</th>
-                            <th className="py-[12px] px-[16px] text-center font-[600] text-[14px] text-[#374151] border-b-[1px] border-[#e5e7eb]">Máximo</th>
-                            <th className="py-[12px] px-[16px] text-center font-[600] text-[14px] text-[#374151] border-b-[1px] border-[#e5e7eb]">Tamaño
-                                                                                                                                                  de
-                                                                                                                                                  muestra
-                            </th>
-                            <th className="py-[12px] px-[16px] text-center font-[600] text-[14px] text-[#374151] border-b-[1px] border-[#e5e7eb]">Tipo
-                                                                                                                                                  de
-                                                                                                                                                  dato
-                            </th>
-                            <th className="py-[12px] px-[16px] text-center font-[600] text-[14px] text-[#374151] border-b-[1px] border-[#e5e7eb]">Códigos
-                                                                                                                                                  de
-                                                                                                                                                  referencias
-                            </th>
-                        </tr>
+                            <tr className="bg-[#f9fafb]">
+                                <th
+                                    className="
+                                    py-[12px]
+                                    px-[16px]
+                                    text-left
+                                    font-[600]
+                                    text-[14px]
+                                    text-[#374151]
+                                    border-b-[1px]
+                                    border-[#e5e7eb]
+                                    "
+                                >
+                                    Nombre del nutriente
+                                </th>
+                                <th
+                                    className="
+                                    py-[12px]
+                                    px-[16px]
+                                    text-center
+                                    font-[600]
+                                    text-[14px]
+                                    text-[#374151]
+                                    border-b-[1px]
+                                    border-[#e5e7eb]
+                                    "
+                                >
+                                    Promedio
+                                </th>
+                                <th
+                                    className="
+                                    py-[12px]
+                                    px-[16px]
+                                    text-center
+                                    font-[600]
+                                    text-[14px]
+                                    text-[#374151]
+                                    border-b-[1px]
+                                    border-[#e5e7eb]
+                                    "
+                                >
+                                    Desviación
+                                </th>
+                                <th
+                                    className="
+                                    py-[12px]
+                                    px-[16px]
+                                    text-center
+                                    font-[600]
+                                    text-[14px]
+                                    text-[#374151]
+                                    border-b-[1px]
+                                    border-[#e5e7eb]
+                                    "
+                                >
+                                    Mínimo
+                                </th>
+                                <th
+                                    className="
+                                    py-[12px]
+                                    px-[16px]
+                                    text-center
+                                    font-[600]
+                                    text-[14px]
+                                    text-[#374151]
+                                    border-b-[1px]
+                                    border-[#e5e7eb]
+                                    "
+                                >
+                                    Máximo
+                                </th>
+                                <th
+                                    className="
+                                    py-[12px]
+                                    px-[16px]
+                                    text-center
+                                    font-[600]
+                                    text-[14px]
+                                    text-[#374151]
+                                    border-b-[1px]
+                                    border-[#e5e7eb]
+                                    "
+                                >
+                                    Tamaño de muestra
+                                </th>
+                                <th
+                                    className="
+                                    py-[12px]
+                                    px-[16px]
+                                    text-center
+                                    font-[600]
+                                    text-[14px]
+                                    text-[#374151]
+                                    border-b-[1px]
+                                    border-[#e5e7eb]
+                                    "
+                                >
+                                    Tipo de dato
+                                </th>
+                                <th
+                                    className="
+                                    py-[12px]
+                                    px-[16px]
+                                    text-center
+                                    font-[600]
+                                    text-[14px]
+                                    text-[#374151]
+                                    border-b-[1px]
+                                    border-[#e5e7eb]
+                                    "
+                                >
+                                    Códigos de referencias
+                                </th>
+                            </tr>
                         </thead>
                         <tbody>
-                        {validNutrients.map((nutrient, index) => (
-                            <tr key={index} className="border-b-[1px] border-[#e5e7eb] hover:bg-[#f9fafb]">
-                                <td className="py-[12px] px-[16px] font-[500] text-[14px] text-[#111827]">
-                                    {getNutrientNameById(nutrient.nutrientId, nameAndIdNutrients)}
-                                </td>
-                                <td className="py-[12px] px-[16px] text-center">
-                  <span
-                      className="inline-block py-[4px] px-[8px] bg-[#e5e7eb] text-[#374151] rounded-[16px] text-[12px] font-[500]"
-                  >
-                    {nutrient.average.toString()}
-                  </span>
-                                </td>
-                                <td className="py-[12px] px-[16px] text-center">
-                  <span
-                      className="inline-block py-[4px] px-[8px] bg-[#e5e7eb] text-[#374151] rounded-[16px] text-[12px] font-[500]"
-                  >
-                    {nutrient.deviation?.toString() || "N/A"}
-                  </span>
-                                </td>
-                                <td className="py-[12px] px-[16px] text-center">
-                  <span
-                      className="inline-block py-[4px] px-[8px] bg-[#e5e7eb] text-[#374151] rounded-[16px] text-[12px] font-[500]"
-                  >
-                    {nutrient.min?.toString() || "N/A"}
-                  </span>
-                                </td>
-                                <td className="py-[12px] px-[16px] text-center">
-                  <span
-                      className="inline-block py-[4px] px-[8px] bg-[#e5e7eb] text-[#374151] rounded-[16px] text-[12px] font-[500]"
-                  >
-                    {nutrient.max?.toString() || "N/A"}
-                  </span>
-                                </td>
-                                <td className="py-[12px] px-[16px] text-center">
-                  <span
-                      className="inline-block py-[4px] px-[8px] bg-[#e5e7eb] text-[#374151] rounded-[16px] text-[12px] font-[500]"
-                  >
-                    {nutrient.sampleSize?.toString() || "N/A"}
-                  </span>
-                                </td>
-                                <td className="py-[12px] px-[16px] text-center">
-                  <span
-                      className="inline-block py-[4px] px-[8px] bg-[#e5e7eb] text-[#374151] rounded-[16px] text-[12px] font-[500]"
-                  >
-                    {nutrient.dataType}
-                  </span>
-                                </td>
-                                <td className="py-[12px] px-[16px] text-center">
-                  <span
-                      className="inline-block py-[4px] px-[8px] bg-[#e5e7eb] text-[#374151] rounded-[16px] text-[12px] font-[500]"
-                  >
-                    {nutrient.referenceCodes}
-                  </span>
-                                </td>
-                            </tr>
-                        ))}
+                            {validNutrients.map((nutrient, index) => (
+                                <tr key={index} className="border-b-[1px] border-[#e5e7eb] hover:bg-[#f9fafb]">
+                                    <td className="py-[12px] px-[16px] font-[500] text-[14px] text-[#111827]">
+                                        {getNutrientNameById(nutrient.nutrientId, nameAndIdNutrients)}
+                                    </td>
+                                    <td className="py-[12px] px-[16px] text-center">
+                                        <span
+                                            className="
+                                            inline-block
+                                            py-[4px]
+                                            px-[8px]
+                                            bg-[#e5e7eb]
+                                            text-[#374151]
+                                            rounded-[16px]
+                                            text-[12px]
+                                            font-[500]
+                                            "
+                                        >
+                                            {nutrient.average.toString()}
+                                        </span>
+                                    </td>
+                                    <td className="py-[12px] px-[16px] text-center">
+                                        <span
+                                            className="
+                                            inline-block
+                                            py-[4px]
+                                            px-[8px]
+                                            bg-[#e5e7eb]
+                                            text-[#374151]
+                                            rounded-[16px]
+                                            text-[12px]
+                                            font-[500]
+                                            "
+                                        >
+                                            {nutrient.deviation?.toString() || "N/A"}
+                                        </span>
+                                    </td>
+                                    <td className="py-[12px] px-[16px] text-center">
+                                        <span
+                                            className="
+                                            inline-block
+                                            py-[4px]
+                                            px-[8px]
+                                            bg-[#e5e7eb]
+                                            text-[#374151]
+                                            rounded-[16px]
+                                            text-[12px]
+                                            font-[500]
+                                            "
+                                        >
+                                            {nutrient.min?.toString() || "N/A"}
+                                        </span>
+                                    </td>
+                                    <td className="py-[12px] px-[16px] text-center">
+                                        <span
+                                            className="
+                                            inline-block
+                                            py-[4px]
+                                            px-[8px]
+                                            bg-[#e5e7eb]
+                                            text-[#374151]
+                                            rounded-[16px]
+                                            text-[12px]
+                                            font-[500]
+                                            "
+                                        >
+                                            {nutrient.max?.toString() || "N/A"}
+                                        </span>
+                                    </td>
+                                    <td className="py-[12px] px-[16px] text-center">
+                                        <span
+                                            className="
+                                            inline-block
+                                            py-[4px]
+                                            px-[8px]
+                                            bg-[#e5e7eb]
+                                            text-[#374151]
+                                            rounded-[16px]
+                                            text-[12px]
+                                            font-[500]
+                                            "
+                                        >
+                                            {nutrient.sampleSize?.toString() || "N/A"}
+                                        </span>
+                                    </td>
+                                    <td className="py-[12px] px-[16px] text-center">
+                                        <span
+                                            className="
+                                            inline-block
+                                            py-[4px]
+                                            px-[8px]
+                                            bg-[#e5e7eb]
+                                            text-[#374151]
+                                            rounded-[16px]
+                                            text-[12px]
+                                            font-[500]
+                                            "
+                                        >
+                                            {nutrient.dataType}
+                                        </span>
+                                    </td>
+                                    <td className="py-[12px] px-[16px] text-center">
+                                        <span
+                                            className="
+                                            inline-block
+                                            py-[4px]
+                                            px-[8px]
+                                            bg-[#e5e7eb]
+                                            text-[#374151]
+                                            rounded-[16px]
+                                            text-[12px]
+                                            font-[500]
+                                            "
+                                        >
+                                            {nutrient.referenceCodes.join(", ")}
+                                        </span>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
@@ -336,7 +495,7 @@ export default function PreviewDataForm({
 
     const renderMainNutrientTables = (
         mainNutrients: NutrientMeasurementWithComponentsForm[]
-    ) => {
+    ): JSX.Element => {
         const nutrientsWithComponents = mainNutrients.filter(
             (nutrient) =>
                 nutrient.components && nutrient.components.some(hasValidData)
@@ -344,8 +503,8 @@ export default function PreviewDataForm({
 
         const nutrientsWithoutComponents = mainNutrients.filter(
             (nutrient) =>
-                (!nutrient.components || nutrient.components.length === 0) &&
-                hasValidData(nutrient)
+                (!nutrient.components || nutrient.components.length === 0)
+                && hasValidData(nutrient)
         );
 
         return (
@@ -367,148 +526,387 @@ export default function PreviewDataForm({
                                     (Total)
                                 </h6>
                                 <div
-                                    className="overflow-x-auto rounded-[8px] border-[1px] border-[#e5e7eb] shadow-[0_2px_4px_rgba(0,0,0,0.05)] mb-[16px]"
+                                    className="
+                                    overflow-x-auto
+                                    rounded-[8px]
+                                    border-[1px]
+                                    border-[#e5e7eb]
+                                    shadow-[0_2px_4px_rgba(0,0,0,0.05)]
+                                    mb-[16px]
+                                    "
                                 >
                                     <table className="w-full min-w-[800px] border-collapse">
                                         <thead>
-                                        <tr className="bg-[#f9fafb]">
-                                            <th className="py-[12px] px-[16px] text-left font-[600] text-[14px] text-[#374151] border-b-[1px] border-[#e5e7eb]">Nombre
-                                                                                                                                                                del
-                                                                                                                                                                componente
-                                            </th>
-                                            <th className="py-[12px] px-[16px] text-center font-[600] text-[14px] text-[#374151] border-b-[1px] border-[#e5e7eb]">Promedio</th>
-                                            <th className="py-[12px] px-[16px] text-center font-[600] text-[14px] text-[#374151] border-b-[1px] border-[#e5e7eb]">Desviación</th>
-                                            <th className="py-[12px] px-[16px] text-center font-[600] text-[14px] text-[#374151] border-b-[1px] border-[#e5e7eb]">Mínimo</th>
-                                            <th className="py-[12px] px-[16px] text-center font-[600] text-[14px] text-[#374151] border-b-[1px] border-[#e5e7eb]">Máximo</th>
-                                            <th className="py-[12px] px-[16px] text-center font-[600] text-[14px] text-[#374151] border-b-[1px] border-[#e5e7eb]">Tamaño
-                                                                                                                                                                  de
-                                                                                                                                                                  muestra
-                                            </th>
-                                            <th className="py-[12px] px-[16px] text-center font-[600] text-[14px] text-[#374151] border-b-[1px] border-[#e5e7eb]">Tipo
-                                                                                                                                                                  de
-                                                                                                                                                                  dato
-                                            </th>
-                                            <th className="py-[12px] px-[16px] text-center font-[600] text-[14px] text-[#374151] border-b-[1px] border-[#e5e7eb]">Códigos
-                                                                                                                                                                  de
-                                                                                                                                                                  referencias
-                                            </th>
-                                        </tr>
+                                            <tr className="bg-[#f9fafb]">
+                                                <th
+                                                    className="
+                                                    py-[12px]
+                                                    px-[16px]
+                                                    text-left
+                                                    font-[600]
+                                                    text-[14px]
+                                                    text-[#374151]
+                                                    border-b-[1px]
+                                                    border-[#e5e7eb]
+                                                    "
+                                                >
+                                                    Nombre del componente
+                                                </th>
+                                                <th
+                                                    className="
+                                                    py-[12px]
+                                                    px-[16px]
+                                                    text-center
+                                                    font-[600]
+                                                    text-[14px]
+                                                    text-[#374151]
+                                                    border-b-[1px]
+                                                    border-[#e5e7eb]
+                                                    "
+                                                >
+                                                    Promedio
+                                                </th>
+                                                <th
+                                                    className="
+                                                    py-[12px]
+                                                    px-[16px]
+                                                    text-center
+                                                    font-[600]
+                                                    text-[14px]
+                                                    text-[#374151]
+                                                    border-b-[1px]
+                                                    border-[#e5e7eb]
+                                                    "
+                                                >
+                                                    Desviación
+                                                </th>
+                                                <th
+                                                    className="
+                                                    py-[12px]
+                                                    px-[16px]
+                                                    text-center
+                                                    font-[600]
+                                                    text-[14px]
+                                                    text-[#374151]
+                                                    border-b-[1px]
+                                                    border-[#e5e7eb]
+                                                    "
+                                                >
+                                                    Mínimo
+                                                </th>
+                                                <th
+                                                    className="
+                                                    py-[12px]
+                                                    px-[16px]
+                                                    text-center
+                                                    font-[600]
+                                                    text-[14px]
+                                                    text-[#374151]
+                                                    border-b-[1px]
+                                                    border-[#e5e7eb]
+                                                    "
+                                                >
+                                                    Máximo
+                                                </th>
+                                                <th
+                                                    className="
+                                                    py-[12px]
+                                                    px-[16px]
+                                                    text-center
+                                                    font-[600]
+                                                    text-[14px]
+                                                    text-[#374151]
+                                                    border-b-[1px]
+                                                    border-[#e5e7eb]
+                                                    "
+                                                >
+                                                    Tamaño de muestra
+                                                </th>
+                                                <th
+                                                    className="
+                                                    py-[12px]
+                                                    px-[16px]
+                                                    text-center
+                                                    font-[600]
+                                                    text-[14px]
+                                                    text-[#374151]
+                                                    border-b-[1px]
+                                                    border-[#e5e7eb]
+                                                    "
+                                                >
+                                                    Tipo de dato
+                                                </th>
+                                                <th
+                                                    className="
+                                                    py-[12px]
+                                                    px-[16px]
+                                                    text-center
+                                                    font-[600]
+                                                    text-[14px]
+                                                    text-[#374151]
+                                                    border-b-[1px]
+                                                    border-[#e5e7eb]
+                                                    "
+                                                >
+                                                    Códigos de referencias
+                                                </th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                        {mainNutrient.components
-                                            ?.filter(hasValidData)
-                                            .map((component, compIndex) => (
-                                                <tr
-                                                    key={compIndex}
-                                                    className="border-b-[1px] border-[#e5e7eb] hover:bg-[#f9fafb]"
+                                            {mainNutrient.components
+                                                ?.filter(hasValidData)
+                                                .map((component, compIndex) => (
+                                                    <tr
+                                                        key={compIndex}
+                                                        className="border-b-[1px] border-[#e5e7eb] hover:bg-[#f9fafb]"
+                                                    >
+                                                        <td
+                                                            className="
+                                                            py-[12px]
+                                                            px-[16px]
+                                                            font-[500]
+                                                            text-[14px]
+                                                            text-[#111827]
+                                                            "
+                                                        >
+                                                            {getNutrientNameById(
+                                                                component.nutrientId,
+                                                                nameAndIdNutrients
+                                                            )}
+                                                        </td>
+                                                        <td className="py-[12px] px-[16px] text-center">
+                                                            <span
+                                                                className="
+                                                                inline-block
+                                                                py-[4px]
+                                                                px-[8px]
+                                                                bg-[#e5e7eb]
+                                                                text-[#374151]
+                                                                rounded-[16px]
+                                                                text-[12px]
+                                                                font-[500]
+                                                                "
+                                                            >
+                                                                {component.average?.toString() || "N/A"}
+                                                            </span>
+                                                        </td>
+                                                        <td className="py-[12px] px-[16px] text-center">
+                                                            <span
+                                                                className="
+                                                                inline-block
+                                                                py-[4px]
+                                                                px-[8px]
+                                                                bg-[#e5e7eb]
+                                                                text-[#374151]
+                                                                rounded-[16px]
+                                                                text-[12px]
+                                                                font-[500]
+                                                                "
+                                                            >
+                                                                {component.deviation?.toString() || "N/A"}
+                                                            </span>
+                                                        </td>
+                                                        <td className="py-[12px] px-[16px] text-center">
+                                                            <span
+                                                                className="
+                                                                inline-block
+                                                                py-[4px]
+                                                                px-[8px]
+                                                                bg-[#e5e7eb]
+                                                                text-[#374151]
+                                                                rounded-[16px]
+                                                                text-[12px]
+                                                                font-[500]
+                                                                "
+                                                            >
+                                                                {component.min?.toString() || "N/A"}
+                                                            </span>
+                                                        </td>
+                                                        <td className="py-[12px] px-[16px] text-center">
+                                                            <span
+                                                                className="
+                                                                inline-block
+                                                                py-[4px]
+                                                                px-[8px]
+                                                                bg-[#e5e7eb]
+                                                                text-[#374151]
+                                                                rounded-[16px]
+                                                                text-[12px]
+                                                                font-[500]
+                                                                "
+                                                            >
+                                                                {component.max?.toString() || "N/A"}
+                                                            </span>
+                                                        </td>
+                                                        <td className="py-[12px] px-[16px] text-center">
+                                                            <span
+                                                                className="
+                                                                inline-block
+                                                                py-[4px]
+                                                                px-[8px]
+                                                                bg-[#e5e7eb]
+                                                                text-[#374151]
+                                                                rounded-[16px]
+                                                                text-[12px]
+                                                                font-[500]
+                                                                "
+                                                            >
+                                                                {component.sampleSize?.toString() || "N/A"}
+                                                            </span>
+                                                        </td>
+                                                        <td className="py-[12px] px-[16px] text-center">
+                                                            <span
+                                                                className="
+                                                                inline-block
+                                                                py-[4px]
+                                                                px-[8px]
+                                                                bg-[#e5e7eb]
+                                                                text-[#374151]
+                                                                rounded-[16px]
+                                                                text-[12px]
+                                                                font-[500]
+                                                                "
+                                                            >
+                                                                {component.dataType}
+                                                            </span>
+                                                        </td>
+                                                        <td
+                                                            className="
+                                                            py-[12px]
+                                                            px-[16px]
+                                                            text-center
+                                                            text-[12px]
+                                                            text-[#6b7280]
+                                                            "
+                                                        >
+                                                            {component.referenceCodes.join(", ")}
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            <tr className="bg-[#f3f4f6]">
+                                                <td
+                                                    className="
+                                                    py-[12px]
+                                                    px-[16px]
+                                                    font-[600]
+                                                    text-[14px]
+                                                    text-[#111827]
+                                                    "
                                                 >
-                                                    <td className="py-[12px] px-[16px] font-[500] text-[14px] text-[#111827]">
-                                                        {getNutrientNameById(
-                                                            component.nutrientId,
-                                                            nameAndIdNutrients
-                                                        )}
-                                                    </td>
-                                                    <td className="py-[12px] px-[16px] text-center">
-                            <span
-                                className="inline-block py-[4px] px-[8px] bg-[#e5e7eb] text-[#374151] rounded-[16px] text-[12px] font-[500]"
-                            >
-                              {component.average?.toString() || "N/A"}
-                            </span>
-                                                    </td>
-                                                    <td className="py-[12px] px-[16px] text-center">
-                            <span
-                                className="inline-block py-[4px] px-[8px] bg-[#e5e7eb] text-[#374151] rounded-[16px] text-[12px] font-[500]"
-                            >
-                              {component.deviation?.toString() || "N/A"}
-                            </span>
-                                                    </td>
-                                                    <td className="py-[12px] px-[16px] text-center">
-                            <span
-                                className="inline-block py-[4px] px-[8px] bg-[#e5e7eb] text-[#374151] rounded-[16px] text-[12px] font-[500]"
-                            >
-                              {component.min?.toString() || "N/A"}
-                            </span>
-                                                    </td>
-                                                    <td className="py-[12px] px-[16px] text-center">
-                            <span
-                                className="inline-block py-[4px] px-[8px] bg-[#e5e7eb] text-[#374151] rounded-[16px] text-[12px] font-[500]"
-                            >
-                              {component.max?.toString() || "N/A"}
-                            </span>
-                                                    </td>
-                                                    <td className="py-[12px] px-[16px] text-center">
-                            <span
-                                className="inline-block py-[4px] px-[8px] bg-[#e5e7eb] text-[#374151] rounded-[16px] text-[12px] font-[500]"
-                            >
-                              {component.sampleSize?.toString() || "N/A"}
-                            </span>
-                                                    </td>
-                                                    <td className="py-[12px] px-[16px] text-center">
-                            <span
-                                className="inline-block py-[4px] px-[8px] bg-[#e5e7eb] text-[#374151] rounded-[16px] text-[12px] font-[500]"
-                            >
-                              {component.dataType}
-                            </span>
-                                                    </td>
-                                                    <td className="py-[12px] px-[16px] text-center text-[12px] text-[#6b7280]">
-                                                        {component.referenceCodes}
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        <tr className="bg-[#f3f4f6]">
-                                            <td className="py-[12px] px-[16px] font-[600] text-[14px] text-[#111827]">
-                                                {getNutrientNameById(
-                                                    mainNutrient.nutrientId,
-                                                    nameAndIdNutrients
-                                                )}{" "}
-                                                (Total)
-                                            </td>
-                                            <td className="py-[12px] px-[16px] text-center">
-                        <span
-                            className="inline-block py-[4px] px-[8px] bg-[#dbeafe] text-[#2563eb] rounded-[16px] text-[12px] font-[500]"
-                        >
-                          {mainNutrient.average?.toString() || "N/A"}
-                        </span>
-                                            </td>
-                                            <td className="py-[12px] px-[16px] text-center">
-                        <span
-                            className="inline-block py-[4px] px-[8px] bg-[#dbeafe] text-[#2563eb] rounded-[16px] text-[12px] font-[500]"
-                        >
-                          {mainNutrient.deviation?.toString() || "N/A"}
-                        </span>
-                                            </td>
-                                            <td className="py-[12px] px-[16px] text-center">
-                        <span
-                            className="inline-block py-[4px] px-[8px] bg-[#dbeafe] text-[#2563eb] rounded-[16px] text-[12px] font-[500]"
-                        >
-                          {mainNutrient.min?.toString() || "N/A"}
-                        </span>
-                                            </td>
-                                            <td className="py-[12px] px-[16px] text-center">
-                        <span
-                            className="inline-block py-[4px] px-[8px] bg-[#dbeafe] text-[#2563eb] rounded-[16px] text-[12px] font-[500]"
-                        >
-                          {mainNutrient.max?.toString() || "N/A"}
-                        </span>
-                                            </td>
-                                            <td className="py-[12px] px-[16px] text-center">
-                        <span
-                            className="inline-block py-[4px] px-[8px] bg-[#dbeafe] text-[#2563eb] rounded-[16px] text-[12px] font-[500]"
-                        >
-                          {mainNutrient.sampleSize?.toString() || "N/A"}
-                        </span>
-                                            </td>
-                                            <td className="py-[12px] px-[16px] text-center">
-                        <span
-                            className="inline-block py-[4px] px-[8px] bg-[#dbeafe] text-[#2563eb] rounded-[16px] text-[12px] font-[500]"
-                        >
-                          {mainNutrient.dataType}
-                        </span>
-                                            </td>
-                                            <td className="py-[12px] px-[16px] text-center text-[12px] text-[#6b7280]">
-                                                {mainNutrient.referenceCodes}
-                                            </td>
-                                        </tr>
+                                                    {getNutrientNameById(
+                                                        mainNutrient.nutrientId,
+                                                        nameAndIdNutrients
+                                                    )}{" "}
+                                                    (Total)
+                                                </td>
+                                                <td className="py-[12px] px-[16px] text-center">
+                                                    <span
+                                                        className="
+                                                        inline-block
+                                                        py-[4px]
+                                                        px-[8px]
+                                                        bg-[#dbeafe]
+                                                        text-[#2563eb]
+                                                        rounded-[16px]
+                                                        text-[12px]
+                                                        font-[500]
+                                                        "
+                                                    >
+                                                        {mainNutrient.average?.toString() || "N/A"}
+                                                    </span>
+                                                </td>
+                                                <td className="py-[12px] px-[16px] text-center">
+                                                    <span
+                                                        className="
+                                                        inline-block
+                                                        py-[4px]
+                                                        px-[8px]
+                                                        bg-[#dbeafe]
+                                                        text-[#2563eb]
+                                                        rounded-[16px]
+                                                        text-[12px]
+                                                        font-[500]
+                                                        "
+                                                    >
+                                                        {mainNutrient.deviation?.toString() || "N/A"}
+                                                    </span>
+                                                </td>
+                                                <td className="py-[12px] px-[16px] text-center">
+                                                    <span
+                                                        className="
+                                                        inline-block
+                                                        py-[4px]
+                                                        px-[8px]
+                                                        bg-[#dbeafe]
+                                                        text-[#2563eb]
+                                                        rounded-[16px]
+                                                        text-[12px]
+                                                        font-[500]
+                                                        "
+                                                    >
+                                                        {mainNutrient.min?.toString() || "N/A"}
+                                                    </span>
+                                                </td>
+                                                <td className="py-[12px] px-[16px] text-center">
+                                                    <span
+                                                        className="
+                                                        inline-block
+                                                        py-[4px]
+                                                        px-[8px]
+                                                        bg-[#dbeafe]
+                                                        text-[#2563eb]
+                                                        rounded-[16px]
+                                                        text-[12px]
+                                                        font-[500]
+                                                        "
+                                                    >
+                                                        {mainNutrient.max?.toString() || "N/A"}
+                                                    </span>
+                                                </td>
+                                                <td className="py-[12px] px-[16px] text-center">
+                                                    <span
+                                                        className="
+                                                        inline-block
+                                                        py-[4px]
+                                                        px-[8px]
+                                                        bg-[#dbeafe]
+                                                        text-[#2563eb]
+                                                        rounded-[16px]
+                                                        text-[12px]
+                                                        font-[500]
+                                                        "
+                                                    >
+                                                        {mainNutrient.sampleSize?.toString() || "N/A"}
+                                                    </span>
+                                                </td>
+                                                <td className="py-[12px] px-[16px] text-center">
+                                                    <span
+                                                        className="
+                                                        inline-block
+                                                        py-[4px]
+                                                        px-[8px]
+                                                        bg-[#dbeafe]
+                                                        text-[#2563eb]
+                                                        rounded-[16px]
+                                                        text-[12px]
+                                                        font-[500]
+                                                        "
+                                                    >
+                                                        {mainNutrient.dataType}
+                                                    </span>
+                                                </td>
+                                                <td
+                                                    className="
+                                                    py-[12px]
+                                                    px-[16px]
+                                                    text-center
+                                                    text-[12px]
+                                                    text-[#6b7280]
+                                                    "
+                                                >
+                                                    {mainNutrient.referenceCodes.join(", ")}
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -524,95 +922,264 @@ export default function PreviewDataForm({
                             <h5 className="text-[18px] font-[600] m-[0]">Nutrientes sin componentes</h5>
                         </div>
                         <div
-                            className="overflow-x-auto rounded-[8px] border-[1px] border-[#e5e7eb] shadow-[0_2px_4px_rgba(0,0,0,0.05)] mb-[24px]"
+                            className="
+                            overflow-x-auto
+                            rounded-[8px]
+                            border-[1px]
+                            border-[#e5e7eb]
+                            shadow-[0_2px_4px_rgba(0,0,0,0.05)]
+                            mb-[24px]
+                            "
                         >
                             <table className="w-full min-w-[800px] border-collapse">
                                 <thead>
-                                <tr className="bg-[#f9fafb]">
-                                    <th className="py-[12px] px-[16px] text-left font-[600] text-[14px] text-[#374151] border-b-[1px] border-[#e5e7eb]">Nombre
-                                                                                                                                                        del
-                                                                                                                                                        nutriente
-                                    </th>
-                                    <th className="py-[12px] px-[16px] text-center font-[600] text-[14px] text-[#374151] border-b-[1px] border-[#e5e7eb]">Promedio</th>
-                                    <th className="py-[12px] px-[16px] text-center font-[600] text-[14px] text-[#374151] border-b-[1px] border-[#e5e7eb]">Desviación</th>
-                                    <th className="py-[12px] px-[16px] text-center font-[600] text-[14px] text-[#374151] border-b-[1px] border-[#e5e7eb]">Mínimo</th>
-                                    <th className="py-[12px] px-[16px] text-center font-[600] text-[14px] text-[#374151] border-b-[1px] border-[#e5e7eb]">Máximo</th>
-                                    <th className="py-[12px] px-[16px] text-center font-[600] text-[14px] text-[#374151] border-b-[1px] border-[#e5e7eb]">Tamaño
-                                                                                                                                                          de
-                                                                                                                                                          muestra
-                                    </th>
-                                    <th className="py-[12px] px-[16px] text-center font-[600] text-[14px] text-[#374151] border-b-[1px] border-[#e5e7eb]">Tipo
-                                                                                                                                                          de
-                                                                                                                                                          dato
-                                    </th>
-                                    <th className="py-[12px] px-[16px] text-center font-[600] text-[14px] text-[#374151] border-b-[1px] border-[#e5e7eb]">Códigos
-                                                                                                                                                          de
-                                                                                                                                                          referencias
-                                    </th>
-                                </tr>
+                                    <tr className="bg-[#f9fafb]">
+                                        <th
+                                            className="
+                                            py-[12px]
+                                            px-[16px]
+                                            text-left
+                                            font-[600]
+                                            text-[14px]
+                                            text-[#374151]
+                                            border-b-[1px]
+                                            border-[#e5e7eb]
+                                            "
+                                        >
+                                            Nombre del nutriente
+                                        </th>
+                                        <th
+                                            className="
+                                            py-[12px]
+                                            px-[16px]
+                                            text-center
+                                            font-[600]
+                                            text-[14px]
+                                            text-[#374151]
+                                            border-b-[1px]
+                                            border-[#e5e7eb]
+                                            "
+                                        >
+                                            Promedio</th>
+                                        <th
+                                            className="
+                                            py-[12px]
+                                            px-[16px]
+                                            text-center
+                                            font-[600]
+                                            text-[14px]
+                                            text-[#374151]
+                                            border-b-[1px]
+                                            border-[#e5e7eb]
+                                            "
+                                        >
+                                            Desviación</th>
+                                        <th
+                                            className="
+                                            py-[12px]
+                                            px-[16px]
+                                            text-center
+                                            font-[600]
+                                            text-[14px]
+                                            text-[#374151]
+                                            border-b-[1px]
+                                            border-[#e5e7eb]
+                                            "
+                                        >
+                                            Mínimo</th>
+                                        <th
+                                            className="
+                                            py-[12px]
+                                            px-[16px]
+                                            text-center
+                                            font-[600]
+                                            text-[14px]
+                                            text-[#374151]
+                                            border-b-[1px]
+                                            border-[#e5e7eb]
+                                            "
+                                        >
+                                            Máximo</th>
+                                        <th
+                                            className="
+                                            py-[12px]
+                                            px-[16px]
+                                            text-center
+                                            font-[600]
+                                            text-[14px]
+                                            text-[#374151]
+                                            border-b-[1px]
+                                            border-[#e5e7eb]
+                                            "
+                                        >
+                                            Tamaño de muestra
+                                        </th>
+                                        <th
+                                            className="
+                                            py-[12px]
+                                            px-[16px]
+                                            text-center
+                                            font-[600]
+                                            text-[14px]
+                                            text-[#374151]
+                                            border-b-[1px]
+                                            border-[#e5e7eb]
+                                            "
+                                        >
+                                            Tipo de dato
+                                        </th>
+                                        <th
+                                            className="
+                                            py-[12px]
+                                            px-[16px]
+                                            text-center
+                                            font-[600]
+                                            text-[14px]
+                                            text-[#374151]
+                                            border-b-[1px]
+                                            border-[#e5e7eb]
+                                            "
+                                        >
+                                            Códigos de referencias
+                                        </th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                {nutrientsWithoutComponents
-                                    ?.filter(hasValidData)
-                                    .map((nutrient, index) => (
-                                        <tr key={index} className="border-b-[1px] border-[#e5e7eb] hover:bg-[#f9fafb]">
-                                            <td className="py-[12px] px-[16px] font-[500] text-[14px] text-[#111827]">
-                                                {getNutrientNameById(
-                                                    nutrient.nutrientId,
-                                                    nameAndIdNutrients
-                                                )}
-                                            </td>
-                                            <td className="py-[12px] px-[16px] text-center">
-                        <span
-                            className="inline-block py-[4px] px-[8px] bg-[#e5e7eb] text-[#374151] rounded-[16px] text-[12px] font-[500]"
-                        >
-                          {nutrient.average.toString()}
-                        </span>
-                                            </td>
-                                            <td className="py-[12px] px-[16px] text-center">
-                        <span
-                            className="inline-block py-[4px] px-[8px] bg-[#e5e7eb] text-[#374151] rounded-[16px] text-[12px] font-[500]"
-                        >
-                          {nutrient.deviation?.toString() || "N/A"}
-                        </span>
-                                            </td>
-                                            <td className="py-[12px] px-[16px] text-center">
-                        <span
-                            className="inline-block py-[4px] px-[8px] bg-[#e5e7eb] text-[#374151] rounded-[16px] text-[12px] font-[500]"
-                        >
-                          {nutrient.min?.toString() || "N/A"}
-                        </span>
-                                            </td>
-                                            <td className="py-[12px] px-[16px] text-center">
-                        <span
-                            className="inline-block py-[4px] px-[8px] bg-[#e5e7eb] text-[#374151] rounded-[16px] text-[12px] font-[500]"
-                        >
-                          {nutrient.max?.toString() || "N/A"}
-                        </span>
-                                            </td>
-                                            <td className="py-[12px] px-[16px] text-center">
-                        <span
-                            className="inline-block py-[4px] px-[8px] bg-[#e5e7eb] text-[#374151] rounded-[16px] text-[12px] font-[500]"
-                        >
-                          {nutrient.sampleSize?.toString() || "N/A"}
-                        </span>
-                                            </td>
-                                            <td className="py-[12px] px-[16px] text-center">
-                        <span
-                            className="inline-block py-[4px] px-[8px] bg-[#e5e7eb] text-[#374151] rounded-[16px] text-[12px] font-[500]"
-                        >
-                          {nutrient.dataType}
-                        </span>
-                                            </td>
-                                            <td className="py-[12px] px-[16px] text-center">
-                        <span
-                            className="inline-block py-[4px] px-[8px] bg-[#e5e7eb] text-[#374151] rounded-[16px] text-[12px] font-[500]"
-                        >
-                          {nutrient.referenceCodes}
-                        </span>
-                                            </td>
-                                        </tr>
-                                    ))}
+                                    {nutrientsWithoutComponents
+                                        ?.filter(hasValidData)
+                                        .map((nutrient, index) => (
+                                            <tr
+                                                key={index}
+                                                className="border-b-[1px] border-[#e5e7eb] hover:bg-[#f9fafb]"
+                                            >
+                                                <td
+                                                    className="
+                                                    py-[12px]
+                                                    px-[16px]
+                                                    font-[500]
+                                                    text-[14px]
+                                                    text-[#111827]
+                                                    "
+                                                >
+                                                    {getNutrientNameById(
+                                                        nutrient.nutrientId,
+                                                        nameAndIdNutrients
+                                                    )}
+                                                </td>
+                                                <td className="py-[12px] px-[16px] text-center">
+                                                    <span
+                                                        className="
+                                                        inline-block
+                                                        py-[4px]
+                                                        px-[8px]
+                                                        bg-[#e5e7eb]
+                                                        text-[#374151]
+                                                        rounded-[16px]
+                                                        text-[12px]
+                                                        font-[500]
+                                                        "
+                                                    >
+                                                        {nutrient.average.toString()}
+                                                    </span>
+                                                </td>
+                                                <td className="py-[12px] px-[16px] text-center">
+                                                    <span
+                                                        className="
+                                                        inline-block
+                                                        py-[4px]
+                                                        px-[8px]
+                                                        bg-[#e5e7eb]
+                                                        text-[#374151]
+                                                        rounded-[16px]
+                                                        text-[12px]
+                                                        font-[500]
+                                                        "
+                                                    >
+                                                        {nutrient.deviation?.toString() || "N/A"}
+                                                    </span>
+                                                </td>
+                                                <td className="py-[12px] px-[16px] text-center">
+                                                    <span
+                                                        className="
+                                                        inline-block
+                                                        py-[4px]
+                                                        px-[8px]
+                                                        bg-[#e5e7eb]
+                                                        text-[#374151]
+                                                        rounded-[16px]
+                                                        text-[12px]
+                                                        font-[500]
+                                                        "
+                                                    >
+                                                        {nutrient.min?.toString() || "N/A"}
+                                                    </span>
+                                                </td>
+                                                <td className="py-[12px] px-[16px] text-center">
+                                                    <span
+                                                        className="
+                                                        inline-block
+                                                        py-[4px]
+                                                        px-[8px]
+                                                        bg-[#e5e7eb]
+                                                        text-[#374151]
+                                                        rounded-[16px]
+                                                        text-[12px]
+                                                        font-[500]
+                                                        "
+                                                    >
+                                                        {nutrient.max?.toString() || "N/A"}
+                                                    </span>
+                                                </td>
+                                                <td className="py-[12px] px-[16px] text-center">
+                                                    <span
+                                                        className="
+                                                        inline-block
+                                                        py-[4px]
+                                                        px-[8px]
+                                                        bg-[#e5e7eb]
+                                                        text-[#374151]
+                                                        rounded-[16px]
+                                                        text-[12px]
+                                                        font-[500]
+                                                        "
+                                                    >
+                                                        {nutrient.sampleSize?.toString() || "N/A"}
+                                                    </span>
+                                                </td>
+                                                <td className="py-[12px] px-[16px] text-center">
+                                                    <span
+                                                        className="
+                                                        inline-block
+                                                        py-[4px]
+                                                        px-[8px]
+                                                        bg-[#e5e7eb]
+                                                        text-[#374151]
+                                                        rounded-[16px]
+                                                        text-[12px]
+                                                        font-[500]
+                                                        "
+                                                    >
+                                                        {nutrient.dataType}
+                                                    </span>
+                                                </td>
+                                                <td className="py-[12px] px-[16px] text-center">
+                                                    <span
+                                                        className="
+                                                        inline-block
+                                                        py-[4px]
+                                                        px-[8px]
+                                                        bg-[#e5e7eb]
+                                                        text-[#374151]
+                                                        rounded-[16px]
+                                                        text-[12px]
+                                                        font-[500]
+                                                        "
+                                                    >
+                                                        {nutrient.referenceCodes.join(", ")}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        ))}
                                 </tbody>
                             </table>
                         </div>
@@ -625,7 +1192,14 @@ export default function PreviewDataForm({
     return (
         <div className="p-[24px] max-w-[1200px] mx-auto">
             <div
-                className="mb-[32px] rounded-[8px] border-[1px] border-[#e5e7eb] shadow-[0_2px_8px_rgba(0,0,0,0.08)] overflow-hidden"
+                className="
+                mb-[32px]
+                rounded-[8px]
+                border-[1px]
+                border-[#e5e7eb]
+                shadow-[0_2px_8px_rgba(0,0,0,0.08)]
+                overflow-hidden
+                "
             >
                 <div className="flex items-center bg-[#f9fafb] p-[16px] border-b-[1px] border-[#e5e7eb]">
                     <div className="text-[#3b82f6] mr-[12px]">
@@ -636,11 +1210,15 @@ export default function PreviewDataForm({
                 <div className="p-[24px]">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[16px] mb-[24px]">
                         <div className="col-span-1">
-                            <span className="font-[600] text-[14px] text-[#374151]">{t("PreviewDataFrom.Code")}</span>
+                            <span className="font-[600] text-[14px] text-[#374151]">
+                                {t("PreviewDataFrom.Code")}
+                            </span>
                         </div>
                         <div className="col-span-1 text-[14px] text-[#4b5563]">{data.code}</div>
                         <div className="col-span-1">
-                            <span className="font-[600] text-[14px] text-[#374151]">{t("PreviewDataFrom.Scientific")}</span>
+                            <span className="font-[600] text-[14px] text-[#374151]">
+                                {t("PreviewDataFrom.Scientific")}
+                            </span>
                         </div>
                         <div className="col-span-1 text-[14px] text-[#4b5563]">
                             {searchScientificNameById(data.scientificNameId, scientificNames)}
@@ -681,7 +1259,13 @@ export default function PreviewDataForm({
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-[24px]">
                         <div className="mb-[16px]">
                             <div
-                                className="rounded-[8px] border-[1px] border-[#e5e7eb] overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.05)]"
+                                className="
+                                rounded-[8px]
+                                border-[1px]
+                                border-[#e5e7eb]
+                                overflow-hidden
+                                shadow-[0_1px_3px_rgba(0,0,0,0.05)]
+                                "
                             >
                                 <div className="bg-[#f9fafb] p-[12px] border-b-[1px] border-[#e5e7eb]">
                                     <h5 className="text-[16px] font-[600] m-[0]">Ingredientes</h5>
@@ -689,21 +1273,31 @@ export default function PreviewDataForm({
                                 <div className="p-[16px]">
                                     <div className="grid grid-cols-2 gap-[12px] mb-[12px]">
                                         <div className="col-span-1">
-                                            <span className="font-[600] text-[14px] text-[#374151]">Nombre en español</span>
+                                            <span className="font-[600] text-[14px] text-[#374151]">Nombre en español
+                                            </span>
                                         </div>
-                                        <div className="col-span-1 text-[14px] text-[#4b5563]">{data.ingredients.es || "N/A"}</div>
+                                        <div className="col-span-1 text-[14px] text-[#4b5563]">
+                                            {data.ingredients.es || "N/A"}
+                                        </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-[12px] mb-[12px]">
                                         <div className="col-span-1">
-                                            <span className="font-[600] text-[14px] text-[#374151]">Nombre en inglés</span>
+                                            <span className="font-[600] text-[14px] text-[#374151]">Nombre en inglés
+                                            </span>
                                         </div>
-                                        <div className="col-span-1 text-[14px] text-[#4b5563]">{data.ingredients.en || "N/A"}</div>
+                                        <div className="col-span-1 text-[14px] text-[#4b5563]">
+                                            {data.ingredients.en || "N/A"}
+                                        </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-[12px]">
                                         <div className="col-span-1">
-                                            <span className="font-[600] text-[14px] text-[#374151]">Nombre en Portugués</span>
+                                            <span className="font-[600] text-[14px] text-[#374151]">Nombre en
+                                                                                                    Portugués
+                                            </span>
                                         </div>
-                                        <div className="col-span-1 text-[14px] text-[#4b5563]">{data.ingredients.pt || "N/A"}</div>
+                                        <div className="col-span-1 text-[14px] text-[#4b5563]">
+                                            {data.ingredients.pt || "N/A"}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -711,7 +1305,13 @@ export default function PreviewDataForm({
 
                         <div className="mb-[16px]">
                             <div
-                                className="rounded-[8px] border-[1px] border-[#e5e7eb] overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.05)]"
+                                className="
+                                rounded-[8px]
+                                border-[1px]
+                                border-[#e5e7eb]
+                                overflow-hidden
+                                shadow-[0_1px_3px_rgba(0,0,0,0.05)]
+                                "
                             >
                                 <div className="bg-[#f9fafb] p-[12px] border-b-[1px] border-[#e5e7eb]">
                                     <h5 className="text-[16px] font-[600] m-[0]">Nombres Comunes</h5>
@@ -719,27 +1319,36 @@ export default function PreviewDataForm({
                                 <div className="p-[16px]">
                                     <div className="grid grid-cols-2 gap-[12px] mb-[12px]">
                                         <div className="col-span-1">
-                        <span
-                            className="font-[600] text-[14px] text-[#374151]"
-                        >{t("PreviewDataFrom.Common")} (ES)</span>
+                                            <span
+                                                className="font-[600] text-[14px] text-[#374151]"
+                                            >{t("PreviewDataFrom.Common")} (ES)
+                                            </span>
                                         </div>
-                                        <div className="col-span-1 text-[14px] text-[#4b5563]">{data.commonName.es || "N/A"}</div>
+                                        <div className="col-span-1 text-[14px] text-[#4b5563]">
+                                            {data.commonName.es || "N/A"}
+                                        </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-[12px] mb-[12px]">
                                         <div className="col-span-1">
-                        <span
-                            className="font-[600] text-[14px] text-[#374151]"
-                        >{t("PreviewDataFrom.Common")} (EN)</span>
+                                            <span
+                                                className="font-[600] text-[14px] text-[#374151]"
+                                            >{t("PreviewDataFrom.Common")} (EN)
+                                            </span>
                                         </div>
-                                        <div className="col-span-1 text-[14px] text-[#4b5563]">{data.commonName.en || "N/A"}</div>
+                                        <div className="col-span-1 text-[14px] text-[#4b5563]">
+                                            {data.commonName.en || "N/A"}
+                                        </div>
                                     </div>
                                     <div className="grid grid-cols-2 gap-[12px]">
                                         <div className="col-span-1">
-                        <span
-                            className="font-[600] text-[14px] text-[#374151]"
-                        >{t("PreviewDataFrom.Common")} (PT)</span>
+                                            <span
+                                                className="font-[600] text-[14px] text-[#374151]"
+                                            >{t("PreviewDataFrom.Common")} (PT)
+                                            </span>
                                         </div>
-                                        <div className="col-span-1 text-[14px] text-[#4b5563]">{data.commonName.pt || "N/A"}</div>
+                                        <div className="col-span-1 text-[14px] text-[#4b5563]">
+                                            {data.commonName.pt || "N/A"}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -749,7 +1358,14 @@ export default function PreviewDataForm({
             </div>
 
             <div
-                className="mb-[32px] rounded-[8px] border-[1px] border-[#e5e7eb] shadow-[0_2px_8px_rgba(0,0,0,0.08)] overflow-hidden"
+                className="
+                mb-[32px]
+                rounded-[8px]
+                border-[1px]
+                border-[#e5e7eb]
+                shadow-[0_2px_8px_rgba(0,0,0,0.08)]
+                overflow-hidden
+                "
             >
                 <div className="p-[24px]">
                     <h4 className="flex items-center mb-[24px] text-[20px] font-[600]">
@@ -778,7 +1394,14 @@ export default function PreviewDataForm({
 
             {origins && origins.length > 0 && (
                 <div
-                    className="mb-[32px] rounded-[8px] border-[1px] border-[#e5e7eb] shadow-[0_2px_8px_rgba(0,0,0,0.08)] overflow-hidden"
+                    className="
+                    mb-[32px]
+                    rounded-[8px]
+                    border-[1px]
+                    border-[#e5e7eb]
+                    shadow-[0_2px_8px_rgba(0,0,0,0.08)]
+                    overflow-hidden
+                    "
                 >
                     <div className="flex items-center bg-[#f9fafb] p-[16px] border-b-[1px] border-[#e5e7eb]">
                         <div className="text-[#0ea5e9] mr-[12px]">
@@ -790,18 +1413,49 @@ export default function PreviewDataForm({
                         <div className="overflow-x-auto rounded-[8px] border-[1px] border-[#e5e7eb]">
                             <table className="w-full border-collapse">
                                 <thead>
-                                <tr className="bg-[#f9fafb]">
-                                    <th className="py-[12px] px-[16px] text-left font-[600] text-[14px] text-[#374151] border-b-[1px] border-[#e5e7eb] w-[10%]">Número</th>
-                                    <th className="py-[12px] px-[16px] text-left font-[600] text-[14px] text-[#374151] border-b-[1px] border-[#e5e7eb] w-[90%]">Descripción</th>
-                                </tr>
+                                    <tr className="bg-[#f9fafb]">
+                                        <th
+                                            className="
+                                            py-[12px]
+                                            px-[16px]
+                                            text-left
+                                            font-[600]
+                                            text-[14px]
+                                            text-[#374151]
+                                            border-b-[1px]
+                                            border-[#e5e7eb]
+                                            w-[10%]
+                                            "
+                                        >
+                                            Número
+                                        </th>
+                                        <th
+                                            className="
+                                            py-[12px]
+                                            px-[16px]
+                                            text-left font-[600]
+                                            text-[14px]
+                                            text-[#374151]
+                                            border-b-[1px]
+                                            border-[#e5e7eb]
+                                            w-[90%]
+                                            "
+                                        >
+                                            Descripción
+                                        </th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                {origins.map((origin, index) => (
-                                    <tr key={index} className="border-b-[1px] border-[#e5e7eb] hover:bg-[#f9fafb]">
-                                        <td className="py-[12px] px-[16px] text-[14px] text-[#4b5563]">{index + 1}</td>
-                                        <td className="py-[12px] px-[16px] text-[14px] text-[#4b5563]">{origin}</td>
-                                    </tr>
-                                ))}
+                                    {origins.map((origin, index) => (
+                                        <tr key={index} className="border-b-[1px] border-[#e5e7eb] hover:bg-[#f9fafb]">
+                                            <td className="py-[12px] px-[16px] text-[14px] text-[#4b5563]">
+                                                {index + 1}
+                                            </td>
+                                            <td className="py-[12px] px-[16px] text-[14px] text-[#4b5563]">
+                                                {origin}
+                                            </td>
+                                        </tr>
+                                    ))}
                                 </tbody>
                             </table>
                         </div>
@@ -811,7 +1465,14 @@ export default function PreviewDataForm({
 
             {langualCodesInfo && data.langualCodes.length > 0 && (
                 <div
-                    className="mb-[32px] rounded-[8px] border-[1px] border-[#e5e7eb] shadow-[0_2px_8px_rgba(0,0,0,0.08)] overflow-hidden"
+                    className="
+                    mb-[32px]
+                    rounded-[8px]
+                    border-[1px]
+                    border-[#e5e7eb]
+                    shadow-[0_2px_8px_rgba(0,0,0,0.08)]
+                    overflow-hidden
+                    "
                 >
                     <div className="flex items-center bg-[#f9fafb] p-[16px] border-b-[1px] border-[#e5e7eb]">
                         <div className="text-[#0ea5e9] mr-[12px]">
@@ -832,21 +1493,53 @@ export default function PreviewDataForm({
                                 <div className="overflow-x-auto rounded-[8px] border-[1px] border-[#e5e7eb]">
                                     <table className="w-full border-collapse">
                                         <thead>
-                                        <tr className="bg-[#f9fafb]">
-                                            <th className="py-[12px] px-[16px] text-left font-[600] text-[14px] text-[#374151] border-b-[1px] border-[#e5e7eb] w-[10%]">Código</th>
-                                            <th className="py-[12px] px-[16px] text-left font-[600] text-[14px] text-[#374151] border-b-[1px] border-[#e5e7eb] w-[90%]">Descriptor</th>
-                                        </tr>
+                                            <tr className="bg-[#f9fafb]">
+                                                <th
+                                                    className="
+                                                    py-[12px]
+                                                    px-[16px]
+                                                    text-left
+                                                    font-[600]
+                                                    text-[14px]
+                                                    text-[#374151]
+                                                    border-b-[1px]
+                                                    border-[#e5e7eb]
+                                                    w-[10%]
+                                                    "
+                                                >
+                                                    Código
+                                                </th>
+                                                <th
+                                                    className="
+                                                    py-[12px]
+                                                    px-[16px]
+                                                    text-left
+                                                    font-[600]
+                                                    text-[14px]
+                                                    text-[#374151]
+                                                    border-b-[1px]
+                                                    border-[#e5e7eb]
+                                                    w-[90%]
+                                                    "
+                                                >
+                                                    Descriptor
+                                                </th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                        {parentGroup.childrenSelecteds.map((child) => (
-                                            <tr
-                                                key={child.id}
-                                                className="border-b-[1px] border-[#e5e7eb] hover:bg-[#f9fafb]"
-                                            >
-                                                <td className="py-[12px] px-[16px] text-[14px] text-[#4b5563]">{child.code}</td>
-                                                <td className="py-[12px] px-[16px] text-[14px] text-[#4b5563]">{child.descriptor}</td>
-                                            </tr>
-                                        ))}
+                                            {parentGroup.childrenSelecteds.map((child) => (
+                                                <tr
+                                                    key={child.id}
+                                                    className="border-b-[1px] border-[#e5e7eb] hover:bg-[#f9fafb]"
+                                                >
+                                                    <td className="py-[12px] px-[16px] text-[14px] text-[#4b5563]">
+                                                        {child.code}
+                                                    </td>
+                                                    <td className="py-[12px] px-[16px] text-[14px] text-[#4b5563]">
+                                                        {child.descriptor}
+                                                    </td>
+                                                </tr>
+                                            ))}
                                         </tbody>
                                     </table>
                                 </div>
@@ -858,13 +1551,25 @@ export default function PreviewDataForm({
 
             <button
                 onClick={handleSubmit}
-                className="py-[12px] px-[24px] bg-[#10b981] hover:bg-[#059669] text-white font-[600] text-[16px] rounded-[8px] shadow-[0_2px_4px_rgba(0,0,0,0.1)] transition-colors duration-[200ms] border-[0px] cursor-pointer"
+                className="
+                py-[12px]
+                px-[24px]
+                bg-[#10b981]
+                hover:bg-[#059669]
+                text-white font-[600]
+                text-[16px]
+                rounded-[8px]
+                shadow-[0_2px_4px_rgba(0,0,0,0.1)]
+                transition-colors
+                duration-[200ms]
+                border-[0px]
+                cursor-pointer
+                "
             >
                 Validar y enviar
             </button>
 
-            <div className="text-[12px] text-[#6b7280] mt-[16px] text-right">
-            </div>
+            <div className="text-[12px] text-[#6b7280] mt-[16px] text-right"/>
         </div>
     );
 }

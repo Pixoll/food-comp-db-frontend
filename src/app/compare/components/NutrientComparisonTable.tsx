@@ -1,5 +1,5 @@
-import { FoodWithOnlyMeasurements } from "@/api";
-import { NutrientMeasurement, NutrientMeasurementWithComponents, NutrientsValue } from "@/types/SingleFoodResult";
+import type { FoodWithOnlyMeasurements } from "@/api";
+import type { NutrientMeasurement, NutrientMeasurementWithComponents, NutrientsValue } from "@/types/SingleFoodResult";
 import { ChevronDown, ChevronRight, X } from "lucide-react";
 import React, { useState } from "react";
 
@@ -8,32 +8,35 @@ type NutrientComparisonTableProps = {
     onRemoveFood: (codes: string[]) => void;
 };
 
-export default function NutrientComparisonTable({ foodsData, onRemoveFood }: NutrientComparisonTableProps) {
+export default function NutrientComparisonTable({
+    foodsData,
+    onRemoveFood,
+}: NutrientComparisonTableProps): JSX.Element {
     const [expandedSections, setExpandedSections] = useState({
         energy: true,
         macronutrients: true,
         micronutrients: true,
         vitamins: true,
-        minerals: true
+        minerals: true,
     });
 
     const [expandedNutrients, setExpandedNutrients] = useState<Record<string, boolean>>({});
 
-    const toggleSection = (section: keyof typeof expandedSections) => {
+    const toggleSection = (section: keyof typeof expandedSections): void => {
         setExpandedSections(prev => ({
             ...prev,
-            [section]: !prev[section]
+            [section]: !prev[section],
         }));
     };
 
-    const toggleNutrient = (nutrientId: number) => {
+    const toggleNutrient = (nutrientId: number): void => {
         setExpandedNutrients(prev => ({
             ...prev,
-            [nutrientId]: !prev[nutrientId]
+            [nutrientId]: !prev[nutrientId],
         }));
     };
 
-    const getFoodName = (commonName: { es: string } | string) => {
+    const getFoodName = (commonName: { es: string } | string): string => {
         if (typeof commonName === "object" && commonName.es) {
             return commonName.es;
         }
@@ -42,9 +45,8 @@ export default function NutrientComparisonTable({ foodsData, onRemoveFood }: Nut
 
     const renderNutrientRow = (
         nutrient: NutrientMeasurement,
-        indentLevel: number = 0,
-        isComponent: boolean = false
-    ) => {
+        indentLevel: number = 0
+    ): JSX.Element => {
         const paddingClasses = ["pl-[4px]", "pl-[36px]"];
         const paddingClass = indentLevel < paddingClasses.length ? paddingClasses[indentLevel] : paddingClasses[1];
 
@@ -87,11 +89,9 @@ export default function NutrientComparisonTable({ foodsData, onRemoveFood }: Nut
             }
 
             for (const macro of nutrientMeasurements.macronutrients) {
-                if (macro.components) {
-                    const component = macro.components.find(c => c.nutrientId === nutrientId);
-                    if (component) {
-                        return component.average?.toString() || "-";
-                    }
+                const component = macro.components.find(c => c.nutrientId === nutrientId);
+                if (component) {
+                    return component.average?.toString() || "-";
                 }
             }
         }
@@ -115,7 +115,10 @@ export default function NutrientComparisonTable({ foodsData, onRemoveFood }: Nut
         return "-";
     };
 
-    const renderExpandableNutrient = (nutrient: NutrientMeasurementWithComponents, indentLevel: number = 0) => {
+    const renderExpandableNutrient = (
+        nutrient: NutrientMeasurementWithComponents,
+        indentLevel: number = 0
+    ): JSX.Element => {
         const isExpanded = expandedNutrients[nutrient.nutrientId] || false;
         const hasComponents = nutrient.components && nutrient.components.length > 0;
 
@@ -130,16 +133,16 @@ export default function NutrientComparisonTable({ foodsData, onRemoveFood }: Nut
                         onClick={() => hasComponents && toggleNutrient(nutrient.nutrientId)}
                     >
                         {indentLevel >= 1 && (
-                            <div className="absolute left-[20px] top-[0px] bottom-[0px] w-[4px] bg-[#047857]"></div>
+                            <div className="absolute left-[20px] top-[0px] bottom-[0px] w-[4px] bg-[#047857]"/>
                         )}
                         <span className="relative">
-              {hasComponents && (
-                  isExpanded ?
-                      <ChevronDown size={16} className="inline mr-[8px]"/> :
-                      <ChevronRight size={16} className="inline mr-[8px]"/>
-              )}
+                            {hasComponents && (
+                                isExpanded
+                                    ? <ChevronDown size={16} className="inline mr-[8px]"/>
+                                    : <ChevronRight size={16} className="inline mr-[8px]"/>
+                            )}
                             {nutrient.name}
-            </span>
+                        </span>
                     </td>
                     <td className="text-center align-middle bg-[white]">{nutrient.measurementUnit}</td>
 
@@ -154,7 +157,7 @@ export default function NutrientComparisonTable({ foodsData, onRemoveFood }: Nut
                 </tr>
 
                 {isExpanded && hasComponents && nutrient.components.map(comp =>
-                    renderNutrientRow(comp, indentLevel + 1, true)
+                    renderNutrientRow(comp, indentLevel + 1)
                 )}
             </React.Fragment>
         );
@@ -164,133 +167,237 @@ export default function NutrientComparisonTable({ foodsData, onRemoveFood }: Nut
         <div className="m-[12px] w-full overflow-x-auto my-[20px]">
             <table className="w-full min-w-[600px] border-collapse rounded-[8px] overflow-hidden">
                 <thead>
-                <tr>
-                    <th className="sticky top-0 bg-[#f7fef7] z-10 align-middle py-[12px] pl-[36px] text-left min-w-[200px] font-[600] text-[#064e3b] border-b-[2px] border-[#047857]">
-                        Nutrientes
-                    </th>
-                    <th className="sticky top-0 bg-[#f7fef7] z-10 align-middle py-[12px] px-[16px] text-center w-[80px] font-[600] text-[#064e3b] border-b-[2px] border-[#047857]">
-                        Unidad
-                    </th>
-
-                    {foodsData.map(food => (
+                    <tr>
                         <th
-                            key={food.code}
-                            className="sticky top-0 bg-[#f7fef7] z-10 align-middle py-[12px] px-[16px] text-center min-w-[150px] font-[600] text-[#064e3b] border-b-[2px] border-[#047857]"
+                            className="
+                            sticky
+                            top-0
+                            bg-[#f7fef7]
+                            z-10
+                            align-middle
+                            py-[12px]
+                            pl-[36px]
+                            text-left
+                            min-w-[200px]
+                            font-[600]
+                            text-[#064e3b]
+                            border-b-[2px]
+                            border-[#047857]
+                            "
                         >
-                            <div className="flex justify-between items-center">
-                                <span>{getFoodName(food.commonName.es || "")}</span>
-                                <button
-                                    className="p-[3px] leading-none rounded-full text-[#991b1b] bg-[#fee2e2] hover:bg-[#fecaca] hover:text-[#7f1d1d] transition-colors duration-200"
-                                    onClick={() => onRemoveFood([food.code])}
-                                    aria-label={`Remove ${getFoodName(food.commonName.es || "")}`}
-                                >
-                                    <X size={16}/>
-                                </button>
-                            </div>
+                            Nutrientes
                         </th>
-                    ))}
-                </tr>
+                        <th
+                            className="
+                            sticky
+                            top-0
+                            bg-[#f7fef7]
+                            z-10
+                            align-middle
+                            py-[12px]
+                            px-[16px]
+                            text-center
+                            w-[80px]
+                            font-[600]
+                            text-[#064e3b]
+                            border-b-[2px]
+                            border-[#047857]
+                            "
+                        >
+                            Unidad
+                        </th>
+
+                        {foodsData.map(food => (
+                            <th
+                                key={food.code}
+                                className="
+                                sticky
+                                top-0
+                                bg-[#f7fef7]
+                                z-10
+                                align-middle
+                                py-[12px]
+                                px-[16px]
+                                text-center
+                                min-w-[150px]
+                                font-[600]
+                                text-[#064e3b]
+                                border-b-[2px]
+                                border-[#047857]
+                                "
+                            >
+                                <div className="flex justify-between items-center">
+                                    <span>{getFoodName(food.commonName.es || "")}</span>
+                                    <button
+                                        className="
+                                        p-[3px]
+                                        leading-none
+                                        rounded-full
+                                        text-[#991b1b]
+                                        bg-[#fee2e2]
+                                        hover:bg-[#fecaca]
+                                        hover:text-[#7f1d1d]
+                                        transition-colors
+                                        duration-200
+                                        "
+                                        onClick={() => onRemoveFood([food.code])}
+                                        aria-label={`Remove ${getFoodName(food.commonName.es || "")}`}
+                                    >
+                                        <X size={16}/>
+                                    </button>
+                                </div>
+                            </th>
+                        ))}
+                    </tr>
                 </thead>
 
                 <tbody className="divide-y divide-[#e5f1eb]">
-                <tr>
-                    <td
-                        colSpan={2 + foodsData.length}
-                        className="text-[#047857] font-[600] cursor-pointer py-[12px] px-[16px] pl-[36px] bg-[white] transition-colors relative"
-                        onClick={() => toggleSection("energy")}
-                    >
-                        <div className="absolute left-[0px] top-[0px] bottom-[0px] w-[3px] bg-[#047857]"></div>
-                        {expandedSections.energy ?
-                            <ChevronDown size={16} className="inline mr-[8px]"/> :
-                            <ChevronRight size={16} className="inline mr-[8px]"/>
-                        }
-                        Valor energético
-                    </td>
-                </tr>
+                    <tr>
+                        <td
+                            colSpan={2 + foodsData.length}
+                            className="
+                            text-[#047857]
+                            font-[600]
+                            cursor-pointer
+                            py-[12px]
+                            px-[16px]
+                            pl-[36px]
+                            bg-[white]
+                            transition-colors
+                            relative
+                            "
+                            onClick={() => toggleSection("energy")}
+                        >
+                            <div className="absolute left-[0px] top-[0px] bottom-[0px] w-[3px] bg-[#047857]"/>
+                            {expandedSections.energy
+                                ? <ChevronDown size={16} className="inline mr-[8px]"/>
+                                : <ChevronRight size={16} className="inline mr-[8px]"/>
+                            }
+                            Valor energético
+                        </td>
+                    </tr>
 
-                {expandedSections.energy && foodsData[0]?.nutrientMeasurements?.energy?.map(nutrient =>
-                    renderNutrientRow(nutrient)
-                )}
+                    {expandedSections.energy && foodsData[0]?.nutrientMeasurements?.energy?.map(nutrient =>
+                        renderNutrientRow(nutrient)
+                    )}
 
-                <tr>
-                    <td
-                        colSpan={2 + foodsData.length}
-                        className="text-[#047857] font-[600] cursor-pointer py-[12px] px-[16px] pl-[36px] bg-[white] transition-colors relative"
-                        onClick={() => toggleSection("macronutrients")}
-                    >
-                        <div className="absolute left-[0px] top-[0px] bottom-[0px] w-[3px] bg-[#047857]"></div>
-                        {expandedSections.macronutrients ?
-                            <ChevronDown size={16} className="inline mr-[8px]"/> :
-                            <ChevronRight size={16} className="inline mr-[8px]"/>
-                        }
-                        Nutrientes principales
-                    </td>
-                </tr>
+                    <tr>
+                        <td
+                            colSpan={2 + foodsData.length}
+                            className="
+                            text-[#047857]
+                            font-[600]
+                            cursor-pointer
+                            py-[12px]
+                            px-[16px]
+                            pl-[36px]
+                            bg-[white]
+                            transition-colors
+                            relative
+                            "
+                            onClick={() => toggleSection("macronutrients")}
+                        >
+                            <div className="absolute left-[0px] top-[0px] bottom-[0px] w-[3px] bg-[#047857]"/>
+                            {expandedSections.macronutrients
+                                ? <ChevronDown size={16} className="inline mr-[8px]"/>
+                                : <ChevronRight size={16} className="inline mr-[8px]"/>
+                            }
+                            Nutrientes principales
+                        </td>
+                    </tr>
 
-                {expandedSections.macronutrients && foodsData[0]?.nutrientMeasurements?.macronutrients?.map(nutrient =>
-                    renderExpandableNutrient(nutrient)
-                )}
+                    {expandedSections.macronutrients && foodsData[0]?.nutrientMeasurements.macronutrients
+                        .map(nutrient => renderExpandableNutrient(nutrient))
+                    }
 
-                <tr>
-                    <td
-                        colSpan={2 + foodsData.length}
-                        className="text-[#047857] font-[600] cursor-pointer py-[12px] px-[16px] pl-[36px] bg-[white] transition-colors relative"
-                        onClick={() => toggleSection("micronutrients")}
-                    >
-                        <div className="absolute left-[0px] top-[0px] bottom-[0px] w-[3px] bg-[#047857]"></div>
-                        {expandedSections.micronutrients ?
-                            <ChevronDown size={16} className="inline mr-[8px]"/> :
-                            <ChevronRight size={16} className="inline mr-[8px]"/>
-                        }
-                        Micronutrientes
-                    </td>
-                </tr>
+                    <tr>
+                        <td
+                            colSpan={2 + foodsData.length}
+                            className="
+                            text-[#047857]
+                            font-[600]
+                            cursor-pointer
+                            py-[12px]
+                            px-[16px]
+                            pl-[36px]
+                            bg-[white]
+                            transition-colors
+                            relative
+                            "
+                            onClick={() => toggleSection("micronutrients")}
+                        >
+                            <div className="absolute left-[0px] top-[0px] bottom-[0px] w-[3px] bg-[#047857]"/>
+                            {expandedSections.micronutrients
+                                ? <ChevronDown size={16} className="inline mr-[8px]"/>
+                                : <ChevronRight size={16} className="inline mr-[8px]"/>
+                            }
+                            Micronutrientes
+                        </td>
+                    </tr>
 
-                {expandedSections.micronutrients && (
-                    <>
+                    {expandedSections.micronutrients && <>
                         <tr>
                             <td
                                 colSpan={2 + foodsData.length}
-                                className="text-[#047857] font-[600] cursor-pointer py-[12px] px-[16px] pl-[36px] bg-[white] transition-colors relative"
+                                className="
+                                text-[#047857]
+                                font-[600]
+                                cursor-pointer
+                                py-[12px]
+                                px-[16px]
+                                pl-[36px]
+                                bg-[white]
+                                transition-colors
+                                relative
+                                "
                                 onClick={() => toggleSection("vitamins")}
                             >
-                                <div className="absolute left-[0px] top-[0px] bottom-[0px] w-[3px] bg-[#047857]"></div>
+                                <div className="absolute left-[0px] top-[0px] bottom-[0px] w-[3px] bg-[#047857]"/>
                                 <span className="relative">
-                    {expandedSections.vitamins ?
-                        <ChevronDown size={16} className="inline mr-[8px]"/> :
-                        <ChevronRight size={16} className="inline mr-[8px]"/>
-                    }
+                                    {expandedSections.vitamins
+                                        ? <ChevronDown size={16} className="inline mr-[8px]"/>
+                                        : <ChevronRight size={16} className="inline mr-[8px]"/>
+                                    }
                                     Vitaminas
-                  </span>
+                                </span>
                             </td>
                         </tr>
 
-                        {expandedSections.vitamins && foodsData[0]?.nutrientMeasurements?.micronutrients?.vitamins?.map(nutrient =>
-                            renderNutrientRow(nutrient, 1)
-                        )}
+                        {expandedSections.vitamins && foodsData[0]?.nutrientMeasurements.micronutrients.vitamins
+                            .map(nutrient => renderNutrientRow(nutrient, 1))
+                        }
 
                         <tr>
                             <td
                                 colSpan={2 + foodsData.length}
-                                className="text-[#047857] font-[600] cursor-pointer py-[12px] px-[16px] pl-[36px] bg-[white] transition-colors relative"
+                                className="
+                                text-[#047857]
+                                font-[600]
+                                cursor-pointer
+                                py-[12px]
+                                px-[16px]
+                                pl-[36px]
+                                bg-[white]
+                                transition-colors
+                                relative
+                                "
                                 onClick={() => toggleSection("minerals")}
                             >
-                                <div className="absolute left-[0px] top-[0px] bottom-[0px] w-[3px] bg-[#047857]"></div>
+                                <div className="absolute left-[0px] top-[0px] bottom-[0px] w-[3px] bg-[#047857]"/>
                                 <span className="relative">
-                    {expandedSections.minerals ?
-                        <ChevronDown size={16} className="inline mr-[8px]"/> :
-                        <ChevronRight size={16} className="inline mr-[8px]"/>
-                    }
+                                    {expandedSections.minerals
+                                        ? <ChevronDown size={16} className="inline mr-[8px]"/>
+                                        : <ChevronRight size={16} className="inline mr-[8px]"/>
+                                    }
                                     Minerales
-                  </span>
+                                </span>
                             </td>
                         </tr>
 
-                        {expandedSections.minerals && foodsData[0]?.nutrientMeasurements?.micronutrients?.minerals?.map(nutrient =>
-                            renderNutrientRow(nutrient, 1)
-                        )}
-                    </>
-                )}
+                        {expandedSections.minerals && foodsData[0]?.nutrientMeasurements.micronutrients.minerals
+                            .map(nutrient => renderNutrientRow(nutrient, 1))
+                        }
+                    </>}
                 </tbody>
             </table>
         </div>

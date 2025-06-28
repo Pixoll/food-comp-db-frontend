@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import "./index.css";
 
-const NavBar = () => {
+export default function NavBar(): JSX.Element {
     const [menuOpen, setMenuOpen] = useState(false);
     const [langMenuOpen, setLangMenuOpen] = useState(false);
     const { t, i18n } = useTranslation();
@@ -19,7 +19,7 @@ const NavBar = () => {
     const router = useRouter();
 
     useEffect(() => {
-        const handleResize = () => {
+        const handleResize = (): void => {
             if (window.innerWidth >= 768) {
                 setMenuOpen(false);
             }
@@ -28,12 +28,13 @@ const NavBar = () => {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
-    const changeLanguage = (lng: string) => {
+    const changeLanguage = (lng: string): void => {
+        // noinspection JSIgnoredPromiseFromCall
         i18n.changeLanguage(lng);
         setLangMenuOpen(false);
     };
 
-    const handleLogout = async () => {
+    const handleLogout = async (): Promise<void> => {
         try {
             const result = await api.logout();
 
@@ -57,7 +58,7 @@ const NavBar = () => {
         }
     };
 
-    const toggleMenu = () => {
+    const toggleMenu = (): void => {
         setMenuOpen(!menuOpen);
     };
 
@@ -125,6 +126,4 @@ const NavBar = () => {
             </nav>
         </header>
     );
-};
-
-export default NavBar;
+}

@@ -3,6 +3,7 @@ import { initReactI18next } from "react-i18next";
 import { en } from "./en";
 import { es } from "./es";
 
+// noinspection JSIgnoredPromiseFromCall
 i18next.use(initReactI18next).init({
     interpolation: {
         escapeValue: false,
@@ -46,9 +47,12 @@ type I18NKeys<T extends object> = {
 type EsKeys = I18NKeys<typeof es>;
 type EnKeys = I18NKeys<typeof en>;
 
+/* eslint-disable @typescript-eslint/no-redundant-type-constituents */
+// noinspection TypeScriptDuplicateUnionOrIntersectionType
 type MissingKeys =
     | Exclude<EsKeys, EnKeys>
     | Exclude<EnKeys, EsKeys>;
+/* eslint-enable @typescript-eslint/no-redundant-type-constituents */
 
 /*
  * Ensure build is not possible if:

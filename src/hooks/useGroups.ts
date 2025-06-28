@@ -1,18 +1,20 @@
 "use client";
 
+import type { FoodGroup } from "@/api";
 import { Collection } from "@/utils/collection";
 import { useState } from "react";
 import { FetchStatus, useApi } from "./useApi";
 
-export type Group = {
-    id: number;
-    code: string;
-    name: string;
+export type UseGroups = {
+    idToObject: Collection<number, FoodGroup>;
+    idToName: Collection<string, string>;
+    codeToId: Collection<string, number>;
+    forceReload: () => void;
 };
 
-export function useGroups() {
+export function useGroups(): UseGroups {
     const result = useApi([], (api) => api.getFoodGroups());
-    const [idToObject, setIdToObject] = useState(new Collection<number, Group>());
+    const [idToObject, setIdToObject] = useState(new Collection<number, FoodGroup>());
     const [idToName, setIdToName] = useState(new Collection<string, string>());
     const [codeToId, setCodeToId] = useState(new Collection<string, number>());
 
@@ -27,7 +29,7 @@ export function useGroups() {
         setCodeToId(codeToId.clone());
     }
 
-    const forceReload = () => {
+    const forceReload = (): void => {
         if (result.status !== FetchStatus.Loading) {
             result.forceReload();
             idToObject.clear();

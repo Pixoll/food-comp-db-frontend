@@ -1,14 +1,15 @@
 "use client";
 
+import type { Author, City, Journal, Reference } from "@/api";
 import ModalReferences from "@/app/admin-page/add-food/components/ModalReferences";
 import { SearchBox } from "@/app/search/components";
 import Pagination from "@/app/search/components/Pagination";
-import { Author, City, FetchStatus, Journal, Reference, useApi } from "@/hooks";
+import { FetchStatus, useApi } from "@/hooks";
 import {
     getNutrientNameById,
-    NutrientMeasurementForm,
-    NutrientMeasurementWithComponentsForm,
-    NutrientSummary,
+    type NutrientMeasurementForm,
+    type NutrientMeasurementWithComponentsForm,
+    type NutrientSummary,
 } from "@/types/nutrients";
 import { Collection } from "@/utils/collection";
 import { PlusCircle } from "lucide-react";
@@ -43,12 +44,12 @@ const ITEMS_PER_PAGE = 5;
 
 const hasValidData = <T extends NutrientMeasurementForm>(
     nutrient: T
-    // @ts-expect-error
+    // @ts-expect-error just for type hints
 ): nutrient is Omit<T, "average" | "dataType"> &
     Required<Pick<T, "average" | "dataType">> => {
     return (
-        typeof nutrient.average !== "undefined" &&
-        typeof nutrient.dataType !== "undefined"
+        typeof nutrient.average !== "undefined"
+        && typeof nutrient.dataType !== "undefined"
     );
 };
 
@@ -66,7 +67,7 @@ export default function AddReferences({
     cities,
     authors,
     journals,
-}: NewReferencesProps) {
+}: NewReferencesProps): JSX.Element {
     const [selectedFilters, setSelectedFilters] = useState<Filters>({
         nameTittle: "",
         citiesFilter: new Set(),
@@ -85,9 +86,9 @@ export default function AddReferences({
     const filteredReferences = referencesResult.status === FetchStatus.Success ? referencesResult.data : [];
 
     const handleFilterChange = (
-        filterKey: keyof typeof selectedFilters,
+        filterKey: keyof Filters,
         values: string[]
-    ) => {
+    ): void => {
         setSelectedFilters((prevFilters) => ({
             ...prevFilters,
             [filterKey]: new Set(values),
@@ -104,12 +105,8 @@ export default function AddReferences({
     const endIndex = startIndex + ITEMS_PER_PAGE;
     const currentReferences = filteredReferences.slice(startIndex, endIndex);
 
-    const [modalsState, setModalsState] = useState<{ [key: number]: boolean }>(
-        {}
-    );
-    const [selectedReferenceIndex, setSelectedReferenceIndex] = useState<
-        number | null
-    >(null);
+    const [modalsState, setModalsState] = useState<Record<number, boolean>>({});
+    const [selectedReferenceIndex, setSelectedReferenceIndex] = useState<number | null>(null);
 
     const convert = (): NutrientConvert[] => {
         const nutrientsConvert: NutrientConvert[] = [];
@@ -117,14 +114,14 @@ export default function AddReferences({
         const isReferenceAssigned = (
             nutrient: NutrientMeasurementForm,
             refCode: number
-        ) => {
+        ): boolean => {
             return nutrient.referenceCodes?.includes(refCode);
         };
 
         const addNutrientWithSelection = (
             nutrient: NutrientMeasurementForm,
             refCode: number
-        ) => {
+        ): void => {
             nutrientsConvert.push({
                 id: nutrient.nutrientId,
                 name: getNutrientNameById(nutrient.nutrientId, nameAndIdNutrients),
@@ -163,28 +160,25 @@ export default function AddReferences({
         return nutrientsConvert;
     };
 
-    const handleShowModal = (index: number) => {
+    const handleShowModal = (index: number): void => {
         const globalIndex = startIndex + index;
         setModalsState((prev) => ({ ...prev, [globalIndex]: true }));
         setSelectedReferenceIndex(globalIndex);
     };
 
-    const handleHideModal = (index: number) => {
+    const handleHideModal = (index: number): void => {
         const globalIndex = startIndex + index; // Índice global
         setModalsState((prev) => ({ ...prev, [globalIndex]: false }));
     };
 
-    const handleAddReference = (ids: number[], reference: number) => {
+    const handleAddReference = (ids: number[], reference: number): void => {
         if (selectedReferenceIndex !== null) {
             const referenceCode = reference;
             const updatedForm = { ...nutrientValueForm };
 
             const updateNutrientReferences = (
-                nutrientsArray: (
-                    | NutrientMeasurementForm
-                    | NutrientMeasurementWithComponentsForm
-                    )[]
-            ) => {
+                nutrientsArray: Array<NutrientMeasurementForm | NutrientMeasurementWithComponentsForm>
+            ): void => {
                 nutrientsArray.forEach((nutrient) => {
                     if (ids.includes(nutrient.nutrientId)) {
                         nutrient.referenceCodes = nutrient.referenceCodes || [];
@@ -198,10 +192,8 @@ export default function AddReferences({
                     }
 
                     if ("components" in nutrient) {
-                        const components = nutrient.components as (
-                            | NutrientMeasurementForm
-                            | NutrientMeasurementWithComponentsForm
-                            )[];
+                        const components = nutrient.components as Array<| NutrientMeasurementForm
+                            | NutrientMeasurementWithComponentsForm>;
                         updateNutrientReferences(components);
                     }
                 });
@@ -217,11 +209,13 @@ export default function AddReferences({
             setModalsState((prev) => ({ ...prev, [selectedReferenceIndex]: false }));
         }
     };
-    const handlePageChange = (page: number) => {
+
+    const handlePageChange = (page: number): void => {
         if (page > 0 && page <= totalPages) {
             setCurrentPage(page);
         }
     };
+
     return (
         <div className="w-full max-w-[1200px] mx-auto py-[24px] px-[16px]">
             <div className="bg-[white] rounded-[8px] p-[24px] shadow-[0_2px_10px_rgba(0,0,0,0.08)] mb-[32px]">
@@ -231,9 +225,22 @@ export default function AddReferences({
                     <div className="flex flex-col">
                         <label className="text-[14px] font-[600] text-[#374151] mb-[8px]">Título</label>
                         <input
-                            className="w-full h-[42px] px-[12px] rounded-[6px] border-[1px] border-[#d1d5db] bg-[white] text-[#1f2937]
-                     focus:outline-none focus:ring-[2px] focus:ring-[#047857] focus:border-[#047857]
-                     transition-all duration-[200ms]"
+                            className="
+                            w-full
+                            h-[42px]
+                            px-[12px]
+                            rounded-[6px]
+                            border-[1px]
+                            border-[#d1d5db]
+                            bg-[white]
+                            text-[#1f2937]
+                            focus:outline-none
+                            focus:ring-[2px]
+                            focus:ring-[#047857]
+                            focus:border-[#047857]
+                            transition-all
+                            duration-[200ms]
+                            "
                             type="text"
                             placeholder="Ingrese nombre..."
                             value={selectedFilters.nameTittle}
@@ -313,9 +320,20 @@ export default function AddReferences({
                             </h3>
 
                             <div className="flex items-center mb-[16px]">
-              <span className="px-[10px] py-[4px] bg-[#ecfdf5] text-[#047857] rounded-[20px] text-[12px] font-[600] capitalize">
-                {ref.type.toLowerCase()}
-              </span>
+                                <span
+                                    className="
+                                    px-[10px]
+                                    py-[4px]
+                                    bg-[#ecfdf5]
+                                    text-[#047857]
+                                    rounded-[20px]
+                                    text-[12px]
+                                    font-[600]
+                                    capitalize
+                                    "
+                                >
+                                    {ref.type.toLowerCase()}
+                                </span>
                                 {ref.year && (
                                     <span className="ml-[12px] text-[14px] text-[#6b7280]">{ref.year}</span>
                                 )}

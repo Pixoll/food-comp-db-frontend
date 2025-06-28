@@ -1,6 +1,6 @@
 "use client";
 
-import { Food } from "@/api";
+import type { Food } from "@/api";
 import GramsAdjuster from "@/app/detail-food/components/grams-adjuster/GramsAdjuster";
 import { FetchStatus, useApi } from "@/hooks";
 import i18n from "@/i18n";
@@ -16,7 +16,7 @@ import LangualCodes from "../components/LangualCodes/LangualCodes";
 import References from "../components/References";
 import styles from "./detail-food.module.css";
 
-function getDetail(code: string): Food {
+function useDetail(code: string): Food {
     const result = useApi([code], (api, depCode) => api.getFood({
         path: {
             code: depCode,
@@ -39,11 +39,11 @@ function getDetail(code: string): Food {
             },
             group: {
                 code: "",
-                name: ""
+                name: "",
             },
             type: {
                 code: "",
-                name: ""
+                name: "",
             },
             brand: undefined,
             origins: [],
@@ -52,23 +52,23 @@ function getDetail(code: string): Food {
                 macronutrients: [],
                 micronutrients: {
                     vitamins: [],
-                    minerals: []
-                }
+                    minerals: [],
+                },
             },
             langualCodes: [],
-            references: []
+            references: [],
         };
     }
 }
 
-export default function DetailFoodPage() {
+export default function DetailFoodPage(): JSX.Element {
     const params = useParams();
     const code = params.code as string;
     const { t } = useTranslation();
     const selectedLanguage = i18n.language as "en" | "es" | "pt";
     const [grams, setGrams] = useState<number>(100);
 
-    const data = getDetail(code);
+    const data = useDetail(code);
 
     const colors = [
         "#0088fe",
@@ -106,42 +106,39 @@ export default function DetailFoodPage() {
     const references = data.references ?? [];
     const mainNutrients = data.nutrientMeasurements?.macronutrients ?? [];
 
-    const graphicData =
-        mainNutrients
-            .filter((mainNutrient) => mainNutrient.nutrientId !== 12)
-            .map((mainNutrient, index) => ({
-                name: mainNutrient.name,
-                value: +((grams / 100) * mainNutrient.average).toFixed(2),
-                fill: colors[index % colors.length],
-            })) || [];
+    const graphicData = mainNutrients
+        .filter((mainNutrient) => mainNutrient.nutrientId !== 12)
+        .map((mainNutrient, index) => ({
+            name: mainNutrient.name,
+            value: +((grams / 100) * mainNutrient.average).toFixed(2),
+            fill: colors[index % colors.length],
+        }));
 
-    const graphicDataPercent =
-        mainNutrients
-            .filter(
-                (mainNutrient) =>
-                    mainNutrient.nutrientId !== 12 && mainNutrient.nutrientId !== 1
-            )
-            .map((mainNutrient, index) => ({
-                name: mainNutrient.name,
-                value: +(((grams / 100) * mainNutrient.average) / 100).toFixed(2),
-                fill: colors[index % colors.length],
-            })) || [];
+    const graphicDataPercent = mainNutrients
+        .filter((mainNutrient) =>
+            mainNutrient.nutrientId !== 12 && mainNutrient.nutrientId !== 1
+        )
+        .map((mainNutrient, index) => ({
+            name: mainNutrient.name,
+            value: +(((grams / 100) * mainNutrient.average) / 100).toFixed(2),
+            fill: colors[index % colors.length],
+        }));
 
     return (
         <div className="w-full h-full bg-[#effce8] rounded-t-[2px]">
             {(data.commonName.es || data.commonName.en || data.commonName.pt) && (
                 <div
                     className="
-                px-[24px] py-[20px]
-                bg-gradient-to-r from-[#ffffff] to-[#f8fdf6]
-                border-b-[2px] border-b-[#7cbb75]
-                shadow-[0_2px_8px_rgba(0,0,0,0.08)]
-                mb-[16px]
-            "
+                    px-[24px] py-[20px]
+                    bg-gradient-to-r from-[#ffffff] to-[#f8fdf6]
+                    border-b-[2px] border-b-[#7cbb75]
+                    shadow-[0_2px_8px_rgba(0,0,0,0.08)]
+                    mb-[16px]
+                    "
                 >
                     <div className="flex flex-col sm:flex-row sm:items-center gap-[8px] sm:gap-[16px]">
-                    <span
-                        className="
+                        <span
+                            className="
                         inline-flex items-center justify-center
                         bg-[#7cbb70]
                         text-white
@@ -152,19 +149,19 @@ export default function DetailFoodPage() {
                         min-w-[80px]
                         text-center
                         shadow-[0_2px_4px_rgba(124,187,117,0.3)]
-                    "
-                    >
-                    </span>
+                        "
+                        >
+                        </span>
                         <h1
                             className="
-                        font-[700]
-                        text-[28px] sm:text-[32px]
-                        text-[#2d3748]
-                        m-[0px]
-                        leading-[1.1]
-                        tracking-[-0.02em]
-                        flex-1
-                    "
+                            font-[700]
+                            text-[28px] sm:text-[32px]
+                            text-[#2d3748]
+                            m-[0px]
+                            leading-[1.1]
+                            tracking-[-0.02em]
+                            flex-1
+                            "
                         >
                             {code},{data.commonName[selectedLanguage] ?? ""}
                         </h1>
@@ -183,7 +180,7 @@ export default function DetailFoodPage() {
                             strain: data.strain ?? "",
                             brand: data.brand ?? "",
                             observation: data.observation ?? "",
-                            origins: data.origins ?? []
+                            origins: data.origins ?? [],
                         }}
                     />
                 </TabItem>
@@ -198,20 +195,46 @@ export default function DetailFoodPage() {
                         <Graphic title={t("DetailFood.graphics.title_L")} data={graphicData} grams={grams}/>
                         <Graphic title={t("DetailFood.graphics.title_R")} data={graphicDataPercent} grams={grams}/>
                     </div>
-                    <div className="mt-[10px] border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white]">
+                    <div
+                        className="
+                        mt-[10px]
+                        border-[1px]
+                        rounded-[4px]
+                        shadow-[0_4px_10px_rgba(0,0,0,0.2)]
+                        bg-[white]
+                        "
+                    >
                         <h2 className="text-center ">Tabla de composición</h2>
                         <CompositionDropdown nutrientData={data.nutrientMeasurements ?? []} grams={grams}/>
                     </div>
                 </TabItem>
                 <TabItem label="Códigos languales">
-                    <div className="flex flex-col mt-[10px] border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white]">
+                    <div
+                        className="
+                        flex
+                        flex-col
+                        mt-[10px]
+                        border-[1px]
+                        rounded-[4px]
+                        shadow-[0_4px_10px_rgba(0,0,0,0.2)]
+                        bg-[white]
+                        "
+                    >
                         <h2 className="text-center pb-[12px]">Códigos languales</h2>
                         <LangualCodes data={data.langualCodes}/>
                     </div>
                 </TabItem>
                 <TabItem label="Referencias">
                     <div
-                        className="flex flex-col mt-[10px] border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white]"
+                        className="
+                        flex
+                        flex-col
+                        mt-[10px]
+                        border-[1px]
+                        rounded-[4px]
+                        shadow-[0_4px_10px_rgba(0,0,0,0.2)]
+                        bg-[white]
+                        "
                     >
                         <h2 className="text-center pb-[12px]">Referencias</h2>
                         <References data={references}/>

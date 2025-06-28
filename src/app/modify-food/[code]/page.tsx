@@ -1,22 +1,28 @@
 "use client";
 
-import api, { Food } from "@/api";
+import { type Food } from "@/api";
 import { useToast } from "@/context/ToastContext";
 import {
-    FetchStatus,
-    Region,
+    type Commune,
+    FetchStatus, type Location,
+    type Province,
+    type Region,
     useApi,
     useForm,
+    type UseGroups,
     useGroups,
     useOrigins,
+    type UseScientificNames,
     useScientificNames,
+    type UseSubspecies,
     useSubspecies,
-    useTypes
+    type UseTypes,
+    useTypes,
 } from "@/hooks";
-import { LangualCode, NutrientMeasurement, NutrientsValue, Origin } from "@/types/SingleFoodResult";
+import type { LangualCode, NutrientMeasurement, NutrientsValue, Origin } from "@/types/SingleFoodResult";
 import { Collection } from "@/utils/collection";
 import { useParams } from "next/navigation";
-import { FormEvent, useEffect } from "react";
+import { type FormEvent, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import TextField from "../../components/Fields/TextField";
 import Tab from "../../components/Tabs/Tab";
@@ -35,11 +41,12 @@ type FoodForm = {
     brand?: string;
     observation?: string;
     originIds?: number[];
-    nutrientMeasurements: nutrientMeasurementForm[]
+    nutrientMeasurements: nutrientMeasurementForm[];
     langualCodes?: number[];
-}
+};
+
 type nutrientMeasurementForm = {
-    nutrientId: number
+    nutrientId: number;
     average?: number;
     deviation?: number;
     min?: number;
@@ -47,7 +54,7 @@ type nutrientMeasurementForm = {
     sampleSize?: number;
     dataType: "analytic" | "calculated" | "assumed" | "borrowed";
     referencesCodes?: number[];
-}
+};
 
 function normalizeStringValue(value: string | undefined): string | undefined {
     return value?.trim() === "" ? undefined : value?.trim();
@@ -73,11 +80,11 @@ function normalizeNutrientMeasurement(nutrient: NutrientMeasurement): nutrientMe
     };
 }
 
-function getUniqueIds(items: { id: number }[] | undefined): number[] | undefined {
-    if (!items || items.length === 0) return undefined;
-
-    return [...new Set(items.map(item => item.id))];
-}
+// function getUniqueIds(items: { id: number }[] | undefined): number[] | undefined {
+//     if (!items || items.length === 0) return undefined;
+//
+//     return [...new Set(items.map(item => item.id))];
+// }
 
 function getUniqueRegionIds(origins: Origin[] | undefined, allRegionIds: number[]): number[] | undefined {
     if (!origins || origins.length === 0) return undefined;
@@ -93,7 +100,7 @@ function getUniqueLangualCodeIds(langualCodes: LangualCode[] | undefined): numbe
     return [...new Set(
         langualCodes.flatMap(langualCode => [
             langualCode.id,
-            ...langualCode.children.map(child => child.id)
+            ...langualCode.children.map(child => child.id),
         ])
     )];
 }
@@ -106,21 +113,21 @@ function normalizeAllNutrientMeasurements(nutrientValues: NutrientsValue): nutri
             normalizeNutrientMeasurement(mainNutrient),
             ...(mainNutrient.components
                 ? mainNutrient.components.map(normalizeNutrientMeasurement)
-                : [])
+                : []),
         ]),
         ...nutrientValues.micronutrients.minerals.map(normalizeNutrientMeasurement),
-        ...nutrientValues.micronutrients.vitamins.map(normalizeNutrientMeasurement)
+        ...nutrientValues.micronutrients.vitamins.map(normalizeNutrientMeasurement),
     ];
 }
 
 function normalizeFoodFormForApi(
     data: Food,
     collections: {
-        scientificNames: { idToName: Collection<string, string>, nameToId: Collection<string, number> }
-        groups: { idToName: Collection<string, string>, codeToId: Collection<string, number> }
-        types: { idToName: Collection<string, string>, codeToId: Collection<string, number> }
+        scientificNames: { idToName: Collection<string, string>; nameToId: Collection<string, number> };
+        groups: { idToName: Collection<string, string>; codeToId: Collection<string, number> };
+        types: { idToName: Collection<string, string>; codeToId: Collection<string, number> };
         subspecies: Collection<string, number>;
-        regions: Collection<number, Region>
+        regions: Collection<number, Region>;
     }
 ): FoodForm {
     return {
@@ -135,11 +142,11 @@ function normalizeFoodFormForApi(
         observation: normalizeStringValue(data.observation),
         originIds: getUniqueRegionIds(data.origins, [...collections.regions.keys()] as number[]),
         langualCodes: getUniqueLangualCodeIds(data.langualCodes),
-        nutrientMeasurements: normalizeAllNutrientMeasurements(data.nutrientMeasurements)
+        nutrientMeasurements: normalizeAllNutrientMeasurements(data.nutrientMeasurements),
     };
 }
 
-function getAllTypeData(code: string) {
+function useAllTypeData(code: string): UseAllTypeData {
     const result = useApi([code], (api, code) => api.getFood({
         path: {
             code,
@@ -154,7 +161,7 @@ function getAllTypeData(code: string) {
     return { data, groups, types, scientificNames, subspecies, regions, provinces, communes, locations };
 }
 
-export default function ModifyFoodPage() {
+export default function ModifyFoodPage(): JSX.Element {
     const params = useParams();
     const code = params.code as string;
     const { t } = useTranslation();
@@ -169,110 +176,110 @@ export default function ModifyFoodPage() {
         regions,
         provinces,
         communes,
-        locations
-    } = getAllTypeData(code);
+        locations,
+    } = useAllTypeData(code);
 
     const collectionsForNormalized = {
         scientificNames: {
             idToName: scientificNames.idToName,
-            nameToId: scientificNames.nameToId
+            nameToId: scientificNames.nameToId,
         },
         groups: {
             idToName: groups.idToName,
-            codeToId: groups.codeToId
+            codeToId: groups.codeToId,
         },
         types: {
             idToName: types.idToName,
-            codeToId: types.codeToId
+            codeToId: types.codeToId,
         },
         subspecies: subspecies.nameToId,
-        regions: regions
+        regions: regions,
     };
 
     const { formState, setFormState, onInputChange } = useForm<FoodForm>(
         data ? normalizeFoodFormForApi(data, collectionsForNormalized) : {
             commonName: { es: "", en: "", pt: "" },
             ingredients: { es: "", en: "", pt: "" },
-            nutrientMeasurements: []
+            nutrientMeasurements: [],
         }
     );
 
-    const handleScientificName = async () => {
-        const scientificNameId = formState.scientificNameId;
-
-        const payload = {
-            scientificNameId: scientificNameId,
-            scientificName: !scientificNameId
-                ? normalizeStringValue(scientificNames.idToName.get(formState.scientificNameId?.toString() ?? ""))
-                : undefined,
-        };
-
-        if (!payload.scientificNameId && payload.scientificName) {
-            const name = payload.scientificName;
-
-            try {
-                const result = await api.createScientificName({
-                    body: {
-                        name,
-                    },
-                });
-
-                if (result.error) {
-                    console.error("Error al actualizar:", result.error);
-                    return;
-                }
-
-                scientificNames.forceReload();
-                setFormState((prev) => ({
-                    ...prev,
-                    scientificNameId: scientificNames.nameToId.get(name)
-                }));
-            } catch (error) {
-                console.error("Error al actualizar:", error);
-            }
-        } else if (payload.scientificNameId && payload.scientificName) {
-            setFormState((prev) => ({
-                ...prev,
-                scientificNameId: payload.scientificNameId
-            }));
-        }
-    };
-
-    const handleSubspecies = async () => {
-        const subspeciesId = formState.subspeciesId;
-
-        const payload = {
-            subspeciesId: subspeciesId,
-            subspecies: !subspeciesId
-                ? normalizeStringValue(subspecies.idToName.get(formState.subspeciesId?.toString() ?? ""))
-                : undefined,
-        };
-
-        if (!payload.subspeciesId && payload.subspecies) {
-            const name = payload.subspecies;
-
-            try {
-                const result = await api.createSubspecies({
-                    body: {
-                        name,
-                    },
-                });
-
-                if (result.error) {
-                    console.error("Error al actualizar:", result.error);
-                    return;
-                }
-
-                subspecies.forceReload();
-                setFormState((prev) => ({
-                    ...prev,
-                    subspeciesId: subspecies.nameToId.get(name)
-                }));
-            } catch (error) {
-                console.error("Error al actualizar:", error);
-            }
-        }
-    };
+    // const handleScientificName = async () => {
+    //     const scientificNameId = formState.scientificNameId;
+    //
+    //     const payload = {
+    //         scientificNameId: scientificNameId,
+    //         scientificName: !scientificNameId
+    //             ? normalizeStringValue(scientificNames.idToName.get(formState.scientificNameId?.toString() ?? ""))
+    //             : undefined,
+    //     };
+    //
+    //     if (!payload.scientificNameId && payload.scientificName) {
+    //         const name = payload.scientificName;
+    //
+    //         try {
+    //             const result = await api.createScientificName({
+    //                 body: {
+    //                     name,
+    //                 },
+    //             });
+    //
+    //             if (result.error) {
+    //                 console.error("Error al actualizar:", result.error);
+    //                 return;
+    //             }
+    //
+    //             scientificNames.forceReload();
+    //             setFormState((prev) => ({
+    //                 ...prev,
+    //                 scientificNameId: scientificNames.nameToId.get(name)
+    //             }));
+    //         } catch (error) {
+    //             console.error("Error al actualizar:", error);
+    //         }
+    //     } else if (payload.scientificNameId && payload.scientificName) {
+    //         setFormState((prev) => ({
+    //             ...prev,
+    //             scientificNameId: payload.scientificNameId
+    //         }));
+    //     }
+    // };
+    //
+    // const handleSubspecies = async () => {
+    //     const subspeciesId = formState.subspeciesId;
+    //
+    //     const payload = {
+    //         subspeciesId: subspeciesId,
+    //         subspecies: !subspeciesId
+    //             ? normalizeStringValue(subspecies.idToName.get(formState.subspeciesId?.toString() ?? ""))
+    //             : undefined,
+    //     };
+    //
+    //     if (!payload.subspeciesId && payload.subspecies) {
+    //         const name = payload.subspecies;
+    //
+    //         try {
+    //             const result = await api.createSubspecies({
+    //                 body: {
+    //                     name,
+    //                 },
+    //             });
+    //
+    //             if (result.error) {
+    //                 console.error("Error al actualizar:", result.error);
+    //                 return;
+    //             }
+    //
+    //             subspecies.forceReload();
+    //             setFormState((prev) => ({
+    //                 ...prev,
+    //                 subspeciesId: subspecies.nameToId.get(name)
+    //             }));
+    //         } catch (error) {
+    //             console.error("Error al actualizar:", error);
+    //         }
+    //     }
+    // };
 
     useEffect(() => {
         if (data) {
@@ -312,57 +319,58 @@ export default function ModifyFoodPage() {
      }));
      }
      };*/
-    const handleSubmit2 = async (e: FormEvent) => {
+
+    const handleSubmit2 = async (e: FormEvent): Promise<void> => {
         e.preventDefault();
         console.log(formState);
         addToast({
             message: "se agrego con exito",
             title: "Modify",
             type: "Success",
-            position: "top-end"
+            position: "top-end",
         });
     };
 
-    const handleSubmit = async (e: FormEvent) => {
-        e.preventDefault();
-        const payload = normalizeFoodFormForApi(data, collectionsForNormalized);
-
-        try {
-            const result = await api.updateFood({
-                path: {
-                    code,
-                },
-                body: payload,
-            });
-
-            if (result.error) {
-                /*addToast({
-                 type: "Danger",
-                 message:
-                 error.response?.data?.message ||
-                 error.message ||
-                 "A ocurrido un error",
-                 title: "Error",
-                 position: "middle-center",
-                 duration: 5000,
-                 });*/
-                console.error("Error en la solicitud:", result.error);
-                return;
-            }
-
-            /*addToast({
-             type: "Success",
-             message:
-             response.data.message ||
-             "Los cambios fueron realizados exitosamente",
-             title: "Éxito",
-             position: "middle-center",
-             duration: 3000,
-             });*/
-        } catch (error) {
-            console.error("Error en la solicitud:", error);
-        }
-    };
+    // const handleSubmit = async (e: FormEvent) => {
+    //     e.preventDefault();
+    //     const payload = normalizeFoodFormForApi(data, collectionsForNormalized);
+    //
+    //     try {
+    //         const result = await api.updateFood({
+    //             path: {
+    //                 code,
+    //             },
+    //             body: payload,
+    //         });
+    //
+    //         if (result.error) {
+    //             /*addToast({
+    //              type: "Danger",
+    //              message:
+    //              error.response?.data?.message ||
+    //              error.message ||
+    //              "A ocurrido un error",
+    //              title: "Error",
+    //              position: "middle-center",
+    //              duration: 5000,
+    //              });*/
+    //             console.error("Error en la solicitud:", result.error);
+    //             return;
+    //         }
+    //
+    //         /*addToast({
+    //          type: "Success",
+    //          message:
+    //          response.data.message ||
+    //          "Los cambios fueron realizados exitosamente",
+    //          title: "Éxito",
+    //          position: "middle-center",
+    //          duration: 3000,
+    //          });*/
+    //     } catch (error) {
+    //         console.error("Error en la solicitud:", error);
+    //     }
+    // };
 
     return (
         <div className="w-full h-full bg-[#effce8] rounded-t-[2px]">
@@ -370,7 +378,15 @@ export default function ModifyFoodPage() {
             <Tab defaultTab={0}>
                 <TabItem label={"Modificar información general"}>
                     <div
-                        className="flex flex-col mt-[10px] border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white]"
+                        className="
+                        flex
+                        flex-col
+                        mt-[10px]
+                        border-[1px]
+                        rounded-[4px]
+                        shadow-[0_4px_10px_rgba(0,0,0,0.2)]
+                        bg-[white]
+                        "
                     >
                         <div>
                             {Object.entries(formState.commonName).map(([lang, value]) => (
@@ -421,7 +437,15 @@ export default function ModifyFoodPage() {
                 </TabItem>
                 <TabItem label={"Modificar origines"}>
                     <div
-                        className="flex flex-col mt-[10px] border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white] p-[16px]"
+                        className="
+                        flex
+                        flex-col
+                        mt-[10px]
+                        border-[1px]
+                        rounded-[4px]
+                        shadow-[0_4px_10px_rgba(0,0,0,0.2)]
+                        bg-[white] p-[16px]
+                        "
                     >
                         <h3 className="text-[18px] font-[600] mb-[16px]">Origines</h3>
                         <Origins
@@ -430,12 +454,12 @@ export default function ModifyFoodPage() {
                                 regions: regions,
                                 provinces: provinces,
                                 communes: communes,
-                                locations: locations
+                                locations: locations,
                             }}
                             updateOrigins={(updatedOrigins) => {
                                 setFormState(prev => ({
                                     ...prev,
-                                    originIds: [...new Set(updatedOrigins?.map(origin => origin.id))]
+                                    originIds: [...new Set(updatedOrigins?.map(origin => origin.id))],
                                 }));
                             }}
                         />
@@ -443,7 +467,16 @@ export default function ModifyFoodPage() {
                 </TabItem>
                 <TabItem label={"Modificar información nutricional"}>
                     <div
-                        className="flex flex-col mt-[10px] border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white] p-[16px]"
+                        className="
+                        flex
+                        flex-col
+                        mt-[10px]
+                        border-[1px]
+                        rounded-[4px]
+                        shadow-[0_4px_10px_rgba(0,0,0,0.2)]
+                        bg-[white]
+                        p-[16px]
+                        "
                     >
                         <h3 className="text-[18px] font-[600] mb-[16px]">Información nutricional</h3>
 
@@ -463,3 +496,15 @@ export default function ModifyFoodPage() {
         </div>
     );
 }
+
+type UseAllTypeData = {
+    data: Food | null;
+    groups: UseGroups;
+    types: UseTypes;
+    scientificNames: UseScientificNames;
+    subspecies: UseSubspecies;
+    regions: Collection<number, Region>;
+    provinces: Collection<number, Province>;
+    communes: Collection<number, Commune>;
+    locations: Collection<number, Location>;
+};

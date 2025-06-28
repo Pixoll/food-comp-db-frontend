@@ -1,19 +1,26 @@
-import React, {useState, useEffect, ReactElement, cloneElement, Children, isValidElement, useRef} from 'react';
-import TabItem, {TabItemProps} from './TabItem';
-import styles from './Tab.module.css';
+import { Children, cloneElement, isValidElement, type ReactElement, useEffect, useRef, useState } from "react";
+import styles from "./Tab.module.css";
+import TabItem, { type TabItemProps } from "./TabItem";
 
 type TabProps = {
-    children: ReactElement<TabItemProps>[];
+    children: Array<ReactElement<TabItemProps>>;
     defaultTab?: number;
     accentColor?: string;
     onChange?: (index: number) => void;
     className?: string;
-}
+};
 
-export default function Tab({children, defaultTab = 0, accentColor = "#7cbb75", onChange, className = ""}: TabProps){
+export default function Tab({
+    children,
+    defaultTab = 0,
+    accentColor = "#7cbb75",
+    onChange,
+    className = "",
+}: TabProps): JSX.Element | null {
     const tabItems = Children.toArray(children)
         .filter((child): child is ReactElement<TabItemProps> =>
-            isValidElement(child) && (child.type === TabItem || child.props.hasOwnProperty('label'))
+            isValidElement(child)
+            && (child.type === TabItem || Object.prototype.hasOwnProperty.call(child.props, "label"))
         );
 
     const [activeTab, setActiveTab] = useState<number>(
@@ -32,7 +39,7 @@ export default function Tab({children, defaultTab = 0, accentColor = "#7cbb75", 
     }, [activeTab, onChange]);
 
     useEffect(() => {
-        const checkScroll = () => {
+        const checkScroll = (): void => {
             const element = tabsListRef.current;
             if (!element) return;
 
@@ -52,11 +59,12 @@ export default function Tab({children, defaultTab = 0, accentColor = "#7cbb75", 
         };
 
         checkScroll();
-        window.addEventListener('resize', checkScroll);
+        window.addEventListener("resize", checkScroll);
 
-        return () => window.removeEventListener('resize', checkScroll);
+        return () => window.removeEventListener("resize", checkScroll);
     }, [tabItems]);
-    const handleScroll = () => {
+
+    const handleScroll = (): void => {
         const element = tabsListRef.current;
         if (!element) return;
 
@@ -67,9 +75,11 @@ export default function Tab({children, defaultTab = 0, accentColor = "#7cbb75", 
         setShowRightShadow(!isAtEnd);
     };
 
-    if (tabItems.length === 0) return null;
+    if (tabItems.length === 0) {
+        return null;
+    }
 
-    const handleTabClick = (index: number) => {
+    const handleTabClick = (index: number): void => {
         if (!tabItems[index]?.props.disabled) {
             setActiveTab(index);
             const element = tabsListRef.current;
@@ -80,9 +90,9 @@ export default function Tab({children, defaultTab = 0, accentColor = "#7cbb75", 
                 const buttonRect = activeButton.getBoundingClientRect();
                 if (buttonRect.left < elementRect.left || buttonRect.right > elementRect.right) {
                     activeButton.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'nearest',
-                        inline: 'center'
+                        behavior: "smooth",
+                        block: "nearest",
+                        inline: "center",
                     });
                 }
             }
@@ -91,11 +101,13 @@ export default function Tab({children, defaultTab = 0, accentColor = "#7cbb75", 
 
     return (
         <div className={`${styles.tabContainer} ${className}`}>
-            <div className={`
+            <div
+                className={`
                 ${styles.tabsWrapper} 
-                ${showLeftShadow ? styles.showLeftShadow : ''} 
-                ${showRightShadow ? styles.showRightShadow : ''}
-            `}>
+                ${showLeftShadow ? styles.showLeftShadow : ""} 
+                ${showRightShadow ? styles.showRightShadow : ""}
+            `}
+            >
                 <div
                     ref={tabsListRef}
                     className={styles.tabsList}
@@ -113,11 +125,11 @@ export default function Tab({children, defaultTab = 0, accentColor = "#7cbb75", 
                                 disabled={isDisabled}
                                 className={`
                                     ${styles.tabButton}
-                                    ${isActive ? styles.tabButtonActive : ''}
-                                    ${isDisabled ? styles.tabButtonDisabled : ''}
+                                    ${isActive ? styles.tabButtonActive : ""}
+                                    ${isDisabled ? styles.tabButtonDisabled : ""}
                                 `}
                                 style={{
-                                    borderBottomColor: isActive ? accentColor : '#9bb698',
+                                    borderBottomColor: isActive ? accentColor : "#9bb698",
                                 }}
                                 aria-selected={isActive}
                                 role="tab"

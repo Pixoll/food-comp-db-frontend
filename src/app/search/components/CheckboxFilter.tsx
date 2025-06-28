@@ -1,7 +1,8 @@
-'use client'
-import React, {useState} from "react";
+"use client";
+
+import { Collection } from "@/utils/collection";
+import React, { useState } from "react";
 import "@/app/search/components/SearchBox.css";
-import {Collection} from "@/utils/collection";
 
 interface CheckboxFilterProps {
     options: Collection<string, string>;
@@ -9,10 +10,14 @@ interface CheckboxFilterProps {
     setSelectedOptions: (options: Set<string>) => void;
 }
 
-export default function CheckboxFilter({options, selectedOptions, setSelectedOptions}: CheckboxFilterProps) {
+export default function CheckboxFilter({
+    options,
+    selectedOptions,
+    setSelectedOptions,
+}: CheckboxFilterProps): JSX.Element {
     const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
 
-    const handleCheckboxChange = (optionValue: string) => {
+    const handleCheckboxChange = (optionValue: string): void => {
         if (selectedOptions.has(optionValue)) {
             selectedOptions.delete(optionValue);
         } else {
@@ -21,7 +26,7 @@ export default function CheckboxFilter({options, selectedOptions, setSelectedOpt
         setSelectedOptions(new Set(selectedOptions));
     };
 
-    const handleSelectAll = () => {
+    const handleSelectAll = (): void => {
         if (selectedOptions.size === options.size) {
             setSelectedOptions(new Set());
         } else {
@@ -33,7 +38,7 @@ export default function CheckboxFilter({options, selectedOptions, setSelectedOpt
         label.toLowerCase().includes("".toLowerCase())
     );
 
-    const getSelectedLabel = () => {
+    const getSelectedLabel = (): string => {
         if (selectedOptions.size === 0) {
             return "Nada seleccionado";
         } else if (selectedOptions.size > 0 && selectedOptions.size < 3) {
@@ -45,65 +50,121 @@ export default function CheckboxFilter({options, selectedOptions, setSelectedOpt
         }
     };
 
-    return (<>
+    return <>
+        <div
+            className="
+            flex
+            justify-between
+            items-center
+            rounded-[8px]
+            bg-[#1d6735]
+            text-[white]
+            p-[12px]
+            border-[2px]
+            border-solid
+            border-[#015746]
+            cursor-pointer
+            transition-all
+            duration-300
+            ease-in-out
+            hover:bg-[#20703a]
+            hover:border-[#2c6b49]
+            "
+            //className="selected-options-display"
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+        >
+            {getSelectedLabel()}
+            <span className="text-[14px]">{dropdownOpen ? "▲" : "▼"}</span>
+        </div>
+
+        {dropdownOpen && (
             <div
-                className="flex justify-between items-center rounded-[8px] bg-[#1d6735] text-[white] p-[12px]
-                border-[2px] border-solid border-[#015746] cursor-pointer transition-all duration-300 ease-in-out
-                hover:bg-[#20703a] hover:border-[#2c6b49]"
-                //className="selected-options-display"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className="
+                w-full
+                absolute
+                p-[12px]
+                left-[0px]
+                right-[0px]
+                max-h-[250px]
+                overflow-y-auto
+                shadow-[6px_12px_rgba(0,0,0,0.1)
+                bg-[white]
+                border-[1px]
+                border-solid
+                border-[#d6f4e9]
+                z-[20]
+                rounded-[6px]
+                transition-all
+                duration-300
+                ease-in-out
+                md:max-w-[250px]
+                mt-[4px]
+                "
+                //className="dropdown-options"
             >
-                {getSelectedLabel()}
-                <span className="text-[14px]">{dropdownOpen ? "▲" : "▼"}</span>
-            </div>
-
-            {dropdownOpen && (
-                <div className="w-full absolute p-[12px] left-[0px] right-[0px] max-h-[250px] overflow-y-auto shadow-[6px_12px_rgba(0,0,0,0.1) bg-[white]
-                    border-[px] border-solid border-[#d6f4e9] z-[20] rounded-[6px] transition-all
-                    duration-300 ease-in-out md:max-w-[250px] mt-[4px]"
-                    //className="dropdown-options"
+                <label
+                    className="
+                    block
+                    p-[12px]
+                    bg-[#f7f7f7]
+                    cursor-pointer
+                    mb-[10px]
+                    rounded-[10xp]
+                    transition-colors
+                    duration-300
+                    ease-in-out
+                    hover:bg-[#e0e0e0]
+                    md:text-base
+                    "
+                    //className="select-all-label"
                 >
+                    <div className="flex justify-between items-center">
+                        <span>Seleccionar todos</span>
+                        <input
+                            type="checkbox"
+                            checked={selectedOptions.size === options.size}
+                            onChange={handleSelectAll}
+                            className="hidden"
+                        />
+                        {selectedOptions.size === options.size && (
+                            <span className="text-[#81c784] text-[20px]">✔</span>
+                        )}
+                    </div>
+                </label>
 
-                    <label className="block p-[12px] bg-[#f7f7f7] cursor-pointer mb-[10px] rounded-[10xp]
-                        transition-colors duration-300 ease-in-out hover:bg-[#e0e0e0] md:text-base"
-                        //className="select-all-label"
+                {filteredOptions.map((label, option) => (
+                    <label
+                        className="
+                        block
+                        p-[12px]
+                        bg-[#f7f7f7]
+                        cursor-pointer
+                        mb-[10px]
+                        rounded-[6px]
+                        transition-colors
+                        duration-300
+                        ease-in-out
+                        hover:bg-[#e0e0e0]
+                        md:text-base
+                        "
+                        key={option}
                     >
                         <div className="flex justify-between items-center">
-                            <span>Seleccionar todos</span>
+                            <span>{label}</span>
                             <input
                                 type="checkbox"
-                                checked={selectedOptions.size === options.size}
-                                onChange={handleSelectAll}
+                                value={option}
+                                checked={selectedOptions.has(option)}
+                                onChange={() => handleCheckboxChange(option)}
                                 className="hidden"
                             />
-                            {selectedOptions.size === options.size && (
+                            {selectedOptions.has(option) && (
                                 <span className="text-[#81c784] text-[20px]">✔</span>
                             )}
                         </div>
                     </label>
-
-                    {filteredOptions.map((label, option) => (
-                        <label
-                            className="block p-[12px] bg-[#f7f7f7] cursor-pointer mb-[10px] rounded-[6px]
-                                transition-colors duration-300 ease-in-out hover:bg-[#e0e0e0] md:text-base"
-                            key={option}>
-                            <div className="flex justify-between items-center">
-                                <span>{label}</span>
-                                <input
-                                    type="checkbox"
-                                    value={option}
-                                    checked={selectedOptions.has(option)}
-                                    onChange={() => handleCheckboxChange(option)}
-                                    className="hidden"
-                                />
-                                {selectedOptions.has(option) && (
-                                    <span className="text-[#81c784] text-[20px]">✔</span>
-                                )}
-                            </div>
-                        </label>
-                    ))}
-                </div>
-            )}
-        </>
-    );
+                ))}
+            </div>
+        )}
+    </>;
 }

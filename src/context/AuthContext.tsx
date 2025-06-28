@@ -1,7 +1,7 @@
 "use client";
 
 import api from "@/api";
-import { createContext, ReactNode, useCallback, useContext, useEffect, useReducer, useRef } from "react";
+import { createContext, type ReactNode, useCallback, useContext, useEffect, useReducer, useRef } from "react";
 
 type AuthState = {
     isAuthenticated: boolean;
@@ -42,11 +42,12 @@ type AuthProviderProps = {
 
 const SESSION_CHECK_INTERVAL = 5 * 60_000;
 
-export function AuthProvider({ children }: AuthProviderProps) {
+export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     const [state, dispatch] = useReducer(authReducer, { isAuthenticated: false });
     const intervalRef = useRef<number>(0);
 
     useEffect(() => {
+        // noinspection JSIgnoredPromiseFromCall
         checkStatus();
 
         return () => {
@@ -54,9 +55,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 clearInterval(intervalRef.current);
             }
         };
+        // eslint-disable-next-line
     }, []);
 
-    const checkStatus = async () => {
+    const checkStatus = async (): Promise<void> => {
         const response = await api.getSessionInfo().catch(error => ({ error }));
 
         if (response.error) {
@@ -79,6 +81,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
 
         intervalRef.current = setInterval(checkStatus, SESSION_CHECK_INTERVAL) as unknown as number;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // noinspection com.intellij.reactbuddy.ExhaustiveDepsInspection
@@ -98,11 +101,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
     );
 }
 
-// Custom hook for accessing AuthContext easily
-export function useAuth() {
+export function useAuth(): AuthContextType {
     const context = useContext(AuthContext);
     if (!context) {
         throw new Error("useAuth must be used within an AuthProvider");
     }
+
     return context;
 }

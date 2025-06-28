@@ -1,17 +1,19 @@
-import React from "react";
-
 interface PaginationProps {
     currentPage: number;
     npage: number;
     onPageChange: (page: number) => void;
 }
 
-export default function Pagination({currentPage, npage, onPageChange}: PaginationProps) {
-    const getPageNumbers = () => {
+export default function Pagination({
+    currentPage,
+    npage,
+    onPageChange,
+}: PaginationProps): JSX.Element {
+    const getPageNumbers = (): Array<number | string> => {
         const pageLimit = 5;
         const sidePages = 2;
         const numbers = [...Array(npage + 1).keys()].slice(1);
-        let pages: (number | string)[] = [];
+        let pages: Array<number | string>;
 
         if (npage <= pageLimit) {
             pages = numbers;
@@ -66,7 +68,26 @@ export default function Pagination({currentPage, npage, onPageChange}: Paginatio
 
     return (
         <nav>
-            <ul className="flex justify-center py-[15px] px-0 my-[25px] mx-0 list-none bg-[#f8f9fa] rounded-[15px] shadow-[0_6px_12px_rgba(0,0,0,0.1)] whitespace-nowrap items-center md:justify-around md:overflow-x-auto md:py-[10px] md:my-[15px]">
+            <ul
+                className="
+                flex
+                justify-center
+                py-[15px]
+                px-0
+                my-[25px]
+                mx-0
+                list-none
+                bg-[#f8f9fa]
+                rounded-[15px]
+                shadow-[0_6px_12px_rgba(0,0,0,0.1)]
+                whitespace-nowrap
+                items-center
+                md:justify-around
+                md:overflow-x-auto
+                md:py-[10px]
+                md:my-[15px]
+                "
+            >
                 <li className="my-0 mx-[8px] md:mx-[4px]">
                     <span
                         className={baseLinkClasses}
@@ -78,10 +99,20 @@ export default function Pagination({currentPage, npage, onPageChange}: Paginatio
 
                 {getPageNumbers().map((n, i) => (
                     <li
-                        className={`my-0 mx-[8px] md:mx-[4px] ${
-                            currentPage === n
-                                ? "bg-[#37a86a] text-white font-bold pointer-events-none transform-none shadow-[0_3px_6px_rgba(0,0,0,0.15)]"
-                                : ""
+                        className={`
+                        my-0
+                        mx-[8px]
+                        md:mx-[4px]
+                        ${currentPage === n
+                            ? `
+                            bg-[#37a86a]
+                            text-white
+                            font-bold
+                            pointer-events-none
+                            transform-none
+                            shadow-[0_3px_6px_rgba(0,0,0,0.15)]
+                            `
+                            : ""
                         }`}
                         key={i}
                     >

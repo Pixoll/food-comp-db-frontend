@@ -1,34 +1,34 @@
-'use client'
+"use client";
 
-import {FileTextIcon, ListIcon, PackageIcon, TagIcon} from "lucide-react";
-import {ChangeEvent, useState} from "react";
-import {useTranslation} from "react-i18next";
-import {Group, Language, ScientificName, Subspecies, Type} from "@/hooks";
-import Selector from "@/app/components/Selector/Selector";
+import type { FoodGroup, FoodType, Language, ScientificName, Subspecies } from "@/api";
 import TextField from "@/app/components/Fields/TextField";
+import Selector from "@/app/components/Selector/Selector";
+import { FileTextIcon, ListIcon, PackageIcon, TagIcon } from "lucide-react";
+import { type ChangeEvent, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export const searchScientificNameById = (
     id: number | undefined,
     scientificName: ScientificName[]
-) => {
-    const sname = scientificName.find((sname) => sname.id === id);
-    return sname?.name;
+): string | undefined => {
+    const found = scientificName.find((name) => name.id === id);
+    return found?.name;
 };
 
 export const searchSubspeciesNameById = (
     id: number | undefined,
     subspecies: Subspecies[]
-) => {
-    const subspecie = subspecies.find((subspecie) => subspecie.id === id);
-    return subspecie?.name;
+): string | undefined => {
+    const found = subspecies.find((subspecies) => subspecies.id === id);
+    return found?.name;
 };
 
-export const searchGroupNameById = (id: number | undefined, groups: Group[]) => {
+export const searchGroupNameById = (id: number | undefined, groups: FoodGroup[]): string | undefined => {
     const group = groups.find((group) => group.id === id);
     return group?.name;
 };
 
-export const searchTypeNameById = (id: number | undefined, types: Type[]) => {
+export const searchTypeNameById = (id: number | undefined, types: FoodType[]): string | undefined => {
     const type = types.find((type) => type.id === id);
     return type?.name;
 };
@@ -50,36 +50,35 @@ type GeneralData = {
 type NewGeneralDataProps = {
     data: GeneralData;
     onUpdate: (data: GeneralData) => void;
-    types: Type[];
-    groups: Group[];
-    languages: Language[]
+    types: FoodType[];
+    groups: FoodGroup[];
+    languages: Language[];
     scientificNames: ScientificName[];
     subspecies: Subspecies[];
 };
 
 export default function FoodGeneralData({
-                                           data,
-                                           onUpdate,
-                                           groups,
-                                           types,
-                                           languages,
-                                           scientificNames,
-                                           subspecies
-                                       }: NewGeneralDataProps) {
-
-    const {t} = useTranslation();
-
+    data,
+    onUpdate,
+    groups,
+    types,
+    languages,
+    scientificNames,
+    subspecies,
+}: NewGeneralDataProps): JSX.Element {
+    const { t } = useTranslation();
 
     const [formData, setFormData] = useState<GeneralData>(data);
 
     const handleInputChange = (
         e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) => {
-        const {name, value} = e.target;
-        const updatedFormData = {...formData, [name]: value};
+    ): void => {
+        const { name, value } = e.target;
+        const updatedFormData = { ...formData, [name]: value };
         setFormData(updatedFormData);
         onUpdate(updatedFormData);
     };
+
     return (
         <form className="p-[16px] bg-[white] rounded-[4px]">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-[16px] mb-[12px]">
@@ -90,7 +89,10 @@ export default function FoodGeneralData({
                     maxLength={8}
                     icon={<TagIcon size={18}/>}
                     error={!formData.code || !/^[a-z0-9]{8}$/i.test(formData.code)}
-                    errorMessage={!formData.code ? "Ingrese el código." : "Código debe ser de 8 caracteres alfanuméricos."}
+                    errorMessage={!formData.code
+                        ? "Ingrese el código."
+                        : "Código debe ser de 8 caracteres alfanuméricos."
+                    }
                     value={formData.code || ""}
                     onChange={handleInputChange}
                     placeholder={t("DetailFood.code")}
@@ -260,7 +262,10 @@ export default function FoodGeneralData({
                             placeholder={`${t("FoodGeneralData.name_com")} (${lang.code})`}
                             value={formData.commonName[lang.code] || ""}
                             error={lang.code === "es" && !formData.commonName[lang.code]}
-                            errorMessage={lang.code === "es" && !formData.commonName[lang.code] ? "Ingrese el nombre en español." : ""}
+                            errorMessage={lang.code === "es" && !formData.commonName[lang.code]
+                                ? "Ingrese el nombre en español."
+                                : ""
+                            }
                             onChange={(e) => {
                                 const updatedFormData = {
                                     ...formData,

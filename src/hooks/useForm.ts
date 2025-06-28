@@ -1,75 +1,98 @@
-'use client'
-import { ChangeEvent, useState } from "react";
+"use client";
+
+import { type ChangeEvent, useState } from "react";
 
 export type FormState<T> = {
-  [K in keyof T]: T[K];
+    [K in keyof T]: T[K];
 };
-export function setNestedValue(obj: any, path: string, value: any): any {
-  if (!path) return value;
 
-  const result = Array.isArray(obj) ? [...obj] : { ...obj };
+type AnyValue<T> = FormState<T>[keyof FormState<T>];
 
-  const pathParts = path.split('.');
-  let current = result;
+export function setNestedValue<T>(obj: FormState<T>, path: string, value: unknown): FormState<T> {
+    if (!path) {
+        // TODO was value, check if something broke
+        return obj;
+    }
 
-  for (let i = 0; i < pathParts.length - 1; i++) {
-    const part = pathParts[i];
+    const result = (Array.isArray(obj) ? [...obj] : { ...obj }) as FormState<T>;
 
-    const arrayMatch = part.match(/^(.+)\[(\d+)\]$/);
+    const pathParts = path.split(".");
+    let current = result;
+
+    for (let i = 0; i < pathParts.length - 1; i++) {
+        const part = pathParts[i];
+
+        const arrayMatch = part.match(/^(.+)\[(\d+)]$/);
+
+        if (arrayMatch) {
+            const arrayName = arrayMatch[1] as keyof FormState<T>;
+            const index = +arrayMatch[2];
+
+            if (!current[arrayName]) {
+                current[arrayName] = [] as AnyValue<T>;
+            }
+
+            const array = current[arrayName] as unknown[];
+
+            if (!array[index]) {
+                array[index] = {};
+            }
+
+            current = array[index] as FormState<T>;
+        } else {
+            const key = part as keyof FormState<T>;
+            if (!current[key]) {
+                current[key] = {} as AnyValue<T>;
+            }
+
+            current = current[key] as FormState<T>;
+        }
+    }
+
+    const lastPart = pathParts[pathParts.length - 1];
+    const arrayMatch = lastPart.match(/^(.+)\[(\d+)]$/);
 
     if (arrayMatch) {
-      const [, arrayName, index] = arrayMatch;
+        const arrayName = arrayMatch[1] as keyof FormState<T>;
+        const index = +arrayMatch[2];
 
-      if (!current[arrayName]) {
-        current[arrayName] = [];
-      }
+        if (!current[arrayName]) {
+            current[arrayName] = [] as AnyValue<T>;
+        }
 
-      if (!current[arrayName][+(index)]) {
-        current[arrayName][+(index)] = {};
-      }
-
-      current = current[arrayName][+(index)];
+        const array = current[arrayName] as unknown[];
+        array[index] = value;
     } else {
-      if (!current[part]) {
-        current[part] = {};
-      }
-
-      current = current[part];
+        current[lastPart as keyof FormState<T>] = value as AnyValue<T>;
     }
-  }
 
-  const lastPart = pathParts[pathParts.length - 1];
-  const arrayMatch = lastPart.match(/^(.+)\[(\d+)\]$/);
-
-  if (arrayMatch) {
-    const [, arrayName, index] = arrayMatch;
-    if (!current[arrayName]) {
-      current[arrayName] = [];
-    }
-    current[arrayName][+(index)] = value;
-  } else {
-    current[lastPart] = value;
-  }
-
-  return result;
+    return result;
 }
-export function useForm<T extends object>(initialForm: FormState<T>) {
-  const [formState, setFormState] = useState<FormState<T>>(initialForm);
 
-  const onInputChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = target;
-    setFormState((prevState: FormState<T>) => setNestedValue(prevState, name, value));
-  };
+type UseForm<T extends object> = FormState<T> & {
+    formState: FormState<T>;
+    setFormState: (newFormState: FormState<T> | ((prev: FormState<T>) => FormState<T>)) => void;
+    onInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    onResetForm: () => void;
+};
 
-  const onResetForm = () => {
-    setFormState(initialForm);
-  };
+export function useForm<T extends object>(initialForm: FormState<T>): UseForm<T> {
+    const [formState, setFormState] = useState<FormState<T>>(initialForm);
 
-  return {
-    ...formState,
-    formState,
-    setFormState,
-    onInputChange,
-    onResetForm,
-  };
+    const onInputChange = ({ target }: ChangeEvent<HTMLInputElement>): void => {
+        const { name, value } = target;
+        setFormState((prevState: FormState<T>) => setNestedValue(prevState, name, value));
+    };
+
+    const onResetForm = (): void => {
+        setFormState(initialForm);
+    };
+
+    return {
+        ...formState,
+        formState,
+        setFormState,
+        onInputChange,
+        onResetForm,
+    };
 }

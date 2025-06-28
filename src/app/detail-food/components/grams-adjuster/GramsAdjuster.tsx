@@ -1,28 +1,28 @@
-import { useState, ChangeEvent } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { type ChangeEvent, useState } from "react";
 
 type GramsAdjusterProps = {
     initialGrams?: number;
     onGramsChange: (grams: number) => void;
 };
 
-export default function GramsAdjuster({ initialGrams = 100, onGramsChange }: GramsAdjusterProps) {
+export default function GramsAdjuster({ initialGrams = 100, onGramsChange }: GramsAdjusterProps): JSX.Element {
     const [inputGrams, setInputGrams] = useState<string>(initialGrams.toString());
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const [currentGrams, setCurrentGrams] = useState<number>(initialGrams);
 
-    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const value = e.target.value;
         if (/^\d*\.?\d*$/.test(value)) {
             setInputGrams(value);
         }
     };
 
-    const applyGramsChange = () => {
-        const parsedValue = inputGrams === '' ? 0 : +(inputGrams);
+    const applyGramsChange = (): void => {
+        const parsedValue = inputGrams === "" ? 0 : +(inputGrams);
         //default
         if (parsedValue <= 0) {
-            setInputGrams('100');
+            setInputGrams("100");
             setCurrentGrams(100);
             onGramsChange(100);
         } else {
@@ -32,7 +32,7 @@ export default function GramsAdjuster({ initialGrams = 100, onGramsChange }: Gra
         setIsExpanded(false);
     };
 
-    const toggleExpand = () => {
+    const toggleExpand = (): void => {
         setIsExpanded(!isExpanded);
         if (!isExpanded) {
             setInputGrams(currentGrams.toString());
@@ -44,18 +44,18 @@ export default function GramsAdjuster({ initialGrams = 100, onGramsChange }: Gra
             <div
                 onClick={toggleExpand}
                 className="
-                    flex
-                    items-center
-                    justify-between
-                    p-[8px]
-                    pl-[12px]
-                    border-[1px]
-                    rounded-[4px]
-                    bg-[#f8f9fa]
-                    cursor-pointer
-                    hover:bg-[#eaecef]
-                    transition-colors
-                    duration-200
+                flex
+                items-center
+                justify-between
+                p-[8px]
+                pl-[12px]
+                border-[1px]
+                rounded-[4px]
+                bg-[#f8f9fa]
+                cursor-pointer
+                hover:bg-[#eaecef]
+                transition-colors
+                duration-200
                 "
             >
                 <div className="flex items-center">
@@ -69,12 +69,12 @@ export default function GramsAdjuster({ initialGrams = 100, onGramsChange }: Gra
                 <div className="flex items-center">
                     <button
                         className="
-                            px-[8px]
-                            py-[4px]
-                            text-[13px]
-                            text-[#5fa16c]
-                            hover:text-[#4c8a58]
-                            font-medium
+                        px-[8px]
+                        py-[4px]
+                        text-[13px]
+                        text-[#5fa16c]
+                        hover:text-[#4c8a58]
+                        font-medium
                         "
                         onClick={(e) => {
                             e.stopPropagation();
@@ -82,13 +82,17 @@ export default function GramsAdjuster({ initialGrams = 100, onGramsChange }: Gra
                         }}
                     >
                         Ajustar
-                        {isExpanded ? <ChevronUp size={16} className="inline ml-[4px]" /> : <ChevronDown size={16} className="inline ml-[4px]" />}
+                        {isExpanded ? <ChevronUp size={16} className="inline ml-[4px]"/> : <ChevronDown
+                            size={16}
+                            className="inline ml-[4px]"
+                        />}
                     </button>
                 </div>
             </div>
 
             {isExpanded && (
-                <div className="
+                <div
+                    className="
                     absolute
                     z-10
                     mt-[4px]
@@ -99,7 +103,8 @@ export default function GramsAdjuster({ initialGrams = 100, onGramsChange }: Gra
                     bg-[white]
                     w-full
                     animate-fadeIn
-                ">
+                    "
+                >
                     <div className="flex items-center justify-between gap-[12px]">
                         <div className="flex items-center gap-[8px]">
                             <input
@@ -107,19 +112,19 @@ export default function GramsAdjuster({ initialGrams = 100, onGramsChange }: Gra
                                 value={inputGrams}
                                 onChange={handleInputChange}
                                 className="
-                                    w-[70px]
-                                    py-[6px]
-                                    px-[10px]
-                                    border-[1.5px]
-                                    border-[#ced4da]
-                                    rounded-[4px]
-                                    text-[15px]
-                                    font-[500]
-                                    text-center
-                                    focus:outline-none
-                                    focus:border-[#5fa16c]
-                                    focus:ring-[2px]
-                                    focus:ring-[#5fa16c25]
+                                w-[70px]
+                                py-[6px]
+                                px-[10px]
+                                border-[1.5px]
+                                border-[#ced4da]
+                                rounded-[4px]
+                                text-[15px]
+                                font-[500]
+                                text-center
+                                focus:outline-none
+                                focus:border-[#5fa16c]
+                                focus:ring-[2px]
+                                focus:ring-[#5fa16c25]
                                 "
                                 aria-label="Cantidad en gramos"
                             />
@@ -130,16 +135,16 @@ export default function GramsAdjuster({ initialGrams = 100, onGramsChange }: Gra
                             <button
                                 onClick={() => setIsExpanded(false)}
                                 className="
-                                    px-[12px]
-                                    py-[6px]
-                                    border-[1px]
-                                    border-[#dee2e6]
-                                    rounded-[4px]
-                                    text-[13px]
-                                    font-[600]
-                                    bg-[#f8f9fa]
-                                    text-[#495057]
-                                    hover:bg-[#e2e6ea]
+                                px-[12px]
+                                py-[6px]
+                                border-[1px]
+                                border-[#dee2e6]
+                                rounded-[4px]
+                                text-[13px]
+                                font-[600]
+                                bg-[#f8f9fa]
+                                text-[#495057]
+                                hover:bg-[#e2e6ea]
                                 "
                             >
                                 Cancelar
@@ -147,16 +152,16 @@ export default function GramsAdjuster({ initialGrams = 100, onGramsChange }: Gra
                             <button
                                 onClick={applyGramsChange}
                                 className="
-                                    bg-[#5fa16c]
-                                    text-[white]
-                                    px-[12px]
-                                    py-[6px]
-                                    border-none
-                                    rounded-[4px]
-                                    text-[13px]
-                                    font-[600]
-                                    cursor-pointer
-                                    hover:bg-[#4c8a58]
+                                bg-[#5fa16c]
+                                text-[white]
+                                px-[12px]
+                                py-[6px]
+                                border-none
+                                rounded-[4px]
+                                text-[13px]
+                                font-[600]
+                                cursor-pointer
+                                hover:bg-[#4c8a58]
                                 "
                             >
                                 Aplicar

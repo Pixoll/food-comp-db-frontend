@@ -1,80 +1,80 @@
 .modalOverlay {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    display: flex;
     align-items: center;
-    justify-content: center;
     background-color: rgba(0, 0, 0, 0.6);
-    z-index: 1000;
-    transition: opacity 0.3s ease;
-    padding: 1rem;
+    bottom: 0;
     box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    left: 0;
+    padding: 1rem;
+    position: fixed;
+    right: 0;
+    top: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
 }
 
 .modalContainer {
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     margin: 0 auto;
     max-width: 90%;
-    width: 100%;
-    transition: all 0.3s ease;
     position: relative;
-    box-sizing: border-box;
+    transition: all 0.3s ease;
+    width: 100%;
 }
 
 .modalHeader {
-    width: 100%;
-    min-height: 64px;
-    background: linear-gradient(135deg, #1a8d44 0%, #166534 100%);
-    padding: 16px;
-    display: flex;
-    justify-content: space-between;
     align-items: center;
-    position: relative;
+    background: linear-gradient(135deg, #1a8d44 0%, #166534 100%);
     border-bottom: 1px solid #0e4c25;
     box-sizing: border-box;
+    display: flex;
     flex-shrink: 0;
+    justify-content: space-between;
+    min-height: 64px;
+    padding: 16px;
+    position: relative;
+    width: 100%;
 }
 
 .modalContent {
-    width: 100%;
-    flex: 1 1 auto;
-    padding: 20px;
     box-sizing: border-box;
-    min-height: 100px;
     display: flex;
+    flex: 1 1 auto;
     flex-direction: column;
+    min-height: 100px;
     overflow-y: auto;
+    padding: 20px;
+    width: 100%;
 }
 
 .modalTitle {
     color: white;
+    font-size: 1.25rem;
     font-weight: 600;
     margin: 0;
-    font-size: 1.25rem;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .closeButton {
+    align-items: center;
     background-color: transparent;
     border: none;
+    border-radius: 50%;
     color: white;
-    font-size: 28px;
     cursor: pointer;
-    width: 32px;
-    height: 32px;
     display: flex;
-    align-items: center;
+    font-size: 28px;
+    height: 32px;
     justify-content: center;
     padding: 0;
-    border-radius: 50%;
     transition: all 0.2s ease;
+    width: 32px;
 }
 
 .closeButton:hover {
@@ -83,17 +83,17 @@
 }
 
 .closeButton:focus {
-    outline: none;
     box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+    outline: none;
 }
 
 .modalContent {
-    width: 100%;
+    box-sizing: border-box;
     flex-grow: 1;
+    max-height: calc(80vh - 128px);
     overflow: auto;
     padding: 20px;
-    box-sizing: border-box;
-    max-height: calc(80vh - 128px);
+    width: 100%;
 }
 
 .modalContent::-webkit-scrollbar {
@@ -110,39 +110,39 @@
 }
 
 .modalFooter {
-    width: 100%;
-    min-height: 64px;
-    background: linear-gradient(135deg, #166534 0%, #14532d 100%);
-    padding: 16px;
-    display: flex;
-    justify-content: flex-end;
     align-items: center;
+    background: linear-gradient(135deg, #166534 0%, #14532d 100%);
     border-top: 1px solid #0e4c25;
     box-sizing: border-box;
+    display: flex;
     flex-shrink: 0;
+    justify-content: flex-end;
+    min-height: 64px;
+    padding: 16px;
+    width: 100%;
 }
 
 .closeButtonFooter {
-    padding: 8px 18px;
     background-color: white;
-    color: #166534;
     border: none;
     border-radius: 6px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    color: #166534;
+    cursor: pointer;
+    font-weight: 500;
+    padding: 8px 18px;
+    transition: all 0.2s ease;
 }
 
 .closeButtonFooter:hover {
     background-color: #f9fafb;
-    transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
 }
 
 .closeButtonFooter:active {
-    transform: translateY(1px);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transform: translateY(1px);
 }
 
 .fadeIn {
@@ -203,8 +203,8 @@
 
 @media (max-width: 640px) {
     .modalContainer {
-        width: 95% !important;
         max-height: 80vh !important;
+        width: 95% !important;
     }
 
     .modalHeader, .modalFooter {

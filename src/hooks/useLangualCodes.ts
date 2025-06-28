@@ -1,11 +1,11 @@
 "use client";
 
-import { LangualCode } from "@/api";
+import type { LangualCode } from "@/api";
 import { Collection } from "@/utils/collection";
 import { useState } from "react";
 import { FetchStatus, useApi } from "./useApi";
 
-export function useLangualCodes() {
+export function useLangualCodes(): Collection<string, LangualCode> {
     const result = useApi([], (api) => api.getLangualCodes());
     const [langualCodes, setLangualCodes] = useState(new Collection<string, LangualCode>());
 

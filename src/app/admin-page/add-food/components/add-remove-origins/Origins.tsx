@@ -1,9 +1,9 @@
-'use client'
+"use client";
 
-import React, {useCallback, useEffect, useState} from "react";
-import {useTranslation} from "react-i18next";
-import {Commune, Location, Province, Region} from "@/hooks";
-import {Collection} from "@/utils/collection"
+import type { Commune, Location, Province, Region } from "@/hooks";
+import { Collection } from "@/utils/collection";
+import React, { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import OriginRow from "./OriginRow";
 
 type OriginsProps = {
@@ -18,10 +18,10 @@ type OriginsProps = {
 };
 
 export default function Origins({
-                                    data,
-                                    updateOrigins,
-                                    originsForm,
-                                }: OriginsProps) {
+    data,
+    updateOrigins,
+    originsForm,
+}: OriginsProps): JSX.Element {
     const { t } = useTranslation();
 
     const [rows, setRows] = useState<number[]>(
@@ -30,7 +30,7 @@ export default function Origins({
 
     const [addresses, setAddresses] = useState<string[]>([]);
 
-    const [originIds, setOriginIds] = useState<(number | null)[]>(originsForm);
+    const [originIds, setOriginIds] = useState<Array<number | null>>(originsForm);
     useEffect(() => {
         const updatedOrigins: number[] = [];
         for (let index = 0; index < originIds.length; index++) {
@@ -52,7 +52,7 @@ export default function Origins({
         setOriginIds((prevOriginIds) => [...prevOriginIds, null]);
     }, []);
 
-    const handleRemoveLastRow = () => {
+    const handleRemoveLastRow = (): void => {
         if (rows.length > 1) {
             setRows((prevRows) => prevRows.slice(0, -1));
             setAddresses((prevAddresses) => prevAddresses.slice(0, -1));
@@ -70,7 +70,7 @@ export default function Origins({
         });
     }, []);
 
-    const handleIdsChange = (id: number | null, index: number) => {
+    const handleIdsChange = (id: number | null, index: number): void => {
         setOriginIds((prevOriginIds) => {
             const updatedIds = [...prevOriginIds];
             updatedIds[index] = id;
@@ -83,34 +83,74 @@ export default function Origins({
             <div className="overflow-x-auto">
                 <table className="w-full min-w-[600px] border-collapse rounded-[8px] overflow-hidden">
                     <thead>
-                    <tr className="bg-[#f7fef7]">
-                        <th className="py-[12px] px-[16px] text-left font-[600] text-[#064e3b] border-b-[2px] border-[#047857]">
-                            {t("Origins.Region")}
-                        </th>
-                        <th className="py-[12px] px-[16px] text-left font-[600] text-[#064e3b] border-b-[2px] border-[#047857]">
-                            {t("Origins.Province")}
-                        </th>
-                        <th className="py-[12px] px-[16px] text-left font-[600] text-[#064e3b] border-b-[2px] border-[#047857]">
-                            {t("Origins.Commune")}
-                        </th>
-                        <th className="py-[12px] px-[16px] text-left font-[600] text-[#064e3b] border-b-[2px] border-[#047857]">
-                            {t("Origins.Location")}
-                        </th>
-                    </tr>
+                        <tr className="bg-[#f7fef7]">
+                            <th
+                                className="
+                                py-[12px]
+                                px-[16px]
+                                text-left
+                                font-[600]
+                                text-[#064e3b]
+                                border-b-[2px]
+                                border-[#047857]
+                                "
+                            >
+                                {t("Origins.Region")}
+                            </th>
+                            <th
+                                className="
+                                py-[12px]
+                                px-[16px]
+                                text-left
+                                font-[600]
+                                text-[#064e3b]
+                                border-b-[2px]
+                                border-[#047857]
+                                "
+                            >
+                                {t("Origins.Province")}
+                            </th>
+                            <th
+                                className="
+                                py-[12px]
+                                px-[16px]
+                                text-left
+                                font-[600]
+                                text-[#064e3b]
+                                border-b-[2px]
+                                border-[#047857]
+                                "
+                            >
+                                {t("Origins.Commune")}
+                            </th>
+                            <th
+                                className="
+                                py-[12px]
+                                px-[16px]
+                                text-left
+                                font-[600]
+                                text-[#064e3b]
+                                border-b-[2px]
+                                border-[#047857]
+                                "
+                            >
+                                {t("Origins.Location")}
+                            </th>
+                        </tr>
                     </thead>
                     <tbody className="divide-y divide-[#e5f1eb]">
-                    {rows.map((row, index) => (
-                        <OriginRow
-                            data={data}
-                            key={row}
-                            onAddressChange={(address: string) =>
-                                handleAddressChange(index, address)
-                            }
-                            onIdChange={(id: number | null) => handleIdsChange(id, index)}
-                            index={index}
-                            initialId={originIds[index] ?? -1}
-                        />
-                    ))}
+                        {rows.map((row, index) => (
+                            <OriginRow
+                                data={data}
+                                key={row}
+                                onAddressChange={(address: string) =>
+                                    handleAddressChange(index, address)
+                                }
+                                onIdChange={(id: number | null) => handleIdsChange(id, index)}
+                                index={index}
+                                initialId={originIds[index] ?? -1}
+                            />
+                        ))}
                     </tbody>
                 </table>
             </div>
@@ -118,14 +158,34 @@ export default function Origins({
             <div className="flex mt-[16px] space-x-[12px]">
                 <button
                     onClick={handleAddRow}
-                    className="px-[16px] py-[8px] bg-[#047857] text-[white] rounded-[4px] border-none hover:bg-[#065f46] transition-colors duration-[200ms]"
+                    className="
+                    px-[16px]
+                    py-[8px]
+                    bg-[#047857]
+                    text-[white]
+                    rounded-[4px]
+                    border-none
+                    hover:bg-[#065f46]
+                    transition-colors
+                    duration-[200ms]
+                    "
                 >
                     {t("Origins.Add")}
                 </button>
 
                 <button
                     onClick={handleRemoveLastRow}
-                    className="px-[16px] py-[8px] bg-[#ef4444] text-[white] rounded-[4px] border-none hover:bg-[#dc2626] transition-colors duration-[200ms]"
+                    className="
+                    px-[16px]
+                    py-[8px]
+                    bg-[#ef4444]
+                    text-[white]
+                    rounded-[4px]
+                    border-none
+                    hover:bg-[#dc2626]
+                    transition-colors
+                    duration-[200ms]
+                    "
                 >
                     {t("Origins.Delete")}
                 </button>
@@ -141,10 +201,17 @@ export default function Origins({
                         {addresses.map((address, index) => (
                             <li
                                 key={index}
-                                className="py-[12px] px-[16px] bg-[white] hover:bg-[#f0fdf4] transition-colors duration-[200ms]"
+                                className="
+                                py-[12px]
+                                px-[16px]
+                                bg-[white]
+                                hover:bg-[#f0fdf4]
+                                transition-colors
+                                duration-[200ms]
+                                "
                             >
-                                {address ||
-                                    <span className="text-[#6b7280] italic">
+                                {address
+                                    || <span className="text-[#6b7280] italic">
                                         {t("Origins.no_direction")}
                                     </span>
                                 }

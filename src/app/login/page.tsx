@@ -4,7 +4,7 @@ import api from "@/api";
 import { useAuth } from "@/context/AuthContext";
 import { useForm } from "@/hooks";
 import { useRouter } from "next/navigation";
-import { FormEvent } from "react";
+import type { FormEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { BiLogIn } from "react-icons/bi";
 import { FaLock, FaUserCircle } from "react-icons/fa";
@@ -12,17 +12,19 @@ import { FaLock, FaUserCircle } from "react-icons/fa";
 type LoginForm = {
     username: string;
     password: string;
-}
-export default function LoginPage() {
+};
+
+export default function LoginPage(): JSX.Element {
     const { t } = useTranslation();
     const { login } = useAuth();
     const router = useRouter();
 
     const { formState, onInputChange, onResetForm } = useForm<LoginForm>({
         username: "",
-        password: ""
+        password: "",
     });
-    const onLogin = async (e: FormEvent) => {
+
+    const onLogin = async (e: FormEvent): Promise<void> => {
         e.preventDefault();
 
         try {
@@ -45,26 +47,26 @@ export default function LoginPage() {
             console.error(t("loginPage.errors.login"), error);
         }
     };
-    return (
 
+    return (
         <div className="flex flex-row h-full justify-center items-center">
             <div
                 className="
-                    flex
-                    flex-col
-                    justify-start
-                    items-center
-                    text-white
-                    w-[450px]
-                    h-[500px]
-                    p-[40px]
-                    rounded-[10px]
-                    shadow-[10px_10px_15px_rgba(0,0,0,0.05)]
-                    bg-[rgba(255,255,255,0.25)]
-                    backdrop-blur-[20px]
-                    font-['Poppins',sans-serif]
-                    [text-shadow:2px_2px_4px_rgba(0,0,0,0.2)]
-                    "
+                flex
+                flex-col
+                justify-start
+                items-center
+                text-white
+                w-[450px]
+                h-[500px]
+                p-[40px]
+                rounded-[10px]
+                shadow-[10px_10px_15px_rgba(0,0,0,0.05)]
+                bg-[rgba(255,255,255,0.25)]
+                backdrop-blur-[20px]
+                font-['Poppins',sans-serif]
+                [text-shadow:2px_2px_4px_rgba(0,0,0,0.2)]
+                "
             >
                 <h1 className="text-center mb-[20px] text-[24px] text-[white]">{t("loginPage.title")}</h1>
                 <form onSubmit={onLogin} className="w-full">
@@ -84,15 +86,15 @@ export default function LoginPage() {
                             onChange={onInputChange}
                             required
                             className="
-                                w-full
-                                px-[5px]
-                                h-[40px]
-                                text-[16px]
-                                border-none
-                                bg-transparent
-                                outline-none
-                                text-[white]
-                                peer
+                            w-full
+                            px-[5px]
+                            h-[40px]
+                            text-[16px]
+                            border-none
+                            bg-transparent
+                            outline-none
+                            text-[white]
+                            peer
                             "
                         />
                         <span
@@ -107,8 +109,8 @@ export default function LoginPage() {
                             duration-500
                             peer-focus:w-full
                             peer-valid:w-full
-                        "
-                        ></span>
+                            "
+                        />
                         <label
                             className="
                             absolute
@@ -129,7 +131,7 @@ export default function LoginPage() {
                             peer-focus:text-[#009000]
                             peer-valid:-top-[5px]
                             peer-valid:text-[#009000]
-                        "
+                            "
                         >
                             <FaUserCircle/> {t("loginPage.username")}
                         </label>
@@ -141,7 +143,7 @@ export default function LoginPage() {
                         border-[#adadad]
                         my-[30px]
                         group
-                    "
+                        "
                     >
                         <input
                             type="password"
@@ -150,15 +152,15 @@ export default function LoginPage() {
                             onChange={onInputChange}
                             required
                             className="
-                                w-full
-                                px-[5px]
-                                h-[40px]
-                                text-[16px]
-                                border-none
-                                bg-transparent
-                                outline-none
-                                text-[white]
-                                peer
+                            w-full
+                            px-[5px]
+                            h-[40px]
+                            text-[16px]
+                            border-none
+                            bg-transparent
+                            outline-none
+                            text-[white]
+                            peer
                             "
                         />
                         <span
@@ -173,8 +175,8 @@ export default function LoginPage() {
                             duration-500
                             peer-focus:w-full
                             peer-valid:w-full
-                        "
-                        ></span>
+                            "
+                        />
                         <label
                             className="
                             absolute
@@ -195,7 +197,7 @@ export default function LoginPage() {
                             peer-focus:text-[#009000]
                             peer-valid:-top-[5px]
                             peer-valid:text-[#009000]
-                        "
+                            "
                         >
                             <FaLock/> {t("loginPage.password")}
                         </label>
@@ -203,25 +205,25 @@ export default function LoginPage() {
                     <button
                         type="submit"
                         className="
-                            w-full
-                            h-[50px]
-                            border-none
-                            bg-[#28a745]
-                            text-[white]
-                            text-[18px]
-                            font-[700]
-                            rounded-[25px]
-                            cursor-pointer
-                            transition-all
-                            duration-300
-                            ease-in-out
-                            hover:bg-[#218838]
-                            hover:scale-105
-                            focus:outline-none
-                            flex
-                            items-center
-                            justify-center
-                            gap-[8px]
+                        w-full
+                        h-[50px]
+                        border-none
+                        bg-[#28a745]
+                        text-[white]
+                        text-[18px]
+                        font-[700]
+                        rounded-[25px]
+                        cursor-pointer
+                        transition-all
+                        duration-300
+                        ease-in-out
+                        hover:bg-[#218838]
+                        hover:scale-105
+                        focus:outline-none
+                        flex
+                        items-center
+                        justify-center
+                        gap-[8px]
                         "
                     >
                         <BiLogIn/>
@@ -230,6 +232,5 @@ export default function LoginPage() {
                 </form>
             </div>
         </div>
-
     );
 }

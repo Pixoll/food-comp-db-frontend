@@ -1,9 +1,9 @@
-'use client'
+"use client";
 
-import {Dispatch, SetStateAction, useState} from "react";
-import {useTranslation} from "react-i18next";
-import {FormState, useForm, useReferences} from "@/hooks";
-import { ArticleByReference, Authors, GeneralData, PreviewPostReference, ReferenceForm } from "./components";
+import { type FormState, useForm, useReferences } from "@/hooks";
+import { type Dispatch, type SetStateAction, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { ArticleByReference, Authors, GeneralData, PreviewPostReference, type ReferenceForm } from "./components";
 
 enum TypeOfHandle {
     GENERAL_DATA = 1,
@@ -14,7 +14,7 @@ function selectHandle<T extends object>(
     partialData: Partial<ReferenceForm>,
     i: TypeOfHandle,
     setFormState: Dispatch<SetStateAction<FormState<T>>>
-) {
+): Dispatch<SetStateAction<FormState<T>>> | void {
     switch (i) {
         case TypeOfHandle.GENERAL_DATA:
             return setFormState((prev) => ({
@@ -33,8 +33,7 @@ function selectHandle<T extends object>(
     }
 }
 
-export default function AddReferencePage() {
-
+export default function AddReferencePage(): JSX.Element {
     const { t } = useTranslation();
     const {
         references,
@@ -47,7 +46,7 @@ export default function AddReferencePage() {
     } = useReferences();
     const [activeSection, setActiveSection] = useState<string>("general");
 
-    const {formState, setFormState, onResetForm} = useForm<ReferenceForm>({
+    const { formState, setFormState, onResetForm } = useForm<ReferenceForm>({
         code: 0,
         type: "article", //Listo <GeneralData>
         title: "", //Listo <GeneralData>
@@ -60,7 +59,6 @@ export default function AddReferencePage() {
         other: undefined, //Listo <GeneralData>
     });
 
-
     if (!formState.code && references) {
         const newCode = Math.max(...(references?.map((r) => r.code) ?? [])) + 1;
         setFormState((previous) => ({
@@ -69,38 +67,40 @@ export default function AddReferencePage() {
         }));
         formState.code = newCode;
     }
-let sectionNamesByNewReference: {id:string, name:string}[];
 
-if (formState.type === "article") {
-    sectionNamesByNewReference = [
-        { id: "general", name: t("AdminPage.sectionNamesByNewReference.Data") },
-        {
-            id: "authors",
-            name: t("AdminPage.sectionNamesByNewReference.Authors"),
-        },
-        {
-            id: "article",
-            name: t("AdminPage.sectionNamesByNewReference.Article"),
-        },
-        {
-            id: "preview",
-            name: t("AdminPage.sectionNamesByNewReference.Preview"),
-        },
-    ];
-} else {
-    sectionNamesByNewReference = [
-        { id: "general", name: t("AdminPage.sectionNamesByNewReference.Data") },
-        {
-            id: "authors",
-            name: t("AdminPage.sectionNamesByNewReference.Authors"),
-        },
-        {
-            id: "preview",
-            name: t("AdminPage.sectionNamesByNewReference.Preview"),
-        },
-    ];
-}
-    const renderSectionByNewReference = () => {
+    let sectionNamesByNewReference: Array<{ id: string; name: string }>;
+
+    if (formState.type === "article") {
+        sectionNamesByNewReference = [
+            { id: "general", name: t("AdminPage.sectionNamesByNewReference.Data") },
+            {
+                id: "authors",
+                name: t("AdminPage.sectionNamesByNewReference.Authors"),
+            },
+            {
+                id: "article",
+                name: t("AdminPage.sectionNamesByNewReference.Article"),
+            },
+            {
+                id: "preview",
+                name: t("AdminPage.sectionNamesByNewReference.Preview"),
+            },
+        ];
+    } else {
+        sectionNamesByNewReference = [
+            { id: "general", name: t("AdminPage.sectionNamesByNewReference.Data") },
+            {
+                id: "authors",
+                name: t("AdminPage.sectionNamesByNewReference.Authors"),
+            },
+            {
+                id: "preview",
+                name: t("AdminPage.sectionNamesByNewReference.Preview"),
+            },
+        ];
+    }
+
+    const renderSectionByNewReference = (): JSX.Element | null => {
         switch (activeSection) {
             case "general":
                 return (
@@ -113,7 +113,11 @@ if (formState.type === "article") {
                         newCity={formState.newCity}
                         other={formState.other}
                         cities={cities || []}
-                        onFormUpdate={(updatedFields: Partial<ReferenceForm>) =>selectHandle({...formState,...updatedFields},TypeOfHandle.GENERAL_DATA, setFormState)}
+                        onFormUpdate={(updatedFields: Partial<ReferenceForm>) => selectHandle(
+                            { ...formState, ...updatedFields },
+                            TypeOfHandle.GENERAL_DATA,
+                            setFormState
+                        )}
                     />
                 );
             case "authors":
@@ -130,7 +134,7 @@ if (formState.type === "article") {
                                         .map((author) => author.name),
                                     authorIds: authors
                                         .filter((author) => author.id > 0)
-                                        .map((author) => author.id)
+                                        .map((author) => author.id),
                                 },
                                 TypeOfHandle.GENERAL_DATA,
                                 setFormState
@@ -175,26 +179,25 @@ if (formState.type === "article") {
                 return null;
         }
     };
-    return (
-        <>
-            <div className="left-column">
-                <h3 className="subtitle">{t("AdminPage.title")}</h3>
-                {sectionNamesByNewReference.map(({ id, name }) => (
-                    <button
-                        key={`post-reference-${id}`}
-                        className={`pagination-button ${
-                            activeSection === id ? "active" : ""
-                        }`}
-                        onClick={() => setActiveSection(id)}
-                    >
-                        {name}
-                    </button>
-                ))}
-            </div>
-            <div className="content-container">
-                <h2 className="title">{t("AdminPage.New_R")}</h2>
-                {renderSectionByNewReference()}
-            </div>
-        </>
-    )
+
+    return <>
+        <div className="left-column">
+            <h3 className="subtitle">{t("AdminPage.title")}</h3>
+            {sectionNamesByNewReference.map(({ id, name }) => (
+                <button
+                    key={`post-reference-${id}`}
+                    className={`pagination-button ${
+                        activeSection === id ? "active" : ""
+                    }`}
+                    onClick={() => setActiveSection(id)}
+                >
+                    {name}
+                </button>
+            ))}
+        </div>
+        <div className="content-container">
+            <h2 className="title">{t("AdminPage.New_R")}</h2>
+            {renderSectionByNewReference()}
+        </div>
+    </>;
 }

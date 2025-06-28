@@ -1,15 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import type { Subspecies } from "@/api";
 import { Collection } from "@/utils/collection";
+import { useState } from "react";
 import { FetchStatus, useApi } from "./useApi";
 
-export type Subspecies = {
-    id: number;
-    name: string;
+export type UseSubspecies = {
+    idToObject: Collection<number, Subspecies>;
+    idToName: Collection<string, string>;
+    nameToId: Collection<string, number>;
+    forceReload: () => void;
 };
 
-export function useSubspecies() {
+export function useSubspecies(): UseSubspecies {
     const result = useApi([], (api) => api.getSubspecies());
     const [idToObject, setIdToObject] = useState(new Collection<number, Subspecies>());
     const [idToName, setIdToName] = useState(new Collection<string, string>());
@@ -26,7 +29,7 @@ export function useSubspecies() {
         setNameToId(nameToId.clone());
     }
 
-    const forceReload = () => {
+    const forceReload = (): void => {
         if (result.status !== FetchStatus.Loading) {
             result.forceReload();
             idToObject.clear();

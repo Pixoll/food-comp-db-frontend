@@ -1,7 +1,6 @@
 "use client";
 
 import api from "@/api";
-import { RequestResult } from "@hey-api/client-fetch";
 import { useEffect, useState } from "react";
 
 export enum FetchStatus {
@@ -33,25 +32,25 @@ type Api = typeof api;
 
 type BaseOptions = {
     signal: AbortSignal;
-}
+};
 
-type ApiResponse<R> = {
+type ApiResponse<R, E> = {
     data: R | undefined;
-    error: any;
+    error: E;
 };
 
 function apiWrapper(baseOptions: BaseOptions): Api {
     return Object.fromEntries(Object.entries(api).map(([key, fn]) =>
         [key, (options = {}) =>
             // @ts-expect-error: options is always an object
-            fn({ ...baseOptions, ...options })
+            fn({ ...baseOptions, ...options }),
         ]
     )) as unknown as Api;
 }
 
-export function useApi<R, Deps extends readonly unknown[] = []>(
+export function useApi<R, E, Deps extends readonly unknown[] = []>(
     deps: [...Deps],
-    callback: (api: Api, ...args: Deps) => Promise<ApiResponse<R>>,
+    callback: (api: Api, ...args: Deps) => Promise<ApiResponse<R, E>>
 ): FetchResult<R> {
     const [status, setStatus] = useState<FetchStatus>(FetchStatus.Loading);
     const [data, setData] = useState<R | null>(null);
@@ -85,16 +84,17 @@ export function useApi<R, Deps extends readonly unknown[] = []>(
             });
 
         return () => abortController.abort();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [counter, ...deps]);
 
-    const onCancelRequest = () => {
+    const onCancelRequest = (): void => {
         if (controller) {
             controller.abort();
             setError("Request cancelled");
         }
     };
 
-    const forceReload = () => setCounter(x => x + 1);
+    const forceReload = (): void => setCounter(x => x + 1);
 
     switch (status) {
         case FetchStatus.Loading:
@@ -106,7 +106,7 @@ export function useApi<R, Deps extends readonly unknown[] = []>(
     }
 }
 
-function getErrorMessage(error: unknown) {
+function getErrorMessage(error: unknown): string {
     return error && typeof error === "object" && "message" in error && typeof error.message === "string"
         ? error.message
         : `${error}`;

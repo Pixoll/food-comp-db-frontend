@@ -1,8 +1,8 @@
-import {PlusCircle, XCircle} from "lucide-react";
-import {useTranslation} from "react-i18next";
-import {useGroups, useNutrients, useOrigins, useTypes} from "@/hooks";
-import {Collection} from "@/utils/collection";
 import NumericField from "@/app/components/Fields/NumericField";
+import { useGroups, useNutrients, useOrigins, useTypes } from "@/hooks";
+import { Collection } from "@/utils/collection";
+import { PlusCircle, XCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import SearchBox from "./SearchBox";
 
 export type Filters = {
@@ -25,15 +25,15 @@ type FilterBodyProps = {
 };
 
 export default function FilterBody({
-                                       selectedFilters,
-                                       setSelectedFilters,
-                                       resetFilters,
-                                   }: FilterBodyProps) {
-    const {t} = useTranslation();
+    selectedFilters,
+    setSelectedFilters,
+    resetFilters,
+}: FilterBodyProps): JSX.Element {
+    const { t } = useTranslation();
     const groups = useGroups().idToName;
     const types = useTypes().idToName;
-    const {nutrients} = useNutrients();
-    const {regions} = useOrigins();
+    const { nutrients } = useNutrients();
+    const { regions } = useOrigins();
     const regionOptions = new Collection<string, string>(
         Array.from(regions.values()).map((region) => [region.id.toString(), region.name])
     );
@@ -46,23 +46,27 @@ export default function FilterBody({
     const handleFilterChange = (
         filterKey: keyof typeof selectedFilters,
         values: string[]
-    ) => {
+    ): void => {
         setSelectedFilters((prevFilters) => ({
             ...prevFilters,
             [filterKey]: new Set(values),
         }));
     };
 
-    const handleNutrientFilterChange = <K extends keyof NutrientFilter>(key: K, value: NutrientFilter[K], index: number) => {
+    const handleNutrientFilterChange = <K extends keyof NutrientFilter>(
+        key: K,
+        value: NutrientFilter[K],
+        index: number
+    ): void => {
         setSelectedFilters((prevFilters) => ({
             ...prevFilters,
             nutrientsFilter: selectedFilters.nutrientsFilter.map((nutrient, i) =>
-                i === index ? {...nutrient, [key]: value} : nutrient
+                i === index ? { ...nutrient, [key]: value } : nutrient
             ),
         }));
     };
 
-    const handleAddNutrientFilter = () => {
+    const handleAddNutrientFilter = (): void => {
         setSelectedFilters((prevFilters) => ({
             ...prevFilters,
             nutrientsFilter: [...prevFilters.nutrientsFilter, {
@@ -72,7 +76,7 @@ export default function FilterBody({
         }));
     };
 
-    const handleRemoveLastNutrientFilter = () => {
+    const handleRemoveLastNutrientFilter = (): void => {
         setSelectedFilters((prevFilters) => ({
             ...prevFilters,
             nutrientsFilter: [...prevFilters.nutrientsFilter.slice(0, -1)],
@@ -136,23 +140,23 @@ export default function FilterBody({
                                     }
                                 }}
                                 className="
-                                  appearance-none
-                                  w-full
-                                  bg-[#f8f9fa]
-                                  border-[1.5px]
-                                  border-[#ced4da]
-                                  rounded-[6px]
-                                  py-[10px]
-                                  px-[12px]
-                                  pr-[36px]
-                                  text-[16px]
-                                  font-[400]
-                                  text-[#495057]
-                                  focus:outline-none
-                                  focus:border-[#80bdff]
-                                  focus:shadow-[0_0_0_0.2rem_rgba(0,123,255,0.25)]
-                                  transition-colors
-                                  duration-[200ms]
+                                appearance-none
+                                w-full
+                                bg-[#f8f9fa]
+                                border-[1.5px]
+                                border-[#ced4da]
+                                rounded-[6px]
+                                py-[10px]
+                                px-[12px]
+                                pr-[36px]
+                                text-[16px]
+                                font-[400]
+                                text-[#495057]
+                                focus:outline-none
+                                focus:border-[#80bdff]
+                                focus:shadow-[0_0_0_0.2rem_rgba(0,123,255,0.25)]
+                                transition-colors
+                                duration-[200ms]
                                 "
                             >
                                 <option value={""}>Nada seleccionado</option>
@@ -164,11 +168,25 @@ export default function FilterBody({
                                 ))}
                             </select>
                             <div
-                                className="absolute right-[12px] top-[50%] transform translate-y-[-50%] pointer-events-none text-[#6c757d]">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                     viewBox="0 0 16 16">
-                                    <path fillRule="evenodd"
-                                          d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                                className="
+                                absolute
+                                right-[12px]
+                                top-[50%]
+                                transform
+                                translate-y-[-50%]
+                                pointer-events-none
+                                text-[#6c757d]
+                                "
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    viewBox="0 0 16 16"
+                                >
+                                    <path
+                                        fillRule="evenodd"
+                                        // eslint-disable-next-line max-len
+                                        d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                                    />
                                 </svg>
                             </div>
                         </div>
@@ -200,7 +218,7 @@ export default function FilterBody({
                                     focus:shadow-[0_0_0_0.2rem_rgba(0,123,255,0.25)]
                                     transition-colors
                                     duration-[200ms]
-                                  "
+                                    "
                                 >
                                     <option value="<">&lt;</option>
                                     <option value="<=">&le;</option>
@@ -209,11 +227,25 @@ export default function FilterBody({
                                     <option value=">">&gt;</option>
                                 </select>
                                 <div
-                                    className="absolute right-[12px] top-[50%] transform translate-y-[-50%] pointer-events-none text-[#6c757d]">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                         viewBox="0 0 16 16">
-                                        <path fillRule="evenodd"
-                                              d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                                    className="
+                                    absolute
+                                    right-[12px]
+                                    top-[50%]
+                                    transform
+                                    translate-y-[-50%]
+                                    pointer-events-none
+                                    text-[#6c757d]
+                                    "
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        viewBox="0 0 16 16"
+                                    >
+                                        <path
+                                            fillRule="evenodd"
+                                            // eslint-disable-next-line max-len
+                                            d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                                        />
                                     </svg>
                                 </div>
                             </div>
@@ -240,25 +272,25 @@ export default function FilterBody({
                     <button
                         onClick={handleAddNutrientFilter}
                         className="
-                              flex
-                              items-center
-                              justify-center
-                              px-[16px]
-                              py-[10px]
-                              bg-[#ffffff]
-                              border-[1.5px]
-                              border-[#007bff]
-                              text-[#007bff]
-                              rounded-[6px]
-                              text-[14px]
-                              font-[500]
-                              transition-all
-                              duration-[200ms]
-                              hover:bg-[#007bff]
-                              hover:text-[#ffffff]
-                              focus:outline-none
-                              focus:shadow-[0_0_0_0.2rem_rgba(0,123,255,0.25)]
-                            "
+                        flex
+                        items-center
+                        justify-center
+                        px-[16px]
+                        py-[10px]
+                        bg-[#ffffff]
+                        border-[1.5px]
+                        border-[#007bff]
+                        text-[#007bff]
+                        rounded-[6px]
+                        text-[14px]
+                        font-[500]
+                        transition-all
+                        duration-[200ms]
+                        hover:bg-[#007bff]
+                        hover:text-[#ffffff]
+                        focus:outline-none
+                        focus:shadow-[0_0_0_0.2rem_rgba(0,123,255,0.25)]
+                        "
                     >
                         <PlusCircle className="w-[18px] h-[18px] mr-[8px]"/>
                         Agregar
@@ -269,24 +301,24 @@ export default function FilterBody({
                     <button
                         onClick={handleRemoveLastNutrientFilter}
                         className="
-                          flex
-                          items-center
-                          justify-center
-                          px-[16px]
-                          py-[10px]
-                          bg-[#ffffff]
-                          border-[1.5px]
-                          border-[#6c757d]
-                          text-[#6c757d]
-                          rounded-[6px]
-                          text-[14px]
-                          font-[500]
-                          transition-all
-                          duration-[200ms]
-                          hover:bg-[#6c757d]
-                          hover:text-[#ffffff]
-                          focus:outline-none
-                          focus:shadow-[0_0_0_0.2rem_rgba(108,117,125,0.25)]
+                        flex
+                        items-center
+                        justify-center
+                        px-[16px]
+                        py-[10px]
+                        bg-[#ffffff]
+                        border-[1.5px]
+                        border-[#6c757d]
+                        text-[#6c757d]
+                        rounded-[6px]
+                        text-[14px]
+                        font-[500]
+                        transition-all
+                        duration-[200ms]
+                        hover:bg-[#6c757d]
+                        hover:text-[#ffffff]
+                        focus:outline-none
+                        focus:shadow-[0_0_0_0.2rem_rgba(108,117,125,0.25)]
                         "
                     >
                         <XCircle className="w-[18px] h-[18px] mr-[8px]"/>
@@ -296,8 +328,21 @@ export default function FilterBody({
             </div>
         </div>
 
-        <button onClick={resetFilters}
-                className="bg-[#1d6735] text-[white] p-[10px] transition-all duration-300 ease-in-out border-none w-full rounded-[5px] hover:bg-[#388e60]">
+        <button
+            onClick={resetFilters}
+            className="
+            bg-[#1d6735]
+            text-[white]
+            p-[10px]
+            transition-all
+            duration-300
+            ease-in-out
+            border-none
+            w-full
+            rounded-[5px]
+            hover:bg-[#388e60]
+            "
+        >
             {t("Filter.reset")}
         </button>
     </>;

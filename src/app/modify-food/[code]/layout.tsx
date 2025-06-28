@@ -1,16 +1,15 @@
-import React from "react"
-import Footer from "../../components/Footer"
-
+import type { ReactNode } from "react";
+import Footer from "../../components/Footer";
 
 type ModifyFoodPageLayoutProps = {
-    children: React.ReactNode
-}
+    children: ReactNode;
+};
 
-export default function ModifyFoodPageLayout({children}: ModifyFoodPageLayoutProps) {
+export default function ModifyFoodPageLayout({ children }: ModifyFoodPageLayoutProps): JSX.Element {
     return (
         <div>
             {children}
             <Footer/>
         </div>
-    )
+    );
 }
