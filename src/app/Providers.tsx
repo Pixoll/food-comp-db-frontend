@@ -2,14 +2,13 @@
 
 import { AuthProvider } from "@/context/AuthContext";
 import ComparisonProvider from "@/context/ComparisonContext";
+import { I18nProvider } from "@/context/I18nContext";
 import { ToastProvider } from "@/context/ToastContext";
-import i18next from "@/i18n";
-import type { ReactNode } from "react";
-import { I18nextProvider } from "react-i18next";
+import type { JSX, ReactNode } from "react";
 
 export default function Providers({ children }: { children: ReactNode }): JSX.Element {
     return (
-        <I18nextProvider i18n={i18next}>
+        <I18nProvider>
             <ToastProvider>
                 <ComparisonProvider>
                     <AuthProvider>
@@ -17,6 +16,6 @@ export default function Providers({ children }: { children: ReactNode }): JSX.El
                     </AuthProvider>
                 </ComparisonProvider>
             </ToastProvider>
-        </I18nextProvider>
+        </I18nProvider>
     );
 }

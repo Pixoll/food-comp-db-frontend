@@ -6,8 +6,9 @@ import api, {
     type NewArticleDto,
     type NewReferenceDto,
 } from "@/api";
+import { type I18nObject, useTranslation } from "@/context/I18nContext";
 import { useToast } from "@/context/ToastContext";
-import { useTranslation } from "react-i18next";
+import type { JSX } from "react";
 import type { RecursivePartial } from "./ArticleByReference";
 import type { ReferenceForm } from "./GeneralData";
 
@@ -21,36 +22,6 @@ type PreviewNewReferenceProps = {
     handleResetReferenceForm: (nextCode: number) => void;
 };
 
-const searchCityNameByID = (id: number | undefined, cities: City[]): string | undefined => {
-    if (!id) return;
-    return cities.find((city) => city.id === id)?.name;
-};
-
-const searchAuthorNameByID = (id: number | undefined, authors: Author[]): string | undefined => {
-    if (!id) return;
-    return authors.find((author) => author.id === id)?.name;
-};
-
-const searchVolumeInfoById = (
-    id: number | undefined,
-    journalVolumes: JournalVolume[],
-    journals: Journal[],
-    pageStart?: number,
-    pageEnd?: number
-): string => {
-    if (!id) return "Sin información de volumen";
-
-    const volume = journalVolumes.find((volume) => volume.id === id);
-    if (volume) {
-        const journal = journals.find((j) => j.id === volume.journalId);
-        return journal
-            ? `${journal.name}, Vol. ${volume.volume}(${volume.issue}), ${pageStart}-${pageEnd} - Año: ${volume.year}`
-            : `Vol. ${volume.volume}(${volume.issue}), ${pageStart}-${pageEnd} - Año: ${volume.year}`;
-    }
-
-    return "Volumen no encontrado";
-};
-
 export default function PreviewPostReference({
     data,
     cities,
@@ -62,28 +33,20 @@ export default function PreviewPostReference({
 }: PreviewNewReferenceProps): JSX.Element {
     const { t } = useTranslation();
     const { addToast } = useToast();
+
     const formatNewArticle = (newArticle: RecursivePartial<NewArticleDto>): string => {
         const { pageStart, pageEnd, volumeId, newVolume } = newArticle;
 
-        let articleInfo = "";
-
-        if (newVolume) {
-            const { volume, issue, year, newJournal } = newVolume;
-            if (newJournal) {
-                articleInfo += newJournal;
-            }
-            articleInfo += `Vol. ${volume}(${issue}), ${pageStart}-${pageEnd} - Año: ${year}`;
-        } else if (volumeId) {
-            articleInfo += searchVolumeInfoById(
-                volumeId,
-                journalVolumes,
-                journals,
+        return newVolume
+            ? t.newReferencePreview.volumeInformation(
+                newVolume.newJournal,
+                newVolume.volume,
+                newVolume.issue,
+                newVolume.year,
                 pageStart,
                 pageEnd
-            );
-        }
-
-        return articleInfo;
+            )
+            : searchVolumeInfoById(volumeId, journalVolumes, journals, pageStart, pageEnd, t);
     };
 
     const cityName = data.cityId
@@ -117,7 +80,7 @@ export default function PreviewPostReference({
                 console.error(result.error);
                 addToast({
                     message: result.error.message,
-                    title: "Fallo",
+                    title: t.newReferencePreview.toastError,
                     type: "Danger",
                     position: "middle-center",
                 });
@@ -125,8 +88,8 @@ export default function PreviewPostReference({
             }
 
             addToast({
-                message: "Se creo exitosamente",
-                title: "Éxito",
+                message: t.newReferencePreview.toastSuccessMessage,
+                title: t.newReferencePreview.toastSuccess,
                 type: "Success",
                 position: "top-end",
             });
@@ -135,8 +98,8 @@ export default function PreviewPostReference({
         } catch (error) {
             console.error(error);
             addToast({
-                message: (error as Error)?.message ?? "Error",
-                title: "Fallo",
+                message: (error as Error)?.message ?? t.newReferencePreview.toastError,
+                title: t.newReferencePreview.toastError,
                 type: "Danger",
                 position: "middle-center",
             });
@@ -193,7 +156,7 @@ export default function PreviewPostReference({
                                         mr-[10px]
                                         "
                                     >
-                                        {data.type.charAt(0).toUpperCase() + data.type.slice(1)}
+                                        {t.newReferencePreview[data.type]}
                                     </span>
                                     {data.year && (
                                         <span className="flex items-center text-[14px]">
@@ -230,9 +193,9 @@ export default function PreviewPostReference({
                                         </svg>
                                     </div>
                                     <div>
-                                        <span
-                                            className="font-[600] mr-[4px] text-[#475569]"
-                                        >{t("PreviewPostReference.Code")}</span>
+                                        <span className="font-[600] mr-[4px] text-[#475569]">
+                                            {t.newReferencePreview.code}
+                                        </span>
                                         <span className="font-[500]">{data.code}</span>
                                     </div>
                                 </div>
@@ -252,10 +215,10 @@ export default function PreviewPostReference({
                                             </svg>
                                         </div>
                                         <div>
-                                            <span
-                                                className="font-[600] mr-[4px] text-[#475569]"
-                                            >{t("PreviewPostReference.Authors")}</span>
-                                            <span className="font-[500]">{authorNames.join(" - ")}</span>
+                                            <span className="font-[600] mr-[4px] text-[#475569]">
+                                                {t.newReferencePreview.authors}
+                                            </span>
+                                            <span className="font-[500]">{authorNames.join("; ")}</span>
                                         </div>
                                     </div>
                                 )}
@@ -275,11 +238,10 @@ export default function PreviewPostReference({
                                             </svg>
                                         </div>
                                         <div>
-                                            <span
-                                                className="font-[600] mr-[4px] text-[#475569]"
-                                            >{t("PreviewPostReference.New_A")}:
+                                            <span className="font-[600] mr-[4px] text-[#475569]">
+                                                {t.newReferencePreview.newAuthors}:
                                             </span>
-                                            <span className="font-[500]">{data.newAuthors.join(" - ")}</span>
+                                            <span className="font-[500]">{data.newAuthors.join("; ")}</span>
                                         </div>
                                     </div>
                                 )}
@@ -301,7 +263,7 @@ export default function PreviewPostReference({
                                         <div>
                                             <span
                                                 className="font-[600] mr-[4px] text-[#475569]"
-                                            >{t("PreviewPostReference.New")}</span>
+                                            >{t.newReferencePreview.newArticle}</span>
                                             <span className="font-[500]">{formatNewArticle(data.newArticle)}</span>
                                         </div>
                                     </div>
@@ -328,7 +290,7 @@ export default function PreviewPostReference({
                                         <div>
                                             <span
                                                 className="font-[600] mr-[4px] text-[#475569]"
-                                            >{t("PreviewPostReference.City")}</span>
+                                            >{t.newReferencePreview.city}</span>
                                             <span className="font-[500]">{cityName}</span>
                                         </div>
                                     </div>
@@ -350,7 +312,7 @@ export default function PreviewPostReference({
                                         <div>
                                             <span
                                                 className="font-[600] mr-[4px] text-[#475569]"
-                                            >{t("PreviewPostReference.Other")}</span>
+                                            >{t.newReferencePreview.other}</span>
                                             <span className="font-[500]">{data.other}</span>
                                         </div>
                                     </div>
@@ -381,7 +343,7 @@ export default function PreviewPostReference({
                                     d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
                                 />
                             </svg>
-                            {data.type.charAt(0).toUpperCase() + data.type.slice(1)} - {data.code}
+                            {t.newReferencePreview[data.type]} - {data.code}
                         </div>
                     </div>
                 </div>
@@ -420,9 +382,41 @@ export default function PreviewPostReference({
                             d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
                         />
                     </svg>
-                    {t("PreviewPostReference.button")}
+                    {t.newReferencePreview.validateAndSend}
                 </button>
             </div>
         </div>
     );
 };
+
+function searchCityNameByID(id: number | undefined, cities: City[]): string | undefined {
+    if (!id) return;
+    return cities.find((city) => city.id === id)?.name;
+}
+
+function searchAuthorNameByID(id: number | undefined, authors: Author[]): string | undefined {
+    if (!id) return;
+    return authors.find((author) => author.id === id)?.name;
+}
+
+function searchVolumeInfoById(
+    id: number | undefined,
+    journalVolumes: JournalVolume[],
+    journals: Journal[],
+    pageStart: number | undefined,
+    pageEnd: number | undefined,
+    t: I18nObject
+): string {
+    if (!id) {
+        return t.newReferencePreview.noVolumeInformation;
+    }
+
+    const journalVolume = journalVolumes.find((volume) => volume.id === id);
+    if (journalVolume) {
+        const { volume, issue, year } = journalVolume;
+        const journal = journals.find((j) => j.id === journalVolume.journalId);
+        return t.newReferencePreview.volumeInformation(journal?.name, volume, issue, year, pageStart, pageEnd);
+    }
+
+    return t.newReferencePreview.volumeNotFound;
+}

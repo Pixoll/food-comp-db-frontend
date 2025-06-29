@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { JSX, ReactNode } from "react";
 import Footer from "../../components/Footer";
 
 export default function DetailFoodPageLayout({ children }: { children: ReactNode }): JSX.Element {

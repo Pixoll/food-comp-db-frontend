@@ -4,6 +4,7 @@ import type { Author, City, Journal, Reference } from "@/api";
 import ModalReferences from "@/app/admin-page/add-food/components/ModalReferences";
 import { SearchBox } from "@/app/search/components";
 import Pagination from "@/app/search/components/Pagination";
+import { useTranslation } from "@/context/I18nContext";
 import { FetchStatus, useApi } from "@/hooks";
 import {
     getNutrientNameById,
@@ -13,7 +14,7 @@ import {
 } from "@/types/nutrients";
 import { Collection } from "@/utils/collection";
 import { PlusCircle } from "lucide-react";
-import { useState } from "react";
+import { type JSX, useState } from "react";
 
 type NutrientsValueForm = {
     energy: NutrientMeasurementForm[];
@@ -54,7 +55,7 @@ const hasValidData = <T extends NutrientMeasurementForm>(
 };
 
 type Filters = {
-    nameTittle: string;
+    nameTitle: string;
     citiesFilter: Set<string>;
     authorsFilter: Set<string>;
     journalsFilter: Set<string>;
@@ -68,8 +69,9 @@ export default function AddReferences({
     authors,
     journals,
 }: NewReferencesProps): JSX.Element {
+    const { t } = useTranslation();
     const [selectedFilters, setSelectedFilters] = useState<Filters>({
-        nameTittle: "",
+        nameTitle: "",
         citiesFilter: new Set(),
         authorsFilter: new Set(),
         journalsFilter: new Set(),
@@ -77,7 +79,7 @@ export default function AddReferences({
 
     const referencesResult = useApi([selectedFilters], (api, filters) => api.getReferences({
         query: {
-            title: filters.nameTittle,
+            title: filters.nameTitle,
             authors: Array.from(filters.authorsFilter).map(n => +n),
             journals: Array.from(filters.journalsFilter).map(n => +n),
             cities: Array.from(filters.citiesFilter).map(n => +n),
@@ -192,9 +194,7 @@ export default function AddReferences({
                     }
 
                     if ("components" in nutrient) {
-                        const components = nutrient.components as Array<| NutrientMeasurementForm
-                            | NutrientMeasurementWithComponentsForm>;
-                        updateNutrientReferences(components);
+                        updateNutrientReferences(nutrient.components);
                     }
                 });
             };
@@ -219,11 +219,15 @@ export default function AddReferences({
     return (
         <div className="w-full max-w-[1200px] mx-auto py-[24px] px-[16px]">
             <div className="bg-[white] rounded-[8px] p-[24px] shadow-[0_2px_10px_rgba(0,0,0,0.08)] mb-[32px]">
-                <h2 className="text-[22px] font-[700] text-[#064e3b] mb-[20px]">Filtros de búsqueda</h2>
+                <h2 className="text-[22px] font-[700] text-[#064e3b] mb-[20px]">
+                    {t.addReference.searchFilters}
+                </h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[20px]">
                     <div className="flex flex-col">
-                        <label className="text-[14px] font-[600] text-[#374151] mb-[8px]">Título</label>
+                        <label className="text-[14px] font-[600] text-[#374151] mb-[8px]">
+                            {t.addReference.title}
+                        </label>
                         <input
                             className="
                             w-full
@@ -242,19 +246,21 @@ export default function AddReferences({
                             duration-[200ms]
                             "
                             type="text"
-                            placeholder="Ingrese nombre..."
-                            value={selectedFilters.nameTittle}
+                            placeholder={t.addReference.enterTitle}
+                            value={selectedFilters.nameTitle}
                             onChange={(e) =>
                                 setSelectedFilters((prev) => ({
                                     ...prev,
-                                    nameTittle: e.target.value,
+                                    nameTitle: e.target.value,
                                 }))
                             }
                         />
                     </div>
 
                     <div className="flex flex-col">
-                        <label className="text-[14px] font-[600] text-[#374151] mb-[8px]">Ciudad</label>
+                        <label className="text-[14px] font-[600] text-[#374151] mb-[8px]">
+                            {t.addReference.city}
+                        </label>
                         <SearchBox
                             filterOptions={
                                 new Collection(
@@ -271,7 +277,9 @@ export default function AddReferences({
                     </div>
 
                     <div className="flex flex-col">
-                        <label className="text-[14px] font-[600] text-[#374151] mb-[8px]">Revista</label>
+                        <label className="text-[14px] font-[600] text-[#374151] mb-[8px]">
+                            {t.addReference.journal}
+                        </label>
                         <SearchBox
                             filterOptions={
                                 new Collection(
@@ -288,7 +296,9 @@ export default function AddReferences({
                     </div>
 
                     <div className="flex flex-col">
-                        <label className="text-[14px] font-[600] text-[#374151] mb-[8px]">Autor</label>
+                        <label className="text-[14px] font-[600] text-[#374151] mb-[8px]">
+                            {t.addReference.author}
+                        </label>
                         <SearchBox
                             filterOptions={
                                 new Collection(
@@ -310,9 +320,17 @@ export default function AddReferences({
                 {currentReferences.map((ref, index) => (
                     <div
                         key={ref.code}
-                        className="rounded-[8px] overflow-hidden shadow-[0_4px_15px_rgba(0,0,0,0.08)]
-                   hover:shadow-[0_8px_25px_rgba(0,0,0,0.12)] transition-all duration-[300ms]
-                    h-full flex flex-col"
+                        className="
+                        rounded-[8px]
+                        overflow-hidden
+                        shadow-[0_4px_15px_rgba(0,0,0,0.08)]
+                        hover:shadow-[0_8px_25px_rgba(0,0,0,0.12)]
+                        transition-all
+                        duration-[300ms]
+                        h-full
+                        flex
+                        flex-col
+                        "
                     >
                         <div className="flex-grow p-[20px]">
                             <h3 className="text-[18px] font-[700] text-[#064e3b] mb-[12px] line-clamp-2">
@@ -342,35 +360,45 @@ export default function AddReferences({
                             <div className="space-y-[8px] text-[14px] text-[#4b5563]">
                                 {ref.authors && (
                                     <div className="flex">
-                                        <span className="text-[#374151] font-[600] min-w-[90px]">Autores:</span>
+                                        <span className="text-[#374151] font-[600] min-w-[90px]">
+                                            {t.addReference.authors}
+                                        </span>
                                         <span className="flex-grow">{ref.authors.join(", ")}</span>
                                     </div>
                                 )}
 
                                 {ref.journalName && (
                                     <div className="flex">
-                                        <span className="text-[#374151] font-[600] min-w-[90px]">Publicación:</span>
+                                        <span className="text-[#374151] font-[600] min-w-[90px]">
+                                            {t.addReference.publication}
+                                        </span>
                                         <span className="flex-grow">{ref.journalName}</span>
                                     </div>
                                 )}
 
                                 {ref.pageStart && ref.pageEnd && (
                                     <div className="flex">
-                                        <span className="text-[#374151] font-[600] min-w-[90px]">Páginas:</span>
+                                        <span className="text-[#374151] font-[600] min-w-[90px]">
+                                            {t.addReference.pages}
+                                        </span>
                                         <span className="flex-grow">{ref.pageStart} - {ref.pageEnd}</span>
                                     </div>
                                 )}
 
                                 {ref.city && (
                                     <div className="flex">
-                                        <span className="text-[#374151] font-[600] min-w-[90px]">Ciudad:</span>
+                                        <span className="text-[#374151] font-[600] min-w-[90px]">
+                                            {t.addReference.cities}
+                                        </span>
                                         <span className="flex-grow">{ref.city}</span>
                                     </div>
                                 )}
 
                                 {ref.other && (
                                     <div className="flex">
-                                        <span className="text-[#374151] font-[600] min-w-[90px]">Info adicional:</span>
+                                        <span className="text-[#374151] font-[600] min-w-[90px]">
+                                            {t.addReference.additionalInfo}
+                                        </span>
                                         <span className="flex-grow">{ref.other}</span>
                                     </div>
                                 )}
@@ -379,12 +407,24 @@ export default function AddReferences({
 
                         <div className="mt-auto">
                             <button
-                                className="w-full py-[12px] bg-[#047857] hover:bg-[#065f46] text-[white] font-[600]
-                       flex items-center justify-center gap-[8px] transition-colors duration-[200ms]"
+                                className="
+                                w-full
+                                py-[12px]
+                                bg-[#047857]
+                                hover:bg-[#065f46]
+                                text-[white]
+                                font-[600]
+                                flex
+                                items-center
+                                justify-center
+                                gap-[8px]
+                                transition-colors
+                                duration-[200ms]
+                                "
                                 onClick={() => handleShowModal(index)}
                             >
                                 <PlusCircle size={18}/>
-                                <span>Agregar referencia</span>
+                                <span>{t.addReference.addReference}</span>
                             </button>
                         </div>
                     </div>
@@ -405,7 +445,7 @@ export default function AddReferences({
             <div className="mt-[16px]">
                 <Pagination
                     currentPage={currentPage}
-                    npage={totalPages}
+                    totalPages={totalPages}
                     onPageChange={handlePageChange}
                 />
             </div>

@@ -2,18 +2,18 @@
 
 import api from "@/api";
 import { useAuth } from "@/context/AuthContext";
+import { type Language, useTranslation } from "@/context/I18nContext";
 import { useToast } from "@/context/ToastContext";
 import { Languages, LogOut, Menu, MonitorCog, Search, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { type JSX, useEffect, useState } from "react";
 import "./index.css";
 
 export default function NavBar(): JSX.Element {
     const [menuOpen, setMenuOpen] = useState(false);
     const [langMenuOpen, setLangMenuOpen] = useState(false);
-    const { t, i18n } = useTranslation();
+    const { t, setLanguage } = useTranslation();
     const { addToast } = useToast();
     const { state, logout } = useAuth();
     const router = useRouter();
@@ -28,9 +28,9 @@ export default function NavBar(): JSX.Element {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
-    const changeLanguage = (lng: string): void => {
+    const changeLanguage = (lng: Language): void => {
         // noinspection JSIgnoredPromiseFromCall
-        i18n.changeLanguage(lng);
+        setLanguage(lng);
         setLangMenuOpen(false);
     };
 
@@ -67,7 +67,7 @@ export default function NavBar(): JSX.Element {
             <nav className="navbar-container">
                 <div className="navbar-logo">
                     <Link href="/" className="navbar-link">
-                        {t("navbar.home")}
+                        {t.navbar.home}
                     </Link>
                 </div>
 
@@ -75,13 +75,13 @@ export default function NavBar(): JSX.Element {
                     <ul className="navbar-menu-list">
                         <li>
                             <Link href="/search" className="navbar-link" onClick={() => setMenuOpen(false)}>
-                                Buscar
+                                {t.navbar.search}
                                 <Search className="ml-[8px]" size={24}/>
                             </Link>
                         </li>
                         <li>
                             <Link href="/compare" className="navbar-link" onClick={() => setMenuOpen(false)}>
-                                Comparar
+                                {t.navbar.compare}
                             </Link>
                         </li>
                     </ul>
@@ -89,36 +89,41 @@ export default function NavBar(): JSX.Element {
 
                 <div className="navbar-actions">
                     <div className="language-selector">
-                        <button onClick={() => setLangMenuOpen(!langMenuOpen)} aria-label="Change language">
+                        <button
+                            onClick={() => setLangMenuOpen(!langMenuOpen)}
+                            aria-label={t.navbar.changeLanguage}
+                        >
                             <Languages size={24}/>
                         </button>
                         {langMenuOpen && (
                             <div className="language-dropdown">
-                                <button onClick={() => changeLanguage("es")}>{t("navbar.spanish")}</button>
-                                <button onClick={() => changeLanguage("en")}>{t("navbar.english")}</button>
+                                <button onClick={() => changeLanguage("es")}>Español</button>
+                                <button onClick={() => changeLanguage("en")}>English</button>
                             </div>
                         )}
                     </div>
 
-                    {state.isAuthenticated ? (
-                        <>
-                            <Link href="/admin-page" aria-label="Admin panel">
+                    {state.isAuthenticated
+                        ? <>
+                            <Link href="/admin-page" aria-label={t.navbar.adminPanel}>
                                 <MonitorCog color={"#ffffff"} size={24}/>
                             </Link>
-                            <button onClick={handleLogout} aria-label="Log out" className="logout-btn">
-                                <span className="logout-text">{t("navbar.close")}</span>
+                            <button onClick={handleLogout} aria-label={t.navbar.signOut} className="logout-btn">
+                                <span className="logout-text">{t.navbar.signOut}</span>
                                 <LogOut size={24}/>
                             </button>
                         </>
-                    ) : (
-                        <Link href="/login" className="login-btn">
-                            Iniciar sesión
-                        </Link>
-                    )}
+                        : (
+                            <Link href="/login" className="login-btn">
+                                {t.navbar.signIn}
+                            </Link>
+                        )
+                    }
 
                     <button
-                        onClick={toggleMenu} className="menu-toggle"
-                        aria-label={menuOpen ? "Close menu" : "Open menu"}
+                        onClick={toggleMenu}
+                        className="menu-toggle"
+                        aria-label={menuOpen ? t.navbar.closeMenu : t.navbar.openMenu}
                     >
                         {menuOpen ? <X size={28}/> : <Menu size={28}/>}
                     </button>

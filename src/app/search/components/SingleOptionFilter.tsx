@@ -1,20 +1,22 @@
 "use client";
 
+import { useTranslation } from "@/context/I18nContext";
 import { Collection } from "@/utils/collection";
-import { useState } from "react";
+import { type JSX, useState } from "react";
 import "@/app/search/components/SearchBox.css";
 
-interface SingleOptionFilterProps {
+type SingleOptionFilterProps = {
     options: Collection<string, string>;
     selectedOption: string | null;
     setSelectedOption: (option: string | null) => void;
-}
+};
 
 export default function SingleOptionFilter({
     options,
     selectedOption,
     setSelectedOption,
 }: SingleOptionFilterProps): JSX.Element {
+    const { t } = useTranslation();
     const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
 
     const handleOptionChange = (optionValue: string): void => {
@@ -27,9 +29,9 @@ export default function SingleOptionFilter({
 
     const getSelectedLabel = (): string => {
         if (!selectedOption) {
-            return "Nada seleccionado";
+            return t.checkboxFilter.nothingSelected;
         }
-        return options.get(selectedOption) ?? "Opción desconocida";
+        return options.get(selectedOption)!;
     };
 
     return (

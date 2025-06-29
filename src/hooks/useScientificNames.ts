@@ -5,7 +5,7 @@ import { Collection } from "@/utils/collection";
 import { useState } from "react";
 import { FetchStatus, useApi } from "./useApi";
 
-export type UseScientificNames = {
+type UseScientificNames = {
     idToObject: Collection<number, ScientificName>;
     idToName: Collection<string, string>;
     nameToId: Collection<string, number>;

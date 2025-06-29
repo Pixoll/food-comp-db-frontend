@@ -3,8 +3,9 @@
 import type { Article, Journal, JournalVolume, NewArticleDto, NewVolumeDto } from "@/api";
 import NumericField from "@/app/components/Fields/NumericField";
 import TextField from "@/app/components/Fields/TextField";
+import { useTranslation } from "@/context/I18nContext";
 import { BookOpen, FileText, Layers, PlusCircle, XCircle } from "lucide-react";
-import { useState } from "react";
+import { type JSX, useState } from "react";
 
 type NewArticleByReferenceProps = {
     data: {
@@ -28,17 +29,13 @@ export type RecursivePartial<T> = {
                 : T[K];
 };
 
-const searchIdJournalByIdVolume = (id: number | undefined, volumes: JournalVolume[]): number | undefined => {
-    const volume = volumes.find((volume) => volume.id === id);
-    return volume?.journalId;
-};
-
 export default function ArticleByReference({
     data,
     dataForm,
     updateNewArticle,
 }: NewArticleByReferenceProps): JSX.Element {
     const { journals, journalVolumes } = data;
+    const { t } = useTranslation();
 
     const [selectedIdJournal, setSelectedIdJournal] = useState<number | undefined>(
         searchIdJournalByIdVolume(dataForm.newArticle?.volumeId, journalVolumes)
@@ -170,7 +167,7 @@ export default function ArticleByReference({
             <div className="rounded-[8px] border-[1px] border-[#e5e7eb] mb-[16px] shadow-sm bg-[white] overflow-hidden">
                 <div className="flex items-center p-[16px] border-b border-[#e5e7eb] bg-[#f9fafb]">
                     <BookOpen className="mr-[8px] text-[#4b5563]"/>
-                    <h2 className="text-[18px] font-[600] text-[#111827] m-0">Seleccionar una revista</h2>
+                    <h2 className="text-[18px] font-[600] text-[#111827] m-0">{t.newArticle.selectJournal}</h2>
                 </div>
 
                 <div className="p-[16px]">
@@ -187,9 +184,9 @@ export default function ArticleByReference({
                                         setSelectedArticle(undefined);
                                     }}
                                     maxLength={100}
-                                    placeholder="Agregar nueva revista"
+                                    placeholder={t.newArticle.addNewJournal}
                                     error={!newJournalName?.length}
-                                    errorMessage="Ingrese el nombre de la revista."
+                                    errorMessage={t.newArticle.enterJournalName}
                                     fullWidth
                                 />
                             </div>
@@ -213,7 +210,7 @@ export default function ArticleByReference({
                                     "
                                 >
                                     <XCircle className="mr-[8px]"/>
-                                    Cancelar
+                                    {t.newArticle.cancel}
                                 </button>
                             </div>
                         </div>
@@ -244,7 +241,7 @@ export default function ArticleByReference({
                                         focus:border-[#3b82f6]
                                         "
                                     >
-                                        <option value="">Selecciona una revista existente</option>
+                                        <option value="">{t.newArticle.selectExistingJournal}</option>
                                         {journals.map((journal) => (
                                             <option key={journal.id} value={journal.id}>
                                                 {journal.name}
@@ -273,7 +270,7 @@ export default function ArticleByReference({
                                     "
                                 >
                                     <PlusCircle className="mr-[8px]"/>
-                                    Nueva revista
+                                    {t.newArticle.newJournal}
                                 </button>
                             </div>
                         </div>
@@ -285,7 +282,7 @@ export default function ArticleByReference({
                 <div className="rounded-[8px] border border-[#e5e7eb] mb-[16px] shadow-sm bg-[white] overflow-hidden">
                     <div className="flex items-center p-[16px] border-b border-[#e5e7eb] bg-[#f9fafb]">
                         <Layers className="mr-[8px] text-[#4b5563]"/>
-                        <h2 className="text-[18px] font-[600] text-[#111827] m-0">Seleccionar un volumen</h2>
+                        <h2 className="text-[18px] font-[600] text-[#111827] m-0">{t.newArticle.selectVolume}</h2>
                     </div>
                     <div className="p-[16px]">
                         {!newVolume ? (
@@ -312,12 +309,12 @@ export default function ArticleByReference({
                                             focus:border-[#3b82f6]
                                             "
                                         >
-                                            <option value="">Selecciona un volumen existente</option>
+                                            <option value="">{t.newArticle.selectExistingVolume}</option>
                                             {journalVolumes
                                                 .filter((v) => v.journalId === selectedIdJournal)
                                                 .map((v) => (
                                                     <option key={v.id} value={v.id}>
-                                                        {`Volumen: ${v.volume}, Número: (${v.issue}), Año: ${v.year}`}
+                                                        {t.newArticle.volumeIssueYear(v.volume, v.issue, v.year)}
                                                     </option>
                                                 ))}
                                         </select>
@@ -343,7 +340,7 @@ export default function ArticleByReference({
                                         "
                                     >
                                         <PlusCircle className="mr-[8px]"/>
-                                        Nuevo volumen
+                                        {t.newArticle.newVolume}
                                     </button>
                                 </div>
                             </div>
@@ -358,12 +355,12 @@ export default function ArticleByReference({
                                         error={isVolumeUndefined || isVolumeBelow1 || isVolumeNotInteger}
                                         errorMessage={
                                             isVolumeUndefined
-                                                ? "Ingrese el volúmen."
+                                                ? t.newArticle.enterVolume
                                                 : isVolumeBelow1
-                                                    ? "Volúmen debe ser al menos 1."
-                                                    : "Volúmen debe ser un entero."
+                                                    ? t.atLeast(t.newArticle.volume, 1)
+                                                    : t.mustBeInteger(t.newArticle.volume)
                                         }
-                                        helperText="Volumen"
+                                        helperText={t.newArticle.volume}
                                         fullWidth
                                     />
                                 </div>
@@ -376,12 +373,12 @@ export default function ArticleByReference({
                                         error={isIssueUndefined || isIssueBelow1 || isIssueNotInteger}
                                         errorMessage={
                                             isIssueUndefined
-                                                ? "Ingrese el número."
+                                                ? t.newArticle.enterIssue
                                                 : isIssueBelow1
-                                                    ? "Número debe ser al menos 1."
-                                                    : "Número debe ser un entero."
+                                                    ? t.atLeast(t.newArticle.issue, 1)
+                                                    : t.mustBeInteger(t.newArticle.issue)
                                         }
-                                        helperText="Número (Issue)"
+                                        helperText={t.newArticle.issue}
                                         fullWidth
                                     />
                                 </div>
@@ -395,14 +392,14 @@ export default function ArticleByReference({
                                         error={isYearUndefined || isYearBelow1 || isYearOverCurrent || isYearNotInteger}
                                         errorMessage={
                                             isYearUndefined
-                                                ? "Ingrese el año."
+                                                ? t.newArticle.enterYear
                                                 : isYearBelow1
-                                                    ? "Año debe ser al menos 1."
+                                                    ? t.atLeast(t.newArticle.year, 1)
                                                     : isYearOverCurrent
-                                                        ? "Año debe ser menor o igual al actual."
-                                                        : "Año debe ser un entero."
+                                                        ? t.newArticle.yearBelowCurrent
+                                                        : t.mustBeInteger(t.newArticle.year)
                                         }
-                                        helperText="Año"
+                                        helperText={t.newArticle.year}
                                         fullWidth
                                     />
                                 </div>
@@ -428,7 +425,7 @@ export default function ArticleByReference({
                                         "
                                     >
                                         <XCircle className="mr-[8px]"/>
-                                        Cancelar
+                                        {t.newArticle.cancel}
                                     </button>
                                 </div>
                             </div>
@@ -441,7 +438,7 @@ export default function ArticleByReference({
                 <div className="rounded-[8px] border border-[#e5e7eb] shadow-sm bg-[white] overflow-hidden">
                     <div className="flex items-center p-[16px] border-b border-[#e5e7eb] bg-[#f9fafb]">
                         <FileText className="mr-[8px] text-[#4b5563]"/>
-                        <h2 className="text-[18px] font-[600] text-[#111827] m-0">Seleccionar un Artículo</h2>
+                        <h2 className="text-[18px] font-[600] text-[#111827] m-0">{t.newArticle.selectArticle}</h2>
                     </div>
                     <div className="p-[16px]">
                         <div className="flex flex-col md:flex-row gap-[16px]">
@@ -454,12 +451,12 @@ export default function ArticleByReference({
                                     error={isPageStartUndefined || isPageStartBelow1 || isPageStartNotInteger}
                                     errorMessage={
                                         isPageStartUndefined
-                                            ? "Ingrese la página de inicio."
+                                            ? t.newArticle.enterStartPage
                                             : isPageStartBelow1
-                                                ? "Página de inicio debe ser al menos 1."
-                                                : "Página de inicio debe ser un entero."
+                                                ? t.atLeast(t.newArticle.startPage, 1)
+                                                : t.mustBeInteger(t.newArticle.startPage)
                                     }
-                                    helperText="Página de inicio"
+                                    helperText={t.newArticle.startPage}
                                     fullWidth
                                 />
                             </div>
@@ -476,14 +473,17 @@ export default function ArticleByReference({
                                     }
                                     errorMessage={
                                         isPageEndUndefined
-                                            ? "Ingrese la página final."
+                                            ? t.newArticle.enterEndPage
                                             : isPageEndBelow1
-                                                ? "Página final debe ser al menos 1."
+                                                ? t.atLeast(t.newArticle.endPage, 1)
                                                 : isPageEndBelowPageStart
-                                                    ? "Página final debe ser mayor a página de inicio."
-                                                    : "Página final debe ser un entero."
+                                                    ? t.greaterThan(
+                                                        t.newArticle.endPage,
+                                                        t.newArticle.startPage.toLowerCase()
+                                                    )
+                                                    : t.mustBeInteger(t.newArticle.endPage)
                                     }
-                                    helperText="Página final"
+                                    helperText={t.newArticle.endPage}
                                     fullWidth
                                 />
                             </div>
@@ -494,3 +494,8 @@ export default function ArticleByReference({
         </div>
     );
 };
+
+function searchIdJournalByIdVolume(id: number | undefined, volumes: JournalVolume[]): number | undefined {
+    const volume = volumes.find((volume) => volume.id === id);
+    return volume?.journalId;
+}

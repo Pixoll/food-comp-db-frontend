@@ -1,3 +1,5 @@
+import { useTranslation } from "@/context/I18nContext";
+import { tw } from "@/utils/tailwind";
 import {
     AlertCircleIcon,
     AlertTriangleIcon,
@@ -6,95 +8,98 @@ import {
     X as CloseIcon,
     XCircleIcon,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { type JSX, useEffect, useState } from "react";
 
-type ColorVariant =
-    | "Primary"
-    | "Secondary"
-    | "Success"
-    | "Danger"
-    | "Warning"
-    | "Info"
-    | "Light"
-    | "Dark";
+type ToastTypeConfig = {
+    Icon: typeof AlertCircleIcon;
+    bgColor: string;
+    textColor: string;
+    bgOpacity: string;
+    borderColor: string;
+    iconColor: string;
+};
 
-type Position =
-    | "top-start"
-    | "top-center"
-    | "top-end"
-    | "middle-start"
-    | "middle-center"
-    | "middle-end"
-    | "bottom-start"
-    | "bottom-center"
-    | "bottom-end";
-
-const ToastTypeConfig = {
+const toastTypeConfigs = {
     Success: {
-        icon: CheckCircleIcon,
-        bgColor: "bg-[#22c55e]",
-        textColor: "text-[#ffffff]",
-        bgOpacity: "bg-[#dcfce7]",
-        borderColor: "border-[#22c55e]",
-        iconColor: "text-[#22c55e]",
+        Icon: CheckCircleIcon,
+        bgColor: tw`bg-[#22c55e]`,
+        textColor: tw`text-[#ffffff]`,
+        bgOpacity: tw`bg-[#dcfce7]`,
+        borderColor: tw`border-[#22c55e]`,
+        iconColor: tw`text-[#22c55e]`,
     },
     Danger: {
-        icon: XCircleIcon,
-        bgColor: "bg-[#ef4444]",
-        textColor: "text-[#ffffff]",
-        bgOpacity: "bg-[#fee2e2]",
-        borderColor: "border-[#ef4444]",
-        iconColor: "text-[#ef4444]",
+        Icon: XCircleIcon,
+        bgColor: tw`bg-[#ef4444]`,
+        textColor: tw`text-[#ffffff]`,
+        bgOpacity: tw`bg-[#fee2e2]`,
+        borderColor: tw`border-[#ef4444]`,
+        iconColor: tw`text-[#ef4444]`,
     },
     Warning: {
-        icon: AlertTriangleIcon,
-        bgColor: "bg-[#eab308]",
-        textColor: "text-[#ffffff]",
-        bgOpacity: "bg-[#fef9c3]",
-        borderColor: "border-[#eab308]",
-        iconColor: "text-[#eab308]",
+        Icon: AlertTriangleIcon,
+        bgColor: tw`bg-[#eab308]`,
+        textColor: tw`text-[#ffffff]`,
+        bgOpacity: tw`bg-[#fef9c3]`,
+        borderColor: tw`border-[#eab308]`,
+        iconColor: tw`text-[#eab308]`,
     },
     Info: {
-        icon: InfoIcon,
-        bgColor: "bg-[#60a5fa]",
-        textColor: "text-[#ffffff]",
-        bgOpacity: "bg-[#dbeafe]",
-        borderColor: "border-[#60a5fa]",
-        iconColor: "text-[#60a5fa]",
+        Icon: InfoIcon,
+        bgColor: tw`bg-[#60a5fa]`,
+        textColor: tw`text-[#ffffff]`,
+        bgOpacity: tw`bg-[#dbeafe]`,
+        borderColor: tw`border-[#60a5fa]`,
+        iconColor: tw`text-[#60a5fa]`,
     },
     Primary: {
-        icon: AlertCircleIcon,
-        bgColor: "bg-[#3b82f6]",
-        textColor: "text-[#ffffff]",
-        bgOpacity: "bg-[#dbeafe]",
-        borderColor: "border-[#3b82f6]",
-        iconColor: "text-[#3b82f6]",
+        Icon: AlertCircleIcon,
+        bgColor: tw`bg-[#3b82f6]`,
+        textColor: tw`text-[#ffffff]`,
+        bgOpacity: tw`bg-[#dbeafe]`,
+        borderColor: tw`border-[#3b82f6]`,
+        iconColor: tw`text-[#3b82f6]`,
     },
     Secondary: {
-        icon: AlertCircleIcon,
-        bgColor: "bg-[#6b7280]",
-        textColor: "text-[#ffffff]",
-        bgOpacity: "bg-[#f3f4f6]",
-        borderColor: "border-[#6b7280]",
-        iconColor: "text-[#6b7280]",
+        Icon: AlertCircleIcon,
+        bgColor: tw`bg-[#6b7280]`,
+        textColor: tw`text-[#ffffff]`,
+        bgOpacity: tw`bg-[#f3f4f6]`,
+        borderColor: tw`border-[#6b7280]`,
+        iconColor: tw`text-[#6b7280]`,
     },
     Light: {
-        icon: AlertCircleIcon,
-        bgColor: "bg-[#f3f4f6]",
-        textColor: "text-[#1f2937]",
-        bgOpacity: "bg-[#f9fafb]",
-        borderColor: "border-[#e5e7eb]",
-        iconColor: "text-[#1f2937]",
+        Icon: AlertCircleIcon,
+        bgColor: tw`bg-[#f3f4f6]`,
+        textColor: tw`text-[#1f2937]`,
+        bgOpacity: tw`bg-[#f9fafb]`,
+        borderColor: tw`border-[#e5e7eb]`,
+        iconColor: tw`text-[#1f2937]`,
     },
     Dark: {
-        icon: AlertCircleIcon,
-        bgColor: "bg-[#1f2937]",
-        textColor: "text-[#ffffff]",
-        bgOpacity: "bg-[#e5e7eb]",
-        borderColor: "border-[#1f2937]",
-        iconColor: "text-[#1f2937]",
+        Icon: AlertCircleIcon,
+        bgColor: tw`bg-[#1f2937]`,
+        textColor: tw`text-[#ffffff]`,
+        bgOpacity: tw`bg-[#e5e7eb]`,
+        borderColor: tw`border-[#1f2937]`,
+        iconColor: tw`text-[#1f2937]`,
     },
+} as const satisfies Readonly<Record<string, ToastTypeConfig>>;
+
+const positions = {
+    "top-start": tw`top-[16px] left-[16px]`,
+    "top-center": tw`top-[16px] left-[50%] translate-x-[-50%]`,
+    "top-end": tw`top-[16px] right-[16px]`,
+    "middle-start": tw`top-[50%] left-[16px] translate-y-[-50%]`,
+    "middle-center": tw`top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]`,
+    "middle-end": tw`top-[50%] right-[16px] translate-y-[-50%]`,
+    "bottom-start": tw`bottom-[16px] left-[16px]`,
+    "bottom-center": tw`bottom-[16px] left-[50%] translate-x-[-50%]`,
+    "bottom-end": tw`bottom-[16px] right-[16px]`,
 };
+
+type ColorVariant = keyof typeof toastTypeConfigs;
+type Position = keyof typeof positions;
 
 export type ToastComponentProps = {
     type?: ColorVariant;
@@ -104,16 +109,18 @@ export type ToastComponentProps = {
     position?: Position;
 };
 
-export function ToastComponent({
+export default function ToastComponent({
     type = "Primary",
     message,
     title,
     duration = 5000,
     position = "middle-center",
 }: ToastComponentProps): JSX.Element | null {
+    const { t } = useTranslation();
     const [show, setShow] = useState(true);
-    const config = ToastTypeConfig[type];
-    const Icon = config.icon;
+    const [showTime] = useState(Date.now());
+    const { Icon, bgColor, bgOpacity, textColor } = toastTypeConfigs[type];
+    const secondsAgo = Math.floor((Date.now() - showTime) / 1000);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -127,28 +134,12 @@ export function ToastComponent({
         return null;
     }
 
-    const getPositionClasses = (): string => {
-        const positions = {
-            "top-start": "top-[16px] left-[16px]",
-            "top-center": "top-[16px] left-[50%] translate-x-[-50%]",
-            "top-end": "top-[16px] right-[16px]",
-            "middle-start": "top-[50%] left-[16px] translate-y-[-50%]",
-            "middle-center": "top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]",
-            "middle-end": "top-[50%] right-[16px] translate-y-[-50%]",
-            "bottom-start": "bottom-[16px] left-[16px]",
-            "bottom-center": "bottom-[16px] left-[50%] translate-x-[-50%]",
-            "bottom-end": "bottom-[16px] right-[16px]",
-        };
-
-        return positions[position];
-    };
-
     return (
         <div
             className={`
             pointer-events-none
             fixed
-            ${getPositionClasses()}
+            ${positions[position]}
             z-[50]
             w-[100%]
             max-w-[600px]
@@ -171,7 +162,7 @@ export function ToastComponent({
                 overflow-y-auto
                 "
             >
-                <div className={`${config.bgColor} ${config.textColor} p-[12px] flex items-center`}>
+                <div className={`${bgColor} ${textColor} p-[12px] flex items-center`}>
                     <Icon
                         size={48}
                         className="mr-[16px]"
@@ -180,12 +171,14 @@ export function ToastComponent({
                     />
                     <div className="flex flex-col">
                         <strong className="text-[1.25rem] font-[700] mb-[4px]">{title || type}</strong>
-                        <span className="text-[0.875rem] opacity-[0.7]">just now</span>
+                        <span className="text-[0.875rem] opacity-[0.7]">
+                            {secondsAgo === 0 ? t.toast.justNow : `${secondsAgo} ${t.toast.secondsAgo}`}
+                        </span>
                     </div>
                     <button
                         type="button"
                         className="ml-auto border-none p-[4px] rounded-[9999px] hover:bg-[#f4a698] transition-colors"
-                        aria-label="Close"
+                        aria-label={t.toast.close}
                         onClick={() => setShow(false)}
                     >
                         <CloseIcon size={24}/>
@@ -193,7 +186,7 @@ export function ToastComponent({
                 </div>
                 <div
                     className={`
-                    ${config.bgOpacity}
+                    ${bgOpacity}
                     p-[16px]
                     text-[1.25rem]
                     text-[#1f2937]
@@ -208,5 +201,3 @@ export function ToastComponent({
         </div>
     );
 }
-
-export default ToastComponent;

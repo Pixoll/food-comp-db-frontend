@@ -1,8 +1,8 @@
 "use client";
 
 import Modal from "@/app/components/Modal/Modal";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@/context/I18nContext";
+import { type JSX, useEffect, useState } from "react";
 
 type NutrientConvert = {
     id: number;
@@ -58,8 +58,8 @@ export default function ModalReferences({
 
     return (
         <Modal
-            width={600}
-            header={t("ModalReferences.Select")}
+            fontWeight={600}
+            header={t.referencesModal.select}
             onClose={onHide}
         >
             <div className="flex-1 overflow-y-auto p-[16px]">
@@ -91,7 +91,7 @@ export default function ModalReferences({
                     onClick={onHide}
                     className="px-[8px] py-[16px] bg-[#f96740] text-[white] border-none rounded-[4px] cursor-pointer"
                 >
-                    {t("ModalReferences.Close")}
+                    {t.referencesModal.close}
                 </button>
                 <button
                     onClick={handleAddReference}
@@ -108,7 +108,7 @@ export default function ModalReferences({
                     }
                     `}
                 >
-                    {t("ModalReferences.Save")}
+                    {t.referencesModal.save}
                 </button>
             </div>
         </Modal>

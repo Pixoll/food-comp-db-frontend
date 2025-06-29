@@ -1,27 +1,30 @@
-interface PaginationProps {
+import { tw } from "@/utils/tailwind";
+import type { JSX } from "react";
+
+type PaginationProps = {
     currentPage: number;
-    npage: number;
+    totalPages: number;
     onPageChange: (page: number) => void;
-}
+};
 
 export default function Pagination({
     currentPage,
-    npage,
+    totalPages,
     onPageChange,
 }: PaginationProps): JSX.Element {
     const getPageNumbers = (): Array<number | string> => {
         const pageLimit = 5;
         const sidePages = 2;
-        const numbers = [...Array(npage + 1).keys()].slice(1);
+        const numbers = [...Array(totalPages + 1).keys()].slice(1);
         let pages: Array<number | string>;
 
-        if (npage <= pageLimit) {
+        if (totalPages <= pageLimit) {
             pages = numbers;
         } else {
             if (currentPage <= sidePages + 1) {
-                pages = [...numbers.slice(0, sidePages + 2), "...", npage];
-            } else if (currentPage >= npage - sidePages) {
-                pages = [1, "...", ...numbers.slice(npage - (sidePages + 2))];
+                pages = [...numbers.slice(0, sidePages + 2), "...", totalPages];
+            } else if (currentPage >= totalPages - sidePages) {
+                pages = [1, "...", ...numbers.slice(totalPages - (sidePages + 2))];
             } else {
                 pages = [
                     1,
@@ -30,7 +33,7 @@ export default function Pagination({
                     currentPage,
                     currentPage + 1,
                     "...",
-                    npage,
+                    totalPages,
                 ];
             }
         }
@@ -38,31 +41,31 @@ export default function Pagination({
         return pages;
     };
 
-    const baseLinkClasses = `
-        py-[10px] 
-        px-[18px] 
-        no-underline 
-        text-[rgb(3,33,31)] 
-        text-[16px] 
-        font-[600] 
-        rounded-[8px] 
-        transition-all 
-        duration-300 
-        ease-in-out 
-        inline-block 
-        cursor-pointer 
-        min-w-[50px] 
-        text-center 
-        bg-white 
-        border-2 
-        border-[#e0e0e0] 
-        hover:bg-[#37a86a] 
-        hover:text-white 
-        hover:scale-105 
+    const baseLinkClasses = tw`
+        py-[10px]
+        px-[18px]
+        no-underline
+        text-[rgb(3,33,31)]
+        text-[16px]
+        font-[600]
+        rounded-[8px]
+        transition-all
+        duration-300
+        ease-in-out
+        inline-block
+        cursor-pointer
+        min-w-[50px]
+        text-center
+        bg-white
+        border-2
+        border-[#e0e0e0]
+        hover:bg-[#37a86a]
+        hover:text-white
+        hover:scale-105
         hover:shadow-[0_4px_8px_rgba(0,0,0,0.2)]
-        md:py-[10px] 
-        md:px-[16px] 
-        md:text-[14px] 
+        md:py-[10px]
+        md:px-[16px]
+        md:text-[14px]
         md:min-w-[40px]
     `;
 

@@ -1,4 +1,13 @@
-import { Children, cloneElement, isValidElement, type ReactElement, useEffect, useRef, useState } from "react";
+import {
+    Children,
+    cloneElement,
+    isValidElement,
+    type JSX,
+    type ReactElement,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
 import styles from "./Tab.module.css";
 import TabItem, { type TabItemProps } from "./TabItem";
 
@@ -124,9 +133,9 @@ export default function Tab({
                                 onClick={() => handleTabClick(index)}
                                 disabled={isDisabled}
                                 className={`
-                                    ${styles.tabButton}
-                                    ${isActive ? styles.tabButtonActive : ""}
-                                    ${isDisabled ? styles.tabButtonDisabled : ""}
+                                ${styles.tabButton}
+                                ${isActive ? styles.tabButtonActive : ""}
+                                ${isDisabled ? styles.tabButtonDisabled : ""}
                                 `}
                                 style={{
                                     borderBottomColor: isActive ? accentColor : "#9bb698",

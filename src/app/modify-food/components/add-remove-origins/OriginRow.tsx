@@ -1,10 +1,10 @@
 "use client";
 
 import type { Origin } from "@/api";
+import { useTranslation } from "@/context/I18nContext";
 import type { Commune, Location, Province, Region } from "@/hooks";
 import { Collection } from "@/utils/collection";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { type JSX, useState } from "react";
 import Selector from "../../../components/Selector/Selector";
 
 type OriginType = Origin["type"];
@@ -299,7 +299,7 @@ export default function OriginRow({
             <td>
                 <Selector
                     options={regionOptions.map((region) => ({ id: region.id, name: region.name ?? "" }))}
-                    placeholder={t("OriginRow.selected")}
+                    placeholder={t.originRow.nothingSelected}
                     selectedValue={selectedRegionName}
                     onSelect={(id, name) => handleSelection("region", id, name)}
                 />
@@ -307,7 +307,7 @@ export default function OriginRow({
             <td>
                 <Selector
                     options={communesOptions.map((commune) => ({ id: commune.id, name: commune.name ?? "" }))}
-                    placeholder={t("OriginRow.selected")}
+                    placeholder={t.originRow.nothingSelected}
                     selectedValue={selectedProvinceName}
                     onSelect={(id, name) => handleSelection("province", id, name)}
                 />
@@ -315,7 +315,7 @@ export default function OriginRow({
             <td>
                 <Selector
                     options={communesOptions.map((commune) => ({ id: commune.id, name: commune.name ?? "" }))}
-                    placeholder={t("OriginRow.selected")}
+                    placeholder={t.originRow.nothingSelected}
                     selectedValue={selectedCommuneName}
                     onSelect={(id, name) => handleSelection("commune", id, name)}
                 />
@@ -323,7 +323,7 @@ export default function OriginRow({
             <td>
                 <Selector
                     options={locationOptions.map((location) => ({ id: location.id, name: location.name ?? "" }))}
-                    placeholder={t("OriginRow.selected")}
+                    placeholder={t.originRow.nothingSelected}
                     selectedValue={selectedLocationName}
                     onSelect={(id, name) => handleSelection("location", id, name)}
                 />

@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { JSX, ReactNode } from "react";
 import styles from "./add-food.module.css";
 
 type LayoutProps = {

@@ -1,5 +1,5 @@
 import Footer from "@/app/components/Footer";
-import type { ReactNode } from "react";
+import type { JSX, ReactNode } from "react";
 
 type ComparePageProps = {
     children: ReactNode;

@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Montserrat } from "next/font/google";
-import type { ReactNode } from "react";
+import type { JSX, ReactNode } from "react";
 import NavBar from "./components/NavBar/Navbar";
 import Providers from "./Providers";
 import "./globals.css";
@@ -11,7 +11,7 @@ type RootLayoutProps = {
 
 export const metadata: Metadata = {
     title: "CapChiCAL",
-    description: "Web site created using create-react-app",
+    description: "Base de Datos de Composición de Alimentos",
     manifest: "/manifest.json",
 };
 

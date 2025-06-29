@@ -1,5 +1,6 @@
+import { useTranslation } from "@/context/I18nContext";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { type ChangeEvent, useState } from "react";
+import { type ChangeEvent, type JSX, useState } from "react";
 
 type GramsAdjusterProps = {
     initialGrams?: number;
@@ -7,6 +8,7 @@ type GramsAdjusterProps = {
 };
 
 export default function GramsAdjuster({ initialGrams = 100, onGramsChange }: GramsAdjusterProps): JSX.Element {
+    const { t } = useTranslation();
     const [inputGrams, setInputGrams] = useState<string>(initialGrams.toString());
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
     const [currentGrams, setCurrentGrams] = useState<number>(initialGrams);
@@ -60,7 +62,7 @@ export default function GramsAdjuster({ initialGrams = 100, onGramsChange }: Gra
             >
                 <div className="flex items-center">
                     <span className="text-[14px] font-medium text-[#495057] mr-[6px]">
-                        Cantidad:
+                        {t.gramsAdjuster.quantity}
                     </span>
                     <span className="text-[15px] font-semibold text-[#333]">
                         {currentGrams}g
@@ -81,11 +83,11 @@ export default function GramsAdjuster({ initialGrams = 100, onGramsChange }: Gra
                             toggleExpand();
                         }}
                     >
-                        Ajustar
-                        {isExpanded ? <ChevronUp size={16} className="inline ml-[4px]"/> : <ChevronDown
-                            size={16}
-                            className="inline ml-[4px]"
-                        />}
+                        {t.gramsAdjuster.adjust}
+                        {isExpanded
+                            ? <ChevronUp size={16} className="inline ml-[4px]"/>
+                            : <ChevronDown size={16} className="inline ml-[4px]"/>
+                        }
                     </button>
                 </div>
             </div>
@@ -128,7 +130,7 @@ export default function GramsAdjuster({ initialGrams = 100, onGramsChange }: Gra
                                 "
                                 aria-label="Cantidad en gramos"
                             />
-                            <span className="text-[14px] text-[#666]">gramos</span>
+                            <span className="text-[14px] text-[#666]">{t.gramsAdjuster.grams}</span>
                         </div>
 
                         <div className="flex gap-[8px]">
@@ -147,7 +149,7 @@ export default function GramsAdjuster({ initialGrams = 100, onGramsChange }: Gra
                                 hover:bg-[#e2e6ea]
                                 "
                             >
-                                Cancelar
+                                {t.gramsAdjuster.cancel}
                             </button>
                             <button
                                 onClick={applyGramsChange}
@@ -164,7 +166,7 @@ export default function GramsAdjuster({ initialGrams = 100, onGramsChange }: Gra
                                 hover:bg-[#4c8a58]
                                 "
                             >
-                                Aplicar
+                                {t.gramsAdjuster.apply}
                             </button>
                         </div>
                     </div>

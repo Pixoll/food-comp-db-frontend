@@ -2,10 +2,10 @@
 
 import api from "@/api";
 import { useAuth } from "@/context/AuthContext";
+import { useTranslation } from "@/context/I18nContext";
 import { useForm } from "@/hooks";
 import { useRouter } from "next/navigation";
-import type { FormEvent } from "react";
-import { useTranslation } from "react-i18next";
+import type { FormEvent, JSX } from "react";
 import { BiLogIn } from "react-icons/bi";
 import { FaLock, FaUserCircle } from "react-icons/fa";
 
@@ -36,7 +36,7 @@ export default function LoginPage(): JSX.Element {
             });
 
             if (result.error) {
-                console.error(t("loginPage.errors.login"), result.error);
+                console.error("Error", result.error);
                 return;
             }
 
@@ -44,7 +44,7 @@ export default function LoginPage(): JSX.Element {
             onResetForm();
             router.push("/");
         } catch (error) {
-            console.error(t("loginPage.errors.login"), error);
+            console.error("Error", error);
         }
     };
 
@@ -68,7 +68,7 @@ export default function LoginPage(): JSX.Element {
                 [text-shadow:2px_2px_4px_rgba(0,0,0,0.2)]
                 "
             >
-                <h1 className="text-center mb-[20px] text-[24px] text-[white]">{t("loginPage.title")}</h1>
+                <h1 className="text-center mb-[20px] text-[24px] text-[white]">{t.loginPage.title}</h1>
                 <form onSubmit={onLogin} className="w-full">
                     <div
                         className="
@@ -133,7 +133,8 @@ export default function LoginPage(): JSX.Element {
                             peer-valid:text-[#009000]
                             "
                         >
-                            <FaUserCircle/> {t("loginPage.username")}
+                            <FaUserCircle/>
+                            {t.loginPage.username}
                         </label>
                     </div>
                     <div
@@ -199,7 +200,8 @@ export default function LoginPage(): JSX.Element {
                             peer-valid:text-[#009000]
                             "
                         >
-                            <FaLock/> {t("loginPage.password")}
+                            <FaLock/>
+                            {t.loginPage.password}
                         </label>
                     </div>
                     <button
@@ -227,7 +229,7 @@ export default function LoginPage(): JSX.Element {
                         "
                     >
                         <BiLogIn/>
-                        {t("loginPage.title")}
+                        {t.loginPage.title}
                     </button>
                 </form>
             </div>

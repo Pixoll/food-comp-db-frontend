@@ -1,51 +1,30 @@
-import i18next from "i18next";
-import { initReactI18next } from "react-i18next";
 import { en } from "./en";
 import { es } from "./es";
 
-// noinspection JSIgnoredPromiseFromCall
-i18next.use(initReactI18next).init({
-    interpolation: {
-        escapeValue: false,
-    },
-    lng: "es",
-    resources: {
-        es: {
-            translation: es,
-        },
-        en: {
-            translation: en,
-        },
-    },
-});
+const i18n = {
+    en,
+    es,
+} as const;
 
-export default i18next;
+export default i18n;
 
-declare module "i18next" {
-    // noinspection JSUnusedGlobalSymbols
-    interface CustomTypeOptions {
-        resources: {
-            translation: (typeof es) & (typeof en);
-        };
-    }
-}
-
-type I18NObject = {
-    [key: string]: string | I18NObject;
+type I18nObject = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [key: string]: string | I18nObject | ((...args: any[]) => string);
 };
 
 type JoinKeys<K extends string, P extends string> = `${K}.${P}`;
 
-type I18NKeys<T extends object> = {
+type I18nKeys<T extends object> = {
     [K in keyof T & string]: T[K] extends object
-        ? K | JoinKeys<K, I18NKeys<T[K]>>
+        ? K | JoinKeys<K, I18nKeys<T[K]>>
         : T[K] extends string
             ? K
             : never
 }[keyof T & string];
 
-type EsKeys = I18NKeys<typeof es>;
-type EnKeys = I18NKeys<typeof en>;
+type EsKeys = I18nKeys<typeof es>;
+type EnKeys = I18nKeys<typeof en>;
 
 /* eslint-disable @typescript-eslint/no-redundant-type-constituents */
 // noinspection TypeScriptDuplicateUnionOrIntersectionType
@@ -62,8 +41,8 @@ type MissingKeys =
  */
 
 // noinspection BadExpressionStatementJS
-(es satisfies I18NObject);
+(es satisfies I18nObject);
 // noinspection BadExpressionStatementJS
-(en satisfies I18NObject);
+(en satisfies I18nObject);
 // noinspection BadExpressionStatementJS
 ({} satisfies Record<MissingKeys, never>);

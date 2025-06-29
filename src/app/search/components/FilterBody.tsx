@@ -1,8 +1,9 @@
 import NumericField from "@/app/components/Fields/NumericField";
+import { useTranslation } from "@/context/I18nContext";
 import { useGroups, useNutrients, useOrigins, useTypes } from "@/hooks";
 import { Collection } from "@/utils/collection";
 import { PlusCircle, XCircle } from "lucide-react";
-import { useTranslation } from "react-i18next";
+import type { JSX } from "react";
 import SearchBox from "./SearchBox";
 
 export type Filters = {
@@ -86,7 +87,7 @@ export default function FilterBody({
     return <>
         {/* Filter Sections */}
         <div className="mb-[16px]"/*className="filter-group"*/>
-            <label htmlFor="other">{t("Filter.type")}</label>
+            <label htmlFor="other">{t.foodsFilter.type}</label>
             <SearchBox
                 filterOptions={types}
                 onChange={(values) => handleFilterChange("foodTypeFilter", values)}
@@ -96,7 +97,7 @@ export default function FilterBody({
         </div>
 
         <div className="mb-[16px]">
-            <label htmlFor="other">{t("Filter.regions")}</label>
+            <label htmlFor="other">{t.foodsFilter.regions}</label>
             <SearchBox
                 filterOptions={regionOptions}
                 onChange={(values) => handleFilterChange("regionsFilter", values)}
@@ -106,7 +107,7 @@ export default function FilterBody({
         </div>
 
         <div className="mb-[16px]">
-            <label htmlFor="other">{t("Filter.group")}</label>
+            <label htmlFor="other">{t.foodsFilter.group}</label>
             <SearchBox
                 filterOptions={groups}
                 onChange={(values) => handleFilterChange("groupsFilter", values)}
@@ -117,7 +118,7 @@ export default function FilterBody({
 
         {/* Measurement Section */}
         <div className="flex flex-col w-full bg-[#ffffff] rounded-[8px] p-[16px] shadow-[0_2px_8px_rgba(0,0,0,0.1)]">
-            <h3 className="text-[18px] font-[600] text-[#333333] mb-[16px]">{t("Measurement.title")}</h3>
+            <h3 className="text-[18px] font-[600] text-[#333333] mb-[16px]">{t.foodsFilter.nutrients.title}</h3>
 
             {selectedFilters.nutrientsFilter.map((nutrient, index, array) => (
                 <div key={index} className="flex flex-col w-full mb-[20px]">
@@ -131,7 +132,7 @@ export default function FilterBody({
                         <div className="relative">
                             <select
                                 id={`nutrient-select-${index}`}
-                                aria-label="Select nutrient"
+                                aria-label={t.foodsFilter.nutrients.select}
                                 value={nutrient.id || ""}
                                 onChange={(e) => {
                                     const id = +e.target.value;
@@ -159,12 +160,11 @@ export default function FilterBody({
                                 duration-[200ms]
                                 "
                             >
-                                <option value={""}>Nada seleccionado</option>
+                                <option value={""}>{t.foodsFilter.nutrients.nothingSelected}</option>
                                 {getAvailableNutrients(array.slice(0, index)).map(nutrient => (
-                                    <option
-                                        key={nutrient.id}
-                                        value={nutrient.id}
-                                    >{`${nutrient.name} (${nutrient.measurementUnit})`}</option>
+                                    <option key={nutrient.id} value={nutrient.id}>
+                                        {`${nutrient.name} (${nutrient.measurementUnit})`}
+                                    </option>
                                 ))}
                             </select>
                             <div
@@ -197,7 +197,7 @@ export default function FilterBody({
                             <div className="relative">
                                 <select
                                     id={`operator-select-${index}`}
-                                    aria-label="Select operator"
+                                    aria-label={t.foodsFilter.nutrients.operator}
                                     value={nutrient.op}
                                     onChange={(e) => handleNutrientFilterChange("op", e.target.value, index)}
                                     className="
@@ -220,11 +220,11 @@ export default function FilterBody({
                                     duration-[200ms]
                                     "
                                 >
-                                    <option value="<">&lt;</option>
-                                    <option value="<=">&le;</option>
-                                    <option value="=">=</option>
-                                    <option value=">=">&ge;</option>
-                                    <option value=">">&gt;</option>
+                                    <option value="<" aria-label={t.foodsFilter.nutrients.less}>&lt;</option>
+                                    <option value="<=" aria-label={t.foodsFilter.nutrients.lessEqual}>&le;</option>
+                                    <option value="=" aria-label={t.foodsFilter.nutrients.equal}>=</option>
+                                    <option value=">=" aria-label={t.foodsFilter.nutrients.greaterEqual}>&ge;</option>
+                                    <option value=">" aria-label={t.foodsFilter.nutrients.greater}>&gt;</option>
                                 </select>
                                 <div
                                     className="
@@ -259,7 +259,7 @@ export default function FilterBody({
                                 allowDecimals={true}
                                 min={0}
                                 error={typeof nutrient.value !== "undefined" && nutrient.value < 0}
-                                errorMessage="Valor no puede ser negativo."
+                                errorMessage={t.foodsFilter.nutrients.noNegative}
                                 className="w-full"
                             />
                         </div>
@@ -293,7 +293,7 @@ export default function FilterBody({
                         "
                     >
                         <PlusCircle className="w-[18px] h-[18px] mr-[8px]"/>
-                        Agregar
+                        {t.foodsFilter.nutrients.add}
                     </button>
                 )}
 
@@ -322,7 +322,7 @@ export default function FilterBody({
                         "
                     >
                         <XCircle className="w-[18px] h-[18px] mr-[8px]"/>
-                        Eliminar último
+                        {t.foodsFilter.nutrients.removeLast}
                     </button>
                 )}
             </div>
@@ -343,7 +343,7 @@ export default function FilterBody({
             hover:bg-[#388e60]
             "
         >
-            {t("Filter.reset")}
+            {t.foodsFilter.reset}
         </button>
     </>;
 }

@@ -1,24 +1,23 @@
-import { type ReactNode, useEffect, useRef, useState } from "react";
+import { type JSX, type ReactNode, useEffect, useRef, useState } from "react";
 import styles from "./Modal.module.css";
+import { useTranslation } from "@/context/I18nContext";
 
 type ModalProps = {
-    width?: number;
+    fontWeight?: number;
     height?: number;
     header?: string;
     children: ReactNode;
     onClose?: () => void;
 };
 
-export default function Modal(props: ModalProps): JSX.Element | null {
-    const {
-        width = 700,
-        height,
-        header = "Modal",
-        children,
-        onClose = () => {
-        },
-    } = props;
-
+export default function Modal({
+    fontWeight = 700,
+    height,
+    header = "Modal",
+    children,
+    onClose,
+}: ModalProps): JSX.Element | null {
+    const { t } = useTranslation();
     const [isOpen, setIsOpen] = useState(true);
     const [isClosing, setIsClosing] = useState(false);
     const modalRef = useRef<HTMLDivElement>(null);
@@ -55,14 +54,16 @@ export default function Modal(props: ModalProps): JSX.Element | null {
         setIsClosing(true);
         setTimeout(() => {
             setIsOpen(false);
-            onClose();
+            onClose?.();
         }, 300);
     };
 
-    if (!isOpen) return null;
+    if (!isOpen) {
+        return null;
+    }
 
     const containerStyle = {
-        width: width ? `${width}px` : "400px",
+        width: `${fontWeight || 400}px`,
         ...height && { height: `${height}px` },
     };
 
@@ -78,7 +79,7 @@ export default function Modal(props: ModalProps): JSX.Element | null {
                     <button
                         onClick={handleClose}
                         className={styles.closeButton}
-                        aria-label="Cerrar modal"
+                        aria-label={t.modal.closeModal}
                     >
                         <span aria-hidden="true">×</span>
                     </button>
@@ -89,11 +90,8 @@ export default function Modal(props: ModalProps): JSX.Element | null {
                 </div>
 
                 <div className={styles.modalFooter}>
-                    <button
-                        onClick={handleClose}
-                        className={styles.closeButtonFooter}
-                    >
-                        Cerrar
+                    <button onClick={handleClose} className={styles.closeButtonFooter}>
+                        {t.modal.close}
                     </button>
                 </div>
             </div>

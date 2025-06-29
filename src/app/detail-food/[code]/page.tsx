@@ -2,19 +2,51 @@
 
 import type { Food } from "@/api";
 import GramsAdjuster from "@/app/detail-food/components/grams-adjuster/GramsAdjuster";
+import { useTranslation } from "@/context/I18nContext";
 import { FetchStatus, useApi } from "@/hooks";
-import i18n from "@/i18n";
 import { useParams } from "next/navigation";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { type JSX, useState } from "react";
 import Tab from "../../components/Tabs/Tab";
 import TabItem from "../../components/Tabs/TabItem";
-import CompositionDropdown from "../components/composition-dropdown/CompositionDropdown";
+import CompositionDropdown from "../components/CompositionDropdown";
 import Graphic from "../components/Graphic";
-import InfoAboutFoot from "../components/InfoAboutFoot";
-import LangualCodes from "../components/LangualCodes/LangualCodes";
+import FoodInformation from "../components/FoodInformation";
+import LangualCodes from "@/app/detail-food/components/langual-codes/LangualCodes";
 import References from "../components/References";
 import styles from "./detail-food.module.css";
+
+const pieColors = [
+    "#0088fe",
+    "#00c49f",
+    "#ffbb28",
+    "#ff8042",
+    "#a28cc3",
+    "#ff6361",
+    "#bc5090",
+    "#58508d",
+    "#003f5c",
+    "#ffa600",
+    "#2f4b7c",
+    "#665191",
+    "#d45087",
+    "#f95d6a",
+    "#ff7c43",
+    "#1f77b4",
+    "#aec7e8",
+    "#ff9896",
+    "#98df8a",
+    "#c5b0d5",
+    "#ffbb78",
+    "#9467bd",
+    "#c49c94",
+    "#e377c2",
+    "#f7b6d2",
+    "#7f7f7f",
+    "#c7c7c7",
+    "#bcbd22",
+    "#dbdb8d",
+    "#17becf",
+] as const;
 
 function useDetail(code: string): Food {
     const result = useApi([code], (api, depCode) => api.getFood({
@@ -64,44 +96,10 @@ function useDetail(code: string): Food {
 export default function DetailFoodPage(): JSX.Element {
     const params = useParams();
     const code = params.code as string;
-    const { t } = useTranslation();
-    const selectedLanguage = i18n.language as "en" | "es" | "pt";
+    const { t, language } = useTranslation();
     const [grams, setGrams] = useState<number>(100);
 
     const data = useDetail(code);
-
-    const colors = [
-        "#0088fe",
-        "#00c49f",
-        "#ffbb28",
-        "#ff8042",
-        "#a28cc3",
-        "#ff6361",
-        "#bc5090",
-        "#58508d",
-        "#003f5c",
-        "#ffa600",
-        "#2f4b7c",
-        "#665191",
-        "#d45087",
-        "#f95d6a",
-        "#ff7c43",
-        "#1f77b4",
-        "#aec7e8",
-        "#ff9896",
-        "#98df8a",
-        "#c5b0d5",
-        "#ffbb78",
-        "#9467bd",
-        "#c49c94",
-        "#e377c2",
-        "#f7b6d2",
-        "#7f7f7f",
-        "#c7c7c7",
-        "#bcbd22",
-        "#dbdb8d",
-        "#17becf",
-    ];
 
     const references = data.references ?? [];
     const mainNutrients = data.nutrientMeasurements?.macronutrients ?? [];
@@ -111,7 +109,7 @@ export default function DetailFoodPage(): JSX.Element {
         .map((mainNutrient, index) => ({
             name: mainNutrient.name,
             value: +((grams / 100) * mainNutrient.average).toFixed(2),
-            fill: colors[index % colors.length],
+            fill: pieColors[index % pieColors.length],
         }));
 
     const graphicDataPercent = mainNutrients
@@ -121,24 +119,23 @@ export default function DetailFoodPage(): JSX.Element {
         .map((mainNutrient, index) => ({
             name: mainNutrient.name,
             value: +(((grams / 100) * mainNutrient.average) / 100).toFixed(2),
-            fill: colors[index % colors.length],
+            fill: pieColors[index % pieColors.length],
         }));
 
     return (
         <div className="w-full h-full bg-[#effce8] rounded-t-[2px]">
-            {(data.commonName.es || data.commonName.en || data.commonName.pt) && (
-                <div
-                    className="
-                    px-[24px] py-[20px]
-                    bg-gradient-to-r from-[#ffffff] to-[#f8fdf6]
-                    border-b-[2px] border-b-[#7cbb75]
-                    shadow-[0_2px_8px_rgba(0,0,0,0.08)]
-                    mb-[16px]
-                    "
-                >
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-[8px] sm:gap-[16px]">
-                        <span
-                            className="
+            <div
+                className="
+                px-[24px] py-[20px]
+                bg-gradient-to-r from-[#ffffff] to-[#f8fdf6]
+                border-b-[2px] border-b-[#7cbb75]
+                shadow-[0_2px_8px_rgba(0,0,0,0.08)]
+                mb-[16px]
+                "
+            >
+                <div className="flex flex-col sm:flex-row sm:items-center gap-[8px] sm:gap-[16px]">
+                    <span
+                        className="
                         inline-flex items-center justify-center
                         bg-[#7cbb70]
                         text-white
@@ -150,27 +147,26 @@ export default function DetailFoodPage(): JSX.Element {
                         text-center
                         shadow-[0_2px_4px_rgba(124,187,117,0.3)]
                         "
-                        >
-                        </span>
-                        <h1
-                            className="
-                            font-[700]
-                            text-[28px] sm:text-[32px]
-                            text-[#2d3748]
-                            m-[0px]
-                            leading-[1.1]
-                            tracking-[-0.02em]
-                            flex-1
-                            "
-                        >
-                            {code},{data.commonName[selectedLanguage] ?? ""}
-                        </h1>
-                    </div>
+                    >
+                    </span>
+                    <h1
+                        className="
+                        font-[700]
+                        text-[28px] sm:text-[32px]
+                        text-[#2d3748]
+                        m-[0px]
+                        leading-[1.1]
+                        tracking-[-0.02em]
+                        flex-1
+                        "
+                    >
+                        [{code}] {data.commonName[language] ?? data.commonName.en ?? data.commonName.es}
+                    </h1>
                 </div>
-            )}
+            </div>
             <Tab defaultTab={0}>
-                <TabItem label="Información general">
-                    <InfoAboutFoot
+                <TabItem label={t.foodDetail.generalInfo}>
+                    <FoodInformation
                         data={{
                             ingredients: data.ingredients,
                             group: data.group,
@@ -184,7 +180,7 @@ export default function DetailFoodPage(): JSX.Element {
                         }}
                     />
                 </TabItem>
-                <TabItem label="Composición del alimento">
+                <TabItem label={t.foodDetail.foodComposition}>
                     <GramsAdjuster
                         initialGrams={100}
                         onGramsChange={(newGrams) => {
@@ -192,8 +188,8 @@ export default function DetailFoodPage(): JSX.Element {
                         }}
                     />
                     <div className={styles["graphic-container"]}>
-                        <Graphic title={t("DetailFood.graphics.title_L")} data={graphicData} grams={grams}/>
-                        <Graphic title={t("DetailFood.graphics.title_R")} data={graphicDataPercent} grams={grams}/>
+                        <Graphic title={t.foodDetail.graphics.titleLeft} data={graphicData} grams={grams}/>
+                        <Graphic title={t.foodDetail.graphics.titleRight} data={graphicDataPercent} grams={grams}/>
                     </div>
                     <div
                         className="
@@ -204,11 +200,11 @@ export default function DetailFoodPage(): JSX.Element {
                         bg-[white]
                         "
                     >
-                        <h2 className="text-center ">Tabla de composición</h2>
+                        <h2 className="text-center ">{t.foodDetail.compositionTable}</h2>
                         <CompositionDropdown nutrientData={data.nutrientMeasurements ?? []} grams={grams}/>
                     </div>
                 </TabItem>
-                <TabItem label="Códigos languales">
+                <TabItem label={t.foodDetail.langualCodes}>
                     <div
                         className="
                         flex
@@ -220,11 +216,11 @@ export default function DetailFoodPage(): JSX.Element {
                         bg-[white]
                         "
                     >
-                        <h2 className="text-center pb-[12px]">Códigos languales</h2>
+                        <h2 className="text-center pb-[12px]">{t.foodDetail.langualCodes}</h2>
                         <LangualCodes data={data.langualCodes}/>
                     </div>
                 </TabItem>
-                <TabItem label="Referencias">
+                <TabItem label={t.foodDetail.references.title}>
                     <div
                         className="
                         flex
@@ -236,7 +232,7 @@ export default function DetailFoodPage(): JSX.Element {
                         bg-[white]
                         "
                     >
-                        <h2 className="text-center pb-[12px]">Referencias</h2>
+                        <h2 className="text-center pb-[12px]">{t.foodDetail.references.title}</h2>
                         <References data={references}/>
                     </div>
                 </TabItem>

@@ -1,7 +1,8 @@
 import type { FoodWithOnlyMeasurements } from "@/api";
+import { useTranslation } from "@/context/I18nContext";
 import type { NutrientMeasurement, NutrientMeasurementWithComponents, NutrientsValue } from "@/types/SingleFoodResult";
 import { ChevronDown, ChevronRight, X } from "lucide-react";
-import React, { useState } from "react";
+import { Fragment, type JSX, useState } from "react";
 
 type NutrientComparisonTableProps = {
     foodsData: FoodWithOnlyMeasurements[];
@@ -12,6 +13,7 @@ export default function NutrientComparisonTable({
     foodsData,
     onRemoveFood,
 }: NutrientComparisonTableProps): JSX.Element {
+    const { t } = useTranslation();
     const [expandedSections, setExpandedSections] = useState({
         energy: true,
         macronutrients: true,
@@ -126,7 +128,7 @@ export default function NutrientComparisonTable({
         const paddingClass = indentLevel < paddingClasses.length ? paddingClasses[indentLevel] : paddingClasses[1];
 
         return (
-            <React.Fragment key={`${nutrient.nutrientId}-expandable`}>
+            <Fragment key={`${nutrient.nutrientId}-expandable`}>
                 <tr className="hover:bg-[#f0fdf4] transition-colors duration-[200ms]">
                     <td
                         className={`${paddingClass} bg-[white] relative ${hasComponents ? "cursor-pointer" : ""}`}
@@ -159,7 +161,7 @@ export default function NutrientComparisonTable({
                 {isExpanded && hasComponents && nutrient.components.map(comp =>
                     renderNutrientRow(comp, indentLevel + 1)
                 )}
-            </React.Fragment>
+            </Fragment>
         );
     };
 
@@ -185,7 +187,7 @@ export default function NutrientComparisonTable({
                             border-[#047857]
                             "
                         >
-                            Nutrientes
+                            {t.nutrientsDropdown.nutrients}
                         </th>
                         <th
                             className="
@@ -204,7 +206,7 @@ export default function NutrientComparisonTable({
                             border-[#047857]
                             "
                         >
-                            Unidad
+                            {t.nutrientsDropdown.unit}
                         </th>
 
                         {foodsData.map(food => (
@@ -241,7 +243,7 @@ export default function NutrientComparisonTable({
                                         duration-200
                                         "
                                         onClick={() => onRemoveFood([food.code])}
-                                        aria-label={`Remove ${getFoodName(food.commonName.es || "")}`}
+                                        aria-label={`${t.compare.remove} ${getFoodName(food.commonName.es || "")}`}
                                     >
                                         <X size={16}/>
                                     </button>
@@ -273,7 +275,7 @@ export default function NutrientComparisonTable({
                                 ? <ChevronDown size={16} className="inline mr-[8px]"/>
                                 : <ChevronRight size={16} className="inline mr-[8px]"/>
                             }
-                            Valor energético
+                            {t.nutrientsDropdown.energeticValue}
                         </td>
                     </tr>
 
@@ -302,7 +304,7 @@ export default function NutrientComparisonTable({
                                 ? <ChevronDown size={16} className="inline mr-[8px]"/>
                                 : <ChevronRight size={16} className="inline mr-[8px]"/>
                             }
-                            Nutrientes principales
+                            {t.nutrientsDropdown.mainNutrients}
                         </td>
                     </tr>
 
@@ -331,7 +333,7 @@ export default function NutrientComparisonTable({
                                 ? <ChevronDown size={16} className="inline mr-[8px]"/>
                                 : <ChevronRight size={16} className="inline mr-[8px]"/>
                             }
-                            Micronutrientes
+                            {t.nutrientsDropdown.micronutrients}
                         </td>
                     </tr>
 
@@ -358,7 +360,7 @@ export default function NutrientComparisonTable({
                                         ? <ChevronDown size={16} className="inline mr-[8px]"/>
                                         : <ChevronRight size={16} className="inline mr-[8px]"/>
                                     }
-                                    Vitaminas
+                                    {t.nutrientsDropdown.vitamins}
                                 </span>
                             </td>
                         </tr>
@@ -389,7 +391,7 @@ export default function NutrientComparisonTable({
                                         ? <ChevronDown size={16} className="inline mr-[8px]"/>
                                         : <ChevronRight size={16} className="inline mr-[8px]"/>
                                     }
-                                    Minerales
+                                    {t.nutrientsDropdown.minerals}
                                 </span>
                             </td>
                         </tr>

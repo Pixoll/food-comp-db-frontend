@@ -1,29 +1,24 @@
 "use client";
 
-import { type Food } from "@/api";
+import { type Food, type Language, type NutrientMeasurementUpdateDto } from "@/api";
+import { useTranslation } from "@/context/I18nContext";
 import { useToast } from "@/context/ToastContext";
 import {
-    type Commune,
-    FetchStatus, type Location,
-    type Province,
+    FetchStatus,
     type Region,
     useApi,
     useForm,
-    type UseGroups,
     useGroups,
     useOrigins,
-    type UseScientificNames,
     useScientificNames,
-    type UseSubspecies,
     useSubspecies,
-    type UseTypes,
     useTypes,
 } from "@/hooks";
 import type { LangualCode, NutrientMeasurement, NutrientsValue, Origin } from "@/types/SingleFoodResult";
+import type { Require } from "@/types/util";
 import { Collection } from "@/utils/collection";
 import { useParams } from "next/navigation";
-import { type FormEvent, useEffect } from "react";
-import { useTranslation } from "react-i18next";
+import { type FormEvent, type JSX, useEffect } from "react";
 import TextField from "../../components/Fields/TextField";
 import Tab from "../../components/Tabs/Tab";
 import TabItem from "../../components/Tabs/TabItem";
@@ -31,8 +26,8 @@ import Origins from "../components/add-remove-origins/Origins";
 import ModifyCompositionDropdown from "../components/ModifyCompositionDropdown";
 
 type FoodForm = {
-    commonName: Record<"es" | "en" | "pt", string | undefined>;
-    ingredients: Record<"es" | "en" | "pt", string | undefined>;
+    commonName: Record<Language["code"], string | undefined>;
+    ingredients: Record<Language["code"], string | undefined>;
     scientificNameId?: number;
     subspeciesId?: number;
     groupId?: number;
@@ -41,24 +36,11 @@ type FoodForm = {
     brand?: string;
     observation?: string;
     originIds?: number[];
-    nutrientMeasurements: nutrientMeasurementForm[];
+    nutrientMeasurements: NutrientMeasurementForm[];
     langualCodes?: number[];
 };
 
-type nutrientMeasurementForm = {
-    nutrientId: number;
-    average?: number;
-    deviation?: number;
-    min?: number;
-    max?: number;
-    sampleSize?: number;
-    dataType: "analytic" | "calculated" | "assumed" | "borrowed";
-    referencesCodes?: number[];
-};
-
-function normalizeStringValue(value: string | undefined): string | undefined {
-    return value?.trim() === "" ? undefined : value?.trim();
-}
+type NutrientMeasurementForm = Require<NutrientMeasurementUpdateDto, "nutrientId" | "dataType">;
 
 function stringToNumberOrUndefined(value: string | undefined): number | undefined {
     if (!value?.trim()) return undefined;
@@ -67,7 +49,7 @@ function stringToNumberOrUndefined(value: string | undefined): number | undefine
     return isNaN(parsedNumber) ? undefined : parsedNumber;
 }
 
-function normalizeNutrientMeasurement(nutrient: NutrientMeasurement): nutrientMeasurementForm {
+function normalizeNutrientMeasurement(nutrient: NutrientMeasurement): NutrientMeasurementForm {
     return {
         nutrientId: nutrient.nutrientId,
         average: stringToNumberOrUndefined(nutrient.average?.toString()),
@@ -76,7 +58,7 @@ function normalizeNutrientMeasurement(nutrient: NutrientMeasurement): nutrientMe
         max: stringToNumberOrUndefined(nutrient.max?.toString()),
         sampleSize: stringToNumberOrUndefined(nutrient.sampleSize?.toString()),
         dataType: nutrient.dataType,
-        referencesCodes: nutrient.referenceCodes,
+        referenceCodes: nutrient.referenceCodes,
     };
 }
 
@@ -105,7 +87,7 @@ function getUniqueLangualCodeIds(langualCodes: LangualCode[] | undefined): numbe
     )];
 }
 
-function normalizeAllNutrientMeasurements(nutrientValues: NutrientsValue): nutrientMeasurementForm[] {
+function normalizeAllNutrientMeasurements(nutrientValues: NutrientsValue): NutrientMeasurementForm[] {
     return [
         ...nutrientValues.energy.map(normalizeNutrientMeasurement),
 
@@ -131,22 +113,27 @@ function normalizeFoodFormForApi(
     }
 ): FoodForm {
     return {
-        commonName: data.commonName as Record<"es" | "en" | "pt", string | undefined>,
-        ingredients: data.ingredients as Record<"es" | "en" | "pt", string | undefined>,
+        commonName: data.commonName as Record<Language["code"], string | undefined>,
+        ingredients: data.ingredients as Record<Language["code"], string | undefined>,
         scientificNameId: collections.scientificNames.nameToId.get(data.scientificName || ""),
         subspeciesId: collections.subspecies.get(data.subspecies || ""),
         groupId: collections.groups.codeToId.get(data.group.code || ""),
         typeId: collections.types.codeToId.get(data.type.code || ""),
-        strain: normalizeStringValue(data.strain),
-        brand: normalizeStringValue(data.brand),
-        observation: normalizeStringValue(data.observation),
+        strain: data.strain?.trim() || undefined,
+        brand: data.brand?.trim() || undefined,
+        observation: data.observation?.trim() || undefined,
         originIds: getUniqueRegionIds(data.origins, [...collections.regions.keys()] as number[]),
         langualCodes: getUniqueLangualCodeIds(data.langualCodes),
         nutrientMeasurements: normalizeAllNutrientMeasurements(data.nutrientMeasurements),
     };
 }
 
-function useAllTypeData(code: string): UseAllTypeData {
+export default function ModifyFoodPage(): JSX.Element {
+    const params = useParams();
+    const code = params.code as string;
+    const { t } = useTranslation();
+    const { addToast } = useToast();
+
     const result = useApi([code], (api, code) => api.getFood({
         path: {
             code,
@@ -158,26 +145,6 @@ function useAllTypeData(code: string): UseAllTypeData {
     const scientificNames = useScientificNames();
     const subspecies = useSubspecies();
     const { regions, provinces, communes, locations } = useOrigins();
-    return { data, groups, types, scientificNames, subspecies, regions, provinces, communes, locations };
-}
-
-export default function ModifyFoodPage(): JSX.Element {
-    const params = useParams();
-    const code = params.code as string;
-    const { t } = useTranslation();
-    const { addToast } = useToast();
-
-    const {
-        data,
-        groups,
-        types,
-        scientificNames,
-        subspecies,
-        regions,
-        provinces,
-        communes,
-        locations,
-    } = useAllTypeData(code);
 
     const collectionsForNormalized = {
         scientificNames: {
@@ -283,14 +250,14 @@ export default function ModifyFoodPage(): JSX.Element {
 
     useEffect(() => {
         if (data) {
-            const updatedDataFomr = normalizeFoodFormForApi(data, collectionsForNormalized);
-            setFormState(updatedDataFomr);
+            const updatedDataForm = normalizeFoodFormForApi(data, collectionsForNormalized);
+            setFormState(updatedDataForm);
         }
         // eslint-disable-next-line
     }, [data]);
 
     if (!data) {
-        return <h2>{t("DetailFood.loading")}</h2>;
+        return <h2>{t.foodDetail.loading}</h2>;
     }
 
     /*const handleUpdateNutrients = (updatedData: NutrientsValue) => {
@@ -324,8 +291,8 @@ export default function ModifyFoodPage(): JSX.Element {
         e.preventDefault();
         console.log(formState);
         addToast({
-            message: "se agrego con exito",
-            title: "Modify",
+            message: t.modifyFood.successToastMessage,
+            title: t.modifyFood.successToastTitle,
             type: "Success",
             position: "top-end",
         });
@@ -374,9 +341,9 @@ export default function ModifyFoodPage(): JSX.Element {
 
     return (
         <div className="w-full h-full bg-[#effce8] rounded-t-[2px]">
-            <h2 className="text-center">{"Modificar alimento"} {code}</h2>
+            <h2 className="text-center">{t.modifyFood.title} {code}</h2>
             <Tab defaultTab={0}>
-                <TabItem label={"Modificar información general"}>
+                <TabItem label={t.modifyFood.modifyGeneralInfo}>
                     <div
                         className="
                         flex
@@ -392,7 +359,7 @@ export default function ModifyFoodPage(): JSX.Element {
                             {Object.entries(formState.commonName).map(([lang, value]) => (
                                 <TextField
                                     key={`commonName.${lang}`}
-                                    label={`Nombre común (${lang.toUpperCase()})`}
+                                    label={`${t.modifyFood.commonName} (${lang.toUpperCase()})`}
                                     name={`commonName.${lang}`}
                                     value={value || ""}
                                     onChange={onInputChange}
@@ -404,7 +371,7 @@ export default function ModifyFoodPage(): JSX.Element {
                             {Object.entries(formState.ingredients).map(([lang, value]) => (
                                 <TextField
                                     key={`ingredients.${lang}`}
-                                    label={`Ingrediente(${lang.toUpperCase()})`}
+                                    label={`${t.modifyFood.ingredients} (${lang.toUpperCase()})`}
                                     name={`ingredients.${lang}`}
                                     value={value || ""}
                                     onChange={onInputChange}
@@ -413,21 +380,21 @@ export default function ModifyFoodPage(): JSX.Element {
                             ))}
                         </div>
                         <TextField
-                            label="Observación"
+                            label={t.modifyFood.observation}
                             name="observation"
                             value={formState.observation || ""}
                             onChange={onInputChange}
                             fullWidth
                         />
                         <TextField
-                            label="Marca"
+                            label={t.modifyFood.brand}
                             name="brand"
                             value={formState.brand || ""}
                             onChange={onInputChange}
                             fullWidth
                         />
                         <TextField
-                            label="Marca"
+                            label={t.modifyFood.strain}
                             name="strain"
                             value={formState.strain || ""}
                             onChange={onInputChange}
@@ -435,7 +402,7 @@ export default function ModifyFoodPage(): JSX.Element {
                         />
                     </div>
                 </TabItem>
-                <TabItem label={"Modificar origines"}>
+                <TabItem label={t.modifyFood.modifyOrigins}>
                     <div
                         className="
                         flex
@@ -447,7 +414,9 @@ export default function ModifyFoodPage(): JSX.Element {
                         bg-[white] p-[16px]
                         "
                     >
-                        <h3 className="text-[18px] font-[600] mb-[16px]">Origines</h3>
+                        <h3 className="text-[18px] font-[600] mb-[16px]">
+                            {t.modifyFood.origins}
+                        </h3>
                         <Origins
                             originsForm={data.origins || []}
                             data={{
@@ -465,7 +434,7 @@ export default function ModifyFoodPage(): JSX.Element {
                         />
                     </div>
                 </TabItem>
-                <TabItem label={"Modificar información nutricional"}>
+                <TabItem label={t.modifyFood.modifyNutrients}>
                     <div
                         className="
                         flex
@@ -478,8 +447,9 @@ export default function ModifyFoodPage(): JSX.Element {
                         p-[16px]
                         "
                     >
-                        <h3 className="text-[18px] font-[600] mb-[16px]">Información nutricional</h3>
-
+                        <h3 className="text-[18px] font-[600] mb-[16px]">
+                            {t.modifyFood.nutritionalInfo}
+                        </h3>
                         <ModifyCompositionDropdown
                             nutrientData={data.nutrientMeasurements ?? []}
                             formState={formState}
@@ -488,23 +458,11 @@ export default function ModifyFoodPage(): JSX.Element {
                         />
                     </div>
                 </TabItem>
-                <TabItem label={"Agregar y/o quitar referencias"}>
+                <TabItem label={t.modifyFood.modifyReferences}>
 
                 </TabItem>
             </Tab>
-            <button onClick={handleSubmit2}>Guardar y enviar</button>
+            <button onClick={handleSubmit2}>{t.modifyFood.saveAndSend}</button>
         </div>
     );
 }
-
-type UseAllTypeData = {
-    data: Food | null;
-    groups: UseGroups;
-    types: UseTypes;
-    scientificNames: UseScientificNames;
-    subspecies: UseSubspecies;
-    regions: Collection<number, Region>;
-    provinces: Collection<number, Province>;
-    communes: Collection<number, Commune>;
-    locations: Collection<number, Location>;
-};

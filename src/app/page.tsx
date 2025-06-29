@@ -1,8 +1,8 @@
 "use client";
 
+import { useTranslation } from "@/context/I18nContext";
 import { useRouter } from "next/navigation";
-import { type FormEvent, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { type FormEvent, type JSX, useState } from "react";
 import Footer from "./components/Footer";
 
 export default function HomePage(): JSX.Element {
@@ -50,7 +50,7 @@ export default function HomePage(): JSX.Element {
                             font-[Poppins,_sans-serif]
                             "
                         >
-                            {t("homepage.title")}
+                            {t.homepage.title}
                         </h1>
                         <p
                             className="
@@ -60,14 +60,14 @@ export default function HomePage(): JSX.Element {
                             font-[Poppins,_sans-serif]
                             "
                         >
-                            {t("homepage.subtitle")}
+                            {t.homepage.subtitle}
                         </p>
 
                         <form onSubmit={handleSubmit} className="w-full flex flex-col items-center">
                             <div className="flex w-full h-[60px] max-w-[568px] mx-auto mb-[20px]">
                                 <input
                                     type="text"
-                                    placeholder={t("search.placeholder")}
+                                    placeholder={t.search.placeholder}
                                     value={foodName}
                                     onChange={(e) => setFoodName(e.target.value.trim())}
                                     className="
@@ -104,7 +104,7 @@ export default function HomePage(): JSX.Element {
                                     shadow-[2px_2px_8px_rgba(0,0,0,0.9)]
                                     "
                                 >
-                                    {t("search.button")}
+                                    {t.search.button}
                                 </button>
                             </div>
                         </form>
@@ -123,7 +123,7 @@ export default function HomePage(): JSX.Element {
                                 "
                                 onClick={() => router.push("/search")}
                             >
-                                {t("search.advancedSearch")}
+                                {t.search.advancedSearch}
                             </button>
                         </div>
                     </div>

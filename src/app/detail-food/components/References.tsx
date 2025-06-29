@@ -1,107 +1,32 @@
+import { type I18nObject, useTranslation } from "@/context/I18nContext";
 import type { Reference } from "@/types/SingleFoodResult";
+import type { JSX } from "react";
 
 type ReferenceProps = {
     data: Reference[];
 };
 
 export default function References({ data }: ReferenceProps): JSX.Element {
-    const formatAuthors = (authors: string[]): string => {
-        if (authors.length === 0) return "";
-        if (authors.length === 1) return authors[0];
-        if (authors.length === 2) return `${authors[0]} & ${authors[1]}`;
-        return `${authors[0]} et al.`;
-    };
-
-    const formatCitation = (reference: Reference): JSX.Element => {
-        const authors = formatAuthors(reference.authors);
-        const year = reference.refYear ? `(${reference.refYear})` : "";
-        const title = reference.title ? `"${reference.title}"` : "";
-
-        switch (reference.type) {
-            case "article":
-                return <>
-                    <span className="font-[500]">{authors}</span> {year}. {title}.
-                    {reference.journalName && <span className="italic">{reference.journalName}</span>}
-                    {reference.volume && <span>, {reference.volume}</span>}
-                    {reference.issue && <span>({reference.issue})</span>}
-                    {(reference.pageStart && reference.pageEnd)
-                        && <span>, pp. {reference.pageStart}-{reference.pageEnd}</span>}
-                    {reference.other && <span>. {reference.other}</span>}
-                </>;
-
-            case "book":
-                return <>
-                    <span className="font-[500]">{authors}</span> {year}.
-                    <span className="italic">{title}</span>.
-                    {reference.cityName && <span>{reference.cityName}</span>}
-                    {reference.other && <span>. {reference.other}</span>}
-                </>;
-
-            case "thesis":
-                return <>
-                    <span className="font-[500]">{authors}</span> {year}. {title}
-                    <span className="italic"> [Thesis]</span>.
-                    {reference.cityName && <span>{reference.cityName}</span>}
-                    {reference.other && <span>. {reference.other}</span>}
-                </>;
-
-            case "report":
-                return <>
-                    <span className="font-[500]">{authors}</span> {year}. {title}
-                    <span className="italic"> [Report]</span>.
-                    {reference.other && <span>{reference.other}</span>}
-                </>;
-
-            case "website":
-                return <>
-                    <span className="font-[500]">{authors}</span> {year}. {title}.
-                    <span className="italic">Retrieved from {reference.other}</span>
-                </>;
-
-            default:
-                return <>
-                    <span className="font-[500]">{authors}</span> {year}. {title}
-                    {reference.other && <span>. {reference.other}</span>}
-                </>;
-        }
-    };
-
-    const getReferenceIcon = (type: Reference["type"]): string => {
-        switch (type) {
-            case "article":
-                return "📄";
-            case "book":
-                return "📚";
-            case "thesis":
-                return "🎓";
-            case "report":
-                return "📊";
-            case "website":
-                return "🌐";
-            default:
-                return "📝";
-        }
-    };
+    const { t } = useTranslation();
 
     return (
         <div className="space-y-[16px] p-[4px]">
-
             {data.length === 0 ? (
-                <p className="text-[#64748b] italic">No tiene referencias asignadas</p>
+                <p className="text-[#64748b] italic">{t.foodDetail.references.none}</p>
             ) : (data.map((reference) => (
                 <div
-                    className="
-                        p-[16px]
-                        border-l-[4px]
-                        border-[#8ad1aa]
-                        rounded-r-[8px]
-                        bg-[#f8fafc]
-                        hover:bg-[#f1f5f9]
-                        transition-colors
-                        duration-[200ms]
-                        shadow-[0_2px_4px_rgba(0,0,0,0.05)]
-                        "
                     key={reference.code}
+                    className="
+                    p-[16px]
+                    border-l-[4px]
+                    border-[#8ad1aa]
+                    rounded-r-[8px]
+                    bg-[#f8fafc]
+                    hover:bg-[#f1f5f9]
+                    transition-colors
+                    duration-[200ms]
+                    shadow-[0_2px_4px_rgba(0,0,0,0.05)]
+                    "
                 >
                     <div className="flex items-start gap-[12px]">
                         <div className="text-[24px] mt-[2px]" aria-hidden="true">
@@ -109,9 +34,12 @@ export default function References({ data }: ReferenceProps): JSX.Element {
                         </div>
                         <div className="flex-1">
                             <p className="text-[15px] leading-[1.6] text-[#334155]">
-                                [{reference.code}] {formatCitation(reference)}
+                                [{reference.code}] {formatCitation(reference, t)}
                             </p>
                             <div className="mt-[8px] text-[13px] text-[#64748b]">
+                                {reference.volumeYear && (
+                                    <span>{t.foodDetail.references.published} {reference.volumeYear}</span>
+                                )}
                                 <span
                                     className="
                                     inline-block
@@ -126,9 +54,8 @@ export default function References({ data }: ReferenceProps): JSX.Element {
                                     mr-[8px]
                                     "
                                 >
-                                    {reference.type}
+                                    {t.foodDetail.references[reference.type]}
                                 </span>
-                                {reference.volumeYear && <span>Published: {reference.volumeYear}</span>}
                             </div>
                         </div>
                     </div>
@@ -136,4 +63,82 @@ export default function References({ data }: ReferenceProps): JSX.Element {
             )))}
         </div>
     );
+}
+
+function getReferenceIcon(type: Reference["type"]): string {
+    switch (type) {
+        case "article":
+            return "📄";
+        case "book":
+            return "📚";
+        case "thesis":
+            return "🎓";
+        case "report":
+            return "📊";
+        case "website":
+            return "🌐";
+        default:
+            return "📝";
+    }
+}
+
+function formatAuthors(authors: string[]): string {
+    if (authors.length === 0) return "";
+    if (authors.length === 1) return authors[0];
+    if (authors.length === 2) return `${authors[0]} & ${authors[1]}`;
+    return `${authors[0]} et al.`;
+}
+
+function formatCitation(reference: Reference, t: I18nObject): JSX.Element {
+    const authors = formatAuthors(reference.authors);
+    const year = reference.refYear ? `(${reference.refYear})` : "";
+    const title = reference.title ? `"${reference.title}"` : "";
+
+    switch (reference.type) {
+        case "article":
+            return <>
+                <span className="font-[500]">{authors}</span> {year}. {title}.
+                {reference.journalName && <span className="italic">{reference.journalName}</span>}
+                {reference.volume && <span>, {reference.volume}</span>}
+                {reference.issue && <span>({reference.issue})</span>}
+                {(reference.pageStart && reference.pageEnd)
+                    && <span>, pp. {reference.pageStart}-{reference.pageEnd}</span>}
+                {reference.other && <span>. {reference.other}</span>}
+            </>;
+
+        case "book":
+            return <>
+                <span className="font-[500]">{authors}</span> {year}.
+                <span className="italic">{title}</span>.
+                {reference.cityName && <span>{reference.cityName}</span>}
+                {reference.other && <span>. {reference.other}</span>}
+            </>;
+
+        case "thesis":
+            return <>
+                <span className="font-[500]">{authors}</span> {year}. {title}
+                <span className="italic"> [{t.foodDetail.references.thesis}]</span>.
+                {reference.cityName && <span>{reference.cityName}</span>}
+                {reference.other && <span>. {reference.other}</span>}
+            </>;
+
+        case "report":
+            return <>
+                <span className="font-[500]">{authors}</span> {year}. {title}
+                <span className="italic"> [{t.foodDetail.references.report}]</span>.
+                {reference.other && <span>{reference.other}</span>}
+            </>;
+
+        case "website":
+            return <>
+                <span className="font-[500]">{authors}</span> {year}. {title}.{" "}
+                <span className="italic">{t.foodDetail.references.retrievedFrom} {reference.other}</span>
+            </>;
+
+        default:
+            return <>
+                <span className="font-[500]">{authors}</span> {year}. {title}
+                {reference.other && <span>. {reference.other}</span>}
+            </>;
+    }
 }

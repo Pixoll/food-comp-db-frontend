@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslation } from "@/context/I18nContext";
 import {
     getNutrientNameById,
     type NutrientMeasurementForm,
@@ -7,8 +8,7 @@ import {
     type NutrientSummary,
 } from "@/types/nutrients";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { type JSX, useState } from "react";
 import AddNutrientRow from "./add-nutrients-measurements/AddNutrientRow";
 
 type NewMacronutrientWithComponentProps = {
@@ -136,28 +136,28 @@ export default function AddMeasurementsWithComponent({
                                     <thead>
                                         <tr className="bg-[#8fbc8f] rounded-[5px]">
                                             <th className="bg-[white] text-[black] font-[700] p-[8px] text-left">
-                                                {t("NewMacronutrient.name")}
+                                                {t.newMacronutrient.name}
                                             </th>
                                             <th className="bg-[white] text-[black] font-[700] p-[8px] text-center">
-                                                {t("NewMacronutrient.mean")}
+                                                {t.newMacronutrient.average}
                                             </th>
                                             <th className="bg-[white] text-[black] font-[700] p-[8px] text-center">
-                                                {t("NewMacronutrient.Deviation")}
+                                                {t.newMacronutrient.deviation}
                                             </th>
                                             <th className="bg-[white] text-[black] font-[700] p-[8px] text-center">
-                                                {t("NewMacronutrient.min")}
+                                                {t.newMacronutrient.min}
                                             </th>
                                             <th className="bg-[white] text-[black] font-[700] p-[8px] text-center">
-                                                {t("NewMacronutrient.max")}
+                                                {t.newMacronutrient.max}
                                             </th>
                                             <th className="bg-[white] text-[black] font-[700] p-[8px] text-center">
-                                                {t("NewMacronutrient.Size")}
+                                                {t.newMacronutrient.sampleSize}
                                             </th>
                                             <th className="bg-[white] text-[black] font-[700] p-[8px] text-center">
-                                                {t("NewMacronutrient.type")}
+                                                {t.newMacronutrient.type}
                                             </th>
                                             <th className="bg-[white] text-[black] font-[700] p-[8px] text-center">
-                                                {t("NewMacronutrient.Action")}
+                                                {t.newMacronutrient.action}
                                             </th>
                                         </tr>
                                     </thead>

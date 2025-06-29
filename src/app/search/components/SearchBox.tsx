@@ -1,16 +1,16 @@
 "use client";
 
 import { Collection } from "@/utils/collection";
-import { useEffect, useState } from "react";
+import { type JSX, useEffect, useState } from "react";
 import CheckboxFilter from "./CheckboxFilter";
 import SingleOptionFilter from "./SingleOptionFilter";
 
-interface SearchBoxProps {
+type SearchBoxProps = {
     filterOptions: Collection<string, string>;
     onChange: (selectedOptions: string[]) => void;
     single: boolean;
     selectedOptions: string[];
-}
+};
 
 export default function SearchBox({
     filterOptions,

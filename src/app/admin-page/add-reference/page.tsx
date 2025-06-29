@@ -1,8 +1,8 @@
 "use client";
 
+import { useTranslation } from "@/context/I18nContext";
 import { type FormState, useForm, useReferences } from "@/hooks";
-import { type Dispatch, type SetStateAction, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { type Dispatch, type JSX, type SetStateAction, useState } from "react";
 import { ArticleByReference, Authors, GeneralData, PreviewPostReference, type ReferenceForm } from "./components";
 
 enum TypeOfHandle {
@@ -72,30 +72,30 @@ export default function AddReferencePage(): JSX.Element {
 
     if (formState.type === "article") {
         sectionNamesByNewReference = [
-            { id: "general", name: t("AdminPage.sectionNamesByNewReference.Data") },
+            { id: "general", name: t.newReferencePage.sectionNames.data },
             {
                 id: "authors",
-                name: t("AdminPage.sectionNamesByNewReference.Authors"),
+                name: t.newReferencePage.sectionNames.authors,
             },
             {
                 id: "article",
-                name: t("AdminPage.sectionNamesByNewReference.Article"),
+                name: t.newReferencePage.sectionNames.article,
             },
             {
                 id: "preview",
-                name: t("AdminPage.sectionNamesByNewReference.Preview"),
+                name: t.newReferencePage.sectionNames.preview,
             },
         ];
     } else {
         sectionNamesByNewReference = [
-            { id: "general", name: t("AdminPage.sectionNamesByNewReference.Data") },
+            { id: "general", name: t.newReferencePage.sectionNames.data },
             {
                 id: "authors",
-                name: t("AdminPage.sectionNamesByNewReference.Authors"),
+                name: t.newReferencePage.sectionNames.authors,
             },
             {
                 id: "preview",
-                name: t("AdminPage.sectionNamesByNewReference.Preview"),
+                name: t.newReferencePage.sectionNames.preview,
             },
         ];
     }
@@ -182,7 +182,7 @@ export default function AddReferencePage(): JSX.Element {
 
     return <>
         <div className="left-column">
-            <h3 className="subtitle">{t("AdminPage.title")}</h3>
+            <h3 className="subtitle">{t.newReferencePage.sections}</h3>
             {sectionNamesByNewReference.map(({ id, name }) => (
                 <button
                     key={`post-reference-${id}`}
@@ -196,7 +196,7 @@ export default function AddReferencePage(): JSX.Element {
             ))}
         </div>
         <div className="content-container">
-            <h2 className="title">{t("AdminPage.New_R")}</h2>
+            <h2 className="title">{t.newReferencePage.title}</h2>
             {renderSectionByNewReference()}
         </div>
     </>;

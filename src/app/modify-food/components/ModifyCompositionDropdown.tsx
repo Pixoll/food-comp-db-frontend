@@ -1,6 +1,7 @@
+import { useTranslation } from "@/context/I18nContext";
 import type { NutrientMeasurement, NutrientMeasurementWithComponents, NutrientsValue } from "@/types/SingleFoodResult";
 import { ChevronDown, ChevronRight, Edit } from "lucide-react";
-import React, { useState } from "react";
+import { Fragment, type JSX, useState } from "react";
 import NumericField from "../../components/Fields/NumericField";
 import Modal from "../../components/Modal/Modal";
 
@@ -31,6 +32,7 @@ export default function ModifyCompositionDropdown<F extends FormState>({
     formState,
     onUpdateFormState,
 }: ModifyCompositionDropdownProps<F>): JSX.Element {
+    const { t } = useTranslation();
     const [expandedSections, setExpandedSections] = useState({
         energy: true,
         macronutrients: true,
@@ -164,7 +166,7 @@ export default function ModifyCompositionDropdown<F extends FormState>({
         const paddingClass = indentLevel < paddingClasses.length ? paddingClasses[indentLevel] : paddingClasses[1];
 
         return (
-            <React.Fragment key={`${nutrient.nutrientId}-expandable`}>
+            <Fragment key={`${nutrient.nutrientId}-expandable`}>
                 <tr>
                     <td
                         className={`${paddingClass} bg-[white] relative ${hasComponents ? "cursor-pointer" : ""}`}
@@ -204,7 +206,7 @@ export default function ModifyCompositionDropdown<F extends FormState>({
                 {isExpanded && hasComponents && nutrient.components.map(comp =>
                     renderNutrientRow(comp, indentLevel + 1)
                 )}
-            </React.Fragment>
+            </Fragment>
         );
     };
 
@@ -230,7 +232,7 @@ export default function ModifyCompositionDropdown<F extends FormState>({
                             border-[#047857]
                             "
                         >
-                            Nutrientes
+                            {t.nutrientsDropdown.nutrients}
                         </th>
                         <th
                             className="
@@ -249,7 +251,7 @@ export default function ModifyCompositionDropdown<F extends FormState>({
                             border-[#047857]
                             "
                         >
-                            Unidad
+                            {t.nutrientsDropdown.unit}
                         </th>
                         <th
                             className="
@@ -268,7 +270,7 @@ export default function ModifyCompositionDropdown<F extends FormState>({
                             border-[#047857]
                             "
                         >
-                            Información
+                            {t.nutrientsDropdown.information}
                         </th>
                     </tr>
                 </thead>
@@ -296,7 +298,7 @@ export default function ModifyCompositionDropdown<F extends FormState>({
                                 ? <ChevronDown size={16} className="inline mr-[8px]"/>
                                 : <ChevronRight size={16} className="inline mr-[8px]"/>
                             }
-                            Valor energético
+                            {t.nutrientsDropdown.energeticValue}
                         </td>
                     </tr>
 
@@ -325,7 +327,7 @@ export default function ModifyCompositionDropdown<F extends FormState>({
                                 ? <ChevronDown size={16} className="inline mr-[8px]"/>
                                 : <ChevronRight size={16} className="inline mr-[8px]"/>
                             }
-                            Nutrientes principales
+                            {t.nutrientsDropdown.mainNutrients}
                         </td>
                     </tr>
 
@@ -351,104 +353,102 @@ export default function ModifyCompositionDropdown<F extends FormState>({
                             <div className="absolute left-[0px] top-[0px] bottom-[0px] w-[2px] bg-[#047857]"></div>
                             <span className="relative">
                                 {expandedSections.micronutrients
-                                ? <ChevronDown size={16} className="inline mr-[8px]"/>
-                                : <ChevronRight size={16} className="inline mr-[8px]"/>
+                                    ? <ChevronDown size={16} className="inline mr-[8px]"/>
+                                    : <ChevronRight size={16} className="inline mr-[8px]"/>
                                 }
-                                Micronutrientes
+                                {t.nutrientsDropdown.micronutrients}
                             </span>
                         </td>
                     </tr>
 
-                    {expandedSections.micronutrients && (
-                        <>
-                            <tr>
-                                <td
-                                    colSpan={3}
-                                    className="
-                                    text-[#047857]
-                                    font-[600]
-                                    cursor-pointer
-                                    py-[12px]
-                                    px-[16px]
-                                    pl-[36px]
-                                    bg-[white]
-                                    transition-colors
-                                    relative
-                                    "
-                                    onClick={() => toggleSection("vitamins")}
-                                >
-                                    <span className="relative">
-                                        {expandedSections.vitamins
+                    {expandedSections.micronutrients && <>
+                        <tr>
+                            <td
+                                colSpan={3}
+                                className="
+                                text-[#047857]
+                                font-[600]
+                                cursor-pointer
+                                py-[12px]
+                                px-[16px]
+                                pl-[36px]
+                                bg-[white]
+                                transition-colors
+                                relative
+                                "
+                                onClick={() => toggleSection("vitamins")}
+                            >
+                                <span className="relative">
+                                    {expandedSections.vitamins
                                         ? <ChevronDown size={16} className="inline mr-[8px]"/>
                                         : <ChevronRight size={16} className="inline mr-[8px]"/>
-                                        }
-                                    Vitaminas
-                                    </span>
-                                </td>
-                            </tr>
+                                    }
+                                    {t.nutrientsDropdown.vitamins}
+                                </span>
+                            </td>
+                        </tr>
 
-                            {expandedSections.vitamins && nutrientData.micronutrients?.vitamins?.map(nutrient =>
-                                renderNutrientRow(nutrient, 1)
-                            )}
+                        {expandedSections.vitamins && nutrientData.micronutrients?.vitamins?.map(nutrient =>
+                            renderNutrientRow(nutrient, 1)
+                        )}
 
-                            <tr>
-                                <td
-                                    colSpan={3}
-                                    className="
-                                    text-[#047857]
-                                    font-[600]
-                                    cursor-pointer
-                                    py-[12px]
-                                    px-[16px]
-                                    pl-[36px]
-                                    bg-[white]
-                                    transition-colors
-                                    relative
-                                    "
-                                    onClick={() => toggleSection("minerals")}
-                                >
-                                    <span className="relative">
-                                        {expandedSections.minerals
+                        <tr>
+                            <td
+                                colSpan={3}
+                                className="
+                                text-[#047857]
+                                font-[600]
+                                cursor-pointer
+                                py-[12px]
+                                px-[16px]
+                                pl-[36px]
+                                bg-[white]
+                                transition-colors
+                                relative
+                                "
+                                onClick={() => toggleSection("minerals")}
+                            >
+                                <span className="relative">
+                                    {expandedSections.minerals
                                         ? <ChevronDown size={16} className="inline mr-[8px]"/>
                                         : <ChevronRight size={16} className="inline mr-[8px]"/>
-                                        }
-                                    Minerales
-                                    </span>
-                                </td>
-                            </tr>
+                                    }
+                                    {t.nutrientsDropdown.minerals}
+                                </span>
+                            </td>
+                        </tr>
 
-                            {expandedSections.minerals && nutrientData?.micronutrients?.minerals?.map(nutrient =>
-                                renderNutrientRow(nutrient, 1)
-                            )}
-                        </>
-                    )}
+                        {expandedSections.minerals && nutrientData?.micronutrients?.minerals?.map(nutrient =>
+                            renderNutrientRow(nutrient, 1)
+                        )}
+                    </>}
                 </tbody>
             </table>
             {modalData && (
                 <Modal
-                    width={800}
+                    fontWeight={800}
                     height={400}
-                    header={"Información adicional"}
+                    header={t.nutrientsDropdown.additionalInfo}
                     onClose={closeModal}
                 >
                     <div className="w-[100%] p-[16px]">
                         <div className="grid grid-cols-2 gap-[16px] mb-[16px]">
                             <NumericField
-                                label="Promedio"
+                                label={t.nutrientsDropdown.average}
                                 value={modalData.average}
                                 onChange={(value) => setModalData({ ...modalData, average: value })}
                                 allowDecimals={true}
                             />
 
                             <NumericField
-                                label="Desviación"
+                                label={t.nutrientsDropdown.deviation}
                                 value={modalData.deviation}
                                 onChange={(value) => setModalData({ ...modalData, deviation: value })}
                                 allowDecimals={true}
                             />
 
                             <NumericField
-                                label="Mínimo"
+                                label={t.nutrientsDropdown.min}
                                 value={modalData.min}
                                 max={modalData.max}
                                 onChange={(value) => setModalData({ ...modalData, min: value })}
@@ -456,7 +456,7 @@ export default function ModifyCompositionDropdown<F extends FormState>({
                             />
 
                             <NumericField
-                                label="Máximo"
+                                label={t.nutrientsDropdown.max}
                                 value={modalData.max}
                                 min={modalData.min}
                                 onChange={(value) => setModalData({ ...modalData, max: value })}
@@ -464,7 +464,7 @@ export default function ModifyCompositionDropdown<F extends FormState>({
                             />
 
                             <NumericField
-                                label="Tamaño de muestra"
+                                label={t.nutrientsDropdown.sampleSize}
                                 value={modalData.sampleSize}
                                 onChange={(value) => setModalData({ ...modalData, sampleSize: value })}
                                 allowDecimals={false}
@@ -479,10 +479,10 @@ export default function ModifyCompositionDropdown<F extends FormState>({
                                         dataType: e.target.value as DataType,
                                     })}
                                 >
-                                    <option value="analytic">Analítico</option>
-                                    <option value="calculated">Calculado</option>
-                                    <option value="assumed">Asumido</option>
-                                    <option value="borrowed">Prestado</option>
+                                    <option value="analytic">{t.nutrientsDropdown.analytic}</option>
+                                    <option value="calculated">{t.nutrientsDropdown.calculated}</option>
+                                    <option value="assumed">{t.nutrientsDropdown.assumed}</option>
+                                    <option value="borrowed">{t.nutrientsDropdown.borrowed}</option>
                                 </select>
                             </div>
                         </div>
@@ -500,7 +500,7 @@ export default function ModifyCompositionDropdown<F extends FormState>({
                                 "
                                 onClick={saveModalData}
                             >
-                                Guardar cambios
+                                {t.modifyNutrients.saveChanges}
                             </button>
                             <button
                                 className="
@@ -515,7 +515,7 @@ export default function ModifyCompositionDropdown<F extends FormState>({
                                 "
                                 onClick={closeModal}
                             >
-                                Cancelar
+                                {t.modifyNutrients.cancel}
                             </button>
                         </div>
                     </div>

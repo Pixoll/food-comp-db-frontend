@@ -1,7 +1,7 @@
 "use client";
 
 import ToastComponent, { type ToastComponentProps } from "@/app/components/ToastComponent";
-import { createContext, type ReactNode, useContext, useState } from "react";
+import { createContext, type JSX, type ReactNode, useContext, useState } from "react";
 
 type ToastContextProps = {
     addToast: (toast: ToastComponentProps) => void;

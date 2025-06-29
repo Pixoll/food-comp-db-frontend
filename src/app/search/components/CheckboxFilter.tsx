@@ -1,20 +1,22 @@
 "use client";
 
+import { useTranslation } from "@/context/I18nContext";
 import { Collection } from "@/utils/collection";
-import React, { useState } from "react";
-import "@/app/search/components/SearchBox.css";
+import { type JSX, useState } from "react";
+import "./SearchBox.css";
 
-interface CheckboxFilterProps {
+type CheckboxFilterProps = {
     options: Collection<string, string>;
     selectedOptions: Set<string>;
     setSelectedOptions: (options: Set<string>) => void;
-}
+};
 
 export default function CheckboxFilter({
     options,
     selectedOptions,
     setSelectedOptions,
 }: CheckboxFilterProps): JSX.Element {
+    const { t } = useTranslation();
     const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
 
     const handleCheckboxChange = (optionValue: string): void => {
@@ -40,13 +42,12 @@ export default function CheckboxFilter({
 
     const getSelectedLabel = (): string => {
         if (selectedOptions.size === 0) {
-            return "Nada seleccionado";
+            return t.checkboxFilter.nothingSelected;
         } else if (selectedOptions.size > 0 && selectedOptions.size < 3) {
-            return [...selectedOptions
-                .values()]
+            return [...selectedOptions.values()]
                 .reduce((text, opt) => text ? text + ", " + options.get(opt) : options.get(opt)!, "");
         } else {
-            return `${selectedOptions.size} Items`;
+            return `${selectedOptions.size} ${t.checkboxFilter.items}`;
         }
     };
 
@@ -119,7 +120,7 @@ export default function CheckboxFilter({
                     //className="select-all-label"
                 >
                     <div className="flex justify-between items-center">
-                        <span>Seleccionar todos</span>
+                        <span>{t.checkboxFilter.selectAll}</span>
                         <input
                             type="checkbox"
                             checked={selectedOptions.size === options.size}

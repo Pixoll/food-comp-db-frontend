@@ -1,6 +1,6 @@
 "use client";
 
-import type { ChangeEvent, InputHTMLAttributes, ReactNode } from "react";
+import type { ChangeEvent, InputHTMLAttributes, JSX, ReactNode } from "react";
 
 type TextFieldProps = {
     value: string;

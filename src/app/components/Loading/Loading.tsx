@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import type { CSSProperties, JSX } from "react";
 import styles from "./Loading.module.css";
 
 type Size = {

@@ -1,12 +1,12 @@
 "use client";
 
 import { Pagination } from "@/app/search/components";
+import { useTranslation } from "@/context/I18nContext";
 // TODO some really horrible shit
 // @ts-expect-error: uh oh
 import { LangualCode } from "@/hooks";
 import { ChevronDown, ChevronRight, PlusCircle, Trash2 } from "lucide-react";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { type JSX, useState } from "react";
 
 type NewLangualCodeProps = {
     langualCodes: LangualCode[];
@@ -104,7 +104,7 @@ export default function AddLangualCode({
             <div className="mb-[16px]">
                 <input
                     type="text"
-                    placeholder={t("LangualCode.Search")}
+                    placeholder={t.langualCodes.search}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="
@@ -151,11 +151,10 @@ export default function AddLangualCode({
                         >
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-[8px]">
-                                    {expandedParents.includes(parent.id) ? (
-                                        <ChevronDown className="text-[#6b7280]" size={20}/>
-                                    ) : (
-                                        <ChevronRight className="text-[#6b7280]" size={20}/>
-                                    )}
+                                    {expandedParents.includes(parent.id)
+                                        ? <ChevronDown className="text-[#6b7280]" size={20}/>
+                                        : <ChevronRight className="text-[#6b7280]" size={20}/>
+                                    }
                                     <span className="font-[600] text-[#1f2937]">
                                         {parent.code} - {parent.descriptor}
                                     </span>
@@ -195,24 +194,20 @@ export default function AddLangualCode({
                                                     onClick={() => handleChildSelection(child.id)}
                                                 >
                                                     <div className="flex flex-col items-center">
-                                                        {isSelected ? (
-                                                            <>
-                                                                <Trash2 size={20} className="mb-[4px]"/>
-                                                                <span
-                                                                    className="text-[12px]"
-                                                                >{t("LangualCode.Eliminate")}</span>
-                                                            </>
-                                                        ) : (
-                                                            <>
-                                                                <PlusCircle
-                                                                    size={20}
-                                                                    className="mb-[4px] border-transparent"
-                                                                />
-                                                                <span
-                                                                    className="text-[12px]"
-                                                                >{t("LangualCode.Add")}</span>
-                                                            </>
-                                                        )}
+                                                        {isSelected ? <>
+                                                            <Trash2 size={20} className="mb-[4px]"/>
+                                                            <span className="text-[12px]">
+                                                                {t.langualCodes.delete}
+                                                            </span>
+                                                        </> : <>
+                                                            <PlusCircle
+                                                                size={20}
+                                                                className="mb-[4px] border-transparent"
+                                                            />
+                                                            <span className="text-[12px]">
+                                                                {t.langualCodes.add}
+                                                            </span>
+                                                        </>}
                                                     </div>
                                                 </button>
                                             </div>
@@ -224,7 +219,7 @@ export default function AddLangualCode({
                                     <div className="p-[12px] border-t-[1px] border-[#e5e7eb]">
                                         <Pagination
                                             currentPage={currentPage}
-                                            npage={totalPages}
+                                            totalPages={totalPages}
                                             onPageChange={(page) => handleChildPageChange(parent.id, page)}
                                         />
                                     </div>

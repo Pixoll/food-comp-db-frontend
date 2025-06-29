@@ -1,7 +1,13 @@
+"use client";
+
+import { useTranslation } from "@/context/I18nContext";
 import Link from "next/link";
+import type { JSX } from "react";
 import styles from "./admin-page.module.css";
 
 export default function AdminPage(): JSX.Element {
+    const { t } = useTranslation();
+
     return (
         <div className="p-[36px] h-auto flex flex-col bg-gradient-to-b from-[#f0f9ff] to-[#e9f8d9]">
             <h1
@@ -16,7 +22,7 @@ export default function AdminPage(): JSX.Element {
                 border-[#eaeaea]
                 "
             >
-                Panel Administrativo
+                {t.adminPage.title}
             </h1>
 
             <div
@@ -38,10 +44,11 @@ export default function AdminPage(): JSX.Element {
                     "
                 >
                     <div className="p-[20px] flex-grow flex flex-col">
-                        <h3 className="text-[20px] font-[600] mb-[12px] text-[#2c3e50]">Añadir Subespecie</h3>
+                        <h3 className="text-[20px] font-[600] mb-[12px] text-[#2c3e50]">
+                            {t.adminPage.addSubspecies.title}
+                        </h3>
                         <p className="text-[16px] text-[#495057] leading-[1.6] flex-grow">
-                            Para añadir una nueva subespecie, ya sea para modificar un alimento existente o para
-                            agregarla a un nuevo alimento.
+                            {t.adminPage.addSubspecies.description}
                         </p>
                         <div className="mt-[16px] flex justify-center">
                             <Link
@@ -61,7 +68,7 @@ export default function AdminPage(): JSX.Element {
                                 shadow-[0_2px_4px_rgba(0,0,0,0.1)]
                                 "
                             >
-                                Añadir Subespecie
+                                {t.adminPage.addSubspecies.title}
                             </Link>
                         </div>
                     </div>
@@ -83,9 +90,11 @@ export default function AdminPage(): JSX.Element {
                     "
                 >
                     <div className="p-[20px] flex-grow flex flex-col">
-                        <h3 className="text-[20px] font-[600] mb-[12px] text-[#2c3e50]">Añadir alimento</h3>
+                        <h3 className="text-[20px] font-[600] mb-[12px] text-[#2c3e50]">
+                            {t.adminPage.addFood.title}
+                        </h3>
                         <p className="text-[16px] text-[#495057] leading-[1.6] flex-grow">
-                            Para agregar un solo alimento y todos los datos que lo componen.
+                            {t.adminPage.addFood.description}
                         </p>
                         <div className="mt-[16px] flex justify-center">
                             <Link
@@ -105,7 +114,7 @@ export default function AdminPage(): JSX.Element {
                                 shadow-[0_2px_4px_rgba(0,0,0,0.1)]
                                 "
                             >
-                                Añadir Comida
+                                {t.adminPage.addFood.title}
                             </Link>
                         </div>
                     </div>
@@ -127,10 +136,11 @@ export default function AdminPage(): JSX.Element {
                     "
                 >
                     <div className="p-[20px] flex-grow flex flex-col">
-                        <h3 className="text-[20px] font-[600] mb-[12px] text-[#2c3e50]">Añadir por Archivo Excel</h3>
+                        <h3 className="text-[20px] font-[600] mb-[12px] text-[#2c3e50]">
+                            {t.adminPage.addByFile.title}
+                        </h3>
                         <p className="text-[16px] text-[#495057] leading-[1.6] flex-grow">
-                            Para añadir alimentos y referencias nuevos o actualizar existentes desde el archivo excel
-                            convencional.
+                            {t.adminPage.addByFile.description}
                         </p>
                         <div className="mt-[16px] flex justify-center">
                             <Link
@@ -150,7 +160,7 @@ export default function AdminPage(): JSX.Element {
                                 shadow-[0_2px_4px_rgba(0,0,0,0.1)]
                                 "
                             >
-                                Añadir por XLSX
+                                {t.adminPage.addByFile.title}
                             </Link>
                         </div>
                     </div>
@@ -172,9 +182,11 @@ export default function AdminPage(): JSX.Element {
                     "
                 >
                     <div className="p-[20px] flex-grow flex flex-col">
-                        <h3 className="text-[20px] font-[600] mb-[12px] text-[#2c3e50]">Añadir Referencia</h3>
+                        <h3 className="text-[20px] font-[600] mb-[12px] text-[#2c3e50]">
+                            {t.adminPage.addReference.title}
+                        </h3>
                         <p className="text-[16px] text-[#495057] leading-[1.6] flex-grow">
-                            Para añadir una nueva referencia que no existe actualmente.
+                            {t.adminPage.addReference.description}
                         </p>
                         <div className="mt-[16px] flex justify-center">
                             <Link
@@ -194,7 +206,7 @@ export default function AdminPage(): JSX.Element {
                                 shadow-[0_2px_4px_rgba(0,0,0,0.1)]
                                 "
                             >
-                                Añadir Referencia
+                                {t.adminPage.addReference.title}
                             </Link>
                         </div>
                     </div>
@@ -216,9 +228,11 @@ export default function AdminPage(): JSX.Element {
                     "
                 >
                     <div className="p-[20px] flex-grow flex flex-col">
-                        <h3 className="text-[20px] font-[600] mb-[12px] text-[#2c3e50]">Añadir Nombre Científico</h3>
+                        <h3 className="text-[20px] font-[600] mb-[12px] text-[#2c3e50]">
+                            {t.adminPage.addScientificName.title}
+                        </h3>
                         <p className="text-[16px] text-[#495057] leading-[1.6] flex-grow">
-                            Para añadir un nuevo nombre científico que no existe actualmente.
+                            {t.adminPage.addScientificName.description}
                         </p>
                         <div className="mt-[16px] flex justify-center">
                             <Link
@@ -238,7 +252,7 @@ export default function AdminPage(): JSX.Element {
                                 shadow-[0_2px_4px_rgba(0,0,0,0.1)]
                                 "
                             >
-                                Añadir Nombre Científico
+                                {t.adminPage.addScientificName.title}
                             </Link>
                         </div>
                     </div>

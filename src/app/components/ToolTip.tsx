@@ -1,4 +1,4 @@
-import { type ReactNode, useRef, useState } from "react";
+import { type JSX, type ReactNode, useRef, useState } from "react";
 
 type TooltipProps = {
     content: string;

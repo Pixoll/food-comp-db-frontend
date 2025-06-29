@@ -1,7 +1,7 @@
 "use client";
 
 import api from "@/api";
-import { createContext, type ReactNode, useCallback, useContext, useEffect, useReducer, useRef } from "react";
+import { createContext, type JSX, type ReactNode, useCallback, useContext, useEffect, useReducer, useRef } from "react";
 
 type AuthState = {
     isAuthenticated: boolean;
@@ -11,11 +11,11 @@ type AuthAction = {
     type: "login" | "logout";
 };
 
-interface AuthContextType {
+type AuthContextType = {
     state: AuthState;
     login: () => void;
     logout: () => void;
-}
+};
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 

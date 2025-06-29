@@ -1,4 +1,4 @@
-import { type ChangeEvent, type ReactNode, useEffect, useState } from "react";
+import { type ChangeEvent, type JSX, type ReactNode, useEffect, useState } from "react";
 import TextField from "./TextField";
 
 type NumericFieldProps = {

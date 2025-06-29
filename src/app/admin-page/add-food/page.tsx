@@ -1,11 +1,13 @@
 "use client";
 
+import type { NutrientMeasurement, StringTranslation } from "@/api";
 import AddLangualCode from "@/app/admin-page/add-food/components/AddLangualCode";
 import AddMeasurementsWithComponent from "@/app/admin-page/add-food/components/AddMeasurementsWithComponent";
 import AddNutrientsMeasurements from "@/app/admin-page/add-food/components/AddNutrientsMeasurements";
 import AddReferences from "@/app/admin-page/add-food/components/AddReferences";
 import FoodGeneralData from "@/app/admin-page/add-food/components/FoodGeneralData";
 import PreviewDataForm from "@/app/admin-page/add-food/components/PreviewDataForm";
+import { useTranslation } from "@/context/I18nContext";
 import {
     type AnyNutrient,
     type FormState,
@@ -20,8 +22,7 @@ import {
     useSubspecies,
     useTypes,
 } from "@/hooks";
-import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { type Dispatch, type JSX, type SetStateAction, useEffect, useState } from "react";
 import Origins from "./components/add-remove-origins/Origins";
 
 enum TypeOfHandle {
@@ -42,7 +43,7 @@ export type NutrientMeasurementForm = {
     min?: number;
     max?: number;
     sampleSize?: number;
-    dataType?: "analytic" | "calculated" | "assumed" | "borrowed";
+    dataType?: NutrientMeasurement["dataType"];
     referenceCodes: number[];
 };
 
@@ -59,9 +60,8 @@ export type FoodForm = {
     subspeciesId?: number;
     groupId?: number;
     typeId?: number;
-    commonName: Record<"es", string> &
-        Partial<Record<"en" | "pt", string | null>>;
-    ingredients: Partial<Record<"es" | "en" | "pt", string | null>>;
+    commonName: Record<"es", string> & Partial<Omit<StringTranslation, "es">>;
+    ingredients: Partial<StringTranslation>;
     origins: number[];
     langualCodes: number[];
     nutrientsValueForm: {
@@ -214,6 +214,7 @@ export default function AddFoodPage(): JSX.Element {
             },
         },
     });
+
     useEffect(() => {
         const initialFormData: FoodForm = {
             code: "",
@@ -521,39 +522,33 @@ export default function AddFoodPage(): JSX.Element {
     };
 
     const sectionNames = [
-        t("AdminPage.sectionNames.data"),
-        t("AdminPage.sectionNames.value"),
-        t("AdminPage.sectionNames.compound"),
-        t("AdminPage.sectionNames.non_compounded"),
-        t("AdminPage.sectionNames.vitamins"),
-        t("AdminPage.sectionNames.minerals"),
-        t("AdminPage.sectionNames.origins"),
-        t("AdminPage.sectionNames.references"),
-        t("AdminPage.sectionNames.codes"),
-        t("AdminPage.sectionNames.view"),
+        t.newFoodPage.sectionNames.data,
+        t.newFoodPage.sectionNames.value,
+        t.newFoodPage.sectionNames.compound,
+        t.newFoodPage.sectionNames.nonCompound,
+        t.newFoodPage.sectionNames.vitamins,
+        t.newFoodPage.sectionNames.minerals,
+        t.newFoodPage.sectionNames.origins,
+        t.newFoodPage.sectionNames.references,
+        t.newFoodPage.sectionNames.codes,
+        t.newFoodPage.sectionNames.view,
     ];
 
-    return (
-        <>
-            <div
-                className="left-column"
-            >
-                <h3 className="subtitle">{t("AdminPage.title")}</h3>
-                {sectionNames.map((name, index) => (
-                    <button
-                        key={`manual-${index}`}
-                        className={`pagination-button ${
-                            activeSection === index + 1 ? "active" : ""
-                        }`}
-                        onClick={() => setActiveSection(index + 1)}
-                    >
-                        {name}
-                    </button>
-                ))}
-            </div>
-            <div className="content-container">
-                {renderSection()}
-            </div>
-        </>
-    );
+    return <>
+        <div className="left-column">
+            <h3 className="subtitle">{t.newFoodPage.sections}</h3>
+            {sectionNames.map((name, index) => (
+                <button
+                    key={`manual-${index}`}
+                    className={`pagination-button ${activeSection === index + 1 ? "active" : ""}`}
+                    onClick={() => setActiveSection(index + 1)}
+                >
+                    {name}
+                </button>
+            ))}
+        </div>
+        <div className="content-container">
+            {renderSection()}
+        </div>
+    </>;
 }

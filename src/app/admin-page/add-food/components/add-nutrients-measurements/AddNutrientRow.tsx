@@ -1,9 +1,10 @@
-import type { NutrientMeasurementForm } from "@/types/nutrients";
-import { useTranslation } from "react-i18next";
-import type { NutrientMeasurementFormOnlyNumbers } from "../AddNutrientsMeasurements";
-import { AlertCircle, Ellipsis } from "lucide-react";
 import NumericField from "@/app/components/Fields/NumericField";
 import ToolTip from "@/app/components/ToolTip";
+import { useTranslation } from "@/context/I18nContext";
+import type { NutrientMeasurementForm } from "@/types/nutrients";
+import { AlertCircle, Ellipsis } from "lucide-react";
+import type { JSX } from "react";
+import type { NutrientMeasurementFormOnlyNumbers } from "../AddNutrientsMeasurements";
 
 type NutrientRowProps = {
     nutrient: NutrientMeasurementForm;
@@ -128,7 +129,7 @@ export default function AddNutrientRow({
                     "
                     onClick={() => startEditing(nutrient)}
                 >
-                    {t("NewMacronutrient.Edit")}
+                    {t.newMacronutrient.edit}
                 </button>
             </td>
         </tr>
@@ -166,8 +167,9 @@ export default function AddNutrientRow({
                     {isAverageInvalid && (
                         <ToolTip
                             content={!isValueDefined("average")
-                                ? "Ingrese el promedio."
-                                : "Promedio debe ser al menos 0."}
+                                ? t.newMacronutrient.enterAverage
+                                : t.atLeast(t.newMacronutrient.average, 0)
+                            }
                         >
                             <AlertCircle
                                 className="
@@ -196,7 +198,7 @@ export default function AddNutrientRow({
                         fullWidth={true}
                     />
                     {isDeviationInvalid && (
-                        <ToolTip content="Desviación debe ser al menos 0.">
+                        <ToolTip content={t.atLeast(t.newMacronutrient.deviation, 0)}>
                             <AlertCircle
                                 className="
                                 absolute
@@ -224,7 +226,7 @@ export default function AddNutrientRow({
                         className="w-full"
                     />
                     {isMinInvalid && (
-                        <ToolTip content="Mínimo debe ser al menos 0.">
+                        <ToolTip content={t.atLeast(t.newMacronutrient.min, 0)}>
                             <AlertCircle
                                 className="
                                 absolute
@@ -255,8 +257,8 @@ export default function AddNutrientRow({
                         <ToolTip
                             content={
                                 isValueLessThan("max", 0)
-                                    ? "Máximo debe ser al menos 0."
-                                    : "Máximo debe ser mayor o igual al mínimo"
+                                    ? t.atLeast(t.newMacronutrient.max, 0)
+                                    : t.greaterThanOrEqual(t.newMacronutrient.max, t.newMacronutrient.min.toLowerCase())
                             }
                         >
                             <AlertCircle
@@ -289,8 +291,8 @@ export default function AddNutrientRow({
                         <ToolTip
                             content={
                                 isValueLessThan("sampleSize", 1)
-                                    ? "Tamaño de muestra debe ser al menos 1."
-                                    : "Tamaño de muestra debe ser un entero."
+                                    ? t.atLeast(t.newMacronutrient.sampleSize, 1)
+                                    : t.mustBeInteger(t.newMacronutrient.sampleSize)
                             }
                         >
                             <AlertCircle
@@ -321,20 +323,20 @@ export default function AddNutrientRow({
                     >
                         <option value="">Ninguna</option>
                         <option value="analytic">
-                            {t("NewMacronutrient.Analytical")}
+                            {t.newMacronutrient.analytical}
                         </option>
                         <option value="calculated">
-                            {t("NewMacronutrient.Calculated")}
+                            {t.newMacronutrient.calculated}
                         </option>
                         <option value="assumed">
-                            {t("NewMacronutrient.Taken")}
+                            {t.newMacronutrient.assumed}
                         </option>
                         <option value="borrowed">
-                            {t("NewMacronutrient.Borrowed")}
+                            {t.newMacronutrient.borrowed}
                         </option>
                     </select>
                     {isDataTypeInvalid && (
-                        <ToolTip content="Ingrese el tipo de dato.">
+                        <ToolTip content={t.newMacronutrient.enterDataType}>
                             <AlertCircle
                                 className="
                                 absolute
@@ -372,7 +374,7 @@ export default function AddNutrientRow({
                             || isDataTypeInvalid
                         )}
                     >
-                        {t("NewMacronutrient.save")}
+                        {t.newMacronutrient.save}
                     </button>
                     <button
                         className="
@@ -387,7 +389,7 @@ export default function AddNutrientRow({
                         "
                         onClick={cancelEditing}
                     >
-                        {t("NewMacronutrient.cancel")}
+                        {t.newMacronutrient.cancel}
                     </button>
                 </div>
             </td>

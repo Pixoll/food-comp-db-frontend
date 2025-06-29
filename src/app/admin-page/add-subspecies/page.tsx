@@ -1,9 +1,11 @@
 "use client";
 
+import { useTranslation } from "@/context/I18nContext";
 import { useSubspecies } from "@/hooks";
-import { useState } from "react";
+import { type JSX, useState } from "react";
 
 export default function AddSubspeciesPage(): JSX.Element {
+    const { t } = useTranslation();
     const { idToObject } = useSubspecies();
     const subspecies = idToObject.mapValues(s => ({ id: s.id, name: s.name }));
 
@@ -27,15 +29,16 @@ export default function AddSubspeciesPage(): JSX.Element {
                 "
             >
                 <div className="bg-[#166534] text-[#ffffff] p-[24px]">
-                    <h1 className="text-[28px] font-[700] text-center">Agregar Nueva Subespecie</h1>
+                    <h1 className="text-[28px] font-[700] text-center">{t.addSubspecies.title}</h1>
                     <p className="text-[16px] opacity-[0.9] text-center mt-[8px]">
-                        Agrega o busca subespecies en el sistema
+                        {t.addSubspecies.subtitle}
                     </p>
                 </div>
 
                 <div className="p-[32px]">
                     <div className="mb-[32px]">
-                        <h2 className="text-[20px] font-[600] text-[#1f2937] mb-[16px]">Buscar Subespecies Existentes
+                        <h2 className="text-[20px] font-[600] text-[#1f2937] mb-[16px]">
+                            {t.addSubspecies.searchExistent}
                         </h2>
 
                         <div className="relative">
@@ -43,7 +46,7 @@ export default function AddSubspeciesPage(): JSX.Element {
                                 type="text"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                placeholder="Buscar subespecies..."
+                                placeholder={t.addSubspecies.searchPlaceholder}
                                 className="
                                 w-full
                                 p-[12px]
@@ -99,21 +102,23 @@ export default function AddSubspeciesPage(): JSX.Element {
                                     ))
                                 ) : (
                                     <div className="col-span-full text-center p-[20px] text-[#6b7280]">
-                                        {searchTerm ? "No se encontraron subespecies" : "Cargando subespecies..."}
+                                        {searchTerm ? t.addSubspecies.noneFound : t.addSubspecies.loading}
                                     </div>
                                 )}
                             </div>
                         </div>
                     </div>
                     <div className="mt-[32px] pt-[32px] border-t-[1px] border-[#e5e7eb]">
-                        <h2 className="text-[20px] font-[600] text-[#1f2937] mb-[16px]">Agregar Nueva Subespecie</h2>
+                        <h2 className="text-[20px] font-[600] text-[#1f2937] mb-[16px]">
+                            {t.addSubspecies.addNew}
+                        </h2>
 
                         <div className="mb-[20px]">
                             <input
                                 type="text"
                                 value={newSubspecies}
                                 onChange={(e) => setNewSubspecies(e.target.value)}
-                                placeholder="Nombre de la nueva subespecie..."
+                                placeholder={t.addSubspecies.namePlaceholder}
                                 className="
                                 w-full
                                 p-[12px]
@@ -159,7 +164,7 @@ export default function AddSubspeciesPage(): JSX.Element {
                                             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                                         />
                                     </svg>
-                                    Verificar existencia
+                                    {t.addSubspecies.verify}
                                 </button>
 
                                 <button
@@ -192,15 +197,14 @@ export default function AddSubspeciesPage(): JSX.Element {
                                             d="M12 4v16m8-8H4"
                                         />
                                     </svg>
-                                    Agregar subespecie
+                                    {t.addSubspecies.addNew}
                                 </button>
                             </div>
                         </div>
 
                         <p className="text-[14px] text-[#6b7280] mt-[16px] bg-[#f3f4f6] p-[12px] rounded-[6px]">
-                            <span className="font-[600]">Nota:</span>
-                            Antes de agregar una nueva subespecie, verifica que no exista en el sistema para evitar
-                            duplicados.
+                            <span className="font-[600]">{t.addSubspecies.note}</span>{" "}
+                            {t.addSubspecies.beforeAdding}
                         </p>
                     </div>
                 </div>

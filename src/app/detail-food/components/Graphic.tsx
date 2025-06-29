@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { type JSX, useState } from "react";
 import { Cell, Legend, Pie, PieChart, type PieLabelRenderProps, Tooltip } from "recharts";
 
 type DataItem = {
@@ -13,54 +13,6 @@ type GraphicProps = {
     data: DataItem[];
     title: string;
     grams: number;
-};
-
-const renderCustomizedLabel = (props: PieLabelRenderProps): JSX.Element | null => {
-    const {
-        cx = 0,
-        cy = 0,
-        midAngle = 0,
-        outerRadius = 0,
-        value,
-        fill,
-    } = props;
-
-    if (value === undefined || value < 0.01) return null;
-
-    const cxNum = Number(cx);
-    const cyNum = Number(cy);
-    const outerRadiusNum = Number(outerRadius);
-
-    const RADIAN = Math.PI / 180;
-    const radius = outerRadiusNum + 20;
-    const x = cxNum + radius * Math.cos(-midAngle * RADIAN);
-    const y = cyNum + radius * Math.sin(-midAngle * RADIAN);
-
-    const textAnchor = x > cxNum ? "start" : "end";
-
-    return (
-        <>
-            <line
-                x1={cxNum + (outerRadiusNum + 5) * Math.cos(-midAngle * RADIAN)}
-                y1={cyNum + (outerRadiusNum + 5) * Math.sin(-midAngle * RADIAN)}
-                x2={x}
-                y2={y}
-                stroke={fill}
-                strokeWidth={1.5}
-            />
-            <text
-                x={x}
-                y={y}
-                fill={fill}
-                textAnchor={textAnchor}
-                dominantBaseline="central"
-                fontSize="12px"
-                fontWeight="bold"
-            >
-                {typeof value === "number" ? `${value.toFixed(2)}%` : ""}
-            </text>
-        </>
-    );
 };
 
 export default function Graphic({ data, title, grams }: GraphicProps): JSX.Element {
@@ -81,7 +33,7 @@ export default function Graphic({ data, title, grams }: GraphicProps): JSX.Eleme
                         outerRadius={120}
                         innerRadius={60}
                         paddingAngle={3}
-                        label={renderCustomizedLabel}
+                        label={CustomizedLabel}
                         labelLine={false}
                         startAngle={90}
                         endAngle={-270}
@@ -120,3 +72,49 @@ export default function Graphic({ data, title, grams }: GraphicProps): JSX.Eleme
         </div>
     );
 };
+
+function CustomizedLabel(props: PieLabelRenderProps): JSX.Element | null {
+    const {
+        cx = 0,
+        cy = 0,
+        midAngle = 0,
+        outerRadius = 0,
+        value,
+        fill,
+    } = props;
+
+    if (value === undefined || value < 0.01) return null;
+
+    const cxNum = Number(cx);
+    const cyNum = Number(cy);
+    const outerRadiusNum = Number(outerRadius);
+
+    const RADIAN = Math.PI / 180;
+    const radius = outerRadiusNum + 20;
+    const x = cxNum + radius * Math.cos(-midAngle * RADIAN);
+    const y = cyNum + radius * Math.sin(-midAngle * RADIAN);
+
+    const textAnchor = x > cxNum ? "start" : "end";
+
+    return <>
+        <line
+            x1={cxNum + (outerRadiusNum + 5) * Math.cos(-midAngle * RADIAN)}
+            y1={cyNum + (outerRadiusNum + 5) * Math.sin(-midAngle * RADIAN)}
+            x2={x}
+            y2={y}
+            stroke={fill}
+            strokeWidth={1.5}
+        />
+        <text
+            x={x}
+            y={y}
+            fill={fill}
+            textAnchor={textAnchor}
+            dominantBaseline="central"
+            fontSize="12px"
+            fontWeight="bold"
+        >
+            {typeof value === "number" ? `${value.toFixed(2)}%` : ""}
+        </text>
+    </>;
+}

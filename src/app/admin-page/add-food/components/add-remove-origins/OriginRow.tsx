@@ -2,10 +2,10 @@
 
 import type { Origin } from "@/api";
 import Selector from "@/app/components/Selector/Selector";
+import { useTranslation } from "@/context/I18nContext";
 import type { Commune, Location, Province, Region } from "@/hooks";
 import { Collection } from "@/utils/collection";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { type JSX, useState } from "react";
 
 type OriginType = Origin["type"];
 
@@ -72,11 +72,9 @@ export default function OriginRow({
     const communesOptions = selectedProvince !== null
         ? Array.from(provinces.get(selectedProvince)?.communes.values() || [])
         : Array.from(provinces.values())
-            ? Array.from(
-                regionOptions.flatMap((region) =>
-                    Array.from(region.provinces.values()).flatMap((province) =>
-                        Array.from(province.communes.values())
-                    )
+            ? regionOptions.flatMap((region) =>
+                Array.from(region.provinces.values()).flatMap((province) =>
+                    Array.from(province.communes.values())
                 )
             )
             : Array.from(communes.values());
@@ -84,11 +82,9 @@ export default function OriginRow({
     const locationOptions = selectedCommune !== null
         ? Array.from(communes.get(selectedCommune)?.locations.values() || [])
         : selectedProvince !== null
-            ? Array.from(
-                provincesOptions.flatMap((province) =>
-                    Array.from(province.communes.values()).flatMap((commune) =>
-                        Array.from(commune.locations.values())
-                    )
+            ? provincesOptions.flatMap((province) =>
+                Array.from(province.communes.values()).flatMap((commune) =>
+                    Array.from(commune.locations.values())
                 )
             )
             : Array.from(locations.values());
@@ -306,7 +302,7 @@ export default function OriginRow({
             <td>
                 <Selector
                     options={regionOptions.map((region) => ({ id: region.id, name: region.name ?? "" }))}
-                    placeholder={t("OriginRow.selected")}
+                    placeholder={t.originRow.nothingSelected}
                     selectedValue={selectedRegionName}
                     onSelect={(id, name) => handleSelection("region", id, name)}
                 />
@@ -314,7 +310,7 @@ export default function OriginRow({
             <td>
                 <Selector
                     options={communesOptions.map((commune) => ({ id: commune.id, name: commune.name ?? "" }))}
-                    placeholder={t("OriginRow.selected")}
+                    placeholder={t.originRow.nothingSelected}
                     selectedValue={selectedProvinceName}
                     onSelect={(id, name) => handleSelection("province", id, name)}
                 />
@@ -322,7 +318,7 @@ export default function OriginRow({
             <td>
                 <Selector
                     options={communesOptions.map((commune) => ({ id: commune.id, name: commune.name ?? "" }))}
-                    placeholder={t("OriginRow.selected")}
+                    placeholder={t.originRow.nothingSelected}
                     selectedValue={selectedCommuneName}
                     onSelect={(id, name) => handleSelection("commune", id, name)}
                 />
@@ -330,7 +326,7 @@ export default function OriginRow({
             <td>
                 <Selector
                     options={locationOptions.map((location) => ({ id: location.id, name: location.name ?? "" }))}
-                    placeholder={t("OriginRow.selected")}
+                    placeholder={t.originRow.nothingSelected}
                     selectedValue={selectedLocationName}
                     onSelect={(id, name) => handleSelection("location", id, name)}
                 />

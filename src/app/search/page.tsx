@@ -1,10 +1,10 @@
 "use client";
 
 import type { GetFoodsData } from "@/api";
+import { useTranslation } from "@/context/I18nContext";
 import { useApi } from "@/hooks";
 import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { type JSX, Suspense, useEffect, useState } from "react";
 import FilterBody, { type Filters } from "./components/FilterBody";
 import FoodResultsTable from "./components/nutrient-table/FoodResultsTable";
 import styles from "./search.module.css";
@@ -81,7 +81,7 @@ function Search(): JSX.Element {
                 `}
                 /*className="food-filter food-filter-static"*/
             >
-                <h4>{t("Filter.title")}</h4>
+                <h4>{t.foodsFilter.title}</h4>
                 <FilterBody
                     selectedFilters={selectedFilters}
                     setSelectedFilters={setSelectedFilters}

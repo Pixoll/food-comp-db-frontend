@@ -1,11 +1,11 @@
 "use client";
 
-import type { FoodGroup, FoodType, Language, ScientificName, Subspecies } from "@/api";
+import type { FoodGroup, FoodType, Language, ScientificName, StringTranslation, Subspecies } from "@/api";
 import TextField from "@/app/components/Fields/TextField";
 import Selector from "@/app/components/Selector/Selector";
+import { useTranslation } from "@/context/I18nContext";
 import { FileTextIcon, ListIcon, PackageIcon, TagIcon } from "lucide-react";
-import { type ChangeEvent, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { type ChangeEvent, type JSX, useState } from "react";
 
 export const searchScientificNameById = (
     id: number | undefined,
@@ -42,9 +42,8 @@ type GeneralData = {
     subspeciesId?: number;
     groupId?: number;
     typeId?: number;
-    commonName: Record<"es", string> &
-        Partial<Record<"en" | "pt", string | null>>;
-    ingredients: Partial<Record<"es" | "en" | "pt", string | null>>;
+    commonName: Record<"es", string> & Partial<Omit<StringTranslation, "es">>;
+    ingredients: Partial<StringTranslation>;
 };
 
 type NewGeneralDataProps = {
@@ -67,7 +66,6 @@ export default function FoodGeneralData({
     subspecies,
 }: NewGeneralDataProps): JSX.Element {
     const { t } = useTranslation();
-
     const [formData, setFormData] = useState<GeneralData>(data);
 
     const handleInputChange = (
@@ -83,54 +81,54 @@ export default function FoodGeneralData({
         <form className="p-[16px] bg-[white] rounded-[4px]">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-[16px] mb-[12px]">
                 <TextField
-                    label={t("FoodGeneralData.code")}
+                    label={t.addFoodGeneralData.code}
                     required
                     name="code"
                     maxLength={8}
                     icon={<TagIcon size={18}/>}
                     error={!formData.code || !/^[a-z0-9]{8}$/i.test(formData.code)}
                     errorMessage={!formData.code
-                        ? "Ingrese el código."
-                        : "Código debe ser de 8 caracteres alfanuméricos."
+                        ? t.addFoodGeneralData.enterCode
+                        : t.addFoodGeneralData.codeMustBeAlphanumeric
                     }
                     value={formData.code || ""}
                     onChange={handleInputChange}
-                    placeholder={t("DetailFood.code")}
+                    placeholder={t.foodDetail.code}
                     fullWidth
                 />
 
                 <TextField
-                    label={t("FoodGeneralData.strain")}
+                    label={t.addFoodGeneralData.strain}
                     name="strain"
                     maxLength={50}
                     icon={<ListIcon size={18}/>}
                     value={formData.strain || ""}
                     onChange={handleInputChange}
-                    placeholder={t("FoodGeneralData.strain")}
+                    placeholder={t.addFoodGeneralData.strain}
                     fullWidth
                 />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-[16px] mb-[12px]">
                 <TextField
-                    label={t("FoodGeneralData.brand")}
+                    label={t.addFoodGeneralData.brand}
                     name="brand"
                     maxLength={8}
                     icon={<PackageIcon size={18}/>}
                     value={formData.brand || ""}
                     onChange={handleInputChange}
-                    placeholder={t("FoodGeneralData.brand")}
+                    placeholder={t.addFoodGeneralData.brand}
                     fullWidth
                 />
 
                 <TextField
-                    label={t("FoodGeneralData.Observation")}
+                    label={t.addFoodGeneralData.observation}
                     name="observation"
                     maxLength={200}
                     icon={<FileTextIcon size={18}/>}
                     value={formData.observation || ""}
                     onChange={handleInputChange}
-                    placeholder={t("FoodGeneralData.Observation")}
+                    placeholder={t.addFoodGeneralData.observation}
                     fullWidth
                 />
             </div>
@@ -138,7 +136,7 @@ export default function FoodGeneralData({
             <div className="mb-[12px]">
                 <div className="mb-[8px]">
                     <label className="block text-[14px] font-medium text-[#4B5563]">
-                        {t("DetailFood.label_group")}
+                        {t.addFoodGeneralData.group}
                         <span className="text-[#EF4444]">*</span>
                     </label>
                 </div>
@@ -149,7 +147,7 @@ export default function FoodGeneralData({
                             name: group.name,
                         }))}
                         selectedValue={searchGroupNameById(formData.groupId, groups) ?? ""}
-                        placeholder={t("FoodGeneralData.select_G")}
+                        placeholder={t.addFoodGeneralData.selectGroup}
                         onSelect={(id) => {
                             if (id !== null) {
                                 const updatedFormData = {
@@ -167,7 +165,7 @@ export default function FoodGeneralData({
             <div className="mb-[12px]">
                 <div className="mb-[8px]">
                     <label className="block text-[14px] font-medium text-[#4B5563]">
-                        {t("DetailFood.label_type")}
+                        {t.addFoodGeneralData.type}
                         <span className="text-[#EF4444]">*</span>
                     </label>
                 </div>
@@ -178,7 +176,7 @@ export default function FoodGeneralData({
                             name: type.name,
                         }))}
                         selectedValue={searchTypeNameById(formData.typeId, types) ?? ""}
-                        placeholder={t("FoodGeneralData.select_A")}
+                        placeholder={t.addFoodGeneralData.selectType}
                         onSelect={(id) => {
                             if (id !== null) {
                                 const updatedFormData = {
@@ -195,17 +193,17 @@ export default function FoodGeneralData({
             <div className="mb-[12px]">
                 <div className="mb-[8px]">
                     <label className="block text-[14px] font-medium text-[#4B5563]">
-                        {t("FoodGeneralData.name_scientist")}
+                        {t.addFoodGeneralData.scientificName}
                     </label>
                 </div>
                 {scientificNames && (
                     <Selector
-                        options={scientificNames.map((sname) => ({
-                            id: sname.id,
-                            name: sname.name,
+                        options={scientificNames.map((name) => ({
+                            id: name.id,
+                            name: name.name,
                         }))}
                         selectedValue={searchScientificNameById(formData.scientificNameId, scientificNames) ?? ""}
-                        placeholder={t("FoodGeneralData.Select_scientific")}
+                        placeholder={t.addFoodGeneralData.selectScientificName}
                         onSelect={(id) => {
                             if (id !== null) {
                                 const updatedFormData = {
@@ -223,17 +221,17 @@ export default function FoodGeneralData({
             <div className="mb-[12px]">
                 <div className="mb-[8px]">
                     <label className="block text-[14px] font-medium text-[#4B5563]">
-                        {t("FoodGeneralData.Subspecies")}
+                        {t.addFoodGeneralData.subspecies}
                     </label>
                 </div>
                 {subspecies && (
                     <Selector
-                        options={subspecies.map((sname) => ({
-                            id: sname.id,
-                            name: sname.name,
+                        options={subspecies.map((name) => ({
+                            id: name.id,
+                            name: name.name,
                         }))}
                         selectedValue={searchSubspeciesNameById(formData.subspeciesId, subspecies) ?? ""}
-                        placeholder={t("FoodGeneralData.Select_subspecies")}
+                        placeholder={t.addFoodGeneralData.selectSubspecies}
                         onSelect={(id) => {
                             if (id !== null) {
                                 const updatedFormData = {
@@ -251,7 +249,7 @@ export default function FoodGeneralData({
             <div className="mb-[12px]">
                 <div className="mb-[8px]">
                     <label className="block text-[14px] font-medium text-[#4B5563]">
-                        Nombres comunes
+                        {t.addFoodGeneralData.commonNames}
                         <span className="text-[#EF4444]">*</span>
                     </label>
                 </div>
@@ -259,11 +257,11 @@ export default function FoodGeneralData({
                     <div key={lang.code} className={index > 0 ? "mt-[10px]" : ""}>
                         <TextField
                             maxLength={200}
-                            placeholder={`${t("FoodGeneralData.name_com")} (${lang.code})`}
+                            placeholder={`${t.addFoodGeneralData.commonName} (${lang.code})`}
                             value={formData.commonName[lang.code] || ""}
                             error={lang.code === "es" && !formData.commonName[lang.code]}
                             errorMessage={lang.code === "es" && !formData.commonName[lang.code]
-                                ? "Ingrese el nombre en español."
+                                ? t.addFoodGeneralData.enterSpanishName
                                 : ""
                             }
                             onChange={(e) => {
@@ -286,14 +284,14 @@ export default function FoodGeneralData({
             <div className="mb-[12px]">
                 <div className="mb-[8px]">
                     <label className="block text-[14px] font-medium text-[#4B5563]">
-                        {t("FoodGeneralData.Ingredients")}
+                        {t.addFoodGeneralData.ingredients}
                     </label>
                 </div>
                 {languages?.map((lang, index) => (
                     <div key={lang.code} className={index > 0 ? "mt-[10px]" : ""}>
                         <TextField
                             maxLength={400}
-                            placeholder={`${t("FoodGeneralData.Ingredient")} (${lang.code})`}
+                            placeholder={`${t.addFoodGeneralData.ingredient} (${lang.code})`}
                             value={formData.ingredients[lang.code] || ""}
                             onChange={(e) => {
                                 const updatedFormData = {

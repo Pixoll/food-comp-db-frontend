@@ -1,17 +1,17 @@
 "use client";
 
-import type { City, NewArticleDto } from "@/api";
+import type { City, NewArticleDto, Reference } from "@/api";
 import NumericField from "@/app/components/Fields/NumericField";
 import TextField from "@/app/components/Fields/TextField";
 import SelectorWithInput from "@/app/components/Selector/SelectorWithInput";
+import { useTranslation } from "@/context/I18nContext";
 import { Book, Calendar, FileText, Globe, Info, MapPin, TagIcon } from "lucide-react";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { type JSX, useState } from "react";
 import type { RecursivePartial } from "./ArticleByReference";
 
 export type ReferenceForm = {
     code: number;
-    type: "report" | "thesis" | "article" | "website" | "book";
+    type: Reference["type"];
     title: string;
     authorIds?: number[];
     newAuthors?: string[];
@@ -24,7 +24,7 @@ export type ReferenceForm = {
 
 type NewReferenceProps = {
     code: number;
-    type: "report" | "thesis" | "article" | "website" | "book";
+    type: Reference["type"];
     title: string;
     year?: number;
     cityId?: number;
@@ -32,15 +32,6 @@ type NewReferenceProps = {
     other?: string;
     cities: City[];
     onFormUpdate: (updatedFields: Partial<ReferenceForm>) => void;
-};
-
-const searchCityNameByID = (
-    id: number | undefined,
-    cities: City[]
-): string | undefined => {
-    if (!id) return;
-    const city = cities.find((city) => city.id === id);
-    return city?.name;
 };
 
 export default function GeneralData({
@@ -86,23 +77,6 @@ export default function GeneralData({
         onFormUpdate(updatedForm);
     };
 
-    const getReferenceTypeIcon = (): JSX.Element | null => {
-        switch (type) {
-            case "book":
-                return <Book className="me-[8px]"/>;
-            case "article":
-                return <FileText className="me-[8px]"/>;
-            case "website":
-                return <Globe className="me-[8px]"/>;
-            case "report":
-                return <Info className="me-[8px]"/>;
-            case "thesis":
-                return <FileText className="me-[8px]"/>;
-            default:
-                return null;
-        }
-    };
-
     const isTypeNotArticleOrWebsite = type !== "article" && type !== "website";
     const isYearDefined = typeof referenceForm.year !== "undefined";
     const isYearBelow1 = (referenceForm.year ?? 0) < 1;
@@ -114,15 +88,17 @@ export default function GeneralData({
     return (
         <div className="mt-[16px] rounded-[8px] border border-[#e5e7eb] shadow-sm bg-white overflow-hidden">
             <div className="flex items-center p-[16px] border-b border-[#e5e7eb] bg-[#f9fafb]">
-                <span className="mr-[12px] text-[#4b5563]">{getReferenceTypeIcon()}</span>
-                <h2 className="text-[18px] font-[600] text-[#111827] m-0">{t("GeneralData.Add")}</h2>
+                <span className="mr-[12px] text-[#4b5563]">
+                    <ReferenceTypeIcon type={type}/>
+                </span>
+                <h2 className="text-[18px] font-[600] text-[#111827] m-0">{t.newReferenceGeneralData.add}</h2>
             </div>
 
             <div className="p-[20px]">
                 <form className="space-y-[20px]">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-[16px]">
                         <NumericField
-                            label={t("GeneralData.Code")}
+                            label={t.newReferenceGeneralData.code}
                             value={code}
                             onChange={() => {
                             }}
@@ -139,7 +115,7 @@ export default function GeneralData({
                                 className="text-[14px] font-[500] mb-[4px] text-[#374151] flex items-center"
                             >
                                 <span className="mr-[8px] text-[#4b5563]"><Book className="w-[18px] h-[18px]"/></span>
-                                {t("GeneralData.Type")}
+                                {t.newReferenceGeneralData.type}
                                 <span className="text-[#dc2626] ml-[4px]">*</span>
                             </label>
 
@@ -161,24 +137,24 @@ export default function GeneralData({
                                 w-full
                                 "
                             >
-                                <option value="report">{t("GeneralData.Report")}</option>
-                                <option value="thesis">{t("GeneralData.Thesis")}</option>
-                                <option value="article">{t("GeneralData.Article")}</option>
-                                <option value="website">{t("GeneralData.Website")}</option>
-                                <option value="book">{t("GeneralData.Book")}</option>
+                                <option value="report">{t.newReferenceGeneralData.report}</option>
+                                <option value="thesis">{t.newReferenceGeneralData.thesis}</option>
+                                <option value="article">{t.newReferenceGeneralData.article}</option>
+                                <option value="website">{t.newReferenceGeneralData.website}</option>
+                                <option value="book">{t.newReferenceGeneralData.book}</option>
                             </select>
                         </div>
                     </div>
                     <TextField
-                        label={t("GeneralData.Title")}
+                        label={t.newReferenceGeneralData.title}
                         value={referenceForm.title}
                         onChange={(e) => handleInputChange("title", e.target.value)}
                         id="formReferenceTitle"
                         fullWidth
                         maxLength={300}
-                        placeholder={t("GeneralData.Enter_t")}
+                        placeholder={t.newReferenceGeneralData.enterTitle}
                         error={referenceForm.title.length === 0}
-                        errorMessage="Ingrese el título."
+                        errorMessage={t.newReferenceGeneralData.enterTitle}
                         icon={<span className="text-[#4b5563]"><FileText className="w-[18px] h-[18px]"/></span>}
                         required
                     />
@@ -190,16 +166,14 @@ export default function GeneralData({
                                 className="text-[14px] font-[500] mb-[4px] text-[#374151] flex items-center"
                             >
                                 <span className="mr-[8px] text-[#4b5563]"><MapPin className="w-[18px] h-[18px]"/></span>
-                                {t("GeneralData.City")}
+                                {t.newReferenceGeneralData.city}
                             </label>
 
                             <SelectorWithInput
                                 options={cities}
                                 newValueMaxLength={100}
-                                placeholder={t("GeneralData.Select")}
-                                selectedValue={
-                                    searchCityNameByID(referenceForm.cityId, cities) || newCity
-                                }
+                                placeholder={t.newReferenceGeneralData.selectCity}
+                                selectedValue={searchCityNameByID(referenceForm.cityId, cities) || newCity}
                                 onSelect={(id, name) => {
                                     if (id) {
                                         handleInputChange("cityId", id);
@@ -211,7 +185,7 @@ export default function GeneralData({
                         </div>
 
                         <NumericField
-                            label={t("GeneralData.Year")}
+                            label={t.newReferenceGeneralData.year}
                             value={referenceForm.year}
                             onChange={(e) => handleInputChange("year", e)}
                             id="formReferenceYear"
@@ -221,25 +195,29 @@ export default function GeneralData({
                             allowDecimals={false}
                             error={(isYearDefined || isTypeNotArticleOrWebsite)
                                 && (isYearBelow1 || isYearOverCurrent || isYearNotInteger)}
-                            errorMessage={!isYearDefined ? "Ingrese el año."
-                                : isYearBelow1 ? "Año debe ser al menos 1."
-                                    : isYearOverCurrent ? "Año debe ser menor o igual al actual."
-                                        : "Año debe ser un entero."}
+                            errorMessage={!isYearDefined
+                                ? t.newReferenceGeneralData.enterYear
+                                : isYearBelow1
+                                    ? t.atLeast(t.newReferenceGeneralData.year, 1)
+                                    : isYearOverCurrent
+                                        ? t.newReferenceGeneralData.yearBelowCurrent
+                                        : t.mustBeInteger(t.newReferenceGeneralData.year)
+                            }
                             icon={<span className="text-[#4b5563]"><Calendar className="w-[18px] h-[18px]"/></span>}
                             required={isTypeNotArticleOrWebsite}
                         />
                     </div>
 
                     <TextField
-                        label={t("GeneralData.Other")}
+                        label={t.newReferenceGeneralData.other}
                         value={referenceForm.other || ""}
                         onChange={(e) => handleInputChange("other", e.target.value)}
                         id="formReferenceOther"
                         fullWidth
                         maxLength={100}
-                        placeholder={t("GeneralData.Additional")}
+                        placeholder={t.newReferenceGeneralData.enterOther}
                         error={isTypeWebsiteOrBook && !referenceForm.other?.length}
-                        errorMessage="Ingrese la información adicional."
+                        errorMessage={t.newReferenceGeneralData.enterOther}
                         icon={<span className="text-[#4b5563]"><Info className="w-[18px] h-[18px]"/></span>}
                         required={isTypeWebsiteOrBook}
                     />
@@ -248,3 +226,30 @@ export default function GeneralData({
         </div>
     );
 };
+
+type ReferenceTypeIconProps = {
+    type: Reference["type"];
+};
+
+function ReferenceTypeIcon({ type }: ReferenceTypeIconProps): JSX.Element | null {
+    switch (type) {
+        case "book":
+            return <Book className="me-[8px]"/>;
+        case "article":
+            return <FileText className="me-[8px]"/>;
+        case "website":
+            return <Globe className="me-[8px]"/>;
+        case "report":
+            return <Info className="me-[8px]"/>;
+        case "thesis":
+            return <FileText className="me-[8px]"/>;
+        default:
+            return null;
+    }
+}
+
+function searchCityNameByID(id: number | undefined, cities: City[]): string | undefined {
+    if (!id) return;
+    const city = cities.find((city) => city.id === id);
+    return city?.name;
+}

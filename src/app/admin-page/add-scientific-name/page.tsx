@@ -1,8 +1,11 @@
 "use client";
+
+import { useTranslation } from "@/context/I18nContext";
 import { useScientificNames } from "@/hooks";
-import { useState } from "react";
+import { type JSX, useState } from "react";
 
 export default function AddScientificNamePage(): JSX.Element {
+    const { t } = useTranslation();
     const { idToObject } = useScientificNames();
     const [searchTerm, setSearchTerm] = useState("");
     const [newScientificName, setNewScientificName] = useState("");
@@ -26,16 +29,16 @@ export default function AddScientificNamePage(): JSX.Element {
                 "
             >
                 <div className="bg-[#33ae90] text-[#ffffff] p-[24px]">
-                    <h1 className="text-[28px] font-[700] text-center">Agregar Nuevo Nombre Cientifico</h1>
+                    <h1 className="text-[28px] font-[700] text-center">{t.addScientificName.title}</h1>
                     <p className="text-[16px] opacity-[0.9] text-center mt-[8px]">
-                        Agrega o busca nombres cientificos en el sistema
+                        {t.addScientificName.subtitle}
                     </p>
                 </div>
 
                 <div className="p-[32px]">
                     <div className="mb-[32px]">
                         <h2 className="text-[20px] font-[600] text-[#1f2937] mb-[16px]">
-                            Buscar nombres cientificos existentes
+                            {t.addScientificName.searchExistent}
                         </h2>
 
                         <div className="relative">
@@ -43,7 +46,7 @@ export default function AddScientificNamePage(): JSX.Element {
                                 type="text"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                placeholder="Buscar subespecies..."
+                                placeholder={t.addScientificName.searchPlaceholder}
                                 className="
                                 w-full
                                 p-[12px]
@@ -99,15 +102,15 @@ export default function AddScientificNamePage(): JSX.Element {
                                     ))
                                 ) : (
                                     <div className="col-span-full text-center p-[20px] text-[#6b7280]">
-                                        {searchTerm ? "No se encontraron subespecies" : "Cargando subespecies..."}
+                                        {searchTerm ? t.addScientificName.noneFound : t.addScientificName.loading}
                                     </div>
                                 )}
                             </div>
                         </div>
                     </div>
                     <div className="mt-[32px] pt-[32px] border-t-[1px] border-[#e5e7eb]">
-                        <h2 className="text-[20px] font-[600] text-[#1f2937] mb-[16px]">Agregar nuevo nombre
-                                                                                        cientifico.
+                        <h2 className="text-[20px] font-[600] text-[#1f2937] mb-[16px]">
+                            {t.addScientificName.addNew}
                         </h2>
 
                         <div className="mb-[20px]">
@@ -115,7 +118,7 @@ export default function AddScientificNamePage(): JSX.Element {
                                 type="text"
                                 value={newScientificName}
                                 onChange={(e) => setNewScientificName(e.target.value)}
-                                placeholder="Nombre de la nueva subespecie..."
+                                placeholder={t.addScientificName.namePlaceholder}
                                 className="
                                 w-full
                                 p-[12px]
@@ -162,7 +165,7 @@ export default function AddScientificNamePage(): JSX.Element {
                                             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                                         />
                                     </svg>
-                                    Verificar existencia
+                                    {t.addScientificName.verify}
                                 </button>
 
                                 <button
@@ -197,15 +200,14 @@ export default function AddScientificNamePage(): JSX.Element {
                                             d="M12 4v16m8-8H4"
                                         />
                                     </svg>
-                                    Agregar nuevo nombre cientifico
+                                    {t.addScientificName.addNew}
                                 </button>
                             </div>
                         </div>
 
                         <p className="text-[14px] text-[#6b7280] mt-[16px] bg-[#f3f4f6] p-[12px] rounded-[6px]">
-                            <span className="font-[600]">Nota:</span>
-                            Antes de agregar un nuevo nombre cientifico, verifica que no exista en el sistema para
-                            evitar duplicados.
+                            <span className="font-[600]">{t.addScientificName.note}</span>{" "}
+                            {t.addScientificName.beforeAdding}
                         </p>
                     </div>
                 </div>

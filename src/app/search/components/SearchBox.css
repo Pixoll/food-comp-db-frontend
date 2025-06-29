@@ -37,7 +37,7 @@
     z-index: 10;
 }
 
-checkbox-filter.show .dropdown-options {
+.checkbox-filter.show .dropdown-options {
     display: block;
 }
 

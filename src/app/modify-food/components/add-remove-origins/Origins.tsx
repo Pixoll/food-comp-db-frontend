@@ -1,10 +1,10 @@
 "use client";
 
+import { useTranslation } from "@/context/I18nContext";
 import type { Commune, Location, Province, Region } from "@/hooks";
 import type { Origin } from "@/types/SingleFoodResult";
 import { Collection } from "@/utils/collection";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { type JSX, useCallback, useEffect, useRef, useState } from "react";
 import OriginRow from "./OriginRow";
 
 type OriginsProps = {
@@ -87,7 +87,7 @@ export default function Origins({
             setAddresses((prevAddresses) => prevAddresses.slice(0, -1));
             setOriginIds((prevOriginIds) => prevOriginIds.slice(0, -1));
         } else {
-            alert(t("Origins.minimum"));
+            alert(t.origins.minimum);
         }
     };
 
@@ -124,7 +124,7 @@ export default function Origins({
                                 border-[#047857]
                                 "
                             >
-                                {t("Origins.Region")}
+                                {t.origins.region}
                             </th>
                             <th
                                 className="
@@ -137,7 +137,7 @@ export default function Origins({
                                 border-[#047857]
                                 "
                             >
-                                {t("Origins.Province")}
+                                {t.origins.province}
                             </th>
                             <th
                                 className="
@@ -150,7 +150,7 @@ export default function Origins({
                                 border-[#047857]
                                 "
                             >
-                                {t("Origins.Commune")}
+                                {t.origins.commune}
                             </th>
                             <th
                                 className="
@@ -163,7 +163,7 @@ export default function Origins({
                                 border-[#047857]
                                 "
                             >
-                                {t("Origins.Location")}
+                                {t.origins.location}
                             </th>
                         </tr>
                     </thead>
@@ -172,9 +172,7 @@ export default function Origins({
                             <OriginRow
                                 data={data}
                                 key={row}
-                                onAddressChange={(address: string) =>
-                                    handleAddressChange(index, address)
-                                }
+                                onAddressChange={(address: string) => handleAddressChange(index, address)}
                                 onIdChange={(id: number | null) => handleIdsChange(id, index)}
                                 index={index}
                                 initialId={originIds[index] ?? -1}
@@ -199,7 +197,7 @@ export default function Origins({
                     duration-[200ms]
                     "
                 >
-                    {t("Origins.Add")}
+                    {t.origins.add}
                 </button>
 
                 <button
@@ -216,7 +214,7 @@ export default function Origins({
                     duration-[200ms]
                     "
                 >
-                    {t("Origins.Delete")}
+                    {t.origins.delete}
                 </button>
             </div>
 
@@ -241,7 +239,7 @@ export default function Origins({
                             >
                                 {address
                                   || <span className="text-[#6b7280] italic">
-                                      {t("Origins.no_direction")}
+                                      {t.origins.noneSelected}
                                   </span>
                                 }
                             </li>
@@ -249,7 +247,7 @@ export default function Origins({
                     </ul>
                 ) : (
                     <p className="text-[#6b7280] italic">
-                        {"No hay orígenes seleccionados"}
+                        {t.origins.noneSelected}
                     </p>
                 )}
             </div>

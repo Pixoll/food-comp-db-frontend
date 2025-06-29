@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import { useTranslation } from "@/context/I18nContext";
+import { type JSX, useEffect, useRef, useState } from "react";
 import "@/app/components/Selector/SelectorWithInput.css";
-import { useTranslation } from "react-i18next";
 
 type SelectorWithInputProps = {
     options: Array<{ id: number; name: string }>;
@@ -107,7 +107,7 @@ export default function SelectorWithInput({
                     <div className="search-options">
                         <input
                             type="text"
-                            placeholder={t("search.button")}
+                            placeholder={t.search.button}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             autoFocus
@@ -127,7 +127,7 @@ export default function SelectorWithInput({
                             onClick={handleCustomOption}
                             style={{ fontStyle: "italic", color: "#555555" }}
                         >
-                            {"Otro valor"}
+                            {t.selector.other}
                         </li>
                     </ul>
                 </div>
@@ -138,7 +138,7 @@ export default function SelectorWithInput({
                     <input
                         type="text"
                         maxLength={newValueMaxLength}
-                        placeholder={"Escriba otro valor"}
+                        placeholder={t.selector.enterAnother}
                         value={customOption}
                         onChange={(e) => setCustomOption(e.target.value)}
                         onBlur={handleCustomOptionSubmit}

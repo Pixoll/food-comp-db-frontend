@@ -1,16 +1,7 @@
+import { useTranslation } from "@/context/I18nContext";
 import type { NutrientMeasurementForm, NutrientSummary } from "@/types/nutrients";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { type JSX, useState } from "react";
 import AddNutrientRow from "./add-nutrients-measurements/AddNutrientRow";
-
-const getNutrientNameById = (
-    id: number,
-    nameAndIdNutrients: NutrientSummary[]
-): string => {
-    const nutrient = nameAndIdNutrients.find((nutrient) => nutrient.id === id);
-
-    return `${nutrient?.name} (${nutrient?.measurementUnit})`;
-};
 
 export type NutrientMeasurementFormOnlyNumbers = {
     [K in keyof NutrientMeasurementForm as NutrientMeasurementForm[K] extends number | undefined
@@ -81,28 +72,28 @@ export default function AddNutrientsMeasurements({
                     <thead>
                         <tr className="bg-[#8fbc8f] rounded-[5px]">
                             <th className="bg-[white] text-[black] font-[700] p-[8px] text-left">
-                                {t("NewMacronutrient.name")}
+                                {t.newMacronutrient.name}
                             </th>
                             <th className="bg-[white] text-[black] font-[700] p-[8px] text-center">
-                                {t("NewMacronutrient.mean")}
+                                {t.newMacronutrient.average}
                             </th>
                             <th className="bg-[white] text-[black] font-[700] p-[8px] text-center">
-                                {t("NewMacronutrient.Deviation")}
+                                {t.newMacronutrient.deviation}
                             </th>
                             <th className="bg-[white] text-[black] font-[700] p-[8px] text-center">
-                                {t("NewMacronutrient.min")}
+                                {t.newMacronutrient.min}
                             </th>
                             <th className="bg-[white] text-[black] font-[700] p-[8px] text-center">
-                                {t("NewMacronutrient.max")}
+                                {t.newMacronutrient.max}
                             </th>
                             <th className="bg-[white] text-[black] font-[700] p-[8px] text-center">
-                                {t("NewMacronutrient.Size")}
+                                {t.newMacronutrient.sampleSize}
                             </th>
                             <th className="bg-[white] text-[black] font-[700] p-[8px] text-center">
-                                {t("NewMacronutrient.type")}
+                                {t.newMacronutrient.type}
                             </th>
                             <th className="bg-[white] text-[black] font-[700] p-[8px] text-center">
-                                {t("NewMacronutrient.Action")}
+                                {t.newMacronutrient.action}
                             </th>
                         </tr>
                     </thead>
@@ -127,4 +118,10 @@ export default function AddNutrientsMeasurements({
             </div>
         </div>
     );
+}
+
+function getNutrientNameById(id: number, nameAndIdNutrients: NutrientSummary[]): string {
+    const nutrient = nameAndIdNutrients.find((nutrient) => nutrient.id === id);
+
+    return `${nutrient?.name} (${nutrient?.measurementUnit})`;
 }

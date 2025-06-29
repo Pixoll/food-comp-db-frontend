@@ -1,15 +1,15 @@
 "use client";
 
-import { createContext, type ReactNode, useContext, useState } from "react";
+import { createContext, type JSX, type ReactNode, useContext, useState } from "react";
 
-type foodTag = {
+type FoodTag = {
     code: string;
     name: string;
 };
 
 type ComparisonContextType = {
-    comparisonFoods: foodTag[];
-    addToComparison: (foods: foodTag[]) => void;
+    comparisonFoods: FoodTag[];
+    addToComparison: (foods: FoodTag[]) => void;
     removeFromComparison: (codes: string[]) => void;
     clearComparison: () => void;
 };
@@ -17,9 +17,9 @@ type ComparisonContextType = {
 const ComparisonContext = createContext<ComparisonContextType | undefined>(undefined);
 
 export default function ComparisonProvider({ children }: { children: ReactNode }): JSX.Element {
-    const [comparisonFoods, setComparisonFoods] = useState<foodTag[]>([]);
+    const [comparisonFoods, setComparisonFoods] = useState<FoodTag[]>([]);
 
-    const addToComparison = (foods: foodTag[]): void => {
+    const addToComparison = (foods: FoodTag[]): void => {
         const newFoods = foods.filter(food =>
             !comparisonFoods.some(existing => existing.code === food.code)
         );

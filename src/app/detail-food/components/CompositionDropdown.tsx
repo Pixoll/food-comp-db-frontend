@@ -1,7 +1,19 @@
+import { useTranslation } from "@/context/I18nContext";
 import type { NutrientMeasurement, NutrientMeasurementWithComponents, NutrientsValue } from "@/types/SingleFoodResult";
 import { ChevronDown, ChevronRight, Info } from "lucide-react";
-import React, { useState } from "react";
-import Modal from "../../../components/Modal/Modal";
+import { Fragment, type JSX, useState } from "react";
+import Modal from "../../components/Modal/Modal";
+
+type ModalData = {
+    deviation?: number;
+    min?: number;
+    max?: number;
+    sampleSize?: number;
+    standardized: boolean;
+    dataType: NutrientMeasurement["dataType"];
+    note?: string;
+    referenceCodes?: number[];
+};
 
 type NutrientCompositionProps = {
     nutrientData: NutrientsValue;
@@ -9,6 +21,7 @@ type NutrientCompositionProps = {
 };
 
 export default function NutrientComposition({ nutrientData, grams }: NutrientCompositionProps): JSX.Element {
+    const { t } = useTranslation();
     const [expandedSections, setExpandedSections] = useState({
         energy: true,
         macronutrients: true,
@@ -18,16 +31,7 @@ export default function NutrientComposition({ nutrientData, grams }: NutrientCom
     });
 
     const [expandedNutrients, setExpandedNutrients] = useState<Record<string, boolean>>({});
-    const [modalData, setModalData] = useState<{
-        deviation?: number;
-        min?: number;
-        max?: number;
-        sampleSize?: number;
-        standardized: boolean;
-        dataType: "analytic" | "calculated" | "assumed" | "borrowed";
-        note?: string;
-        referenceCodes?: number[];
-    } | null>(null);
+    const [modalData, setModalData] = useState<ModalData | null>(null);
 
     const openNutrientModal = (nutrient: NutrientMeasurement): void => {
         setModalData({
@@ -145,7 +149,7 @@ export default function NutrientComposition({ nutrientData, grams }: NutrientCom
         const paddingClass = indentLevel < paddingClasses.length ? paddingClasses[indentLevel] : paddingClasses[1];
 
         return (
-            <React.Fragment key={`${nutrient.nutrientId}-expandable`}>
+            <Fragment key={`${nutrient.nutrientId}-expandable`}>
                 <tr>
                     <td
                         className={`${paddingClass} bg-[white] relative ${hasComponents ? "cursor-pointer" : ""}`}
@@ -188,7 +192,7 @@ export default function NutrientComposition({ nutrientData, grams }: NutrientCom
                 {isExpanded && hasComponents && nutrient.components.map(comp =>
                     renderNutrientRow(comp, indentLevel + 1)
                 )}
-            </React.Fragment>
+            </Fragment>
         );
     };
 
@@ -214,7 +218,7 @@ export default function NutrientComposition({ nutrientData, grams }: NutrientCom
                             border-[#047857]
                             "
                         >
-                            Nutrientes
+                            {t.nutrientsDropdown.nutrients}
                         </th>
                         <th
                             className="
@@ -233,7 +237,7 @@ export default function NutrientComposition({ nutrientData, grams }: NutrientCom
                             border-[#047857]
                             "
                         >
-                            Unidad
+                            {t.nutrientsDropdown.unit}
                         </th>
                         <th
                             className="
@@ -252,7 +256,7 @@ export default function NutrientComposition({ nutrientData, grams }: NutrientCom
                             border-[#047857]
                             "
                         >
-                            Promedio
+                            {t.nutrientsDropdown.average}
                         </th>
                         <th
                             className="
@@ -271,7 +275,7 @@ export default function NutrientComposition({ nutrientData, grams }: NutrientCom
                             border-[#047857]
                             "
                         >
-                            Información
+                            {t.nutrientsDropdown.information}
                         </th>
                     </tr>
                 </thead>
@@ -299,7 +303,7 @@ export default function NutrientComposition({ nutrientData, grams }: NutrientCom
                                 ? <ChevronDown size={16} className="inline mr-[8px]"/>
                                 : <ChevronRight size={16} className="inline mr-[8px]"/>
                             }
-                            Valor energético
+                            {t.nutrientsDropdown.energeticValue}
                         </td>
                     </tr>
 
@@ -328,7 +332,7 @@ export default function NutrientComposition({ nutrientData, grams }: NutrientCom
                                 ? <ChevronDown size={16} className="inline mr-[8px]"/>
                                 : <ChevronRight size={16} className="inline mr-[8px]"/>
                             }
-                            Nutrientes principales
+                            {t.nutrientsDropdown.mainNutrients}
                         </td>
                     </tr>
 
@@ -357,7 +361,7 @@ export default function NutrientComposition({ nutrientData, grams }: NutrientCom
                                     ? <ChevronDown size={16} className="inline mr-[8px]"/>
                                     : <ChevronRight size={16} className="inline mr-[8px]"/>
                                 }
-                                Micronutrientes
+                                {t.nutrientsDropdown.micronutrients}
                             </span>
                         </td>
                     </tr>
@@ -385,7 +389,7 @@ export default function NutrientComposition({ nutrientData, grams }: NutrientCom
                                             ? <ChevronDown size={16} className="inline mr-[8px]"/>
                                             : <ChevronRight size={16} className="inline mr-[8px]"/>
                                         }
-                                        Vitaminas
+                                        {t.nutrientsDropdown.vitamins}
                                     </span>
                                 </td>
                             </tr>
@@ -415,7 +419,7 @@ export default function NutrientComposition({ nutrientData, grams }: NutrientCom
                                             ? <ChevronDown size={16} className="inline mr-[8px]"/>
                                             : <ChevronRight size={16} className="inline mr-[8px]"/>
                                         }
-                                        Minerales
+                                        {t.nutrientsDropdown.minerals}
                                     </span>
                                 </td>
                             </tr>
@@ -429,9 +433,9 @@ export default function NutrientComposition({ nutrientData, grams }: NutrientCom
             </table>
             {modalData && (
                 <Modal
-                    width={800}
+                    fontWeight={800}
                     height={300}
-                    header={"Información adicional"}
+                    header={t.nutrientsDropdown.additionalInfo}
                     onClose={closeModal}
                 >
                     <div className="w-[100%] overflow-x-auto">
@@ -448,7 +452,7 @@ export default function NutrientComposition({ nutrientData, grams }: NutrientCom
                                         border-[#14532d]
                                         "
                                     >
-                                        Desviación
+                                        {t.nutrientsDropdown.deviation}
                                     </th>
                                     <th
                                         className="
@@ -460,7 +464,7 @@ export default function NutrientComposition({ nutrientData, grams }: NutrientCom
                                         border-[#14532d]
                                         "
                                     >
-                                        Mínimo
+                                        {t.nutrientsDropdown.min}
                                     </th>
                                     <th
                                         className="
@@ -472,7 +476,7 @@ export default function NutrientComposition({ nutrientData, grams }: NutrientCom
                                         border-[#14532d]
                                         "
                                     >
-                                        Máximo
+                                        {t.nutrientsDropdown.max}
                                     </th>
                                     <th
                                         className="
@@ -484,7 +488,7 @@ export default function NutrientComposition({ nutrientData, grams }: NutrientCom
                                         border-[#14532d]
                                         "
                                     >
-                                        Tamaño de muestra
+                                        {t.nutrientsDropdown.sampleSize}
                                     </th>
                                     <th
                                         className="
@@ -496,7 +500,7 @@ export default function NutrientComposition({ nutrientData, grams }: NutrientCom
                                         border-[#14532d]
                                         "
                                     >
-                                        Estandarizado
+                                        {t.nutrientsDropdown.standardized}
                                     </th>
                                     <th
                                         className="
@@ -508,7 +512,7 @@ export default function NutrientComposition({ nutrientData, grams }: NutrientCom
                                         border-[#14532d]
                                         "
                                     >
-                                        Nota
+                                        {t.nutrientsDropdown.note}
                                     </th>
                                     <th
                                         className="
@@ -520,7 +524,7 @@ export default function NutrientComposition({ nutrientData, grams }: NutrientCom
                                         border-[#14532d]
                                         "
                                     >
-                                        Tipo de dato
+                                        {t.nutrientsDropdown.dataType}
                                     </th>
                                     <th
                                         className="
@@ -532,7 +536,7 @@ export default function NutrientComposition({ nutrientData, grams }: NutrientCom
                                         border-[#14532d]
                                         "
                                     >
-                                        Referencias
+                                        {t.nutrientsDropdown.references}
                                     </th>
                                 </tr>
                             </thead>
@@ -553,23 +557,23 @@ export default function NutrientComposition({ nutrientData, grams }: NutrientCom
                                     <td className="p-[12px] text-[14px] border-b-[1px] border-[#e5e7eb]">
                                         <span
                                             className={`
-                                inline-block
-                                px-[8px]
-                                py-[2px]
-                                rounded-[4px]
-                                ${modalData.standardized
+                                            inline-block
+                                            px-[8px]
+                                            py-[2px]
+                                            rounded-[4px]
+                                            ${modalData.standardized
                                                 ? "bg-[#dcfce7] text-[#166534]"
                                                 : "bg-[#fee2e2] text-[#991b1b]"
                                             }`}
                                         >
-                                            {modalData.standardized ? "Sí" : "No"}
+                                            {modalData.standardized ? t.yes : t.no}
                                         </span>
                                     </td>
                                     <td className="p-[12px] text-[14px] border-b-[1px] border-[#e5e7eb]">
                                         {modalData.note ?? "-"}
                                     </td>
                                     <td className="p-[12px] text-[14px] border-b-[1px] border-[#e5e7eb]">
-                                        {modalData.dataType ?? "-"}
+                                        {t.nutrientsDropdown[modalData.dataType] ?? "-"}
                                     </td>
                                     <td className="p-[12px] text-[14px] border-b-[1px] border-[#e5e7eb]">
                                         {modalData.referenceCodes?.join(", ") ?? "-"}

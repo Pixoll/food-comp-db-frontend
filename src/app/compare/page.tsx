@@ -2,13 +2,15 @@
 
 import api from "@/api";
 import { useComparison } from "@/context/ComparisonContext";
+import { useTranslation } from "@/context/I18nContext";
 import { FetchStatus, useApi } from "@/hooks";
 import { ArrowLeft, ArrowRight, Download, Search, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { type JSX, useState } from "react";
 import NutrientComparisonTable from "./components/NutrientComparisonTable";
 
 export default function ComparisonPage(): JSX.Element {
+    const { t } = useTranslation();
     const { comparisonFoods, removeFromComparison } = useComparison();
     const [comparisonSectionOpen, setComparisonSectionOpen] = useState(false);
     const router = useRouter();
@@ -54,7 +56,6 @@ export default function ComparisonPage(): JSX.Element {
 
     return (
         <div className="min-h-full h-full bg-gradient-to-br from-[#aff5af] via-[#eff9ef] to-[#def9de] relative ">
-
             <div className="h-full relative z-10 container mx-auto px-[16px] py-[24px] max-w-[1400px]">
                 <div className="mb-[32px]">
                     <button
@@ -80,7 +81,8 @@ export default function ComparisonPage(): JSX.Element {
                         mb-[24px]
                         "
                     >
-                        <ArrowLeft className="mr-[8px] h-[18px] w-[18px]"/> Volver
+                        <ArrowLeft className="mr-[8px] h-[18px] w-[18px]"/>
+                        {t.compare.goBack}
                     </button>
 
                     {comparisonFoods.length < 2 && (
@@ -100,13 +102,11 @@ export default function ComparisonPage(): JSX.Element {
                                 leading-[1.2]
                                 "
                             >
-                                Comparación de Alimentos
+                                {t.compare.foodComparison}
                             </h1>
 
                             <p className="text-[#6b7280] text-[18px] leading-[1.6] max-w-[600px] mx-auto">
-                                Selecciona los alimentos que deseas comparar y analiza sus valores nutricionales de
-                                manera
-                                detallada
+                                {t.compare.selectFoods}
                             </p>
                         </div>
                     )}
@@ -142,7 +142,6 @@ export default function ComparisonPage(): JSX.Element {
                             opacity-[0.7]
                             "
                         />
-
                         <div className="relative z-10">
                             <div
                                 className="
@@ -163,12 +162,11 @@ export default function ComparisonPage(): JSX.Element {
                             </div>
 
                             <h4 className="text-[28px] font-[700] text-[#1f2937] mb-[16px]">
-                                No hay alimentos suficientes para comparar
+                                {t.compare.notEnoughFoods}
                             </h4>
 
                             <p className="text-[#6b7280] text-[18px] leading-[1.6] mb-[32px] max-w-[500px] mx-auto">
-                                Necesitas al menos 2 alimentos para comenzar la comparación. Agrega alimentos desde la
-                                sección de búsqueda.
+                                {t.compare.addFoods}
                             </p>
 
                             <button
@@ -196,7 +194,7 @@ export default function ComparisonPage(): JSX.Element {
                                 "
                             >
                                 <Search className="mr-[12px] h-[20px] w-[20px]"/>
-                                Ir a la búsqueda
+                                {t.compare.goToSearch}
                             </button>
                         </div>
                     </div>
@@ -230,7 +228,7 @@ export default function ComparisonPage(): JSX.Element {
                                         "
                                     />
                                     <span className="text-[#15803d] font-[700] text-[18px]">
-                                        {comparisonFoods.length} alimentos seleccionados.
+                                        {t.compare.selectedFoods(comparisonFoods.length)}
                                     </span>
                                 </div>
                             </div>
@@ -278,7 +276,6 @@ export default function ComparisonPage(): JSX.Element {
                                             duration-[400ms]
                                             "
                                         />
-
                                         <div className="relative z-10">
                                             <div
                                                 className="
@@ -397,9 +394,8 @@ export default function ComparisonPage(): JSX.Element {
                                         duration-[600ms]
                                         "
                                     />
-
                                     <span className="relative z-10 flex items-center">
-                                        Ver Comparación de Nutrientes
+                                        {t.compare.viewNutrientsComparison}
                                         <ArrowRight
                                             className="
                                             ml-[12px]
@@ -458,10 +454,10 @@ export default function ComparisonPage(): JSX.Element {
                                             mb-[8px]
                                             "
                                         >
-                                            Comparación de Nutrientes
+                                            {t.compare.nutrientsComparison}
                                         </h2>
                                         <p className="text-[#6b7280] text-[16px]">
-                                            Análisis detallado de {comparisonFoods.length} alimentos seleccionados
+                                            {t.compare.detailedFoodsAnalysis(comparisonFoods.length)}
                                         </p>
                                     </div>
 
@@ -490,7 +486,7 @@ export default function ComparisonPage(): JSX.Element {
                                             onClick={() => exportData(data.map((f) => f.code))}
                                         >
                                             <Download className="mr-[8px] h-[18px] w-[18px]"/>
-                                            Exportar datos
+                                            {t.compare.exportData}
                                         </button>
                                         <button
                                             className="
@@ -514,7 +510,7 @@ export default function ComparisonPage(): JSX.Element {
                                             onClick={() => setComparisonSectionOpen(false)}
                                         >
                                             <ArrowLeft className="mr-[8px] h-[18px] w-[18px]"/>
-                                            Volver
+                                            {t.compare.goBack}
                                         </button>
                                     </div>
                                 </div>
@@ -522,9 +518,7 @@ export default function ComparisonPage(): JSX.Element {
 
                             <div className="p-[32px]">
                                 {foodsResult.status === FetchStatus.Loading && (
-                                    <div
-                                        className="flex flex-col items-center justify-center py-[80px] text-center"
-                                    >
+                                    <div className="flex flex-col items-center justify-center py-[80px] text-center">
                                         <div className="relative">
                                             <div
                                                 className="
@@ -556,10 +550,10 @@ export default function ComparisonPage(): JSX.Element {
                                             />
                                         </div>
                                         <p className="mt-[24px] text-[#6b7280] text-[18px] font-[500]">
-                                            Cargando datos nutricionales...
+                                            {t.compare.loadingNutrients}
                                         </p>
                                         <p className="mt-[8px] text-[#9ca3af] text-[14px]">
-                                            Esto puede tomar unos segundos
+                                            {t.compare.thisCanTakeSomeTime}
                                         </p>
                                     </div>
                                 )}
@@ -599,11 +593,10 @@ export default function ComparisonPage(): JSX.Element {
                                                 <span className="text-[white] text-[24px] font-[700]">!</span>
                                             </div>
                                             <p className="text-[18px] font-[600] mb-[8px]">
-                                                Error al cargar los datos nutricionales
+                                                {t.compare.errorLoadingNutrients}
                                             </p>
                                             <p className="mb-[20px] text-[16px]">
-                                                Por favor, intente nuevamente o contacte al soporte si el problema
-                                                persiste.
+                                                {t.compare.pleaseTryAgain}
                                             </p>
                                             <button
                                                 onClick={() => window.location.reload()}
@@ -620,7 +613,7 @@ export default function ComparisonPage(): JSX.Element {
                                                 shadow-[0_4px_12px_rgba(220,38,38,0.3)]
                                                 "
                                             >
-                                                Reintentar
+                                                {t.compare.retry}
                                             </button>
                                         </div>
                                     </div>

@@ -1,7 +1,8 @@
 "use client";
 
+import { useTranslation } from "@/context/I18nContext";
 import { ChevronDownIcon } from "lucide-react";
-import { type MouseEvent as ReactMouseEvent, useEffect, useRef, useState } from "react";
+import { type JSX, type MouseEvent as ReactMouseEvent, useEffect, useRef, useState } from "react";
 
 type Option = {
     id: number;
@@ -21,6 +22,7 @@ export default function Selector({
     selectedValue,
     onSelect,
 }: SelectorProps): JSX.Element {
+    const { t } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [dropdownWidth, setDropdownWidth] = useState(0);
@@ -113,7 +115,7 @@ export default function Selector({
                             type="button"
                             onClick={handleClear}
                             className="p-[4px] mr-[4px] text-[#9ca3af] hover:text-[#4b5563]"
-                            aria-label="Clear selection"
+                            aria-label={t.selector.clear}
                         >
                             ×
                         </button>
@@ -157,7 +159,7 @@ export default function Selector({
                             focus:ring-2
                             focus:ring-[#53bb63]
                             "
-                            placeholder="Buscar..."
+                            placeholder={t.selector.search}
                         />
                     </div>
 
@@ -190,7 +192,7 @@ export default function Selector({
                             ))}
                         </ul>
                     ) : (
-                        <div className="px-[12px] py-[8px] text-[14px] text-[#a1ada4]">No hay resultados</div>
+                        <div className="px-[12px] py-[8px] text-[14px] text-[#a1ada4]">{t.selector.noResults}</div>
                     )}
                 </div>
             )}

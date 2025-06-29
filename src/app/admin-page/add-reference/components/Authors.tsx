@@ -2,8 +2,8 @@
 
 import type { Author } from "@/api";
 import SelectorWithInput from "@/app/components/Selector/SelectorWithInput";
-import { useCallback, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "@/context/I18nContext";
+import { type JSX, useCallback, useState } from "react";
 
 type NewAuthorsProps = {
     authorIds?: number[];
@@ -12,26 +12,9 @@ type NewAuthorsProps = {
     updateAuthors: (authors: Author[]) => void;
 };
 
-const convert = (authorIds?: number[], newAuthors?: string[], authors?: Author[]): Author[] => {
-    const list: Author[] = [];
-
-    authorIds?.forEach((authorId) => {
-        const existingAuthor = authors?.find((author) => author.id === authorId);
-        if (existingAuthor) {
-            list.push({ ...existingAuthor });
-        }
-    });
-
-    newAuthors?.forEach((name) => {
-        if (name) list.push({ id: -1, name });
-    });
-
-    return list;
-};
-
 export default function Authors({ authorIds, newAuthors, data, updateAuthors }: NewAuthorsProps): JSX.Element {
     const { t } = useTranslation();
-    const [selectedAuthors, setSelectedAuthors] = useState<Author[]>(convert(authorIds, newAuthors, data));
+    const [selectedAuthors, setSelectedAuthors] = useState<Author[]>(resolveAuthorIds(authorIds, newAuthors, data));
     const [selectors, setSelectors] = useState<number[]>(
         Array.from({ length: selectedAuthors.length }, (_, i) => i)
     );
@@ -77,7 +60,7 @@ export default function Authors({ authorIds, newAuthors, data, updateAuthors }: 
                                 <SelectorWithInput
                                     options={data}
                                     newValueMaxLength={200}
-                                    placeholder={t("Authors.author")}
+                                    placeholder={t.newAuthors.author}
                                     selectedValue={selectedAuthors[index]?.name || ""}
                                     onSelect={(id, name) => handleSelectAuthor(index, id, name)}
                                 />
@@ -99,7 +82,7 @@ export default function Authors({ authorIds, newAuthors, data, updateAuthors }: 
                                     text-[14px]
                                     "
                                 >
-                                    {t("Authors.Eliminate")}
+                                    {t.newAuthors.remove}
                                 </button>
                             </div>
                         </div>
@@ -108,7 +91,7 @@ export default function Authors({ authorIds, newAuthors, data, updateAuthors }: 
             </div>
 
             <h4 className="text-[18px] font-[600] mt-[16px] mb-[8px] text-[#1f2937]">
-                {t("Authors.Select")}
+                {t.newAuthors.select}
             </h4>
 
             <ul className="border border-[#e5e7eb] rounded-[8px] divide-y divide-[#e5e7eb] mb-[16px] overflow-hidden">
@@ -117,12 +100,12 @@ export default function Authors({ authorIds, newAuthors, data, updateAuthors }: 
                         key={author.id || index}
                         className="px-[16px] py-[12px] bg-[white] hover:bg-[#f9fafb] transition-colors duration-[200ms]"
                     >
-                        {author.name || t("Authors.No_selected")}
+                        {author.name || t.newAuthors.noneSelected}
                     </li>
                 ))}
                 {selectedAuthors.length === 0 && (
                     <li className="px-[16px] py-[12px] bg-[white] text-[#6b7280] italic">
-                        {t("Authors.No_selected")}
+                        {t.newAuthors.noneSelected}
                     </li>
                 )}
             </ul>
@@ -144,8 +127,25 @@ export default function Authors({ authorIds, newAuthors, data, updateAuthors }: 
                 shadow-sm
                 "
             >
-                {t("Authors.Add")}
+                {t.newAuthors.add}
             </button>
         </div>
     );
+}
+
+function resolveAuthorIds(authorIds?: number[], newAuthors?: string[], authors?: Author[]): Author[] {
+    const list: Author[] = [];
+
+    authorIds?.forEach((authorId) => {
+        const existingAuthor = authors?.find((author) => author.id === authorId);
+        if (existingAuthor) {
+            list.push({ ...existingAuthor });
+        }
+    });
+
+    newAuthors?.forEach((name) => {
+        if (name) list.push({ id: -1, name });
+    });
+
+    return list;
 }
