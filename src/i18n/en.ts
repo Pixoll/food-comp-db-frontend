@@ -70,6 +70,7 @@ export const en = {
         title: "Results list",
         search: "Search by name...",
         noResults: "There are no results to show.",
+        recommendation : "Try changing the name, filters, or number of results per page.",
         resultsPerPage: "Results per page:",
         export: "Export results",
         goToCompare: "Go to compare",

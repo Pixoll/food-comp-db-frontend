@@ -447,8 +447,17 @@ export default function FoodResultsTable({
             {data.status === FetchStatus.Loading
                 ? <Loading size="large" text={t.foodResults.loading}/>
                 : sortedData.length === 0
-                    ? <p>{t.foodResults.noResults}</p>
-                    : <>
+                    ? <div className="flex flex-col items-center justify-center gap-[12px] py-[48px] text-center">
+
+                        <p className="text-[28px] font-[900] text-[#0f3d2e]">
+                          {t.foodResults.noResults}
+                        </p>
+
+                        <p className="text-[16px] font-[400] text-[#4b6b5f] max-w-[420px]">
+                            {t.foodResults.recommendation}
+                        </p>
+                    </div>
+                  : <>
                         <table
                             className="
                             content-table-foods
