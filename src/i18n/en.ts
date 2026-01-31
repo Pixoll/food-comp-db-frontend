@@ -17,11 +17,10 @@ export const en = {
         closeMenu: "Close menu",
     },
     homepage: {
-        title: "Food Composition Database",
-        subtitle: "A data collection of food composition and more.",
+        title: "Chilean food composition database",
     },
     search: {
-        placeholder: "Search...",
+        placeholder: "Enter the name of a food...",
         button: "Search",
         advancedSearch: "Search advanced",
     },

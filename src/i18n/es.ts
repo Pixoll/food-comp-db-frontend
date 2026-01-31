@@ -17,11 +17,10 @@ export const es = {
         closeMenu: "Cerrar menu",
     },
     homepage: {
-        title: "Base de Datos de Composición de Alimentos",
-        subtitle: "Una colección de datos de composición de alimentos y más.",
+        title: "Base de datos Chilena de composición de alimentos",
     },
     search: {
-        placeholder: "Buscar...",
+        placeholder: "Introduce el nombre de un alimento...",
         button: "Buscar",
         advancedSearch: "Búsqueda avanzada",
     },

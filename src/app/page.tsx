@@ -52,16 +52,6 @@ export default function HomePage(): JSX.Element {
                         >
                             {t.homepage.title}
                         </h1>
-                        <p
-                            className="
-                            text-[18px]
-                            mb-[30px]
-                            text-shadow-[2px_2px_8px_rgba(0,0,0,0.7)]
-                            font-[Poppins,_sans-serif]
-                            "
-                        >
-                            {t.homepage.subtitle}
-                        </p>
 
                         <form onSubmit={handleSubmit} className="w-full flex flex-col items-center">
                             <div className="flex w-full h-[60px] max-w-[568px] mx-auto mb-[20px]">
