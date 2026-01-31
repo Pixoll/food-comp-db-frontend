@@ -5,9 +5,12 @@ import { useAuth } from "@/context/AuthContext";
 import { type Language, useTranslation } from "@/context/I18nContext";
 import { useToast } from "@/context/ToastContext";
 import { Languages, LogOut, Menu, MonitorCog, Search, X } from "lucide-react";
+import Icon from "../../../../public/icon.png";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type JSX, useEffect, useState } from "react";
+import Image from "next/image";
+
 import "./index.css";
 
 export default function NavBar(): JSX.Element {
@@ -66,8 +69,16 @@ export default function NavBar(): JSX.Element {
         <header className="navbar-header">
             <nav className="navbar-container">
                 <div className="navbar-logo">
-                    <Link href="/" className="navbar-link">
-                        {t.navbar.home}
+                    <Link href="/" className="navbar-link navbar-logo-link">
+                        <Image
+                          height={70}
+                          width={70}
+                          src={Icon}
+                          alt="CapChical"
+                          quality={100}
+                          priority
+                          className="navbar-icon"
+                        />
                     </Link>
                 </div>
 

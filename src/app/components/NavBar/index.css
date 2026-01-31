@@ -301,6 +301,47 @@
     transform: translateY(0);
 }
 
+.navbar-icon {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    transition: filter var(--transition-medium), transform var(--transition-medium);
+}
+
+.navbar-logo-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.3rem;
+    margin-left: 0 !important;
+}
+
+.navbar-logo-link::after {
+    display: none;
+}
+.navbar-header.scrolled {
+    background: var(--navbar-bg);
+    box-shadow: var(--shadow-medium);
+}
+
+.navbar-actions svg {
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+.navbar-logo:hover .navbar-icon {
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.16));
+    transform: scale(1.01);
+}
+
+.navbar-container {
+    padding: 1rem 1.5rem;
+}
+
+.navbar-header {
+    background: linear-gradient(135deg, var(--navbar-bg) 0%, #1a5d2e 100%);
+    backdrop-filter: blur(10px);
+}
+
 @media (min-width: 768px) {
     .navbar-menu {
         align-items: center;
@@ -315,7 +356,14 @@
         transform: none;
         visibility: visible;
     }
+    .navbar-container {
+        padding: 1.2rem 2rem;
+    }
 
+    .navbar-icon {
+        height: 70px;
+        width: 70px;
+    }
     .navbar-menu-list {
         align-items: center;
         animation: none;
