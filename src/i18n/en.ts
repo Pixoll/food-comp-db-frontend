@@ -9,6 +9,8 @@ export const en = {
         home: "Home page",
         search: "Search",
         compare: "Compare",
+        history: "History",
+        aboutUs: "About us",
         changeLanguage: "Change lenguaje",
         adminPanel: "Admin panel",
         signIn: "Sign in",
@@ -19,6 +21,43 @@ export const en = {
     homepage: {
         title: "Chilean food composition database",
     },
+    historyPage: {
+        constitutionTitle: "CAPCHICAL Constitution",
+        constitutionContent: "The network was formed by a group of academics from the Department of Food Science and"
+          + " Chemical Technology of the Faculty of Chemical and Pharmaceutical Sciences of the University of Chile and"
+          + " the Institute of Nutrition and Food Technology (INTA), along with representatives from two private analytical"
+          + " laboratories who met regularly, maintaining permanent contact, mainly with Dr."
+          + " Norma Sammán from Argentina, Dr. Elizabete Wenzel and Dr. Delia Rodríguez Amaya from Brazil, as well as colleagues from "
+          + "Bolivia, Peru, Uruguay, and Venezuela. Seminars were held and participation took place in national "
+          + "and international congresses on topics related to the specialty. Dr. Lilia Masson, during her term as President of "
+          + "LATINFOODS, visited several South American countries: Argentina, Uruguay, Bolivia, Paraguay, Peru, Ecuador,"
+          + " Colombia, and Venezuela, collaborating in the reorganization of the respective National Chapters;"
+          + " later, together with Prof. Saturnino de Pablo from INTA, they participated in FAO missions in "
+          + "Cuba and the Dominican Republic.",
+        projectParticipationTitle: "Participation in the FAO Regional Project TCP/RLA/3107",
+        projectParticipationContent: "“Development of Food Composition Databases and Tables for Argentina,"
+          + " Chile, and Paraguay to strengthen international trade and consumer protection” 2008–2009."
+          + " Prepared by Dr. Norma Sammán, University of Jujuy, Argentina, President of ARGENFOODS, "
+          + "and Prof. Lilia Masson, President of CAPCHICAL, Chile, with the support of Dr. Cecilio Morón, FAO representative"
+          + " for Nutrition in Latin America and the Caribbean. FAO Project Coordinator:"
+          + " Eng. Al. María Teresa Oyarzun; Project Director for Chile: Dr. Tito Pizarro, MINSAL; Coordinator:"
+          + " Chem. Eng. Paulina Chávez, MINSAL. This project was very important for the three countries and made it possible to advance"
+          + " in areas such as: Sampling Plans applied to different foods, taught by Dr. Johanne Holden, USDA,"
+          + " USA; a Compilation Workshop taught by Dr. Elizabete Wenzel, University of São Paulo, Brazil; and the"
+          + " development of Excel spreadsheets by Prof. Saturnino de Pablo, INTA, University of Chile, for the "
+          + "Compilation of Food Composition Data for 250 foods per country. Additionally, the project enabled the "
+          + "analysis and compilation of the nutritional composition of macronutrients and some micronutrients of 5 foods "
+          + "designated as priorities by each country. In addition, an Interlaboratory Trial was conducted among the three"
+          + " countries to evaluate the analytical efficiency of official and private laboratories of the 3"
+          + " participating countries, led by researchers from the Swedish Food Agency. The final report was approved"
+          + " by FAO Authorities.",
+        nameChangeTitle: "CAPCHICAL Name Change",
+        nameChangeContent: "In the years 2008–2009, it was necessary to change the name of the Chilean Chapter, then called"
+          + " Chilefood, to CAPCHICAL, because the Chilean company Chilealimentos registered the name in English as"
+          + " Chilefood. Therefore, the name was changed to “Chilean Chapter of Food Composition”,"
+          + " with the acronym “CAPCHICAL”.",
+    },
+
     search: {
         placeholder: "Enter the name of a food...",
         button: "Search",

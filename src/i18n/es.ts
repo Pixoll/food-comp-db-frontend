@@ -9,6 +9,8 @@ export const es = {
         home: "Página principal",
         search: "Buscar",
         compare: "Comparar",
+        history: "Historia",
+        aboutUs: "Acerca de nosotros",
         changeLanguage: "Cambiar idioma",
         adminPanel: "Panel administrativo",
         signIn: "Iniciar sesión",
@@ -18,6 +20,42 @@ export const es = {
     },
     homepage: {
         title: "Base de datos Chilena de composición de alimentos",
+    },
+    historyPage:{
+        constitutionTitle: "Constitución de CAPCHICAL",
+        constitutionContent: "La red se formó por un grupo de académicos del Departamento de Ciencia de los Alimentos y"
+          + " Tecnología Química de la Facultad de Ciencias Químicas y Farmacéuticas de la Universidad de Chile y"
+          + " del Instituto de Nutrición y Tecnología de los alimentos (INTA), más representantes de dos Laboratorios"
+          + " analíticos privados que se reunían regularmente, manteniendo contacto permanente, principalmente con la Dra."
+          + " Norma Sammán de Argentina, Dra. Elizabete Wenzel y Dra. Delia Rodríguez Amaya de Brasil, más colegas de "
+          + "Bolivia, Perú, Uruguay y Venezuela. Se realizaban seminarios y se participaba en congresos nacionales "
+          + "e internacionales en temas de la especialidad. La Dra. Lilia Masson cuando estuvo en la Presidencia de "
+          + "LATINFOODS visitó varios países sudamericanos: Argentina, Uruguay, Bolivia, Paraguay, Perú, Ecuador,"
+          + " Colombia, Venezuela, colaborando en la reorganización de los respectivos Capítulos Nacionales;"
+          + " posteriormente, junto con el Prof. Saturnino de Pablo del INTA, participaron en misiones de FAO en "
+          + "Cuba y República Dominicana.",
+        projectParticipationTitle: "Participación en el Proyecto Regional FAO TCP/RLA/3107",
+        projectParticipationContent: "“Desarrollo de Bases de Datos y Tablas de Composición de Alimentos de Argentina,"
+          + " Chile y Paraguay para fortalecer el comercio internacional y la protección de los consumidores” 2008-2009."
+          + " Preparado por Dra. Norma Sammán, Universidad de Jujuy, Argentina, presidente de ARGENFOODS "
+          + "y Prof. Lilia Masson, presidente de CAPCHICAL, Chile, con el apoyo del Dr. Cecilio Morón, representante"
+          + " de FAO en Nutrición para América Latina y El Caribe. Coordinadora del Proyecto por FAO:"
+          + " Ing. Al. María Teresa Oyarzun; Director del Proyecto por Chile: Dr. Tito Pizarro, MINSAL; Coordinadora:"
+          + " In. Q. Paulina Chávez, MINSAL. Este proyecto fue muy importante para los tres países y permitió avanzar"
+          + " en temas de: Planes de Muestreo aplicado a diferentes alimentos, dictado por la Dra. Johanne Holden, USDA,"
+          + " EEUU; Taller de Compilación dictado por la Dra. Elizabete Wenzel, Universidad San Paulo, Brasil; y el"
+          + " desarrollo de planillas Excel por el Prof. Saturnino de Pablo, INTA, Universidad de Chile, para la "
+          + "Compilación de Datos de Composición de 250 alimentos por país. Adicionalmente, el proyecto permitió el "
+          + "análisis y compilación de la composición nutricional de macro y algunos micronutrientes de 5 alimentos "
+          + "designados prioritarios por cada país. Además, se llevó a cabo un Ensayo Interlaboratorio entre los tres"
+          + " países para evaluar la eficiencia analítica de laboratorios oficiales y privados de los 3 países"
+          + " participantes, dirigido por Investigadores de la Agencia Sueca de Alimentos. El Informe final fue aprobado"
+          + " por las Autoridades de FAO.",
+        nameChangeTitle: "Cambio de Nombre CAPCHICAL",
+        nameChangeContent: "En los años 2008-2009 se debió cambiar el nombre del Capítulo chileno, entonces llamado"
+          + " Chilefood, a CAPCHICAL, debido a que la Empresa Chilena Chilealimentos registró el nombre en inglés como"
+          + " Chilefood. Por lo tanto, se procedió a cambiar el Nombre por “Capítulo Chileno de Composición de "
+          + "Alimentos”, con la sigla “CAPCHICAL”.",
     },
     search: {
         placeholder: "Introduce el nombre de un alimento...",

@@ -5,6 +5,8 @@ import { useAuth } from "@/context/AuthContext";
 import { type Language, useTranslation } from "@/context/I18nContext";
 import { useToast } from "@/context/ToastContext";
 import { Languages, LogOut, Menu, MonitorCog, Search, X } from "lucide-react";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 import Icon from "../../../../public/icon.png";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -70,14 +72,14 @@ export default function NavBar(): JSX.Element {
             <nav className="navbar-container">
                 <div className="navbar-logo">
                     <Link href="/" className="navbar-link navbar-logo-link">
-                        <Image
-                          height={70}
-                          width={70}
-                          src={Icon}
-                          alt="CapChical"
-                          quality={100}
-                          priority
-                          className="navbar-icon"
+                        <Image 
+                            height={70}
+                            width={70}
+                            src={Icon}
+                            alt="CapChical"
+                            quality={100}
+                            priority
+                            className="navbar-icon"
                         />
                     </Link>
                 </div>
@@ -93,6 +95,16 @@ export default function NavBar(): JSX.Element {
                         <li>
                             <Link href="/compare" className="navbar-link" onClick={() => setMenuOpen(false)}>
                                 {t.navbar.compare}
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/history" className="navbar-link" onClick={() => setMenuOpen(false)}>
+                                {t.navbar.history}
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/about-us" className="navbar-link" onClick={() => setMenuOpen(false)}>
+                                {t.navbar.aboutUs}
                             </Link>
                         </li>
                     </ul>
