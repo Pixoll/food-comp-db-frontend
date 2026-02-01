@@ -1,7 +1,6 @@
 import NumericField from "@/app/components/Fields/NumericField";
 import { useTranslation } from "@/context/I18nContext";
-import { useGroups, useNutrients, useOrigins, useTypes } from "@/hooks";
-import { Collection } from "@/utils/collection";
+import {useGroups, useNutrients} from "@/hooks";
 import { PlusCircle, XCircle } from "lucide-react";
 import type { JSX } from "react";
 import SearchBox from "./SearchBox";
@@ -31,13 +30,8 @@ export default function FilterBody({
     resetFilters,
 }: FilterBodyProps): JSX.Element {
     const { t } = useTranslation();
-    const groups = useGroups().idToName;
-    const types = useTypes().idToName;
     const { nutrients } = useNutrients();
-    const { regions } = useOrigins();
-    const regionOptions = new Collection<string, string>(
-        Array.from(regions.values()).map((region) => [region.id.toString(), region.name])
-    );
+    const groups = useGroups().idToName;
 
     const getAvailableNutrients = (array: NutrientFilter[]): typeof nutrients => {
         const values = new Set(array.map(n => n.id));
@@ -85,27 +79,6 @@ export default function FilterBody({
     };
 
     return <>
-        {/* Filter Sections */}
-        <div className="mb-[16px]"/*className="filter-group"*/>
-            <label htmlFor="other">{t.foodsFilter.type}</label>
-            <SearchBox
-                filterOptions={types}
-                onChange={(values) => handleFilterChange("foodTypeFilter", values)}
-                single={false}
-                selectedOptions={Array.from(selectedFilters.foodTypeFilter)}
-            />
-        </div>
-
-        <div className="mb-[16px]">
-            <label htmlFor="other">{t.foodsFilter.regions}</label>
-            <SearchBox
-                filterOptions={regionOptions}
-                onChange={(values) => handleFilterChange("regionsFilter", values)}
-                single={false}
-                selectedOptions={Array.from(selectedFilters.regionsFilter)}
-            />
-        </div>
-
         <div className="mb-[16px]">
             <label htmlFor="other">{t.foodsFilter.group}</label>
             <SearchBox
@@ -116,7 +89,6 @@ export default function FilterBody({
             />
         </div>
 
-        {/* Measurement Section */}
         <div className="flex flex-col w-full bg-[#ffffff] rounded-[8px] p-[16px] shadow-[0_2px_8px_rgba(0,0,0,0.1)]">
             <h3 className="text-[18px] font-[600] text-[#333333] mb-[16px]">{t.foodsFilter.nutrients.title}</h3>
 
