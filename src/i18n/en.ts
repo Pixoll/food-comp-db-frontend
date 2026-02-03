@@ -57,6 +57,24 @@ export const en = {
           + " Chilefood. Therefore, the name was changed to “Chilean Chapter of Food Composition”,"
           + " with the acronym “CAPCHICAL”.",
     },
+    aboutUsPage: {
+        mainTitle: "About Us",
+        teamTitle: "Team",
+        capchicalTitle: "More about CapChiCal",
+        nameTitle: "Representative",
+        institutionTitle: "Institution",
+        roleTitle: "Position",
+        emailTitle: "E-mail",
+        paragraph1: "CAPCHICAL is the acronym for the Chilean Chapter on Food Composition of Chile, belonging to the LATINFOODS Network, which in turn is part of FAO/INFOODS, the organization that leads international activities in this field.",
+        paragraph2: "CAPCHICAL operates as a network, as it is not part of any government or private institution. It held monthly in-person assemblies until 2020, when it shifted to monthly virtual meetings via the ZOOM platform as a consequence of travel restrictions due to the COVID pandemic. This situation has been maintained to date, as it facilitates the participation of representatives who live in different regions.",
+        paragraph3: "CAPCHICAL currently operates with representatives from 15 universities of the Council of Rectors, from Antofagasta to Magallanes, as well as representatives from 4 private universities, the professional institute INACAP, and representatives from government institutions: the Chilean Agency for Food Quality and Safety (ACHIPIA), the Ministry of Health (MINSAL), the Ministry of Agriculture (ODEPA), the Agricultural Research Institute (INIA, Santiago), Sub-Pesca, the Ministry of Economy, the professional association Colegio de Ingenieros en Alimentos (CIACH), the CeTA Technology Center, representatives from several private companies in the productive and analytical sectors, and independent professionals in the food area. In total, approximately 65 members are currently confirmed.",
+        paragraph4: "The CAPCHICAL Network does not have its own financial resources; however, to date it has always received support from the authorities of the universities belonging to this network, from the authorities of the government institutions involved in food-related topics such as health, quality, and safety, from private companies associated with this sector, from international institutions such as FAO, and from professional associations, when outreach activities have been organized.",
+        paragraph5: "To keep active at the national level the generation of chemical and nutritional composition data of native, introduced, processed, and formulated Chilean foods, with the aim that Chile may have, in the near future, an updated and reliable database and information on the nutritional composition of the foods it produces, consumes, and exports.",
+        paragraph6: "To collaborate with government authorities—MINSAL, ISP, and ACHIPIA—in the application of analytical methodologies for the determination of macro- and micronutrients, dietary fiber and its various fractions, and bioactive components that are part of the country’s mandatory nutritional labeling.",
+        paragraph7: "To contribute to the training of specialized human resources required by the country, involving the participation of academics from the universities of the CAPCHICAL Network, health professionals, and the private sector.",
+        paragraph8: "To encourage the submission of research projects among academics from the universities of our Network to national and international agencies on native foods and their functional and bioactive components, in order to innovate and develop safe and healthy foods, with the support of government and private institutions that are part of the Network.",
+        paragraph9: "To organize outreach seminars on current topics related to food and health, promoting the participation of students in the fields of engineering, food technology, and nutrition.",
+    },
 
     search: {
         placeholder: "Enter the name of a food...",

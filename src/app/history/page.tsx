@@ -34,6 +34,7 @@ export default function HistoryPage(): JSX.Element {
                     <p className="text-[#374151] text-[18px]">
                         {t.historyPage.nameChangeContent}
                     </p>
+
                 </div>
 
             </div>

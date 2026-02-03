@@ -3,21 +3,22 @@
     "target": "es6",
     "module": "esnext",
     "moduleResolution": "node",
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "lib": [
       "dom",
       "dom.iterable",
-      "esnext",
+      "esnext"
     ],
     "plugins": [
       {
-        "name": "next",
-      },
+        "name": "next"
+      }
     ],
     "paths": {
       "@/*": [
         "./src/*",
-      ],
+        "./public"
+      ]
     },
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
@@ -43,9 +44,10 @@
     "./src",
     ".next/types/**/*.ts",
     "build/types/**/*.ts",
+    "build/dev/types/**/*.ts"
   ],
   "exclude": [
     "./node_modules",
-    "./src/core/**",
-  ],
+    "./src/core/**"
+  ]
 }

@@ -1,0 +1,340 @@
+.container {
+    width: 100%;
+    height: 240px;
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    margin: 0 0 24px 0;
+    text-align: center;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    flex-shrink: 0;
+}
+
+.sliderWrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-height: 0;
+}
+
+.navButton {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    background: white;
+    opacity: 0.9;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.navButton:hover:not(:disabled) {
+    opacity: 1;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+}
+
+.navButton:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+    color: #1d6735;
+    flex-shrink: 0;
+}
+
+.sliderContainer {
+    flex: 1;
+    overflow: hidden;
+    border-radius: 12px;
+    height: 100%;
+}
+
+.slider {
+    display: flex;
+    height: 100%;
+    transition: transform 0.5s ease-in-out;
+}
+
+.slide {
+    min-width: 100%;
+    height: 100%;
+    padding: 0 4px;
+}
+
+.memberCard {
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(8px);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.memberCard:hover {
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+    transform: translateY(-2px);
+}
+
+.cardContent {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    height: 100%;
+}
+
+.photoContainer {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    background: rgba(29, 103, 53, 0.08);
+    border: 2px solid rgba(29, 103, 53, 0.15);
+}
+
+.photo {
+    object-fit: cover;
+}
+
+.photoPlaceholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(29, 103, 53, 0.1) 0%, rgba(29, 103, 53, 0.05) 100%);
+}
+
+.userIcon {
+    width: 40px;
+    height: 40px;
+    color: rgba(29, 103, 53, 0.5);
+    stroke-width: 1.5;
+}
+
+.infoContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    overflow: hidden;
+}
+
+.memberName {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1d6735;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.memberPosition {
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(29, 103, 53, 0.85);
+    margin: 0;
+    line-height: 1.3;
+}
+
+.memberInstitution {
+    font-size: 13px;
+    color: rgba(29, 103, 53, 0.75);
+    margin: 0;
+    line-height: 1.4;
+    flex: 1;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.memberEmail {
+    font-size: 13px;
+    color: rgba(29, 103, 53, 0.88);
+    text-decoration: underline;
+    transition: opacity 0.2s;
+    margin-top: auto;
+    word-break: break-all;
+}
+
+.memberEmail:hover {
+    opacity: 1;
+    color: #1d6735;
+}
+
+.indicators {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+    flex-shrink: 0;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    background: white;
+    opacity: 0.5;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s;
+    padding: 0;
+}
+
+.dot:hover {
+    opacity: 0.75;
+}
+
+.activeDot {
+    opacity: 1;
+    width: 24px;
+    border-radius: 5px;
+}
+
+.counter {
+    text-align: center;
+    color: white;
+    opacity: 0.8;
+    margin: 10px 0 0 0;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.noMembers {
+    color: white;
+    text-align: center;
+    font-size: 16px;
+}
+
+@media (min-width: 768px) {
+    .container {
+        height: 420px;
+    }
+
+    .title {
+        font-size: 32px;
+        margin-bottom: 28px;
+    }
+
+    .navButton {
+        width: 48px;
+        height: 48px;
+    }
+
+    .icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    .sliderWrapper {
+        gap: 16px;
+    }
+
+    .memberCard {
+        padding: 24px;
+    }
+
+    .photoContainer {
+        width: 100px;
+        height: 100px;
+    }
+
+    .userIcon {
+        width: 48px;
+        height: 48px;
+    }
+
+    .cardContent {
+        gap: 20px;
+    }
+
+    .memberName {
+        font-size: 22px;
+    }
+
+    .memberPosition {
+        font-size: 16px;
+    }
+
+    .memberInstitution {
+        font-size: 14px;
+    }
+
+    .memberEmail {
+        font-size: 14px;
+    }
+
+    .counter {
+        font-size: 15px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .container {
+        height: 380px;
+    }
+
+    .title {
+        font-size: 36px;
+        margin-bottom: 32px;
+    }
+
+    .sliderWrapper {
+        gap: 20px;
+    }
+
+    .memberCard {
+        padding: 28px;
+    }
+
+    .photoContainer {
+        width: 120px;
+        height: 120px;
+    }
+
+    .userIcon {
+        width: 56px;
+        height: 56px;
+    }
+
+    .cardContent {
+        gap: 24px;
+    }
+
+    .memberName {
+        font-size: 24px;
+    }
+
+    .memberPosition {
+        font-size: 17px;
+    }
+
+    .memberInstitution {
+        font-size: 15px;
+    }
+
+    .memberEmail {
+        font-size: 15px;
+    }
+}

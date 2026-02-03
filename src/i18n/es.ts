@@ -57,6 +57,25 @@ export const es = {
           + " Chilefood. Por lo tanto, se procedió a cambiar el Nombre por “Capítulo Chileno de Composición de "
           + "Alimentos”, con la sigla “CAPCHICAL”.",
     },
+    aboutUsPage:{
+        mainTitle: "Sobre nosotros",
+        capchicalTitle: "Más de CapChiCal",
+        teamTitle: "Equipo",
+        nameTitle: "Representante",
+        institutionTitle: "Institución",
+        roleTitle: "Cargo",
+        emailTitle: "E-mail",
+        paragraph1: "CAPCHICAL es el Acrónimo del Capítulo Chileno de Composición de Alimentos de Chile perteneciente a la Red LATINFOODS, que a su vez integra la FAO/INFOODS que lidera las actividades de carácter internacional en este campo.",
+        paragraph2: "CAPCHICAL funciona como una Red, pues no es parte de ninguna Institución de Gobierno o Privada, reuniéndose en asambleas mensuales presenciales hasta el año 2020, cambiando a reuniones mensuales virtuales a través de la plataforma ZOOM, como consecuencia de las restricciones de desplazamientos debido a la pandemia COVID, situación que se ha mantenido a la fecha debido a que facilita la participación de los representantes que viven en regiones.",
+        paragraph3: "CAPCHICAL funciona actualmente con representantes de 15 Universidades del Consejo de Rectores desde Antofagasta hasta Magallanes, más representantes de 4 Universidades Privadas, Instituto Profesional INACAP, representantes de Instituciones de Gobierno: Agencia Chilena de la Calidad e Inocuidad de Alimentos (ACHIPIA), Ministerio de Salud (MINSAL), Ministerio de Agricultura (ODEPA), Instituto Investigaciones Agropecuarias (INIA, Santiago), Sub-Pesca, Ministerio de Economía, Institución Gremial Colegio Ingenieros en Alimentos (CIACH), Centro Tecnológico CeTA, representantes de varias empresas privadas del ámbito productivo y analítico, profesionales independientes del área de alimentos. En total, unos 65 miembros están confirmados actualmente.",
+        paragraph4: "La Red CAPCHICAL no dispone de recursos propios, pero hasta le fecha siempre ha contado con el apoyo de las autoridades de las universidades pertenecientes a esta Red, de las autoridades de las Instituciones de gobierno involucradas en esta temática de alimentos, salud, calidad, inocuidad, de las empresas privadas asociadas a este rubro, de instituciones internacionales como FAO, asociaciones gremiales, cuando se han organizado actividades de difusión.",
+        paragraph5: "Mantener activa a nivel país la generación de datos de composición química y nutricional de los alimentos chilenos nativos, introducidos, procesados, formulados, con la finalidad de que Chile pueda contar en un futuro cercano con una base de datos e información actualizada y confiable de la composición nutricional de los alimentos que produce, consume y exporta.",
+        paragraph6: "Colaborar con las autoridades de gobierno: MINSAL, ISP, ACHIPIA, en la aplicación de metodologías analíticas para la determinación de macro y micronutrientes, fibra dietética y sus diversas fracciones, componentes bioactivos que forman parte del etiquetado nutricional obligatorio del país.",
+        paragraph7: "Contribuir a la formación de recurso humano especializado que el país requiera y que involucren la participación de los académicos de las Universidades de la Red CAPCHICAL, de profesionales del área de la salud y de la empresa privada.",
+        paragraph8: "Estimular la presentación de proyectos de investigación entre los académicos de las universidades de nuestra Red, a agencias nacionales e internacionales en alimentos nativos, sus componentes funcionales y bioactivos, para innovar y desarrollar alimentos inocuos y saludables, contando con el apoyo de las instituciones de gobierno y privadas que son parte de la Red.",
+        paragraph9: "Organizar seminarios de difusión sobre los temas actuales relacionados con alimentación y salud, fomentando la participación de los estudiantes del área de Ingeniería, tecnología de alimentos y nutrición.",
+
+    },
     search: {
         placeholder: "Introduce el nombre de un alimento...",
         button: "Buscar",
