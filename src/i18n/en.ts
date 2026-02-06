@@ -20,6 +20,17 @@ export const en = {
     },
     homepage: {
         title: "Chilean food composition database",
+        subtitle: "Stand by CapChical.",
+        developedBy: "Developed by",
+        scrollToSearch: "Search Foods",
+        placeholder: "Search foods...",
+        button: "Search",
+        advancedSearch: "Advanced Search",
+        foodGroups: "Food groups:",
+        selectGroup: "Select group...",
+        addButton: "+",
+        noGroupsSelected: "No groups selected",
+        removeGroup: "Remove",
     },
     historyPage: {
         constitutionTitle: "CAPCHICAL Constitution",

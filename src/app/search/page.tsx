@@ -15,22 +15,43 @@ function Search(): JSX.Element {
     const { t } = useTranslation();
     const searchParams = useSearchParams();
     const paramFoodName = searchParams.get("foodName") || "";
+    const paramGroups = searchParams.get("groups") || "";
+
+    const initialGroups = paramGroups
+      ? new Set(paramGroups.split(',').map(g => g.trim()).filter(g => g))
+      : new Set<string>();
 
     const [selectedFilters, setSelectedFilters] = useState<Filters>({
         foodTypeFilter: new Set(),
         regionsFilter: new Set(),
-        groupsFilter: new Set(),
+        groupsFilter: initialGroups,
         nutrientsFilter: [{
             id: 0,
             op: "=",
         }],
     });
+
     const [searchForName, setSearchForName] = useState(paramFoodName);
+
     useEffect(() => {
         if (paramFoodName) {
             setSearchForName(paramFoodName);
         }
     }, [paramFoodName]);
+
+    useEffect(() => {
+        if (paramGroups) {
+            const groups = paramGroups
+              .split(',')
+              .map(g => g.trim())
+              .filter(g => g);
+
+            setSelectedFilters(prev => ({
+                ...prev,
+                groupsFilter: new Set(groups),
+            }));
+        }
+    }, [paramGroups]);
 
     const resetFilters = (): void => {
         setSelectedFilters({
@@ -67,9 +88,9 @@ function Search(): JSX.Element {
     }));
 
     return (
-        <div className={styles["search-container"]}>
-            <div
-                className={`
+      <div className={styles["search-container"]}>
+          <div
+            className={`
                 ${styles["filter-body-container"]}
                 p-[20px]
                 flex
@@ -79,30 +100,29 @@ function Search(): JSX.Element {
                 relative
                 shadow-[0_4px_6px_-1px_rgb(0,0,0,0.1)]
                 `}
-                /*className="food-filter food-filter-static"*/
-            >
-                <h4>{t.foodsFilter.title}</h4>
-                <FilterBody
-                    selectedFilters={selectedFilters}
-                    setSelectedFilters={setSelectedFilters}
-                    resetFilters={resetFilters}
-                />
-            </div>
+          >
+              <h4>{t.foodsFilter.title}</h4>
+              <FilterBody
+                selectedFilters={selectedFilters}
+                setSelectedFilters={setSelectedFilters}
+                resetFilters={resetFilters}
+              />
+          </div>
 
-            <FoodResultsTable
-                data={foodsResult}
-                status={foodsResult.status}
-                searchForName={searchForName}
-                setSearchForName={setSearchForName}
-            />
-        </div>
+          <FoodResultsTable
+            data={foodsResult}
+            status={foodsResult.status}
+            searchForName={searchForName}
+            setSearchForName={setSearchForName}
+          />
+      </div>
     );
 }
 
 export default function SearchPage(): JSX.Element {
     return (
-        <Suspense>
-            <Search/>
-        </Suspense>
+      <Suspense>
+          <Search/>
+      </Suspense>
     );
 }

@@ -1,0 +1,619 @@
+
+.pageWrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.heroSection {
+    position: relative;
+    min-height: 100vh;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    width: 100%;
+}
+
+.heroImageGrid {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.heroImageLeft,
+.heroImageRight {
+    position: relative;
+    overflow: hidden;
+}
+
+.heroOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0.5) 0%,
+            rgba(0, 0, 0, 0.4) 50%,
+            rgba(0, 0, 0, 0.6) 100%
+    );
+    z-index: 1;
+}
+
+.heroContent {
+    position: relative;
+    z-index: 10;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 80px 20px;
+    text-align: center;
+    color: white;
+    width: 100%;
+}
+
+.title {
+    font-family: Poppins, sans-serif;
+    font-weight: 800;
+    font-size: 5rem;
+    line-height: 1.1;
+    margin-bottom: 40px;
+    text-shadow:
+            0 0 30px rgba(0, 0, 0, 0.9),
+            0 4px 12px rgba(0, 0, 0, 1);
+    letter-spacing: -0.02em;
+}
+
+.subtitleContainer {
+    max-width: 850px;
+    margin: 0 auto 40px;
+    width: 100%;
+}
+
+.subtitle {
+    font-family: Poppins, sans-serif;
+    font-size: 1.75rem;
+    margin-bottom: 32px;
+    text-shadow:
+            0 0 20px rgba(0, 0, 0, 0.8),
+            0 2px 8px rgba(0, 0, 0, 1);
+    line-height: 1.6;
+    font-weight: 300;
+}
+
+.dropdownWrapper {
+    position: relative;
+    display: inline-block;
+    z-index: 100;
+}
+
+.creditsButton {
+    padding: 12px 28px;
+    background-color: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 9999px;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    font-weight: 400;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.creditsButton:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 1);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.arrow {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.3s ease;
+}
+
+.arrowOpen {
+    transform: rotate(180deg);
+}
+
+.dropdownMenu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(16px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow:
+            0 12px 28px rgba(0, 0, 0, 0.4),
+            0 0 0 1px rgba(255, 255, 255, 0.1);
+    padding: 12px 20px;
+    min-width: 220px;
+    animation: fadeInDown 0.3s ease-out forwards;
+    z-index: 1000;
+}
+
+@keyframes fadeInDown {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+.developerList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.developerItem {
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 0.9rem;
+    font-weight: 400;
+    padding: 8px 12px;
+    transition: all 0.2s ease;
+    border-radius: 10px;
+}
+
+.developerItem:hover {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.15);
+    transform: translateX(3px);
+}
+
+.scrollButton {
+    margin-top: 60px;
+    padding: 16px 36px;
+    background-color: rgba(16, 185, 129, 0.15);
+    backdrop-filter: blur(12px);
+    border: 2px solid rgba(16, 185, 129, 0.4);
+    border-radius: 9999px;
+    color: #10b981;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    animation: bounce 2s infinite;
+}
+
+.scrollButton:hover {
+    background-color: rgba(16, 185, 129, 0.25);
+    border-color: rgba(16, 185, 129, 0.6);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+}
+
+.scrollIcon {
+    width: 24px;
+    height: 24px;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.searchSection {
+    position: relative;
+    min-height: 100vh;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    width: 100%;
+}
+
+.searchImageWrapper {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.searchOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0.6) 0%,
+            rgba(0, 0, 0, 0.7) 50%,
+            rgba(0, 0, 0, 0.75) 100%
+    );
+    z-index: 1;
+}
+
+.searchContent {
+    position: relative;
+    z-index: 10;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 80px 20px;
+    width: 100%;
+}
+
+.searchContainer {
+    width: 100%;
+    max-width: 950px;
+    margin: 0 auto;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(20px);
+    border-radius: 28px;
+    padding: 48px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.image {
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.image:hover {
+    transform: scale(1.05);
+}
+
+.searchForm {
+    width: 100%;
+    margin-bottom: 36px;
+}
+
+.searchWrapper {
+    display: flex;
+    width: 100%;
+    height: 70px;
+}
+
+.searchInput {
+    flex: 1;
+    padding: 20px 30px;
+    font-size: 1.125rem;
+    color: #1f2937;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-right: none;
+    border-radius: 9999px 0 0 9999px;
+    outline: none;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.98);
+    transition: all 0.3s ease;
+}
+
+.searchInput:focus {
+    border-color: #10b981;
+    box-shadow:
+            0 0 0 3px rgba(16, 185, 129, 0.2),
+            0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.searchInput::placeholder {
+    color: #9ca3af;
+}
+
+.searchButton {
+    padding: 20px 44px;
+    font-size: 1.125rem;
+    color: white;
+    font-weight: 600;
+    background-color: #015746;
+    border: none;
+    cursor: pointer;
+    border-radius: 0 9999px 9999px 0;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    white-space: nowrap;
+}
+
+.searchButton:hover {
+    background-color: #20703a;
+    transform: scale(1.02);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.groupSelector {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 28px;
+}
+
+.groupSelectorLabel {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    text-align: left;
+}
+
+.groupSelectWrapper {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+}
+
+.groupSelect {
+    flex: 1;
+    min-width: 0;
+    padding: 15px 20px;
+    font-size: 1rem;
+    color: #1f2937;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 9999px;
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.98);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.groupSelect option {
+    padding: 12px 20px;
+    font-size: 1rem;
+    background-color: white;
+    color: #1f2937;
+}
+
+.groupSelect option:hover {
+    background-color: #f3f4f6;
+}
+
+.groupSelect option:disabled {
+    color: #9ca3af;
+    font-style: italic;
+}
+
+.groupSelect:focus {
+    border-color: #10b981;
+    box-shadow:
+            0 0 0 3px rgba(16, 185, 129, 0.2),
+            0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.addGroupButton {
+    padding: 15px 24px;
+    min-width: 60px;
+    font-size: 1.5rem;
+    color: white;
+    font-weight: 600;
+    background-color: #10b981;
+    border: none;
+    cursor: pointer;
+    border-radius: 9999px;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.addGroupButton:hover {
+    background-color: #059669;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.addGroupButton:disabled {
+    background-color: #6b7280;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.selectedGroupsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    min-height: 60px;
+    margin-bottom: 24px;
+    align-items: center;
+}
+
+.groupTag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 20px;
+    background-color: rgba(16, 185, 129, 0.15);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 9999px;
+    color: #10b981;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.groupTag:hover {
+    background-color: rgba(16, 185, 129, 0.25);
+    border-color: rgba(16, 185, 129, 0.5);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+}
+
+.removeGroupButton {
+    background: none;
+    border: none;
+    color: #10b981;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    padding: 0;
+}
+
+.removeGroupButton:hover {
+    background-color: rgba(16, 185, 129, 0.3);
+    color: #059669;
+}
+
+.removeIcon {
+    width: 15px;
+    height: 15px;
+}
+
+.emptyGroupsMessage {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.95rem;
+    font-style: italic;
+    padding: 14px 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.advancedSearchContainer {
+    text-align: center;
+    margin-top: 16px;
+}
+
+.advancedSearchButton {
+    padding: 15px 40px;
+    font-size: 1.05rem;
+    background-color: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(10px);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+    font-weight: 500;
+}
+
+.advancedSearchButton:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+}
+
+@media (max-width: 768px) {
+    .heroImageGrid {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
+    }
+
+    .heroSection,
+    .searchSection {
+        min-height: 90vh;
+        height: auto;
+    }
+
+    .heroContent,
+    .searchContent {
+        padding: 60px 20px;
+    }
+
+    .title {
+        font-size: 2.5rem;
+        margin-bottom: 28px;
+    }
+
+    .subtitle {
+        font-size: 1.25rem;
+        margin-bottom: 24px;
+    }
+
+    .scrollButton {
+        margin-top: 40px;
+        padding: 14px 28px;
+        font-size: 0.95rem;
+    }
+
+    .searchContainer {
+        padding: 32px 24px;
+    }
+
+    .searchWrapper {
+        flex-direction: column;
+        height: auto;
+        gap: 12px;
+    }
+
+    .searchInput {
+        border-radius: 9999px;
+        border-right: 2px solid rgba(255, 255, 255, 0.3);
+        font-size: 1rem;
+        padding: 14px 22px;
+    }
+
+    .searchButton {
+        border-radius: 9999px;
+        font-size: 1rem;
+        padding: 14px 22px;
+    }
+
+    .groupSelector {
+        align-items: stretch;
+    }
+
+    .groupSelectWrapper {
+        flex-direction: row;
+    }
+
+    .addGroupButton {
+        min-width: 50px;
+        padding: 15px 20px;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1023px) {
+    .title {
+        font-size: 3.5rem;
+    }
+
+    .subtitle {
+        font-size: 1.4rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .title {
+        font-size: 5.5rem;
+    }
+
+    .subtitle {
+        font-size: 1.85rem;
+    }
+}
+
+@media (min-width: 1280px) {
+    .title {
+        font-size: 6rem;
+    }
+
+    .subtitle {
+        font-size: 2rem;
+    }
+}
