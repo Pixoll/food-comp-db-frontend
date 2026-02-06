@@ -1,0 +1,195 @@
+.heroSection {
+    position: relative;
+    background-image: url('/black-garlic.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    height: auto;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(109, 189, 135, 0.25);
+    opacity: 0.55;
+    min-height: 100%;
+}
+
+.contentWrapper {
+    position: relative;
+    z-index: 10;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 120px 20px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    min-height: 100vh;
+}
+
+.header {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.mainTitle {
+    font-size: 48px;
+    font-weight: 700;
+    color: white;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    margin: 0;
+}
+
+.infoBox {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    padding: 24px;
+    width: 100%;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.infoBox:hover {
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+    transform: translateY(-2px);
+}
+
+.infoTitle {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1d6735;
+    margin: 0 0 12px 0;
+    line-height: 1.3;
+}
+
+.infoParagraph {
+    font-size: 15px;
+    line-height: 1.7;
+    color: rgba(29, 103, 53, 0.88);
+    margin: 0;
+}
+
+@media (min-width: 640px) {
+    .contentWrapper {
+        padding: 130px 32px 90px;
+    }
+
+    .mainTitle {
+        font-size: 52px;
+    }
+
+    .infoBox {
+        padding: 28px;
+    }
+
+    .infoTitle {
+        font-size: 26px;
+        margin-bottom: 14px;
+    }
+
+    .infoParagraph {
+        font-size: 16px;
+    }
+}
+
+@media (min-width: 768px) {
+    .contentWrapper {
+        padding: 140px 40px 100px;
+        gap: 50px;
+    }
+
+    .mainTitle {
+        font-size: 56px;
+    }
+
+    .infoBox {
+        padding: 32px;
+    }
+
+    .infoTitle {
+        font-size: 28px;
+        margin-bottom: 16px;
+    }
+
+    .infoParagraph {
+        font-size: 16px;
+        line-height: 1.75;
+    }
+}
+
+@media (min-width: 900px) {
+    .infoBox {
+        padding: 36px;
+    }
+
+    .infoTitle {
+        font-size: 30px;
+    }
+
+    .infoParagraph {
+        font-size: 17px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .contentWrapper {
+        padding: 160px 60px 120px;
+        gap: 60px;
+    }
+
+    .mainTitle {
+        font-size: 64px;
+    }
+
+    .infoBox {
+        padding: 40px;
+    }
+
+    .infoTitle {
+        font-size: 32px;
+        margin-bottom: 18px;
+    }
+
+    .infoParagraph {
+        font-size: 18px;
+        line-height: 1.8;
+    }
+}
+
+@media (min-width: 1280px) {
+    .infoBox {
+        padding: 44px;
+    }
+
+    .infoTitle {
+        font-size: 34px;
+    }
+
+    .infoParagraph {
+        font-size: 19px;
+    }
+}
+
+@media (min-width: 1536px) {
+    .contentWrapper {
+        max-width: 1600px;
+        gap: 70px;
+    }
+
+    .infoBox {
+        padding: 48px;
+    }
+
+    .infoTitle {
+        font-size: 36px;
+        margin-bottom: 20px;
+    }
+
+    .infoParagraph {
+        font-size: 20px;
+    }
+}

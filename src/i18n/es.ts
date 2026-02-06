@@ -33,6 +33,7 @@ export const es = {
         removeGroup: "Eliminar",
     },
     historyPage:{
+        title: "Historia",
         constitutionTitle: "Constitución de CAPCHICAL",
         constitutionContent: "La red se formó por un grupo de académicos del Departamento de Ciencia de los Alimentos y"
           + " Tecnología Química de la Facultad de Ciencias Químicas y Farmacéuticas de la Universidad de Chile y"

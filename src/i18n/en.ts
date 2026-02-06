@@ -33,6 +33,7 @@ export const en = {
         removeGroup: "Remove",
     },
     historyPage: {
+        title: "History",
         constitutionTitle: "CAPCHICAL Constitution",
         constitutionContent: "The network was formed by a group of academics from the Department of Food Science and"
           + " Chemical Technology of the Faculty of Chemical and Pharmaceutical Sciences of the University of Chile and"

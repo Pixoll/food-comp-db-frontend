@@ -3,43 +3,51 @@
 import type {JSX} from "react";
 import {useTranslation} from "@/context/I18nContext";
 import Footer from "@/app/components/Footer";
+import styles from "./HistoryPage.module.css";
 
 export default function HistoryPage(): JSX.Element {
     const { t } = useTranslation();
     return (
-        <div>
-            <div className="flex flex-col mx-auto w-full max-w-[896px] px-[24px] py-[32px] gap-[32px]">
-                <div className="flex flex-col gap-[12px]">
-                    <h2 className="text-[24px] font-bold">
-                        {t.historyPage.constitutionTitle}
-                    </h2>
-                    <p className="text-[#374151] text-[18px]">
-                        {t.historyPage.constitutionContent}
-                    </p>
-                </div>
+      <>
+          <div className={styles.heroSection}>
+              <div className={styles.overlay}></div>
 
-                <div className="flex flex-col gap-[12px]">
-                    <h2 className="text-[24px] font-bold">
-                        {t.historyPage.projectParticipationTitle}
-                    </h2>
-                    <p className="text-[#374151] text-[18px]">
-                        {t.historyPage.projectParticipationContent}
-                    </p>
-                </div>
+              <div className={styles.contentWrapper}>
+                  <header className={styles.header}>
+                      <h1 className={styles.mainTitle}>
+                          {t.historyPage.title || "Historia"}
+                      </h1>
+                  </header>
 
-                <div className="flex flex-col gap-[12px]">
-                    <h2 className="text-[24px] font-bold">
-                        {t.historyPage.nameChangeTitle}
-                    </h2>
-                    <p className="text-[#374151] text-[18px]">
-                        {t.historyPage.nameChangeContent}
-                    </p>
+                  <div className={styles.infoBox}>
+                      <h2 className={styles.infoTitle}>
+                          {t.historyPage.constitutionTitle}
+                      </h2>
+                      <p className={styles.infoParagraph}>
+                          {t.historyPage.constitutionContent}
+                      </p>
+                  </div>
 
-                </div>
+                  <div className={styles.infoBox}>
+                      <h2 className={styles.infoTitle}>
+                          {t.historyPage.projectParticipationTitle}
+                      </h2>
+                      <p className={styles.infoParagraph}>
+                          {t.historyPage.projectParticipationContent}
+                      </p>
+                  </div>
 
-            </div>
-            <Footer />
-        </div>
-
+                  <div className={styles.infoBox}>
+                      <h2 className={styles.infoTitle}>
+                          {t.historyPage.nameChangeTitle}
+                      </h2>
+                      <p className={styles.infoParagraph}>
+                          {t.historyPage.nameChangeContent}
+                      </p>
+                  </div>
+              </div>
+          </div>
+          <Footer />
+      </>
     );
 }
