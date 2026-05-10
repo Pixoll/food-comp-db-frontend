@@ -2,7 +2,6 @@
 
 import type {JSX} from "react";
 import {useTranslation} from "@/context/I18nContext";
-import Footer from "@/app/components/Footer";
 import styles from "./HistoryPage.module.css";
 
 export default function HistoryPage(): JSX.Element {
@@ -47,7 +46,6 @@ export default function HistoryPage(): JSX.Element {
                   </div>
               </div>
           </div>
-          <Footer />
       </>
     );
 }

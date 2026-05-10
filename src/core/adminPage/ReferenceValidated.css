@@ -12,7 +12,6 @@
     text-align: center;
     font-size: 1em;
     transition: all 0.3s ease;
-    font-family: 'Poppins', sans-serif;
 
 }
 
@@ -31,7 +30,6 @@
     border-radius: 8px 8px 0 0;
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    font-family: 'Poppins', serif;
 }
 
 /* Estilo para el encabezado */
@@ -68,7 +66,6 @@
     border-radius: 30px;
     color: white;
     cursor: pointer;
-    font-family: 'Poppins', serif;
     padding: 8px 16px;
     text-align: center;
     transition: all 0.3s ease;
@@ -123,7 +120,6 @@
     position: relative;
     width: 100%;
     margin: 20px 0;
-    font-family: 'Poppins', sans-serif;
     z-index: 1000;
 }
 

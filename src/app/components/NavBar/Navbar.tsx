@@ -76,7 +76,7 @@ export default function NavBar(): JSX.Element {
                             height={70}
                             width={70}
                             src={Icon}
-                            alt="CapChical"
+                            alt="CapChiCAL"
                             quality={100}
                             priority
                             className="navbar-icon"

@@ -61,17 +61,17 @@ export default function FoodInformation({ data }: { data: InfoAboutFoodComponent
                             </div>
                         )}
 
-                        {data.type && (
-                            <div className="flex flex-row space-x-[6px]">
-                                <span className="text-[18px] font-medium text-gray-500">{t.foodDetail.type}</span>
-                                <span className="text-[16px] text-gray-800">
-                                    {data.type.name}{" "}
-                                    <span className="text-[16px] text-gray-500">
-                                        ({data.type.code})
-                                    </span>
-                                </span>
-                            </div>
-                        )}
+                        {/*{data.type && (*/}
+                        {/*    <div className="flex flex-row space-x-[6px]">*/}
+                        {/*        <span className="text-[18px] font-medium text-gray-500">{t.foodDetail.type}</span>*/}
+                        {/*        <span className="text-[16px] text-gray-800">*/}
+                        {/*            {data.type.name}{" "}*/}
+                        {/*            <span className="text-[16px] text-gray-500">*/}
+                        {/*                ({data.type.code})*/}
+                        {/*            </span>*/}
+                        {/*        </span>*/}
+                        {/*    </div>*/}
+                        {/*)}*/}
                     </div>
                 </div>
 

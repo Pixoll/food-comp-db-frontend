@@ -1,40 +1,42 @@
-import type { Metadata, Viewport } from "next";
-import { Montserrat } from "next/font/google";
+"use client";
+
+import { AuthProvider } from "@/context/AuthContext";
+import ComparisonProvider from "@/context/ComparisonContext";
+import { I18nProvider, useTranslation } from "@/context/I18nContext";
+import { ToastProvider } from "@/context/ToastContext";
 import type { JSX, ReactNode } from "react";
-import NavBar from "./components/NavBar/Navbar";
-import Providers from "./Providers";
 import "./globals.css";
 
-type RootLayoutProps = {
-    children: ReactNode;
-};
+export default function RootLayout({ children }: { children: ReactNode }): JSX.Element {
+  return (
+    <html lang="en" className="h-full" suppressHydrationWarning>
+      <I18nProvider>
+        <head>
+          <Title/>
+          <link rel="manifest" href="/manifest.json"/>
+          <link rel="preconnect" href="https://fonts.googleapis.com"/>
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin=""/>
+          <link
+            href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+            rel="stylesheet"
+          />
+        </head>
+        <body>
+          <ToastProvider>
+            <ComparisonProvider>
+              <AuthProvider>
+                {children}
+              </AuthProvider>
+            </ComparisonProvider>
+          </ToastProvider>
+        </body>
+      </I18nProvider>
+    </html>
+  );
+}
 
-export const metadata: Metadata = {
-    title: "CapChiCAL",
-    description: "Base de Datos de Composición de Alimentos",
-    manifest: "/manifest.json",
-};
+function Title(): JSX.Element {
+  const { t } = useTranslation();
 
-export const viewport: Viewport = {
-    themeColor: "#000000",
-};
-
-const montserrat = Montserrat({
-    subsets: ["latin"],
-    display: "swap",
-});
-
-export default function RootLayout({ children }: RootLayoutProps): JSX.Element {
-    return (
-        <html lang="en" className={`${montserrat.className} h-full`} suppressHydrationWarning>
-            <body>
-                <Providers>
-                    <div className="flex flex-col h-[100%]" id="root">
-                        <NavBar/>
-                        {children}
-                    </div>
-                </Providers>
-            </body>
-        </html>
-    );
+  return <title>{t.title}</title>;
 }

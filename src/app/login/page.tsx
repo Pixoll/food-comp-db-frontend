@@ -64,7 +64,6 @@ export default function LoginPage(): JSX.Element {
                 shadow-[10px_10px_15px_rgba(0,0,0,0.05)]
                 bg-[rgba(255,255,255,0.25)]
                 backdrop-blur-[20px]
-                font-['Poppins',sans-serif]
                 [text-shadow:2px_2px_4px_rgba(0,0,0,0.2)]
                 "
             >

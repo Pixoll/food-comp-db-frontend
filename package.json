@@ -10,7 +10,7 @@
     "openapi": "openapi-ts"
   },
   "dependencies": {
-    "@tailwindcss/postcss": "^4.1.6",
+    "@tailwindcss/postcss": "^4.2.4",
     "axios": "^1.7.7",
     "i18next": "^23.16.4",
     "lucide-react": "^0.563.0",
@@ -39,7 +39,7 @@
     "eslint-config-next": "^16.1.6",
     "globals": "^16.2.0",
     "postcss": "^8.5.13",
-    "tailwindcss": "^4.1.6",
+    "tailwindcss": "^4.2.4",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.54.0"
   },

@@ -98,7 +98,7 @@ export default function AddMeasurementsWithComponent({
     };
 
     return (
-        <div className="p-[20px] rounded-[8px] font-['Poppins',_sans-serif] text-[14px]">
+        <div className="p-[20px] rounded-[8px] text-[14px]">
             {macronutrientsWithComponents.map((nutrient) => (
                 <div
                     key={nutrient.nutrientId}

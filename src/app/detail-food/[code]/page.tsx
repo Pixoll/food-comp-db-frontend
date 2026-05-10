@@ -204,22 +204,22 @@ export default function DetailFoodPage(): JSX.Element {
                         <CompositionDropdown nutrientData={data.nutrientMeasurements ?? []} grams={grams}/>
                     </div>
                 </TabItem>
-                <TabItem label={t.foodDetail.langualCodes}>
-                    <div
-                        className="
-                        flex
-                        flex-col
-                        mt-[10px]
-                        border-[1px]
-                        rounded-[4px]
-                        shadow-[0_4px_10px_rgba(0,0,0,0.2)]
-                        bg-[white]
-                        "
-                    >
-                        <h2 className="text-center pb-[12px]">{t.foodDetail.langualCodes}</h2>
-                        <LangualCodes data={data.langualCodes}/>
-                    </div>
-                </TabItem>
+                {/*<TabItem label={t.foodDetail.langualCodes}>*/}
+                {/*    <div*/}
+                {/*        className="*/}
+                {/*        flex*/}
+                {/*        flex-col*/}
+                {/*        mt-[10px]*/}
+                {/*        border-[1px]*/}
+                {/*        rounded-[4px]*/}
+                {/*        shadow-[0_4px_10px_rgba(0,0,0,0.2)]*/}
+                {/*        bg-[white]*/}
+                {/*        "*/}
+                {/*    >*/}
+                {/*        <h2 className="text-center pb-[12px]">{t.foodDetail.langualCodes}</h2>*/}
+                {/*        <LangualCodes data={data.langualCodes}/>*/}
+                {/*    </div>*/}
+                {/*</TabItem>*/}
                 <TabItem label={t.foodDetail.references.title}>
                     <div
                         className="

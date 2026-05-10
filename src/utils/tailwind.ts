@@ -10,5 +10,5 @@ export function tw(template: TemplateStringsArray, ...values: unknown[]): string
         result[k] = template[i];
     }
 
-    return result.join("");
+    return result.join("").trim().replace(/\s+/g, " ");
 }

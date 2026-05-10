@@ -56,7 +56,7 @@ export default function AddNutrientsMeasurements({
     };
 
     return (
-        <div className="p-[20px] rounded-[8px] font-['Poppins',_sans-serif] text-[14px]">
+        <div className="p-[20px] rounded-[8px] text-[14px]">
             <div className="overflow-x-auto">
                 <table className="w-full border-[1px] border-[#dee2e6] rounded-[5px] table-fixed">
                     <colgroup>

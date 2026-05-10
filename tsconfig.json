@@ -2,23 +2,23 @@
   "compilerOptions": {
     "target": "es6",
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "jsx": "react-jsx",
     "lib": [
       "dom",
       "dom.iterable",
-      "esnext"
+      "esnext",
     ],
     "plugins": [
       {
-        "name": "next"
-      }
+        "name": "next",
+      },
     ],
     "paths": {
       "@/*": [
         "./src/*",
-        "./public"
-      ]
+        "./public",
+      ],
     },
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
@@ -36,7 +36,7 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "verbatimModuleSyntax": true
+    "verbatimModuleSyntax": true,
   },
   "include": [
     "./.next/types/**/*.ts",
@@ -44,10 +44,10 @@
     "./src",
     ".next/types/**/*.ts",
     "build/types/**/*.ts",
-    "build/dev/types/**/*.ts"
+    "build/dev/types/**/*.ts",
   ],
   "exclude": [
     "./node_modules",
-    "./src/core/**"
-  ]
+    "./src/core/**",
+  ],
 }

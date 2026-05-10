@@ -1,7 +1,6 @@
 'use client';
 
 import type {JSX} from "react";
-import Footer from "@/app/components/Footer";
 import MembersComponent from "@/app/about-us/Components/MembersComponent";
 import styles from "./AboutUsPage.module.css";
 import {t} from "i18next";
@@ -57,7 +56,7 @@ export default function AboutUsPage(): JSX.Element {
               <MembersComponent members={members} />
             </div>
             <div className={styles.infoBox}>
-              <h2 className={styles.infoTitle}>CapChiCal</h2>
+              <h2 className={styles.infoTitle}>CapChiCAL</h2>
               <p className={styles.infoParagraph}>
                 {t.aboutUsPage.paragraph1}
               </p>
@@ -106,8 +105,6 @@ export default function AboutUsPage(): JSX.Element {
           </div>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 }
