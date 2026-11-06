@@ -1,407 +1,144 @@
-import type { FoodWithOnlyMeasurements } from "@/api";
+"use client";
+
+import type { FoodWithOnlyMeasurements, NutrientMeasurement } from "@/api";
+import { categoryDot, categoryLabel } from "@/app/components/nutrients/categories";
 import { useTranslation } from "@/context/I18nContext";
-import type { NutrientMeasurement, NutrientMeasurementWithComponents, NutrientsValue } from "@/types/SingleFoodResult";
-import { ChevronDown, ChevronRight, X } from "lucide-react";
-import { Fragment, type JSX, useState } from "react";
+import type { CatalogNutrient } from "@/hooks";
+import { foodDisplayName, formatNumber, indexMeasurements, nutrientCategories } from "@/utils/nutrients";
+import { X } from "lucide-react";
+import Link from "next/link";
+import type { JSX } from "react";
 
 type NutrientComparisonTableProps = {
-    foodsData: FoodWithOnlyMeasurements[];
-    onRemoveFood: (codes: string[]) => void;
+    foods: FoodWithOnlyMeasurements[];
+    /** Catálogo aplanado; define el orden y la jerarquía de las filas. */
+    rows: CatalogNutrient[];
+    indexes: Array<Map<number, NutrientMeasurement>>;
+    onRemove: (code: string) => void;
 };
 
+const highestClass = "rounded-full bg-mint-wash px-2 py-0.5 font-semibold text-brand-ink";
+
 export default function NutrientComparisonTable({
-    foodsData,
-    onRemoveFood,
+    foods,
+    rows,
+    indexes,
+    onRemove,
 }: NutrientComparisonTableProps): JSX.Element {
-    const { t } = useTranslation();
-    const [expandedSections, setExpandedSections] = useState({
-        energy: true,
-        macronutrients: true,
-        micronutrients: true,
-        vitamins: true,
-        minerals: true,
-    });
-
-    const [expandedNutrients, setExpandedNutrients] = useState<Record<string, boolean>>({});
-
-    const toggleSection = (section: keyof typeof expandedSections): void => {
-        setExpandedSections(prev => ({
-            ...prev,
-            [section]: !prev[section],
-        }));
-    };
-
-    const toggleNutrient = (nutrientId: number): void => {
-        setExpandedNutrients(prev => ({
-            ...prev,
-            [nutrientId]: !prev[nutrientId],
-        }));
-    };
-
-    const getFoodName = (commonName: { es: string } | string): string => {
-        if (typeof commonName === "object" && commonName.es) {
-            return commonName.es;
-        }
-        return commonName as string;
-    };
-
-    const renderNutrientRow = (
-        nutrient: NutrientMeasurement,
-        indentLevel: number = 0
-    ): JSX.Element => {
-        const paddingClasses = ["pl-[4px]", "pl-[36px]"];
-        const paddingClass = indentLevel < paddingClasses.length ? paddingClasses[indentLevel] : paddingClasses[1];
-
-        return (
-            <tr
-                key={`${nutrient.nutrientId}-${indentLevel}`}
-                className="hover:bg-[#f0fdf4] transition-colors duration-[200ms]"
-            >
-                <td className={`${paddingClass} bg-[white] relative`}>
-                    {indentLevel >= 1 && (
-                        <div className="absolute left-[20px] top-[0px] bottom-[0px] w-[3px] bg-[#047857]"></div>
-                    )}
-                </td>
-                <td className="text-center align-middle bg-[white]">{nutrient.measurementUnit}</td>
-
-                {foodsData.map(food => (
-                    <td
-                        key={`${food.code}-${nutrient.nutrientId}`}
-                        className="text-center align-middle bg-[white]"
-                    >
-                        {getNutrientValue(food.nutrientMeasurements, nutrient.nutrientId)}
-                    </td>
-                ))}
-            </tr>
-        );
-    };
-
-    const getNutrientValue = (nutrientMeasurements: NutrientsValue, nutrientId: number): string => {
-        if (nutrientMeasurements?.energy) {
-            const energyNutrient = nutrientMeasurements.energy.find(n => n.nutrientId === nutrientId);
-            if (energyNutrient) {
-                return energyNutrient.average?.toString() || "-";
-            }
-        }
-
-        if (nutrientMeasurements?.macronutrients) {
-            const macroNutrient = nutrientMeasurements.macronutrients.find(n => n.nutrientId === nutrientId);
-            if (macroNutrient) {
-                return macroNutrient.average?.toString() || "-";
-            }
-
-            for (const macro of nutrientMeasurements.macronutrients) {
-                const component = macro.components.find(c => c.nutrientId === nutrientId);
-                if (component) {
-                    return component.average?.toString() || "-";
-                }
-            }
-        }
-
-        if (nutrientMeasurements?.micronutrients) {
-            if (nutrientMeasurements.micronutrients.vitamins) {
-                const vitamin = nutrientMeasurements.micronutrients.vitamins.find(n => n.nutrientId === nutrientId);
-                if (vitamin) {
-                    return vitamin.average?.toString() || "-";
-                }
-            }
-
-            if (nutrientMeasurements.micronutrients.minerals) {
-                const mineral = nutrientMeasurements.micronutrients.minerals.find(n => n.nutrientId === nutrientId);
-                if (mineral) {
-                    return mineral.average?.toString() || "-";
-                }
-            }
-        }
-
-        return "-";
-    };
-
-    const renderExpandableNutrient = (
-        nutrient: NutrientMeasurementWithComponents,
-        indentLevel: number = 0
-    ): JSX.Element => {
-        const isExpanded = expandedNutrients[nutrient.nutrientId] || false;
-        const hasComponents = nutrient.components && nutrient.components.length > 0;
-
-        const paddingClasses = ["pl-[4px]", "pl-[36px]"];
-        const paddingClass = indentLevel < paddingClasses.length ? paddingClasses[indentLevel] : paddingClasses[1];
-
-        return (
-            <Fragment key={`${nutrient.nutrientId}-expandable`}>
-                <tr className="hover:bg-[#f0fdf4] transition-colors duration-[200ms]">
-                    <td
-                        className={`${paddingClass} bg-[white] relative ${hasComponents ? "cursor-pointer" : ""}`}
-                        onClick={() => hasComponents && toggleNutrient(nutrient.nutrientId)}
-                    >
-                        {indentLevel >= 1 && (
-                            <div className="absolute left-[20px] top-[0px] bottom-[0px] w-[4px] bg-[#047857]"/>
-                        )}
-                        <span className="relative">
-                            {hasComponents && (
-                                isExpanded
-                                    ? <ChevronDown size={16} className="inline mr-[8px]"/>
-                                    : <ChevronRight size={16} className="inline mr-[8px]"/>
-                            )}
-                            {nutrient.name}
-                        </span>
-                    </td>
-                    <td className="text-center align-middle bg-[white]">{nutrient.measurementUnit}</td>
-
-                    {foodsData.map(food => (
-                        <td
-                            key={`${food.code}-${nutrient.nutrientId}`}
-                            className="text-center align-middle bg-[white]"
-                        >
-                            {getNutrientValue(food.nutrientMeasurements, nutrient.nutrientId)}
-                        </td>
-                    ))}
-                </tr>
-
-                {isExpanded && hasComponents && nutrient.components.map(comp =>
-                    renderNutrientRow(comp, indentLevel + 1)
-                )}
-            </Fragment>
-        );
-    };
+    const { t, language } = useTranslation();
 
     return (
-        <div className="m-[12px] w-full overflow-x-auto my-[20px]">
-            <table className="w-full min-w-[600px] border-collapse rounded-[8px] overflow-hidden">
-                <thead>
-                    <tr>
-                        <th
-                            className="
-                            sticky
-                            top-0
-                            bg-[#f7fef7]
-                            z-10
-                            align-middle
-                            py-[12px]
-                            pl-[36px]
-                            text-left
-                            min-w-[200px]
-                            font-[600]
-                            text-[#064e3b]
-                            border-b-[2px]
-                            border-[#047857]
-                            "
-                        >
-                            {t.nutrientsDropdown.nutrients}
-                        </th>
-                        <th
-                            className="
-                            sticky
-                            top-0
-                            bg-[#f7fef7]
-                            z-10
-                            align-middle
-                            py-[12px]
-                            px-[16px]
-                            text-center
-                            w-[80px]
-                            font-[600]
-                            text-[#064e3b]
-                            border-b-[2px]
-                            border-[#047857]
-                            "
-                        >
-                            {t.nutrientsDropdown.unit}
-                        </th>
-
-                        {foodsData.map(food => (
+        <div className="overflow-hidden rounded-card border border-fog bg-paper">
+            <div className="overflow-x-auto">
+                <table className="w-full table-fixed text-[14px]" style={{ minWidth: 300 + foods.length * 180 }}>
+                    <thead>
+                        <tr className="align-bottom">
                             <th
-                                key={food.code}
-                                className="
-                                sticky
-                                top-0
-                                bg-[#f7fef7]
-                                z-10
-                                align-middle
-                                py-[12px]
-                                px-[16px]
-                                text-center
-                                min-w-[150px]
-                                font-[600]
-                                text-[#064e3b]
-                                border-b-[2px]
-                                border-[#047857]
-                                "
+                                className="sticky left-0 z-10 w-[300px] bg-paper py-3 pl-5 pr-3 text-left text-[12px]
+                                font-medium uppercase tracking-wide text-ash"
                             >
-                                <div className="flex justify-between items-center">
-                                    <span>{getFoodName(food.commonName.es || "")}</span>
-                                    <button
-                                        className="
-                                        p-[3px]
-                                        leading-none
-                                        rounded-full
-                                        text-[#991b1b]
-                                        bg-[#fee2e2]
-                                        hover:bg-[#fecaca]
-                                        hover:text-[#7f1d1d]
-                                        transition-colors
-                                        duration-200
-                                        "
-                                        onClick={() => onRemoveFood([food.code])}
-                                        aria-label={`${t.compare.remove} ${getFoodName(food.commonName.es || "")}`}
-                                    >
-                                        <X size={16}/>
-                                    </button>
-                                </div>
+                                {t.nutrientsDropdown.nutrient}
                             </th>
-                        ))}
-                    </tr>
-                </thead>
-
-                <tbody className="divide-y divide-[#e5f1eb]">
-                    <tr>
-                        <td
-                            colSpan={2 + foodsData.length}
-                            className="
-                            text-[#047857]
-                            font-[600]
-                            cursor-pointer
-                            py-[12px]
-                            px-[16px]
-                            pl-[36px]
-                            bg-[white]
-                            transition-colors
-                            relative
-                            "
-                            onClick={() => toggleSection("energy")}
-                        >
-                            <div className="absolute left-[0px] top-[0px] bottom-[0px] w-[3px] bg-[#047857]"/>
-                            {expandedSections.energy
-                                ? <ChevronDown size={16} className="inline mr-[8px]"/>
-                                : <ChevronRight size={16} className="inline mr-[8px]"/>
-                            }
-                            {t.nutrientsDropdown.energeticValue}
-                        </td>
-                    </tr>
-
-                    {expandedSections.energy && foodsData[0]?.nutrientMeasurements?.energy?.map(nutrient =>
-                        renderNutrientRow(nutrient)
-                    )}
-
-                    <tr>
-                        <td
-                            colSpan={2 + foodsData.length}
-                            className="
-                            text-[#047857]
-                            font-[600]
-                            cursor-pointer
-                            py-[12px]
-                            px-[16px]
-                            pl-[36px]
-                            bg-[white]
-                            transition-colors
-                            relative
-                            "
-                            onClick={() => toggleSection("macronutrients")}
-                        >
-                            <div className="absolute left-[0px] top-[0px] bottom-[0px] w-[3px] bg-[#047857]"/>
-                            {expandedSections.macronutrients
-                                ? <ChevronDown size={16} className="inline mr-[8px]"/>
-                                : <ChevronRight size={16} className="inline mr-[8px]"/>
-                            }
-                            {t.nutrientsDropdown.mainNutrients}
-                        </td>
-                    </tr>
-
-                    {expandedSections.macronutrients && foodsData[0]?.nutrientMeasurements.macronutrients
-                        .map(nutrient => renderExpandableNutrient(nutrient))
-                    }
-
-                    <tr>
-                        <td
-                            colSpan={2 + foodsData.length}
-                            className="
-                            text-[#047857]
-                            font-[600]
-                            cursor-pointer
-                            py-[12px]
-                            px-[16px]
-                            pl-[36px]
-                            bg-[white]
-                            transition-colors
-                            relative
-                            "
-                            onClick={() => toggleSection("micronutrients")}
-                        >
-                            <div className="absolute left-[0px] top-[0px] bottom-[0px] w-[3px] bg-[#047857]"/>
-                            {expandedSections.micronutrients
-                                ? <ChevronDown size={16} className="inline mr-[8px]"/>
-                                : <ChevronRight size={16} className="inline mr-[8px]"/>
-                            }
-                            {t.nutrientsDropdown.micronutrients}
-                        </td>
-                    </tr>
-
-                    {expandedSections.micronutrients && <>
-                        <tr>
-                            <td
-                                colSpan={2 + foodsData.length}
-                                className="
-                                text-[#047857]
-                                font-[600]
-                                cursor-pointer
-                                py-[12px]
-                                px-[16px]
-                                pl-[36px]
-                                bg-[white]
-                                transition-colors
-                                relative
-                                "
-                                onClick={() => toggleSection("vitamins")}
-                            >
-                                <div className="absolute left-[0px] top-[0px] bottom-[0px] w-[3px] bg-[#047857]"/>
-                                <span className="relative">
-                                    {expandedSections.vitamins
-                                        ? <ChevronDown size={16} className="inline mr-[8px]"/>
-                                        : <ChevronRight size={16} className="inline mr-[8px]"/>
-                                    }
-                                    {t.nutrientsDropdown.vitamins}
-                                </span>
-                            </td>
+                            {foods.map(food => (
+                                <th
+                                    key={food.code}
+                                    className="w-[200px] min-w-[160px] px-3 py-3 text-right font-normal"
+                                >
+                                    <div className="flex items-start justify-end gap-1">
+                                        <div className="min-w-0 text-right">
+                                            <Link
+                                                href={`/detail-food/${food.code}`}
+                                                className="line-clamp-2 whitespace-normal text-[13px] font-semibold
+                                                text-carbon hover:text-brand"
+                                                title={foodDisplayName(food, food.code)}
+                                            >
+                                                {foodDisplayName(food, food.code)}
+                                            </Link>
+                                            <span className="font-mono text-[12px] text-ash">{food.code}</span>
+                                        </div>
+                                        <button
+                                            type="button"
+                                            onClick={() => onRemove(food.code)}
+                                            className="rounded-full p-0.5 text-ash hover:bg-mist hover:text-carbon"
+                                            aria-label={`${t.compare.remove} ${food.code}`}
+                                        >
+                                            <X size={14}/>
+                                        </button>
+                                    </div>
+                                </th>
+                            ))}
                         </tr>
+                    </thead>
+                    {nutrientCategories.map(category => {
+                        const categoryRows = rows.filter(r => r.category === category);
+                        if (categoryRows.length === 0) return null;
 
-                        {expandedSections.vitamins && foodsData[0]?.nutrientMeasurements.micronutrients.vitamins
-                            .map(nutrient => renderNutrientRow(nutrient, 1))
-                        }
+                        return (
+                            <tbody key={category}>
+                                <tr className="border-t border-fog bg-linen">
+                                    <th
+                                        colSpan={foods.length + 1}
+                                        className="sticky left-0 py-2.5 pl-5 text-left text-[13px] font-semibold"
+                                    >
+                                        <span className="inline-flex items-center gap-2">
+                                            <span className={`size-2 rounded-full ${categoryDot[category]}`}/>
+                                            {categoryLabel(t, category)}
+                                        </span>
+                                    </th>
+                                </tr>
+                                {categoryRows.map(nutrient => {
+                                    const values = indexes.map(index => index.get(nutrient.id)?.average);
+                                    const present = values.filter((v): v is number => v !== undefined);
+                                    const max = present.length > 1 ? Math.max(...present) : undefined;
 
-                        <tr>
-                            <td
-                                colSpan={2 + foodsData.length}
-                                className="
-                                text-[#047857]
-                                font-[600]
-                                cursor-pointer
-                                py-[12px]
-                                px-[16px]
-                                pl-[36px]
-                                bg-[white]
-                                transition-colors
-                                relative
-                                "
-                                onClick={() => toggleSection("minerals")}
-                            >
-                                <div className="absolute left-[0px] top-[0px] bottom-[0px] w-[3px] bg-[#047857]"/>
-                                <span className="relative">
-                                    {expandedSections.minerals
-                                        ? <ChevronDown size={16} className="inline mr-[8px]"/>
-                                        : <ChevronRight size={16} className="inline mr-[8px]"/>
-                                    }
-                                    {t.nutrientsDropdown.minerals}
-                                </span>
-                            </td>
-                        </tr>
-
-                        {expandedSections.minerals && foodsData[0]?.nutrientMeasurements.micronutrients.minerals
-                            .map(nutrient => renderNutrientRow(nutrient, 1))
-                        }
-                    </>}
-                </tbody>
-            </table>
+                                    return (
+                                        <tr key={nutrient.id} className="border-t border-fog hover:bg-linen">
+                                            <td
+                                                className="sticky left-0 z-10 bg-inherit py-2.5 pr-3"
+                                                style={{ paddingLeft: 20 + nutrient.depth * 18 }}
+                                            >
+                                                <span
+                                                    className={nutrient.depth === 0
+                                                        ? "font-medium text-carbon"
+                                                        : "text-graphite"}
+                                                >
+                                                    {nutrient.name}
+                                                </span>
+                                                <span className="ml-1.5 text-[12px] text-ash">
+                                                    {nutrient.measurementUnit}
+                                                </span>
+                                            </td>
+                                            {values.map((value, i) => (
+                                                <td
+                                                    key={foods[i].code}
+                                                    className="px-3 py-2.5 text-right tabular-nums"
+                                                >
+                                                    {value === undefined ? (
+                                                        <span className="text-ash">—</span>
+                                                    ) : (
+                                                        <span
+                                                            className={value === max && value > 0
+                                                                ? highestClass
+                                                                : "text-carbon"}
+                                                            title={value === max ? t.compare.highest : undefined}
+                                                        >
+                                                            {formatNumber(value, language)}
+                                                        </span>
+                                                    )}
+                                                </td>
+                                            ))}
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        );
+                    })}
+                </table>
+            </div>
         </div>
     );
+}
+
+export function buildIndexes(foods: FoodWithOnlyMeasurements[]): Array<Map<number, NutrientMeasurement>> {
+    return foods.map(food => indexMeasurements(food.nutrientMeasurements));
 }

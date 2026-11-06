@@ -1,13 +1,10 @@
-import { FlatCompat } from "@eslint/eslintrc";
 import eslint from "@eslint/js";
+import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
+import nextTypescript from "eslint-config-next/typescript";
 import stylistic from "@stylistic/eslint-plugin";
 import { defineConfig } from "eslint/config";
 import globals from "globals";
 import tslint from "typescript-eslint";
-
-const compat = new FlatCompat({
-    baseDirectory: import.meta.dirname,
-});
 
 const eslintConfig = defineConfig([
     {
@@ -17,13 +14,8 @@ const eslintConfig = defineConfig([
             "src/utils/collection.ts",
         ],
     },
-    ...compat.config({
-        extends: [
-            "next",
-            "next/core-web-vitals",
-            "next/typescript",
-        ],
-    }),
+    ...nextCoreWebVitals,
+    ...nextTypescript,
     eslint.configs.recommended,
     tslint.configs.recommended,
     {

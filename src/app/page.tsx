@@ -2,260 +2,185 @@
 
 import { useTranslation } from "@/context/I18nContext";
 import { useGroups } from "@/hooks";
+import { ArrowDown, BookOpen, ChevronDown, GitCompareArrows, Search, X } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type FormEvent, type JSX, useMemo, useState } from "react";
-// @ts-ignore
+// @ts-expect-error: imágenes estáticas
 import calafate from "../../public/calafate.jpg";
-// @ts-ignore
+// @ts-expect-error: imágenes estáticas
 import chile from "../../public/chili.jpg";
-// @ts-ignore
+// @ts-expect-error: imágenes estáticas
 import potatoSweet from "../../public/sweet-potato.jpg";
 import styles from "./HomePage.module.css";
 
-export default function HomePage(): JSX.Element {
-  const { t } = useTranslation();
-  const router = useRouter();
-  const [foodName, setFoodName] = useState("");
-  const [showCredits, setShowCredits] = useState(false);
-  const [selectedGroup, setSelectedGroup] = useState<number | "">("");
-  const [selectedGroups, setSelectedGroups] = useState<number[]>([]);
-  const { idToObject, idToName } = useGroups();
-
-  const developers = [
+const developers = [
     "Felipe Ruskin",
     "Benjamín González",
-    "Ignacio Padilla"
-  ];
+    "Ignacio Padilla",
+];
 
-  const groupsArray = useMemo(() => {
-    const groups = [];
-    for (const [id, group] of idToObject.entries()) {
-      groups.push(group);
-    }
-    return groups.sort((a, b) => a.name.localeCompare(b.name));
-  }, [idToObject]);
+export default function HomePage(): JSX.Element {
+    const { t } = useTranslation();
+    const router = useRouter();
+    const [foodName, setFoodName] = useState("");
+    const [showCredits, setShowCredits] = useState(false);
+    const [selectedGroups, setSelectedGroups] = useState<number[]>([]);
+    const { idToObject } = useGroups();
 
-  const handleSubmit = (e: FormEvent): void => {
-    e.preventDefault();
-    if (foodName || selectedGroups.length > 0) {
-      toSearchPage();
-    }
-  };
+    const groups = useMemo(
+        () => [...idToObject.values()].sort((a, b) => a.name.localeCompare(b.name)),
+        [idToObject]
+    );
 
-  const toSearchPage = (): void => {
-    const params = new URLSearchParams();
-    if (foodName) {
-      params.append("foodName", foodName);
-    }
+    const toSearchPage = (): void => {
+        const params = new URLSearchParams();
+        const name = foodName.trim();
 
-    if (selectedGroups.length > 0) {
-      params.append("groups", selectedGroups.map(g => g.toString()).join(","));
-    }
-    router.push(`/search?${params.toString()}`);
-  };
+        if (name) {
+            params.append("foodName", name);
+        }
 
-  const handleAddGroup = (): void => {
-    if (selectedGroup !== "" && !selectedGroups.includes(selectedGroup)) {
-      setSelectedGroups([...selectedGroups, selectedGroup]);
-      setSelectedGroup("");
-    }
-  };
+        if (selectedGroups.length > 0) {
+            params.append("groups", selectedGroups.join(","));
+        }
 
-  const handleRemoveGroup = (groupToRemove: number): void => {
-    setSelectedGroups(selectedGroups.filter(group => group !== groupToRemove));
-  };
+        router.push(`/search?${params.toString()}`);
+    };
 
-  const scrollToSearch = (): void => {
-    const searchSection = document.getElementById("search-section");
-    searchSection?.scrollIntoView({ behavior: "smooth" });
-  };
+    const handleSubmit = (e: FormEvent): void => {
+        e.preventDefault();
+        toSearchPage();
+    };
 
-  return (
-    <div className={styles.pageWrapper}>
-      <section className={styles.heroSection}>
-        <div className={styles.heroImageGrid}>
-          <div className={styles.heroImageLeft}>
-            <Image
-              src={calafate}
-              alt="Calafate"
-              fill
-              className={styles.image}
-              priority
-            />
-          </div>
-          <div className={styles.heroImageRight}>
-            <Image
-              src={chile}
-              alt="Chile"
-              fill
-              className={styles.image}
-              priority
-            />
-          </div>
-        </div>
-        <div className={styles.heroOverlay}></div>
-        <div className={styles.heroContent}>
-          <h1 className={styles.title}>
-            {t.homepage.title}
-          </h1>
-          <div className={styles.subtitleContainer}>
-            <p className={styles.subtitle}>
-              {t.homepage.subtitle}
-            </p>
-            <div className={styles.dropdownWrapper}>
-              <button
-                onClick={() => setShowCredits(!showCredits)}
-                className={styles.creditsButton}
-                aria-label={t.homepage.developedBy}
-              >
-                <span>{t.homepage.developedBy}</span>
-                <svg
-                  className={`${styles.arrow} ${showCredits ? styles.arrowOpen : ""}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7"/>
-                </svg>
-              </button>
-              {showCredits && (
-                <div className={styles.dropdownMenu}>
-                  <ul className={styles.developerList}>
-                    {developers.map((dev, index) => (
-                      <li key={index} className={styles.developerItem}>
-                        {dev}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          </div>
+    const toggleGroup = (id: number): void => {
+        setSelectedGroups(prev => prev.includes(id) ? prev.filter(g => g !== id) : [...prev, id]);
+    };
 
-          <button
-            onClick={scrollToSearch}
-            className={styles.scrollButton}
-            aria-label={t.homepage.scrollToSearch}
-          >
-            <svg
-              className={styles.scrollIcon}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 14l-7 7m0 0l-7-7m7 7V3"
-              />
-            </svg>
-            <span>{t.homepage.scrollToSearch}</span>
-          </button>
-        </div>
-      </section>
+    const scrollToSearch = (): void => {
+        document.getElementById("search-section")?.scrollIntoView({ behavior: "smooth" });
+    };
 
-      <section id="search-section" className={styles.searchSection}>
-        <div className={styles.searchImageWrapper}>
-          <Image
-            src={potatoSweet}
-            alt="Sweet Potato"
-            fill
-            className={styles.image}
-            priority
-          />
-        </div>
-        <div className={styles.searchOverlay}></div>
-        <div className={styles.searchContent}>
-          <div className={styles.searchContainer}>
-            <form onSubmit={handleSubmit} className={styles.searchForm}>
-              <div className={styles.searchWrapper}>
-                <input
-                  type="text"
-                  placeholder={t.search.placeholder}
-                  value={foodName}
-                  onChange={(e) => setFoodName(e.target.value.trim())}
-                  className={styles.searchInput}
-                  aria-label={t.search.placeholder}
-                />
-                <button type="submit" className={styles.searchButton}>
-                  {t.search.button}
-                </button>
-              </div>
-            </form>
+    const features = [
+        { icon: <Search size={20}/>, ...t.homepage.features.search, href: "/search" },
+        { icon: <GitCompareArrows size={20}/>, ...t.homepage.features.compare, href: "/compare" },
+        { icon: <BookOpen size={20}/>, ...t.homepage.features.references, href: "/search" },
+    ];
 
-            <div className={styles.groupSelector}>
-              <label className={styles.groupSelectorLabel}>
-                {t.homepage.foodGroups}
-              </label>
-              <div className={styles.groupSelectWrapper}>
-                <select
-                  value={selectedGroup}
-                  onChange={(e) => setSelectedGroup(e.target.value ? Number(e.target.value) : "")}
-                  className={styles.groupSelect}
-                  aria-label={t.homepage.foodGroups}
-                >
-                  <option value="">{t.homepage.selectGroup}</option>
-                  {groupsArray.map((group) => (
-                    <option
-                      key={group.id}
-                      value={group.id}
-                      disabled={selectedGroups.includes(group.id)}
-                    >
-                      {group.name}
-                    </option>
-                  ))}
-                </select>
-                <button
-                  type="button"
-                  onClick={handleAddGroup}
-                  disabled={selectedGroup === ""}
-                  className={styles.addGroupButton}
-                  aria-label={t.homepage.addButton}
-                >
-                  {t.homepage.addButton}
-                </button>
-              </div>
-            </div>
-
-            <div className={styles.selectedGroupsContainer}>
-              {selectedGroups.length === 0 ? (
-                <p className={styles.emptyGroupsMessage}>
-                  {t.homepage.noGroupsSelected}
-                </p>
-              ) : (
-                selectedGroups.map((groupId) => {
-                  const groupName = idToName.get(groupId.toString());
-                  return groupName ? (
-                    <div key={groupId} className={styles.groupTag}>
-                      <span>{groupName}</span>
-                      <button
-                        onClick={() => handleRemoveGroup(groupId)}
-                        className={styles.removeGroupButton}
-                        aria-label={`${t.homepage.removeGroup} ${groupName}`}
-                      >
-                        <svg className={styles.removeIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
-                        </svg>
-                      </button>
+    return (
+        <div className={styles.pageWrapper}>
+            <section className={styles.heroSection}>
+                <div className={styles.heroImageGrid}>
+                    <div className={styles.heroImage}>
+                        <Image src={calafate} alt="Calafate" fill className={styles.image} priority/>
                     </div>
-                  ) : null;
-                })
-              )}
-            </div>
+                    <div className={styles.heroImage}>
+                        <Image src={chile} alt="Ají" fill className={styles.image} priority/>
+                    </div>
+                </div>
+                <div className={styles.heroOverlay}/>
+                <div className={styles.heroContent}>
+                    <span className={styles.chip}>
+                        <span className={styles.chipTag}>CapChiCAL</span>
+                        Universidad de Concepción
+                    </span>
+                    <h1 className={styles.title}>{t.homepage.title}</h1>
+                    <p className={styles.subtitle}>{t.homepage.subtitle}</p>
 
-            <div className={styles.advancedSearchContainer}>
-              <button
-                className={styles.advancedSearchButton}
-                onClick={() => router.push("/search")}
-              >
-                {t.search.advancedSearch}
-              </button>
-            </div>
-          </div>
+                    <div className={styles.heroActions}>
+                        <button type="button" onClick={scrollToSearch} className={styles.primaryButton}>
+                            <ArrowDown size={18}/>
+                            {t.homepage.scrollToSearch}
+                        </button>
+                        <div className={styles.dropdownWrapper}>
+                            <button
+                                type="button"
+                                onClick={() => setShowCredits(!showCredits)}
+                                className={styles.ghostButton}
+                                aria-expanded={showCredits}
+                            >
+                                {t.homepage.developedBy}
+                                <ChevronDown size={16} className={showCredits ? styles.arrowOpen : styles.arrow}/>
+                            </button>
+                            {showCredits && (
+                                <ul className={styles.dropdownMenu}>
+                                    {developers.map(dev => <li key={dev}>{dev}</li>)}
+                                </ul>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="search-section" className={styles.searchSection}>
+                <div className={styles.searchImageWrapper}>
+                    <Image src={potatoSweet} alt="Camote" fill className={styles.image}/>
+                </div>
+                <div className={styles.searchOverlay}/>
+                <div className={styles.searchCard}>
+                    <form onSubmit={handleSubmit} className={styles.searchForm} role="search">
+                        <Search size={20} className={styles.searchIcon}/>
+                        <input
+                            type="text"
+                            placeholder={t.search.placeholder}
+                            value={foodName}
+                            onChange={e => setFoodName(e.target.value)}
+                            className={styles.searchInput}
+                            aria-label={t.search.placeholder}
+                        />
+                        <button type="submit" className={styles.searchButton}>
+                            {t.search.button}
+                        </button>
+                    </form>
+
+                    <div className={styles.groupHeader}>
+                        <span className={styles.groupLabel}>{t.homepage.browseByGroup}</span>
+                        {selectedGroups.length > 0 && (
+                            <button type="button" onClick={() => setSelectedGroups([])} className={styles.clearButton}>
+                                <X size={14}/>
+                                {t.homepage.clearGroups}
+                            </button>
+                        )}
+                    </div>
+                    <div className={styles.groupChips}>
+                        {groups.map(group => {
+                            const selected = selectedGroups.includes(group.id);
+                            return (
+                                <button
+                                    key={group.id}
+                                    type="button"
+                                    onClick={() => toggleGroup(group.id)}
+                                    aria-pressed={selected}
+                                    className={selected
+                                        ? `${styles.groupChip} ${styles.groupChipSelected}`
+                                        : styles.groupChip}
+                                >
+                                    {group.name}
+                                </button>
+                            );
+                        })}
+                    </div>
+
+                    <div className={styles.searchFooter}>
+                        <Link href="/search" className={styles.advancedLink}>
+                            {t.search.advancedSearch}
+                        </Link>
+                    </div>
+                </div>
+            </section>
+
+            <section className={styles.featuresSection}>
+                <div className={styles.featuresGrid}>
+                    {features.map(feature => (
+                        <Link key={feature.title} href={feature.href} className={styles.featureCard}>
+                            <span className={styles.featureIcon}>{feature.icon}</span>
+                            <h2 className={styles.featureTitle}>{feature.title}</h2>
+                            <p className={styles.featureText}>{feature.description}</p>
+                        </Link>
+                    ))}
+                </div>
+            </section>
         </div>
-      </section>
-    </div>
-  );
+    );
 }

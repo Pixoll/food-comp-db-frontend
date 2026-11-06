@@ -25,6 +25,8 @@ export function I18nProvider({ children }: I18nProviderProps): JSX.Element {
     const t = i18n[language];
 
     useEffect(() => {
+        // se lee después de montar para que el HTML del servidor (siempre "es") coincida con la hidratación
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setLanguage(localStorage.getItem(LANG_KEY) as Language | null ?? "es");
     }, []);
 

@@ -1,13 +1,17 @@
 "use client";
 
 import api from "@/api";
+import { Button, Field, Input } from "@/app/components/ui";
 import { useAuth } from "@/context/AuthContext";
 import { useTranslation } from "@/context/I18nContext";
 import { useForm } from "@/hooks";
+import { LogIn } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import type { FormEvent, JSX } from "react";
-import { BiLogIn } from "react-icons/bi";
-import { FaLock, FaUserCircle } from "react-icons/fa";
+import { type FormEvent, type JSX, useState } from "react";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+import Icon from "../../../public/icon.png";
 
 type LoginForm = {
     username: string;
@@ -18,6 +22,8 @@ export default function LoginPage(): JSX.Element {
     const { t } = useTranslation();
     const { login } = useAuth();
     const router = useRouter();
+    const [error, setError] = useState<string | null>(null);
+    const [submitting, setSubmitting] = useState(false);
 
     const { formState, onInputChange, onResetForm } = useForm<LoginForm>({
         username: "",
@@ -26,212 +32,74 @@ export default function LoginPage(): JSX.Element {
 
     const onLogin = async (e: FormEvent): Promise<void> => {
         e.preventDefault();
+        setError(null);
+        setSubmitting(true);
 
-        try {
-            const result = await api.login({
-                body: {
-                    username: formState.username,
-                    password: formState.password,
-                },
-            });
+        const result = await api.login({
+            body: {
+                username: formState.username,
+                password: formState.password,
+            },
+        }).catch(err => ({ error: err as unknown }));
 
-            if (result.error) {
-                console.error("Error", result.error);
-                return;
-            }
+        setSubmitting(false);
 
-            login();
-            onResetForm();
-            router.push("/");
-        } catch (error) {
-            console.error("Error", error);
+        if (result.error) {
+            const status = (result.error as { statusCode?: number }).statusCode;
+            setError(status === 401 || status === 400
+                ? t.loginPage.invalid
+                : (result.error as { message?: string }).message ?? t.common.unknownError);
+            return;
         }
+
+        login();
+        onResetForm();
+        router.push("/admin-page");
     };
 
     return (
-        <div className="flex flex-row h-full justify-center items-center">
-            <div
-                className="
-                flex
-                flex-col
-                justify-start
-                items-center
-                text-white
-                w-[450px]
-                h-[500px]
-                p-[40px]
-                rounded-[10px]
-                shadow-[10px_10px_15px_rgba(0,0,0,0.05)]
-                bg-[rgba(255,255,255,0.25)]
-                backdrop-blur-[20px]
-                [text-shadow:2px_2px_4px_rgba(0,0,0,0.2)]
-                "
-            >
-                <h1 className="text-center mb-[20px] text-[24px] text-[white]">{t.loginPage.title}</h1>
-                <form onSubmit={onLogin} className="w-full">
-                    <div
-                        className="
-                        relative
-                        border-b-[2px]
-                        border-[#adadad]
-                        my-[30px]
-                        group
-                        "
-                    >
-                        <input
-                            type="text"
-                            name="username"
-                            value={formState.username}
-                            onChange={onInputChange}
-                            required
-                            className="
-                            w-full
-                            px-[5px]
-                            h-[40px]
-                            text-[16px]
-                            border-none
-                            bg-transparent
-                            outline-none
-                            text-[white]
-                            peer
-                            "
-                        />
-                        <span
-                            className="
-                            absolute
-                            top-[40px]
-                            left-[0px]
-                            w-[0px]
-                            h-[2px]
-                            bg-[#009000]
-                            transition-all
-                            duration-500
-                            peer-focus:w-full
-                            peer-valid:w-full
-                            "
-                        />
-                        <label
-                            className="
-                            absolute
-                            top-[50%]
-                            left-[5px]
-                            text-[white]
-                            transform
-                            -translate-y-[50%]
-                            text-[16px]
-                            pointer-events-none
-                            transition-all
-                            duration-500
-                            flex
-                            items-center
-                            gap-[4px]
-                            [text-shadow:2px_2px_4px_rgba(0,0,0,0.2)]
-                            peer-focus:-top-[5px]
-                            peer-focus:text-[#009000]
-                            peer-valid:-top-[5px]
-                            peer-valid:text-[#009000]
-                            "
-                        >
-                            <FaUserCircle/>
-                            {t.loginPage.username}
-                        </label>
-                    </div>
-                    <div
-                        className="
-                        relative
-                        border-b-[2px]
-                        border-[#adadad]
-                        my-[30px]
-                        group
-                        "
-                    >
-                        <input
-                            type="password"
-                            name="password"
-                            value={formState.password}
-                            onChange={onInputChange}
-                            required
-                            className="
-                            w-full
-                            px-[5px]
-                            h-[40px]
-                            text-[16px]
-                            border-none
-                            bg-transparent
-                            outline-none
-                            text-[white]
-                            peer
-                            "
-                        />
-                        <span
-                            className="
-                            absolute
-                            top-[40px]
-                            left-[0px]
-                            w-[0px]
-                            h-[2px]
-                            bg-[#009000]
-                            transition-all
-                            duration-500
-                            peer-focus:w-full
-                            peer-valid:w-full
-                            "
-                        />
-                        <label
-                            className="
-                            absolute
-                            top-1/2
-                            left-[5px]
-                            text-[white]
-                            transform
-                            -translate-y-1/2
-                            text-[16px]
-                            pointer-events-none
-                            transition-all
-                            duration-500
-                            flex
-                            items-center
-                            gap-1
-                            [text-shadow:2px_2px_4px_rgba(0,0,0,0.2)]
-                            peer-focus:-top-[5px]
-                            peer-focus:text-[#009000]
-                            peer-valid:-top-[5px]
-                            peer-valid:text-[#009000]
-                            "
-                        >
-                            <FaLock/>
-                            {t.loginPage.password}
-                        </label>
-                    </div>
-                    <button
-                        type="submit"
-                        className="
-                        w-full
-                        h-[50px]
-                        border-none
-                        bg-[#28a745]
-                        text-[white]
-                        text-[18px]
-                        font-[700]
-                        rounded-[25px]
-                        cursor-pointer
-                        transition-all
-                        duration-300
-                        ease-in-out
-                        hover:bg-[#218838]
-                        hover:scale-105
-                        focus:outline-none
-                        flex
-                        items-center
-                        justify-center
-                        gap-[8px]
-                        "
-                    >
-                        <BiLogIn/>
-                        {t.loginPage.title}
-                    </button>
-                </form>
-            </div>
+        <div className="flex w-full max-w-[400px] flex-col rounded-panel border border-fog bg-paper p-8 shadow-panel">
+            <Image
+                src={Icon}
+                alt="CapChiCAL"
+                width={48}
+                height={48}
+                className="mb-5 size-12 rounded-full border border-fog object-contain p-0.5"
+            />
+            <h1 className="text-[24px] font-semibold tracking-[-0.02em] text-carbon">{t.loginPage.title}</h1>
+            <p className="mt-1 text-[14px] text-graphite">{t.loginPage.subtitle}</p>
+
+            <form onSubmit={e => void onLogin(e)} className="mt-6 flex flex-col gap-4">
+                <Field label={t.loginPage.username} htmlFor="login-username">
+                    <Input
+                        id="login-username"
+                        name="username"
+                        autoComplete="username"
+                        value={formState.username}
+                        onChange={onInputChange}
+                        required
+                    />
+                </Field>
+                <Field label={t.loginPage.password} htmlFor="login-password">
+                    <Input
+                        id="login-password"
+                        type="password"
+                        name="password"
+                        autoComplete="current-password"
+                        value={formState.password}
+                        onChange={onInputChange}
+                        required
+                    />
+                </Field>
+                {error && (
+                    <p role="alert" className="rounded-input bg-danger-wash px-3 py-2 text-[13px] text-danger">
+                        {error}
+                    </p>
+                )}
+                <Button type="submit" disabled={submitting} icon={<LogIn size={16}/>} className="mt-2 w-full">
+                    {submitting ? t.loginPage.submitting : t.loginPage.title}
+                </Button>
+            </form>
         </div>
     );
 }

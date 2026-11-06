@@ -2,10 +2,11 @@
 
 import type { ScientificName } from "@/api";
 import { Collection } from "@/utils/collection";
-import { useState } from "react";
+import { useMemo } from "react";
 import { FetchStatus, useApi } from "./useApi";
 
 type UseScientificNames = {
+    status: FetchStatus;
     idToObject: Collection<number, ScientificName>;
     idToName: Collection<string, string>;
     nameToId: Collection<string, number>;
@@ -14,32 +15,23 @@ type UseScientificNames = {
 
 export function useScientificNames(): UseScientificNames {
     const result = useApi([], (api) => api.getScientificNames());
-    const [idToObject, setIdToObject] = useState(new Collection<number, ScientificName>());
-    const [idToName, setIdToName] = useState(new Collection<string, string>());
-    const [nameToId, setNameToId] = useState(new Collection<string, number>());
+    const data = result.status === FetchStatus.Success ? result.data : null;
 
-    if (result.status === FetchStatus.Success && idToObject.size === 0 && idToName.size === 0 && idToName.size === 0) {
-        result.data.forEach((scientificName) => {
-            idToObject.set(scientificName.id, scientificName);
-            idToName.set(scientificName.id.toString(), scientificName.name);
-            nameToId.set(scientificName.name, scientificName.id);
-        });
-        setIdToObject(idToObject.clone());
-        setIdToName(idToName.clone());
-        setNameToId(nameToId.clone());
-    }
+    // derivado de la respuesta: al recargar se recalcula solo (antes quedaban datos viejos)
+    const collections = useMemo(() => {
+        const names = data ?? [];
+        return {
+            idToObject: new Collection(names.map(n => [n.id, n] as const)),
+            idToName: new Collection(names.map(n => [n.id.toString(), n.name] as const)),
+            nameToId: new Collection(names.map(n => [n.name, n.id] as const)),
+        };
+    }, [data]);
 
     const forceReload = (): void => {
         if (result.status !== FetchStatus.Loading) {
             result.forceReload();
-            idToObject.clear();
-            idToName.clear();
-            nameToId.clear();
-            setIdToObject(new Collection());
-            setIdToName(new Collection());
-            setNameToId(new Collection());
         }
     };
 
-    return { idToObject, idToName, nameToId, forceReload };
+    return { status: result.status, ...collections, forceReload };
 }

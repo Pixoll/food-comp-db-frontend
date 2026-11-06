@@ -2,10 +2,11 @@
 
 import type { FoodGroup } from "@/api";
 import { Collection } from "@/utils/collection";
-import { useState } from "react";
+import { useMemo } from "react";
 import { FetchStatus, useApi } from "./useApi";
 
 type UseGroups = {
+    status: FetchStatus;
     idToObject: Collection<number, FoodGroup>;
     idToName: Collection<string, string>;
     codeToId: Collection<string, number>;
@@ -14,32 +15,23 @@ type UseGroups = {
 
 export function useGroups(): UseGroups {
     const result = useApi([], (api) => api.getFoodGroups());
-    const [idToObject, setIdToObject] = useState(new Collection<number, FoodGroup>());
-    const [idToName, setIdToName] = useState(new Collection<string, string>());
-    const [codeToId, setCodeToId] = useState(new Collection<string, number>());
+    const data = result.status === FetchStatus.Success ? result.data : null;
 
-    if (result.status === FetchStatus.Success && idToObject.size === 0 && idToName.size === 0 && codeToId.size === 0) {
-        result.data.forEach((group) => {
-            idToObject.set(group.id, group);
-            idToName.set(group.id.toString(), group.name);
-            codeToId.set(group.code, group.id);
-        });
-        setIdToObject(idToObject.clone());
-        setIdToName(idToName.clone());
-        setCodeToId(codeToId.clone());
-    }
+    // derivado de la respuesta: al recargar se recalcula solo (antes quedaban datos viejos)
+    const collections = useMemo(() => {
+        const groups = data ?? [];
+        return {
+            idToObject: new Collection(groups.map(g => [g.id, g] as const)),
+            idToName: new Collection(groups.map(g => [g.id.toString(), g.name] as const)),
+            codeToId: new Collection(groups.map(g => [g.code, g.id] as const)),
+        };
+    }, [data]);
 
     const forceReload = (): void => {
         if (result.status !== FetchStatus.Loading) {
             result.forceReload();
-            idToObject.clear();
-            idToName.clear();
-            codeToId.clear();
-            setIdToObject(new Collection());
-            setIdToName(new Collection());
-            setCodeToId(new Collection());
         }
     };
 
-    return { idToObject, idToName, codeToId, forceReload };
+    return { status: result.status, ...collections, forceReload };
 }

@@ -3,7 +3,6 @@
 import type {JSX} from "react";
 import MembersComponent from "@/app/about-us/Components/MembersComponent";
 import styles from "./AboutUsPage.module.css";
-import {t} from "i18next";
 import {useTranslation} from "@/context/I18nContext";
 
 const members = [

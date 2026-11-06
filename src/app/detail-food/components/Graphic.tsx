@@ -1,120 +1,81 @@
 "use client";
 
-import { type JSX, useState } from "react";
-import { Cell, Legend, Pie, PieChart, type PieLabelRenderProps, Tooltip } from "recharts";
+import { useTranslation } from "@/context/I18nContext";
+import { formatNumber } from "@/utils/nutrients";
+import type { JSX } from "react";
+import { Bar, BarChart, Cell, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
-type DataItem = {
+export type GraphicItem = {
     name: string;
     value: number;
-    fill: string;
+    unit: string;
 };
 
 type GraphicProps = {
-    data: DataItem[];
     title: string;
-    grams: number;
+    description?: string;
+    data: GraphicItem[];
 };
 
-export default function Graphic({ data, title, grams }: GraphicProps): JSX.Element {
-    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+const COLORS = ["#1d6735", "#7cbb70", "#2c6fdc", "#c27c00", "#b83a8a", "#5aa9a0", "#ff3e00", "#8a8f98"];
+
+/**
+ * Barras horizontales en vez de torta: los macronutrientes de primer nivel se solapan
+ * (p. ej. carbohidratos totales y disponibles), así que un gráfico de partes de un todo engañaría.
+ */
+export default function Graphic({ title, description, data }: GraphicProps): JSX.Element {
+    const { t, language } = useTranslation();
+    const items = data.filter(item => item.value > 0);
+    const height = Math.max(160, items.length * 34 + 24);
+
     return (
-        <div className="w-full p-[16px] border-[1px] rounded-[4px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] bg-[white]">
-            <div className="text-center">
-                <h3 className="text-[20px] font-[700] text-gray-800">{title}</h3>
-            </div>
-            <div className="w-full h-[400px] mt-[10px] flex justify-center">
-                <PieChart key={grams} width={450} height={400}>
-                    <Pie
-                        data={data.filter((item) => item.value >= 0.01)}
-                        dataKey="value"
-                        nameKey="name"
-                        cx="50%"
-                        cy="45%"
-                        outerRadius={120}
-                        innerRadius={60}
-                        paddingAngle={3}
-                        label={CustomizedLabel}
-                        labelLine={false}
-                        startAngle={90}
-                        endAngle={-270}
-                        onMouseEnter={(_, index) => setHoveredIndex(index)}
-                        onMouseLeave={() => setHoveredIndex(null)}
-                    >
-                        {data.map((entry, index) => (
-                            <Cell
-                                key={`cell-${index}`}
-                                fill={entry.fill}
-                                stroke={hoveredIndex === index ? "#000000" : "none"}
-                                strokeWidth={hoveredIndex === index ? 2 : 0}
+        <div className="rounded-card border border-fog bg-paper p-5">
+            <h3 className="text-[16px] font-semibold text-carbon">{title}</h3>
+            {description && <p className="mt-1 text-[13px] text-graphite">{description}</p>}
+            {items.length === 0 ? (
+                <p className="mt-6 text-[13px] text-ash">{t.foodDetail.graphics.empty}</p>
+            ) : (
+                <div className="mt-4" style={{ height }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={items} layout="vertical" margin={{ top: 0, right: 56, bottom: 0, left: 0 }}>
+                            <XAxis type="number" hide/>
+                            <YAxis
+                                type="category"
+                                dataKey="name"
+                                width={140}
+                                tickLine={false}
+                                axisLine={false}
+                                tick={{ fontSize: 12, fill: "#666666" }}
                             />
-                        ))}
-                    </Pie>
-                    <Tooltip
-                        formatter={(value, name) => [`${value}%`, name]}
-                        contentStyle={{
-                            backgroundColor: "#f8f9fa",
-                            border: "1px solid #dee2e6",
-                            borderRadius: "8px",
-                            padding: "10px",
-                        }}
-                    />
-                    <Legend
-                        verticalAlign="bottom"
-                        align="center"
-                        layout="horizontal"
-                        iconType="circle"
-                        wrapperStyle={{
-                            paddingTop: "20px",
-                        }}
-                    />
-                </PieChart>
-            </div>
+                            <Tooltip
+                                cursor={{ fill: "#f5f5f5" }}
+                                formatter={(value, _name, entry) => [
+                                    `${formatNumber(Number(value), language)} ${(entry.payload as GraphicItem).unit}`,
+                                    "",
+                                ]}
+                                separator=""
+                                contentStyle={{
+                                    border: "1px solid #e8e8e8",
+                                    borderRadius: 8,
+                                    boxShadow: "0 1px 3px rgb(0 0 0 / 0.06), 0 8px 16px rgb(0 0 0 / 0.06)",
+                                    fontSize: 13,
+                                }}
+                            />
+                            <Bar dataKey="value" radius={[0, 6, 6, 0]} barSize={18}>
+                                {items.map((item, index) => (
+                                    <Cell key={item.name} fill={COLORS[index % COLORS.length]}/>
+                                ))}
+                                <LabelList
+                                    dataKey="value"
+                                    position="right"
+                                    formatter={(value) => `${formatNumber(Number(value), language, 2)} g`}
+                                    style={{ fontSize: 12, fill: "#666666" }}
+                                />
+                            </Bar>
+                        </BarChart>
+                    </ResponsiveContainer>
+                </div>
+            )}
         </div>
     );
-};
-
-function CustomizedLabel(props: PieLabelRenderProps): JSX.Element | null {
-    const {
-        cx = 0,
-        cy = 0,
-        midAngle = 0,
-        outerRadius = 0,
-        value,
-        fill,
-    } = props;
-
-    if (value === undefined || value < 0.01) return null;
-
-    const cxNum = Number(cx);
-    const cyNum = Number(cy);
-    const outerRadiusNum = Number(outerRadius);
-
-    const RADIAN = Math.PI / 180;
-    const radius = outerRadiusNum + 20;
-    const x = cxNum + radius * Math.cos(-midAngle * RADIAN);
-    const y = cyNum + radius * Math.sin(-midAngle * RADIAN);
-
-    const textAnchor = x > cxNum ? "start" : "end";
-
-    return <>
-        <line
-            x1={cxNum + (outerRadiusNum + 5) * Math.cos(-midAngle * RADIAN)}
-            y1={cyNum + (outerRadiusNum + 5) * Math.sin(-midAngle * RADIAN)}
-            x2={x}
-            y2={y}
-            stroke={fill}
-            strokeWidth={1.5}
-        />
-        <text
-            x={x}
-            y={y}
-            fill={fill}
-            textAnchor={textAnchor}
-            dominantBaseline="central"
-            fontSize="12px"
-            fontWeight="bold"
-        >
-            {typeof value === "number" ? `${value.toFixed(2)}%` : ""}
-        </text>
-    </>;
 }

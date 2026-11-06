@@ -35,6 +35,10 @@ export type SessionInfo = {
      * The username of the currently logged-in admin.
      */
     username: string;
+    /**
+     * The role of the currently logged-in admin.
+     */
+    role: 'admin' | 'super';
 };
 
 export type NewAdminDto = {
@@ -49,68 +53,23 @@ export type NewAdminDto = {
     password: string;
 };
 
-export type StringTranslation = {
-    /**
-     * String translation in spanish.
-     */
-    es: string | null;
-    /**
-     * String translation in english.
-     */
-    en: string | null;
-    /**
-     * String translation in portuguese.
-     */
-    pt: string | null;
-};
-
 export type BaseFood = {
     /**
      * The code of the food.
      */
     code: string;
     /**
+     * The primary name of the food.
+     */
+    foodName?: string;
+    /**
      * The common name of the food.
      */
-    commonName: StringTranslation;
+    commonName?: string;
     /**
      * The scientific name of the food.
      */
     scientificName?: string;
-    /**
-     * The subspecies of the food.
-     */
-    subspecies?: string;
-};
-
-export type NewCommonNameDto = {
-    /**
-     * The common name in spanish.
-     */
-    es: string;
-    /**
-     * The common name in english.
-     */
-    en?: string;
-    /**
-     * The common name in portuguese.
-     */
-    pt?: string;
-};
-
-export type IngredientsDto = {
-    /**
-     * The ingredients in spanish.
-     */
-    es?: string;
-    /**
-     * The ingredients in english.
-     */
-    en?: string;
-    /**
-     * The ingredients in portuguese.
-     */
-    pt?: string;
 };
 
 export type NewNutrientMeasurementDto = {
@@ -127,22 +86,6 @@ export type NewNutrientMeasurementDto = {
      */
     deviation?: number;
     /**
-     * The minimum value of the measurement.
-     */
-    min?: number;
-    /**
-     * The maximum value of the measurement.
-     */
-    max?: number;
-    /**
-     * The sample size of the measurement.
-     */
-    sampleSize?: number;
-    /**
-     * The data type of the measurement.
-     */
-    dataType: 'analytic' | 'calculated' | 'assumed' | 'borrowed';
-    /**
      * An array with all the reference codes of the measurement.
      */
     referenceCodes?: Array<number>;
@@ -151,53 +94,37 @@ export type NewNutrientMeasurementDto = {
 export type NewBatchFoodDto = {
     code: string;
     /**
+     * The primary name of the food.
+     */
+    foodName?: string;
+    /**
      * The common name of the food.
      */
-    commonName: NewCommonNameDto;
-    /**
-     * The ingredients of the food.
-     */
-    ingredients?: IngredientsDto;
+    commonName?: string;
     /**
      * The ID of the food group.
      */
     groupId: number;
     /**
-     * The ID of the food type.
-     */
-    typeId: number;
-    /**
-     * The ID of the scientific name. Should be provided if `subspeciesId` is present.
+     * The ID of the scientific name.
      */
     scientificNameId?: number;
-    /**
-     * The ID of the subspecies.
-     */
-    subspeciesId?: number;
-    /**
-     * The strain of the food.
-     */
-    strain?: string;
-    /**
-     * The brand of the food.
-     */
-    brand?: string;
     /**
      * Any additional observations about the food.
      */
     observation?: string;
     /**
-     * An array of origin IDs.
+     * Other additional information about the food.
      */
-    originIds?: Array<number>;
+    others?: string;
+    /**
+     * The quantity of portion units that make up the 100g base.
+     */
+    portionQuantity?: number;
     /**
      * An array with all the nutrient measurements of the food.
      */
     nutrientMeasurements: Array<NewNutrientMeasurementDto>;
-    /**
-     * An array with all the LanguaL codes of the food.
-     */
-    langualCodes: Array<number>;
 };
 
 export type NewBatchFoodsArrayDto = {
@@ -209,37 +136,10 @@ export type NewBatchFoodsArrayDto = {
 
 export type NutrientMeasurement = {
     /**
-     * The ID of the nutrient.
+     * The code of the nutrient in the BDCA spreadsheet (row 3 of "Composición alimentos", without the angle brackets).
+     * Used to match spreadsheet columns when importing.
      */
-    nutrientId: number;
-    /**
-     * The average value of the measurement.
-     */
-    average: number;
-    /**
-     * The deviation value of the measurement.
-     */
-    deviation?: number;
-    /**
-     * The minimum value of the measurement.
-     */
-    min?: number;
-    /**
-     * The maximum value of the measurement.
-     */
-    max?: number;
-    /**
-     * The sample size of the measurement.
-     */
-    sampleSize?: number;
-    /**
-     * The data type of the measurement.
-     */
-    dataType: 'analytic' | 'calculated' | 'assumed' | 'borrowed';
-    /**
-     * An array with all the reference codes of the measurement.
-     */
-    referenceCodes?: Array<number>;
+    code?: string;
     /**
      * The name of the nutrient.
      */
@@ -256,41 +156,30 @@ export type NutrientMeasurement = {
      * Additional notes about the nutrient.
      */
     note?: string;
+    /**
+     * The ID of the nutrient.
+     */
+    nutrientId: number;
+    /**
+     * The average value of the measurement.
+     */
+    average: number;
+    /**
+     * The deviation value of the measurement.
+     */
+    deviation?: number;
+    /**
+     * An array with all the reference codes of the measurement.
+     */
+    referenceCodes?: Array<number>;
 };
 
 export type MacronutrientMeasurement = {
     /**
-     * The ID of the nutrient.
+     * The code of the nutrient in the BDCA spreadsheet (row 3 of "Composición alimentos", without the angle brackets).
+     * Used to match spreadsheet columns when importing.
      */
-    nutrientId: number;
-    /**
-     * The average value of the measurement.
-     */
-    average: number;
-    /**
-     * The deviation value of the measurement.
-     */
-    deviation?: number;
-    /**
-     * The minimum value of the measurement.
-     */
-    min?: number;
-    /**
-     * The maximum value of the measurement.
-     */
-    max?: number;
-    /**
-     * The sample size of the measurement.
-     */
-    sampleSize?: number;
-    /**
-     * The data type of the measurement.
-     */
-    dataType: 'analytic' | 'calculated' | 'assumed' | 'borrowed';
-    /**
-     * An array with all the reference codes of the measurement.
-     */
-    referenceCodes?: Array<number>;
+    code?: string;
     /**
      * The name of the nutrient.
      */
@@ -308,9 +197,25 @@ export type MacronutrientMeasurement = {
      */
     note?: string;
     /**
+     * The ID of the nutrient.
+     */
+    nutrientId: number;
+    /**
+     * The average value of the measurement.
+     */
+    average: number;
+    /**
+     * The deviation value of the measurement.
+     */
+    deviation?: number;
+    /**
+     * An array with all the reference codes of the measurement.
+     */
+    referenceCodes?: Array<number>;
+    /**
      * The components that make up this macronutrient measurement.
      */
-    components: Array<NutrientMeasurement>;
+    components: Array<MacronutrientMeasurement>;
 };
 
 export type MicronutrientMeasurements = {
@@ -341,17 +246,21 @@ export type GroupedNutrientMeasurements = {
 
 export type FoodWithOnlyMeasurements = {
     /**
-     * The nutrient measurements of the food.
-     */
-    nutrientMeasurements: GroupedNutrientMeasurements;
-    /**
      * The code of the food.
      */
     code: string;
     /**
+     * The primary name of the food.
+     */
+    foodName?: string;
+    /**
      * The common name of the food.
      */
-    commonName: StringTranslation;
+    commonName?: string;
+    /**
+     * The nutrient measurements of the food.
+     */
+    nutrientMeasurements: GroupedNutrientMeasurements;
 };
 
 export type BaseFoodGroup = {
@@ -365,236 +274,89 @@ export type BaseFoodGroup = {
     name: string;
 };
 
-export type BaseFoodType = {
-    /**
-     * The code of the food type.
-     */
-    code: string;
-    /**
-     * The name of the food type.
-     */
-    name: string;
-};
-
-export type FoodOrigin = {
-    /**
-     * The id of the origin.
-     */
-    id: number;
-    /**
-     * The name of the origin.
-     */
-    name: string;
-};
-
-export type LangualCode = {
-    /**
-     * The ID of the LanguaL code.
-     */
-    id: number;
-    /**
-     * The LanguaL code.
-     */
-    code: string;
-    /**
-     * The descriptor of the LanguaL code.
-     */
-    descriptor: string;
-};
-
-export type GroupedLangualCode = {
-    /**
-     * The children of the LanguaL code.
-     */
-    children: Array<LangualCode>;
-    /**
-     * The ID of the LanguaL code.
-     */
-    id: number;
-    /**
-     * The LanguaL code.
-     */
-    code: string;
-    /**
-     * The descriptor of the LanguaL code.
-     */
-    descriptor: string;
-};
-
 export type Reference = {
     /**
      * The code of the reference.
      */
     code: number;
     /**
-     * The title of the reference.
+     * The content of the reference.
      */
-    title: string;
-    /**
-     * The type of the reference.
-     */
-    type: 'report' | 'thesis' | 'article' | 'website' | 'book';
-    /**
-     * The authors of the reference.
-     */
-    authors: Array<string>;
-    /**
-     * The year of the reference.
-     */
-    year?: number;
-    /**
-     * Additional information of the reference.
-     */
-    other?: string;
-    /**
-     * The volume number. Only present if `type` is "article".
-     */
-    volume?: number;
-    /**
-     * The issue number. Only present if `type` is "article".
-     */
-    issue?: number;
-    /**
-     * The year of the volume. Only present if `type` is "article".
-     */
-    volumeYear?: number;
-    /**
-     * The journal where the reference was published. Only present if `type` is "article".
-     */
-    journalName?: string;
-    /**
-     * The starting page of the article. Only present if `type` is "article".
-     */
-    pageStart?: number;
-    /**
-     * The ending page of the article. Only present if `type` is "article".
-     */
-    pageEnd?: number;
-    /**
-     * The city where the reference was published.
-     */
-    city?: string;
+    text?: string;
 };
 
 export type Food = {
     /**
-     * The ingredients of the food.
+     * The primary name of the food.
      */
-    ingredients: StringTranslation;
-    /**
-     * The group of the food.
-     */
-    group: BaseFoodGroup;
-    /**
-     * The type of the food.
-     */
-    type: BaseFoodType;
-    /**
-     * The strain of the food.
-     */
-    strain?: string;
-    /**
-     * The brand of the food.
-     */
-    brand?: string;
-    /**
-     * Any additional observations about the food.
-     */
-    observation?: string;
-    /**
-     * The origins of the food.
-     */
-    origins: Array<FoodOrigin>;
-    /**
-     * Array with all the LanguaL codes of the food.
-     */
-    langualCodes: Array<GroupedLangualCode>;
-    /**
-     * The nutrient measurements of the food.
-     */
-    nutrientMeasurements: GroupedNutrientMeasurements;
-    /**
-     * Array with all the referenced used in the nutrient measurements of the food.
-     */
-    references: Array<Reference>;
+    foodName?: string;
     /**
      * The common name of the food.
      */
-    commonName: StringTranslation;
+    commonName?: string;
     /**
      * The scientific name of the food.
      */
     scientificName?: string;
     /**
-     * The subspecies of the food.
+     * The group of the food.
      */
-    subspecies?: string;
-};
-
-export type NewFoodDto = {
-    /**
-     * The common name of the food.
-     */
-    commonName: NewCommonNameDto;
-    /**
-     * The ingredients of the food.
-     */
-    ingredients?: IngredientsDto;
-    /**
-     * The ID of the food group.
-     */
-    groupId: number;
-    /**
-     * The ID of the food type.
-     */
-    typeId: number;
-    /**
-     * The ID of the scientific name. Should be provided if `subspeciesId` is present.
-     */
-    scientificNameId?: number;
-    /**
-     * The ID of the subspecies.
-     */
-    subspeciesId?: number;
-    /**
-     * The strain of the food.
-     */
-    strain?: string;
-    /**
-     * The brand of the food.
-     */
-    brand?: string;
+    group: BaseFoodGroup;
     /**
      * Any additional observations about the food.
      */
     observation?: string;
     /**
-     * An array of origin IDs.
+     * Other additional information about the food (brands, origins, etc.).
      */
-    originIds?: Array<number>;
+    others?: string;
+    /**
+     * The quantity of portion units that make up the 100g base.
+     */
+    portionQuantity?: number;
+    /**
+     * The nutrient measurements of the food.
+     */
+    nutrientMeasurements: GroupedNutrientMeasurements;
+    /**
+     * Array with all the references used in the nutrient measurements of the food.
+     */
+    references: Array<Reference>;
+};
+
+export type NewFoodDto = {
+    /**
+     * The primary name of the food.
+     */
+    foodName?: string;
+    /**
+     * The common name of the food.
+     */
+    commonName?: string;
+    /**
+     * The ID of the food group.
+     */
+    groupId: number;
+    /**
+     * The ID of the scientific name.
+     */
+    scientificNameId?: number;
+    /**
+     * Any additional observations about the food.
+     */
+    observation?: string;
+    /**
+     * Other additional information about the food.
+     */
+    others?: string;
+    /**
+     * The quantity of portion units that make up the 100g base.
+     */
+    portionQuantity?: number;
     /**
      * An array with all the nutrient measurements of the food.
      */
     nutrientMeasurements: Array<NewNutrientMeasurementDto>;
-    /**
-     * An array with all the LanguaL codes of the food.
-     */
-    langualCodes: Array<number>;
-};
-
-export type CommonNameUpdateDto = {
-    /**
-     * The common name in spanish.
-     */
-    es?: string;
-    /**
-     * The common name in english.
-     */
-    en?: string;
-    /**
-     * The common name in portuguese.
-     */
-    pt?: string;
 };
 
 export type NutrientMeasurementUpdateDto = {
@@ -607,80 +369,49 @@ export type NutrientMeasurementUpdateDto = {
      */
     average?: number;
     /**
-     * The deviation value of the measurement.
+     * The deviation value of the measurement. Use `null` to clear it.
      */
-    deviation?: number;
+    deviation?: number | null;
     /**
-     * The minimum value of the measurement.
-     */
-    min?: number;
-    /**
-     * The maximum value of the measurement.
-     */
-    max?: number;
-    /**
-     * The sample size of the measurement.
-     */
-    sampleSize?: number;
-    /**
-     * The data type of the measurement.
-     */
-    dataType?: 'analytic' | 'calculated' | 'assumed' | 'borrowed';
-    /**
-     * An array with all the reference codes of the measurement.
+     * An array with all the reference codes of the measurement. Omit it to keep the current references,
+     * or send an empty array to remove all of them.
      */
     referenceCodes?: Array<number>;
 };
 
 export type FoodUpdateDto = {
     /**
+     * The primary name of the food.
+     */
+    foodName?: string | null;
+    /**
      * The common name of the food.
      */
-    commonName?: CommonNameUpdateDto;
-    /**
-     * The ingredients of the food.
-     */
-    ingredients?: IngredientsDto;
+    commonName?: string | null;
     /**
      * The ID of the food group.
      */
     groupId?: number;
     /**
-     * The ID of the food type.
-     */
-    typeId?: number;
-    /**
      * The ID of the scientific name.
      */
-    scientificNameId?: number;
-    /**
-     * The ID of the subspecies.
-     */
-    subspeciesId?: number;
-    /**
-     * The strain of the food.
-     */
-    strain?: string;
-    /**
-     * The brand of the food.
-     */
-    brand?: string;
+    scientificNameId?: number | null;
     /**
      * Any additional observations about the food.
      */
-    observation?: string;
+    observation?: string | null;
     /**
-     * An array of origin IDs.
+     * Other additional information about the food.
      */
-    originIds?: Array<number>;
+    others?: string | null;
+    /**
+     * The quantity of portion units that make up the 100g base.
+     */
+    portionQuantity?: number | null;
     /**
      * An array of nutrient measurements of the food.
      */
     nutrientMeasurements?: Array<NutrientMeasurementUpdateDto>;
-    /**
-     * An array of LanguaL codes of the food.
-     */
-    langualCodes?: Array<number>;
 };
 
 export type FoodGroup = {
@@ -715,6 +446,11 @@ export type Nutrient = {
      */
     id: number;
     /**
+     * The code of the nutrient in the BDCA spreadsheet (row 3 of "Composición alimentos", without the angle brackets).
+     * Used to match spreadsheet columns when importing.
+     */
+    code?: string;
+    /**
      * The name of the nutrient.
      */
     name: string;
@@ -738,6 +474,11 @@ export type Macronutrient = {
      */
     id: number;
     /**
+     * The code of the nutrient in the BDCA spreadsheet (row 3 of "Composición alimentos", without the angle brackets).
+     * Used to match spreadsheet columns when importing.
+     */
+    code?: string;
+    /**
      * The name of the nutrient.
      */
     name: string;
@@ -756,7 +497,7 @@ export type Macronutrient = {
     /**
      * The nutrients that make up this macronutrient.
      */
-    components: Array<Nutrient>;
+    components: Array<Macronutrient>;
 };
 
 export type Micronutrients = {
@@ -776,7 +517,7 @@ export type GroupedNutrients = {
      */
     energy: Array<Nutrient>;
     /**
-     * An array with all the macronutrients.
+     * An array with the top-level macronutrients. Their components are nested inside them.
      */
     macronutrients: Array<Macronutrient>;
     /**
@@ -787,9 +528,15 @@ export type GroupedNutrients = {
 
 export type NewNutrientDto = {
     /**
+     * The code of the nutrient in the BDCA spreadsheet (row 3 of "Composición alimentos", without the angle brackets).
+     * Spreadsheet imports use it to match columns. It may repeat with a different measurement unit (e.g. ENERC in kJ
+     * and kcal).
+     */
+    code?: string;
+    /**
      * The type of the nutrient.
      */
-    type: 'energy' | 'macronutrient' | 'component' | 'micronutrient';
+    type: 'energy' | 'macronutrient' | 'micronutrient';
     /**
      * The name of the nutrient.
      */
@@ -810,155 +557,12 @@ export type NewNutrientDto = {
      * The ID of the macronutrient associated with this nutrient.
      * Should only be provided if the `type` is "component".
      */
-    macronutrientId?: number;
+    parentId?: number;
     /**
      * The type of micronutrient, if applicable.
      * Should only be provided if the `type` is "micronutrient".
      */
     micronutrientType?: 'vitamin' | 'mineral';
-};
-
-export type Origin = {
-    /**
-     * The ID of the parent origin. Not present if the `type` is "region".
-     */
-    parentId?: number;
-    /**
-     * The number of the region (1-indexed).
-     */
-    regionNumber?: number;
-    /**
-     * The place of the origin from north to south (0-indexed).
-     */
-    regionPlace?: number;
-    /**
-     * The type of the location. Only present if `type` is "location".
-     */
-    locationType?: 'city' | 'town';
-    /**
-     * The id of the origin.
-     */
-    id: number;
-    /**
-     * The type of the origin.
-     */
-    type: 'region' | 'province' | 'commune' | 'location';
-    /**
-     * The name of the origin.
-     */
-    name: string;
-};
-
-export type NewOriginDto = {
-    /**
-     * The name of the origin.
-     */
-    name: string;
-    /**
-     * The type of the origin.
-     */
-    type: 'region' | 'province' | 'commune' | 'location';
-    /**
-     * The ID of the parent origin. Should only be provided if `type` is not "region".
-     */
-    parentId?: number;
-    /**
-     * The region number. Should only be provided if `type` is "region".
-     */
-    regionNumber?: number;
-    /**
-     * The region place. Should only be provided if `type` is "region".
-     */
-    regionPlace?: number;
-    /**
-     * The type of the location. Should only be provided if `type` is "location".
-     */
-    locationType?: 'city' | 'town';
-};
-
-export type OriginWithoutId = {
-    /**
-     * The type of the origin.
-     */
-    type: 'region' | 'province' | 'commune' | 'location';
-    /**
-     * The name of the origin.
-     */
-    name: string;
-    /**
-     * The ID of the parent origin. Not present if the `type` is "region".
-     */
-    parentId?: number;
-    /**
-     * The number of the region (1-indexed).
-     */
-    regionNumber?: number;
-    /**
-     * The place of the origin from north to south (0-indexed).
-     */
-    regionPlace?: number;
-    /**
-     * The type of the location. Only present if `type` is "location".
-     */
-    locationType?: 'city' | 'town';
-};
-
-export type OriginChild = {
-    /**
-     * The ID of the child origin.
-     */
-    id: number;
-    /**
-     * The name of the child origin.
-     */
-    name: string;
-    /**
-     * The location type of the child origin.
-     * Only present if the child origin type is "location", i.e. parent type is "commune".
-     */
-    type?: 'city' | 'town';
-};
-
-export type NewVolumeDto = {
-    /**
-     * The volume number.
-     */
-    volume: number;
-    /**
-     * The issue number.
-     */
-    issue: number;
-    /**
-     * The year of the volume.
-     */
-    year: number;
-    /**
-     * The ID of the journal. Should not be provided if `newJournal` is present.
-     */
-    journalId?: number;
-    /**
-     * The name of the new journal. Should not be provided if `journalId` is present.
-     */
-    newJournal?: string;
-};
-
-export type NewArticleDto = {
-    /**
-     * The starting page of the article.
-     */
-    pageStart: number;
-    /**
-     * The ending page of the article.
-     */
-    pageEnd: number;
-    /**
-     * The ID of the volume. Should not be provided if `newVolume` is present.
-     */
-    volumeId?: number;
-    /**
-     * The DTO for creating a new volume. Should not be provided if `volumeId` is present.
-     */
-    newVolume?: NewVolumeDto;
 };
 
 export type NewBatchReferenceDto = {
@@ -967,162 +571,20 @@ export type NewBatchReferenceDto = {
      */
     code: number;
     /**
-     * The type of the reference.
+     * The content of the reference.
      */
-    type: 'report' | 'thesis' | 'article' | 'website' | 'book';
-    /**
-     * The title of the reference.
-     */
-    title: string;
-    /**
-     * An array of author IDs. The length of this combined with `newAuthors` should be at least 1.
-     */
-    authorIds?: Array<number>;
-    /**
-     * An array of new author names.  The length of this combined with `authorIds` should be at least 1.
-     */
-    newAuthors?: Array<string>;
-    /**
-     * The year of the reference.
-     */
-    year?: number;
-    /**
-     * The DTO for creating a new article. Should only be provided if `type` is "article".
-     */
-    newArticle?: NewArticleDto;
-    /**
-     * The ID of the city. Should not be provided if `newCity` is present.
-     */
-    cityId?: number;
-    /**
-     * The name of the new city. Should not be provided if `cityId` is present.
-     */
-    newCity?: string;
-    /**
-     * Additional information required for website or book references. May be specified for other types as well.
-     */
-    other?: string;
+    text: string;
 };
 
 export type NewBatchReferencesArrayDto = {
-    /**
-     * An array of new references. Codes and articles may not be repeated.
-     */
     references: Array<NewBatchReferenceDto>;
 };
 
 export type NewReferenceDto = {
     /**
-     * The type of the reference.
+     * The content of the reference.
      */
-    type: 'report' | 'thesis' | 'article' | 'website' | 'book';
-    /**
-     * The title of the reference.
-     */
-    title: string;
-    /**
-     * An array of author IDs. The length of this combined with `newAuthors` should be at least 1.
-     */
-    authorIds?: Array<number>;
-    /**
-     * An array of new author names.  The length of this combined with `authorIds` should be at least 1.
-     */
-    newAuthors?: Array<string>;
-    /**
-     * The year of the reference.
-     */
-    year?: number;
-    /**
-     * The DTO for creating a new article. Should only be provided if `type` is "article".
-     */
-    newArticle?: NewArticleDto;
-    /**
-     * The ID of the city. Should not be provided if `newCity` is present.
-     */
-    cityId?: number;
-    /**
-     * The name of the new city. Should not be provided if `cityId` is present.
-     */
-    newCity?: string;
-    /**
-     * Additional information required for website or book references. May be specified for other types as well.
-     */
-    other?: string;
-};
-
-export type Author = {
-    /**
-     * The ID of the author.
-     */
-    id: number;
-    /**
-     * The name of the author.
-     */
-    name: string;
-};
-
-export type City = {
-    /**
-     * The ID of the city.
-     */
-    id: number;
-    /**
-     * The name of the city.
-     */
-    name: string;
-};
-
-export type Article = {
-    /**
-     * The ID of the author.
-     */
-    id: number;
-    /**
-     * The ID of the volume.
-     */
-    volumeId: number;
-    /**
-     * The starting page of the article.
-     */
-    pageStart: number;
-    /**
-     * The ending page of the article.
-     */
-    pageEnd: number;
-};
-
-export type JournalVolume = {
-    /**
-     * The ID of the author.
-     */
-    id: number;
-    /**
-     * The ID of the journal.
-     */
-    journalId: number;
-    /**
-     * The volume number.
-     */
-    volume: number;
-    /**
-     * The issue number.
-     */
-    issue: number;
-    /**
-     * The year of the volume.
-     */
-    year: number;
-};
-
-export type Journal = {
-    /**
-     * The ID of the journal.
-     */
-    id: number;
-    /**
-     * The name of the journal.
-     */
-    name: string;
+    text: string;
 };
 
 export type ScientificName = {
@@ -1143,389 +605,286 @@ export type NewScientificNameDto = {
     name: string;
 };
 
-export type Subspecies = {
-    /**
-     * The id of the subspecies.
-     */
-    id: number;
-    /**
-     * The name of the subspecies.
-     */
-    name: string;
-};
-
-export type NewSubspeciesDto = {
-    /**
-     * The name of the subspecies.
-     */
-    name: string;
-};
-
-export type FoodType = {
-    /**
-     * The code of the food type.
-     */
-    code: string;
-    /**
-     * The name of the food type.
-     */
-    name: string;
-    /**
-     * The id of the food type.
-     */
-    id: number;
-};
-
-export type NewTypeDto = {
-    /**
-     * The code of the food type.
-     */
-    code: string;
-    /**
-     * The name of the food type.
-     */
-    name: string;
-};
-
-export type Language = {
-    /**
-     * The ID of the language.
-     */
-    id: number;
-    /**
-     * The code of the language.
-     */
-    code: 'es' | 'en' | 'pt';
-    /**
-     * The name of the language.
-     */
-    name: string;
-};
-
 export type XlsxFileDto = {
+    /**
+     * The BDCA spreadsheet (.xlsx or .xls).
+     */
     file: Blob | File;
 };
 
-export type XlsxStringValue = {
+export type XlsxPreviewSummary = {
     /**
-     * Parsed value from the XLS(X) file. `null` if it wasn't able to be parsed or if `raw` is empty string.
+     * Foods in the "Alimentos" sheet.
      */
-    parsed: string | null;
+    foods: number;
     /**
-     * Raw value obtained from the XLS(X) file.
+     * Foods that will be created.
      */
-    raw: string;
+    newFoods: number;
     /**
-     * Old value stored in the database. May be `null`.
+     * Valid foods whose code already exists.
      */
-    old?: string | null;
+    existingFoods: number;
     /**
-     * Flags of this value, composed of 3 bits in the following order: (`updated`, `new`, `valid`).
-     * Note: `updated` and `new` are mutually exclusive.
-     *
-     * Flag values:
-     * - 0 = 0b000 => invalid
-     * - 1 = 0b001 => valid
-     * - 2 = 0b010 => new, invalid
-     * - 3 = 0b011 => new, valid
-     * - 4 = 0b100 => updated, invalid
-     * - 5 = 0b101 => updated, valid
+     * Foods with errors.
      */
-    flags: number;
+    invalidFoods: number;
+    /**
+     * Measurements of the valid foods.
+     */
+    measurements: number;
+    /**
+     * References that will be created.
+     */
+    newReferences: number;
+    /**
+     * Scientific names that will be created.
+     */
+    newScientificNames: number;
+    /**
+     * Columns imported into a nutrient.
+     */
+    mappedColumns: number;
+    /**
+     * Nutrient columns that aren't imported.
+     */
+    ignoredColumns: number;
+    /**
+     * Values in columns that aren't imported.
+     */
+    ignoredValues: number;
 };
 
-export type XlsxStringTranslation = {
-    /**
-     * String translation in spanish.
-     */
-    es: XlsxStringValue | null;
-    /**
-     * String translation in english.
-     */
-    en: XlsxStringValue | null;
-    /**
-     * String translation in portuguese.
-     */
-    pt: XlsxStringValue | null;
-};
-
-export type XlsxNumberValue = {
-    /**
-     * Parsed value from the XLS(X) file. `null` if it wasn't able to be parsed or if `raw` is empty string.
-     */
-    parsed: number | null;
-    /**
-     * Raw value obtained from the XLS(X) file.
-     */
-    raw: string;
-    /**
-     * Old value stored in the database. May be `null`.
-     */
-    old?: number | null;
-    /**
-     * Flags of this value, composed of 3 bits in the following order: (`updated`, `new`, `valid`).
-     * Note: `updated` and `new` are mutually exclusive.
-     *
-     * Flag values:
-     * - 0 = 0b000 => invalid
-     * - 1 = 0b001 => valid
-     * - 2 = 0b010 => new, invalid
-     * - 3 = 0b011 => new, valid
-     * - 4 = 0b100 => updated, invalid
-     * - 5 = 0b101 => updated, valid
-     */
-    flags: number;
-};
-
-export type XlsxMeasurementDataTypeValue = {
-    /**
-     * Parsed value from the XLS(X) file. `null` if it wasn't able to be parsed or if `raw` is empty string.
-     */
-    parsed: 'analytic' | 'calculated' | 'assumed' | 'borrowed';
-    /**
-     * Raw value obtained from the XLS(X) file.
-     */
-    raw: string;
-    /**
-     * Old value stored in the database. May be `null`.
-     */
-    old?: 'analytic' | 'calculated' | 'assumed' | 'borrowed';
-    /**
-     * Flags of this value, composed of 3 bits in the following order: (`updated`, `new`, `valid`).
-     * Note: `updated` and `new` are mutually exclusive.
-     *
-     * Flag values:
-     * - 0 = 0b000 => invalid
-     * - 1 = 0b001 => valid
-     * - 2 = 0b010 => new, invalid
-     * - 3 = 0b011 => new, valid
-     * - 4 = 0b100 => updated, invalid
-     * - 5 = 0b101 => updated, valid
-     */
-    flags: number;
-};
-
-export type XlsxNutrientMeasurement = {
+export type XlsxMeasurementPreview = {
     /**
      * The ID of the nutrient.
      */
     nutrientId: number;
     /**
-     * The average value of the measurement.
+     * The average value, already converted to the nutrient's unit.
      */
-    average: XlsxNumberValue;
+    average: number;
     /**
-     * The deviation value of the measurement.
+     * The deviation, already converted to the nutrient's unit.
      */
-    deviation?: XlsxNumberValue;
+    deviation?: number;
     /**
-     * The minimum value of the measurement.
+     * The spreadsheet column the value comes from.
      */
-    min?: XlsxNumberValue;
-    /**
-     * The maximum value of the measurement.
-     */
-    max?: XlsxNumberValue;
-    /**
-     * The sample size of the measurement.
-     */
-    sampleSize?: XlsxNumberValue;
-    /**
-     * An array with all the reference codes of the measurement.
-     */
-    referenceCodes?: Array<XlsxNumberValue>;
-    /**
-     * The data type of the measurement.
-     */
-    dataType: XlsxMeasurementDataTypeValue;
-    /**
-     * Flags of this value, composed of 3 bits in the following order: (`updated`, `new`, `valid`).
-     * Note: `updated` and `new` are mutually exclusive.
-     *
-     * Flag values:
-     * - 0 = 0b000 => invalid
-     * - 1 = 0b001 => valid
-     * - 2 = 0b010 => new, invalid
-     * - 3 = 0b011 => new, valid
-     * - 4 = 0b100 => updated, invalid
-     * - 5 = 0b101 => updated, valid
-     */
-    flags: number;
+    column: string;
 };
 
-export type XlsxFood = {
+export type XlsxIssue = {
     /**
-     * The code of the food.
+     * The kind of problem.
      */
-    code: XlsxStringValue;
+    type: 'invalid_code' | 'duplicate_code' | 'missing_group' | 'unknown_group' | 'missing_name' | 'too_long' | 'invalid_portion' | 'not_in_composition' | 'no_measurements' | 'non_numeric_value' | 'negative_value' | 'out_of_range' | 'invalid_deviation' | 'deviation_without_average' | 'portion_unit' | 'no_reference' | 'rows_without_food' | 'duplicate_composition_row' | 'missing_metadata_sheet';
     /**
-     * The common name of the food.
+     * The spreadsheet column, when the problem is in a specific cell.
      */
-    commonName: XlsxStringTranslation;
+    column?: string;
     /**
-     * The ingredients of the food.
+     * The food field, for `too_long`.
      */
-    ingredients: XlsxStringTranslation;
+    field?: string;
     /**
-     * The group of the food.
+     * The offending value.
      */
-    group: XlsxNumberValue;
+    value?: string;
     /**
-     * The type of the food.
+     * The maximum length, for `too_long`.
      */
-    type: XlsxNumberValue;
-    /**
-     * The scientific name of the food.
-     */
-    scientificName?: XlsxNumberValue;
-    /**
-     * The subspecies of the food.
-     */
-    subspecies?: XlsxNumberValue;
-    /**
-     * The strain of the food.
-     */
-    strain?: XlsxStringValue;
-    /**
-     * The brand of the food.
-     */
-    brand?: XlsxStringValue;
-    /**
-     * The origins of the food.
-     */
-    origins: Array<XlsxNumberValue>;
-    /**
-     * Any additional observations about the food.
-     */
-    observation?: XlsxStringValue;
-    /**
-     * Array with all the LanguaL codes of the food.
-     */
-    langualCodes: Array<XlsxNumberValue>;
-    /**
-     * The nutrient measurements of the food.
-     */
-    nutrientMeasurements: Array<XlsxNutrientMeasurement>;
-    /**
-     * Flags of this value, composed of 3 bits in the following order: (`updated`, `new`, `valid`).
-     * Note: `updated` and `new` are mutually exclusive.
-     *
-     * Flag values:
-     * - 0 = 0b000 => invalid
-     * - 1 = 0b001 => valid
-     * - 2 = 0b010 => new, invalid
-     * - 3 = 0b011 => new, valid
-     * - 4 = 0b100 => updated, invalid
-     * - 5 = 0b101 => updated, valid
-     */
-    flags: number;
+    max?: number;
 };
 
-export type XlsxReferenceTypeValue = {
+export type XlsxFoodPreview = {
     /**
-     * Parsed value from the XLS(X) file. `null` if it wasn't able to be parsed or if `raw` is empty string.
+     * The row of the food in the "Alimentos" sheet.
      */
-    parsed: 'report' | 'thesis' | 'article' | 'website' | 'book';
+    row: number;
     /**
-     * Raw value obtained from the XLS(X) file.
+     * The code of the food (ID_ALIMENTO).
      */
-    raw: string;
+    code: string;
     /**
-     * Old value stored in the database. May be `null`.
+     * Whether the food will be created, already exists, or can't be imported.
      */
-    old?: 'report' | 'thesis' | 'article' | 'website' | 'book';
+    status: 'new' | 'existing' | 'invalid';
     /**
-     * Flags of this value, composed of 3 bits in the following order: (`updated`, `new`, `valid`).
-     * Note: `updated` and `new` are mutually exclusive.
-     *
-     * Flag values:
-     * - 0 = 0b000 => invalid
-     * - 1 = 0b001 => valid
-     * - 2 = 0b010 => new, invalid
-     * - 3 = 0b011 => new, valid
-     * - 4 = 0b100 => updated, invalid
-     * - 5 = 0b101 => updated, valid
+     * NOMBRE DEL ALIMENTO.
      */
-    flags: number;
+    foodName?: string;
+    /**
+     * NOMBRE SINONIMO.
+     */
+    commonName?: string;
+    /**
+     * NOMBRE CIENTÍFICO, without the author (the text after ";").
+     */
+    scientificName?: string;
+    /**
+     * Whether the scientific name will be created.
+     */
+    newScientificName?: boolean;
+    /**
+     * COD_GRUPO.
+     */
+    groupCode?: string;
+    /**
+     * The name of the group in the database.
+     */
+    groupName?: string;
+    /**
+     * DESCRIPCIÓN, stored as the observation.
+     */
+    observation?: string;
+    /**
+     * OTROS.
+     */
+    others?: string;
+    /**
+     * PORCIÓN, in grams.
+     */
+    portionQuantity?: number;
+    /**
+     * The reference linked to all the food's measurements.
+     */
+    referenceCode?: number;
+    /**
+     * The measurements that will be saved.
+     */
+    measurements: Array<XlsxMeasurementPreview>;
+    /**
+     * Problems that prevent importing the food.
+     */
+    errors: Array<XlsxIssue>;
+    /**
+     * Values that will be skipped or details to review. They don't prevent the import.
+     */
+    warnings: Array<XlsxIssue>;
 };
 
-export type XlsxReference = {
+export type XlsxReferencePreview = {
     /**
      * The code of the reference.
      */
-    code: XlsxNumberValue;
+    code: number;
     /**
-     * The title of the reference.
+     * The text of the reference.
      */
-    title: XlsxStringValue;
+    text: string;
     /**
-     * The type of the reference.
+     * Whether the reference will be created.
      */
-    type: XlsxReferenceTypeValue;
+    isNew: boolean;
     /**
-     * The authors of the reference.
+     * How many foods of the file use it.
      */
-    authors: Array<XlsxNumberValue>;
-    /**
-     * The year of the reference.
-     */
-    year?: XlsxNumberValue;
-    /**
-     * Additional information of the reference.
-     */
-    other?: XlsxStringValue;
-    /**
-     * The volume number.
-     */
-    volume?: XlsxNumberValue;
-    /**
-     * The issue number.
-     */
-    issue?: XlsxNumberValue;
-    /**
-     * The year of the volume.
-     */
-    volumeYear?: XlsxNumberValue;
-    /**
-     * The journal where the reference was published.
-     */
-    journal?: XlsxNumberValue;
-    /**
-     * The starting page of the article.
-     */
-    pageStart?: XlsxNumberValue;
-    /**
-     * The ending page of the article.
-     */
-    pageEnd?: XlsxNumberValue;
-    /**
-     * The city where the reference was published.
-     */
-    city?: XlsxNumberValue;
-    /**
-     * Flags of this value, composed of 3 bits in the following order: (`updated`, `new`, `valid`).
-     * Note: `updated` and `new` are mutually exclusive.
-     *
-     * Flag values:
-     * - 0 = 0b000 => invalid
-     * - 1 = 0b001 => valid
-     * - 2 = 0b010 => new, invalid
-     * - 3 = 0b011 => new, valid
-     * - 4 = 0b100 => updated, invalid
-     * - 5 = 0b101 => updated, valid
-     */
-    flags: number;
+    foods: number;
 };
 
-export type ParseXlsxResult = {
+export type XlsxColumnPreview = {
     /**
-     * Array with all the foods parsed from the XLS(X) file.
+     * The spreadsheet column.
      */
-    foods: Array<XlsxFood>;
+    column: string;
     /**
-     * Array with all the foods parsed from the XLS(X) file.
+     * The code in row 3, without the angle brackets.
      */
-    references: Array<XlsxReference>;
+    code?: string;
+    /**
+     * The description in row 4.
+     */
+    header: string;
+    /**
+     * The unit read from the description.
+     */
+    unit?: string;
+    /**
+     * The column holding the deviation of this one.
+     */
+    deviationColumn?: string;
+    /**
+     * How the column is used.
+     */
+    status: 'mapped' | 'fallback' | 'unmapped' | 'no_code' | 'unit_mismatch' | 'ambiguous';
+    /**
+     * The nutrient the column is imported into.
+     */
+    nutrientId?: number;
+    /**
+     * Factor applied to convert the column's unit to the nutrient's unit, when they differ.
+     */
+    factor?: number;
+    /**
+     * How many foods have a value in this column.
+     */
+    values: number;
+};
+
+export type XlsxPreview = {
+    /**
+     * Counts for the whole file.
+     */
+    summary: XlsxPreviewSummary;
+    /**
+     * Every food of the "Alimentos" sheet, in order.
+     */
+    foods: Array<XlsxFoodPreview>;
+    /**
+     * The references used by the file.
+     */
+    references: Array<XlsxReferencePreview>;
+    /**
+     * Every nutrient column of the "Composición alimentos" sheet.
+     */
+    columns: Array<XlsxColumnPreview>;
+    /**
+     * Problems with the file as a whole.
+     */
+    warnings: Array<XlsxIssue>;
+};
+
+export type XlsxImportFileDto = {
+    /**
+     * The BDCA spreadsheet (.xlsx or .xls).
+     */
+    file: Blob | File;
+    /**
+     * Whether to update the foods whose code already exists. If false or missing, they're left unchanged.
+     */
+    updateExisting?: boolean;
+};
+
+export type XlsxImportResult = {
+    /**
+     * Codes of the foods created.
+     */
+    created: Array<string>;
+    /**
+     * Codes of the existing foods updated.
+     */
+    updated: Array<string>;
+    /**
+     * Codes of the existing foods left unchanged.
+     */
+    skipped: Array<string>;
+    /**
+     * Codes of the foods not imported because of errors.
+     */
+    invalid: Array<string>;
+    /**
+     * Measurements created or updated.
+     */
+    measurements: number;
+    /**
+     * References created.
+     */
+    referencesCreated: number;
+    /**
+     * Scientific names created.
+     */
+    scientificNamesCreated: number;
 };
 
 export type LoginData = {
@@ -1596,6 +955,10 @@ export type GetSessionInfoErrors = {
      * Session token is missing or invalid.
      */
     401: HttpException;
+    /**
+     * You do not have enough permissions.
+     */
+    403: HttpException;
 };
 
 export type GetSessionInfoError = GetSessionInfoErrors[keyof GetSessionInfoErrors];
@@ -1631,6 +994,10 @@ export type DeleteAdminErrors = {
      * Session token is missing or invalid.
      */
     401: HttpException;
+    /**
+     * You do not have enough permissions.
+     */
+    403: HttpException;
     /**
      * Admin doesn't exist.
      */
@@ -1671,6 +1038,10 @@ export type CreateAdminErrors = {
      */
     401: HttpException;
     /**
+     * You do not have enough permissions.
+     */
+    403: HttpException;
+    /**
      * Admin already exists.
      */
     409: HttpException;
@@ -1694,17 +1065,9 @@ export type GetFoodsData = {
          */
         name?: string;
         /**
-         * An array of region IDs.
-         */
-        regions?: Array<number>;
-        /**
          * An array of group IDs.
          */
         groups?: Array<number>;
-        /**
-         * An array of type IDs.
-         */
-        types?: Array<number>;
         /**
          * An array of nutrient IDs.
          */
@@ -1723,7 +1086,7 @@ export type GetFoodsData = {
 
 export type GetFoodsErrors = {
     /**
-     * <br/>Either one of the following:<br/>– Some regions don't exist.<br/>– Some food groups don't exist.<br/>– Some food types don't exist.<br/>– Some nutrients don't exist.<br/>
+     * <br/>Either one of the following:<br/>– Some food groups don't exist.<br/>– Some nutrients don't exist.<br/>
      */
     404: HttpException;
 };
@@ -1756,7 +1119,11 @@ export type BatchCreateFoodsErrors = {
      */
     401: HttpException;
     /**
-     * <br/>Either one of the following:<br/>– Food group doesn't exist.<br/>– Food type doesn't exist.<br/>– Scientific name doesn't exist.<br/>– Subspecies doesn't exist.<br/>– Some origins don't exist.<br/>– Some LanguaL codes don't exist.<br/>– Nutrient doesn't exist.<br/>– Some references don't exist.<br/>
+     * You do not have enough permissions.
+     */
+    403: HttpException;
+    /**
+     * <br/>Either one of the following:<br/>– Food group doesn't exist.<br/>– Scientific name doesn't exist.<br/>– Nutrient doesn't exist.<br/>– Some references don't exist.<br/>
      */
     404: HttpException;
     /**
@@ -1844,7 +1211,11 @@ export type UpdateFoodErrors = {
      */
     401: HttpException;
     /**
-     * <br/>Either one of the following:<br/>- Food doesn't exist.<br/>- Food group doesn't exist.<br/>- Food type doesn't exist.<br/>- Scientific name doesn't exist.<br/>- Subspecies doesn't exist.<br/>- Some origins don't exist.<br/>- Some LanguaL codes don't exist.<br/>- Nutrient doesn't exist.<br/>- Some references don't exist.<br/>
+     * You do not have enough permissions.
+     */
+    403: HttpException;
+    /**
+     * <br/>Either one of the following:<br/>– Food doesn't exist.<br/>– Food group doesn't exist.<br/>– Scientific name doesn't exist.<br/>– Nutrient doesn't exist.<br/>– Some references don't exist.<br/>
      */
     404: HttpException;
 };
@@ -1880,7 +1251,11 @@ export type CreateFoodErrors = {
      */
     401: HttpException;
     /**
-     * <br/>Either one of the following:<br/>- Food group doesn't exist.<br/>- Food type doesn't exist.<br/>- Scientific name doesn't exist.<br/>- Subspecies doesn't exist.<br/>- Some origins don't exist.<br/>- Some LanguaL codes don't exist.<br/>- Nutrient doesn't exist.<br/>- Some references don't exist.<br/>
+     * You do not have enough permissions.
+     */
+    403: HttpException;
+    /**
+     * <br/>Either one of the following:<br/>– Food group doesn't exist.<br/>– Scientific name doesn't exist.<br/>– Nutrient doesn't exist.<br/>– Some references don't exist.<br/>
      */
     404: HttpException;
     /**
@@ -1931,6 +1306,10 @@ export type CreateFoodGroupErrors = {
      */
     401: HttpException;
     /**
+     * You do not have enough permissions.
+     */
+    403: HttpException;
+    /**
      * Food group already exists.
      */
     409: HttpException;
@@ -1944,38 +1323,6 @@ export type CreateFoodGroupResponses = {
      */
     201: unknown;
 };
-
-export type GetLangualCodesData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/langual-codes';
-};
-
-export type GetLangualCodesResponses = {
-    /**
-     * Successfully retrieved LanguaL codes.
-     */
-    200: Array<LangualCode>;
-};
-
-export type GetLangualCodesResponse = GetLangualCodesResponses[keyof GetLangualCodesResponses];
-
-export type GetGroupedLangualCodesData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/langual-codes/grouped';
-};
-
-export type GetGroupedLangualCodesResponses = {
-    /**
-     * Successfully retrieved LanguaL codes grouped by parent.
-     */
-    200: Array<GroupedLangualCode>;
-};
-
-export type GetGroupedLangualCodesResponse = GetGroupedLangualCodesResponses[keyof GetGroupedLangualCodesResponses];
 
 export type GetNutrientsData = {
     body?: never;
@@ -2010,6 +1357,10 @@ export type CreateNutrientErrors = {
      */
     401: HttpException;
     /**
+     * You do not have enough permissions.
+     */
+    403: HttpException;
+    /**
      * Macronutrient doesn't exist.
      */
     404: HttpException;
@@ -2028,150 +1379,14 @@ export type CreateNutrientResponses = {
     201: unknown;
 };
 
-export type GetOriginsData = {
-    body?: never;
-    path?: never;
-    query?: {
-        /**
-         * The name of the origin.
-         */
-        name?: string;
-    };
-    url: '/origins';
-};
-
-export type GetOriginsResponses = {
-    /**
-     * Successfully retrieved origins.
-     */
-    200: Array<Origin>;
-};
-
-export type GetOriginsResponse = GetOriginsResponses[keyof GetOriginsResponses];
-
-export type CreateOriginData = {
-    body: NewOriginDto;
-    path?: never;
-    query?: never;
-    url: '/origins';
-};
-
-export type CreateOriginErrors = {
-    /**
-     * Validation errors (body).
-     */
-    400: HttpException;
-    /**
-     * Session token is missing or invalid.
-     */
-    401: HttpException;
-    /**
-     * Parent origin doesn't exist.
-     */
-    404: HttpException;
-    /**
-     * Origin already exists.
-     */
-    409: HttpException;
-};
-
-export type CreateOriginError = CreateOriginErrors[keyof CreateOriginErrors];
-
-export type CreateOriginResponses = {
-    /**
-     * Origin created successfully.
-     */
-    201: unknown;
-};
-
-export type GetOriginData = {
-    body?: never;
-    path: {
-        /**
-         * The ID of the origin.
-         */
-        id: number;
-    };
-    query?: never;
-    url: '/origins/{id}';
-};
-
-export type GetOriginErrors = {
-    /**
-     * Validation errors (params).
-     */
-    400: HttpException;
-    /**
-     * Origin doesn't exist.
-     */
-    404: HttpException;
-};
-
-export type GetOriginError = GetOriginErrors[keyof GetOriginErrors];
-
-export type GetOriginResponses = {
-    /**
-     * Successfully retrieved origin.
-     */
-    200: OriginWithoutId;
-};
-
-export type GetOriginResponse = GetOriginResponses[keyof GetOriginResponses];
-
-export type GetOriginChildrenData = {
-    body?: never;
-    path: {
-        /**
-         * The ID of the origin.
-         */
-        id: number;
-    };
-    query?: never;
-    url: '/origins/{id}/children';
-};
-
-export type GetOriginChildrenErrors = {
-    /**
-     * Validation errors (params).
-     */
-    400: HttpException;
-    /**
-     * Origin doesn't exist.
-     */
-    404: HttpException;
-};
-
-export type GetOriginChildrenError = GetOriginChildrenErrors[keyof GetOriginChildrenErrors];
-
-export type GetOriginChildrenResponses = {
-    /**
-     * Successfully retrieved origin children.
-     */
-    200: Array<OriginChild>;
-};
-
-export type GetOriginChildrenResponse = GetOriginChildrenResponses[keyof GetOriginChildrenResponses];
-
 export type GetReferencesData = {
     body?: never;
     path?: never;
     query?: {
         /**
-         * The title of the reference.
+         * Part of the content of the reference. If omitted, all references are returned.
          */
-        title?: string;
-        /**
-         * An array of author IDs.
-         */
-        authors?: Array<number>;
-        /**
-         * An array of journal IDs.
-         */
-        journals?: Array<number>;
-        /**
-         * An array of city IDs.
-         */
-        cities?: Array<number>;
+        text?: string;
     };
     url: '/references';
 };
@@ -2181,10 +1396,6 @@ export type GetReferencesErrors = {
      * Validation errors (query).
      */
     400: HttpException;
-    /**
-     * <br/>Either one of the following:<br/>– Some authors don't exist.<br/>– Some cities don't exist.<br/>– Some journals don't exist.<br/>
-     */
-    404: HttpException;
 };
 
 export type GetReferencesError = GetReferencesErrors[keyof GetReferencesErrors];
@@ -2215,11 +1426,11 @@ export type BatchCreateReferencesErrors = {
      */
     401: HttpException;
     /**
-     * <br/>Either one of the following:<br/>- Some authors don't exist.<br/>- City doesn't exist.<br/>- Volume doesn't exist.<br/>- Journal doesn't exist.<br/>
+     * You do not have enough permissions.
      */
-    404: HttpException;
+    403: HttpException;
     /**
-     * <br/>Either one of the following:<br/>- Reference already exists.<br/>- Some authors already exist.<br/>- City already exists.<br/>- Volume already exists.<br/>- Journal already exists.<br/>
+     * <br/>Either one of the following:<br/>- Reference already exists.<br/>
      */
     409: HttpException;
 };
@@ -2255,11 +1466,11 @@ export type CreateReferenceErrors = {
      */
     401: HttpException;
     /**
-     * <br/>Either one of the following:<br/>- Some authors don't exist.<br/>- City doesn't exist.<br/>- Volume doesn't exist.<br/>- Journal doesn't exist.<br/>
+     * You do not have enough permissions.
      */
-    404: HttpException;
+    403: HttpException;
     /**
-     * <br/>Either one of the following:<br/>- Reference already exists.<br/>- Some authors already exist.<br/>- City already exists.<br/>- Volume already exists.<br/>- Journal already exists.<br/>
+     * <br/>Either one of the following:<br/>- Reference already exists.<br/>
      */
     409: HttpException;
 };
@@ -2272,80 +1483,6 @@ export type CreateReferenceResponses = {
      */
     201: unknown;
 };
-
-export type GetAuthorsData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/references/authors';
-};
-
-export type GetAuthorsResponses = {
-    /**
-     * Successfully retrieved authors.
-     */
-    200: Array<Author>;
-};
-
-export type GetAuthorsResponse = GetAuthorsResponses[keyof GetAuthorsResponses];
-
-export type GetCitiesData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/references/cities';
-};
-
-export type GetCitiesResponses = {
-    /**
-     * Successfully retrieved cities.
-     */
-    200: Array<City>;
-};
-
-export type GetCitiesResponse = GetCitiesResponses[keyof GetCitiesResponses];
-
-export type GetArticlesData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/references/articles';
-};
-
-export type GetArticlesResponses = {
-    200: Array<Article>;
-};
-
-export type GetArticlesResponse = GetArticlesResponses[keyof GetArticlesResponses];
-
-export type GetJournalVolumesData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/references/journal-volumes';
-};
-
-export type GetJournalVolumesResponses = {
-    200: Array<JournalVolume>;
-};
-
-export type GetJournalVolumesResponse = GetJournalVolumesResponses[keyof GetJournalVolumesResponses];
-
-export type GetJournalsData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/references/journals';
-};
-
-export type GetJournalsResponses = {
-    /**
-     * Successfully retrieved journals.
-     */
-    200: Array<Journal>;
-};
-
-export type GetJournalsResponse = GetJournalsResponses[keyof GetJournalsResponses];
 
 export type GetScientificNamesData = {
     body?: never;
@@ -2380,6 +1517,10 @@ export type CreateScientificNameErrors = {
      */
     401: HttpException;
     /**
+     * You do not have enough permissions.
+     */
+    403: HttpException;
+    /**
      * Scientific name already exists.
      */
     409: HttpException;
@@ -2394,180 +1535,82 @@ export type CreateScientificNameResponses = {
     201: unknown;
 };
 
-export type GetSubspeciesData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/subspecies';
-};
-
-export type GetSubspeciesResponses = {
+export type PreviewXlsxData = {
     /**
-     * Successfully retrieved subspecies.
-     */
-    200: Array<Subspecies>;
-};
-
-export type GetSubspeciesResponse = GetSubspeciesResponses[keyof GetSubspeciesResponses];
-
-export type CreateSubspeciesData = {
-    body: NewSubspeciesDto;
-    path?: never;
-    query?: never;
-    url: '/subspecies';
-};
-
-export type CreateSubspeciesErrors = {
-    /**
-     * Validation errors (body).
-     */
-    400: HttpException;
-    /**
-     * Session token is missing or invalid.
-     */
-    401: HttpException;
-    /**
-     * Subspecies already exists.
-     */
-    409: HttpException;
-};
-
-export type CreateSubspeciesError = CreateSubspeciesErrors[keyof CreateSubspeciesErrors];
-
-export type CreateSubspeciesResponses = {
-    /**
-     * Subspecies created successfully.
-     */
-    201: unknown;
-};
-
-export type GetFoodTypesData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/types';
-};
-
-export type GetFoodTypesResponses = {
-    /**
-     * Successfully retrieved food types.
-     */
-    200: Array<FoodType>;
-};
-
-export type GetFoodTypesResponse = GetFoodTypesResponses[keyof GetFoodTypesResponses];
-
-export type CreateFoodTypeData = {
-    body: NewTypeDto;
-    path?: never;
-    query?: never;
-    url: '/types';
-};
-
-export type CreateFoodTypeErrors = {
-    /**
-     * Validation errors (body).
-     */
-    400: HttpException;
-    /**
-     * Session token is missing or invalid.
-     */
-    401: HttpException;
-    /**
-     * Food type already exists.
-     */
-    409: HttpException;
-};
-
-export type CreateFoodTypeError = CreateFoodTypeErrors[keyof CreateFoodTypeErrors];
-
-export type CreateFoodTypeResponses = {
-    /**
-     * Food type created successfully.
-     */
-    201: unknown;
-};
-
-export type GetLanguagesData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/languages';
-};
-
-export type GetLanguagesResponses = {
-    /**
-     * Successfully retrieved languages.
-     */
-    200: Array<Language>;
-};
-
-export type GetLanguagesResponse = GetLanguagesResponses[keyof GetLanguagesResponses];
-
-export type GetXlsxData = {
-    body?: never;
-    path?: never;
-    query?: {
-        /**
-         * An array of food codes.
-         */
-        codes?: Array<string>;
-        /**
-         * The language in which to get the food data.
-         */
-        lang?: 'es' | 'en' | 'pt';
-    };
-    url: '/xlsx';
-};
-
-export type GetXlsxErrors = {
-    /**
-     * Validation errors (query).
-     */
-    400: HttpException;
-};
-
-export type GetXlsxError = GetXlsxErrors[keyof GetXlsxErrors];
-
-export type GetXlsxResponses = {
-    /**
-     * XLSX file with food and references
-     */
-    200: unknown;
-};
-
-export type ParseXlsxData = {
-    /**
-     * The XLS(X) file.
+     * The BDCA spreadsheet.
      */
     body: XlsxFileDto;
     path?: never;
     query?: never;
-    url: '/xlsx';
+    url: '/xlsx/preview';
 };
 
-export type ParseXlsxErrors = {
+export type PreviewXlsxErrors = {
     /**
-     * Validation errors (body).
+     * The file is missing the expected sheets or columns.
      */
     400: HttpException;
     /**
      * Session token is missing or invalid.
      */
     401: HttpException;
+    /**
+     * You do not have enough permissions.
+     */
+    403: HttpException;
+    /**
+     * The file isn't a spreadsheet or is too large.
+     */
+    422: HttpException;
 };
 
-export type ParseXlsxError = ParseXlsxErrors[keyof ParseXlsxErrors];
+export type PreviewXlsxError = PreviewXlsxErrors[keyof PreviewXlsxErrors];
 
-export type ParseXlsxResponses = {
+export type PreviewXlsxResponses = {
     /**
-     * Parsed XLS(X) file contents successfully.
+     * What the file would import.
      */
-    200: ParseXlsxResult;
-    /**
-     * *Never returned. Automatically generated by Swagger.*
-     */
-    201: unknown;
+    200: XlsxPreview;
 };
 
-export type ParseXlsxResponse = ParseXlsxResponses[keyof ParseXlsxResponses];
+export type PreviewXlsxResponse = PreviewXlsxResponses[keyof PreviewXlsxResponses];
+
+export type ImportXlsxData = {
+    /**
+     * The BDCA spreadsheet and the import options.
+     */
+    body: XlsxImportFileDto;
+    path?: never;
+    query?: never;
+    url: '/xlsx/import';
+};
+
+export type ImportXlsxErrors = {
+    /**
+     * The file is missing the expected sheets or columns.
+     */
+    400: HttpException;
+    /**
+     * Session token is missing or invalid.
+     */
+    401: HttpException;
+    /**
+     * You do not have enough permissions.
+     */
+    403: HttpException;
+    /**
+     * The file isn't a spreadsheet or is too large.
+     */
+    422: HttpException;
+};
+
+export type ImportXlsxError = ImportXlsxErrors[keyof ImportXlsxErrors];
+
+export type ImportXlsxResponses = {
+    /**
+     * Foods imported successfully.
+     */
+    201: XlsxImportResult;
+};
+
+export type ImportXlsxResponse = ImportXlsxResponses[keyof ImportXlsxResponses];

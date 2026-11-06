@@ -6,12 +6,12 @@ import Image from "next/image";
 import styles from "./MembersComponent.module.css";
 
 export type Member = {
-  name: string,
-  institution: string,
-  position: string,
-  email: string,
-  photoUrl?: string
-}
+  name: string;
+  institution: string;
+  position: string;
+  email: string;
+  photoUrl?: string;
+};
 
 export function MemberCard(prop: Member): JSX.Element {
   return (
@@ -46,14 +46,14 @@ export function MemberCard(prop: Member): JSX.Element {
   );
 }
 
-export default function MembersComponent(props: {members: Array<Member>}): JSX.Element {
+export default function MembersComponent(props: { members: Member[] }): JSX.Element {
   const [index, setIndex] = useState<number>(0);
 
-  const handlePrevious = () => {
+  const handlePrevious = (): void => {
     setIndex((prevIndex) => (prevIndex === 0 ? props.members.length - 1 : prevIndex - 1));
   };
 
-  const handleNext = () => {
+  const handleNext = (): void => {
     setIndex((prevIndex) => (prevIndex === props.members.length - 1 ? 0 : prevIndex + 1));
   };
 

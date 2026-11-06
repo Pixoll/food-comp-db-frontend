@@ -1,128 +1,99 @@
 "use client";
 
-import type { GetFoodsData } from "@/api";
+import { PageContainer } from "@/app/components/ui";
 import { useTranslation } from "@/context/I18nContext";
 import { useApi } from "@/hooks";
 import { useSearchParams } from "next/navigation";
-import { type JSX, Suspense, useEffect, useState } from "react";
-import FilterBody, { type Filters } from "./components/FilterBody";
+import { type JSX, Suspense, useEffect, useMemo, useState } from "react";
+import FilterBody, { emptyFilters, type Filters, type Operator } from "./components/FilterBody";
 import FoodResultsTable from "./components/nutrient-table/FoodResultsTable";
-import styles from "./search.module.css";
-
-type Operator = NonNullable<NonNullable<GetFoodsData["query"]>["operators"]>[number];
 
 function Search(): JSX.Element {
     const { t } = useTranslation();
     const searchParams = useSearchParams();
-    const paramFoodName = searchParams.get("foodName") || "";
-    const paramGroups = searchParams.get("groups") || "";
+    const paramFoodName = searchParams.get("foodName") ?? "";
+    const paramGroups = searchParams.get("groups") ?? "";
 
-    const initialGroups = paramGroups
-      ? new Set(paramGroups.split(',').map(g => g.trim()).filter(g => g))
-      : new Set<string>();
+    const [filters, setFilters] = useState<Filters>(() => ({
+        ...emptyFilters(),
+        groups: parseGroups(paramGroups),
+    }));
+    const [name, setName] = useState(paramFoodName);
+    const [debouncedName, setDebouncedName] = useState(paramFoodName);
 
-    const [selectedFilters, setSelectedFilters] = useState<Filters>({
-        foodTypeFilter: new Set(),
-        regionsFilter: new Set(),
-        groupsFilter: initialGroups,
-        nutrientsFilter: [{
-            id: 0,
-            op: "=",
-        }],
-    });
+    const [syncedParams, setSyncedParams] = useState({ name: paramFoodName, groups: paramGroups });
 
-    const [searchForName, setSearchForName] = useState(paramFoodName);
+    // si cambia la URL (por ejemplo, desde la página principal), se aplican sus parámetros
+    if (syncedParams.name !== paramFoodName || syncedParams.groups !== paramGroups) {
+        if (syncedParams.name !== paramFoodName) {
+            setName(paramFoodName);
+            setDebouncedName(paramFoodName);
+        }
+        if (syncedParams.groups !== paramGroups) {
+            setFilters(prev => ({ ...prev, groups: parseGroups(paramGroups) }));
+        }
+        setSyncedParams({ name: paramFoodName, groups: paramGroups });
+    }
 
     useEffect(() => {
-        if (paramFoodName) {
-            setSearchForName(paramFoodName);
+        const timeout = setTimeout(() => setDebouncedName(name), 300);
+        return () => clearTimeout(timeout);
+    }, [name]);
+
+    // solo los filtros de nutrientes completos y válidos se envían al backend
+    const query = useMemo(() => {
+        const nutrients: number[] = [];
+        const operators: Operator[] = [];
+        const values: number[] = [];
+
+        for (const filter of filters.nutrients) {
+            const value = Number(filter.value.replace(",", "."));
+            if (filter.id && filter.value.trim() !== "" && Number.isFinite(value) && value >= 0) {
+                nutrients.push(filter.id);
+                operators.push(filter.op);
+                values.push(value);
+            }
         }
-    }, [paramFoodName]);
 
-    useEffect(() => {
-        if (paramGroups) {
-            const groups = paramGroups
-              .split(',')
-              .map(g => g.trim())
-              .filter(g => g);
+        return {
+            name: debouncedName.trim(),
+            groups: filters.groups,
+            nutrients,
+            operators,
+            values,
+        };
+    }, [debouncedName, filters]);
 
-            setSelectedFilters(prev => ({
-                ...prev,
-                groupsFilter: new Set(groups),
-            }));
-        }
-    }, [paramGroups]);
+    const queryKey = JSON.stringify(query);
 
-    const resetFilters = (): void => {
-        setSelectedFilters({
-            foodTypeFilter: new Set(),
-            regionsFilter: new Set(),
-            groupsFilter: new Set(),
-            nutrientsFilter: [{
-                id: 0,
-                op: "=",
-            }],
-        });
-        setSearchForName("");
+    const foodsResult = useApi([queryKey], (api, key) => api.getFoods({ query: JSON.parse(key) as typeof query }));
+
+    const reset = (): void => {
+        setFilters(emptyFilters());
+        setName("");
     };
 
-    const foodsResult = useApi([searchForName, selectedFilters], (api, name, filters) => api.getFoods({
-        query: {
-            name: name.trim(),
-            types: Array.from(filters.foodTypeFilter).map(n => +n),
-            regions: Array.from(filters.regionsFilter).map(n => +n),
-            groups: Array.from(filters.groupsFilter).map(n => +n),
-            ...filters.nutrientsFilter.reduce((acc, n) => {
-                if (n.id > 0 && typeof n.value !== "undefined" && n.value >= 0) {
-                    acc.nutrients.push(n.id);
-                    acc.operators.push(n.op as Operator);
-                    acc.values.push(n.value);
-                }
-                return acc;
-            }, {
-                nutrients: [] as number[],
-                operators: [] as Operator[],
-                values: [] as number[],
-            }),
-        },
-    }));
-
     return (
-      <div className={styles["search-container"]}>
-          <div
-            className={`
-                ${styles["filter-body-container"]}
-                p-[20px]
-                flex
-                flex-col
-                bg-[white]
-                rounded-[10px]
-                relative
-                shadow-[0_4px_6px_-1px_rgb(0,0,0,0.1)]
-                `}
-          >
-              <h4>{t.foodsFilter.title}</h4>
-              <FilterBody
-                selectedFilters={selectedFilters}
-                setSelectedFilters={setSelectedFilters}
-                resetFilters={resetFilters}
-              />
-          </div>
-
-          <FoodResultsTable
-            data={foodsResult}
-            status={foodsResult.status}
-            searchForName={searchForName}
-            setSearchForName={setSearchForName}
-          />
-      </div>
+        <PageContainer width="xl">
+            <h1 className="sr-only">{t.foodResults.title}</h1>
+            <div className="grid items-start gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
+                <aside className="rounded-card border border-fog bg-paper p-5 lg:sticky lg:top-6">
+                    <FilterBody filters={filters} onChange={setFilters} onReset={reset}/>
+                </aside>
+                <FoodResultsTable result={foodsResult} name={name} onNameChange={setName}/>
+            </div>
+        </PageContainer>
     );
+}
+
+function parseGroups(param: string): number[] {
+    return param.split(",").map(g => +g.trim()).filter(g => Number.isInteger(g) && g > 0);
 }
 
 export default function SearchPage(): JSX.Element {
     return (
-      <Suspense>
-          <Search/>
-      </Suspense>
+        <Suspense>
+            <Search/>
+        </Suspense>
     );
 }

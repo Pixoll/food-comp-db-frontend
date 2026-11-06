@@ -1,123 +1,44 @@
-import type { StringTranslation } from "@/api";
+import type { Food } from "@/api";
 import { useTranslation } from "@/context/I18nContext";
-import type { Origin } from "@/types/SingleFoodResult";
-import type { JSX } from "react";
+import type { JSX, ReactNode } from "react";
 
-type InfoAboutFoodComponentProps = {
-    ingredients: StringTranslation;
-    group: {
-        code: string;
-        name: string;
-    };
-    type: {
-        code: string;
-        name: string;
-    };
-    scientificName?: string;
-    subspecies?: string;
-    strain?: string;
-    brand?: string;
-    observation?: string;
-    origins?: Origin[];
+type FoodInformationProps = {
+    food: Food;
 };
 
-export default function FoodInformation({ data }: { data: InfoAboutFoodComponentProps }): JSX.Element {
+/**
+ * Datos generales según el Excel nuevo: nombres, grupo, nombre científico, porción, observación y "otros"
+ * (que ahora reúne origen, marca e institución). Solo se muestran los campos con valor; el nombre que ya
+ * se usa como título no se repite.
+ */
+export default function FoodInformation({ food }: FoodInformationProps): JSX.Element {
     const { t } = useTranslation();
+    const titleIsCommonName = !food.foodName?.trim();
+
+    const items: Array<{ label: string; value: ReactNode; wide?: boolean }> = [
+        { label: t.foodDetail.foodName, value: food.foodName },
+        { label: t.foodDetail.commonName, value: titleIsCommonName ? undefined : food.commonName, wide: true },
+        {
+            label: t.foodDetail.group,
+            value: <>{food.group.name} <span className="text-ash">({food.group.code})</span></>,
+        },
+        {
+            label: t.foodDetail.scientificName,
+            value: food.scientificName && <span className="italic">{food.scientificName}</span>,
+        },
+        { label: t.foodDetail.portion, value: food.portionQuantity && t.foodDetail.grams(food.portionQuantity) },
+        { label: t.foodDetail.observation, value: food.observation, wide: true },
+        { label: t.foodDetail.others, value: food.others, wide: true },
+    ];
 
     return (
-        <div className="bg-[white] border-[1px] rounded-[8px] shadow-[0_4px_10px_rgba(0,0,0,0.2)] p-[18px]">
-            <h3 className="text-center text-[22px] font-[700] text-[#2b402b] mb-[20px]">
-                {t.foodDetail.information}
-            </h3>
-
-            <div className="flex flex-col md:flex-row gap-[32px]">
-                <div className="flex-1 space-y-[12px]">
-                    <div className="grid grid-cols-1 gap-y-[8px]">
-                        {data.brand && (
-                            <div className="flex flex-row space-x-[6px]">
-                                <span className="text-[14px] font-[500] text-gray-500">{t.foodDetail.brand}</span>
-                                <span className="text-[16px] text-gray-500 italic">{data.brand}</span>
-                            </div>
-                        )}
-
-                        {data.scientificName && (
-                            <div className="flex flex-row space-x-[6px]">
-                                <span className="text-[18px] font-[500] text-gray-500">
-                                    {t.foodDetail.scientificName}
-                                </span>
-                                <span className="text-[16px] text-gray-500 italic">{data.scientificName}</span>
-                            </div>
-                        )}
-
-                        {data.group && (
-                            <div className="flex flex-row space-x-[6px]">
-                                <span className="text-[18px] font-medium text-gray-500">{t.foodDetail.group}</span>
-                                <span className="text-[16px] text-gray-800">
-                                    {data.group.name}{" "}
-                                    <span className="text-[16px] text-gray-500">
-                                        ({data.group.code})
-                                    </span>
-                                </span>
-                            </div>
-                        )}
-
-                        {/*{data.type && (*/}
-                        {/*    <div className="flex flex-row space-x-[6px]">*/}
-                        {/*        <span className="text-[18px] font-medium text-gray-500">{t.foodDetail.type}</span>*/}
-                        {/*        <span className="text-[16px] text-gray-800">*/}
-                        {/*            {data.type.name}{" "}*/}
-                        {/*            <span className="text-[16px] text-gray-500">*/}
-                        {/*                ({data.type.code})*/}
-                        {/*            </span>*/}
-                        {/*        </span>*/}
-                        {/*    </div>*/}
-                        {/*)}*/}
-                    </div>
+        <dl className="grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2 lg:grid-cols-3">
+            {items.filter(item => !!item.value).map(item => (
+                <div key={item.label} className={item.wide ? "sm:col-span-2 lg:col-span-3" : ""}>
+                    <dt className="text-[12px] font-medium uppercase tracking-wide text-ash">{item.label}</dt>
+                    <dd className="mt-1 text-[14px] leading-relaxed text-carbon">{item.value}</dd>
                 </div>
-
-                <div className="flex-1 space-y-[12px]">
-                    <div className="grid grid-cols-1 gap-y-[8px]">
-                        {data.subspecies && (
-                            <div className="flex flex-row space-x-[6px]">
-                                <span className="text-[18px] font-medium text-gray-500">{t.foodDetail.subspecies}</span>
-                                <span className="text-[16px] text-gray-800">{data.subspecies}</span>
-                            </div>
-                        )}
-
-                        {data.strain && (
-                            <div className="flex flex-row space-x-[6px]">
-                                <span className="text-[18px] font-medium text-gray-500 ">{t.foodDetail.strain}</span>
-                                <span className="text-[16px] text-gray-800">{data.strain}</span>
-                            </div>
-                        )}
-
-                        {data.observation && (
-                            <div className="flex flex-row space-x-[6px]">
-                                <span className="text-[18px] font-medium text-gray-500">
-                                    {t.foodDetail.observation}
-                                </span>
-                                <span className="text-[16px] text-gray-800">{data.observation}</span>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </div>
-
-            {data.origins && data.origins.length > 0 && (
-                <div className="mt-[24px] pt-[16px] border-t-[1px] border-gray-100">
-                    <h4 className="text-[20px] font-medium text-gray-700 mb-[8px]">{t.foodDetail.origins}</h4>
-                    <div className="flex flex-wrap gap-[8px]">
-                        {data.origins.map((origin) => (
-                            <span
-                                key={origin.id}
-                                className="px-[12px] py-[4px] bg-gray-100 text-gray-700 rounded-[50%] text-sm"
-                            >
-                                {origin.name}
-                            </span>
-                        ))}
-                    </div>
-                </div>
-            )}
-        </div>
+            ))}
+        </dl>
     );
 }

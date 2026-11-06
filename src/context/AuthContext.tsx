@@ -1,10 +1,12 @@
 "use client";
 
 import api from "@/api";
-import { createContext, type JSX, type ReactNode, useCallback, useContext, useEffect, useReducer, useRef } from "react";
+import { createContext, type JSX, type ReactNode, useCallback, useContext, useEffect, useReducer } from "react";
 
 type AuthState = {
     isAuthenticated: boolean;
+    /** true cuando ya se consultó la sesión al backend al menos una vez. */
+    checked: boolean;
 };
 
 type AuthAction = {
@@ -25,11 +27,13 @@ function authReducer(state: AuthState, action: AuthAction): AuthState {
             return {
                 ...state,
                 isAuthenticated: true,
+                checked: true,
             };
         case "logout":
             return {
                 ...state,
                 isAuthenticated: false,
+                checked: true,
             };
         default:
             return state;
@@ -43,56 +47,30 @@ type AuthProviderProps = {
 const SESSION_CHECK_INTERVAL = 5 * 60_000;
 
 export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
-    const [state, dispatch] = useReducer(authReducer, { isAuthenticated: false });
-    const intervalRef = useRef<number>(0);
+    const [state, dispatch] = useReducer(authReducer, { isAuthenticated: false, checked: false });
 
+    // revisa la sesión al cargar y luego cada cierto tiempo (la cookie puede expirar)
     useEffect(() => {
-        // noinspection JSIgnoredPromiseFromCall
-        checkStatus();
+        let cancelled = false;
 
-        return () => {
-            if (intervalRef.current) {
-                clearInterval(intervalRef.current);
+        const checkStatus = async (): Promise<void> => {
+            const response = await api.getSessionInfo().catch(error => ({ error }));
+            if (!cancelled) {
+                dispatch({ type: response.error ? "logout" : "login" });
             }
         };
-        // eslint-disable-next-line
+
+        void checkStatus();
+        const interval = setInterval(() => void checkStatus(), SESSION_CHECK_INTERVAL);
+
+        return () => {
+            cancelled = true;
+            clearInterval(interval);
+        };
     }, []);
 
-    const checkStatus = async (): Promise<void> => {
-        const response = await api.getSessionInfo().catch(error => ({ error }));
-
-        if (response.error) {
-            if (state.isAuthenticated) {
-                logout();
-            }
-        } else {
-            if (!state.isAuthenticated) {
-                login();
-            }
-        }
-    };
-
-    // noinspection com.intellij.reactbuddy.ExhaustiveDepsInspection
-    const login = useCallback(() => {
-        dispatch({ type: "login" });
-
-        if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-        }
-
-        intervalRef.current = setInterval(checkStatus, SESSION_CHECK_INTERVAL) as unknown as number;
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    // noinspection com.intellij.reactbuddy.ExhaustiveDepsInspection
-    const logout = useCallback(() => {
-        dispatch({ type: "logout" });
-
-        if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-            intervalRef.current = 0;
-        }
-    }, []);
+    const login = useCallback(() => dispatch({ type: "login" }), []);
+    const logout = useCallback(() => dispatch({ type: "logout" }), []);
 
     return (
         <AuthContext.Provider value={{ state, login, logout }}>

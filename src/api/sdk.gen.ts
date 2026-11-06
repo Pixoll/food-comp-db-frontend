@@ -2,9 +2,9 @@
 
 import { type Client, formDataBodySerializer, type Options as Options2, type TDataShape } from './client';
 import { client } from './client.gen';
-import type { BatchCreateFoodsData, BatchCreateFoodsErrors, BatchCreateFoodsResponses, BatchCreateReferencesData, BatchCreateReferencesErrors, BatchCreateReferencesResponses, CompareFoodsData, CompareFoodsResponses, CreateAdminData, CreateAdminErrors, CreateAdminResponses, CreateFoodData, CreateFoodErrors, CreateFoodGroupData, CreateFoodGroupErrors, CreateFoodGroupResponses, CreateFoodResponses, CreateFoodTypeData, CreateFoodTypeErrors, CreateFoodTypeResponses, CreateNutrientData, CreateNutrientErrors, CreateNutrientResponses, CreateOriginData, CreateOriginErrors, CreateOriginResponses, CreateReferenceData, CreateReferenceErrors, CreateReferenceResponses, CreateScientificNameData, CreateScientificNameErrors, CreateScientificNameResponses, CreateSubspeciesData, CreateSubspeciesErrors, CreateSubspeciesResponses, DeleteAdminData, DeleteAdminErrors, DeleteAdminResponses, GetArticlesData, GetArticlesResponses, GetAuthorsData, GetAuthorsResponses, GetCitiesData, GetCitiesResponses, GetFoodData, GetFoodErrors, GetFoodGroupsData, GetFoodGroupsResponses, GetFoodResponses, GetFoodsData, GetFoodsErrors, GetFoodsResponses, GetFoodTypesData, GetFoodTypesResponses, GetGroupedLangualCodesData, GetGroupedLangualCodesResponses, GetJournalsData, GetJournalsResponses, GetJournalVolumesData, GetJournalVolumesResponses, GetLanguagesData, GetLanguagesResponses, GetLangualCodesData, GetLangualCodesResponses, GetNutrientsData, GetNutrientsResponses, GetOriginChildrenData, GetOriginChildrenErrors, GetOriginChildrenResponses, GetOriginData, GetOriginErrors, GetOriginResponses, GetOriginsData, GetOriginsResponses, GetReferencesData, GetReferencesErrors, GetReferencesResponses, GetScientificNamesData, GetScientificNamesResponses, GetSessionInfoData, GetSessionInfoErrors, GetSessionInfoResponses, GetSubspeciesData, GetSubspeciesResponses, GetXlsxData, GetXlsxErrors, GetXlsxResponses, LoginData, LoginErrors, LoginResponses, LogoutData, LogoutErrors, LogoutResponses, ParseXlsxData, ParseXlsxErrors, ParseXlsxResponses, UpdateFoodData, UpdateFoodErrors, UpdateFoodResponses } from './types.gen';
+import type { BatchCreateFoodsData, BatchCreateFoodsErrors, BatchCreateFoodsResponses, BatchCreateReferencesData, BatchCreateReferencesErrors, BatchCreateReferencesResponses, CompareFoodsData, CompareFoodsResponses, CreateAdminData, CreateAdminErrors, CreateAdminResponses, CreateFoodData, CreateFoodErrors, CreateFoodGroupData, CreateFoodGroupErrors, CreateFoodGroupResponses, CreateFoodResponses, CreateNutrientData, CreateNutrientErrors, CreateNutrientResponses, CreateReferenceData, CreateReferenceErrors, CreateReferenceResponses, CreateScientificNameData, CreateScientificNameErrors, CreateScientificNameResponses, DeleteAdminData, DeleteAdminErrors, DeleteAdminResponses, GetFoodData, GetFoodErrors, GetFoodGroupsData, GetFoodGroupsResponses, GetFoodResponses, GetFoodsData, GetFoodsErrors, GetFoodsResponses, GetNutrientsData, GetNutrientsResponses, GetReferencesData, GetReferencesErrors, GetReferencesResponses, GetScientificNamesData, GetScientificNamesResponses, GetSessionInfoData, GetSessionInfoErrors, GetSessionInfoResponses, ImportXlsxData, ImportXlsxErrors, ImportXlsxResponses, LoginData, LoginErrors, LoginResponses, LogoutData, LogoutErrors, LogoutResponses, PreviewXlsxData, PreviewXlsxErrors, PreviewXlsxResponses, UpdateFoodData, UpdateFoodErrors, UpdateFoodResponses } from './types.gen';
 
-export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
+export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
      * You can provide a client instance returned by `createClient()` instead of
      * individual options. This might be also useful if you want to implement a
@@ -49,14 +49,27 @@ export const getSessionInfo = <ThrowOnError extends boolean = false>(options?: O
 });
 
 /**
- * [ROOT ONLY] Delete an existing admin.
+ * Delete an existing admin.
  */
-export const deleteAdmin = <ThrowOnError extends boolean = false>(options: Options<DeleteAdminData, ThrowOnError>) => (options.client ?? client).delete<DeleteAdminResponses, DeleteAdminErrors, ThrowOnError>({ url: '/admins/{username}', ...options });
+export const deleteAdmin = <ThrowOnError extends boolean = false>(options: Options<DeleteAdminData, ThrowOnError>) => (options.client ?? client).delete<DeleteAdminResponses, DeleteAdminErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: '',
+            type: 'apiKey'
+        }],
+    url: '/admins/{username}',
+    ...options
+});
 
 /**
- * [ROOT ONLY] Create a new admin.
+ * Create a new admin.
  */
 export const createAdmin = <ThrowOnError extends boolean = false>(options: Options<CreateAdminData, ThrowOnError>) => (options.client ?? client).post<CreateAdminResponses, CreateAdminErrors, ThrowOnError>({
+    security: [{
+            in: 'cookie',
+            name: '',
+            type: 'apiKey'
+        }],
     url: '/admins/{username}',
     ...options,
     headers: {
@@ -151,16 +164,6 @@ export const createFoodGroup = <ThrowOnError extends boolean = false>(options: O
 });
 
 /**
- * Retrieves all LanguaL codes.
- */
-export const getLangualCodes = <ThrowOnError extends boolean = false>(options?: Options<GetLangualCodesData, ThrowOnError>) => (options?.client ?? client).get<GetLangualCodesResponses, unknown, ThrowOnError>({ url: '/langual-codes', ...options });
-
-/**
- * Retrieves all LanguaL codes grouped by parent code.
- */
-export const getGroupedLangualCodes = <ThrowOnError extends boolean = false>(options?: Options<GetGroupedLangualCodesData, ThrowOnError>) => (options?.client ?? client).get<GetGroupedLangualCodesResponses, unknown, ThrowOnError>({ url: '/langual-codes/grouped', ...options });
-
-/**
  * Retrieves all nutrients.
  */
 export const getNutrients = <ThrowOnError extends boolean = false>(options?: Options<GetNutrientsData, ThrowOnError>) => (options?.client ?? client).get<GetNutrientsResponses, unknown, ThrowOnError>({ url: '/nutrients', ...options });
@@ -181,38 +184,6 @@ export const createNutrient = <ThrowOnError extends boolean = false>(options: Op
         ...options.headers
     }
 });
-
-/**
- * Retrieves all origins, optionally filtered by name.
- */
-export const getOrigins = <ThrowOnError extends boolean = false>(options?: Options<GetOriginsData, ThrowOnError>) => (options?.client ?? client).get<GetOriginsResponses, unknown, ThrowOnError>({ url: '/origins', ...options });
-
-/**
- * Creates a new origin.
- */
-export const createOrigin = <ThrowOnError extends boolean = false>(options: Options<CreateOriginData, ThrowOnError>) => (options.client ?? client).post<CreateOriginResponses, CreateOriginErrors, ThrowOnError>({
-    security: [{
-            in: 'cookie',
-            name: '',
-            type: 'apiKey'
-        }],
-    url: '/origins',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * Retrieves an origin by its ID.
- */
-export const getOrigin = <ThrowOnError extends boolean = false>(options: Options<GetOriginData, ThrowOnError>) => (options.client ?? client).get<GetOriginResponses, GetOriginErrors, ThrowOnError>({ url: '/origins/{id}', ...options });
-
-/**
- * Retrieves the children of an origin by its ID.
- */
-export const getOriginChildren = <ThrowOnError extends boolean = false>(options: Options<GetOriginChildrenData, ThrowOnError>) => (options.client ?? client).get<GetOriginChildrenResponses, GetOriginChildrenErrors, ThrowOnError>({ url: '/origins/{id}/children', ...options });
 
 /**
  * Retrieves references based on query parameters.
@@ -254,31 +225,6 @@ export const createReference = <ThrowOnError extends boolean = false>(options: O
 });
 
 /**
- * Retrieves all authors.
- */
-export const getAuthors = <ThrowOnError extends boolean = false>(options?: Options<GetAuthorsData, ThrowOnError>) => (options?.client ?? client).get<GetAuthorsResponses, unknown, ThrowOnError>({ url: '/references/authors', ...options });
-
-/**
- * Retrieves all cities.
- */
-export const getCities = <ThrowOnError extends boolean = false>(options?: Options<GetCitiesData, ThrowOnError>) => (options?.client ?? client).get<GetCitiesResponses, unknown, ThrowOnError>({ url: '/references/cities', ...options });
-
-/**
- * Retrieves all articles.
- */
-export const getArticles = <ThrowOnError extends boolean = false>(options?: Options<GetArticlesData, ThrowOnError>) => (options?.client ?? client).get<GetArticlesResponses, unknown, ThrowOnError>({ url: '/references/articles', ...options });
-
-/**
- * Retrieves all journal volumes.
- */
-export const getJournalVolumes = <ThrowOnError extends boolean = false>(options?: Options<GetJournalVolumesData, ThrowOnError>) => (options?.client ?? client).get<GetJournalVolumesResponses, unknown, ThrowOnError>({ url: '/references/journal-volumes', ...options });
-
-/**
- * Retrieves all journals.
- */
-export const getJournals = <ThrowOnError extends boolean = false>(options?: Options<GetJournalsData, ThrowOnError>) => (options?.client ?? client).get<GetJournalsResponses, unknown, ThrowOnError>({ url: '/references/journals', ...options });
-
-/**
  * Retrieves all scientific names.
  */
 export const getScientificNames = <ThrowOnError extends boolean = false>(options?: Options<GetScientificNamesData, ThrowOnError>) => (options?.client ?? client).get<GetScientificNamesResponses, unknown, ThrowOnError>({ url: '/scientific-names', ...options });
@@ -301,72 +247,40 @@ export const createScientificName = <ThrowOnError extends boolean = false>(optio
 });
 
 /**
- * Retrieves all subspecies.
- */
-export const getSubspecies = <ThrowOnError extends boolean = false>(options?: Options<GetSubspeciesData, ThrowOnError>) => (options?.client ?? client).get<GetSubspeciesResponses, unknown, ThrowOnError>({ url: '/subspecies', ...options });
-
-/**
- * Creates a new subspecies.
- */
-export const createSubspecies = <ThrowOnError extends boolean = false>(options: Options<CreateSubspeciesData, ThrowOnError>) => (options.client ?? client).post<CreateSubspeciesResponses, CreateSubspeciesErrors, ThrowOnError>({
-    security: [{
-            in: 'cookie',
-            name: '',
-            type: 'apiKey'
-        }],
-    url: '/subspecies',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * Retrieves all food types.
- */
-export const getFoodTypes = <ThrowOnError extends boolean = false>(options?: Options<GetFoodTypesData, ThrowOnError>) => (options?.client ?? client).get<GetFoodTypesResponses, unknown, ThrowOnError>({ url: '/types', ...options });
-
-/**
- * Creates a new food type.
- */
-export const createFoodType = <ThrowOnError extends boolean = false>(options: Options<CreateFoodTypeData, ThrowOnError>) => (options.client ?? client).post<CreateFoodTypeResponses, CreateFoodTypeErrors, ThrowOnError>({
-    security: [{
-            in: 'cookie',
-            name: '',
-            type: 'apiKey'
-        }],
-    url: '/types',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
-
-/**
- * Retrieves all languages.
- */
-export const getLanguages = <ThrowOnError extends boolean = false>(options?: Options<GetLanguagesData, ThrowOnError>) => (options?.client ?? client).get<GetLanguagesResponses, unknown, ThrowOnError>({ url: '/languages', ...options });
-
-/**
- * Get foods and references data formatted in a XLSX file.
- */
-export const getXlsx = <ThrowOnError extends boolean = false>(options?: Options<GetXlsxData, ThrowOnError>) => (options?.client ?? client).get<GetXlsxResponses, GetXlsxErrors, ThrowOnError>({ url: '/xlsx', ...options });
-
-/**
- * Parse the contents of a XLS(X) file into food and reference objects.
+ * Read a BDCA spreadsheet and show what would be imported, without saving anything.
  *
- * Each cell of the file is verified and flagged as `valid`, `new`, and/or `updated`.
+ * Each food is flagged as `new`, `existing` or `invalid`, and each nutrient column says which nutrient
+ * it's imported into (matched by the nutrient's `code`) or why it's ignored.
  */
-export const parseXlsx = <ThrowOnError extends boolean = false>(options: Options<ParseXlsxData, ThrowOnError>) => (options.client ?? client).post<ParseXlsxResponses, ParseXlsxErrors, ThrowOnError>({
+export const previewXlsx = <ThrowOnError extends boolean = false>(options: Options<PreviewXlsxData, ThrowOnError>) => (options.client ?? client).post<PreviewXlsxResponses, PreviewXlsxErrors, ThrowOnError>({
     ...formDataBodySerializer,
     security: [{
             in: 'cookie',
             name: '',
             type: 'apiKey'
         }],
-    url: '/xlsx',
+    url: '/xlsx/preview',
+    ...options,
+    headers: {
+        'Content-Type': null,
+        ...options.headers
+    }
+});
+
+/**
+ * Import the foods of a BDCA spreadsheet in a single transaction.
+ *
+ * New foods are created. Existing foods are updated only if `updateExisting` is true: their measurements
+ * in the file are created or replaced, and empty cells don't clear saved data. Foods with errors are skipped.
+ */
+export const importXlsx = <ThrowOnError extends boolean = false>(options: Options<ImportXlsxData, ThrowOnError>) => (options.client ?? client).post<ImportXlsxResponses, ImportXlsxErrors, ThrowOnError>({
+    ...formDataBodySerializer,
+    security: [{
+            in: 'cookie',
+            name: '',
+            type: 'apiKey'
+        }],
+    url: '/xlsx/import',
     ...options,
     headers: {
         'Content-Type': null,

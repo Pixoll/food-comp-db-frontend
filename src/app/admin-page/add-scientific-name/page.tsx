@@ -1,217 +1,145 @@
 "use client";
 
+import api from "@/api";
+import RequireAdmin from "@/app/components/RequireAdmin";
+import {
+    Button,
+    Card,
+    CardHeader,
+    EmptyState,
+    Field,
+    Input,
+    LoadingState,
+    PageContainer,
+    PageHeader,
+} from "@/app/components/ui";
 import { useTranslation } from "@/context/I18nContext";
-import { useScientificNames } from "@/hooks";
-import { type JSX, useState } from "react";
+import { useToast } from "@/context/ToastContext";
+import { FetchStatus, useScientificNames } from "@/hooks";
+import { ChevronRight, Leaf, Plus, Search } from "lucide-react";
+import Link from "next/link";
+import { type FormEvent, type JSX, useMemo, useState } from "react";
 
 export default function AddScientificNamePage(): JSX.Element {
+    return (
+        <RequireAdmin>
+            <ScientificNamesAdmin/>
+        </RequireAdmin>
+    );
+}
+
+function ScientificNamesAdmin(): JSX.Element {
     const { t } = useTranslation();
-    const { idToObject } = useScientificNames();
-    const [searchTerm, setSearchTerm] = useState("");
-    const [newScientificName, setNewScientificName] = useState("");
+    const s = t.addScientificName;
+    const { addToast } = useToast();
+    const { status, idToObject, forceReload } = useScientificNames();
+    const [name, setName] = useState("");
+    const [query, setQuery] = useState("");
+    const [saving, setSaving] = useState(false);
 
-    const scientificNames = idToObject.mapValues(s => ({ id: s.id, name: s.name }));
+    const names = useMemo(() => [...idToObject.values()].sort((a, b) => a.name.localeCompare(b.name)), [idToObject]);
+    const filtered = useMemo(() => {
+        const q = query.trim().toLowerCase();
+        return q ? names.filter(n => n.name.toLowerCase().includes(q)) : names;
+    }, [names, query]);
 
-    const filteredScientificNames = searchTerm
-        ? scientificNames.filter(s => s.name.toLowerCase().includes(searchTerm.toLowerCase()))
-        : scientificNames;
+    const exists = names.some(n => n.name.toLowerCase() === name.trim().toLowerCase());
+
+    const submit = async (event: FormEvent): Promise<void> => {
+        event.preventDefault();
+        const value = name.trim();
+        if (!value || exists) return;
+
+        setSaving(true);
+        const result = await api.createScientificName({ body: { name: value } }).catch(error => ({ error }));
+        setSaving(false);
+
+        if (result.error) {
+            addToast({
+                type: "Danger",
+                title: t.common.error,
+                message: (result.error as { message?: string }).message ?? t.common.unknownError,
+                position: "top-end",
+            });
+            return;
+        }
+
+        addToast({ type: "Success", message: s.created(value), position: "top-end", duration: 3000 });
+        setName("");
+        forceReload();
+    };
 
     return (
-        <div className="h-auto bg-gradient-to-b from-[#f1faf6] to-[#ace5e1] p-[24px]">
-            <div
-                className="
-                max-w-[1000px]
-                bg-[#ffffff]
-                mx-auto
-                rounded-[12px]
-                shadow-[0_8px_30px_rgba(0,0,0,0.12)]
-                overflow-hidden
-                "
-            >
-                <div className="bg-[#33ae90] text-[#ffffff] p-[24px]">
-                    <h1 className="text-[28px] font-[700] text-center">{t.addScientificName.title}</h1>
-                    <p className="text-[16px] opacity-[0.9] text-center mt-[8px]">
-                        {t.addScientificName.subtitle}
-                    </p>
-                </div>
+        <PageContainer>
+            <PageHeader
+                eyebrow={(
+                    <>
+                        <Link href="/admin-page" className="hover:text-carbon">{t.adminPage.title}</Link>
+                        <ChevronRight size={14}/>
+                        <span>{s.title}</span>
+                    </>
+                )}
+                title={s.title}
+                description={s.subtitle}
+            />
 
-                <div className="p-[32px]">
-                    <div className="mb-[32px]">
-                        <h2 className="text-[20px] font-[600] text-[#1f2937] mb-[16px]">
-                            {t.addScientificName.searchExistent}
-                        </h2>
+            <div className="grid items-start gap-6 lg:grid-cols-[380px_minmax(0,1fr)]">
+                <Card as="section" padding="lg">
+                    <CardHeader icon={<Plus size={18}/>} title={s.addNew}/>
+                    <form className="flex flex-col gap-4" onSubmit={e => void submit(e)}>
+                        <Field
+                            label={s.addNew}
+                            htmlFor="scientific-name"
+                            error={exists ? s.alreadyExists : undefined}
+                        >
+                            <Input
+                                id="scientific-name"
+                                value={name}
+                                placeholder={s.namePlaceholder}
+                                onChange={e => {
+                                    setName(e.target.value);
+                                    setQuery(e.target.value);
+                                }}
+                                aria-invalid={exists || undefined}
+                                className="italic"
+                            />
+                        </Field>
+                        <Button type="submit" disabled={saving || !name.trim() || exists} className="self-start">
+                            {saving ? s.adding : s.add}
+                        </Button>
+                    </form>
+                </Card>
 
+                <Card as="section" padding="none">
+                    <div className="border-b border-fog p-5">
+                        <CardHeader
+                            icon={<Leaf size={18}/>}
+                            title={s.searchExistent}
+                            description={status === FetchStatus.Success ? `${names.length}` : undefined}
+                            className="mb-4"
+                        />
                         <div className="relative">
-                            <input
-                                type="text"
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                placeholder={t.addScientificName.searchPlaceholder}
-                                className="
-                                w-full
-                                p-[12px]
-                                pl-[44px]
-                                border-[2px]
-                                border-[#e5e7eb]
-                                rounded-[8px]
-                                focus:border-[#166534]
-                                focus:outline-none
-                                transition-all
-                                duration-[200ms]
-                                "
+                            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-ash"/>
+                            <Input
+                                value={query}
+                                onChange={e => setQuery(e.target.value)}
+                                placeholder={s.searchPlaceholder}
+                                aria-label={s.searchPlaceholder}
+                                className="rounded-full pl-9"
                             />
-                            <div className="absolute left-[16px] top-[50%] translate-y-[-50%] text-[#9ca3af]">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    className="w-[20px] h-[20px]"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                                    />
-                                </svg>
-                            </div>
-                        </div>
-
-                        <div className="mt-[20px] max-h-[300px] overflow-y-auto pr-[8px]">
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[16px]">
-                                {filteredScientificNames.size > 0 ? (
-                                    filteredScientificNames.map((s) => (
-                                        <div
-                                            key={s.id}
-                                            className="
-                                            p-[16px]
-                                            border-[1px]
-                                            border-[#e5e7eb]
-                                            rounded-[8px]
-                                            hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)]
-                                            hover:border-[#336bae]
-                                            transition-all
-                                            duration-[200ms]
-                                            cursor-pointer
-                                            "
-                                        >
-                                            <p className="font-[500] text-[#1f2937]">{s.name}</p>
-                                            <p className="text-[14px] text-[#6b7280] mt-[4px]">ID: {s.id}</p>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <div className="col-span-full text-center p-[20px] text-[#6b7280]">
-                                        {searchTerm ? t.addScientificName.noneFound : t.addScientificName.loading}
-                                    </div>
-                                )}
-                            </div>
                         </div>
                     </div>
-                    <div className="mt-[32px] pt-[32px] border-t-[1px] border-[#e5e7eb]">
-                        <h2 className="text-[20px] font-[600] text-[#1f2937] mb-[16px]">
-                            {t.addScientificName.addNew}
-                        </h2>
-
-                        <div className="mb-[20px]">
-                            <input
-                                type="text"
-                                value={newScientificName}
-                                onChange={(e) => setNewScientificName(e.target.value)}
-                                placeholder={t.addScientificName.namePlaceholder}
-                                className="
-                                w-full
-                                p-[12px]
-                                border-[2px]
-                                border-[#e5e7eb]
-                                rounded-[8px]
-                                focus:border-[#166534]
-                                focus:outline-none
-                                transition-all
-                                duration-[200ms]
-                                mb-[16px]
-                                "
-                            />
-
-                            <div className="flex flex-wrap gap-[16px]">
-                                <button
-                                    className="
-                                    flex
-                                    items-center
-                                    bg-[#f1faf6]
-                                    text-[#336bae]
-                                    border-[1px]
-                                    border-[#336bae]
-                                    py-[10px]
-                                    px-[20px]
-                                    rounded-[6px]
-                                    font-[500]
-                                    hover:bg-[#accbf0]
-                                    transition-colors
-                                    duration-[200ms]
-                                    "
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                        className="w-[18px] h-[18px] mr-[8px]"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                        />
-                                    </svg>
-                                    {t.addScientificName.verify}
-                                </button>
-
-                                <button
-                                    className="
-                                    flex
-                                    items-center
-                                    bg-[#4eb996]
-                                    border[2px]
-                                    border-[white]
-                                    text-[#ffffff]
-                                    py-[10px]
-                                    px-[20px]
-                                    rounded-[6px]
-                                    font-[500]
-                                    hover:bg-[#21b082]
-                                    transition-colors
-                                    duration-[200ms]
-                                    shadow-[0_2px_4px_rgba(0,0,0,0.1)]
-                                    "
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                        className="w-[18px] h-[18px] mr-[8px]"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M12 4v16m8-8H4"
-                                        />
-                                    </svg>
-                                    {t.addScientificName.addNew}
-                                </button>
-                            </div>
-                        </div>
-
-                        <p className="text-[14px] text-[#6b7280] mt-[16px] bg-[#f3f4f6] p-[12px] rounded-[6px]">
-                            <span className="font-[600]">{t.addScientificName.note}</span>{" "}
-                            {t.addScientificName.beforeAdding}
-                        </p>
-                    </div>
-                </div>
+                    {status === FetchStatus.Loading && <LoadingState label={s.loading}/>}
+                    {status !== FetchStatus.Loading && filtered.length === 0 && <EmptyState title={s.noneFound}/>}
+                    <ul className="grid gap-x-6 sm:grid-cols-2">
+                        {filtered.map(n => (
+                            <li key={n.id} className="border-b border-fog px-5 py-3 text-[14px] italic text-carbon">
+                                {n.name}
+                            </li>
+                        ))}
+                    </ul>
+                </Card>
             </div>
-        </div>
+        </PageContainer>
     );
 }

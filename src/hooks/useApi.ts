@@ -1,7 +1,7 @@
 "use client";
 
 import api from "@/api";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export enum FetchStatus {
     Loading,
@@ -55,12 +55,12 @@ export function useApi<R, E, Deps extends readonly unknown[] = []>(
     const [status, setStatus] = useState<FetchStatus>(FetchStatus.Loading);
     const [data, setData] = useState<R | null>(null);
     const [error, setError] = useState<null | string>(null);
-    const [controller, setController] = useState<null | AbortController>(null);
+    const controllerRef = useRef<AbortController | null>(null);
     const [counter, setCounter] = useState(0);
 
     useEffect(() => {
         const abortController = new AbortController();
-        setController(abortController);
+        controllerRef.current = abortController;
 
         callback(apiWrapper({ signal: abortController.signal }), ...deps)
             .then(async (result) => {
@@ -88,8 +88,8 @@ export function useApi<R, E, Deps extends readonly unknown[] = []>(
     }, [counter, ...deps]);
 
     const onCancelRequest = (): void => {
-        if (controller) {
-            controller.abort();
+        if (controllerRef.current) {
+            controllerRef.current.abort();
             setError("Request cancelled");
         }
     };

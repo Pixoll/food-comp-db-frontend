@@ -1,242 +1,193 @@
 "use client";
 
-import type { Food } from "@/api";
+import CompositionTable from "@/app/detail-food/components/CompositionTable";
+import FoodInformation from "@/app/detail-food/components/FoodInformation";
+import Graphic, { type GraphicItem } from "@/app/detail-food/components/Graphic";
 import GramsAdjuster from "@/app/detail-food/components/grams-adjuster/GramsAdjuster";
+import References from "@/app/detail-food/components/References";
+import {
+    Badge,
+    Button,
+    ButtonLink,
+    Card,
+    EmptyState,
+    ErrorState,
+    LoadingState,
+    PageContainer,
+    Tabs,
+} from "@/app/components/ui";
+import { useAuth } from "@/context/AuthContext";
+import { useComparison } from "@/context/ComparisonContext";
 import { useTranslation } from "@/context/I18nContext";
 import { FetchStatus, useApi } from "@/hooks";
+import { foodDisplayName, formatNumber, indexMeasurements, scaleValue } from "@/utils/nutrients";
+import { Check, ChevronRight, FlaskConical, Pencil, Plus } from "lucide-react";
+import Link from "next/link";
 import { useParams } from "next/navigation";
-import { type JSX, useState } from "react";
-import Tab from "../../components/Tabs/Tab";
-import TabItem from "../../components/Tabs/TabItem";
-import CompositionDropdown from "../components/CompositionDropdown";
-import Graphic from "../components/Graphic";
-import FoodInformation from "../components/FoodInformation";
-import LangualCodes from "@/app/detail-food/components/langual-codes/LangualCodes";
-import References from "../components/References";
-import styles from "./detail-food.module.css";
+import { type JSX, useMemo, useState } from "react";
 
-const pieColors = [
-    "#0088fe",
-    "#00c49f",
-    "#ffbb28",
-    "#ff8042",
-    "#a28cc3",
-    "#ff6361",
-    "#bc5090",
-    "#58508d",
-    "#003f5c",
-    "#ffa600",
-    "#2f4b7c",
-    "#665191",
-    "#d45087",
-    "#f95d6a",
-    "#ff7c43",
-    "#1f77b4",
-    "#aec7e8",
-    "#ff9896",
-    "#98df8a",
-    "#c5b0d5",
-    "#ffbb78",
-    "#9467bd",
-    "#c49c94",
-    "#e377c2",
-    "#f7b6d2",
-    "#7f7f7f",
-    "#c7c7c7",
-    "#bcbd22",
-    "#dbdb8d",
-    "#17becf",
-] as const;
-
-function useDetail(code: string): Food {
-    const result = useApi([code], (api, depCode) => api.getFood({
-        path: {
-            code: depCode,
-        },
-    }));
-
-    if (result.status === FetchStatus.Success) {
-        return result.data;
-    } else {
-        return {
-            commonName: {
-                es: null,
-                en: null,
-                pt: null,
-            },
-            ingredients: {
-                es: null,
-                en: null,
-                pt: null,
-            },
-            group: {
-                code: "",
-                name: "",
-            },
-            type: {
-                code: "",
-                name: "",
-            },
-            brand: undefined,
-            origins: [],
-            nutrientMeasurements: {
-                energy: [],
-                macronutrients: [],
-                micronutrients: {
-                    vitamins: [],
-                    minerals: [],
-                },
-            },
-            langualCodes: [],
-            references: [],
-        };
-    }
-}
+type DetailTab = "composition" | "references";
 
 export default function DetailFoodPage(): JSX.Element {
     const params = useParams();
-    const code = params.code as string;
+    const code = (params.code as string).toUpperCase();
     const { t, language } = useTranslation();
-    const [grams, setGrams] = useState<number>(100);
+    const { state } = useAuth();
+    const { comparisonFoods, addToComparison } = useComparison();
+    const [grams, setGrams] = useState(100);
+    const [tab, setTab] = useState<DetailTab>("composition");
 
-    const data = useDetail(code);
+    const result = useApi([code], (api, foodCode) => api.getFood({ path: { code: foodCode } }));
+    const food = result.status === FetchStatus.Success ? result.data : null;
 
-    const references = data.references ?? [];
-    const mainNutrients = data.nutrientMeasurements?.macronutrients ?? [];
+    const measurementIndex = useMemo(() => food ? indexMeasurements(food.nutrientMeasurements) : new Map(), [food]);
 
-    const graphicData = mainNutrients
-        .filter((mainNutrient) => mainNutrient.nutrientId !== 12)
-        .map((mainNutrient, index) => ({
-            name: mainNutrient.name,
-            value: +((grams / 100) * mainNutrient.average).toFixed(2),
-            fill: pieColors[index % pieColors.length],
-        }));
+    const referenceUsage = useMemo(() => {
+        const usage = new Map<number, number>();
+        for (const measurement of measurementIndex.values()) {
+            for (const referenceCode of measurement.referenceCodes ?? []) {
+                usage.set(referenceCode, (usage.get(referenceCode) ?? 0) + 1);
+            }
+        }
+        return usage;
+    }, [measurementIndex]);
 
-    const graphicDataPercent = mainNutrients
-        .filter((mainNutrient) =>
-            mainNutrient.nutrientId !== 12 && mainNutrient.nutrientId !== 1
-        )
-        .map((mainNutrient, index) => ({
-            name: mainNutrient.name,
-            value: +(((grams / 100) * mainNutrient.average) / 100).toFixed(2),
-            fill: pieColors[index % pieColors.length],
-        }));
+    const chartData: GraphicItem[] = useMemo(() => (food?.nutrientMeasurements.macronutrients ?? [])
+        .filter(m => m.measurementUnit === "g")
+        .map(m => ({ name: m.name, value: +scaleValue(m.average, grams).toFixed(3), unit: m.measurementUnit })),
+    [food, grams]);
+
+    if (result.status === FetchStatus.Loading) {
+        return (
+            <PageContainer>
+                <LoadingState label={t.foodDetail.loading}/>
+            </PageContainer>
+        );
+    }
+
+    if (!food) {
+        return (
+            <PageContainer>
+                <Card>
+                    <ErrorState
+                        title={t.foodDetail.notFound}
+                        description={t.foodDetail.notFoundDescription(code)}
+                        action={<ButtonLink href="/search" variant="secondary">{t.foodDetail.backToSearch}</ButtonLink>}
+                    />
+                </Card>
+            </PageContainer>
+        );
+    }
+
+    const name = foodDisplayName(food, code);
+    const isInComparison = comparisonFoods.some(f => f.code === code);
+    const energy = food.nutrientMeasurements.energy;
 
     return (
-        <div className="w-full h-full bg-[#effce8] rounded-t-[2px]">
-            <div
-                className="
-                px-[24px] py-[20px]
-                bg-gradient-to-r from-[#ffffff] to-[#f8fdf6]
-                border-b-[2px] border-b-[#7cbb75]
-                shadow-[0_2px_8px_rgba(0,0,0,0.08)]
-                mb-[16px]
-                "
-            >
-                <div className="flex flex-col sm:flex-row sm:items-center gap-[8px] sm:gap-[16px]">
-                    <span
-                        className="
-                        inline-flex items-center justify-center
-                        bg-[#7cbb70]
-                        text-white
-                        font-[600]
-                        text-[16px]
-                        px-[6px] py-[4px]
-                        rounded-[8px]
-                        min-w-[80px]
-                        text-center
-                        shadow-[0_2px_4px_rgba(124,187,117,0.3)]
-                        "
-                    >
-                    </span>
-                    <h1
-                        className="
-                        font-[700]
-                        text-[28px] sm:text-[32px]
-                        text-[#2d3748]
-                        m-[0px]
-                        leading-[1.1]
-                        tracking-[-0.02em]
-                        flex-1
-                        "
-                    >
-                        [{code}] {data.commonName[language] ?? data.commonName.en ?? data.commonName.es}
-                    </h1>
+        <PageContainer>
+            <nav className="mb-6 flex items-center gap-1 text-[13px] text-ash" aria-label="breadcrumb">
+                <Link href="/search" className="hover:text-carbon">{t.foodDetail.foods}</Link>
+                <ChevronRight size={14}/>
+                <span className="text-graphite">{code}</span>
+            </nav>
+
+            <Card padding="lg" className="mb-6">
+                <div className="flex flex-wrap items-start justify-between gap-6">
+                    <div className="min-w-0 max-w-[760px]">
+                        <div className="mb-3 flex flex-wrap items-center gap-2">
+                            <Badge tone="neutral" className="font-mono">{code}</Badge>
+                            <Badge tone="brand">{food.group.name}</Badge>
+                        </div>
+                        <h1 className="text-[28px] sm:text-[36px] font-semibold leading-[1.15] tracking-[-0.025em]">
+                            {name}
+                        </h1>
+                        {food.foodName && food.commonName && (
+                            <p className="mt-2 text-[15px] leading-relaxed text-graphite">{food.commonName}</p>
+                        )}
+                        {food.scientificName && (
+                            <p className="mt-1 text-[14px] italic text-ash">{food.scientificName}</p>
+                        )}
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                        <Button
+                            variant={isInComparison ? "soft" : "secondary"}
+                            icon={isInComparison ? <Check size={16}/> : <Plus size={16}/>}
+                            onClick={() => addToComparison([{ code, name }])}
+                            disabled={isInComparison}
+                        >
+                            {isInComparison ? t.foodDetail.inCompare : t.foodDetail.addToCompare}
+                        </Button>
+                        {state.isAuthenticated && (
+                            <ButtonLink href={`/modify-food/${code}`} icon={<Pencil size={16}/>}>
+                                {t.foodDetail.edit}
+                            </ButtonLink>
+                        )}
+                    </div>
                 </div>
-            </div>
-            <Tab defaultTab={0}>
-                <TabItem label={t.foodDetail.generalInfo}>
-                    <FoodInformation
-                        data={{
-                            ingredients: data.ingredients,
-                            group: data.group,
-                            type: data.type,
-                            scientificName: data.scientificName,
-                            subspecies: data.subspecies ?? "",
-                            strain: data.strain ?? "",
-                            brand: data.brand ?? "",
-                            observation: data.observation ?? "",
-                            origins: data.origins ?? [],
-                        }}
-                    />
-                </TabItem>
-                <TabItem label={t.foodDetail.foodComposition}>
-                    <GramsAdjuster
-                        initialGrams={100}
-                        onGramsChange={(newGrams) => {
-                            setGrams(newGrams);
-                        }}
-                    />
-                    <div className={styles["graphic-container"]}>
-                        <Graphic title={t.foodDetail.graphics.titleLeft} data={graphicData} grams={grams}/>
-                        <Graphic title={t.foodDetail.graphics.titleRight} data={graphicDataPercent} grams={grams}/>
+
+                <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                    {energy.map(e => (
+                        <Stat
+                            key={e.nutrientId}
+                            label={`${e.name} (${e.measurementUnit})`}
+                            value={formatNumber(scaleValue(e.average, grams), language, 1)}
+                            hint={t.foodDetail.grams(grams)}
+                        />
+                    ))}
+                    <Stat label={t.foodDetail.measuredNutrients} value={measurementIndex.size.toString()}/>
+                    <Stat label={t.foodDetail.referencesCount} value={food.references.length.toString()}/>
+                </div>
+
+                <div className="mt-6 border-t border-fog pt-6">
+                    <FoodInformation food={food}/>
+                </div>
+            </Card>
+
+            <Tabs<DetailTab>
+                className="mb-6"
+                active={tab}
+                onChange={setTab}
+                tabs={[
+                    { key: "composition", label: t.foodDetail.foodComposition, count: measurementIndex.size },
+                    { key: "references", label: t.foodDetail.references.title, count: food.references.length },
+                ]}
+            />
+
+            {tab === "composition" && (measurementIndex.size === 0 ? (
+                <Card>
+                    <EmptyState icon={<FlaskConical size={20}/>} title={t.foodDetail.noComposition}/>
+                </Card>
+            ) : (
+                <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+                    <div className="min-w-0 space-y-4">
+                        <GramsAdjuster grams={grams} onGramsChange={setGrams} portion={food.portionQuantity}/>
+                        <CompositionTable
+                            measurements={food.nutrientMeasurements}
+                            grams={grams}
+                            references={food.references}
+                        />
                     </div>
-                    <div
-                        className="
-                        mt-[10px]
-                        border-[1px]
-                        rounded-[4px]
-                        shadow-[0_4px_10px_rgba(0,0,0,0.2)]
-                        bg-[white]
-                        "
-                    >
-                        <h2 className="text-center ">{t.foodDetail.compositionTable}</h2>
-                        <CompositionDropdown nutrientData={data.nutrientMeasurements ?? []} grams={grams}/>
+                    <div className="lg:sticky lg:top-6 lg:self-start">
+                        <Graphic
+                            title={t.foodDetail.graphics.title}
+                            description={t.foodDetail.graphics.description}
+                            data={chartData}
+                        />
                     </div>
-                </TabItem>
-                {/*<TabItem label={t.foodDetail.langualCodes}>*/}
-                {/*    <div*/}
-                {/*        className="*/}
-                {/*        flex*/}
-                {/*        flex-col*/}
-                {/*        mt-[10px]*/}
-                {/*        border-[1px]*/}
-                {/*        rounded-[4px]*/}
-                {/*        shadow-[0_4px_10px_rgba(0,0,0,0.2)]*/}
-                {/*        bg-[white]*/}
-                {/*        "*/}
-                {/*    >*/}
-                {/*        <h2 className="text-center pb-[12px]">{t.foodDetail.langualCodes}</h2>*/}
-                {/*        <LangualCodes data={data.langualCodes}/>*/}
-                {/*    </div>*/}
-                {/*</TabItem>*/}
-                <TabItem label={t.foodDetail.references.title}>
-                    <div
-                        className="
-                        flex
-                        flex-col
-                        mt-[10px]
-                        border-[1px]
-                        rounded-[4px]
-                        shadow-[0_4px_10px_rgba(0,0,0,0.2)]
-                        bg-[white]
-                        "
-                    >
-                        <h2 className="text-center pb-[12px]">{t.foodDetail.references.title}</h2>
-                        <References data={references}/>
-                    </div>
-                </TabItem>
-            </Tab>
+                </div>
+            ))}
+
+            {tab === "references" && <References references={food.references} usage={referenceUsage}/>}
+        </PageContainer>
+    );
+}
+
+function Stat({ label, value, hint }: { label: string; value: string; hint?: string }): JSX.Element {
+    return (
+        <div className="rounded-card border border-fog bg-paper px-4 py-3">
+            <p className="truncate text-[12px] text-ash" title={label}>{label}</p>
+            <p className="mt-1 text-[22px] font-semibold tabular-nums leading-tight text-carbon">{value}</p>
+            {hint && <p className="text-[12px] text-ash">{hint}</p>}
         </div>
     );
 }

@@ -1,203 +1,185 @@
 "use client";
 
+import api from "@/api";
+import RequireAdmin from "@/app/components/RequireAdmin";
+import {
+    Button,
+    Card,
+    CardHeader,
+    EmptyState,
+    Field,
+    Input,
+    LoadingState,
+    PageContainer,
+    PageHeader,
+    Textarea,
+} from "@/app/components/ui";
 import { useTranslation } from "@/context/I18nContext";
-import { type FormState, useForm, useReferences } from "@/hooks";
-import { type Dispatch, type JSX, type SetStateAction, useState } from "react";
-import { ArticleByReference, Authors, GeneralData, PreviewPostReference, type ReferenceForm } from "./components";
+import { useToast } from "@/context/ToastContext";
+import { FetchStatus, useReferences } from "@/hooks";
+import { BookOpen, ChevronRight, Plus, Search } from "lucide-react";
+import Link from "next/link";
+import { type FormEvent, type JSX, useMemo, useState } from "react";
 
-enum TypeOfHandle {
-    GENERAL_DATA = 1,
-    ARTICLE_BY_REFERENCE_DATA = 2,
-}
-
-function selectHandle<T extends object>(
-    partialData: Partial<ReferenceForm>,
-    i: TypeOfHandle,
-    setFormState: Dispatch<SetStateAction<FormState<T>>>
-): Dispatch<SetStateAction<FormState<T>>> | void {
-    switch (i) {
-        case TypeOfHandle.GENERAL_DATA:
-            return setFormState((prev) => ({
-                ...prev,
-                ...partialData,
-            }));
-
-        case TypeOfHandle.ARTICLE_BY_REFERENCE_DATA:
-            return setFormState((prev) => ({
-                ...prev,
-                newArticle: partialData.newArticle,
-            }));
-
-        default:
-            return setFormState;
-    }
-}
+const MAX_TEXT = 1000;
 
 export default function AddReferencePage(): JSX.Element {
+    return (
+        <RequireAdmin>
+            <ReferencesAdmin/>
+        </RequireAdmin>
+    );
+}
+
+function ReferencesAdmin(): JSX.Element {
     const { t } = useTranslation();
-    const {
-        references,
-        authors,
-        cities,
-        journals,
-        journalVolumes,
-        articles,
-        forceReload,
-    } = useReferences();
-    const [activeSection, setActiveSection] = useState<string>("general");
+    const r = t.referencesAdmin;
+    const { addToast } = useToast();
+    const { status, references, byCode, nextCode, forceReload } = useReferences();
+    const [codeInput, setCodeInput] = useState("");
+    const [codeEdited, setCodeEdited] = useState(false);
+    const [text, setText] = useState("");
+    const [query, setQuery] = useState("");
+    const [submitted, setSubmitted] = useState(false);
+    const [saving, setSaving] = useState(false);
 
-    const { formState, setFormState, onResetForm } = useForm<ReferenceForm>({
-        code: 0,
-        type: "article", //Listo <GeneralData>
-        title: "", //Listo <GeneralData>
-        authorIds: undefined, //Listo <NewAuthor>
-        newAuthors: undefined, //Listo<NewAuthor>
-        year: undefined, //Listo <GeneralData>
-        newArticle: undefined, //No listo <Para otro componente>
-        cityId: undefined, //Listo <GeneralData>
-        newCity: undefined, //Listo <GeneralData>
-        other: undefined, //Listo <GeneralData>
-    });
+    // mientras no se edite, se propone el siguiente código libre
+    const code = codeEdited ? codeInput : nextCode.toString();
 
-    if (!formState.code && references) {
-        const newCode = Math.max(...(references?.map((r) => r.code) ?? [])) + 1;
-        setFormState((previous) => ({
-            ...previous,
-            code: newCode,
-        }));
-        formState.code = newCode;
-    }
+    const codeNumber = Number(code);
+    const codeError = !Number.isInteger(codeNumber) || codeNumber < 1
+        ? r.codeInvalid
+        : byCode.has(codeNumber) ? r.codeTaken : undefined;
+    const textError = !text.trim() ? r.textRequired : undefined;
 
-    let sectionNamesByNewReference: Array<{ id: string; name: string }>;
+    const filtered = useMemo(() => {
+        const q = query.trim().toLowerCase();
+        return q
+            ? references.filter(ref => ref.code.toString() === q || ref.text?.toLowerCase().includes(q))
+            : references;
+    }, [references, query]);
 
-    if (formState.type === "article") {
-        sectionNamesByNewReference = [
-            { id: "general", name: t.newReferencePage.sectionNames.data },
-            {
-                id: "authors",
-                name: t.newReferencePage.sectionNames.authors,
-            },
-            {
-                id: "article",
-                name: t.newReferencePage.sectionNames.article,
-            },
-            {
-                id: "preview",
-                name: t.newReferencePage.sectionNames.preview,
-            },
-        ];
-    } else {
-        sectionNamesByNewReference = [
-            { id: "general", name: t.newReferencePage.sectionNames.data },
-            {
-                id: "authors",
-                name: t.newReferencePage.sectionNames.authors,
-            },
-            {
-                id: "preview",
-                name: t.newReferencePage.sectionNames.preview,
-            },
-        ];
-    }
+    const submit = async (event: FormEvent): Promise<void> => {
+        event.preventDefault();
+        setSubmitted(true);
+        if (codeError || textError) return;
 
-    const renderSectionByNewReference = (): JSX.Element | null => {
-        switch (activeSection) {
-            case "general":
-                return (
-                    <GeneralData
-                        code={formState.code}
-                        type={formState.type}
-                        title={formState.title}
-                        year={formState.year}
-                        cityId={formState.cityId}
-                        newCity={formState.newCity}
-                        other={formState.other}
-                        cities={cities || []}
-                        onFormUpdate={(updatedFields: Partial<ReferenceForm>) => selectHandle(
-                            { ...formState, ...updatedFields },
-                            TypeOfHandle.GENERAL_DATA,
-                            setFormState
-                        )}
-                    />
-                );
-            case "authors":
-                return (
-                    <Authors
-                        authorIds={formState.authorIds}
-                        newAuthors={formState.newAuthors}
-                        data={authors || []}
-                        updateAuthors={(authors) =>
-                            selectHandle(
-                                {
-                                    newAuthors: authors
-                                        .filter((author) => author.id < 0)
-                                        .map((author) => author.name),
-                                    authorIds: authors
-                                        .filter((author) => author.id > 0)
-                                        .map((author) => author.id),
-                                },
-                                TypeOfHandle.GENERAL_DATA,
-                                setFormState
-                            )
-                        }
-                    />
-                );
+        setSaving(true);
+        const result = await api.createReference({ path: { code: codeNumber }, body: { text: text.trim() } })
+            .catch(error => ({ error }));
+        setSaving(false);
 
-            case "article":
-                return (
-                    <ArticleByReference
-                        data={{
-                            journals: journals || [],
-                            journalVolumes: journalVolumes || [],
-                            articles: articles || [],
-                        }}
-                        dataForm={{
-                            newArticle: formState.newArticle,
-                        }}
-                        updateNewArticle={(updatedArticle) =>
-                            selectHandle(
-                                { newArticle: updatedArticle },
-                                TypeOfHandle.ARTICLE_BY_REFERENCE_DATA,
-                                setFormState
-                            )
-                        }
-                    />
-                );
-            case "preview":
-                return (
-                    <PreviewPostReference
-                        data={formState}
-                        authors={authors || []}
-                        cities={cities || []}
-                        journals={journals || []}
-                        journalVolumes={journalVolumes || []}
-                        forceReload={forceReload}
-                        handleResetReferenceForm={onResetForm}
-                    />
-                );
-            default:
-                return null;
+        if (result.error) {
+            addToast({
+                type: "Danger",
+                title: t.common.error,
+                message: (result.error as { message?: string }).message ?? t.common.unknownError,
+                position: "top-end",
+            });
+            return;
         }
+
+        addToast({ type: "Success", message: r.created(codeNumber), position: "top-end", duration: 3000 });
+        setText("");
+        setCodeEdited(false);
+        setSubmitted(false);
+        forceReload();
     };
 
-    return <>
-        <div className="left-column">
-            <h3 className="subtitle">{t.newReferencePage.sections}</h3>
-            {sectionNamesByNewReference.map(({ id, name }) => (
-                <button
-                    key={`post-reference-${id}`}
-                    className={`pagination-button ${
-                        activeSection === id ? "active" : ""
-                    }`}
-                    onClick={() => setActiveSection(id)}
-                >
-                    {name}
-                </button>
-            ))}
-        </div>
-        <div className="content-container">
-            <h2 className="title">{t.newReferencePage.title}</h2>
-            {renderSectionByNewReference()}
-        </div>
-    </>;
+    return (
+        <PageContainer>
+            <PageHeader
+                eyebrow={(
+                    <>
+                        <Link href="/admin-page" className="hover:text-carbon">{t.adminPage.title}</Link>
+                        <ChevronRight size={14}/>
+                        <span>{r.title}</span>
+                    </>
+                )}
+                title={r.title}
+                description={r.description}
+            />
+
+            <div className="grid items-start gap-6 lg:grid-cols-[380px_minmax(0,1fr)]">
+                <Card as="section" padding="lg" className="lg:sticky lg:top-6">
+                    <CardHeader icon={<Plus size={18}/>} title={r.newReference}/>
+                    <form className="flex flex-col gap-4" noValidate onSubmit={e => void submit(e)}>
+                        <Field
+                            label={r.code}
+                            htmlFor="reference-code"
+                            required
+                            hint={r.codeHint}
+                            error={submitted || codeEdited ? codeError : undefined}
+                        >
+                            <Input
+                                id="reference-code"
+                                inputMode="numeric"
+                                value={code}
+                                onChange={e => {
+                                    setCodeEdited(true);
+                                    setCodeInput(e.target.value);
+                                }}
+                                className="max-w-[140px] tabular-nums"
+                            />
+                        </Field>
+                        <Field
+                            label={r.text}
+                            htmlFor="reference-text"
+                            required
+                            error={submitted ? textError : undefined}
+                            hint={`${text.length}/${MAX_TEXT}`}
+                        >
+                            <Textarea
+                                id="reference-text"
+                                rows={6}
+                                maxLength={MAX_TEXT}
+                                value={text}
+                                placeholder={r.textPlaceholder}
+                                onChange={e => setText(e.target.value)}
+                            />
+                        </Field>
+                        <Button type="submit" disabled={saving} className="self-start">
+                            {saving ? r.saving : r.save}
+                        </Button>
+                    </form>
+                </Card>
+
+                <Card as="section" padding="none">
+                    <div className="border-b border-fog p-5">
+                        <CardHeader
+                            icon={<BookOpen size={18}/>}
+                            title={r.existing}
+                            description={status === FetchStatus.Success ? `${references.length}` : undefined}
+                            className="mb-4"
+                        />
+                        <div className="relative">
+                            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-ash"/>
+                            <Input
+                                value={query}
+                                onChange={e => setQuery(e.target.value)}
+                                placeholder={r.search}
+                                aria-label={r.search}
+                                className="rounded-full pl-9"
+                            />
+                        </div>
+                    </div>
+                    {status === FetchStatus.Loading && <LoadingState label={r.loading}/>}
+                    {status !== FetchStatus.Loading && filtered.length === 0 && <EmptyState title={r.none}/>}
+                    <ol className="divide-y divide-fog">
+                        {filtered.map(ref => (
+                            <li key={ref.code} className="flex gap-4 px-5 py-4">
+                                <span
+                                    className="flex h-7 min-w-7 shrink-0 items-center justify-center rounded-full
+                                    bg-mist px-2 text-[12px] font-semibold tabular-nums text-graphite"
+                                >
+                                    {ref.code}
+                                </span>
+                                <p className="text-[14px] leading-relaxed text-carbon">{ref.text}</p>
+                            </li>
+                        ))}
+                    </ol>
+                </Card>
+            </div>
+        </PageContainer>
+    );
 }
