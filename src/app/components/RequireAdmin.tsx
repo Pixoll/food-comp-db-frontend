@@ -6,10 +6,6 @@ import { useTranslation } from "@/context/I18nContext";
 import { Lock } from "lucide-react";
 import type { JSX, ReactNode } from "react";
 
-/**
- * Muestra el contenido solo a administradores con sesión iniciada.
- * El backend igual valida la sesión en cada petición; esto solo evita mostrar formularios inútiles.
- */
 export default function RequireAdmin({ children }: { children: ReactNode }): JSX.Element {
     const { t } = useTranslation();
     const { state } = useAuth();

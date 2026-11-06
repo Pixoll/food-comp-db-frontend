@@ -182,7 +182,7 @@ export default function FoodResultsTable({ result, name, onNameChange }: FoodRes
 
             {result.status === FetchStatus.Success && sorted.length > 0 && (
                 <>
-                    <div className="overflow-x-auto">
+                    <div className="relative overflow-x-auto">
                         <table className="w-full min-w-[640px] text-[14px]">
                             <thead>
                                 <tr className="text-left text-[12px] font-medium text-ash">

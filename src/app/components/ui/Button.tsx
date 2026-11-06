@@ -8,7 +8,7 @@ const base = "inline-flex items-center justify-center gap-2 rounded-full font-me
     + "transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed select-none";
 
 const variants: Record<ButtonVariant, string> = {
-    primary: "bg-brand text-white shadow-subtle hover:bg-brand-hover",
+    primary: "bg-brand text-on-brand shadow-subtle hover:bg-brand-hover",
     secondary: "bg-paper text-carbon shadow-subtle-2 hover:bg-linen",
     ghost: "bg-transparent text-graphite hover:bg-mist hover:text-carbon",
     soft: "bg-mint-wash text-brand-ink hover:bg-mint/60",

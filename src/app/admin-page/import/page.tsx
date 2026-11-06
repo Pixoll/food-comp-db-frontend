@@ -2,7 +2,7 @@
 
 import api, { type XlsxImportResult, type XlsxPreview } from "@/api";
 import RequireAdmin from "@/app/components/RequireAdmin";
-import { Button, Card, PageContainer, PageHeader, Tabs } from "@/app/components/ui";
+import { actionBarClass, Button, Card, PageContainer, PageHeader, Tabs } from "@/app/components/ui";
 import { useTranslation } from "@/context/I18nContext";
 import { useToast } from "@/context/ToastContext";
 import { apiErrorMessage, apiErrorStatus } from "@/utils/apiError";
@@ -113,7 +113,7 @@ function ImportXlsx(): JSX.Element {
 
     return (
         <PageContainer width="xl">
-            <div className={preview && !result ? "pb-32" : undefined}>
+            <div>
                 <PageHeader
                     eyebrow={(
                         <>
@@ -183,11 +183,8 @@ function ImportXlsx(): JSX.Element {
             </div>
 
             {preview && !result && (
-                <div className="fixed inset-x-0 bottom-0 z-20 border-t border-fog bg-paper/95 backdrop-blur">
-                    <div
-                        className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-3 px-4
-                        py-3 sm:px-6"
-                    >
+                <div className={actionBarClass}>
+                    <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-5">
                         <div className="flex min-w-0 flex-col gap-1">
                             {summary && summary.existingFoods > 0 && (
                                 <label className={switchLabelClass}>

@@ -33,7 +33,7 @@ export default function AdminPage(): JSX.Element {
                             transition-shadow duration-150 hover:shadow-panel"
                         >
                             <span
-                                className="flex size-10 items-center justify-center rounded-full bg-brand text-white"
+                                className="flex size-10 items-center justify-center rounded-full bg-brand text-on-brand"
                             >
                                 {card.icon}
                             </span>

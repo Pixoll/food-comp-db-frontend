@@ -5,7 +5,8 @@ import { useAuth } from "@/context/AuthContext";
 import { useComparison } from "@/context/ComparisonContext";
 import { type Language, useTranslation } from "@/context/I18nContext";
 import { useToast } from "@/context/ToastContext";
-import { Languages, LogOut, Menu, MonitorCog, Search, X } from "lucide-react";
+import { useTheme } from "@/hooks/useTheme";
+import { Languages, LogOut, Menu, MonitorCog, Moon, Search, Sun, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -27,6 +28,7 @@ export default function NavBar(): JSX.Element {
     const { addToast } = useToast();
     const { state, logout } = useAuth();
     const { comparisonFoods } = useComparison();
+    const { theme, toggleTheme } = useTheme();
     const router = useRouter();
     const pathname = usePathname();
 
@@ -66,7 +68,7 @@ export default function NavBar(): JSX.Element {
     const isActive = (href: string): boolean => pathname === href || pathname.startsWith(`${href}/`);
 
     return (
-        <header className="relative z-40 bg-brand text-white shadow-[0_1px_0_rgb(0_0_0/0.08)]">
+        <header className="nav-surface relative z-40 border-b border-white/5 text-on-nav shadow-subtle">
             <nav className="mx-auto flex h-16 max-w-[1400px] items-center gap-4 px-4 sm:px-6">
                 <Link href="/" className="flex shrink-0 items-center gap-3" aria-label={t.navbar.home}>
                     <Image
@@ -82,9 +84,9 @@ export default function NavBar(): JSX.Element {
                 </Link>
 
                 <ul
-                    className={`${menuOpen ? "flex" : "hidden"} absolute inset-x-0 top-16 flex-col gap-1 border-t
-                    border-white/10 bg-brand p-3 shadow-panel md:static md:flex md:flex-1 md:flex-row md:justify-center
-                    md:border-0 md:p-0 md:shadow-none`}
+                    className={`${menuOpen ? "flex" : "hidden"} nav-surface absolute inset-x-0 top-16 flex-col gap-1
+                    border-t border-white/10 p-3 shadow-panel md:static md:flex md:flex-1 md:flex-row
+                    md:justify-center md:border-0 md:bg-none md:p-0 md:shadow-none`}
                 >
                     {links.map(link => (
                         <li key={link.href}>
@@ -93,8 +95,8 @@ export default function NavBar(): JSX.Element {
                                 onClick={() => setMenuOpen(false)}
                                 className={`flex items-center gap-2 rounded-full px-4 py-2 text-[15px] font-medium
                                 transition-colors ${isActive(link.href)
-                                    ? "bg-white/15 text-white"
-                                    : "text-white/80 hover:bg-white/10 hover:text-white"}`}
+                                    ? "bg-white/15 text-on-nav"
+                                    : "text-on-nav/80 hover:bg-white/10 hover:text-on-nav"}`}
                             >
                                 {link.label}
                                 {link.icon}
@@ -112,6 +114,16 @@ export default function NavBar(): JSX.Element {
                 </ul>
 
                 <div className="ml-auto flex items-center gap-1 md:ml-0">
+                    <button
+                        type="button"
+                        onClick={toggleTheme}
+                        aria-label={theme === "dark" ? t.navbar.lightTheme : t.navbar.darkTheme}
+                        title={theme === "dark" ? t.navbar.lightTheme : t.navbar.darkTheme}
+                        className="rounded-full p-2 text-on-nav/80 hover:bg-white/10 hover:text-on-nav"
+                    >
+                        {theme === "dark" ? <Sun size={18}/> : <Moon size={18}/>}
+                    </button>
+
                     <div ref={langRef} className="relative">
                         <button
                             type="button"
@@ -119,7 +131,7 @@ export default function NavBar(): JSX.Element {
                             aria-label={t.navbar.changeLanguage}
                             aria-expanded={langMenuOpen}
                             className="flex items-center gap-1.5 rounded-full px-3 py-2 text-[13px] font-medium
-                            text-white/80 hover:bg-white/10 hover:text-white"
+                            text-on-nav/80 hover:bg-white/10 hover:text-on-nav"
                         >
                             <Languages size={18}/>
                             <span className="uppercase">{language}</span>
@@ -165,7 +177,7 @@ export default function NavBar(): JSX.Element {
                                 aria-label={t.navbar.signOut}
                                 title={t.navbar.signOut}
                                 className="flex items-center gap-2 rounded-full px-3 py-2 text-[13px] font-medium
-                                text-white/80 hover:bg-white/10 hover:text-white"
+                                text-on-nav/80 hover:bg-white/10 hover:text-on-nav"
                             >
                                 <LogOut size={18}/>
                                 <span className="hidden xl:inline">{t.navbar.signOut}</span>
@@ -175,7 +187,7 @@ export default function NavBar(): JSX.Element {
                         <Link
                             href="/login"
                             className="ml-1 rounded-full bg-mint px-4 py-2 text-[14px] font-medium text-brand-ink
-                            shadow-subtle transition-colors hover:bg-white"
+                            shadow-subtle transition hover:brightness-110"
                         >
                             {t.navbar.signIn}
                         </Link>

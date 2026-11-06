@@ -2,6 +2,7 @@
 
 import api from "@/api";
 import {
+    actionBarClass,
     Button,
     ButtonLink,
     Card,
@@ -270,7 +271,7 @@ function FoodFormBody({ mode, initial, title, groups, scientificNames }: FoodFor
     const loadingCatalogs = nutrients.status === FetchStatus.Loading;
 
     return (
-        <PageContainer width="lg" className="pb-32">
+        <PageContainer width="lg">
             <PageHeader
                 eyebrow={(
                     <>
@@ -338,11 +339,9 @@ function FoodFormBody({ mode, initial, title, groups, scientificNames }: FoodFor
                     />
                 )}
 
-                <div className="fixed inset-x-0 bottom-0 z-20 border-t border-fog bg-paper/95 backdrop-blur">
-                    <div
-                        className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-3 px-4
-                        py-3 sm:px-6"
-                    >
+                {/* sticky (no fixed): acompaña el scroll pero se detiene antes del footer en vez de taparlo */}
+                <div className={actionBarClass}>
+                    <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-5">
                         <p className="text-[13px] text-graphite">
                             {submitted && errorCount > 0
                                 ? <span className="text-danger">{f.reviewErrors}</span>

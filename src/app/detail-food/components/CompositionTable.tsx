@@ -168,7 +168,7 @@ export default function CompositionTable({ measurements, grams, references }: Co
                     </button>
                 )}
             </div>
-            <div className="overflow-x-auto">
+            <div className="relative overflow-x-auto">
                 <table className="w-full min-w-[560px] text-[14px]">
                     <thead>
                         <tr className="text-left text-[12px] font-medium uppercase tracking-wide text-ash">

@@ -27,7 +27,7 @@
     flex-shrink: 0;
     width: 36px;
     height: 36px;
-    background: white;
+    background: var(--color-paper);
     opacity: 0.9;
     border: none;
     border-radius: 50%;
@@ -53,7 +53,7 @@
 .icon {
     width: 18px;
     height: 18px;
-    color: #1d6735;
+    color: var(--color-brand);
     flex-shrink: 0;
 }
 
@@ -74,11 +74,11 @@
 }
 
 .memberCard {
-    background: rgba(255, 255, 255, 0.96);
+    background: color-mix(in srgb, var(--color-paper) 96%, transparent);
     backdrop-filter: blur(8px);
     padding: 16px;
     border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid color-mix(in srgb, var(--color-fog) 60%, transparent);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     transition: all 0.3s;
     display: flex;
@@ -104,8 +104,8 @@
     border-radius: 50%;
     overflow: hidden;
     position: relative;
-    background: rgba(29, 103, 53, 0.08);
-    border: 2px solid rgba(29, 103, 53, 0.15);
+    background: var(--color-mint-wash);
+    border: 2px solid var(--color-fog);
 }
 
 .photo {
@@ -118,13 +118,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, rgba(29, 103, 53, 0.1) 0%, rgba(29, 103, 53, 0.05) 100%);
+    background: linear-gradient(135deg, var(--color-mint-wash) 0%, var(--color-sprout) 100%);
 }
 
 .userIcon {
     width: 48px;
     height: 48px;
-    color: rgba(29, 103, 53, 0.5);
+    color: var(--color-leaf);
     stroke-width: 1.5;
 }
 
@@ -140,7 +140,7 @@
 .memberName {
     font-size: 18px;
     font-weight: 700;
-    color: #1d6735;
+    color: var(--color-brand);
     margin: 0;
     line-height: 1.3;
     word-wrap: break-word;
@@ -151,7 +151,7 @@
 .memberPosition {
     font-size: 14px;
     font-weight: 600;
-    color: rgba(29, 103, 53, 0.85);
+    color: var(--color-brand-ink);
     margin: 0;
     line-height: 1.4;
     word-wrap: break-word;
@@ -160,7 +160,7 @@
 
 .memberInstitution {
     font-size: 13px;
-    color: rgba(29, 103, 53, 0.75);
+    color: var(--color-graphite);
     margin: 0;
     line-height: 1.5;
     word-wrap: break-word;
@@ -169,7 +169,7 @@
 
 .memberEmail {
     font-size: 12px;
-    color: rgba(29, 103, 53, 0.88);
+    color: var(--color-brand);
     text-decoration: underline;
     transition: opacity 0.2s;
     word-break: break-all;
@@ -178,7 +178,7 @@
 
 .memberEmail:hover {
     opacity: 1;
-    color: #1d6735;
+    color: var(--color-brand-hover);
 }
 
 .indicators {

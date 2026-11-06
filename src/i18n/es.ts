@@ -18,6 +18,8 @@ export const es = {
     signOut: "Cerrar sesión",
     openMenu: "Abrir menu",
     closeMenu: "Cerrar menu",
+    lightTheme: "Cambiar a tema claro",
+    darkTheme: "Cambiar a tema oscuro",
   },
   homepage: {
     title: "Base de Datos Chilena de Composición de Alimentos",

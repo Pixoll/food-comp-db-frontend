@@ -4,3 +4,4 @@ export * from "./useGroups";
 export * from "./useNutrients";
 export * from "./useReferences";
 export * from "./useScientificNames";
+export * from "./useTheme";

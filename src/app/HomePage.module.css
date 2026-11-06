@@ -33,7 +33,12 @@
 .heroOverlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgb(24 25 37 / 0.55) 0%, rgb(24 25 37 / 0.45) 50%, rgb(24 25 37 / 0.7) 100%);
+  background: linear-gradient(180deg, rgb(8 38 20 / 0.6) 0%, rgb(8 38 20 / 0.42) 50%, rgb(5 24 12 / 0.78) 100%);
+}
+
+/* en tema oscuro las fotos se oscurecen más para que no destaquen sobre el resto de la página */
+:global([data-theme="dark"]) .heroOverlay {
+  background: linear-gradient(180deg, rgb(3 14 7 / 0.72) 0%, rgb(3 14 7 / 0.58) 50%, rgb(3 12 6 / 0.9) 100%);
 }
 
 .heroContent {
@@ -116,7 +121,7 @@
 }
 
 .primaryButton:hover {
-  background: #ffffff;
+  filter: brightness(1.08);
 }
 
 .ghostButton {
@@ -155,7 +160,7 @@
   list-style: none;
   border: 1px solid var(--color-fog);
   border-radius: 12px;
-  background: #ffffff;
+  background: var(--color-paper);
   box-shadow: var(--shadow-panel);
   color: var(--color-carbon);
   font-size: 14px;
@@ -192,7 +197,11 @@
 .searchOverlay {
   position: absolute;
   inset: 0;
-  background: rgb(24 25 37 / 0.55);
+  background: linear-gradient(180deg, rgb(6 30 16 / 0.62), rgb(6 30 16 / 0.5));
+}
+
+:global([data-theme="dark"]) .searchOverlay {
+  background: linear-gradient(180deg, rgb(3 14 7 / 0.78), rgb(3 14 7 / 0.7));
 }
 
 .searchCard {
@@ -203,7 +212,7 @@
   padding: 32px;
   border: 1px solid var(--color-fog);
   border-radius: 24px;
-  background: #ffffff;
+  background: var(--color-paper);
   box-shadow: var(--shadow-panel);
 }
 
@@ -221,7 +230,7 @@
 
 .searchForm:focus-within {
   border-color: var(--color-leaf);
-  box-shadow: 0 0 0 3px rgb(167 238 181 / 0.6);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-mint) 60%, transparent);
 }
 
 .searchIcon {
@@ -249,7 +258,7 @@
   padding: 10px 24px;
   border-radius: 9999px;
   background: var(--color-brand);
-  color: #ffffff;
+  color: var(--color-on-brand);
   font-size: 15px;
   font-weight: 500;
   box-shadow: var(--shadow-subtle);
@@ -296,7 +305,7 @@
   padding: 6px 14px;
   border: 1px solid var(--color-fog);
   border-radius: 9999px;
-  background: #ffffff;
+  background: var(--color-paper);
   color: var(--color-graphite);
   font-size: 13px;
   text-align: left;
@@ -312,7 +321,7 @@
 .groupChipSelected:hover {
   border-color: var(--color-brand);
   background: var(--color-brand);
-  color: #ffffff;
+  color: var(--color-on-brand);
 }
 
 .searchFooter {
@@ -336,8 +345,8 @@
 /* ---------- Características ---------- */
 
 .featuresSection {
-  padding: 64px 16px;
-  background: var(--color-linen);
+  padding: 72px 16px;
+  background: linear-gradient(180deg, var(--color-canvas) 0%, var(--color-band) 100%);
 }
 
 .featuresGrid {
@@ -352,7 +361,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 32px 16px;
+  padding: 32px 20px;
+  border: 1px solid var(--color-fog);
+  border-radius: 16px;
+  background: var(--color-paper);
+  box-shadow: var(--shadow-subtle-2);
   text-align: center;
 }
 
@@ -360,11 +373,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 9999px;
   background: var(--color-brand);
-  color: #ffffff;
+  color: var(--color-on-brand);
 }
 
 .featureTitle {
@@ -404,6 +417,6 @@
 
   .featuresGrid {
     grid-template-columns: 1fr;
-    gap: 0;
+    gap: 16px;
   }
 }

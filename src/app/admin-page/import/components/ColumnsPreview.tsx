@@ -43,7 +43,7 @@ export default function ColumnsPreview({ columns }: { columns: XlsxColumnPreview
                             onClick={() => setFilter(key)}
                             aria-pressed={filter === key}
                             className={`rounded-full border px-3 py-1 text-[13px] transition-colors ${filter === key
-                                ? "border-carbon bg-carbon text-white"
+                                ? "border-brand bg-brand text-on-brand"
                                 : "border-fog bg-paper text-graphite hover:border-ash"}`}
                         >
                             {x.columnFilters[key]} <span className="tabular-nums opacity-70">{count}</span>
@@ -62,7 +62,7 @@ export default function ColumnsPreview({ columns }: { columns: XlsxColumnPreview
                     </p>
                 )}
             </div>
-            <div className="overflow-x-auto">
+            <div className="relative overflow-x-auto">
                 <table className="w-full min-w-[720px] text-[13px]">
                     <thead>
                         <tr className="border-b border-fog text-left text-[12px] uppercase tracking-wide text-ash">

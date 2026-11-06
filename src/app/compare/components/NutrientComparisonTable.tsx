@@ -29,13 +29,13 @@ export default function NutrientComparisonTable({
 
     return (
         <div className="overflow-hidden rounded-card border border-fog bg-paper">
-            <div className="overflow-x-auto">
+            <div className="relative overflow-x-auto">
                 <table className="w-full table-fixed text-[14px]" style={{ minWidth: 300 + foods.length * 180 }}>
                     <thead>
                         <tr className="align-bottom">
                             <th
-                                className="sticky left-0 z-10 w-[300px] bg-paper py-3 pl-5 pr-3 text-left text-[12px]
-                                font-medium uppercase tracking-wide text-ash"
+                                className="sticky left-0 z-10 w-[300px] bg-sprout py-3 pl-5 pr-3 text-left text-[12px]
+                                font-medium uppercase tracking-wide"
                             >
                                 {t.nutrientsDropdown.nutrient}
                             </th>

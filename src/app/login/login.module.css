@@ -3,6 +3,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex: 1;
     min-height: calc(100vh - 64px);
     padding: 48px 16px;
     background: no-repeat center center;
@@ -12,8 +13,12 @@
 .login-container::before {
     position: absolute;
     inset: 0;
-    background: rgb(24 25 37 / 0.35);
+    background: linear-gradient(160deg, rgb(8 40 20 / 0.55), rgb(4 20 10 / 0.35));
     content: "";
+}
+
+:global([data-theme="dark"]) .login-container::before {
+    background: rgb(3 12 7 / 0.72);
 }
 
 .login-container > * {

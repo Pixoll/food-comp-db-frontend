@@ -108,7 +108,7 @@ export default function MeasurementsSection({
                 )}
             </div>
 
-            <div className="overflow-x-auto border-t border-fog">
+            <div className="relative overflow-x-auto border-t border-fog">
                 <table className="w-full min-w-[680px] text-[14px]">
                     <thead>
                         <tr className="text-left text-[12px] uppercase tracking-wide text-ash">

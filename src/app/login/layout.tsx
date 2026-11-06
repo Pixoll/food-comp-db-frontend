@@ -7,7 +7,7 @@ type LoginPageLayoutProps = {
 
 export default function LoginPageLayout({ children }: LoginPageLayoutProps): JSX.Element {
     return (
-        <div className="h-full">
+        <div className="flex flex-1 flex-col">
             <div className={styles["login-container"]} style={{ backgroundImage: "url(/admin_login_bg.jpg)" }}>
                 {children}
             </div>

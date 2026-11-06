@@ -4,7 +4,6 @@ type PageContainerProps = {
     children: ReactNode;
     className?: string;
     width?: "md" | "lg" | "xl";
-    tone?: "white" | "linen";
 };
 
 const widths = {
@@ -13,14 +12,9 @@ const widths = {
     xl: "max-w-[1400px]",
 };
 
-export function PageContainer({
-    children,
-    className = "",
-    width = "lg",
-    tone = "linen",
-}: PageContainerProps): JSX.Element {
+export function PageContainer({ children, className = "", width = "lg" }: PageContainerProps): JSX.Element {
     return (
-        <main className={`w-full ${tone === "linen" ? "bg-linen" : "bg-paper"}`}>
+        <main className="page-surface w-full flex-1">
             <div className={`mx-auto w-full ${widths[width]} px-4 sm:px-6 py-8 sm:py-12 ${className}`}>
                 {children}
             </div>
@@ -45,7 +39,7 @@ export function PageHeader({ eyebrow, title, description, actions, className = "
                         {eyebrow}
                     </div>
                 )}
-                <h1 className="text-[30px] sm:text-[36px] font-semibold leading-[1.15] tracking-[-0.025em] text-carbon">
+                <h1 className="text-[30px] sm:text-[36px] font-semibold leading-[1.15] tracking-tight text-carbon">
                     {title}
                 </h1>
                 {description && <p className="mt-2 text-[16px] leading-relaxed text-graphite">{description}</p>}
@@ -54,3 +48,6 @@ export function PageHeader({ eyebrow, title, description, actions, className = "
         </header>
     );
 }
+
+export const actionBarClass = "sticky bottom-4 z-20 mt-6 rounded-card border border-fog bg-paper/90 "
+    + "shadow-panel backdrop-blur supports-[backdrop-filter]:bg-paper/80";

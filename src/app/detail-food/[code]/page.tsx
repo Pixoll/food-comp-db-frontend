@@ -158,7 +158,7 @@ export default function DetailFoodPage(): JSX.Element {
                     <EmptyState icon={<FlaskConical size={20}/>} title={t.foodDetail.noComposition}/>
                 </Card>
             ) : (
-                <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
                     <div className="min-w-0 space-y-4">
                         <GramsAdjuster grams={grams} onGramsChange={setGrams} portion={food.portionQuantity}/>
                         <CompositionTable

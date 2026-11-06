@@ -18,6 +18,8 @@ export const en = {
     signOut: "Sign out",
     openMenu: "Open menu",
     closeMenu: "Close menu",
+    lightTheme: "Switch to light theme",
+    darkTheme: "Switch to dark theme",
   },
   homepage: {
     title: "Chilean Food Composition Database",

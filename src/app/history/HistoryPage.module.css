@@ -16,6 +16,12 @@
     min-height: 100%;
 }
 
+/* en tema oscuro la foto se oscurece con un velo verde-negro */
+:global([data-theme="dark"]) .overlay {
+    background-color: rgb(4 16 9 / 0.78);
+    opacity: 1;
+}
+
 .contentWrapper {
     position: relative;
     z-index: 10;
@@ -43,12 +49,12 @@
 }
 
 .infoBox {
-    background: rgba(255, 255, 255, 0.95);
+    background: color-mix(in srgb, var(--color-paper) 94%, transparent);
     backdrop-filter: blur(8px);
     padding: 24px;
     width: 100%;
     border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid color-mix(in srgb, var(--color-fog) 60%, transparent);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
 }
@@ -61,7 +67,7 @@
 .infoTitle {
     font-size: 24px;
     font-weight: 700;
-    color: #1d6735;
+    color: var(--color-brand);
     margin: 0 0 12px 0;
     line-height: 1.3;
 }
@@ -69,7 +75,7 @@
 .infoParagraph {
     font-size: 15px;
     line-height: 1.7;
-    color: rgba(29, 103, 53, 0.88);
+    color: var(--color-brand-ink);
     margin: 0;
 }
 

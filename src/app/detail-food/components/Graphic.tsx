@@ -17,7 +17,17 @@ type GraphicProps = {
     data: GraphicItem[];
 };
 
-const COLORS = ["#1d6735", "#7cbb70", "#2c6fdc", "#c27c00", "#b83a8a", "#5aa9a0", "#ff3e00", "#8a8f98"];
+// variables CSS del tema: el gráfico cambia de colores junto con el tema claro/oscuro
+const COLORS = [
+    "var(--color-brand)",
+    "var(--color-leaf)",
+    "var(--color-sky)",
+    "var(--color-amber)",
+    "var(--color-magenta)",
+    "#5aa9a0",
+    "#e8590c",
+    "var(--color-ash)",
+];
 
 /**
  * Barras horizontales en vez de torta: los macronutrientes de primer nivel se solapan
@@ -45,19 +55,21 @@ export default function Graphic({ title, description, data }: GraphicProps): JSX
                                 width={140}
                                 tickLine={false}
                                 axisLine={false}
-                                tick={{ fontSize: 12, fill: "#666666" }}
+                                tick={{ fontSize: 12, fill: "var(--color-graphite)" }}
                             />
                             <Tooltip
-                                cursor={{ fill: "#f5f5f5" }}
+                                cursor={{ fill: "var(--color-mist)" }}
                                 formatter={(value, _name, entry) => [
                                     `${formatNumber(Number(value), language)} ${(entry.payload as GraphicItem).unit}`,
                                     "",
                                 ]}
                                 separator=""
                                 contentStyle={{
-                                    border: "1px solid #e8e8e8",
+                                    border: "1px solid var(--color-fog)",
                                     borderRadius: 8,
-                                    boxShadow: "0 1px 3px rgb(0 0 0 / 0.06), 0 8px 16px rgb(0 0 0 / 0.06)",
+                                    background: "var(--color-paper)",
+                                    color: "var(--color-carbon)",
+                                    boxShadow: "var(--shadow-panel)",
                                     fontSize: 13,
                                 }}
                             />
@@ -69,7 +81,7 @@ export default function Graphic({ title, description, data }: GraphicProps): JSX
                                     dataKey="value"
                                     position="right"
                                     formatter={(value) => `${formatNumber(Number(value), language, 2)} g`}
-                                    style={{ fontSize: 12, fill: "#666666" }}
+                                    style={{ fontSize: 12, fill: "var(--color-graphite)" }}
                                 />
                             </Bar>
                         </BarChart>

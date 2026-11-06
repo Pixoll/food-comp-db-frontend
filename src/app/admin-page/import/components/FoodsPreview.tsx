@@ -62,7 +62,7 @@ export default function FoodsPreview({ foods, references }: FoodsPreviewProps): 
                             onClick={() => setFilter(key)}
                             aria-pressed={filter === key}
                             className={`rounded-full border px-3 py-1 text-[13px] transition-colors ${filter === key
-                                ? "border-carbon bg-carbon text-white"
+                                ? "border-brand bg-brand text-on-brand"
                                 : "border-fog bg-paper text-graphite hover:border-ash"}`}
                         >
                             {x.filters[key]} <span className="tabular-nums opacity-70">{counts[key]}</span>
@@ -84,7 +84,7 @@ export default function FoodsPreview({ foods, references }: FoodsPreviewProps): 
             {visible.length === 0 ? (
                 <p className="px-5 py-10 text-center text-[14px] text-graphite">{x.noFoods}</p>
             ) : (
-                <div className="overflow-x-auto">
+                <div className="relative overflow-x-auto">
                     <table className="w-full min-w-[640px] text-[14px]">
                         <thead>
                             <tr className="border-b border-fog text-left text-[12px] uppercase tracking-wide text-ash">
@@ -260,7 +260,7 @@ function FoodDetail({ food, reference }: FoodDetailProps): JSX.Element {
             {food.measurements.length > 0 && (
                 <div className="max-h-[320px] overflow-y-auto rounded-input border border-fog">
                     <table className="w-full text-[13px]">
-                        <thead className="sticky top-0 bg-paper">
+                        <thead className="sticky top-0 bg-sprout">
                             <tr className="border-b border-fog text-left text-[11px] uppercase tracking-wide text-ash">
                                 <th className="px-3 py-2 font-medium">{x.nutrient}</th>
                                 <th className="px-3 py-2 text-right font-medium">{x.value}</th>

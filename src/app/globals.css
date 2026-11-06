@@ -1,48 +1,73 @@
 @import "tailwindcss";
 
 /*
- * Tokens de diseño. Siguen el DESIGN.md (lienzo blanco, bordes finos, botones pill, poca sombra)
- * pero conservan la paleta verde original de CapChiCAL como color de acción.
+ * Dos temas, ambos sobre la paleta verde de CapChiCAL:
+ *   - claro: verdes con blancos (lienzo verde muy suave, tarjetas blancas, navbar y footer verdes)
+ *   - oscuro: verdes con negros (lienzo casi negro con tinte verde, verde brillante como acción)
+ *
+ * Los componentes usan siempre los mismos nombres (bg-paper, text-carbon, bg-brand...). Lo que cambia
+ * entre temas es el valor de cada variable: el tema claro está en @theme y el oscuro en
+ * :root[data-theme="dark"]. El atributo data-theme lo pone el script de layout.tsx antes de pintar.
  */
 @theme static {
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --default-font-family: var(--font-sans);
 
-  /* Neutros */
-  --color-carbon: #181925;
-  --color-graphite: #666666;
-  --color-ash: #999999;
-  --color-fog: #e8e8e8;
-  --color-mist: #f5f5f5;
-  --color-linen: #fafafa;
-  --color-paper: #ffffff;
+  /* Texto y superficies */
+  --color-carbon: #13221a;      /* texto principal */
+  --color-graphite: #4b5f52;    /* texto secundario */
+  --color-ash: #7c8f82;         /* texto terciario, placeholders */
+  --color-fog: #d3e3d1;         /* bordes */
+  --color-mist: #e5f0e3;        /* hover, filas de grupo, inputs deshabilitados */
+  --color-linen: #f5f9f3;       /* superficie suave dentro de tarjetas (filas de grupo, hover) */
+  --color-canvas: #eef5ec;      /* lienzo de las páginas */
+  --color-paper: #ffffff;       /* tarjetas, inputs, menús */
+  --color-band: #d6ebd3;        /* franja verde al inicio de cada página */
 
-  /* Marca (paleta original) */
+  /* Marca */
   --color-brand: #1d6735;
   --color-brand-hover: #17552b;
-  --color-brand-ink: #134524;
+  --color-brand-ink: #134524;   /* texto sobre fondos verdes suaves */
+  --color-on-brand: #ffffff;    /* texto sobre bg-brand */
   --color-leaf: #7cbb70;
   --color-mint: #a7eeb5;
-  --color-mint-wash: #e8f6ea;
-  --color-sprout: #f3fbef;
+  --color-mint-wash: #dcf0dc;
+  --color-sprout: #eef7ea;
+
+  /* Navbar y footer */
+  --color-nav: #1d6735;
+  --color-nav-end: #164f29;
+  --color-on-nav: #ffffff;
+  --color-footer: #14381f;
+  --color-footer-end: #0f2b18;
+  --color-on-footer: #e3f1e5;
+  --color-footer-muted: #9cbea4;
+  --color-footer-link: #a7eeb5;
+  --color-footer-line: rgb(255 255 255 / 0.12);
 
   /* Acentos por categoría (uno por categoría, nunca mezclados en un componente) */
-  --color-amber: #c27c00;
-  --color-amber-wash: #fff4dc;
+  --color-amber: #b26f00;
+  --color-amber-wash: #fff1d6;
   --color-sky: #2c6fdc;
-  --color-sky-wash: #e7f0fe;
+  --color-sky-wash: #e4eefd;
   --color-magenta: #b83a8a;
-  --color-magenta-wash: #fbe8f4;
+  --color-magenta-wash: #fbe6f3;
   --color-danger: #c62828;
-  --color-danger-wash: #fdecec;
+  --color-danger-wash: #fdeaea;
+
+  /* Colores de sombra: cambian con el tema, las sombras se definen una sola vez */
+  --color-shadow: rgb(19 69 36 / 0.1);
+  --color-shadow-soft: rgb(19 69 36 / 0.06);
+  --color-shadow-ring: rgb(19 69 36 / 0.08);
 
   --radius-input: 8px;
   --radius-card: 16px;
   --radius-panel: 24px;
 
-  --shadow-subtle: 0 1px 1px 1px rgb(0 0 0 / 0.08), 0 0 0 0.5px rgb(0 0 0 / 0.06);
-  --shadow-subtle-2: 0 1px 1px 0 rgb(0 0 0 / 0.08), 0 0 0 1px rgb(0 0 0 / 0.05);
-  --shadow-panel: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 8px 16px 0 rgb(0 0 0 / 0.06), 0 0 0 1px rgb(0 0 0 / 0.02);
+  --shadow-subtle: 0 1px 1px 1px var(--color-shadow), 0 0 0 0.5px var(--color-shadow-ring);
+  --shadow-subtle-2: 0 1px 1px 0 var(--color-shadow), 0 0 0 1px var(--color-shadow-ring);
+  --shadow-panel: 0 1px 3px 0 var(--color-shadow-soft), 0 8px 16px 0 var(--color-shadow-soft),
+    0 0 0 1px var(--color-shadow-ring);
 
   --animate-fade-in: fade-in 160ms ease-out;
 
@@ -58,16 +83,68 @@
   }
 }
 
+/* Tema oscuro: verdes con negros */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-carbon: #e3eee5;
+  --color-graphite: #a6bbab;
+  --color-ash: #72887a;
+  --color-fog: #213428;
+  --color-mist: #1a2a20;
+  --color-linen: #132019;
+  --color-canvas: #09100b;
+  --color-paper: #0f1a13;
+  --color-band: #10291a;
+
+  --color-brand: #4cbb6c;
+  --color-brand-hover: #63cb81;
+  --color-brand-ink: #b5edc2;
+  --color-on-brand: #04130a;
+  --color-leaf: #4f9d63;
+  --color-mint: #2c6a40;
+  --color-mint-wash: #163323;
+  --color-sprout: #0e1d14;
+
+  --color-nav: #08110b;
+  --color-nav-end: #10301c;
+  --color-on-nav: #e6f3e8;
+  --color-footer: #0c1a11;
+  --color-footer-end: #060c08;
+  --color-on-footer: #cfe2d3;
+  --color-footer-muted: #7b9683;
+  --color-footer-link: #7fd69a;
+  --color-footer-line: rgb(255 255 255 / 0.08);
+
+  --color-amber: #f0b44c;
+  --color-amber-wash: #33270d;
+  --color-sky: #84b3ff;
+  --color-sky-wash: #13233c;
+  --color-magenta: #ee8fcd;
+  --color-magenta-wash: #35152b;
+  --color-danger: #ff8a80;
+  --color-danger-wash: #3a1513;
+
+  --color-shadow: rgb(0 0 0 / 0.5);
+  --color-shadow-soft: rgb(0 0 0 / 0.35);
+  --color-shadow-ring: rgb(255 255 255 / 0.06);
+}
+
+/* dark:* en Tailwind sigue al selector de tema, no a la preferencia del sistema */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 @layer base {
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    color-scheme: light;
   }
 
   body {
-    background-color: var(--color-paper);
+    background-color: var(--color-canvas);
     color: var(--color-carbon);
     letter-spacing: -0.011em;
+    transition: background-color 200ms ease, color 200ms ease;
   }
 
   h1, h2, h3, h4 {
@@ -83,6 +160,40 @@
     outline: 2px solid var(--color-leaf);
     outline-offset: 2px;
   }
+
+  ::selection {
+    background: var(--color-mint);
+    color: var(--color-brand-ink);
+  }
+
+  /* encabezados de tabla con un tinte verde en ambos temas */
+  thead tr {
+    background-color: var(--color-sprout);
+  }
+
+  thead th {
+    color: color-mix(in srgb, var(--color-brand-ink) 78%, transparent);
+  }
+
+  /* selects nativos y scrollbars siguen el tema */
+  select option {
+    background-color: var(--color-paper);
+    color: var(--color-carbon);
+  }
+}
+
+@utility nav-surface {
+  background-image: linear-gradient(135deg, var(--color-nav) 0%, var(--color-nav-end) 100%);
+}
+
+@utility footer-surface {
+  background-image: linear-gradient(180deg, var(--color-footer) 0%, var(--color-footer-end) 100%);
+}
+
+/* Franja verde suave al inicio de las páginas interiores */
+@utility page-surface {
+  background-color: var(--color-canvas);
+  background-image: linear-gradient(180deg, var(--color-band) 0, var(--color-canvas) 340px);
 }
 
 * {
